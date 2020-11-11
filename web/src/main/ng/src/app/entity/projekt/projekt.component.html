@@ -1,0 +1,154 @@
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
+  <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
+    <mat-icon>clear</mat-icon>
+  </a>
+  <mat-card-header>
+    <mat-card-title>
+      <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
+      <mat-icon *ngIf="isChild" class="app-entity-projekt" [matTooltip]="'entities.projekt' | translate">{{ config.entityIcons["projekt"] }}</mat-icon>
+      <ng-container [ngSwitch]="isChild">
+        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon class="app-clean-mg app-color-accent">link</mat-icon></a>
+        <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
+      </ng-container><span class="app-pipe"></span>
+      <ng-container *ngIf="hasRights">
+        <app-inline-filter [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
+      </ng-container>
+      
+      &#160;(<app-inline-filter [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
+      <span class="app-pipe"></span><app-inline-filter [field]="'f_vedouci'" [value]="result.vedouci_projektu"></app-inline-filter><span class="app-pipe"></span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="state.itemView === 'col' && !isDocumentDialogOpen && !isChild" class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'Obrázek není k dispozici' | translate">
+      <mat-icon>image_not_supported</mat-icon>
+    </div>
+    <div class="app-metadata app-row-gap-16">
+      <div *ngIf="result.typ_projektu || result.datum_zahajeni">
+        <ng-container *ngIf="result.typ_projektu">
+          <label class="app-label">{{ 'field.f_typ_projektu' | translate }}:</label>&#160;
+          <app-inline-filter [field]="'f_typ_projektu'" [value]="result.typ_projektu" [heslar]="'typ_projektu'"></app-inline-filter>
+          <span class="app-pipe"></span>
+        </ng-container>
+        <ng-container *ngIf="result.datum_zahajeni">
+          <label class="app-label">{{ 'field.datum_provedeni' | translate }}:</label>&#160;
+          {{ result.datum_zahajeni | date : 'dd.MM.yyyy'}} - {{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}<span class="app-pipe"></span>
+        </ng-container>
+        <ng-container *ngIf="result.pristupnost">
+          <label class="app-label">{{ 'field.pristupnost' | translate }}:</label>&#160;
+          <app-inline-filter [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+        </ng-container>
+      </div>
+      <div *ngIf="result.organizace_prihlaseni">
+        <label class="app-label">{{ 'field.f_organizace' | translate }}:</label>&#160;
+        <app-inline-filter [field]="'f_organizace'" [value]="result.organizace_prihlaseni" [heslar]="'organizace'"></app-inline-filter>
+      </div>
+      <div *ngIf="result.dalsi_katastry && hasRights">
+        <label class="app-label">{{ 'field.dalsi_katastry' | translate }}:</label>&#160;
+        <ng-container *ngFor="let k of result.dalsi_katastry; let last = last">
+          <app-inline-filter [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
+          (<app-inline-filter [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
+        </ng-container>
+      </div>
+      <div *ngIf="result.podnet" class="app-truncate-text">
+        <label class="app-label">{{ 'field.podnet' | translate }}:</label>&#160;{{ result.podnet }}
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
+    <div fxFlex class="app-metadata">
+      <ng-container *ngIf="result.child_akce?.length > 0">
+        {{'Počet akcí' | translate}}: <strong>{{result.child_akce?.length}}</strong>
+        <span class="app-pipe"></span>
+      </ng-container>
+      <ng-container *ngIf="result.child_samostatny_nalez?.length > 0"> 
+        {{'Počet samostatných nálezů' | translate}}: <strong>{{result.child_samostatny_nalez?.length}}</strong> 
+        <span class="app-pipe"></span>
+      </ng-container>
+    </div>
+    <div>
+      <button *ngIf="!mapDetail && hasRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'Zobrazit na mapě' | translate">
+        <mat-icon>map</mat-icon>
+      </button>
+      <a mat-flat-button [routerLink]="'/id/' + result.ident_cely" target="_blank">
+        <mat-icon>link</mat-icon>
+      </a>
+      <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
+        <mat-icon>menu_book</mat-icon>
+      </button>
+      <button mat-flat-button (click)="print()">
+        <mat-icon>print</mat-icon>
+      </button>
+      <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
+        <mat-icon>grade</mat-icon>
+      </button>
+      <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'" *ngIf="hasRights && !isDocumentDialogOpen">
+        {{(detailExpanded ? 'Skrýt detail' : 'Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+      </button>
+      <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">
+        {{ 'Zobrazit detail' | translate }}
+      </button>
+      <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false" *ngIf="state.itemView === 'col' && isDocumentDialogOpen">
+        {{ 'Skrýt detail' | translate }}
+      </button>
+    </div>
+  </mat-card-actions>
+  <mat-card-content *ngIf="detailExpanded && !isChild && hasRights" >
+    <div class="app-card-detail">
+      <mat-accordion multi="true">
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+            <mat-panel-title>
+              {{ 'Popis projektu' | translate }}:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <table>
+            <tbody>
+              <tr *ngIf="result.lokalita">
+                <th class="app-label">{{ 'field.lokalizace' | translate }}:</th>
+                <td>{{ result.lokalita }}</td>
+              </tr>
+              <tr *ngIf="result.parcelni_cislo">
+                <th class="app-label">{{ 'Parcelní číslo' | translate }}:</th>
+                <td>{{ result.parcelni_cislo }}</td>
+              </tr>
+              <tr *ngIf="result.planovane_zahajeni">
+                <th class="app-label">{{ 'Plánované zahájení' | translate }}:</th>
+                <td>{{ result.planovane_zahajeni }}</td>
+              </tr>
+              <tr *ngIf="result.uzivatelske_oznaceni">
+                <th class="app-label">{{ 'Uživatelské označení' | translate }}:</th>
+                <td>{{ result.uzivatelske_oznaceni }}</td>
+              </tr>
+              <tr *ngIf="result.kulturni_pamatka">
+                <th class="app-label">{{ 'Památková ochrana' | translate }}:</th>
+                <td>{{ result.kulturni_pamatka }}</td>
+              </tr>
+              <tr *ngIf="result.nkp_cislo">
+                <th class="app-label">{{ 'Rejstříkové číslo ÚSKP' | translate }}:</th>
+                <td>{{ result.nkp_cislo }}</td>
+              </tr>
+              <tr *ngIf="result.nkp_popis">
+                <th class="app-label">{{ 'Název památky' | translate }}:</th>
+                <td>{{ result.nkp_popis }}</td>
+              </tr>
+              <tr *ngIf="result.podnet">
+                <th class="app-label">{{ 'field.podnet' | translate }}:</th>
+                <td>{{ result.podnet }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="result.akce?.length > 0 || result.samostatny_nalez?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+          <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
+            <mat-panel-title>
+              {{ 'Související záznamy' | translate }}:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+          <app-samostatny-nalez *ngFor="let sn of result.samostatny_nalez" [result]="sn" [isChild]="true"  class="app-related-item"></app-samostatny-nalez>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-card-content>
+</mat-card>

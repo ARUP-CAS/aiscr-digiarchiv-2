@@ -1,0 +1,19 @@
+<mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+  <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+    <mat-panel-title>
+      <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+      {{ 'Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+      <app-inline-filter [field]="'f_dok_jednotka_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
+      <ng-container *ngIf="result.nazev">&#160;({{result.nazev}})</ng-container>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container><!--*ngIf="result.negativni_jednotka"-->
+    <label class="app-label">{{ 'field.dok_jednotka_negativni_jednotka' | translate }}:</label>&#160;
+    {{ result.negativni_jednotka === '1'  ? 'Ano' : 'Ne' }}
+  </ng-container>
+  <mat-accordion multi="true">
+    <app-pian *ngFor="let pian of result.pian" [result]="pian"></app-pian>
+    <app-adb *ngFor="let adb of result.adb" [result]="adb"></app-adb>
+    <app-komponenta *ngFor="let komponenta of result.komponenta" [result]="komponenta"></app-komponenta>
+  </mat-accordion>
+</mat-expansion-panel>

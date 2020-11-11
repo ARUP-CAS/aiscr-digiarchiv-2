@@ -1,0 +1,51 @@
+// --- FACETS SEARCH  ---
+
+app-facets-search {
+  .mat-card {
+    @extend .app-clean-bg;
+    @include set-border(bottom, 1, solid, #{$app-gray-3});
+
+    .mat-card-content {
+      .mat-form-field {
+        &.mat-form-field-appearance-fill {
+          .mat-form-field-wrapper {
+            margin-bottom: -1.3437em;
+  
+            .mat-form-field-flex {
+              @extend .app-clean-pd;
+              border-radius: $app-border-radius;
+              background-color: $app-color-lightnes;
+              border: 1px solid $app-gray-4;
+              padding-left: $app-gap !important;
+              align-items: center;
+
+              .mat-form-field-suffix {
+                .mat-icon {
+                  margin-top: 3px;
+                }
+              }
+            }
+  
+            .mat-form-field-underline {
+              &:before {
+                background-color: transparent;
+              }
+  
+              .mat-form-field-ripple {
+                background-color: transparent;
+              } 
+            }
+          }
+        }
+
+        &.mat-focused {
+          box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
+
+          .mat-form-field-ripple {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+  }
+}

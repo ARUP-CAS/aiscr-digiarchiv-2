@@ -1,0 +1,96 @@
+<mat-expansion-panel  [expanded]="true" class="app-panel-filter-by-field">
+  <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
+    <mat-panel-title>
+      <a (click)="addFilter()" class="app-filter-badge app-gap-icon-right"><mat-icon mat-flat-button>filter_list</mat-icon></a>
+      {{ 'field.filtruj_dle' | translate }}
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-card class="mat-elevation-z0">
+    <mat-card-content>
+      <div fxLayout="row" [class.app-row-gap-16]="filterField">
+        <mat-form-field fxFlex appearance="fill">
+          <mat-select [placeholder]="'Pole' | translate" name="filterField" [(ngModel)]="filterField">
+            <mat-option *ngFor="let f of config.filterFields" [value]="f">
+              {{ 'field.' + f.field | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutGap="16px" *ngIf="filterField" [ngSwitch]="filterField.type">
+        <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown app-in-facet-dynamic" [matTooltip]="filterField ? ('Operátor OR' | translate) : ('Zvolit operátor pro filtrování' | translate)">
+          <mat-icon *ngIf="!filterOperator">more_vert</mat-icon>
+          <span *ngIf="filterOperator" [class]="'app-badge-op ' + filterOperator">{{filterOperator.toUpperCase()}}</span>
+        </a>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="filterOperator = 'or'">
+            <span class="app-badge-op or">OR</span> 
+            <span>{{ 'Operátor OR' | translate }}</span>
+          </button>
+          <button mat-menu-item (click)="filterOperator = 'and'">
+            <span class="app-badge-op and">AND</span> 
+            <span>{{ 'Operátor AND' | translate }}</span>
+          </button>
+          <button mat-menu-item (click)="filterOperator = 'not'">
+            <span class="app-badge-op not">NOT</span> 
+            <span>{{ 'Operátor NOT' | translate }}</span>
+          </button>
+        </mat-menu>
+        <ng-container *ngSwitchCase="'date'">
+          <mat-form-field fxFlex appearance="fill">
+            <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="'Datum od' | translate" (click)="datum_od.open()" >
+            <mat-datepicker-toggle matSuffix [for]="datum_od"></mat-datepicker-toggle>
+            <mat-datepicker #datum_od startView="multi-year" >
+            </mat-datepicker>
+          </mat-form-field>
+          <mat-form-field fxFlex appearance="fill">
+            <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'Datum do' | translate" (click)="datum_do.open()" >
+            <mat-datepicker-toggle matSuffix [for]="datum_do"></mat-datepicker-toggle>
+            <mat-datepicker #datum_do startView="multi-year" >
+            </mat-datepicker>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngSwitchCase="'rok'">
+          <mat-form-field fxFlex appearance="fill">
+            <input matInput [matDatepicker]="rok_od" [value]="rokoddate.value" [placeholder]="'Rok od' | translate" hidden=true [readonly]="true"  >
+            <input matInput [(ngModel)]="rokod" [placeholder]="'Rok od' | translate" (click)="rok_od.open()" name="aa">
+            <mat-datepicker-toggle matSuffix [for]="rok_od"></mat-datepicker-toggle>
+            <mat-datepicker #rok_od startView="multi-year" (yearSelected)="chosenYearHandler($event, rok_od, 'from')">
+            </mat-datepicker>
+          </mat-form-field>
+          <mat-form-field fxFlex appearance="fill">
+            <input matInput [matDatepicker]="rok_do" [value]="rokdodate.value" [placeholder]="'Rok do' | translate" hidden=true [readonly]="true">
+            <input matInput [(ngModel)]="rokdo" [placeholder]="'Rok do' | translate" (click)="rok_do.open()" name="bb">
+            <mat-datepicker-toggle matSuffix [for]="rok_do"></mat-datepicker-toggle>
+            <mat-datepicker #rok_do startView="multi-year" (yearSelected)="chosenYearHandler($event, rok_do, 'until')">
+            </mat-datepicker>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngSwitchCase="'number'">
+          <mat-form-field fxFlex appearance="fill">
+            <input matInput type="number" [placeholder]="'Hodnota' | translate" name="filterFieldValue"
+              [(ngModel)]="numberod" (keyup.enter)="addFilter()" />
+          </mat-form-field>
+          <mat-form-field fxFlex appearance="fill">
+            <input matInput type="number" [placeholder]="'Hodnota' | translate" name="filterFieldValue"
+              [(ngModel)]="numberdo" (keyup.enter)="addFilter()" />
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngSwitchCase="'boolean'">
+
+          <mat-radio-group aria-label="Select an option" [(ngModel)]="boolValue">
+            <mat-radio-button value="1">{{ 'Ano' | translate}}</mat-radio-button>&#160;
+            <mat-radio-button value="0">{{ 'Ne' | translate}}</mat-radio-button>
+          </mat-radio-group>
+
+
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <mat-form-field fxFlex appearance="fill">
+            <input matInput [placeholder]="'Hodnota' | translate" name="filterFieldValue"
+              [(ngModel)]="filterFieldValue" (keyup.enter)="addFilter()" />
+          </mat-form-field>
+        </ng-container>
+      </div>    
+    </mat-card-content>
+  </mat-card>
+</mat-expansion-panel>

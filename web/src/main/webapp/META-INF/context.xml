@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/amcr">
+
+<Parameter name="app_dir" override="false" value="/Users/pkudela/Projects/arup/env/config"/>
+
+</Context>

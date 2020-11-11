@@ -1,0 +1,71 @@
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
+  <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
+    <mat-icon>clear</mat-icon>
+  </a>
+  <mat-card-header>
+    <mat-card-title>
+      <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
+      <mat-icon *ngIf="isChild" class="app-entity-akce" [matTooltip]="'entities.akce' | translate">turned_in</mat-icon>
+      <ng-container [ngSwitch]="isChild">
+        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
+      </ng-container><span class="app-pipe"></span>
+      {{ 'Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+      <ng-container *ngIf="result.poznamka"> ({{ result.poznamka }})</ng-container> 
+      <span class="app-pipe"></span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="state.itemView === 'col' && !isDocumentDialogOpen && !isChild" class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'Obrázek není k dispozici' | translate">
+      <mat-icon>image_not_supported</mat-icon>
+    </div>
+    <div class="app-metadata app-row-gap-16" >
+      
+      <ng-container *ngIf="result.vazba_akce || result.vazba_lokalita">
+        <label class="app-label">{{ 'Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
+        <ng-container *ngIf="result.vazba_akce">
+          <a [routerLink]="'/id/' + result.vazba_akce" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_akce }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
+        </ng-container>
+        <ng-container *ngIf="result.vazba_druha_akce">
+          <a [routerLink]="'/id/' + result.vazba_druha_akce" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
+        </ng-container>
+        <ng-container *ngIf="result.vazba_lokalita">
+          <a [routerLink]="'/id/' + result.vazba_lokalita" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_lokalita }} <mat-icon>link</mat-icon></a>
+        </ng-container>
+        <ng-container *ngIf="result.vazba_druha_lokalita">
+          <a [routerLink]="'/id/' + result.vazba_druha_lokalita" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
+        </ng-container>
+      </ng-container>
+
+      <mat-accordion multi="true">
+        <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [detailExpanded]="true"></app-dok-jednotka>
+      </mat-accordion>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions fxLayout="row" fxLayoutAlign="start end" *ngIf="!isChild">
+    
+    <div>
+      <button mat-flat-button>
+        <a [routerLink]="'/id/' + result.ident_cely" target="_blank">
+          <mat-icon>link</mat-icon>
+        </a>
+      </button>
+      <button mat-flat-button (click)="print()">
+        <mat-icon>print</mat-icon>
+      </button>
+      <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
+        <mat-icon>grade</mat-icon>
+      </button>
+      <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
+        {{(detailExpanded ? 'Skrýt detail' : 'Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+      </button>
+      <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">
+        {{ 'Zobrazit detail' | translate }}
+      </button>
+      <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false" *ngIf="state.itemView === 'col' && isDocumentDialogOpen">
+        {{ 'Skrýt detail' | translate }}
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,220 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cz.inovatika.arup.digiarchiv.web.index.models;
+
+import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ *
+ * @author alberto
+ */
+public class SamostatniNalez implements Entity {
+
+  static final Logger LOGGER = Logger.getLogger(SamostatniNalez.class.getName());
+
+  @Field
+  public String ident_cely;
+
+  @Field
+  public int stav;
+
+  @Field
+  public String typ;
+
+  @Field
+  public String inv_cislo;
+
+  @Field
+  public String projekt_id;
+
+  @Field
+  public String okres;
+
+  @Field
+  public String katastr;
+
+  @Field
+  public String lokalizace;
+
+  @Field
+  public String centroid_e;
+
+  @Field
+  public String centroid_n;
+
+//  @Field
+//  public String geom_gml;
+  @Field
+  public int hloubka;
+  
+  @Field
+  public String nalezove_okolnosti;
+
+  @Field
+  public String pristupnost;
+
+  @Field
+  public String obdobi;
+
+  @Field
+  public String presna_datace;
+
+  @Field
+  public String druh;
+
+  @Field
+  public String specifikace;
+
+  @Field
+  public String pocet;
+
+  @Field
+  public String nalezce;
+
+  @Field
+  public Date datum_nalezu;
+
+  @Field
+  public String predano;
+
+  @Field
+  public String predano_organizace;
+
+  @Field
+  public String odpovedny_pracovnik_vlozeni;
+
+  @Field
+  public Date datum_vlozeni;
+
+  @Field
+  public String odpovedny_pracovnik_archivace;
+
+  @Field
+  public Date datum_archivace;
+  
+  String[] facetFields = new String[]{"komponenta_areal","f_aktivita","nalez_kategorie"};
+
+  @Override
+  public void fillFields(SolrInputDocument idoc) {
+
+    boolean searchable = stav == 4;
+    idoc.setField("searchable", searchable);
+    
+    if (this.centroid_n != null) {
+      String loc = this.centroid_n + "," + this.centroid_e;
+      idoc.addField("lat", this.centroid_n);
+      idoc.addField("lng", this.centroid_e);
+      idoc.addField("loc", loc);
+      idoc.addField("loc_rpt", loc);
+    }
+    
+    if (nalezce != null) {
+      idoc.addField("autor_sort", nalezce);
+    }
+    if (druh != null) {
+      idoc.addField("druh_nalezu", druh);
+    }
+    if (okres != null) {
+      String okres_sort = okres;
+      if (katastr != null) {
+        okres_sort += " " + katastr;
+      }
+      idoc.addField("okres_sort", okres_sort);
+    }
+  }
+
+  @Override
+  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+    addSoubor(client, idoc);
+    if (idoc.containsKey("obdobi") && idoc.getFieldValue("obdobi") != null) {
+      idoc.addField("obdobi_poradi", SearchUtils.getObdobiPoradi((String) idoc.getFieldValue("obdobi")));
+    }
+    
+    // addPian(client, idoc);
+  }
+
+  private void addSoubor(HttpSolrClient client, SolrInputDocument idoc) {
+    SolrQuery query = new SolrQuery("samostatny_nalez:\"" + this.ident_cely + "\"")
+            .setFields("filepath,nazev,uzivatelske_oznaceni,mimetype,rozsah,"
+                    + "size_bytes,vytvoreno,stav,dokument,projekt,samostatny_nalez");
+    JSONObject json = SearchUtils.json(query, client, "soubor");
+    if (json.getJSONObject("response").getInt("numFound") > 0) {
+      JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+      addJSONFields(doc, "soubor", idoc);
+    }
+
+  }
+
+  private void addJSONFields(JSONObject doc, String prefix, SolrInputDocument idoc) {
+    for (String s : doc.keySet()) {
+      switch (s) {
+        case "_version_":
+        case "_root_":
+        case "indextime":
+          break;
+        default:
+          idoc.addField(prefix + "_" + s, doc.optString(s));
+      }
+    }
+  }
+
+  @Override
+  public void setFullText(SolrInputDocument idoc) {
+    List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("samostatny_nalez").toList();
+    List<String> excludePas = Arrays.asList(Options.getInstance().getStrings("pasSecuredFields"));
+    
+    String pristupnost = (String) idoc.getFieldValue("pristupnost");
+    List<String> prSufix = new ArrayList<>();
+
+    if ("A".compareTo(pristupnost) == 0) {
+      prSufix.add("A");
+    }
+    if ("B".compareTo(pristupnost) >= 0) {
+      prSufix.add("B");
+    }
+    if ("C".compareTo(pristupnost) >= 0) {
+      prSufix.add("C");
+    }
+    if ("D".compareTo(pristupnost) >= 0) {
+      prSufix.add("D");
+    }
+    Object[] fields = idoc.getFieldNames().toArray();
+    for (Object f : fields) {
+      String s = (String) f;
+      
+      SolrSearcher.addCommonFieldFacets(s, idoc, prSufix);
+      
+      if (indexFields.contains(s)) {
+        for (String sufix : prSufix) {
+          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
+        }
+      } 
+    }
+    
+  }
+  
+  @Override
+  public boolean isSearchable() {
+    return true;
+  }
+  
+  @Override
+  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  }
+}

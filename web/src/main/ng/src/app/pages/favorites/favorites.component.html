@@ -1,0 +1,103 @@
+<div class="app-display-table loading" *ngIf="loading">
+  <div class="app-table-cell app-clean-pd">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+
+<div class="app-display-table app-container" *ngIf="!loading">
+  <ng-container *ngIf="state.isMapaCollapsed">
+    <div class="app-table-cell app-left">
+      <div fxLayout="row" fxFlexFill>
+        <div fxFlex class="app-facets">
+          <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
+          <app-facets></app-facets>
+        </div>
+      </div>
+    </div>
+    <div class="app-table-cell app-right">
+      <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
+        <div fxFlex="0 0 140px" class="app-action-links">
+          <a (click)="showChartBar()"
+          [matTooltip]="isChartBarCollapsed ? ('Zobrazit časovou osu' | translate) : ('Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
+          <span class="app-pipe"></span>
+          <a [matMenuTriggerFor]="menuView" [matTooltip]="state.itemView + '.Zobrazení výsledků' | translate">
+            <mat-icon [ngSwitch]="state.itemView">
+              <ng-container *ngSwitchCase="'row'">reorder</ng-container>
+              <ng-container *ngSwitchCase="'col'">apps</ng-container>
+              <ng-container *ngSwitchDefault>tv</ng-container>
+            </mat-icon>
+          </a><span class="app-pipe"></span>
+          <mat-menu #menuView="matMenu">
+            <button mat-menu-item (click)="setItemView('row')">
+              <mat-icon>reorder</mat-icon>{{ 'Řádkové zobrazení výsledků' | translate }}
+            </button>
+            <button mat-menu-item (click)="setItemView('col')">
+              <mat-icon>apps</mat-icon>{{ 'Sloupcové zobrazení výsledků' | translate }}
+            </button>
+            <button mat-menu-item (click)="setItemView('default')">
+              <mat-icon>tv</mat-icon>{{ 'Výchozí zobrazení výsledků' | translate }}
+            </button>
+          </mat-menu>
+          <a [href]="exportUrl" [matTooltip]="'Export' | translate" target="_blank"><mat-icon>import_export</mat-icon></a>
+        </div>
+        <div fxFlex="0 0 calc(100% - 156px)">
+          <app-paginator></app-paginator>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex>
+          <app-chart-bar *ngIf="state.numFound > 0 && state.facetRanges?.obdobi_poradi && !isChartBarCollapsed" [@enterAnimation] [height]="'120px'" [width]="'100%'"></app-chart-bar>
+          <ng-container *ngFor="let result of docs">
+            <ng-container [ngSwitch]="state.entity">
+              <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
+              <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+              <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
+              <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
+              <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
+              <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlex>
+          <app-paginator></app-paginator>
+        </div>
+      </div>
+    </div> 
+  </ng-container>
+  <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
+    <mat-sidenav-container class="app-sidenav-container">
+      <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+        <mat-tab-group [selectedIndex]="1">
+          <mat-tab [label]="'Filtry' | translate">
+            <div class="app-facets">
+              <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
+              <app-facets></app-facets>
+            </div>
+          </mat-tab>
+          <mat-tab [label]="'Výsledky' | translate">
+            <app-paginator></app-paginator>
+            <ng-container *ngFor="let result of docs">
+              <ng-container [ngSwitch]="state.entity">
+                <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
+                <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
+                <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
+                <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
+                <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+              </ng-container>
+            </ng-container>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-sidenav>
+    
+      <mat-sidenav-content>
+        <button mat-raised-button (click)="sidenav.toggle()" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'">
+          <mat-icon>last_page</mat-icon>
+        </button>
+        <app-mapa></app-mapa>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="app-searchbar-wrapper">
+  <div class="app-container">
+    <div fxLayout="row" fxLayoutGap="32px" class="app-search-form" fxLayoutAlign="start center">
+      <div fxFlex class="app-fx-left">
+        <input type="text" [placeholder]="'q.placeholder' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'q.tooltip' | translate" matTooltipPosition="above" />
+        <span fxFlex class="app-controls">
+          <span class="app-mobile-controls fxHide_gt-xs">
+            <a (click)="toggleMapa()">
+              <mat-icon>{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
+            </a>
+            <!-- <a (click)="changeShowWithoutThumbs()">
+              <mat-icon>{{ state.hideWithoutThumbs ? 'visibility_off' : 'visibility_on' }}</mat-icon>
+            </a> -->
+          </span>
+          <a (click)="search()">
+            <mat-icon>search</mat-icon>
+          </a>
+        </span>
+      </div>
+      <div fxFlex class="app-fx-right fxHide_xs">
+        <button mat-flat-button color="primary" (click)="toggleMapa()" [class.app-active]="!state.isMapaCollapsed">
+          <mat-icon *ngIf="!state.isMapaCollapsed" class="fxHide_sm fxHide_xs">clear</mat-icon>
+          <span class="fxHide_sm fxHide_xs"><ng-container *ngIf="!state.isMapaCollapsed">&#160;</ng-container>{{ state.isMapaCollapsed ? ('search map' | translate) : ('close map' | translate) }}</span>
+          <mat-icon class="fxHide_gt-sm">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
+        </button>
+        <!-- temporary commented based David agreement
+        <mat-checkbox [checked]="!state.hideWithoutThumbs" (change)="changeShowWithoutThumbs()" class="fxHide_md fxHide_sm fxHide_xs">
+          {{ 'showWithoutThumbs' | translate }}
+        </mat-checkbox>
+        <button mat-flat-button color="primary" (click)="changeShowWithoutThumbs()" class="fxHide_gt-md">
+          <mat-icon>{{ state.hideWithoutThumbs ? 'visibility_off' : 'visibility_on' }}</mat-icon>
+        </button> -->
+      </div>
+    </div>
+  </div>
+</div>

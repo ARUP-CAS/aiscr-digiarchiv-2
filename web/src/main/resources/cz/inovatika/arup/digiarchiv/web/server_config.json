@@ -1,0 +1,221 @@
+{
+  "solrhost": "http://localhost:8983/solr/",
+  "solrRels" : "http://localhost:8983/solr/",
+  
+  "OAI": {
+    "url": "https://api.aiscr.cz/dapro/oai",
+    "sets": ["soubor", "adb", "dok_jednotka", "ext_zdroj", "pian", "let", "projekt", "akce", "lokalita", "samostatny_nalez", "dokument"]
+  },
+  
+  "imagesDir": "/home/alberto/Projects/ARUP/data/",
+  "thumbsDir": "/home/alberto/.amcr/thumbs/",
+  "thesauriDir": "/home/alberto/.amcr/thesauri/",
+  "dynamicThumbs": false,
+  "thumbWidth": 100,
+  "thumbHeight": 100,
+  "mediumHeight": 1000,
+  "maxPixels": 5000000,
+  "watermark.alpha": 0.5,
+  "sessionTimeout": 300,
+  "indexSecLevel": "E",
+  "translations": {
+    "jazyk_dokumentu": {
+      "heslar": "jazyk_dokumentu",
+      "label": "caption"
+    },
+    "typ_dokumentu": {
+      "heslar": "typ_dokumentu",
+      "label": "caption"
+    },
+    "kategorie_dokumentu": {
+      "heslar": "typ_dokumentu",
+      "label": "caption"
+    },
+    
+    "organizace_autora": {
+      "heslar": "organizace",
+      "label": "caption"
+    },
+    "pristupnost_dokument": {
+      "heslar": "pristupnost_dokument",
+      "label": "vyznam"
+    },
+    "rada": {
+      "heslar": "rada",
+      "label": "vysvetlivka"
+    },
+    "ulozeni_originalu": {
+      "heslar": "ulozeni_originalu",
+      "label": "caption"
+    },
+    "material_dokumentu": {
+      "heslar": "material_dokumentu",
+      "label": "caption"
+    },
+    "katastr": {
+      "heslar": "katastr",
+      "label": "caption"
+    },
+    "okres": {
+      "heslar": "okresy",
+      "label": "full_name"
+    }
+  },
+
+  "amcrapi": {
+    "url":"http://api.archeologickamapa.cz/xmlrpc/0/?t=600",
+    "user": "",
+    "pwd": ""
+  },
+  "indexFieldsByType": {
+    "dokument": [
+      "ident_cely",
+      
+        "typ_dokumentu",
+        "material_originalu",
+        "rada",
+        "autor",
+        "rok_vzniku",
+        "organizace",
+        "datum_zverejneni",
+        "jazyk_dokumentu",
+      
+        "ulozeni_originalu",
+        "child_soubor",
+        "kategorie",
+        "soubor_nazev",
+        "soubor_uzivatelske_oznaceni",
+        "jednotka_dokumentu_ident_cely",
+        "jednotka_dokumentu_vazba_akce",
+        "komponenta_parent",
+        "komponenta_ident_cely",
+        "komponenta_areal",
+        "nalez_druh_nalezu",
+        "nalez_kategorie",
+        "nalez_specifikace",
+        "f_aktivita",
+        "pian_id",
+      "popis",
+      "poznamka", "typ_dokumentu_posudek","oznaceni_originalu", "extra_data_region"
+      
+    ],
+
+    "akce": [
+      "ident_cely",
+      "poznamka",
+      "okres",
+      "katastr",
+      "dalsi_katastry",
+      "vedouci_akce",
+      "organizace",
+      "organizace_ostatni",
+      "vedouci_akce_ostatni",
+      "hlavni_typ",
+      "vedlejsi_typ",
+      "datum_zahajeni_v",
+      "datum_ukonceni_v",
+      "lokalizace",
+      "ulozeni_nalezu"
+    ],
+    "lokalita": [
+      "ident_cely",
+      "okres",
+      "katastr",
+      "dalsi_katastry",
+      "typ_lokality",
+      "vedouci_akce",
+      "vedlejsi_typ",
+      "vedouci_akce_ostatni",
+      "organizace_ostatni",
+      "nazev",
+      "druh",
+      "popis",
+      "poznamka"
+    ],
+    "projekt": [
+      "ident_cely",
+      "typ_projektu",
+      "okres",
+      "katastr",
+      "dalsi_katastry",
+      "podnet",
+      "lokalita",
+      "parcelni_cislo",
+      "planovane_zahajeni",
+      "vedouci_projektu",
+      "organizace_prihlaseni",
+      "uzivatelske_oznaceni",
+      "kulturni_pamatka",
+      "nkp_cislo",
+      "nkp_popis"
+    ],
+    "samostatny_nalez": [
+      "ident_cely",
+      "inv_cislo",
+      "okres",
+      "hloubka",
+      "nalezove_okolnosti",
+      "obdobi",
+      "presna_datace",
+      "druh",
+      "specifikace",
+      "poznamka",
+      "nalezce",
+      "predano_organizace",
+      "katastr",
+      "lokalizace",
+      "projekt_id"
+    ]
+  },
+  "kategoriet": {
+    "nálezová zpráva": "texty",
+    "příloha NZ/ZAA": "texty",
+    "expertní posudek": "texty",
+    "restaurátorská zpráva": "texty",
+    "investorská zpráva": "texty",
+    "hlášení/ZAA": "texty",
+    "text jiný": "texty",
+    "kresba předmětu": "texty",
+    "data analytická": "ddata",
+    "data geodetická": "ddata",
+
+    "data geofyzikální": "ddata",
+    "data GPS": "ddata",
+    "data terénního výzkumu": "ddata",
+    "data vektorového plánu": "ddata",
+    "foto krajiny": "foto",
+    "foto lokality": "foto",
+    "foto výzkumu/sondy": "foto",
+    "foto osobní": "foto",
+    "foto osobní (mimo ter. výzkum)": "foto",
+    "foto pracovní": "foto",
+    "foto objektu": "foto",
+    "foto předmětu": "foto",
+    "foto mikro": "foto",
+    "foto konzervace": "foto",
+    "foto události": "foto",
+
+    "letfoto krajiny": "lfoto",
+    "letfoto lokality": "lfoto",
+    "letfoto výzkumu": "lfoto",
+    "letfoto vegetačních příznaků": "lfoto",
+    "letfoto půdních příznaků": "lfoto",
+    "letfoto sněžných příznaků": "lfoto",
+    "letfoto stínových příznaků": "lfoto",
+
+    "plán regionu": "mplany",
+    "plán lokality": "mplany",
+    "plán výzkumu": "mplany",
+    "plán sondy": "mplany",
+    "plán objektu": "mplany",
+    "mapa": "mplany",
+    
+    "3D – textura": "ddata3d",
+    "3D – rekonstrukce": "ddata3d",
+    "3D – dokumentace": "ddata3d",
+    
+    "-": "neuvedeno"
+  },
+  
+  "pasSecuredFields": ["lokalizace", "katastr"]
+}

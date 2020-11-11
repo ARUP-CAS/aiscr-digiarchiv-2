@@ -1,0 +1,74 @@
+// --- NAVBAR ---
+
+app-navbar {
+  .app-navbar {
+    height: $app-navbar-height;
+    background-color: $app-navbar-bg-color;
+    align-items: unset;
+    position: relative;
+    z-index: 1090;
+    border-bottom: 1px solid $app-gray-2;
+
+    a {
+      &:not(.app-logo) {
+        font-weight: normal;
+        text-decoration: unset;
+        color: $app-navbar-link-color;
+        margin-right: $app-gap;
+        padding: 4px 15px !important;
+        border-radius: $app-border-radius;
+      }
+
+      &.app-active {
+        color: $app-primary-color;
+        font-weight: bold;
+        border-radius: 0;
+      }
+
+      &.app-sidenav-link {
+        padding-right: 0 !important;
+        color: $app-color-darknes;
+        margin-top: $app-gap !important;
+
+        .mat-icon {
+          @include setIcon(24);
+        }
+      }
+
+      .mat-icon {
+        @include setIcon(20, inherit, sub);
+        margin-right: $app-gap-icon;
+        //display: none;
+      } 
+    }
+
+    .app-fx-left {
+      position: relative;
+
+      .app-logo {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  
+    .app-fx-right {
+      display: flex;
+      justify-content: flex-end;
+      padding-bottom: 30px;
+  
+      a {
+        @extend .app-clean-mg;
+      }
+  
+      span {
+        color: $app-navbar-color;
+      }
+  
+      .app-pipe {
+        border-color: $app-gray-3;
+        margin: 0;
+      }
+    }
+  }
+}

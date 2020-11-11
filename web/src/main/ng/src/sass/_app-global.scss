@@ -1,0 +1,641 @@
+// --- GLOBAL ---
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: $app-primary-color;
+
+  &:hover {
+    color: darken($app-primary-color, 10);
+    text-decoration: none;
+  }
+
+  &.app-icon-inside {
+    .mat-icon {
+      vertical-align: middle;
+    }
+  }
+
+  &.app-disabled-link {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.3;
+    text-decoration: none;
+  }
+}
+
+// cleaners
+.app-cleanfix {
+  @include cleanfix();
+}
+
+.app-clean-mg {
+  margin: 0 !important;
+}
+
+.app-clean-pd {
+  padding: 0 !important;
+}
+
+.app-clean-bg {
+  background-color: transparent !important;
+}
+
+.app-clean-radius {
+  border-radius: 0 !important;
+}
+
+.app-clean-border {
+  border: 0 !important;
+}
+
+.app-clean-shadow {
+  box-shadow: none !important;
+}
+
+// colors
+.app-color-warning {
+  color: $app-color-warning !important;
+}
+
+.app-color-info {
+  color: $app-color-info !important;
+}
+
+.app-color-fav {
+  color: $app-color-fav !important;
+}
+
+// common
+.app-pipe {
+  border-left: 1px solid $app-gray-4;
+  margin: 0 calc(#{$app-gap} / 2);
+
+  &:last-child {
+    display: none;
+  }
+}
+
+.app-comma {
+  &:last-of-type {
+    display: none;
+  }
+}
+
+.app-cursor-pointer {
+  cursor: pointer;
+}
+
+.app-row-gap-8 {
+  margin-bottom: calc(#{$app-gap} / 2) !important;
+}
+
+.app-row-gap-16 {
+  margin-bottom: $app-gap !important;
+}
+
+.app-row-gap-32 {
+  margin-bottom: calc(2 * #{$app-gap}) !important;
+}
+
+.app-full-width {
+  width: 100% !important;
+}
+
+.app-font-bold {
+  font-weight: 700;
+}
+
+.app-gap-icon-right {
+  margin-right: $app-gap-icon;
+}
+
+.app-gap-icon-left {
+  margin-left: $app-gap-icon;
+}
+
+.app-gap-button-right {
+  margin-right: calc(#{$app-gap} / 2);
+}
+
+.app-icon-18 {
+  @include setIcon(18, $position: text-bottom);
+}
+
+.app-rotate-up {
+  .mat-icon {
+    transition: all 0.4s ease;
+    transform: rotateZ(180deg);
+  }
+}
+
+.app-rotate-down {
+  .mat-icon {
+    transition: all 0.4s ease;
+    transform: rotateZ(0deg);
+  }
+}
+
+.app-facets,
+.app-result-item {
+  @include setEntityColor(ico);
+}
+
+.app-label {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.app-list-inside {
+  @extend .app-clean-mg;
+  padding-left: 20px;
+}
+
+.app-truncate-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+
+.app-icon-ap {
+  margin-left: $app-gap-icon;
+
+  img {
+    height: 12px;
+  }
+}
+
+.app-btn-op-dropdown {
+  vertical-align: text-bottom;
+
+  &.app-in-facet-dynamic {
+    margin-right: 0 !important;
+    align-self: center;
+
+    .app-badge-op {
+      @extend .app-clean-mg;
+    }
+  }
+  
+  .mat-icon {
+    color: $app-accent-color !important;
+  }
+}
+
+.app-badge-op {
+  display: inline-flex;
+  margin-right: $app-gap-half;
+  font-size: 10px !important;
+  font-weight: 500;
+  color: $app-color-lightnes !important;
+  width: 28px;
+  justify-content: center;
+  border-radius: 4px;
+  height: 17px;
+  align-items: center;
+
+  &.or {
+    background-color: $app-badge-or;
+  }
+
+  &.and {
+    background-color: $app-badge-and;
+  }
+
+  &.not {
+    background-color: $app-badge-not;
+  }
+
+  &.app-in-facet-dynamic {
+    vertical-align: text-top;
+  }
+}
+
+// font
+.app-font-family-rc {
+  font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+// toolbar
+.mat-toolbar {
+  font-size: inherit;
+}
+
+// card
+.mat-card {
+  .app-link-close {
+    position: absolute;
+    top: $app-gap;
+    right: $app-gap;
+
+    @include setLinkColor($app-color-darknes);
+  }
+
+  .mat-card-header {
+    .mat-card-header-text {
+      @extend .app-clean-mg;
+
+      .mat-icon {
+        margin-right: $app-gap-icon;
+        vertical-align: bottom;
+      }
+
+      .mat-card-title {
+        font-size: $app-card-title-font-size;
+
+        .app-count {
+          font-weight: normal;
+          color: $app-gray-5;
+        }
+      }
+    }
+  }
+
+  .mat-card-content {
+    //margin-bottom: calc(#{$app-gap} / 2);
+
+    .app-metadata {
+      .mat-icon {
+        @include setIcon(18);
+        @extend .app-clean-mg;
+      }
+    }
+
+    /* .mat-icon {
+      &:not(.app-icon-showing-more) {
+        @extend .app-gap-icon-right;
+        @include setIcon($position: text-bottom); 
+      } 
+    } */
+
+    // specific behavior for expansion panel in first level of card
+    .app-card-detail {
+      margin-top: $app-gap-half;
+
+      & > .mat-accordion {
+        & > :not(.mat-expansion-panel-spacing) {
+          &:not(:last-child) {
+            margin-bottom: 2px;
+          }
+        }
+      }
+    }
+
+    // general expansion panel behavior of card
+    .mat-expansion-panel {
+      @extend .mat-elevation-z0;
+
+      &.app-panel-souvisejici-zaznamy {
+        .mat-expansion-panel-content {
+          max-height: 635px;
+          overflow-y: auto;
+          
+          .mat-expansion-panel-body {
+            $val: calc(2 * #{$app-gap});
+
+            .app-related-item {
+              display: block;
+
+              &:last-child {
+                .app-card-child {
+                  border-bottom: none !important;
+                  margin-bottom: -16px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      &.mat-expansion-panel-spacing {
+        @extend .app-clean-mg;
+      }
+
+      &.app-panel-inner {
+        .mat-expansion-panel-header {
+          @extend .app-clean-bg, .app-clean-pd;
+          margin-top: 4px;
+
+          .mat-expansion-panel-header-title {
+            color: $app-primary-color;
+            //white-space: nowrap;  commented based on David issue
+            flex-wrap: wrap;
+
+            .mat-icon {
+              @include setIcon($size: 20);
+            }
+
+            /* .app-badge {
+              background-color: $app-color-darknes;
+              font-weight: normal;
+              font-size: 14px;
+              color: $app-color-lightnes;
+              padding-left: $app-gap-icon;
+              margin: 0 2px;
+              border-radius: $app-border-radius;
+            
+              .mat-icon {
+                @include setIcon($size: 18, $position: sub);
+              }
+            } */
+          } 
+        }
+
+        .mat-expansion-panel-content {
+          .mat-expansion-panel-body {
+            padding-top: 2px;
+            padding-bottom: 0;
+
+            /* .app-badge {
+              background-color: $app-color-darknes;
+              font-weight: normal;
+              font-size: 14px;
+              color: $app-color-lightnes;
+              padding-left: $app-gap-icon;
+              margin: 0 2px;
+              border-radius: $app-border-radius;
+            
+              .mat-icon {
+                @include setIcon($size: 18, $position: sub);
+              }
+
+              &.app-badge-body {
+                padding-top: 2px;
+                padding-bottom: 2px;
+              }
+            } */
+          }  
+        }
+      }
+    
+      .mat-expansion-panel-header {
+        background-color: $app-gray-1 !important;
+        flex-direction: row-reverse;
+
+        .mat-expansion-indicator {
+          margin-right: $app-gap;
+        }
+      }
+
+      .mat-expansion-panel-content {
+        .mat-expansion-panel-body {
+          padding-top: $app-gap;
+
+          .mat-icon {
+            @include setIcon($size: 20, $position: text-bottom);
+          }
+
+          table {
+            border-spacing: 0;
+
+            th, td {
+              vertical-align: top;
+            }
+
+            th {
+              padding-left: 0;
+              text-align: left;
+              padding-right: $app-gap-icon;
+              min-width: 130px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mat-card-actions {
+    @extend .app-clean-mg;
+    padding-top: 0;
+
+    .mat-button-base {
+      &:not(:first-child) {
+        margin: 0 0 0 $app-gap-button;  
+      }
+      
+      &.mat-flat-button {
+        background-color: $app-gray-1; 
+        
+        a {
+          display: inline-flex;
+          color: currentColor;
+        }
+      }
+    }
+  }
+
+  &.app-card-info {
+    //@extend .app-clean-mg;
+    background-color: $app-card-info-bg;
+
+    .mat-card-content {
+      color: $app-color-info;
+
+      .app-text {
+        vertical-align: super;
+        font-weight: bold;
+      }
+
+      .mat-icon {
+        @include setIcon($position: bottom, $color: $app-color-info);
+      }
+    }
+  }
+
+  &.app-card-child {
+    @extend .app-clean-shadow, .app-clean-radius;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: 1px solid $app-gray-3;
+  }
+}
+
+// table
+.mat-table {
+  width: 100%;
+}
+
+
+// expansion panel
+.mat-expansion-panel {
+  .mat-expansion-panel-header {
+    font-weight: 700;
+  }
+
+  .mat-list-item-content {
+    .mat-icon {
+      @include setIcon(18, $position: bottom);
+      color: $app-primary-color-darker;
+    } 
+  }
+
+  .mat-expansion-panel-header,
+  .mat-expansion-panel-body {
+    .app-facets & {
+      padding-left: $app-gap;
+      padding-right: $app-gap;
+    }
+  }
+
+  /* zakomentovano, chovani chci jen pokud jsou ve facetech
+  .mat-expansion-panel-header,
+  .mat-expansion-panel-body {
+    padding-left: $app-gap;
+    padding-right: $app-gap;
+  } 
+  */
+}
+
+
+// mat list
+.mat-list {
+  .mat-subheader {
+    font-size: 15px;
+  }
+
+  .mat-list-item {
+    .mat-icon {
+      margin-right: $app-gap-icon !important;
+    }
+
+    /* &.active {
+      color: $app-primary-color !important;
+      font-weight: bold;
+    } */
+  }
+
+  .mat-icon {
+    @include setIcon(18, $position: text-top);
+  }
+
+  &.app-list-view-facet {
+    .mat-list-item {
+      height: $app-list-view-facet-item-height;
+      color: $app-list-view-facet-item-color;
+
+      a {
+        &:hover {
+          color: $app-primary-color-darker;
+        }  
+      }
+    }
+  }
+
+  &.app-list-view-admin {
+    @extend .app-clean-pd;
+
+    .mat-list-item {
+      height: $app-list-view-facet-item-height;
+
+      .mat-list-item-content {
+        @extend .app-clean-pd;
+
+        .mat-icon {
+          color: $app-color-warning;
+        }
+      }
+
+      &:hover {
+        color: $app-primary-color-darker;
+      }
+    }
+  }
+}
+
+
+// mat tree
+.mat-tree {
+  @extend .app-clean-bg;
+  margin-left: -5px;
+
+  .mat-tree-node {
+    min-height: $app-list-view-facet-item-height;
+    color: $app-list-view-facet-item-color;
+    font-size: initial;
+
+    a {
+      color: $app-list-view-facet-item-color;
+
+      &:hover {
+        color: $app-primary-color-darker;
+      }
+    }
+
+    .mat-icon-button {
+      width: $app-list-view-facet-item-height;
+      height: $app-list-view-facet-item-height;
+      line-height: $app-list-view-facet-item-height;
+      margin-right: $app-gap-icon;
+    }
+
+    .mat-checkbox {
+      margin-right: $app-gap-icon;
+    }
+  }  
+}
+
+
+// dialog
+.cdk-overlay-container {
+  z-index: 1099;
+}
+
+
+// ident badge
+.app-ident-badge {
+  margin-right: 2px;
+
+  .mat-icon {
+    $size: 18;
+    font-size: #{$size}px !important;
+    height: #{$size}px !important;
+    width: #{$size}px !important;
+    vertical-align: sub !important;
+    color: $app-badge-color;
+
+    .mat-card-title & {
+      @extend .app-clean-mg;
+    }
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: $app-badge-color;
+  }
+
+  &.app-inbody {
+    &:not(:hover) {
+      color: currentColor;
+    }
+  }
+}
+
+// ident format (in map view - result list)
+.app-ident-format {
+  word-break: break-all;
+}
+
+// filter badge
+.app-filter-badge {
+  color: currentColor;
+  
+  .mat-icon {
+    $size: 18;
+    font-size: #{$size}px !important;
+    height: #{$size}px !important;
+    width: #{$size}px !important;
+    vertical-align: sub !important;
+    color: $app-badge-color;
+
+    .mat-card-title & {
+      @extend .app-clean-mg;
+    }
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: $app-badge-color;
+  }
+}

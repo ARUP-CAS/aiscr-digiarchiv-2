@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>
+	<ng-container *ngFor="let file of files; let idx = index" class.active]="file === selectedFile">
+    <a (click)="selectFile(file, idx)">{{ file.nazev }}</a>
+  </ng-container>
+	<a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
+</h1>
+<div mat-dialog-content *ngIf="selectedFile">
+  <div fxLayout="row" fxLayoutAlign="start baseline">
+    <div fxFlex class="app-controls">
+      <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
+      <span class="app-pipe"></span>
+      <mat-form-field>
+        <input [title]="'Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()" />
+      </mat-form-field>
+      stránka z <strong>{{ selectedFile?.rozsah }}</strong>
+      <span *ngIf="currentPage < selectedFile.rozsah" class="app-pipe"></span>
+      <a *ngIf="currentPage < selectedFile.rozsah" (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
+    </div>
+    <div class="app-metadata">
+      {{'Velikost souboru' | translate}}: <strong>{{selectedFile.humanFileSize}}</strong><span class="app-pipe"></span><!--
+      -->{{'Typ souboru' | translate}}: <strong>{{mimetype()}}</strong><span class="app-pipe"></span>
+      <ng-container *ngIf="selectedFile !== null">
+        <a [matTooltip]="'Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile.nazev"><mat-icon>get_app</mat-icon></a>  
+      </ng-container>
+    </div>
+  </div>
+  
+  <ngu-carousel #carousel [inputs]="carouselConfig" [dataSource]="selectedFile.pages">
+    <div *nguCarouselDef="let item; let idx = index" class="item">
+      <img [src]="imgPoint(selectedFile) + '?size=medium&id='+selectedFile.filepath + '&page=' + idx" />
+    </div>
+  </ngu-carousel>
+</div>
+
+<!-- <div mat-dialog-actions>
+	<button mat-button mat-dialog-close>Zavřít</button>
+</div> -->

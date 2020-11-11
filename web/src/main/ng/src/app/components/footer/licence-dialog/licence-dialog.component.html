@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{ 'Licence' | translate}}</h1>
+<div mat-dialog-content>
+  <p>
+    {{'licence.work' | translate}}, {{'licence.authored_by' | translate}}
+    <a href="http://www.arup.cas.cz/" [title]="'Archeologický ústav AV ČR, Praha, v. v. i.' | translate" target="_blank">{{'Archeologický ústav AV ČR, Praha, v. v. i.' | translate}}</a>
+    {{'licence.and' | translate}}
+    <a href="http://www.arub.cz/" [title]="'Archeologický ústav AV ČR, Brno, v. v. i.' | translate" target="_blank">{{'Archeologický ústav AV ČR, Brno, v. v. i.' | translate}}</a>, 
+    {{'licence.licenced_under' | translate}}
+    <a href="http://creativecommons.org/licenses/by-nc/4.0/" [title]="'licence.cc_by_nc' | translate" target="_blank">{{'licence.cc_by_nc' | translate}}</a>. 
+    {{'licence.data_and_metadata_usage' | translate}}
+  </p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false" cdkFocusInitial>{{ 'Zavřít' | translate }}</button>
+</div>

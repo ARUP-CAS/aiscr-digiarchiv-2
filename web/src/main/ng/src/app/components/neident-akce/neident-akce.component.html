@@ -1,0 +1,35 @@
+<!-- Title -->
+<div class="app-result-item-nav-title app-border-radius app-cursor-pointer app-color-blue-pastel">
+  <strong>{{'Akce dokumentu' | translate}} {{data.ident_cely}}:</strong>
+</div><!--/.title -->
+
+<ul class="list-unstyled app-nav-tree app-color-black">
+  <li class="app-nav-li-separator"></li>
+  <li *ngIf="hasValue('katastr') || hasValue('okres')">
+    <label>{{'Katastr (okres)' | translate}}:</label> 
+    <span *ngIf="hasValue('katastr')">{{data.katastr}}</span>
+		<span *ngIf="hasValue('okres')">({{data.okres}})</span>
+  </li>
+  <li *ngIf="hasValue('vedouci')">
+    <label>{{'Vedoucí výzkumu' | translate}}:</label> 
+    <span>{{data.vedouci}}</span>
+  </li>
+  <li *ngIf="hasValue('rok_zahajeni') && hasValue('rok_ukonceni')">
+    <label>{{'Rok výzkumu' | translate}}:</label> 
+    <span>{{data.rok_zahajeni}} - {{data.rok_ukonceni}}</span>
+  </li>
+  <li *ngIf="hasValue('lokalizace')">
+    <label>{{'field.lokalizace' | translate}}:</label> 
+    <span>{{data.lokalizace}}</span>
+  </li>
+  <li *ngIf="hasValue('popis')">
+    <label>{{'field.f_popis' | translate}}:</label> 
+    <span>{{data.popis}}</span>
+  </li>
+  <li *ngIf="hasValue('poznamka')">
+    <label>{{'field.f_poznamka' | translate}}:</label>
+    <span>{{data.poznamka}}</span>
+  </li>
+  
+  <li class="app-nav-li-separator"></li>
+</ul>

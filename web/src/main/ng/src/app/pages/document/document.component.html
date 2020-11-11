@@ -1,0 +1,67 @@
+<div class="app-display-table app-loading" *ngIf="loading">
+  <div class="app-table-cell app-clean-pd">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+
+<div class="app-display-table app-container" *ngIf="!loading">
+  <ng-container *ngIf="state.isMapaCollapsed">
+    <div class="app-table-cell">
+      <mat-card class="app-card-info app-row-gap-16">
+        <mat-card-content>
+          <ng-container *ngIf="!isResultEmpty(result)">
+            <strong>{{ 'Persistentní odkaz' | translate }}: </strong> {{link}}
+            <ng-container *ngIf="result.entity === 'dokument' || result.entity === 'knihovna_3d'">
+              <br/>
+              <strong>{{'citation.intro' | translate}}:</strong>
+              {{ result.autor }} {{result.rok_vzniku}}: {{'citation.dokument' | translate}}
+              {{ result.ident_cely }}. {{ result.organizace }}. 
+              {{ 'Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
+            </ng-container>
+  
+            <ng-container *ngIf="result.entity !== 'dokument' && result.entity !== 'knihovna_3d'">
+              <br/>
+              <strong>{{'citation.intro' | translate}}:</strong>
+              {{'licence.record' | translate}}
+              {{ result.ident_cely }}
+              [cit. {{now | date : 'yyyy-MM-dd'}}].
+              {{ 'citation.work' | translate }}.
+              {{ 'Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
+            </ng-container>
+  
+          </ng-container>
+          <ng-container *ngIf="isResultEmpty(result)">
+            {{ 'idnotfound' | translate }}
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+      <ng-container *ngIf="!isResultEmpty(result)">
+        <app-dokument *ngIf="result.entity === 'dokument'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument>
+        <app-knihovna3d *ngIf="result.entity === 'knihovna_3d'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-knihovna3d>
+        <app-akce *ngIf="result.entity === 'akce'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-akce>
+        <app-lokalita *ngIf="result.entity === 'lokalita'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-lokalita>
+        <app-projekt *ngIf="result.entity === 'projekt'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-projekt>
+        <app-samostatny-nalez *ngIf="result.entity === 'samostatny_nalez'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-samostatny-nalez>
+        <app-jednotka-dokumentu *ngIf="result.entity === 'jednotka_dokumentu'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-jednotka-dokumentu>
+        <app-let *ngIf="result.entity === 'let'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
+        <app-pian *ngIf="result.entity === 'pian'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
+        <app-externi-zdroj *ngIf="result.entity === 'ext_zdroj'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
+        <mat-card *ngIf="result.entity === 'adb' || result.entity === 'dok_jednotka' || result.entity === 'komponenta' || result.entity === 'vyskovy_bod'">
+          <mat-card-content>
+            <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-adb>
+            <app-vyskovy-bod *ngIf="result.entity === 'vyskovy_bod'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
+            <app-dok-jednotka *ngIf="result.entity === 'dok_jednotka'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
+            <app-komponenta *ngIf="result.entity === 'komponenta'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  </ng-container>
+  <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
+    <mat-sidenav-container class="app-sidenav-container">
+      <mat-sidenav-content>
+        <app-mapa [isResults]="false"></app-mapa>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<mat-list role="list" class="app-list-used-facet">
+  <h3 mat-subheader fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="app-primary">
+    <div fxFlex>Aktivní filtry</div>
+    <div>
+      <a [matTooltip]="'Odstranit všechny filtry' | translate" matTooltipPosition="above" (click)="clean()">
+        <mat-icon>close</mat-icon>
+      </a>
+    </div>
+  </h3>
+  <mat-list-item role="listitem" *ngFor="let facet of state.breadcrumbs">
+    <div class="app-display-table">
+      <a [matTooltip]="'Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
+        <mat-icon>close</mat-icon>
+      </a>
+      <span class="app-facet-name">
+        <span *ngIf="facet.operator" [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
+        <ng-container *ngIf="facet.field !== 'q'">{{ 'field.' + facet.field | translate}}:&#160;</ng-container>
+        <span class="app-font-bold">{{ facet.display }}</span> 
+      </span> 
+    </div>
+  </mat-list-item>
+</mat-list>

@@ -1,0 +1,14 @@
+<div class="app-display-table app-loading" *ngIf="loading">
+  <div class="app-table-cell app-clean-pd">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+
+<div class="app-display-table app-container">
+  <div class="app-table-cell">
+    <div fxLayout="row" fxFlexFill>
+      <app-free-text [id]="'help'" ></app-free-text>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,36 @@
+// --- EXPORT ---
+
+app-export {
+  display: block;
+  background-color: $app-color-lightnes;
+  padding: $app-searchbar-field-icon-gap;
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 5px;
+    }
+
+    thead {
+      tr {
+        border-bottom: 2px solid $app-gray-3;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: $app-gray-1;
+        }
+
+        &:hover {
+          background-color: $app-gray-3;
+        }
+      }
+    }
+  }
+}

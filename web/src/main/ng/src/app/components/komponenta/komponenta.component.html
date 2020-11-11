@@ -1,0 +1,33 @@
+<mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+  <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+    <mat-panel-title>
+      <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+      {{ 'Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+      <app-inline-filter [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
+      <ng-container *ngIf="result.jistota || result.presna_datace">&#160;({{result.jistota}}<ng-container *ngIf="result.jistota && result.presna_datace">;&#160;</ng-container><ng-container *ngIf="result.presna_datace">{{result.presna_datace}}</ng-container>)</ng-container>
+      <ng-container *ngIf="result.areal">&#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="result.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
+      <ng-container *ngIf="aktivity.length > 0"> 
+        &#160;(<ng-container *ngFor="let aktivita of aktivity; let last = last">
+          <app-inline-filter [field]="'f_aktivita'" [value]="aktivita" [heslar]="'f_aktivita'"></app-inline-filter>
+          <span *ngIf="!last">,&#160;</span></ng-container>)
+      </ng-container>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div *ngIf="result.poznamka">
+    <label class="app-label">{{ 'field.f_poznamka' | translate }}:</label>&#160;{{ result.poznamka }}
+  </div>
+  <mat-expansion-panel #panel1 *ngIf="result.nalez?.length > 0" [expanded]="true" hideToggle class="app-panel-inner">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+      <mat-panel-title>
+        <mat-icon>{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>
+        {{ 'Nálezy' | translate }}:
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul class="app-list-inside">
+      <li *ngFor="let nalez of result.nalez">
+        <app-nalez [result]="nalez"></app-nalez>
+      </li>
+    </ul>
+  </mat-expansion-panel>
+</mat-expansion-panel>
+  

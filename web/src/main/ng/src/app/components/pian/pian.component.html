@@ -1,0 +1,113 @@
+<ng-container [ngSwitch]="inDocument">
+  <mat-expansion-panel *ngSwitchCase="false" #panel [expanded]="true" hideToggle class="app-panel-inner">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+      <mat-panel-title>
+        <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+        {{ 'PIAN' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+        <app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
+        <ng-container *ngIf="result.presnost">&#160;({{'přesnost' | translate }}:&#160;
+          <app-inline-filter [field]="'f_pian_presnost'" [value]="result.presnost" [heslar]="'presnost'"></app-inline-filter>
+          )</ng-container>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div *ngIf="result.zm10">
+      <label class="app-label">{{ 'field.f_pian_zm10' | translate }}:</label>&#160;
+      <app-inline-filter [field]="'f_pian_zm10'" [value]="result.zm10"></app-inline-filter>
+    </div>
+    <div *ngIf="result.centroid_n">
+      <label class="app-label">{{ 'Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ result.centroid_n }} : {{ result.centroid_e }}
+    </div>
+  </mat-expansion-panel>
+  <mat-card *ngSwitchCase="true" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
+    <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
+      <mat-icon>clear</mat-icon>
+    </a>
+    <mat-card-header>
+      <mat-card-title>
+        {{ 'PIAN' | translate }}&#160;{{ result.ident_cely }}
+        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
+        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="result.presnost" [heslar]="'presnost'"></app-inline-filter>
+        <span class="app-pipe"></span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="app-metadata app-row-gap-16">
+        <div *ngIf="result.pristupnost || result.zm10">
+          <ng-container *ngIf="result.pristupnost">
+            <label class="app-label">{{ 'field.pristupnost' | translate }}:</label>&#160;
+            <app-inline-filter [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+            <span class="app-pipe"></span>
+          </ng-container>
+          <ng-container *ngIf="result.zm10">
+            <label class="app-label">{{ 'field.f_pian_zm10' | translate }}:</label>&#160;
+            <app-inline-filter [field]="'zm10'" [value]="result.zm10" [heslar]="'zm10'"></app-inline-filter>
+            <span class="app-pipe"></span>
+          </ng-container>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
+      <div fxFlex class="app-metadata">
+        <ng-container *ngIf="result.dokument?.length > 0">
+          {{'Počet dokumentů' | translate}}: <strong>{{result.dokument?.length}}</strong>
+          <span class="app-pipe"></span>
+        </ng-container>
+      </div>
+      <div>
+        <button *ngIf="!mapDetail" mat-flat-button (click)="service.showInMap(result, true)" [matTooltip]="'Zobrazit na mapě' | translate">
+          <mat-icon>map</mat-icon>
+        </button>
+        <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
+          <mat-icon>menu_book</mat-icon>
+        </button>
+        <button mat-flat-button (click)="service.print()">
+          <mat-icon>print</mat-icon>
+        </button>
+        <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
+          <mat-icon>grade</mat-icon>
+        </button>
+        <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
+          {{(detailExpanded ? 'Skrýt detail' : 'Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+        </button>
+      </div>
+    </mat-card-actions>
+    <mat-card-content *ngIf="detailExpanded">
+      <div class="app-card-detail">
+        <mat-accordion multi="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+              <mat-panel-title>
+                {{ 'Popis PIAN' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table>
+              <tbody>
+                <tr *ngIf="result.centroid_n || result.centroid_e">
+                  <th class="app-label">{{ 'Definiční bod (WGS-84)' | translate }}:</th>
+                  <td><ng-container *ngIf="result.centroid_n">{{ result.centroid_n }}</ng-container><ng-container *ngIf="result.centroid_e">&#160;:&#160;{{ result.centroid_e }}</ng-container></td>
+                </tr>
+                <tr *ngIf="result.geom_gml">
+                  <th class="app-label">{{ 'Geometrie GML' | translate }}:</th>
+                  <td>{{ result.geom_gml }}</td>
+                </tr>
+                <tr *ngIf="result.geom_wkt">
+                  <th class="app-label">{{ 'Geometrie WKT' | translate }}:</th>
+                  <td>{{ result.geom_wkt }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </mat-expansion-panel>
+          <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+            <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+              <mat-panel-title>
+                {{ 'Související záznamy' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+            <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+          </mat-expansion-panel> 
+        </mat-accordion>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-container>

@@ -1,0 +1,7 @@
+assets/
+server/
+index.html
+*.js
+*.css
+*.map
+*.png

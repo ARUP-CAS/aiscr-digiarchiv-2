@@ -1,0 +1,96 @@
+<mat-accordion multi="true">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
+      <mat-panel-title>
+        {{ 'field.entity' | translate }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list role="list">
+      <mat-list-item *ngFor="let entity of config.entities" [ngClass]="'app-facet-entity ' + entity" [class.active]="state.entity === entity" (click)="setEntity(entity)">
+        <div fxLayout="row" fxFlexFill class="app-fx-wrapper" >
+          <div fxFlex="50px" class="app-fx-left">
+            <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
+          </div>
+          <div fxFlex class="app-fx-right">
+            <strong>{{ 'entities.' + entity | translate }}</strong>
+            <span *ngIf="state.totals">({{ state.totals[entity] }})</span>
+          </div>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <app-facets-dynamic></app-facets-dynamic>
+  <app-facets-search></app-facets-search>
+
+  <ng-container *ngFor="let facetPivot of state.facetPivots">
+    <mat-expansion-panel *ngIf="treeData.length > 0" [expanded]="true">
+      <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
+        <mat-panel-title>
+          {{ 'field.' + facetPivot.field | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" #tree>
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding class="app-node-child">
+          <button mat-icon-button disabled></button><button mat-icon-button disabled></button>
+          <mat-checkbox [checked]="node.used" (change)="clickPivot('f_typ_dokumentu',node.field, node.used)"></mat-checkbox>
+          <a (click)="clickPivot('f_typ_dokumentu',node.field, node.used)">{{node.field | translateHeslar : 'f_typ_dokumentu'}}</a> 
+          <span>({{node.count}})</span>
+        </mat-tree-node>
+        <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding >
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.field">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          <mat-checkbox [checked]="node.used" (change)="clickPivot('kategorie_dokumentu',node.field, node.used)"></mat-checkbox>
+          <a (click)="clickPivot('kategorie_dokumentu',node.field, node.used)">{{'kategorie_dokumentu.' + node.field | translate}}</a>
+          <span>({{node.count}})</span>
+        </mat-tree-node>
+      </mat-tree>
+    </mat-expansion-panel>
+  </ng-container>
+
+  <ng-container *ngFor="let facetField of state.facetsFiltered">
+    <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered || true">
+      <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
+        <mat-panel-title>
+          <a class="app-filter-badge app-gap-icon-right" [matTooltip]="'Aplikovat filtr' | translate"
+          (click)="applyFilters()">
+            <mat-icon mat-flat-button>filter_list</mat-icon></a>
+          {{ 'field.'+facetField.field | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list role="list">
+        <cdk-virtual-scroll-viewport itemSize="10" [style.height.px]="math.min(200, facetField.values.length * 22)">
+        <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-table">
+          <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown" [matTooltip]="facet.operator ? ('Operátor ' + facet.operator | translate) : ('Zvolit operátor pro filtrování' | translate)">
+            <mat-icon *ngIf="!facet.operator || facet.operator === 'delete'">more_vert</mat-icon>
+            <span *ngIf="facet.operator && facet.operator !== 'delete'" [class]="'app-badge-op ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
+          </a>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="addFilter(facetField.field, facet, 'or')">
+              <span class="app-badge-op or">OR</span> 
+              <span>{{ 'Operátor OR' | translate }}</span>
+            </button>
+            <button mat-menu-item (click)="addFilter(facetField.field, facet, 'and')">
+              <span class="app-badge-op and">AND</span> 
+              <span>{{ 'Operátor AND' | translate }}</span>
+            </button>
+            <button mat-menu-item (click)="addFilter(facetField.field, facet, 'not')">
+              <span class="app-badge-op not">NOT</span> 
+              <span>{{ 'Operátor NOT' | translate }}</span>
+            </button>
+          </mat-menu>
+          <div class="app-list-content">
+            <a (click)="clickFacet(facetField.field, facet)">
+              {{ facet.name | translateHeslar : facetField.field }}
+            </a>
+            <span>({{ facet.value }})</span>
+          </div>
+        </mat-list-item>
+      </cdk-virtual-scroll-viewport>
+      </mat-list>
+    </mat-expansion-panel> 
+  </ng-container>
+</mat-accordion>

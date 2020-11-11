@@ -1,0 +1,48 @@
+// --- FACETS USED ---
+
+app-facets-used,
+.app-facets-used {
+  .mat-list {
+    @include set-border(bottom, 1, solid, #{$app-gray-3});
+    padding: 10px 0 $app-gap 0 !important;
+    margin-top: $app-gap;
+    
+    .mat-subheader {
+      @extend .app-font-bold;
+      color: $app-primary-color;
+      height: 0;
+      padding-right: 8px;
+
+      .mat-icon {
+        color: $app-color-warning;
+        margin-left: $app-gap-icon;
+      }
+    }
+
+    .mat-list-item {
+      height: auto;
+
+      .app-display-table {
+        line-height: 22px;
+        display: table;
+        width: 100%;
+
+        a {
+          display: table-cell;
+          width: 18px;
+        }
+
+        .app-facet-item {
+          display: table-cell;
+        }
+      }
+      
+
+      .mat-icon {
+        &:hover {
+          color: $app-color-warning;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "response": {
+    "docs": [],
+    "numFound": 0,
+    "start": 0
+  },
+  "responseHeader": {
+    "QTime": 73,
+    "params": {
+      "json.wrf": "__ng_jsonp__.__req5.finished",
+      "facet.heatmap": "loc_rpt",
+      "json.nl": "map",
+      "facet.heatmap.geom": "[\"12.3651123046875 48.72720881940671\" TO \"18.6273193359375 50.85450904781293\"]",
+      "facet.heatmap.maxCells": "400000",
+      "start": "0",
+      "facet.heatmap.maxLevel": "7",
+      "fq": "loc_rpt:[48.72720881940671,12.3651123046875 TO 50.85450904781293,18.6273193359375]",
+      "facet.heatmap.distErr": "0.03131103515625",
+      "rows": "100",
+      "wt": "json"
+    },
+    "status": 0
+  },
+  "facet_counts": {
+    "facet_intervals": {},
+    "facet_pivot": {},
+    "facet_queries": {},
+    "facet_fields": {},
+    "facet_ranges": {}
+  }
+}

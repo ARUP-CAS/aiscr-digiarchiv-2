@@ -1,0 +1,94 @@
+<div class="app-display-table app-loading" *ngIf="loading">
+  <div class="app-table-cell app-clean-pd">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+
+<div class="app-display-table app-container">
+  <div class="app-table-cell">
+    <ng-container *ngIf="state.isMapaCollapsed">
+      <div fxLayout="row wrap" class="app-entities-wrapper">
+        <ng-container *ngFor="let entity of config.entities">
+          <mat-card [class]="'app-entity-' + entity" class="app-card-entity">
+            <mat-card-header>
+              <mat-card-title fxLayout="row">
+                <a fxFlex routerLink="/results" [queryParams]="{'entity' : entity}">
+                  <mat-icon fxFlex="28px">{{ config.entityIcons[entity] }}</mat-icon><span>{{ 'entities.' + entity | translate }}</span>
+                </a>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+              <span>{{ totals[entity] }}</span> {{'záznamů' | translate}}
+              <a *ngIf="entity === 'dokument'" (click)="showingCat = !showingCat" [class]="'app-icon-inside app-entity-' + entity" [ngClass]="showingCat ? 'app-rotate-up' : 'app-rotate-down'" [matTooltip]="showingCat ? 'Sbalit kategorie' : 'Rozbalit kategorie'">
+                <mat-icon>
+                  expand_more
+                </mat-icon>
+              </a>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
+        <mat-card fxFlex="100%" *ngIf="showingCat" class="app-doctype">
+          <mat-card-content fxLayout="row wrap">
+            <mat-card fxFlex *ngFor="let doctype of kategories" class="app-card-doctype mat-elevation-z0">
+              <mat-card-header>
+                <mat-card-title>
+                  <a routerLink="/results" [queryParams]="{'kategorie_dokumentu' : doctype, 'entity': 'dokument'}">
+                    <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'kategorie_dokumentu.' + doctype | translate }}
+                  </a>
+                </mat-card-title>
+                <mat-card-subtitle>
+                  <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div fxLayout="row" class="app-desc-wrapper">
+        <mat-card fxFlex class="app-fx-left">
+          <mat-card-header>
+            <mat-card-title>{{ 'O projektu' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <app-free-text [id]="'about'" ></app-free-text>
+          </mat-card-content>
+        </mat-card>
+        <div fxFlex class="app-fx-right">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>{{ 'Novinky' | translate }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <app-free-text [id]="'news'" ></app-free-text>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!state.isMapaCollapsed">
+      <mat-sidenav-container class="app-sidenav-container">
+        <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+          <mat-tab-group>
+            <mat-tab label="Filters">
+              <div class="app-facets">
+                <app-facets-search></app-facets-search>
+                <app-facets-used></app-facets-used><!--*ngIf="isActiveFacet()"-->
+                <app-facets></app-facets>
+              </div>
+            </mat-tab>
+            <mat-tab label="Results">
+              Results
+            </mat-tab>
+          </mat-tab-group>
+        </mat-sidenav>
+      
+        <mat-sidenav-content>
+          <button mat-raised-button (click)="sidenav.toggle()" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'">
+            <mat-icon>last_page</mat-icon>
+          </button>
+          <app-mapa></app-mapa>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </ng-container>
+  </div>
+</div>

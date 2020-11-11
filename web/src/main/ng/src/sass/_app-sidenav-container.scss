@@ -1,0 +1,114 @@
+// --- SIDENAV CONTAINER ---
+
+.app-sidenav-container {
+  height: calc(100vh - 217px);
+
+  .mat-sidenav {
+    width: $app-table-cell-left-width;
+
+    .mat-tab-group {
+      .mat-tab-label {
+        min-width: 50%;
+      }
+    }
+
+    .app-result-item {
+      @extend .app-clean-shadow, .app-clean-radius;
+      border-bottom: 1px solid $app-gray-2;
+      padding-top: calc(#{$app-gap} / 2);
+      padding-bottom: calc(#{$app-gap} / 2);
+
+      &:hover {
+        background-color: $app-gray-2;
+      }
+
+      &.app-row-gap-16 {
+        @extend .app-clean-mg;
+      }
+
+      .mat-card-header {
+        .mat-card-title {
+          @extend .app-clean-mg;
+          font-size: 14px;
+         
+          a {
+            .mat-icon {
+              @include setIcon(20);
+            }
+          }
+        }
+      }
+      .mat-card-content,
+      .mat-card-actions {
+        display: none !important;
+      }
+    }
+
+    app-paginator {
+      & > div {
+        border-bottom: 1px solid $app-gray-3;
+      }
+
+      .mat-paginator-container {
+        width: auto;
+      }
+
+      .mat-paginator-page-size,
+      .app-sorting,
+      .mat-form-field-label {
+        display: none !important;
+      }
+
+      .app-page-num {
+        $val: 50px;
+        flex: 1 1 $val !important;
+        max-width: $val !important;
+        min-width: $val !important;
+      }
+    }
+  }
+
+  .app-btn {
+    position: absolute;
+    top: $app-gap;
+    left: 18px;
+    z-index: 1002;
+    min-width: 0;
+    line-height: 28px;
+    padding: 0 1px;
+  }
+
+  .app-view-card-info {
+    position: absolute;
+    top: $app-gap;
+    right: $app-gap;
+    z-index: 1002;
+    width: 880px;
+
+    max-height: calc(100% - 16px);
+    overflow-y: auto;
+
+    .mat-card-title {
+      max-width: 640px;
+    }
+  }
+
+  .app-active-pian-facet {
+    position: absolute;
+    top: $app-gap;
+    left: 60px;
+    z-index: 1002;
+    padding: 0 $app-gap-icon;
+    min-height: 28px;
+    background-color: rgba($app-color-lightnes, .8);
+
+    a {
+      vertical-align: sub;
+
+      .mat-icon {
+        color: $app-color-warning;
+        @include setIcon($size: 18, $position: middle);
+      }
+    }
+  }
+}

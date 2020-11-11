@@ -1,0 +1,52 @@
+<mat-toolbar class="app-navbar">
+  <div class="app-container">
+    <div fxLayout="row" fxFlexFill>
+      <div fxFlex class="app-fx-left">
+        <a class="app-logo" (click)="logoClicked()" routerLink="home" [title]="'logo_desc' | translate">
+          <img [src]="'assets/img/logo-digitalni-archiv-amcr-' + state.currentLang + '.png'" [alt]="'logo_desc' | translate" />
+        </a>
+      </div>
+      <div fxFlex class="app-fx-right">
+        <div fxLayout="row" fxLayoutAlign="end" fxFlexFill class="fxHide_gt-sm"><!--fxHide.gt-sm-->
+          <a (click)="onToggleSidenav()" class="app-sidenav-link">
+            <mat-icon>menu</mat-icon>
+          </a>  
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end" fxFlexFill class="fxHide_sm fxHide_xs"><!--fxHide.sm fxHide.xs-->
+          <a routerLink="home" routerLinkActive="app-active">
+            <mat-icon>home</mat-icon>
+            Home
+          </a>
+          <span class="app-pipe"></span>
+          <a routerLink="napoveda" routerLinkActive="app-active">
+            <mat-icon>help_outline</mat-icon>
+            {{ 'help' | translate }}
+          </a>
+          <!-- <span class="app-pipe" *ngIf="state.logged"></span>
+          <a *ngIf="state.logged" routerLink="favorites" routerLinkActive="app-active">
+            <mat-icon>grade</mat-icon>
+            {{ 'Favorites' | translate }}
+          </a> -->
+          <span class="app-pipe"></span>
+          <a *ngIf="!state.logged" (click)="showLogin()">
+            <mat-icon>login</mat-icon>
+            {{ 'Přihlásit' | translate }}
+          </a>
+          <span class="app-pipe"></span>
+          <a *ngIf="!state.logged" href="http://api.archeologickamapa.cz/registrace/0/" target="_blank">
+            <mat-icon>how_to_reg</mat-icon>
+            {{ 'Registrovat uživatele' | translate }}
+          </a>
+          <a *ngIf="state.logged" (click)="showLogin()">
+            <mat-icon>logout</mat-icon>
+            {{state.user.jmeno}} {{state.user.prijmeni}}
+            ({{'pristupnost_' + state.user.pristupnost | translate}})
+          </a>
+          <span class="app-pipe"></span>
+          <a *ngIf="state.currentLang !== 'en'" (click)="changeLang('en')">English</a>
+          <a *ngIf="state.currentLang !== 'cs'" (click)="changeLang('cs')">Čeština</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,19 @@
+// --- VIEW ROW ---
+
+.app-view-row {
+  .mat-card {
+    .mat-card-content {
+      .app-thumb {
+        display: none;
+      }
+      
+      .app-metadata {
+        div {
+          &:not(:first-child) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

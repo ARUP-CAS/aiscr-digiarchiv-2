@@ -1,0 +1,57 @@
+// --- FILE VIEWER ---
+
+app-file-viewer {
+  .mat-dialog-title {
+    position: relative;
+
+    .app-close-icon {
+      position: absolute;
+      top: 5px;
+      right: 0;
+      color: $app-color-darknes;
+    }
+  }
+
+  .mat-dialog-content {
+    overflow: unset;
+
+   .app-controls {
+      .mat-icon {
+      @include setIcon($position: middle);  
+      }
+     
+      .mat-form-field {
+        width: 30px;
+        font-weight: bold;
+      }
+    }
+
+    .app-metadata {
+      .mat-icon {
+        @include setIcon($position: middle);
+      }
+    }
+
+    .app-carousel {
+      .ngucarousel {
+        .ngucarousel-items {
+          & > div {
+            /* position: relative;
+            min-width: 755px;
+            min-height: 400px;
+            max-height: 560px;
+            overflow-y: auto; */
+
+            img {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.app-file-viewer {
+  height: 95%;
+}

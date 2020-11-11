@@ -1,0 +1,50 @@
+<footer>
+  <div class="app-container">
+    <div fxLayout="row" class="app-footer-wrapper">
+      <div fxFlex class="app-fx-left">
+        <p>
+          {{'Archeologický ústav AV ČR, Praha, v. v. i.' | translate}} © {{ currentYear }}.
+        </p>
+        <p>
+          {{'Kontakt' | translate}} <a (click)="showKontakt()"><mat-icon>info</mat-icon></a><span class="app-pipe"></span>Created by 
+          <a href="http://www.inovatika.cz" title="Inovatika" target="_blank">
+            <img src="./assets/img/logo-inovatika.png" alt="Inovatika" class="app-logo" />
+          </a>
+          <span class="app-pipe"></span>
+          <a href="http://creativecommons.org/licenses/by-nc/4.0/" [title]="'licence.cc_by_nc' | translate" target="_blank">
+            <img src="assets/img/logo-cc.png" [alt]="'licence.cc_by_nc' | translate" />
+          </a>&#160;
+          <a (click)="showLicence()"><mat-icon>info</mat-icon></a>
+        </p>
+        <p>
+          {{ 'Verze' | translate }} 2.0.0
+        </p>
+      </div>
+      <div fxFlex class="app-fx-right">
+        <p>
+          <a href="http://www.arup.cas.cz/" [title]="'Archeologický ústav AV ČR, Praha, v. v. i.' | translate" target="_blank">
+            <img src="assets/img/logo-arup.png" [alt]="'Archeologický ústav AV ČR, Praha, v. v. i.' | translate" />
+          </a>
+          <a href="http://arub.avcr.cz/archiv/" [title]="'Archeologický ústav AV ČR, Brno, v. v. i.' | translate" target="_blank">
+            <img src="assets/img/logo-avcr-brno.png" [alt]="'Archeologický ústav AV ČR, Brno, v. v. i.' | translate" />
+          </a>
+          <a href="http://www.msmt.cz/" [title]="'Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate" target="_blank">
+            <img src="assets/img/logo-msmt.png" [alt]="'Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate" />
+          </a>
+          <a href="http://www.aiscr.cz/" [title]="'Archeologický informační systém České republiky' | translate" target="_blank">
+            <img src="assets/img/logo-ais.png" [alt]="'Archeologický informační systém České republiky' | translate" />
+          </a>
+          <a href="http://www.ariadne-infrastructure.eu/" [title]="'Ariadne' | translate" target="_blank">
+            <img src="assets/img/logo-ariadne.png" [alt]="'Ariadne' | translate" />
+          </a>
+          <a href="http://av21.avcr.cz/" [title]="'Programy strategie AV21' | translate" target="_blank">
+            <img src="assets/img/logo_09ccc.png" [alt]="'Programy strategie AV21' | translate" />
+          </a>
+          <a href="http://www.spacesystems.cz" title="Space Systems Czech" target="_blank">
+            <img src="assets/img/logo-ssc.png" alt="Space Systems Czech" />
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

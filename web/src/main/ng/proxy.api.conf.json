@@ -1,0 +1,30 @@
+{
+  "/api/**": {
+    "target": "http://localhost:8080/amcr/api",
+    "pathRewrite": {
+      "^/api":""
+    },
+    "changeOrigin": false,
+    "withCredentials": true,
+    "secure": false
+  },
+  
+  "/assets/i18n/**": {
+    "target": "http://localhost:8080/amcr/assets/i18n/cs",
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/assets/i18n":""
+    },
+    "changeOrigin": false,
+    "secure": false
+  },
+  
+  "/assets/config_.json": {
+    "target": "http://localhost:8080/amcr/assets/config.json",
+    "pathRewrite": {
+      "^/api":""
+    },
+    "changeOrigin": false,
+    "secure": false
+  }
+}
