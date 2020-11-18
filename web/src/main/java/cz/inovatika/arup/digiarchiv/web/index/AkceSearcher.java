@@ -71,7 +71,7 @@ public class AkceSearcher implements EntitySearcher{
       SolrSearcher.addLocationParams(request, query);
     }
 
-    query.setFields("ident_cely","katastr","okres","vedouci_akce", "loc",
+    query.setFields("ident_cely","katastr","okres","vedouci_akce", "loc","entity",
     "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,
     "organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
     "hlavni_typ","vedlejsi_typ","vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
