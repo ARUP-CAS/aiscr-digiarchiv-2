@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<schema name="digiarchiv-entities" version="1.6">
+
+<!-- Common fields to all entites -->
+
+   <field name="_version_" type="plong" indexed="false" stored="false"/>
+   <field name="indextime" type="pdate" indexed="true" stored="true" default="NOW" /> 
+   <field name="ident_cely" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="searchable" type="boolean" indexed="true" stored="true" multiValued="false" />
+   <field name="stav" type="pint" indexed="true" stored="true" multiValued="false" />
+   <field name="entity" type="string" indexed="true" stored="true" />
+   <field name="pristupnost" type="string" indexed="true" stored="true" />
+   
+   <field name="loc" type="location" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_rpt" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_rpt_A" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_rpt_B" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_rpt_C" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_rpt_D" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="lng" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lat" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="pian_id" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   <field name="pian_typ" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="pian_presnost" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="pian_zm10" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <!-- Dokument fields -->
+   <field name="extra_data_rok_od" type="pint" indexed="true" stored="true"  multiValued="true" />
+   <field name="extra_data_rok_do" type="pint" indexed="true" stored="true"  multiValued="true" />
+   <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />
+   
+   
+   <field name="datum_zverejneni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
+   <field name="extra_data_datum_vzniku" type="pdate" indexed="true" stored="true"  multiValued="true" />
+   <field name="let_datum" type="pdate" indexed="true" stored="true"  multiValued="true" />
+   
+   <field name="soubor_vytvoreno" type="pdate" indexed="true" stored="true"  multiValued="true" />
+   <field name="soubor_rozsah" type="pint" indexed="true" stored="true"  multiValued="true" />
+   
+   <field name="autor" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
+   <field name="typ_dokumentu_posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="extra_data" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <!--
+   <field name="extra_data_duveryhodnost" type="pint" indexed="true" stored="true"  multiValued="true" />
+   -->
+   
+   <field name="tvar" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="jednotka_dokumentu" type="string" indexed="false" stored="true" multiValued="true" docValues="false" />   
+   <field name="pian" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="odkaz" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="soubor" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="komponenta_dokument" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="komponenta" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="nalez_dokumentu" type="string" indexed="false" stored="true"  multiValued="true" />
+   <field name="neident_akce" type="string" indexed="false" stored="true"  multiValued="true" />
+   
+   <field name="child_soubor" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="parent_akce_katastr" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="parent_akce_okres" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="parent_lokalita_katastr" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="parent_lokalita_okres" type="string" indexed="false" stored="true" multiValued="true" /> 
+   
+  
+   <!-- Akce and lokalita fields -->
+   <field name="je_nz" type="pint" indexed="true" stored="true" multiValued="false" /> 
+   
+   <field name="datum_zahajeni_v" type="pdate" indexed="true" stored="true" />
+   <field name="datum_ukonceni_v" type="pdate" indexed="true" stored="true" />
+   <field name="datum_zapisu" type="pdate" indexed="true" stored="true" />
+   <field name="datum_autorizace" type="pdate" indexed="true" stored="true" />
+   <field name="datum_archivace_zaa" type="pdate" indexed="true" stored="true" />
+   <field name="datum_odlozeni_nz" type="pdate" indexed="true" stored="true" />
+   <field name="datum_vraceni_zaa" type="pdate" indexed="true" stored="true" />
+   <field name="datum_podani_nz" type="pdate" indexed="true" stored="true" />
+   <field name="datum_zamitnuti" type="pdate" indexed="true" stored="true" />
+   <field name="rok_vydani" type="pint" indexed="true" stored="true"  multiValued="true" />
+   
+   
+   <field name="datum_provedeni" type="rdate" indexed="true" stored="true" />
+   <field name="datum_provedeni_od" type="pdate" indexed="true" stored="true" />
+   <field name="datum_provedeni_do" type="pdate" indexed="true" stored="true" />
+   
+   <field name="dok_jednotka" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="adb" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="ext_zdroj" type="string" indexed="false" stored="true" multiValued="true" /> 
+   
+   <field name="child_dok_jednotka" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="child_dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="child_ext_zdroj" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   <field name="vedouci_akce_ostatni" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <field name="organizace_ostatni" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <field name="dalsi_katastry" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <field name="dalsi_katastr" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <field name="dalsi_okres" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   
+   <!-- Projekt fields -->
+   <field name="child_akce" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="child_samostatny_nalez" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   <!-- Samostatny nalez fields -->
+   <field name="hloubka" type="pint" indexed="true" stored="true" multiValued="false" /> 
+   <field name="datum_nalezu" type="pdate" indexed="true" stored="true" />
+   <field name="full_text_notlogged" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   <field name="full_text_logged" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   
+   <!-- ADB fields -->
+   <field name="vyskovy_bod" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   
+   <!-- PIAN fields -->
+   <field name="geom_gml" type="string_big" indexed="false" stored="true" multiValued="false" /> 
+   <field name="geom_wkt" type="string_big" indexed="false" stored="true" multiValued="false" /> 
+   
+   <!-- Externi zdroj -->
+   <field name="datum_rd" type="pdate" indexed="true" stored="true"  /> 
+   <field name="ext_odkaz" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   
+   <!-- Dynamic fields for multivalued children -->
+   <dynamicField name="dok_jednotka_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="komponenta_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="extra_data_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="odkaz_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="tvar_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="jednotka_dokumentu_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   
+   
+   <dynamicField name="nalez_dokumentu_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="komponenta_dokument_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="neident_akce_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="soubor_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="let_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="adb_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="f_adb_*" type="string" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="f_pian_*" type="string" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="vyskovy_bod_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="nalez_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="ext_zdroj_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   
+   <field name="adv_jmeno" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
+   
+   <!-- obdobi integer for filters --> 
+   <field name="obdobi_poradi" type="pint" indexed="true" stored="true" multiValued="true" /> 
+   
+   <!-- pole pro facety -->
+   <field name="f_aktivita" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_aktivita_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_aktivita_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_aktivita_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_aktivita_D" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_typ_dokumentu" type="string" indexed="true" stored="true" multiValued="false" /> 
+   
+   
+   <field name="f_typ_dokumentu_posudek" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_extra_data_format" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   <field name="f_autor" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_vedouci" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_nalezce" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_pozorovatel" type="string" indexed="true" stored="true" multiValued="true" /> 
+
+   <field name="f_organizace" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_okres" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   <field name="f_katastr" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_katastr_A" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_katastr_B" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_katastr_C" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_katastr_D" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_rok_vzniku" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_rok_vydani" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_obdobi" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_obdobi_A" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_obdobi_B" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_obdobi_C" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_obdobi_D" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_areal" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_areal_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_areal_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_areal_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_areal_D" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_druh_lokality" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_lokality" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_typ_nalezu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_nalezu_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_nalezu_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_nalezu_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_nalezu_D" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_druh_nalezu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_druh_nalezu_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_druh_nalezu_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_druh_nalezu_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_druh_nalezu_D" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_kategorie" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_kategorie_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_kategorie_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_kategorie_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_kategorie_D" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_specifikace" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_specifikace_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_specifikace_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_specifikace_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_specifikace_D" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_typ_vyzkumu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_vyzkumu_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_vyzkumu_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_vyzkumu_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_vyzkumu_D" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_material_dokumentu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_jazyk_dokumentu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_rada" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_ulozeni_originalu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_zachovalost" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_nahrada" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_zeme" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_format" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_udalost_typ" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_osoby" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   
+   <field name="f_let_pozorovatel" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_let_organizace" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_let_pilot" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_let_letiste_start" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_let_letiste_cil" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_let_pocasi" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_let_dohlednost" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_tvar" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_typ_projektu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_kulturni_pamatka" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   
+   <field name="f_dok_jednotka_typ" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_dok_jednotka_typ_A" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_dok_jednotka_typ_B" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_dok_jednotka_typ_C" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_dok_jednotka_typ_D" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_nalezove_okolnosti" type="string" indexed="true" stored="true" multiValued="true" />
+
+   
+   <!-- sort fields -->
+   <field name="autor_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
+   <field name="organizace_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
+   <field name="okres_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
+   
+   <!-- For all other fields -->
+   <dynamicField name="*" type="lowercase_cs" multiValued="false"/>
+   
+   <!-- Field for free text filtering -->
+   <field name="f_popis" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="f_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="f_podnazev" type="text_general" indexed="true" stored="false" multiValued="true" />
+   
+   <!-- Fulltext fields by pristupnosti -->
+   <field name="text_all_A" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   <field name="text_all_B" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   <field name="text_all_C" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   <field name="text_all_D" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   <field name="text_all_E" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   
+ <!-- Field to use to determine and enforce document uniqueness. 
+      Unless this field is marked with required="false", it will be a required field
+   -->
+ <uniqueKey>ident_cely</uniqueKey>
+
+
+<copyField source="typ_dokumentu" dest="f_typ_dokumentu" /> 
+<copyField source="autor" dest="f_autor" />
+<copyField source="adb_autor_popisu" dest="f_autor" />
+<copyField source="adb_autor_revize" dest="f_autor" />
+
+<copyField source="extra_data_osoby" dest="f_osoby" />
+
+<copyField source="*_vedouci" dest="f_vedouci" />
+<copyField source="vedouci_akce" dest="f_vedouci" />
+<copyField source="vedouci_akce_ostatni" dest="f_vedouci" />
+<copyField source="vedouci_projektu" dest="f_vedouci" />
+
+<copyField source="nalezce" dest="f_nalezce" />
+
+<copyField source="let_pozorovatel" dest="f_pozorovatel" />
+	   
+
+<copyField source="autor" dest="adv_jmeno" />
+<copyField source="neident_akce_vedouci" dest="adv_jmeno" />
+<copyField source="extra_data_osoby" dest="adv_jmeno" />
+<copyField source="akce_vedouci_akce" dest="adv_jmeno" />
+<copyField source="akce_vedouci_akce_ostatni" dest="adv_jmeno" />
+
+<copyField source="okres" dest="f_okres" />
+<copyField source="*_okres" dest="f_okres" />
+<copyField source="katastr" dest="f_katastr" />
+<copyField source="*_katastr" dest="f_katastr" />
+<copyField source="dalsi_katastry" dest="f_katastr" />
+
+<copyField source="rok_vzniku" dest="f_rok_vzniku" />
+<copyField source="rok_vydani" dest="f_rok_vydani" />
+
+<copyField source="obdobi" dest="f_obdobi" />
+<copyField source="*_obdobi" dest="f_obdobi" />
+
+<copyField source="areal" dest="f_areal" />
+<copyField source="*_areal" dest="f_areal" />
+
+<copyField source="*_obdobi_poradi" dest="obdobi_poradi" />
+
+<copyField source="organizace" dest="f_organizace" />
+<copyField source="organizace_ostatni" dest="f_organizace" />
+<copyField source="organizace_prihlaseni" dest="f_organizace" />
+
+<copyField source="let_pozorovatel" dest="f_let_pozorovatel" />
+<copyField source="let_organizace" dest="f_let_organizace" />
+<copyField source="let_pilot" dest="f_let_pilot" />
+<copyField source="let_letiste_start" dest="f_let_letiste_start" />
+<copyField source="let_letiste_cil" dest="f_let_letiste_cil" />
+<copyField source="let_pocasi" dest="f_let_pocasi" />
+<copyField source="let_dohlednost" dest="f_let_dohlednost" />
+
+<copyField source="tvar_tvar" dest="f_tvar" />
+
+<!--
+<copyField source="hlavni_typ" dest="f_typ_vyzkumu" />
+<copyField source="vedlejsi_typ" dest="f_typ_vyzkumu" />
+-->
+
+<copyField source="material_originalu" dest="f_material_dokumentu" />
+
+<copyField source="typ_dokumentu_posudek" dest="f_typ_dokumentu_posudek" />
+
+<copyField source="jazyk_dokumentu" dest="f_jazyk_dokumentu" />
+<copyField source="rada" dest="f_rada" />
+<copyField source="ulozeni_originalu" dest="f_ulozeni_originalu" />
+<copyField source="extra_data_zachovalost" dest="f_zachovalost" />
+<copyField source="extra_data_nahrada" dest="f_nahrada" />
+<copyField source="extra_data_zeme" dest="f_zeme" />
+<copyField source="extra_data_format" dest="f_format" />
+<copyField source="extra_data_udalost_typ" dest="f_udalost_typ" />
+
+<copyField source="typ_projektu" dest="f_typ_projektu" />
+<copyField source="kulturni_pamatka" dest="f_kulturni_pamatka" />
+
+
+<copyField source="nalezove_okolnosti" dest="f_nalezove_okolnosti" /> 
+
+<copyField source="typ_lokality" dest="f_typ_lokality" />
+<copyField source="druh" dest="f_druh_lokality" />
+
+<copyField source="*typ_nalezu" dest="f_typ_nalezu" />
+
+<copyField source="druh_nalezu" dest="f_druh_nalezu" />
+<copyField source="*druh_nalezu" dest="f_druh_nalezu" />
+<copyField source="nalez_kategorie" dest="f_kategorie" />
+<copyField source="*specifikace" dest="f_specifikace" />
+
+<copyField source="adb_typ_sondy" dest="f_adb_typ_sondy" />
+<copyField source="adb_podnet" dest="f_adb_podnet" />
+<copyField source="pian_typ" dest="f_pian_typ" />
+<copyField source="pian_presnost" dest="f_pian_presnost" />
+<copyField source="pian_zm10" dest="f_pian_zm10" />
+<copyField source="dok_jednotka_typ" dest="f_dok_jednotka_typ" />
+
+
+<copyField source="popis" dest="f_popis" />
+<copyField source="poznamka" dest="f_poznamka" />
+<copyField source="podnazev" dest="f_podnazev" />
+
+
+<!--
+<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
+<copyField source="datum_ukonceni_v" dest="datum_provedeni" /> 
+<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
+<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
+<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
+-->
+
+    <!-- field type definitions. The "name" attribute is
+       just a label to be used by field definitions.  The "class"
+       attribute and any other attributes determine the real
+       behavior of the fieldType.
+         Class names starting with "solr" refer to java classes in a
+       standard package such as org.apache.solr.analysis
+    -->
+
+    <!-- sortMissingLast and sortMissingFirst attributes are optional attributes are
+         currently supported on types that are sorted internally as strings
+         and on numeric types.
+       This includes "string", "boolean", "pint", "pfloat", "plong", "pdate", "pdouble".
+       - If sortMissingLast="true", then a sort on this field will cause documents
+         without the field to come after documents with the field,
+         regardless of the requested sort order (asc or desc).
+       - If sortMissingFirst="true", then a sort on this field will cause documents
+         without the field to come before documents with the field,
+         regardless of the requested sort order.
+       - If sortMissingLast="false" and sortMissingFirst="false" (the default),
+         then default lucene sorting will be used which places docs without the
+         field first in an ascending sort and last in a descending sort.
+    -->
+
+    <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true" docValues="true" />
+    <fieldType name="strings" class="solr.StrField" sortMissingLast="true" multiValued="true" docValues="true" />
+
+    <!-- boolean type: "true" or "false" -->
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true"/>
+
+    <!--
+      Numeric field types that index values using KD-trees.
+      Point fields don't support FieldCache, so they must have docValues="true" if needed for sorting, faceting, functions, etc.
+    -->
+    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+    <fieldType name="pfloat" class="solr.FloatPointField" docValues="true"/>
+    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+    <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
+
+    <fieldType name="pints" class="solr.IntPointField" docValues="true" multiValued="true"/>
+    <fieldType name="pfloats" class="solr.FloatPointField" docValues="true" multiValued="true"/>
+    <fieldType name="plongs" class="solr.LongPointField" docValues="true" multiValued="true"/>
+    <fieldType name="pdoubles" class="solr.DoublePointField" docValues="true" multiValued="true"/>
+    <fieldType name="random" class="solr.RandomSortField" indexed="true"/>
+
+    <!-- since fields of this type are by default not stored or indexed,
+       any data added to them will be ignored outright.  -->
+    <fieldType name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
+
+    <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
+         is a more restricted form of the canonical representation of dateTime
+         http://www.w3.org/TR/xmlschema-2/#dateTime    
+         The trailing "Z" designates UTC time and is mandatory.
+         Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z
+         All other components are mandatory.
+
+         Expressions can also be used to denote calculations that should be
+         performed relative to "NOW" to determine the value, ie...
+
+               NOW/HOUR
+                  ... Round to the start of the current hour
+               NOW-1DAY
+                  ... Exactly 1 day prior to now
+               NOW/DAY+6MONTHS+3DAYS
+                  ... 6 months and 3 days in the future from the start of
+                      the current day
+                      
+      -->
+    <!-- KD-tree versions of date fields -->
+    <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
+    <fieldType name="pdates" class="solr.DatePointField" docValues="true" multiValued="true"/>
+    <fieldType name="rdate" class="solr.DateRangeField" />
+    <fieldType name="rdates" class="solr.DateRangeField" multiValued="true"/>
+    
+    <!--Binary data type. The data should be sent/retrieved in as Base64 encoded Strings -->
+    <fieldType name="binary" class="solr.BinaryField"/>
+
+    <!-- solr.TextField allows the specification of custom text analyzers
+         specified as a tokenizer and a list of token filters. Different
+         analyzers may be specified for indexing and querying.
+
+         The optional positionIncrementGap puts space between multiple fields of
+         this type on the same document, with the purpose of preventing false phrase
+         matching across fields.
+
+         For more info on customizing your analyzer chain, please see
+         http://lucene.apache.org/solr/guide/understanding-analyzers-tokenizers-and-filters.html#understanding-analyzers-tokenizers-and-filters
+     -->
+
+    <!-- One can also specify an existing Analyzer class that has a
+         default constructor via the class attribute on the analyzer element.
+         Example:
+    <fieldType name="text_greek" class="solr.TextField">
+      <analyzer class="org.apache.lucene.analysis.el.GreekAnalyzer"/>
+    </fieldType>
+    -->
+
+    <!-- A text field that only splits on whitespace for exact matching of words -->
+    <dynamicField name="*_ws" type="text_ws"  indexed="true"  stored="true"/>
+    <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- A general text field that has reasonable, generic
+         cross-language defaults: it tokenizes with StandardTokenizer,
+	       removes stop words from case-insensitive "stopwords.txt"
+	       (empty by default), and down cases.  At query time only, it
+	       also applies synonyms.
+	  -->
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
+        -->
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    
+    <!-- SortableTextField generaly functions exactly like TextField,
+         except that it supports, and by default uses, docValues for sorting (or faceting)
+         on the first 1024 characters of the original field values (which is configurable).
+         
+         This makes it a bit more useful then TextField in many situations, but the trade-off
+         is that it takes up more space on disk; which is why it's not used in place of TextField
+         for every fieldType in this _default schema.
+	  -->
+    <dynamicField name="*_t_sort" type="text_gen_sort" indexed="true" stored="true" multiValued="false"/>
+    <dynamicField name="*_txt_sort" type="text_gen_sort" indexed="true" stored="true"/>
+    <fieldType name="text_gen_sort" class="solr.SortableTextField" positionIncrementGap="100" multiValued="true">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- A text field with defaults appropriate for English: it tokenizes with StandardTokenizer,
+         removes English stop words (lang/stopwords_en.txt), down cases, protects words from protwords.txt, and
+         finally applies Porter's stemming.  The query time analyzer also applies synonyms from synonyms.txt. -->
+    <dynamicField name="*_txt_en" type="text_en"  indexed="true"  stored="true"/>
+    <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
+        -->
+        <!-- Case insensitive stop word removal.
+        -->
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+            />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+	      -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+        />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+	      -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- A text field with defaults appropriate for English, plus
+         aggressive word-splitting and autophrase features enabled.
+         This field is just like text_en, except it adds
+         WordDelimiterGraphFilter to enable splitting and matching of
+         words on case-change, alpha numeric boundaries, and
+         non-alphanumeric chars.  This means certain compound word
+         cases will work, for example query "wi fi" will match
+         document "WiFi" or "wi-fi".
+    -->
+    <dynamicField name="*_txt_en_split" type="text_en_splitting"  indexed="true"  stored="true"/>
+    <fieldType name="text_en_splitting" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+      <analyzer type="index">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        -->
+        <!-- Case insensitive stop word removal.
+        -->
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+        />
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.PorterStemFilterFactory"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+        />
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- Less flexible matching, but less false matches.  Probably not ideal for product names,
+         but may be good for SKUs.  Can insert dashes in the wrong place and still match. -->
+    <dynamicField name="*_txt_en_split_tight" type="text_en_splitting_tight"  indexed="true"  stored="true"/>
+    <fieldType name="text_en_splitting_tight" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+      <analyzer type="index">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        <!-- this filter can remove any duplicate tokens that appear at the same position - sometimes
+             possible with WordDelimiterGraphFilter in conjuncton with stemming. -->
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        <!-- this filter can remove any duplicate tokens that appear at the same position - sometimes
+             possible with WordDelimiterGraphFilter in conjuncton with stemming. -->
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- Just like text_general except it reverses the characters of
+	       each token, to enable more efficient leading wildcard queries.
+    -->
+    <dynamicField name="*_txt_rev" type="text_general_rev"  indexed="true"  stored="true"/>
+    <fieldType name="text_general_rev" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true"
+                maxPosAsterisk="3" maxPosQuestion="2" maxFractionAsterisk="0.33"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <dynamicField name="*_phon_en" type="phonetic_en"  indexed="true"  stored="true"/>
+    <fieldType name="phonetic_en" stored="false" indexed="true" class="solr.TextField" >
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.DoubleMetaphoneFilterFactory" inject="false"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- lowercases the entire field value, keeping it as a single token.  -->
+    <dynamicField name="*_s_lower" type="lowercase"  indexed="true"  stored="true"/>
+    <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory" />
+      </analyzer>
+    </fieldType>
+
+    <!-- 
+      Example of using PathHierarchyTokenizerFactory at index time, so
+      queries for paths match documents at that path, or in descendent paths
+    -->
+    <dynamicField name="*_descendent_path" type="descendent_path"  indexed="true"  stored="true"/>
+    <fieldType name="descendent_path" class="solr.TextField">
+      <analyzer type="index">
+        <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.KeywordTokenizerFactory" />
+      </analyzer>
+    </fieldType>
+
+    <!--
+      Example of using PathHierarchyTokenizerFactory at query time, so
+      queries for paths match documents at that path, or in ancestor paths
+    -->
+    <dynamicField name="*_ancestor_path" type="ancestor_path"  indexed="true"  stored="true"/>
+    <fieldType name="ancestor_path" class="solr.TextField">
+      <analyzer type="index">
+        <tokenizer class="solr.KeywordTokenizerFactory" />
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
+      </analyzer>
+    </fieldType>
+
+    <!-- This point type indexes the coordinates as separate fields (subFields)
+      If subFieldType is defined, it references a type, and a dynamic field
+      definition is created matching *___<typename>.  Alternately, if 
+      subFieldSuffix is defined, that is used to create the subFields.
+      Example: if subFieldType="double", then the coordinates would be
+        indexed in fields myloc_0___double,myloc_1___double.
+      Example: if subFieldSuffix="_d" then the coordinates would be indexed
+        in fields myloc_0_d,myloc_1_d
+      The subFields are an implementation detail of the fieldType, and end
+      users normally should not need to know about them.
+     -->
+    <dynamicField name="*_point" type="point"  indexed="true"  stored="true"/>
+    <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
+
+    <!-- A specialized field for geospatial search filters and distance sorting. -->
+    <fieldType name="location" class="solr.LatLonPointSpatialField" docValues="true"/>
+
+    <!-- A geospatial field type that supports multiValued and polygon shapes.
+      For more information about this and other spatial fields see:
+      http://lucene.apache.org/solr/guide/spatial-search.html
+    -->
+    <fieldType name="location_rpt"   class="solr.SpatialRecursivePrefixTreeFieldType"
+		geo="true" distErrPct="0.01" distanceUnits="degrees"  />
+
+    <!-- Payloaded field types -->
+    <fieldType name="delimited_payloads_float" stored="false" indexed="true" class="solr.TextField">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.DelimitedPayloadTokenFilterFactory" encoder="float"/>
+      </analyzer>
+    </fieldType>
+    <fieldType name="delimited_payloads_int" stored="false" indexed="true" class="solr.TextField">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.DelimitedPayloadTokenFilterFactory" encoder="integer"/>
+      </analyzer>
+    </fieldType>
+    <fieldType name="delimited_payloads_string" stored="false" indexed="true" class="solr.TextField">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.DelimitedPayloadTokenFilterFactory" encoder="identity"/>
+      </analyzer>
+    </fieldType>
+	
+
+    <!-- Czech -->
+    <dynamicField name="*_txt_cz" type="text_cz"  indexed="true"  stored="true"/>
+    <fieldType name="text_cz" class="solr.TextField" positionIncrementGap="100">
+      <analyzer> 
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_cz.txt" />
+        <filter class="solr.CzechStemFilterFactory"/>       
+      </analyzer>
+    </fieldType>
+	
+	<fieldType name="icu_sort_cs" class="solr.ICUCollationField"  locale="cs" strength="tertiary" />
+    
+	<fieldType name="lowercase_cs" class="solr.TextField" >
+		<analyzer>
+			<tokenizer class="solr.KeywordTokenizerFactory"/>
+			<filter class="solr.ICUFoldingFilterFactory"/>
+		</analyzer>
+	</fieldType>
+
+    <fieldType name="text_general_cs" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"  />
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        -->
+        <filter class="solr.HunspellStemFilterFactory" dictionary="hunspell/cs_CZ.dic" affix="hunspell/cs_CZ.aff" ignoreCase="true" />
+        <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="false"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"  />
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.HunspellStemFilterFactory" dictionary="hunspell/cs_CZ.dic" affix="hunspell/cs_CZ.aff" ignoreCase="true" />
+        <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="false"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+    
+    <fieldType name="text_prefix" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+	  <tokenizer class="solr.EdgeNGramFilterFactory" minGramSize="3" maxGramSize="15" />
+      </analyzer>
+      <analyzer type="query">
+	  <tokenizer class="solr.KeywordTokenizerFactory" />
+      </analyzer>
+  </fieldType>
+  
+  <fieldtype name="string_big" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+  <analyzer>
+    <tokenizer class="solr.KeywordTokenizerFactory"/>
+  </analyzer>
+</fieldtype>
+
+    <!-- Similarity is the scoring routine for each document vs. a query.
+       A custom Similarity or SimilarityFactory may be specified here, but 
+       the default is fine for most applications.  
+       For more info: http://lucene.apache.org/solr/guide/other-schema-elements.html#OtherSchemaElements-Similarity
+    -->
+    <!--
+     <similarity class="com.example.solr.CustomSimilarityFactory">
+       <str name="paramkey">param value</str>
+     </similarity>
+    -->
+
+</schema>
