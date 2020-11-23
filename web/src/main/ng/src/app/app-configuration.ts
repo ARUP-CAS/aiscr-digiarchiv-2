@@ -116,6 +116,7 @@ import { isPlatformBrowser } from '@angular/common';
             .toPromise()
             .then(cfg => {
                 this.config = cfg as Configuration;
+                this.config.amcr = this.server;
             }).then(() => {
                 return this.getObdobi();
             });
