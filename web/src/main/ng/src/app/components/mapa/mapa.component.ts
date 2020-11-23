@@ -379,6 +379,10 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   updateBounds(mapBounds) {
+    if (!this.isResults) {
+      // Jsme v documentu, nepotrebujeme znovu nacist data
+      return;
+    }
     let bounds = this.map.getBounds();
     if (mapBounds) {
       bounds = mapBounds;
