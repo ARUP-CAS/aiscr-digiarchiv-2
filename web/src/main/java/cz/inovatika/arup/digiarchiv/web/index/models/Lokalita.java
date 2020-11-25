@@ -169,7 +169,7 @@ public class Lokalita implements Entity {
            
     for (String dok : this.child_dokument) {
       SolrQuery query = new SolrQuery("ident_cely:\"" + dok + "\"")
-              .setFields("f_areal", "f_obdobi", "f_aktivita", "f_kategorie", "f_druh_nalezu", "f_specifikace");
+              .setFields("f_areal", "f_obdobi", "f_aktivita", "f_kategorie", "f_druh_nalezu", "f_specifikace", "nalez_kategorie");
 //      for (String f: dokFields) {
 //        for (String sufix : sufixes) {
 //          query.addField(f + "_" + sufix);
