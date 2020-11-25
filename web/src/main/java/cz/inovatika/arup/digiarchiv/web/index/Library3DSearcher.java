@@ -60,9 +60,8 @@ public class Library3DSearcher implements EntitySearcher {
       JSONObject jo = SearchUtils.json(query, client, "entities");
       String pristupnost = LoginServlet.pristupnost(request.getSession());
       filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-      // getChilds(jo, client, request);
+      SolrSearcher.addFavorites(jo, client, request);
       return jo;
-
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
       json.put("error", ex);

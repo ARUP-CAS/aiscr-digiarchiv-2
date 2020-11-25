@@ -37,13 +37,10 @@ public class ADBSearcher implements EntitySearcher{
   public JSONObject search(HttpServletRequest request) {
     JSONObject json = new JSONObject();
     try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-      String handler = LoginServlet.isLogged(request.getSession()) ? "/search" : "/search";
-      SolrQuery query = new SolrQuery()
-              .setFacet(true)
-              .setRequestHandler(handler);
+      SolrQuery query = new SolrQuery();
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
-      getChilds(jo, client, request);
+      SolrSearcher.addFavorites(jo, client, request);
       return jo;
 
     } catch (Exception ex) {

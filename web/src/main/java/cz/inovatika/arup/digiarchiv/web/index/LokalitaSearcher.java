@@ -55,9 +55,8 @@ public class LokalitaSearcher implements EntitySearcher {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
-      //getChilds(jo, client, request);
+      SolrSearcher.addFavorites(jo, client, request);
       return jo;
-
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
       json.put("error", ex);

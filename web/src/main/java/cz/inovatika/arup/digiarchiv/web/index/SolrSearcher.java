@@ -469,6 +469,16 @@ public class SolrSearcher {
       }
     }
   }
+  
+  public static void addFavorites(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      if (LoginServlet.userId(request) != null) {
+        addIsFavorite(client, doc, LoginServlet.userId(request));
+      }
+    }
+  }
 
   public static void addIsFavorite(HttpSolrClient client, JSONObject doc, String username) {
     String ident_cely = doc.getString("ident_cely");
