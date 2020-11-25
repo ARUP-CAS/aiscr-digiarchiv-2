@@ -186,7 +186,24 @@ public class SearchUtils {
         case "indextime":
           break;
         default:
+          addFieldNonRepeat(idoc, s, doc.get(s));
+          // idoc.addField(s, doc.get(s));
+      }
+    }
+  }
+  
+  public static void addJSONFieldsSufixed(JSONObject doc, SolrInputDocument idoc, String[] sufixes) {
+    for (String s : doc.keySet()) {
+      switch (s) {
+        case "_version_":
+        case "_root_":
+        case "indextime":
+          break;
+        default:
           idoc.addField(s, doc.get(s));
+          for (String sufix : sufixes) {
+            idoc.addField(s + "_" + sufix, doc.get(s));
+          }
       }
     }
   }
@@ -199,8 +216,16 @@ public class SearchUtils {
         case "indextime":
           break;
         default:
-          idoc.addField(prefix + "_" + s, doc.optString(s));
+          // idoc.addField(prefix + "_" + s, doc.optString(s));
+          addFieldNonRepeat(idoc, prefix + "_" + s, doc.optString(s));
       }
+    }
+  }
+  
+  public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
+    
+    if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
+      idoc.addField(field, value);
     }
   }
 }

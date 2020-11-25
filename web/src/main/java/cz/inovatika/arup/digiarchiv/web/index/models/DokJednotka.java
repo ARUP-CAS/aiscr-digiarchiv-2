@@ -6,6 +6,7 @@
 package cz.inovatika.arup.digiarchiv.web.index.models;
 
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,8 +117,8 @@ public class DokJednotka implements Entity {
       JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
       if (doc.has("centroid_n")) {
           String loc = doc.optString("centroid_n") + "," + doc.optString("centroid_e");
-          idoc.addField("loc", loc);
-          idoc.addField("loc_rpt", loc);
+          SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
+          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
       }
       idoc.setField("pian", doc.toString());
     } else {
@@ -133,7 +134,7 @@ public class DokJednotka implements Entity {
         case "indextime":
           break;
         default:
-          idoc.addField(s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, s, doc.optString(s));
       }
     }
   }

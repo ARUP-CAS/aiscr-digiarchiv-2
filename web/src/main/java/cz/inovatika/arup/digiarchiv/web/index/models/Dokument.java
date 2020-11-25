@@ -125,20 +125,20 @@ public class Dokument implements Entity {
     boolean searchable = stav == 3 && !"zl".equals(rada.toLowerCase()) && !"za".equals(rada.toLowerCase());
     idoc.setField("searchable", searchable);
     String kategorie = Options.getInstance().getJSONObject("kategoriet").optString(typ_dokumentu);
-    idoc.addField("kategorie_dokumentu", kategorie);
+    SolrSearcher.addFieldNonRepeat(idoc, "kategorie_dokumentu", kategorie);
 
     if (extra_data != null) {
       for (String extra : extra_data) {
         JSONObject doc = new JSONObject(extra);
         if (doc.has("northing")) { 
           String loc = doc.optString("northing") + "," + doc.optString("easting");
-          idoc.addField("lat", doc.optString("northing"));
-          idoc.addField("lng", doc.optString("easting"));
-          idoc.addField("loc", loc);
-          idoc.addField("loc_rpt", loc); 
+          SolrSearcher.addFieldNonRepeat(idoc, "lat", doc.optString("northing"));
+          SolrSearcher.addFieldNonRepeat(idoc, "lng", doc.optString("easting"));
+          SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
+          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc); 
         }
         for (String s : doc.keySet()) {
-          idoc.addField("extra_data_" + s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "extra_data_" + s, doc.optString(s));
         }
       }
     }
@@ -146,7 +146,7 @@ public class Dokument implements Entity {
       for (String js : tvar) {
         JSONObject doc = new JSONObject(js);
         for (String s : doc.keySet()) {
-          idoc.addField("tvar_" + s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "tvar_" + s, doc.optString(s));
         }
       }
     }
@@ -159,7 +159,7 @@ public class Dokument implements Entity {
       autor.clear();
       autor.addAll(l);
       autor_sort = autor.get(0);
-      idoc.addField("autor_sort", autor.get(0));
+      SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", autor.get(0));
     }
 
     if (typ_dokumentu_posudek != null) {
@@ -173,7 +173,7 @@ public class Dokument implements Entity {
     }
 
     if (organizace != null) {
-      idoc.addField("organizace_sort", organizace);
+      SolrSearcher.addFieldNonRepeat(idoc, "organizace_sort", organizace);
     }
   }
 
@@ -189,12 +189,12 @@ public class Dokument implements Entity {
       JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
       for (String f : facetFields) {
         if (doc.has(f)) {
-          idoc.addField(f, doc.get(f));
+          SolrSearcher.addFieldNonRepeat(idoc, f, doc.get(f));
         }
       }
       if (doc.has("katastr")) {
-        idoc.addField(field + "_katastr", doc.getString("katastr"));
-        idoc.addField(field + "_okres", doc.getString("okres"));
+        SolrSearcher.addFieldNonRepeat(idoc, field + "_katastr", doc.getString("katastr"));
+        SolrSearcher.addFieldNonRepeat(idoc, field + "_okres", doc.getString("okres"));
       }
     }
   }
@@ -207,22 +207,22 @@ public class Dokument implements Entity {
     JSONObject json = SearchUtils.json(query, client, "entities");
     if (json.getJSONObject("response").getInt("numFound") > 0) {
       JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-      idoc.addField("dok_jednotka", doc.toString());
+      SolrSearcher.addFieldNonRepeat(idoc, "dok_jednotka", doc.toString());
 
       if (doc.has("katastr")) {
-        idoc.addField(field + "_katastr", doc.getString("katastr"));
-        idoc.addField(field + "_okres", doc.getString("okres"));
+        SolrSearcher.addFieldNonRepeat(idoc, field + "_katastr", doc.getString("katastr"));
+        SolrSearcher.addFieldNonRepeat(idoc, field + "_okres", doc.getString("okres"));
       }
       if (doc.has("komponenta")) {
         JSONArray ja = doc.getJSONArray("komponenta");
         for (int i = 0; i < ja.length(); i++) {
           JSONObject k = ja.getJSONObject(i);
           for (String fk : k.keySet()) {
-            idoc.addField("komponenta_" + fk, k.optString(fk));
+            SolrSearcher.addFieldNonRepeat(idoc, "komponenta_" + fk, k.optString(fk));
             if (fk.contains("aktivita") && k.optString(fk).equals("1")) {
-              idoc.addField("f_aktivita", fk.substring("aktivita_".length()));
+              SolrSearcher.addFieldNonRepeat(idoc, "f_aktivita", fk.substring("aktivita_".length()));
             } else if ("nalez".equals(fk)) {
-              addNalez(idoc, k);
+              addNalez(idoc, k.get("nalez"));
             }
           }
         }
@@ -237,48 +237,48 @@ public class Dokument implements Entity {
           JSONArray pians = (JSONArray) p;
           pianDoc = pians.getJSONObject(0);
           for (int pian = 0; pian < pians.length(); pian++) {
-            idoc.addField("pian_id", pians.getJSONObject(pian).optString("ident_cely"));
-            idoc.addField("pian_typ", pians.getJSONObject(pian).optString("typ"));
-            idoc.addField("pian_presnost", pians.getJSONObject(pian).optString("presnost"));
-            idoc.addField("pian_zm10", pians.getJSONObject(pian).optString("zm10"));
+            SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pians.getJSONObject(pian).optString("ident_cely"));
+            SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pians.getJSONObject(pian).optString("typ"));
+            SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pians.getJSONObject(pian).optString("presnost"));
+            SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pians.getJSONObject(pian).optString("zm10"));
           }
 
         } else {
           pianDoc = (JSONObject) p;
-          idoc.addField("pian_id", pianDoc.optString("ident_cely"));
-          idoc.addField("pian_typ", pianDoc.optString("typ"));
-          idoc.addField("pian_presnost", pianDoc.optString("presnost"));
-          idoc.addField("pian_zm10", pianDoc.optString("zm10"));
+          SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pianDoc.optString("ident_cely"));
+          SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pianDoc.optString("typ"));
+          SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pianDoc.optString("presnost"));
+          SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pianDoc.optString("zm10"));
         }
         if (pianDoc.has("centroid_n")) {
           String loc = pianDoc.optString("centroid_n") + "," + pianDoc.optString("centroid_e");
-          idoc.addField("lat", pianDoc.optString("centroid_n"));
-          idoc.addField("lng", pianDoc.optString("centroid_e"));
-          idoc.addField("loc", loc);
-          idoc.addField("loc_rpt", loc);
+          SolrSearcher.addFieldNonRepeat(idoc, "lat", pianDoc.optString("centroid_n"));
+          SolrSearcher.addFieldNonRepeat(idoc, "lng", pianDoc.optString("centroid_e"));
+          SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
+          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
         }
-        idoc.addField("pian", pianDoc.toString());
+        SolrSearcher.addFieldNonRepeat(idoc, "pian", pianDoc.toString());
       }
       return doc;
     }
     return json;
   }
 
-  private void addNalez(SolrInputDocument idoc, JSONObject json) {
-    Object nalez = json.get("nalez");
+  private void addNalez(SolrInputDocument idoc, Object nalez) {
+    // Object nalez = json.get("nalez");
     if (nalez instanceof JSONArray) {
       JSONArray ja = (JSONArray) nalez;
       for (int i = 0; i < ja.length(); i++) {
-        idoc.addField("nalez_druh_nalezu", ja.getJSONObject(i).optString("druh_nalezu"));
-        idoc.addField("nalez_typ_nalezu", ja.getJSONObject(i).optString("typ_nalezu"));
-        idoc.addField("nalez_kategorie", ja.getJSONObject(i).optString("kategorie"));
-        idoc.addField("nalez_specifikace", ja.getJSONObject(i).optString("specifikace"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_druh_nalezu", ja.getJSONObject(i).optString("druh_nalezu"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_typ_nalezu", ja.getJSONObject(i).optString("typ_nalezu"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_kategorie", ja.getJSONObject(i).optString("kategorie"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_specifikace", ja.getJSONObject(i).optString("specifikace"));
       }
     } else {
-      idoc.addField("nalez_druh_nalezu", ((JSONObject) nalez).optString("druh_nalezu"));
-      idoc.addField("nalez_typ_nalezu", ((JSONObject) nalez).optString("typ_nalezu"));
-      idoc.addField("nalez_kategorie", ((JSONObject) nalez).optString("kategorie"));
-      idoc.addField("nalez_specifikace", ((JSONObject) nalez).optString("specifikace"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_druh_nalezu", ((JSONObject) nalez).optString("druh_nalezu"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_typ_nalezu", ((JSONObject) nalez).optString("typ_nalezu"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_kategorie", ((JSONObject) nalez).optString("kategorie"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_specifikace", ((JSONObject) nalez).optString("specifikace"));
     }
   }
 
@@ -288,37 +288,39 @@ public class Dokument implements Entity {
     for (String s : doc.keySet()) {
 
       if (s.contains("aktivita") && doc.optString(s).equals("1")) {
-        idoc.addField("f_aktivita", s.substring("aktivita_".length()));
+        SolrSearcher.addFieldNonRepeat(idoc, "f_aktivita", s.substring("aktivita_".length()));
         aks.put(s.substring("aktivita_".length()));
       } else if ("nalez".equals(s)) {
-        addNalez(idoc, doc);
+        addNalez(idoc, doc.get("nalez"));
       }
       switch (s) {
         case "nalez_dokumentu":
           Object obj = doc.get("nalez_dokumentu");
+          addNalez(idoc, obj);
           if (obj instanceof JSONArray) {
             JSONArray ja = (JSONArray) obj;
             for (int i = 0; i < ja.length(); i++) {
               addJSONFields(ja.getJSONObject(i), "nalez_dokumentu", idoc);
-              idoc.addField("nalez_dokumentu", ja.getJSONObject(i).toString());
+              SolrSearcher.addFieldNonRepeat(idoc, "nalez_dokumentu", ja.getJSONObject(i).toString());
             }
           } else if (obj instanceof JSONObject) {
             addJSONFields((JSONObject) obj, "nalez_dokumentu", idoc);
-            idoc.addField("nalez_dokumentu", ((JSONObject) obj).toString());
+            SolrSearcher.addFieldNonRepeat(idoc, "nalez_dokumentu", ((JSONObject) obj).toString());
+            
           }
           break;
         default:
-          idoc.addField("komponenta_dokument_" + s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "komponenta_dokument_" + s, doc.optString(s));
       }
     }
     if (!aks.isEmpty()) {
       doc.put("aktivita", aks);
     }
-    idoc.addField("komponenta_dokument", doc.toString());
+    SolrSearcher.addFieldNonRepeat(idoc, "komponenta_dokument", doc.toString());
 
     addAsEntity(client, doc, "komponenta_dokument");
     if (doc.has("obdobi")) {
-      idoc.addField("obdobi_poradi", SearchUtils.getObdobiPoradi(doc.getString("obdobi")));
+      SolrSearcher.addFieldNonRepeat(idoc, "obdobi_poradi", SearchUtils.getObdobiPoradi(doc.getString("obdobi")));
     }
   }
 
@@ -330,7 +332,7 @@ public class Dokument implements Entity {
         case "indextime":
           break;
         default:
-          idoc.addField(s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, s, doc.optString(s));
       }
     }
   }
@@ -343,10 +345,10 @@ public class Dokument implements Entity {
         case "indextime":
           break;
         case "vedouci":
-          idoc.addField(prefix + "_" + s, doc.optString(s).split(";"));
+          SolrSearcher.addFieldNonRepeat(idoc, prefix + "_" + s, doc.optString(s).split(";"));
           break;
         default:
-          idoc.addField(prefix + "_" + s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, prefix + "_" + s, doc.optString(s));
       }
     }
   }
@@ -380,7 +382,7 @@ public class Dokument implements Entity {
           switch (s) {
             case "neident_akce":
               JSONObject naDoc = doc.getJSONObject("neident_akce");
-              idoc.addField("neident_akce", naDoc.toString());
+              SolrSearcher.addFieldNonRepeat(idoc, "neident_akce", naDoc.toString());
               addJSONFields(naDoc, "neident_akce", idoc);
 
               int start = naDoc.optInt("rok_zahajeni", 0);
@@ -389,16 +391,16 @@ public class Dokument implements Entity {
                 String ukonceni = "*";
                 Calendar c1 = Calendar.getInstance();
                 c1.set(start, 1, 1);
-                idoc.addField("datum_provedeni_od", c1.toInstant().toString());
+                SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", c1.toInstant().toString());
                 if (end != 0) {
                   Calendar c2 = Calendar.getInstance();
                   c2.set(end, 12, 31);
-                  idoc.addField("datum_provedeni_do", c2.toInstant().toString());
+                  SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", c2.toInstant().toString());
                   if (c2.after(c1)) {
                     ukonceni = c2.toInstant().toString();
                   }
                 }
-                idoc.addField("datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
+                SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
               }
               break;
 
@@ -417,18 +419,18 @@ public class Dokument implements Entity {
             case "vazba_akce":
               // Chceme pian
               //String vazba_akce = (String) doc.get("vazba_akce");
-              idoc.addField("jednotka_dokumentu_vazba_akce", doc.optString(s));
+              SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_akce", doc.optString(s));
               dok_jednotka = addDokJednotka(client, idoc, "parent_akce", doc.optString(s));
               processAkce(client, idoc, "parent_akce", doc.optString(s));
               break;
             case "vazba_lokalita":
               // Chceme pian
-              idoc.addField("jednotka_dokumentu_vazba_lokalita", doc.optString(s));
+              SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_lokalita", doc.optString(s));
               dok_jednotka = addDokJednotka(client, idoc, "parent_lokalita", (String) doc.get("vazba_lokalita"));
               processAkce(client, idoc, "parent_lokalita", doc.optString(s));
               break;
             default:
-              idoc.addField("jednotka_dokumentu_" + s, doc.optString(s));
+              SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_" + s, doc.optString(s));
           }
         }
 
@@ -448,7 +450,7 @@ public class Dokument implements Entity {
       JSONObject json = SearchUtils.json(query, client, "soubor");
       if (json.getJSONObject("response").getInt("numFound") > 0) {
         JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-        idoc.addField("soubor", doc.toString());
+        SolrSearcher.addFieldNonRepeat(idoc, "soubor", doc.toString());
         addJSONFields(doc, "soubor", idoc);
 
         if (i == 0) {
@@ -503,7 +505,7 @@ public class Dokument implements Entity {
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {
-          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       } 
       

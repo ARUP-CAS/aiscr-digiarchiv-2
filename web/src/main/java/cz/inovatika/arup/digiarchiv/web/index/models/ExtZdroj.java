@@ -5,6 +5,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web.index.models;
 
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -137,7 +138,7 @@ public class ExtZdroj implements Entity {
         case "externi_zdroj":
           break;
         default:
-          idoc.addField(prefix + "_" + s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, prefix + "_" + s, doc.optString(s));
       }
     }
   }

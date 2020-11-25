@@ -52,7 +52,7 @@
   </ng-container>
 
   <ng-container *ngFor="let facetField of state.facetsFiltered">
-    <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered || true">
+    <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered">
       <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
         <mat-panel-title>
           <a class="app-filter-badge app-gap-icon-right" [matTooltip]="'Aplikovat filtr' | translate"

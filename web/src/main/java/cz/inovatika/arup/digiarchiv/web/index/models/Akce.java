@@ -202,30 +202,30 @@ public class Akce implements Entity {
         String kt = parts[0];
         String ok = parts[1].substring(0, parts[1].length() - 1);
 
-        idoc.addField("dalsi_katastr", kt.trim());
-        idoc.addField("dalsi_okres", ok.trim());
+        SolrSearcher.addFieldNonRepeat(idoc, "dalsi_katastr", kt.trim());
+        SolrSearcher.addFieldNonRepeat(idoc, "dalsi_okres", ok.trim());
       }
       idoc.setField("dalsi_katastry", kats);
     }
 
     if (vazba_projekt_akce != null) {
       JSONObject j = new JSONObject(vazba_projekt_akce);
-      idoc.addField("vazba_projekt", j.getString("id_projekt"));
+      SolrSearcher.addFieldNonRepeat(idoc, "vazba_projekt", j.getString("id_projekt"));
     }
 
     if (organizace != null) {
-      idoc.addField("organizace_sort", organizace);
+      SolrSearcher.addFieldNonRepeat(idoc, "organizace_sort", organizace);
     }
 
     if (hlavni_typ != null) {
-      idoc.addField("f_typ_vyzkumu", hlavni_typ);
+      SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", hlavni_typ);
     }
     if (vedlejsi_typ != null) {
-      idoc.addField("f_typ_vyzkumu", vedlejsi_typ);
+      SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", vedlejsi_typ);
     }
 
     if (vedouci_akce != null) {
-      idoc.addField("autor_sort", vedouci_akce);
+      SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", vedouci_akce);
     }
 
     if (okres != null) {
@@ -233,19 +233,19 @@ public class Akce implements Entity {
       if (katastr != null) {
         okres_sort += " " + katastr;
       } 
-      idoc.addField("okres_sort", okres_sort);
+      SolrSearcher.addFieldNonRepeat(idoc, "okres_sort", okres_sort);
     }
 
     if (datum_zahajeni_v != null) {
-      idoc.addField("datum_provedeni_od", datum_zahajeni_v);
+      SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", datum_zahajeni_v);
       String ukonceni = "*";
       if (datum_ukonceni_v != null) {
-        idoc.addField("datum_provedeni_do", datum_ukonceni_v);
+        SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", datum_ukonceni_v);
         if (datum_ukonceni_v.after(datum_zahajeni_v)) {
           ukonceni = datum_ukonceni_v.toInstant().toString();
         }
       }
-      idoc.addField("datum_provedeni", "[" + datum_zahajeni_v.toInstant().toString() + " TO " + ukonceni + "]");
+      SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + datum_zahajeni_v.toInstant().toString() + " TO " + ukonceni + "]");
     }
 
   }
@@ -269,11 +269,11 @@ public class Akce implements Entity {
       JSONObject json = SearchUtils.json(query, client, "entities");
       if (json.getJSONObject("response").getInt("numFound") > 0) {
         JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-        idoc.addField("ext_zdroj", doc.toString());
+        SolrSearcher.addFieldNonRepeat(idoc, "ext_zdroj", doc.toString());
         if (doc.has("rok_vydani_vzniku")) {
           String r = doc.getString("rok_vydani_vzniku");
           if (StringUtils.isNumeric(r)) {
-            idoc.addField("rok_vydani", doc.optString("rok_vydani_vzniku"));
+            SolrSearcher.addFieldNonRepeat(idoc, "rok_vydani", doc.optString("rok_vydani_vzniku"));
           }
 
         }
@@ -286,16 +286,16 @@ public class Akce implements Entity {
     if (nalez instanceof JSONArray) {
       JSONArray ja = (JSONArray) nalez;
       for (int i = 0; i < ja.length(); i++) {
-        idoc.addField("nalez_druh_nalezu", ja.getJSONObject(i).optString("druh_nalezu"));
-        idoc.addField("nalez_typ_nalezu", ja.getJSONObject(i).optString("typ_nalezu"));
-        idoc.addField("nalez_kategorie", ja.getJSONObject(i).optString("kategorie"));
-        idoc.addField("nalez_specifikace", ja.getJSONObject(i).optString("specifikace"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_druh_nalezu", ja.getJSONObject(i).optString("druh_nalezu"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_typ_nalezu", ja.getJSONObject(i).optString("typ_nalezu"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_kategorie", ja.getJSONObject(i).optString("kategorie"));
+        SolrSearcher.addFieldNonRepeat(idoc, "nalez_specifikace", ja.getJSONObject(i).optString("specifikace"));
       }
     } else {
-      idoc.addField("nalez_druh_nalezu", ((JSONObject) nalez).optString("druh_nalezu"));
-      idoc.addField("nalez_typ_nalezu", ((JSONObject) nalez).optString("typ_nalezu"));
-      idoc.addField("nalez_kategorie", ((JSONObject) nalez).optString("kategorie"));
-      idoc.addField("nalez_specifikace", ((JSONObject) nalez).optString("specifikace"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_druh_nalezu", ((JSONObject) nalez).optString("druh_nalezu"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_typ_nalezu", ((JSONObject) nalez).optString("typ_nalezu"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_kategorie", ((JSONObject) nalez).optString("kategorie"));
+      SolrSearcher.addFieldNonRepeat(idoc, "nalez_specifikace", ((JSONObject) nalez).optString("specifikace"));
     }
   } 
 
@@ -309,16 +309,16 @@ public class Akce implements Entity {
       if (json.getJSONObject("response").getInt("numFound") > 0) {
         for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
           JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-          idoc.addField("dok_jednotka", doc.toString());
+          SolrSearcher.addFieldNonRepeat(idoc, "dok_jednotka", doc.toString());
           for (String s : doc.keySet()) {
             if ("komponenta".equals(s)) {
               JSONArray ja = doc.getJSONArray("komponenta");
               for (int i = 0; i < ja.length(); i++) {
                 JSONObject k = ja.getJSONObject(i);
                 for (String fk : k.keySet()) {
-                  idoc.addField("komponenta_" + fk, k.optString(fk));
+                  SolrSearcher.addFieldNonRepeat(idoc, "komponenta_" + fk, k.optString(fk));
                   if (fk.contains("aktivita") && k.optString(fk).equals("1")) {
-                    idoc.addField("f_aktivita", fk.substring("aktivita_".length()));
+                    SolrSearcher.addFieldNonRepeat(idoc, "f_aktivita", fk.substring("aktivita_".length()));
                   } else if ("nalez".equals(fk)) {
                     addNalez(idoc, k);
                   }
@@ -326,7 +326,7 @@ public class Akce implements Entity {
               }
 
             } else {
-              idoc.addField("dok_jednotka_" + s, doc.optString(s));
+              SolrSearcher.addFieldNonRepeat(idoc, "dok_jednotka_" + s, doc.optString(s));
             }
           }
           if (doc.has("child_adb")) {
@@ -341,28 +341,28 @@ public class Akce implements Entity {
               JSONArray pians = (JSONArray) p;
               pianDoc = pians.getJSONObject(0);
               for (int pian = 0; pian < pians.length(); pian++) {
-                idoc.addField("pian_id", pians.getJSONObject(pian).optString("ident_cely"));
-                idoc.addField("pian_typ", pians.getJSONObject(pian).optString("typ"));
-                idoc.addField("pian_presnost", pians.getJSONObject(pian).optString("presnost"));
-                idoc.addField("pian_zm10", pians.getJSONObject(pian).optString("zm10"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pians.getJSONObject(pian).optString("ident_cely"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pians.getJSONObject(pian).optString("typ"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pians.getJSONObject(pian).optString("presnost"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pians.getJSONObject(pian).optString("zm10"));
               }
 
             } else {
               pianDoc = (JSONObject) p;
-              idoc.addField("pian_id", pianDoc.optString("ident_cely"));
-              idoc.addField("pian_typ", pianDoc.optString("typ"));
-              idoc.addField("pian_presnost", pianDoc.optString("presnost"));
-              idoc.addField("pian_zm10", pianDoc.optString("zm10"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pianDoc.optString("ident_cely"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pianDoc.optString("typ"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pianDoc.optString("presnost"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pianDoc.optString("zm10"));
             }
 
             if (pianDoc.has("centroid_n")) {
               String loc = pianDoc.optString("centroid_n") + "," + pianDoc.optString("centroid_e");
-              idoc.addField("loc", loc);
-              idoc.addField("lat", pianDoc.optString("centroid_n"));
-              idoc.addField("lng", pianDoc.optString("centroid_e"));
-              idoc.addField("loc_rpt", loc);
+              SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
+              SolrSearcher.addFieldNonRepeat(idoc, "lat", pianDoc.optString("centroid_n"));
+              SolrSearcher.addFieldNonRepeat(idoc, "lng", pianDoc.optString("centroid_e"));
+              SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
             }
-            idoc.addField("pian", pianDoc.toString());
+            SolrSearcher.addFieldNonRepeat(idoc, "pian", pianDoc.toString());
 
           }
         }
@@ -376,22 +376,22 @@ public class Akce implements Entity {
     JSONObject json = SearchUtils.json(query, client, "entities");
     if (json.getJSONObject("response").getInt("numFound") > 0) {
       JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-      idoc.addField("adb", doc.toString());
+      SolrSearcher.addFieldNonRepeat(idoc, "adb", doc.toString());
       for (String field : ADB_FIELDS) {
-        idoc.addField("adb_" + field, doc.optString(field));
+        SolrSearcher.addFieldNonRepeat(idoc, "adb_" + field, doc.optString(field));
       }
       if (doc.has("vyskovy_bod")) {
         JSONArray ja = doc.getJSONArray("vyskovy_bod");
         for (int i = 0; i < ja.length(); i++) {
           JSONObject vb = ja.getJSONObject(i);
-          idoc.addField("vyskovy_bod_ident_cely", vb.optString("ident_cely"));
-          idoc.addField("vyskovy_bod_typ", vb.optString("typ"));
-          idoc.addField("vyskovy_bod_niveleta", vb.optString("niveleta"));
-          idoc.addField("vyskovy_bod_easting", vb.optString("easting"));
-          idoc.addField("vyskovy_bod_northing", vb.optString("northing"));
+          SolrSearcher.addFieldNonRepeat(idoc, "vyskovy_bod_ident_cely", vb.optString("ident_cely"));
+          SolrSearcher.addFieldNonRepeat(idoc, "vyskovy_bod_typ", vb.optString("typ"));
+          SolrSearcher.addFieldNonRepeat(idoc, "vyskovy_bod_niveleta", vb.optString("niveleta"));
+          SolrSearcher.addFieldNonRepeat(idoc, "vyskovy_bod_easting", vb.optString("easting"));
+          SolrSearcher.addFieldNonRepeat(idoc, "vyskovy_bod_northing", vb.optString("northing"));
 //          String loc = vb.optString("northing") + "," + vb.optString("easting");
-//          idoc.addField("loc", loc);
-//          idoc.addField("loc_rpt", loc);
+//          SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
+//          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
         }
 
       }
@@ -426,7 +426,7 @@ public class Akce implements Entity {
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {
-          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       } 
 
@@ -437,9 +437,9 @@ public class Akce implements Entity {
       "vedouci_akce", "specifikace_data", "datum_zahajeni", "okres",
       "datum_ukonceni", "je_nz", "pristupnost"};
     for (String field : defFields) {
-      idoc.addField("text_all_A", idoc.getFieldValues(field));
-      idoc.addField("text_all_B", idoc.getFieldValues(field));
-      idoc.addField("text_all_C", idoc.getFieldValues(field));
+      SolrSearcher.addFieldNonRepeat(idoc, "text_all_A", idoc.getFieldValues(field));
+      SolrSearcher.addFieldNonRepeat(idoc, "text_all_B", idoc.getFieldValues(field));
+      SolrSearcher.addFieldNonRepeat(idoc, "text_all_C", idoc.getFieldValues(field));
     }
   }
 

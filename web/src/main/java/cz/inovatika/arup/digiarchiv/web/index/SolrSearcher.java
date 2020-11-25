@@ -512,7 +512,7 @@ public class SolrSearcher {
     }
     if (field.contains("druh_nalezu")) {
       for (String sufix : prSufix) {
-        idoc.addField("f_druh_nalezu_" + sufix, idoc.getFieldValues(field));
+        addFieldNonRepeat(idoc, "f_druh_nalezu_" + sufix, idoc.getFieldValues(field));
       }
     }
     if (field.contains("specifikace") && !field.contains("specifikace_data")) {
@@ -526,7 +526,7 @@ public class SolrSearcher {
 //        idoc.addField("f_okres_" + sufix, idoc.getFieldValues(field));
 //      }
 //    }
-    if (field.contains("katastr")) {
+    if (field.contains("katastr")&& !field.equals("dalsi_katastry")) {
       for (String sufix : prSufix) {
         idoc.addField("f_katastr_" + sufix, idoc.getFieldValues(field));
       }
@@ -565,4 +565,18 @@ public class SolrSearcher {
     }
 
   }
+  
+  public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
+    
+    if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
+      idoc.addField(field, value);
+    }
+  }
+  
+//  public static void cleanRepeated(SolrInputDocument idoc) {
+//    for (String field : idoc.getFieldNames()) {
+//      Collection<Object> vals = idoc.getFieldValues(field);
+//      
+//    }
+//  }
 }

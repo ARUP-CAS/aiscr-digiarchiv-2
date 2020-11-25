@@ -118,24 +118,24 @@ public class SamostatniNalez implements Entity {
     
     if (this.centroid_n != null) {
       String loc = this.centroid_n + "," + this.centroid_e;
-      idoc.addField("lat", this.centroid_n);
-      idoc.addField("lng", this.centroid_e);
-      idoc.addField("loc", loc);
-      idoc.addField("loc_rpt", loc);
+      SolrSearcher.addFieldNonRepeat(idoc, "lat", this.centroid_n);
+      SolrSearcher.addFieldNonRepeat(idoc, "lng", this.centroid_e);
+      SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
+      SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
     }
     
     if (nalezce != null) {
-      idoc.addField("autor_sort", nalezce);
+      SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", nalezce);
     }
     if (druh != null) {
-      idoc.addField("druh_nalezu", druh);
+      SolrSearcher.addFieldNonRepeat(idoc, "druh_nalezu", druh);
     }
     if (okres != null) {
       String okres_sort = okres;
       if (katastr != null) {
         okres_sort += " " + katastr;
       }
-      idoc.addField("okres_sort", okres_sort);
+      SolrSearcher.addFieldNonRepeat(idoc, "okres_sort", okres_sort);
     }
   }
 
@@ -143,7 +143,7 @@ public class SamostatniNalez implements Entity {
   public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
     addSoubor(client, idoc);
     if (idoc.containsKey("obdobi") && idoc.getFieldValue("obdobi") != null) {
-      idoc.addField("obdobi_poradi", SearchUtils.getObdobiPoradi((String) idoc.getFieldValue("obdobi")));
+      SolrSearcher.addFieldNonRepeat(idoc, "obdobi_poradi", SearchUtils.getObdobiPoradi((String) idoc.getFieldValue("obdobi")));
     }
     
     // addPian(client, idoc);
@@ -169,7 +169,7 @@ public class SamostatniNalez implements Entity {
         case "indextime":
           break;
         default:
-          idoc.addField(prefix + "_" + s, doc.optString(s));
+          SolrSearcher.addFieldNonRepeat(idoc, prefix + "_" + s, doc.optString(s));
       }
     }
   }
@@ -202,7 +202,7 @@ public class SamostatniNalez implements Entity {
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {
-          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       } 
     }

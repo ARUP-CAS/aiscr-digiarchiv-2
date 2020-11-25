@@ -169,24 +169,24 @@ public class Projekt implements Entity {
 
     if (this.geometry_n != null) {
       this.loc = this.geometry_n + "," + this.geometry_e;
-              idoc.addField("lat", this.geometry_n);
-              idoc.addField("lng", this.geometry_e);
-      idoc.addField("loc", this.loc);
-      idoc.addField("loc_rpt", this.loc);
+              SolrSearcher.addFieldNonRepeat(idoc, "lat", this.geometry_n);
+              SolrSearcher.addFieldNonRepeat(idoc, "lng", this.geometry_e);
+      SolrSearcher.addFieldNonRepeat(idoc, "loc", this.loc);
+      SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", this.loc);
     }
 
     if (organizace_prihlaseni != null) {
-      idoc.addField("organizace_sort", organizace_prihlaseni);
+      SolrSearcher.addFieldNonRepeat(idoc, "organizace_sort", organizace_prihlaseni);
     }
     if (vedouci_projektu != null) {
-      idoc.addField("autor_sort", vedouci_projektu);
+      SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", vedouci_projektu);
     }
     if (okres != null) {
       String okres_sort = okres;
       if (katastr != null) {
         okres_sort += " " + katastr;
       }
-      idoc.addField("okres_sort", okres_sort);
+      SolrSearcher.addFieldNonRepeat(idoc, "okres_sort", okres_sort);
     }
 
     if (dalsi_katastry != null) {
@@ -196,22 +196,22 @@ public class Projekt implements Entity {
         String kt = parts[0];
         String ok = parts[1].substring(0, parts[1].length()-1);
         
-        idoc.addField("dalsi_katastr", kt.trim());
-        idoc.addField("dalsi_okres",ok.trim());
+        SolrSearcher.addFieldNonRepeat(idoc, "dalsi_katastr", kt.trim());
+        SolrSearcher.addFieldNonRepeat(idoc, "dalsi_okres",ok.trim());
       }
       idoc.setField("dalsi_katastry", kats);
     } 
 
     if (datum_zahajeni != null) {
-      idoc.addField("datum_provedeni_od", datum_zahajeni);
+      SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", datum_zahajeni);
       String ukonceni = "*";
       if (datum_ukonceni != null) {
-        idoc.addField("datum_provedeni_do", datum_ukonceni);
+        SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", datum_ukonceni);
         if (datum_ukonceni.after(datum_zahajeni)) {
           ukonceni = datum_ukonceni.toInstant().toString();
         }
       }
-      idoc.addField("datum_provedeni", "[" + datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
+      SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
     }
   }
 
@@ -264,14 +264,14 @@ public class Projekt implements Entity {
         for (int i = 0; i < docs.length(); i++) {
           
           JSONObject doc = docs.getJSONObject(i); 
-          // idoc.addField("akce", doc.toString());
+          // SolrSearcher.addFieldNonRepeat(idoc, "akce", doc.toString());
           
           if (pristupnost.compareTo(doc.getString("pristupnost")) < 0) {
             pristupnost = doc.getString("pristupnost");
           }
           for (String f : facetFields) {
             if (doc.has(f)) {
-              idoc.addField(f, doc.get(f));
+              SolrSearcher.addFieldNonRepeat(idoc, f, doc.get(f));
             } 
           }
           if (doc.has("pian")) {
@@ -283,26 +283,26 @@ public class Projekt implements Entity {
               JSONArray pians = (JSONArray) p;
               pianDoc = pians.getJSONObject(0);
               for (int pian = 0; pian < pians.length(); pian++) {
-                idoc.addField("pian_id", pians.getJSONObject(pian).optString("ident_cely"));
-                idoc.addField("pian_typ", pians.getJSONObject(pian).optString("typ"));
-                idoc.addField("pian_presnost", pians.getJSONObject(pian).optString("presnost"));
-                idoc.addField("pian_zm10", pians.getJSONObject(pian).optString("zm10"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pians.getJSONObject(pian).optString("ident_cely"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pians.getJSONObject(pian).optString("typ"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pians.getJSONObject(pian).optString("presnost"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pians.getJSONObject(pian).optString("zm10"));
               }
 
             } else {
               pianDoc = (JSONObject) p;
-              idoc.addField("pian_id", pianDoc.optString("ident_cely"));
-              idoc.addField("pian_typ", pianDoc.optString("typ"));
-              idoc.addField("pian_presnost", pianDoc.optString("presnost"));
-              idoc.addField("pian_zm10", pianDoc.optString("zm10"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pianDoc.optString("ident_cely"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pianDoc.optString("typ"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pianDoc.optString("presnost"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pianDoc.optString("zm10"));
             }
 
             if (pianDoc.has("centroid_n")) {
               String loc = pianDoc.optString("centroid_n") + "," + pianDoc.optString("centroid_e");
-              idoc.addField("loc", loc);
-              idoc.addField("loc_rpt", loc);
+              SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
+              SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
             }
-            idoc.addField("pian", pianDoc.toString());
+            SolrSearcher.addFieldNonRepeat(idoc, "pian", pianDoc.toString());
 
           }
         }
@@ -338,7 +338,7 @@ public class Projekt implements Entity {
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {
-          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       } 
     }
