@@ -55,14 +55,12 @@ public class Library3DSearcher implements EntitySearcher {
   public JSONObject search(HttpServletRequest request) {
     JSONObject json = new JSONObject();
     try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-      String handler = LoginServlet.isLogged(request.getSession()) ? "/search" : "/search";
-      SolrQuery query = new SolrQuery("*")
-              .setRequestHandler(handler);
+      SolrQuery query = new SolrQuery("*");
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
       String pristupnost = LoginServlet.pristupnost(request.getSession());
       filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-      getChilds(jo, client, request);
+      // getChilds(jo, client, request);
       return jo;
 
     } catch (Exception ex) {
@@ -80,17 +78,16 @@ public class Library3DSearcher implements EntitySearcher {
     query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json]");
     //   query.addFilterQuery("{!tag=entityF}(stav:3 AND rada:3D)");
       
-    if (request.getParameter("hideWithoutThumbs") != null) {
-      query.addFilterQuery("-hasThumb:false");
-    }
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
       pristupnost = "D";
     }
     SolrSearcher.addFilters(request, query, pristupnost);
     query.set("df", "text_all_A");
-    query.addFacetField("{!ex=f_katastrF key=f_katastr}f_katastr_" + pristupnost);
-    SolrSearcher.addLocationParams(request, query);
+    
+    if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+      SolrSearcher.addLocationParams(request, query);
+    }
 
     query.set("facet.range", "obdobi_poradi");
     query.set("facet.range.start", "100");
@@ -104,7 +101,7 @@ public class Library3DSearcher implements EntitySearcher {
    * @param jo
    * @param pristupnost
    */
-  public void filter(JSONObject jo, String pristupnost, String org) {
+  private void filter(JSONObject jo, String pristupnost, String org) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
