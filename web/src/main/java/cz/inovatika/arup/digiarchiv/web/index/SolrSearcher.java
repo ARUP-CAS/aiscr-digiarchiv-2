@@ -515,7 +515,7 @@ public class SolrSearcher {
         idoc.addField("f_druh_nalezu_" + sufix, idoc.getFieldValues(field));
       }
     }
-    if (field.contains("specifikace")) {
+    if (field.contains("specifikace") && !field.contains("specifikace_data")) {
       for (String sufix : prSufix) {
         idoc.addField("f_specifikace_" + sufix, idoc.getFieldValues(field));
       }
