@@ -109,7 +109,7 @@
       </mat-sidenav>
     
       <mat-sidenav-content>
-        <button mat-raised-button (click)="sidenav.toggle()" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'">
+        <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'">
           <mat-icon>last_page</mat-icon>
         </button>
         <app-mapa></app-mapa>

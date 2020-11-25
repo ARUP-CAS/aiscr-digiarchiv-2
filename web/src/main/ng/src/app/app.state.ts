@@ -26,6 +26,11 @@ export class AppState {
   private mapResultSubject: BehaviorSubject<string> = new BehaviorSubject('');
   public mapResultChanged: Observable<string> = this.mapResultSubject.asObservable();
 
+  private mapViewSubject: BehaviorSubject<string> = new BehaviorSubject('');
+  public mapViewChanged: Observable<string> = this.mapViewSubject.asObservable();
+
+  
+
   entity: string;
 
   public user: User;
@@ -266,6 +271,11 @@ export class AppState {
     if (changed) {
       this.mapResultSubject.next(result);
     }
+  }
+
+  changeMapView(sidenav) {
+    sidenav.toggle();
+    this.mapViewSubject.next('');
   }
 
   setLogged(res: any) {

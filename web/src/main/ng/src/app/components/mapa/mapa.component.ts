@@ -130,6 +130,14 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.setData();
       }
     }));
+
+    this.subs.push(this.state.mapViewChanged.subscribe(res => {
+      if (this.mapReady) {
+        setTimeout(() => {
+          this.map.invalidateSize({pan: false});
+        }, 500);
+      }
+    }));
   }
 
   getVisibleCount(): number {
@@ -340,7 +348,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     } else {
       this.locationFilter.setBounds(bounds.pad(-0.95));
     }
-
+    
     map.on('zoomend', () => {
       // this.heatmapLayer.setOptions(this.config.mapOptions.heatmapOptions);
       this.updateBounds(map.getBounds());
