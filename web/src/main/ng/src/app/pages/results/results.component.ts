@@ -63,9 +63,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.exportUrl = 'export?' + str;
     });
 
-    this.state.loggedChanged.subscribe(val => {
-      this.search(this.route.snapshot.queryParams);
-    });
+    // this.state.loggedChanged.subscribe(val => {
+    //   this.search(this.route.snapshot.queryParams);
+    // });
 
 
     // set side nav map breakpoint
@@ -105,10 +105,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search(params: Params) {
-    //if (this.state.isMapaCollapsed) {
+    console.log(params.mapa, this.state.isMapaCollapsed);
+    if (!this.state.isMapaCollapsed) {
+    //  return;
+    }
     this.loading = true;
     this.state.loading = true;
-    //}
     const p = Object.assign({}, params);
     p.mapa = !this.state.isMapaCollapsed;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {

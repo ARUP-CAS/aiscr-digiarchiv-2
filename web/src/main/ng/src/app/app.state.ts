@@ -14,7 +14,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class AppState {
 
   // Observe state
-  private stateSubject: ReplaySubject<string> = new ReplaySubject(1);
+  private stateSubject: Subject<string> = new Subject();
   public stateChanged: Observable<string> = this.stateSubject.asObservable();
 
   private loggedSubject: Subject<string> = new Subject();
@@ -23,10 +23,10 @@ export class AppState {
   private stateParamsSubject: ReplaySubject<string> = new ReplaySubject(1);
   public stateParamsChanged: Observable<string> = this.stateParamsSubject.asObservable();
 
-  private mapResultSubject: BehaviorSubject<string> = new BehaviorSubject('');
+  private mapResultSubject: Subject<string> = new Subject();
   public mapResultChanged: Observable<string> = this.mapResultSubject.asObservable();
 
-  private mapViewSubject: BehaviorSubject<string> = new BehaviorSubject('');
+  private mapViewSubject: Subject<string> = new Subject();
   public mapViewChanged: Observable<string> = this.mapViewSubject.asObservable();
 
   
@@ -110,6 +110,7 @@ export class AppState {
   }
 
   setSearchResponse(resp: SolrResponse) {
+    console.log('setSearchResponse');
     this.solrResponse = resp;
     this.numFound = resp.response.numFound;
     this.totalPages = this.numFound / this.rows;
@@ -143,7 +144,6 @@ export class AppState {
     setTimeout(() => {
       this.setFacets(resp);
     }, 100);
-    // this.stateSubject.next();
   }
 
   setFacets(resp) {
@@ -163,7 +163,7 @@ export class AppState {
       from: this.stats.datum_provedeni_od.min,
       until: this.stats.datum_provedeni_do.max
     };
-    this.stateSubject.next();
+    this.stateSubject.next('facets');
   }
 
   setFacetPivots(resp: SolrResponse) {
@@ -263,6 +263,7 @@ export class AppState {
   }
 
   setMapResult(result, mapDetail) {
+    console.log('setMapResult');
     if (mapDetail) {
       return;
     }

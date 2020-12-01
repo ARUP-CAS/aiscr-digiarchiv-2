@@ -401,7 +401,7 @@ export class AppService {
   }
 
   showInMap(result: any, isPian = false) {
-    // this.state.isMapaCollapsed = false;
+    this.state.isMapaCollapsed = false;
     const p: any = {};
     p.mapa = true;
     let url = '/results';
@@ -413,7 +413,8 @@ export class AppService {
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;
     } else {
-      this.state.setMapResult(result, false);
+      this.state.mapResult = result;
+      // this.state.setMapResult(result, false);
     }
     
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });

@@ -100,13 +100,13 @@ public class SolrSearcher {
       int start = (Integer.parseInt(request.getParameter("page"))) * rows;
       query.setStart(start);
     }
-    if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+    //if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
       if (request.getParameter("sort") != null) {
         query.setParam("sort", request.getParameter("sort"));
       } else {
         query.setParam("sort", "ident_cely asc");
       }
-    }
+    //}
 
     if (request.getParameter("inFavorites") != null) {
       String username = LoginServlet.userId(request);
