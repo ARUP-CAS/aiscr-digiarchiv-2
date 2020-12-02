@@ -309,7 +309,11 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
     if (changed && ms.length > 0) {
       this.zoomingOnMarker = true;
-      this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
+      if (this.map.getZoom() < this.config.mapOptions.hitZoomLevel) {
+        this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
+      } else {
+        this.map.setView(ms[ms.length - 1].getLatLng());
+      }
       
       // setTimeout(() => {
       //   this.currentZoom = this.map.getZoom();
@@ -489,7 +493,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       const bounds = this.locationFilter.getBounds();
       maxBounds = new L.latLngBounds(bounds.getSouthWest(), bounds.getNorthEast());
     }
-
 
     // this.data = heat;
     if (counts_ints2D !== null) {
