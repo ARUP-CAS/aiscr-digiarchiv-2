@@ -105,7 +105,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search(params: Params) {
-    console.log(params.mapa, this.state.isMapaCollapsed);
     if (!this.state.isMapaCollapsed) {
     //  return;
     }

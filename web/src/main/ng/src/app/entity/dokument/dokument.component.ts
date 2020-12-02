@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
@@ -13,7 +13,7 @@ import { DocumentDialogComponent } from 'src/app/components/document-dialog/docu
   templateUrl: './dokument.component.html',
   styleUrls: ['./dokument.component.scss']
 })
-export class DokumentComponent implements OnInit {
+export class DokumentComponent implements OnInit, OnChanges {
 
 
   private _result: any;
@@ -50,6 +50,16 @@ export class DokumentComponent implements OnInit {
     public service: AppService
   ) { }
 
+  ngOnChanges(c) {
+    if (c.result) {
+      this.hasDetail = false;
+      this.detailExpanded = false;
+    }
+    if (this.mapDetail) {
+      this.getFullId();
+    }
+  }
+
   ngOnInit(): void {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     if (this.result.pian) {
@@ -76,12 +86,17 @@ export class DokumentComponent implements OnInit {
   toggleDetail() {
     this.detailExpanded = !this.detailExpanded;
     if (!this.hasDetail && !this.inDocument) {
-      this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-        this.result.akce = res.response.docs[0].akce;
-        this.result.lokalita = res.response.docs[0].lokalita;
-        this.hasDetail = true;
-      });
+      this.getFullId();
     }
+  }
+
+  getFullId() {
+    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+      this.result = res.response.docs[0];
+      // this.result.akce = res.response.docs[0].akce;
+      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.hasDetail = true;
+    });
   }
 
   setImg() {

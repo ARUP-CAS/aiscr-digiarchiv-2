@@ -756,7 +756,7 @@
        <str name="defType">edismax</str>
 	   <str name="df">text_all_A</str>
        
-       <str name="facet">on</str>
+       <!-- <str name="facet">on</str> -->
        <str name="facet.missing">false</str>
        <str name="facet.mincount">1</str>
        <str name="facet.limit">10000</str>

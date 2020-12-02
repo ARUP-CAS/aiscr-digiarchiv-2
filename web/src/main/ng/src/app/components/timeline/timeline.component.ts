@@ -61,7 +61,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     setTimeout(() => {
       this.setObdobi();
-      this.subs = this.state.stateChanged.subscribe(val => {
+      this.subs = this.state.facetsChanged.subscribe(val => {
         if (this.state.obdobi) {
           this.currentObdobi = this.state.obdobi;
         } else {

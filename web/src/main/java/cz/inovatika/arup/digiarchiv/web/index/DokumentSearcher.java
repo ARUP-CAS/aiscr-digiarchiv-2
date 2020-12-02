@@ -66,8 +66,7 @@ public class DokumentSearcher implements EntitySearcher {
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query);
     query.addFilterQuery("{!tag=entityF}entity:" + ENTITY);
-    query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]");
-      String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
       pristupnost = "D";
     }
@@ -79,12 +78,16 @@ public class DokumentSearcher implements EntitySearcher {
     
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
+      query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres");
+    } else {
+      query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]");
     }
+    
 
-    query.set("facet.range", "obdobi_poradi");
-    query.set("facet.range.start", "100");
-    query.set("facet.range.end", "2600");
-    query.set("facet.range.gap", "100");
+//    query.set("facet.range", "obdobi_poradi");
+//    query.set("facet.range.start", "100");
+//    query.set("facet.range.end", "2600");
+//    query.set("facet.range.gap", "100");
   }
   
   /**

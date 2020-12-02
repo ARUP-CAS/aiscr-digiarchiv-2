@@ -81,13 +81,6 @@ public class SolrSearcher {
     }
     query.setQuery(q); 
     
-    List<Object> facetFields = Options.getInstance().getClientConf().getJSONArray("facets").toList();
-    for (Object f : facetFields) {
-      if (!((String)f).contains("okres") && !((String)f).equals("pristupnost")) {
-        query.addFacetField("{!ex=" + f + "F key=" + f + "}" + f + "_" + pristupnost);
-      }
-    }
-    
     // query.addFacetField("{!ex=f_arealF key=f_areal}f_areal_" + pristupnost);
 
     int rows = Options.getInstance().getClientConf().getInt("defaultRows");
@@ -95,10 +88,17 @@ public class SolrSearcher {
       rows = Integer.parseInt(request.getParameter("rows"));
     }
     query.setRows(rows);
-
+    int start = 0;
     if (request.getParameter("page") != null) {
-      int start = (Integer.parseInt(request.getParameter("page"))) * rows;
+      start = (Integer.parseInt(request.getParameter("page"))) * rows;
       query.setStart(start);
+    }
+    
+    List<Object> facetFields = Options.getInstance().getClientConf().getJSONArray("facets").toList();
+    for (Object f : facetFields) {
+      if (!((String)f).contains("okres") && !((String)f).equals("pristupnost")) {
+        query.addFacetField("{!ex=" + f + "F key=" + f + "}" + f + "_" + pristupnost);
+      }
     }
     //if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
       if (request.getParameter("sort") != null) {
@@ -124,6 +124,8 @@ public class SolrSearcher {
         query.addFilterQuery("ident_cely:emtpyrecord");
       }
     }
+    query.set("facet", "true");
+    //LOGGER.log(Level.INFO, "query: {0}", query );
 
   }
 

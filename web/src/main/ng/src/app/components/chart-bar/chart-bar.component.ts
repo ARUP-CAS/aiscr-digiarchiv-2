@@ -89,7 +89,7 @@ export class ChartBarComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.state.stateChanged.subscribe(
+    this.state.facetsChanged.subscribe(
       (resp) => {
         this.setData();
       }

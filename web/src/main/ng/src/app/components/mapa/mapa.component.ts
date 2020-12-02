@@ -123,10 +123,17 @@ export class MapaComponent implements OnInit, OnDestroy {
     //   }
     // }));
 
-    this.subs.push(this.state.stateChanged.subscribe(res => {
-      console.log('stateChanged');
+    this.subs.push(this.state.resultsChanged.subscribe(res => {
+      console.log('resultsChanged');
       if (this.mapReady) {
         this.setData();
+      }
+    }));
+
+    this.subs.push(this.state.facetsChanged.subscribe(res => {
+      console.log('facetsChanged');
+      if (this.mapReady) {
+        this.setHeatData();
       }
     }));
 
@@ -134,10 +141,10 @@ export class MapaComponent implements OnInit, OnDestroy {
       console.log('mapViewChanged');
       if (this.mapReady) {
         setTimeout(() => {
-          this.map.invalidateSize({pan: false});
+          this.map.invalidateSize({ pan: false });
         }, 500);
       }
-    })); 
+    }));
   }
 
   getVisibleCount(): number {
@@ -162,22 +169,14 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setData() {
     if (this.state.solrResponse) {
-      if (this.heatmapLayer) {
-        this.map.removeLayer(this.heatmapLayer);
-      }
       this.setMarkersData();
-      const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
-      this.showHeat = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
-      if (this.showHeat) {
-        this.setHeatData();
-      }
+
       if (this.state.locationFilterEnabled) {
         this.locationFilter.enable();
       } else {
         this.locationFilter.disable();
       }
       setTimeout(() => {
-        console.log(this.state.mapResult);
 
         if (this.state.mapResult) {
           this.hitMarker(this.state.mapResult);
@@ -192,7 +191,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   fitOnMarkers() {
     // Find markers boundary and change map view
 
-     if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
+    if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
       const lng = this.state.stats.lng;
       if (lat.max === lat.min) {
@@ -276,7 +275,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   clearSelectedMarker() {
-    
+
     this.selectedMarker.forEach(m => {
       m.setIcon(L.icon({
         iconUrl: 'assets/marker-icon.png'
@@ -295,7 +294,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     const docId = res.ident_cely;
     let changed = true;
-    if ((this.selectedMarker.length > 0 && this.selectedMarker[0].docId.includes(docId)) || !this.isResults ) {
+    if ((this.selectedMarker.length > 0 && this.selectedMarker[0].docId.includes(docId)) || !this.isResults) {
       // the same or document
       changed = false;
     }
@@ -328,7 +327,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   popUpHtml(id: string, presnost: string) {
-    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost')  + ')';
+    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ')';
   }
 
   onMapReady(map: L.Map) {
@@ -423,6 +422,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     console.log('mapReady');
     // this.setData();
+    this.setHeatData();
     this.mapReady = true;
   }
 
@@ -431,7 +431,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   // }
 
   updateBounds(mapBounds) {
-    
+
     console.log('updateBounds');
     if (!this.isResults) {
       // Jsme v documentu, nepotrebujeme znovu nacist data
@@ -441,7 +441,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (mapBounds) {
       bounds = mapBounds;
     }
-    
+
     if (this.locationFilter.isEnabled()) {
       bounds = this.locationFilter.getBounds();
     } else {
@@ -458,11 +458,20 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setHeatData() {
-    if (!this.state.solrResponse.facet_counts.facet_heatmaps?.loc_rpt) {
+    if (this.heatmapLayer) {
+      this.map.removeLayer(this.heatmapLayer);
+    }
+    if (!this.state.heatMaps?.loc_rpt) {
+      return;
+    }
+    const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
+    this.showHeat = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
+    console.log('showHeat', this.showHeat);
+    if (!this.showHeat) {
       return;
     }
     this.data.data = [];
-    const f = this.state.solrResponse.facet_counts.facet_heatmaps.loc_rpt;
+    const f = this.state.heatMaps.loc_rpt;
     const counts_ints2D = f.counts_ints2D;
     // const gridLevel = f.gridLevel;
     const columns = f.columns;

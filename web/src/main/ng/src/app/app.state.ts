@@ -14,14 +14,14 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class AppState {
 
   // Observe state
-  private stateSubject: Subject<string> = new Subject();
-  public stateChanged: Observable<string> = this.stateSubject.asObservable();
+  private resultsSubject: Subject<string> = new Subject();
+  public resultsChanged: Observable<string> = this.resultsSubject.asObservable();
+
+  private facetsSubject: Subject<string> = new Subject();
+  public facetsChanged: Observable<string> = this.facetsSubject.asObservable();
 
   private loggedSubject: Subject<string> = new Subject();
   public loggedChanged: Observable<string> = this.loggedSubject.asObservable();
-
-  private stateParamsSubject: ReplaySubject<string> = new ReplaySubject(1);
-  public stateParamsChanged: Observable<string> = this.stateParamsSubject.asObservable();
 
   private mapResultSubject: Subject<string> = new Subject();
   public mapResultChanged: Observable<string> = this.mapResultSubject.asObservable();
@@ -59,7 +59,7 @@ export class AppState {
   solrResponse: SolrResponse;
   loading: boolean;
   numFound: number;
-  facets: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[];
+  facets: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[] = [];
   facetsFiltered: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[];
   facetFilterValue: string;
   areFacetsFiltered: boolean;
@@ -83,9 +83,11 @@ export class AppState {
     }[]
   }[] = [];
 
+  heatMaps;
+
   q: string;
   rows: number;
-  page: number;
+  page = 0;
   totalPages: number;
   sorts: Sort[];
   sort: Sort;
@@ -110,11 +112,22 @@ export class AppState {
   }
 
   setSearchResponse(resp: SolrResponse) {
-    console.log('setSearchResponse');
+    // this.mapResult = null;
     this.solrResponse = resp;
     this.numFound = resp.response.numFound;
     this.totalPages = this.numFound / this.rows;
+    this.resultsSubject.next('results');
+    setTimeout(() => {
+      this.setFacets(resp);
+    }, 100);
+  }
+
+  setFacets(resp) {
+    if (this.page !== 0 && this.facets.length > 0 && this.heatMaps?.loc_rpt) {
+      return;
+    }
     this.facets = [];
+    this.heatMaps = resp.facet_counts.facet_heatmaps;
     this.facetsFiltered = [];
     this.areFacetsFiltered = false;
     this.facetFilterValue = '';
@@ -141,12 +154,7 @@ export class AppState {
         }
       }
     });
-    setTimeout(() => {
-      this.setFacets(resp);
-    }, 100);
-  }
 
-  setFacets(resp) {
     this.facetsFiltered = Object.assign([], this.facets);
     this.setFacetPivots(resp);
     this.facetRanges = resp.facet_counts.facet_ranges;
@@ -163,7 +171,7 @@ export class AppState {
       from: this.stats.datum_provedeni_od.min,
       until: this.stats.datum_provedeni_do.max
     };
-    this.stateSubject.next('facets');
+    this.facetsSubject.next('facets');
   }
 
   setFacetPivots(resp: SolrResponse) {
@@ -231,7 +239,6 @@ export class AppState {
       this.sort = this.sorts[0];
     }
 
-    this.stateParamsSubject.next();
   }
 
   getUserPristupnost() {

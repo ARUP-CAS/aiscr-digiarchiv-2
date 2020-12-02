@@ -79,7 +79,7 @@ export class FacetsComponent implements OnInit, AfterViewInit {
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable; // demo
 
   ngOnInit(): void {
-    this.state.stateChanged.subscribe(() => {
+    this.state.facetsChanged.subscribe(() => {
       this.setTreeData();
     });
 
