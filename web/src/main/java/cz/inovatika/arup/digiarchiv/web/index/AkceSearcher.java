@@ -65,13 +65,15 @@ public class AkceSearcher implements EntitySearcher{
     
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
-    }
+      query.setFields("ident_cely,entity,vedouci_akce,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres");
+    } else {
 
-    query.setFields("ident_cely","katastr","okres","vedouci_akce", "loc","entity",
-    "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,
-    "organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
-    "hlavni_typ","vedlejsi_typ","vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
-    "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]");
+      query.setFields("ident_cely","katastr","okres","vedouci_akce", "loc","entity",
+      "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,
+      "organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
+      "hlavni_typ","vedlejsi_typ","vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
+      "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]");
+     }
   }
   
 }

@@ -74,6 +74,9 @@ public class SolrSearcher {
     query.setRequestHandler("/search");
 
     String pristupnost = LoginServlet.pristupnost(request.getSession());
+    if ("E".equals(pristupnost)) {
+      pristupnost = "D";
+    }
     if ("C".compareTo(pristupnost) <= 0) {
       String organizace = LoginServlet.organizace(request.getSession());
       // Zohlednit organizace. Hledame full_text pro "D" + organizace

@@ -12,8 +12,8 @@
     "centerY": 15.496,
     "heatmapOptions": {
       "radius": 0.05,
-      "maxOpacity": 0.5,
-      "minOpacity": 0.1,
+      "maxOpacity": 0.3,
+      "minOpacity": 0.05,
       "scaleRadius": true,
       "useLocalExtrema": false,
       "latField": "lat",

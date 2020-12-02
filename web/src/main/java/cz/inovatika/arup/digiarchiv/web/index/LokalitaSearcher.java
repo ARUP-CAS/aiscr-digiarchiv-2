@@ -75,10 +75,14 @@ public class LokalitaSearcher implements EntitySearcher {
     query.set("df", "text_all_" + pristupnost);
                
     SolrSearcher.addFilters(request, query, pristupnost);
+    
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
-    }
-    query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument:[json]");
+      query.setFields("ident_cely,entity,nazev,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres");
+    } else {
+      query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument:[json]");
+     }
+    
   }
 
 }

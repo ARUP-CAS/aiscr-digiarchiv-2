@@ -79,6 +79,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   maxNumMarkers = 200;
   markerZoomLevel = 16;
   currentZoom: number;
+  zoomingOnMarker = true;
 
   map;
   markers = new L.featureGroup();
@@ -307,6 +308,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       m.setZIndexOffset(100);
     });
     if (changed && ms.length > 0) {
+      this.zoomingOnMarker = true;
       this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
       
       // setTimeout(() => {
@@ -392,10 +394,10 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
 
     map.on('zoomend', (e) => {
-      // if (this.currentZoom > this.map.getZoom()) {
-        // Oddalujeme se, musime ziskat markers
+       if (!this.zoomingOnMarker) {
         this.updateBounds(map.getBounds());
-      // }
+       }
+       this.zoomingOnMarker = false;
     });
     map.on('dragend', () => {
       this.updateBounds(map.getBounds());

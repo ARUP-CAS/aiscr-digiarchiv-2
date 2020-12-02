@@ -45,13 +45,11 @@ export class AppComponent implements OnInit {
         this.service.setCrumbs(params);
         this.state.processParams(params);
 
-        
-
-    if (!this.state.isMapaCollapsed) {
-      this.document.body.classList.add('app-view-map');
-    } else {
-      this.document.body.classList.remove('app-view-map');
-    }
+        if (!this.state.isMapaCollapsed) {
+          this.document.body.classList.add('app-view-map');
+        } else {
+          this.document.body.classList.remove('app-view-map');
+        }
 
       }
     });
