@@ -84,7 +84,9 @@ public class SolrSearcher {
     // query.addFacetField("{!ex=f_arealF key=f_areal}f_areal_" + pristupnost);
 
     int rows = Options.getInstance().getClientConf().getInt("defaultRows");
-    if (request.getParameter("rows") != null) {
+    if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+      rows = 200;
+    } else if (request.getParameter("rows") != null) {
       rows = Integer.parseInt(request.getParameter("rows"));
     }
     query.setRows(rows);

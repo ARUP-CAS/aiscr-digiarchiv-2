@@ -50,7 +50,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   options = {
     layers: [
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 20,
+        maxZoom: 18,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
       })
     ],
@@ -76,8 +76,9 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   params: HttpParams;
 
-  maxNumMarkers = 50;
+  maxNumMarkers = 200;
   markerZoomLevel = 16;
+  currentZoom: number;
 
   map;
   markers = new L.featureGroup();
@@ -106,12 +107,14 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.push(this.state.mapResultChanged.subscribe((res: any) => {
-      console.log('mapResultChanged');
       if (this.mapReady) {
         this.hitMarker(res);
       }
     }));
     this.options.zoom = this.config.mapOptions.zoom;
+    if (this.state.mapResult) {
+      this.options.zoom = this.config.mapOptions.hitZoomLevel;
+    }
     this.options.center = L.latLng(this.config.mapOptions.centerX, this.config.mapOptions.centerY);
 
     L.control.zoom(this.zoomOptions);
@@ -124,21 +127,18 @@ export class MapaComponent implements OnInit, OnDestroy {
     // }));
 
     this.subs.push(this.state.resultsChanged.subscribe(res => {
-      console.log('resultsChanged');
       if (this.mapReady) {
         this.setData();
       }
     }));
 
     this.subs.push(this.state.facetsChanged.subscribe(res => {
-      console.log('facetsChanged');
       if (this.mapReady) {
         this.setHeatData();
       }
     }));
 
     this.subs.push(this.state.mapViewChanged.subscribe(res => {
-      console.log('mapViewChanged');
       if (this.mapReady) {
         setTimeout(() => {
           this.map.invalidateSize({ pan: false });
@@ -253,7 +253,9 @@ export class MapaComponent implements OnInit, OnDestroy {
           }
         }
       }
+
     });
+    this.currentZoom = this.map.getZoom();
   }
 
   setMarker(res) {
@@ -286,7 +288,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   hitMarker(res) {
-
     if (!res) {
       this.clearSelectedMarker();
       // this.fitOnMarkers();
@@ -304,10 +305,15 @@ export class MapaComponent implements OnInit, OnDestroy {
       // m.fire('click');
       m.setIcon(this.hitIcon);
       m.setZIndexOffset(100);
-      if (changed) {
-        this.map.setView(m.getLatLng());
-      }
     });
+    if (changed && ms.length > 0) {
+      this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
+      
+      // setTimeout(() => {
+      //   this.currentZoom = this.map.getZoom();
+      //   // this.map.setZoom(this.hitZoomLevel);
+      // }, 1000);
+    }
     if (!ms || ms.length === 0) {
       this.state.mapResult = null;
       //this.fitOnMarkers();
@@ -365,7 +371,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.locationFilter.setBounds(bounds);
       // this.locationFilter.enable();
       this.map.fitBounds(bounds);
-
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
       const lng = this.state.stats.lng;
@@ -386,41 +391,36 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.locationFilter.setBounds(bounds.pad(-0.95));
     }
 
-    map.on('zoomend', () => {
-      console.log('zoomend');
-      // this.updateBounds(map.getBounds());
+    map.on('zoomend', (e) => {
+      // if (this.currentZoom > this.map.getZoom()) {
+        // Oddalujeme se, musime ziskat markers
+        this.updateBounds(map.getBounds());
+      // }
     });
     map.on('dragend', () => {
-      console.log('dragend');
       this.updateBounds(map.getBounds());
     });
     map.on('fullscreenchange', () => {
-      console.log('fullscreenchange');
       this.updateBounds(map.getBounds());
     });
     map.on('resize', () => {
-      console.log('resize');
       this.updateBounds(map.getBounds());
     });
 
     this.locationFilter.on('change', (e) => {
-      console.log('change');
       this.updateBounds(null);
     });
 
     this.locationFilter.on('enabled', () => {
-      console.log('locationFilter_enabled');
       this.state.locationFilterEnabled = true;
       // this.updateBounds(bounds);
     });
 
     this.locationFilter.on('disabled', () => {
-      console.log('locationFilter_disabled');
       this.state.locationFilterEnabled = false;
       this.updateBounds(null);
     });
 
-    console.log('mapReady');
     // this.setData();
     this.setHeatData();
     this.mapReady = true;
@@ -431,8 +431,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   // }
 
   updateBounds(mapBounds) {
-
-    console.log('updateBounds');
     if (!this.isResults) {
       // Jsme v documentu, nepotrebujeme znovu nacist data
       return;
@@ -465,8 +463,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       return;
     }
     const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
+    
     this.showHeat = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
-    console.log('showHeat', this.showHeat);
     if (!this.showHeat) {
       return;
     }

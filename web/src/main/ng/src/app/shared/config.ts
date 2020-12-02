@@ -28,6 +28,7 @@ export class Configuration {
 
   mapOptions: {
     zoom: number,
+    hitZoomLevel: number,
     centerX: number,
     centerY: number,
     heatmapOptions: {

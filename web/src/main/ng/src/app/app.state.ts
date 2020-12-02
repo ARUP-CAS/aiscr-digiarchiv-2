@@ -112,7 +112,6 @@ export class AppState {
   }
 
   setSearchResponse(resp: SolrResponse) {
-    // this.mapResult = null;
     this.solrResponse = resp;
     this.numFound = resp.response.numFound;
     this.totalPages = this.numFound / this.rows;
@@ -227,8 +226,12 @@ export class AppState {
     this.entity = params.has('entity') ? params.get('entity') : 'dokument';
     this.sorts = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
     this.page = params.has('page') ? +params.get('page') : 0;
-    this.rows = params.has('rows') ? +params.get('rows') : this.config.defaultRows;
     this.isMapaCollapsed = params.has('mapa') ? params.get('mapa') === 'false' : true;
+    if (this.isMapaCollapsed) {
+      this.rows = params.has('rows') ? +params.get('rows') : this.config.defaultRows;
+    } else {
+      this.rows = 200;
+    }
     this.pianId = params.has('pian_id') ? params.get('pian_id') : null;
 
 
@@ -270,7 +273,6 @@ export class AppState {
   }
 
   setMapResult(result, mapDetail) {
-    console.log('setMapResult');
     if (mapDetail) {
       return;
     }
