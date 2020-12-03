@@ -227,10 +227,6 @@ public class LoginServlet extends HttpServlet {
             } else {
               jo.put("remaining", left);
             }
-            System.out.println(req.getSession().getAttribute("user"));
-            System.out.println(req.getSession().getAttribute("userid"));
-            System.out.println(jo);
-            
           }
 
         } catch (Exception ex) {

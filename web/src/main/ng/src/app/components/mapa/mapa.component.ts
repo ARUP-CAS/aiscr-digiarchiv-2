@@ -146,6 +146,10 @@ export class MapaComponent implements OnInit, OnDestroy {
         }, 500);
       }
     }));
+
+    if (!this.isResults && this.mapReady) {
+      this.setData();
+    }
   }
 
   getVisibleCount(): number {
@@ -178,7 +182,6 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.locationFilter.disable();
       }
       setTimeout(() => {
-
         if (this.state.mapResult) {
           this.hitMarker(this.state.mapResult);
         } else {
@@ -296,7 +299,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     const docId = res.ident_cely;
     let changed = true;
-    if ((this.selectedMarker.length > 0 && this.selectedMarker[0].docId.includes(docId)) || !this.isResults) {
+    if ((this.selectedMarker.length > 0 && this.selectedMarker[0].docId.includes(docId)) ) {
       // the same or document
       changed = false;
     }
@@ -314,7 +317,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else {
         this.map.setView(ms[ms.length - 1].getLatLng());
       }
-      
+
       // setTimeout(() => {
       //   this.currentZoom = this.map.getZoom();
       //   // this.map.setZoom(this.hitZoomLevel);
@@ -365,8 +368,6 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     map.on('enterFullscreen', () => map.invalidateSize());
     map.on('exitFullscreen', () => map.invalidateSize());
-
-
     let bounds = map.getBounds();
     if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('loc_rpt').split(',');
@@ -375,7 +376,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       bounds = L.latLngBounds(southWest, northEast);
 
       this.locationFilter.setBounds(bounds);
-      // this.locationFilter.enable();
       this.map.fitBounds(bounds);
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
@@ -389,20 +389,20 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(lat.min, lng.min);
       const northEast = L.latLng(lat.max, lng.max);
       bounds = L.latLngBounds(southWest, northEast);
-      // this.locationFilter.enable();
       this.map.fitBounds(bounds.pad(.03));
       this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
 
+    // } else if(!this.isResults) {
+    //   this.locationFilter.setBounds(bounds.pad(-0.95));
     } else {
       this.locationFilter.setBounds(bounds.pad(-0.95));
     }
 
     map.on('zoomend', (e) => {
-      console.log(this.map.getZoom());
-       if (!this.zoomingOnMarker) {
+      if (!this.zoomingOnMarker) {
         this.updateBounds(map.getBounds());
-       }
-       this.zoomingOnMarker = false;
+      }
+      this.zoomingOnMarker = false;
     });
     map.on('dragend', () => {
       this.updateBounds(map.getBounds());
@@ -428,14 +428,12 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.updateBounds(null);
     });
 
-    // this.setData();
+    if (!this.isResults) {
+      this.setData();
+    }
     this.setHeatData();
     this.mapReady = true;
   }
-
-  // onResize(mapBounds) {
-  //   this.updateBounds(mapBounds);
-  // }
 
   updateBounds(mapBounds) {
     if (!this.isResults) {
@@ -470,7 +468,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       return;
     }
     const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
-    
+
     this.showHeat = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
     if (!this.showHeat) {
       return;
@@ -495,9 +493,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       maxBounds = new L.latLngBounds(bounds.getSouthWest(), bounds.getNorthEast());
     }
 
-    // this.data = heat;
     if (counts_ints2D !== null) {
-
       for (let i = 0; i < counts_ints2D.length; i++) {
         if (counts_ints2D[i] !== null && counts_ints2D[i] !== 'null') {
           const row = counts_ints2D[i];

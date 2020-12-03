@@ -11,7 +11,7 @@
 	</mat-card>
 
 	<div class="app-view-card-info">
-		<ng-container *ngIf="state.mapResult && isResults">
+		<ng-container *ngIf="state.mapResult">
 			<ng-container [ngSwitch]="state.mapResult.entity">
 				<app-dokument *ngSwitchCase="'dokument'" [result]="state.mapResult" [mapDetail]="true"></app-dokument>
 				<app-dokument *ngSwitchCase="'knihovna_3d'" [result]="state.mapResult" [mapDetail]="true"></app-dokument>

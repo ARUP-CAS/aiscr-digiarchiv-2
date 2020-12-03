@@ -115,6 +115,19 @@ export class AppState {
     this.solrResponse = resp;
     this.numFound = resp.response.numFound;
     this.totalPages = this.numFound / this.rows;
+    this.stats = resp.stats.stats_fields;
+    const keys = Object.keys(this.stats);
+    keys.forEach(k => {
+      this.stats[k].from = this.stats[k].min;
+      this.stats[k].until = this.stats[k].max;
+    });
+    this.stats.datum_provedeni = {
+      min: this.stats.datum_provedeni_od.min,
+      max: this.stats.datum_provedeni_do.max,
+      count: this.stats.datum_provedeni_od.count,
+      from: this.stats.datum_provedeni_od.min,
+      until: this.stats.datum_provedeni_do.max
+    };
     this.resultsSubject.next('results');
     setTimeout(() => {
       this.setFacets(resp);
@@ -122,14 +135,17 @@ export class AppState {
   }
 
   setFacets(resp) {
-    if (this.page !== 0 && this.facets.length > 0 && this.heatMaps?.loc_rpt) {
+    if (this.page !== 0 && this.heatMaps?.loc_rpt) {
       return;
     }
     this.facets = [];
-    this.heatMaps = resp.facet_counts.facet_heatmaps;
+    this.heatMaps = resp.facet_counts?.facet_heatmaps;
     this.facetsFiltered = [];
     this.areFacetsFiltered = false;
     this.facetFilterValue = '';
+    if (!resp.facet_counts) {
+      return;
+    }
     this.config.facets.forEach(f => {
       if (resp.facet_counts.facet_fields[f]) {
         const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
@@ -157,19 +173,7 @@ export class AppState {
     this.facetsFiltered = Object.assign([], this.facets);
     this.setFacetPivots(resp);
     this.facetRanges = resp.facet_counts.facet_ranges;
-    this.stats = resp.stats.stats_fields;
-    const keys = Object.keys(this.stats);
-    keys.forEach(k => {
-      this.stats[k].from = this.stats[k].min;
-      this.stats[k].until = this.stats[k].max;
-    });
-    this.stats.datum_provedeni = {
-      min: this.stats.datum_provedeni_od.min,
-      max: this.stats.datum_provedeni_do.max,
-      count: this.stats.datum_provedeni_od.count,
-      from: this.stats.datum_provedeni_od.min,
-      until: this.stats.datum_provedeni_do.max
-    };
+    
     this.facetsSubject.next('facets');
   }
 
