@@ -10,6 +10,7 @@ import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -169,19 +170,18 @@ public class Lokalita implements Entity {
            
     for (String dok : this.child_dokument) {
       SolrQuery query = new SolrQuery("ident_cely:\"" + dok + "\"")
-              .setFields("f_areal", "f_obdobi", "f_aktivita", "f_kategorie", "f_druh_nalezu", "f_specifikace", "nalez_kategorie");
-//      for (String f: dokFields) {
-//        for (String sufix : sufixes) {
-//          query.addField(f + "_" + sufix);
-//        }
-//      }
+              // .setFields("f_areal", "f_obdobi", "f_aktivita", "f_kategorie", "f_druh_nalezu", "f_specifikace", "nalez_kategorie");
+              .setFields("jednotka_dokumentu:[json]");
       
       JSONObject json = SearchUtils.json(query, client, "entities");
       if (json.getJSONObject("response").getInt("numFound") > 0) {
-        JSONArray ja = json.getJSONObject("response").getJSONArray("docs");
+        JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+        JSONArray ja = doc.getJSONArray("jednotka_dokumentu");
         for (int i = 0; i < ja.length(); i++) {
-          JSONObject doc = ja.getJSONObject(i);
-          SearchUtils.addJSONFields(doc, idoc);
+          JSONObject jd = ja.getJSONObject(i);
+          if (jd.has("vazba_lokalita") && ident_cely.equals(jd.getString("vazba_lokalita"))) {
+            SearchUtils.addJSONFields(jd, "jednotka_dokumentu", idoc);
+          }
           
         }
       }
@@ -319,18 +319,25 @@ public class Lokalita implements Entity {
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {
-          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
+          SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       } 
+      
+//      if (indexFields.contains(s)) {
+//        for (String sufix : prSufix) {
+//          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
+//        }
+//      } 
     }
 
     // Fields allways searchable
     String[] defFields = new String[]{"ident_cely", "okres",
       "typ_lokality", "druh"};
     for (String field : defFields) {
-      idoc.addField("text_all_A", idoc.getFieldValues(field));
-      idoc.addField("text_all_B", idoc.getFieldValues(field));
-      idoc.addField("text_all_C", idoc.getFieldValues(field));
+      Object[] vals = idoc.getFieldValues(field).toArray();
+      idoc.addField("text_all_A", vals);
+      idoc.addField("text_all_B", vals);
+      idoc.addField("text_all_C", vals);
     }
   } 
 
