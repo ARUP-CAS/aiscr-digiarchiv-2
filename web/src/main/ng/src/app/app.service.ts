@@ -261,9 +261,9 @@ export class AppService {
     return this.post(url, { docid: identCely });
   }
 
-  getLogged() {
+  getLogged(wantsUser: boolean) {
     const url = '/user/islogged';
-    return this.get(url);
+    return this.get(url, new HttpParams().set('wantsUser', wantsUser+''));
   }
 
   login(user: string, pwd: string) {

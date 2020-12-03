@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.service.getLogged().subscribe((res: any) => {
+    this.service.getLogged(true).subscribe((res: any) => {
       this.state.setLogged(res);
       if (this.state.logged) {
         this.loggedChecker = setInterval(() => {
@@ -51,7 +51,7 @@ export class NavbarComponent implements OnInit {
 
   checkLogged() {
     if (this.state.logged) {
-      this.service.getLogged().subscribe((res: any) => {
+      this.service.getLogged(false).subscribe((res: any) => {
         if (res.error) {
           this.state.setLogged(res);
           clearInterval(this.loggedChecker);

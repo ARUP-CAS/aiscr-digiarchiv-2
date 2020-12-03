@@ -158,7 +158,7 @@ public class LoginServlet extends HttpServlet {
                         .addFilterQuery("heslar_name:organizace");
                 JSONObject res = SearchUtils.json(query, client, "heslar");
                 if (res.getJSONObject("response").optInt("numFound", 0) > 0) {
-                  String organizace = res.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("nazev");
+                  String organizace = res.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("nazev_zkraceny");
                   userJo.put("organizaceNazev", organizace);
                 } else {
                   LOGGER.log(Level.WARNING, "Uzivatel bez organizace");
@@ -211,8 +211,6 @@ public class LoginServlet extends HttpServlet {
     ISLOGGED {
       @Override
       JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        resp.setContentType("application/json;charset=UTF-8");
-        
         int left = (int) Math.round(req.getSession().getMaxInactiveInterval() - (Instant.now().toEpochMilli() - req.getSession().getLastAccessedTime())*.001);
         boolean expired = left < 0;
         
@@ -223,7 +221,16 @@ public class LoginServlet extends HttpServlet {
             jo.put("error", "nologged");
           } else {
             req.getSession().setMaxInactiveInterval(left);
-            jo.put("remaining", left);
+            if (Boolean.parseBoolean(req.getParameter("wantsUser"))) {
+              jo = (JSONObject) req.getSession().getAttribute("user");
+              jo.getJSONObject((String) req.getSession().getAttribute("userid")).put("remaining", left);
+            } else {
+              jo.put("remaining", left);
+            }
+            System.out.println(req.getSession().getAttribute("user"));
+            System.out.println(req.getSession().getAttribute("userid"));
+            System.out.println(jo);
+            
           }
 
         } catch (Exception ex) {
