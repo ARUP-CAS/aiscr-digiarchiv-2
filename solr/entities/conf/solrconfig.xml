@@ -787,74 +787,45 @@
 	   
        <str name="facet.field">pristupnost</str>
 	   
-       <str name="facet.field">{!ex=f_okresF}f_okres</str>
-	   <!--
-       <str name="facet.field">{!ex=f_arealF}f_areal</str> 
-       <str name="facet.field">{!ex=f_obdobiF}f_obdobi</str>
-       <str name="facet.field">{!ex=f_aktivitaF}f_aktivita</str>
-       <str name="facet.field">{!ex=f_kategorieF}f_kategorie</str>
-       <str name="facet.field">{!ex=f_druh_nalezuF}f_druh_nalezu</str>
-       <str name="facet.field">{!ex=f_specifikaceF}f_specifikace</str>
-       <str name="facet.field">{!ex=f_katastrF}f_katastr</str>
-       <str name="facet.field">{!ex=f_typ_vyzkumuF}f_typ_vyzkumu</str>
-	   -->
+       <str name="facet.field">f_okres</str>
 	   
-       <str name="facet.field">{!ex=f_druh_lokalityF}f_druh_lokality</str>
-       <str name="facet.field">{!ex=f_typ_lokalityF}f_typ_lokality</str>
+       <str name="facet.field">f_druh_lokality</str>
+       <str name="facet.field">f_typ_lokality</str>
 	   
-	   <!--
-       <str name="facet.field">{!ex=f_typ_nalezuF}f_typ_nalezu</str>
-	   -->
-	   
-       <str name="facet.field">{!ex=f_typ_dokumentu_posudekF}f_typ_dokumentu_posudek</str>
+       <str name="facet.field">f_typ_dokumentu_posudek</str>
 
-       <str name="facet.field">{!ex=f_autorF}f_autor</str>
-       <str name="facet.field">{!ex=f_osobyF}f_osoby</str>
-       <str name="facet.field">{!ex=f_vedouciF}f_vedouci</str>
-       <str name="facet.field">{!ex=f_nalezceF}f_nalezce</str>
-       <str name="facet.field">{!ex=f_pozorovatelF}f_pozorovatel</str>
+       <str name="facet.field">f_autor</str>
+       <str name="facet.field">f_osoby</str>
+       <str name="facet.field">f_vedouci</str>
+       <str name="facet.field">f_nalezce</str>
+       <str name="facet.field">f_pozorovatel</str>
 	   
-	   <!--
-       <str name="facet.field">{!ex=f_hlavni_typF}f_hlavni_typ</str>
-       <str name="facet.field">{!ex=f_vedlejsi_typF}f_vedlejsi_typ</str> 
-	   -->
+       <str name="facet.field">f_typ_projektu</str>
+       <str name="facet.field">f_kulturni_pamatka</str>
 	   
-       <str name="facet.field">{!ex=f_typ_projektuF}f_typ_projektu</str>
-       <str name="facet.field">{!ex=f_kulturni_pamatkaF}f_kulturni_pamatka</str>
+       <str name="facet.field">f_organizace</str>
 	   
-       <str name="facet.field">{!ex=f_organizaceF}f_organizace</str>
+       <str name="facet.field">f_material_dokumentu</str>
 	   
-       <str name="facet.field">{!ex=f_material_dokumentuF}f_material_dokumentu</str>
+       <str name="facet.field">f_jazyk_dokumentu</str>
+       <str name="facet.field">f_rada</str>
+       <str name="facet.field">f_ulozeni_originalu</str>
+       <str name="facet.field">f_format</str>
+       <str name="facet.field">f_zeme</str>
+       <str name="facet.field">f_zachovalost</str>
+       <str name="facet.field">f_nahrada</str>
+       <str name="facet.field">f_udalost_typ</str>
 	   
-       <str name="facet.field">{!ex=f_jazyk_dokumentuF}f_jazyk_dokumentu</str>
-       <str name="facet.field">{!ex=f_radaF}f_rada</str>
-       <str name="facet.field">{!ex=f_ulozeni_originaluF}f_ulozeni_originalu</str>
-       <str name="facet.field">{!ex=f_formatF}f_format</str>
-       <str name="facet.field">{!ex=f_zemeF}f_zeme</str>
-       <str name="facet.field">{!ex=f_zachovalostF}f_zachovalost</str>
-       <str name="facet.field">{!ex=f_nahradaF}f_nahrada</str>
-       <str name="facet.field">{!ex=f_udalost_typF}f_udalost_typ</str>
+       <str name="facet.field">f_let_organizace</str>
+       <str name="facet.field">f_let_pilot</str>
+       <str name="facet.field">f_let_letiste_start</str>
+       <str name="facet.field">f_let_letiste_cil</str>
+       <str name="facet.field">f_let_pocasi</str>
+       <str name="facet.field">f_let_dohlednost</str>
 	   
-       <str name="facet.field">{!ex=f_let_organizaceF}f_let_organizace</str>
-       <str name="facet.field">{!ex=f_let_pilotF}f_let_pilot</str>
-       <str name="facet.field">{!ex=f_let_letiste_startF}f_let_letiste_start</str>
-       <str name="facet.field">{!ex=f_let_letiste_cilF}f_let_letiste_cil</str>
-       <str name="facet.field">{!ex=f_let_pocasiF}f_let_pocasi</str>
-       <str name="facet.field">{!ex=f_let_dohlednostF}f_let_dohlednost</str>
-	   
-       <str name="facet.field">{!ex=f_tvarF}f_tvar</str>
-	   
-	   
-	   <!--
-       <str name="facet.field">{!ex=f_adb_typ_sondyF}f_adb_typ_sondy</str>
-       <str name="facet.field">{!ex=f_adb_podnetF}f_adb_podnet</str>
-       <str name="facet.field">{!ex=f_pian_typF}f_pian_typ</str>
-       <str name="facet.field">{!ex=f_pian_presnostF}f_pian_presnost</str>
-       <str name="facet.field">{!ex=f_pian_zm10F}f_pian_zm10</str>
-       <str name="facet.field">{!ex=f_dok_jednotka_typF}f_dok_jednotka_typ</str>
-	   -->
+       <str name="facet.field">f_tvar</str>
 
-       <str name="facet.field">{!ex=f_nalezove_okolnostiF}f_nalezove_okolnosti</str>
+       <str name="facet.field">f_nalezove_okolnosti</str>
 
      </lst>
   </initParams>

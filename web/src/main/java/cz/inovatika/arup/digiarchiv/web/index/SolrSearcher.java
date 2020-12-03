@@ -83,8 +83,6 @@ public class SolrSearcher {
       q += " OR (text_all_D:(" + q + ") AND organizace:\"" + organizace + "\")";
     }
     query.setQuery(q); 
-    
-    // query.addFacetField("{!ex=f_arealF key=f_areal}f_areal_" + pristupnost);
 
     int rows = Options.getInstance().getClientConf().getInt("defaultRows");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
@@ -102,7 +100,8 @@ public class SolrSearcher {
     List<Object> facetFields = Options.getInstance().getClientConf().getJSONArray("facets").toList();
     for (Object f : facetFields) {
       if (!((String)f).contains("okres") && !((String)f).equals("pristupnost")) {
-        query.addFacetField("{!ex=" + f + "F key=" + f + "}" + f + "_" + pristupnost);
+        //query.addFacetField("{!ex=" + f + "F key=" + f + "}" + f + "_" + pristupnost);
+        query.addFacetField("{!key=" + f + "}" + f + "_" + pristupnost);
       }
     }
     //if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
@@ -247,67 +246,6 @@ public class SolrSearcher {
       query.addFilterQuery(fq) //        .setParam("facet.heatmap.distErr", dist + "")
               //        .setParam("facet.heatmap.geom", geom)
               ;
-    }
-
-    if (request.getParameter("adv") != null) {
-
-      String[] advs = request.getParameterValues("adv");
-      String fq = "";
-      for (int i = 0; i < advs.length; i++) {
-
-        JSONObject adv = new JSONObject(advs[i]);
-        String entity = adv.getString("entity");
-        String fieldtype = adv.getString("fieldtype");
-        String field = adv.getString("field");
-        String operator = adv.optString("operator");
-        String fieldCondition = adv.optString("fieldCondition");
-
-        String searchField = getSearchField(field);
-        if ("komponenta_aktivita".equals(field)) {
-          searchField = "komponenta_dokument_aktivita_" + Options.getInstance().getClientConf().getJSONObject("aktivity").getString(adv.getString("dispValue"));
-        }
-//        if ("katastr".equals(field) && !LoginServlet.isLogged(request.getSession())) {
-//          searchField = "adv_katastr_n";
-//        }
-
-        if (i == 0) {
-          fq = searchField + ":";
-        } else {
-          fq += " " + operator.toUpperCase() + " " + searchField + ":";
-        }
-
-        switch (fieldtype) {
-          case "date": {
-            fq += "[" + adv.getString("valueOd") + " TO " + adv.getString("valueDo") + "]";
-            break;
-          }
-          case "heslar": {
-
-            if ("komponenta_aktivita".equals(field)) {
-              fq += "1";
-            } else {
-              fq += '"' + adv.getString("value") + '"';
-            }
-            break;
-          }
-          case "text": {
-
-            if ("starts".equals(fieldCondition)) {
-              fq += adv.getString("value") + "*";
-            } else if ("equals".equals(fieldCondition)) {
-              fq += '"' + adv.getString("value") + '"';
-            } else {
-              fq += "*" + adv.getString("value") + "*";
-            }
-            break;
-          }
-          default: {
-            fq = "";
-          }
-        }
-
-      }
-      query.addFilterQuery(fq);
     }
   }
 
