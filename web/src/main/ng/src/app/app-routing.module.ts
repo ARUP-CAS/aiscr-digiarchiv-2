@@ -12,6 +12,7 @@ import { FavoritesComponent } from './pages/favorites/favorites.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'id/:id', component: DocumentComponent},
+  {path: 'print/:id', component: DocumentComponent},
   {path: 'export', component: ExportComponent},
   {path: 'results', component: ResultsComponent},
   {path: 'favorites', component: FavoritesComponent},

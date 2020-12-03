@@ -4,7 +4,7 @@ import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { NeidentAkce } from 'src/app/shared/neident-akce';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Lokalita } from 'src/app/shared/lokalita';
 import { Akce } from 'src/app/shared/akce';
 import { KomponentaDok } from 'src/app/shared/komponenta-dok';
@@ -17,7 +17,7 @@ import { DocumentDialogComponent } from 'src/app/components/document-dialog/docu
   templateUrl: './knihovna3d.component.html',
   styleUrls: ['./knihovna3d.component.scss']
 })
-export class Knihovna3dComponent implements OnInit {
+export class Knihovna3dComponent implements OnInit, OnChanges {
   @Input() result;
   @Input() highlighting;
   @Input() inModal = false;
@@ -54,6 +54,16 @@ export class Knihovna3dComponent implements OnInit {
       year = ${this.result.rok_vzniku}, 
       note = “${this.result.organizace}”
     }`;
+  }
+
+  ngOnChanges(c) {
+    if (c.result) {
+      this.hasDetail = false;
+      this.detailExpanded = this.inDocument;
+    }
+    if (this.mapDetail) {
+      this.getFullId();
+    }
   }
 
 

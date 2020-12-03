@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { AppService } from 'src/app/app.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './projekt.component.html',
   styleUrls: ['./projekt.component.scss']
 })
-export class ProjektComponent implements OnInit {
+export class ProjektComponent implements OnInit, OnChanges {
 
   @Input() result;
   @Input() detailExpanded: boolean;
@@ -49,7 +49,7 @@ export class ProjektComponent implements OnInit {
   ngOnChanges(c) {
     if (c.result) {
       this.hasDetail = false;
-      this.detailExpanded = false;
+      this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
       this.getFullId();

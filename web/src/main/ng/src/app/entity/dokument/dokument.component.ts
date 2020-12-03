@@ -53,7 +53,7 @@ export class DokumentComponent implements OnInit, OnChanges {
   ngOnChanges(c) {
     if (c.result) {
       this.hasDetail = false;
-      this.detailExpanded = false;
+      this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
       this.getFullId();

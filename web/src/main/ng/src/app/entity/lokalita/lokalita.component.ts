@@ -1,5 +1,5 @@
 import { AppService } from 'src/app/app.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './lokalita.component.html',
   styleUrls: ['./lokalita.component.scss']
 })
-export class LokalitaComponent implements OnInit {
+export class LokalitaComponent implements OnInit, OnChanges {
 
   @Input() result: any;
   @Input() detailExpanded: boolean;
@@ -49,7 +49,7 @@ export class LokalitaComponent implements OnInit {
   ngOnChanges(c) {
     if (c.result) {
       this.hasDetail = false;
-      this.detailExpanded = false;
+      this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
       this.getFullId();

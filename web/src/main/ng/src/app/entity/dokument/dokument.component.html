@@ -115,9 +115,12 @@
       <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
         <mat-icon>menu_book</mat-icon>
       </button>
-      <button mat-flat-button (click)="print()">
+      <button *ngIf="inDocument" mat-flat-button (click)="service.print()">
         <mat-icon>print</mat-icon>
       </button>
+      <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely" >
+        <mat-icon>print</mat-icon>
+      </a>
       <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
         <mat-icon>grade</mat-icon>
       </button>

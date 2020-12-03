@@ -3,7 +3,7 @@ import { AppState } from 'src/app/app.state';
 import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { AppService } from 'src/app/app.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { SolrResponse } from 'src/app/shared/solr-response';
 
 @Component({
@@ -21,6 +21,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   constructor(
     private titleService: Title,
     private route: ActivatedRoute,
+    private router: Router,
     private config: AppConfiguration,
     public state: AppState,
     private service: AppService
@@ -39,7 +40,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.state.printing) {
+    if (this.state.printing || this.router.isActive('print', false)) {
       this.state.printing = false;
       setTimeout(() => {
         this.service.print();

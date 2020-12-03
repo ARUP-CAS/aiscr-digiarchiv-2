@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
 import { AppConfiguration } from 'src/app/app-configuration';
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './samostatny-nalez.component.html',
   styleUrls: ['./samostatny-nalez.component.scss']
 })
-export class SamostatnyNalezComponent implements OnInit {
+export class SamostatnyNalezComponent implements OnInit, OnChanges {
 
   @Input() result;
   @Input() detailExpanded: boolean;
@@ -52,7 +52,7 @@ export class SamostatnyNalezComponent implements OnInit {
   ngOnChanges(c) {
     if (c.result) {
       this.hasDetail = false;
-      this.detailExpanded = false;
+      this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
       this.getFullId();
