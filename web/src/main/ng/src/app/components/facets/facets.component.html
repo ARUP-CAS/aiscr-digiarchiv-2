@@ -61,6 +61,8 @@
           {{ 'field.'+facetField.field | translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        
       <mat-list role="list">
         <cdk-virtual-scroll-viewport itemSize="10" [style.height.px]="math.min(200, facetField.values.length * 22)">
         <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-table">
@@ -91,6 +93,7 @@
         </mat-list-item>
       </cdk-virtual-scroll-viewport>
       </mat-list>
+      </ng-template>
     </mat-expansion-panel> 
   </ng-container>
 </mat-accordion>
