@@ -46,6 +46,34 @@ export class LokalitaComponent implements OnInit {
      }`;
   }
 
+  ngOnChanges(c) {
+    if (c.result) {
+      this.hasDetail = false;
+      this.detailExpanded = false;
+    }
+    if (this.mapDetail) {
+      this.getFullId();
+    }
+  }
+
+  getFullId() {
+    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+      this.result = res.response.docs[0];
+      // this.result.akce = res.response.docs[0].akce;
+      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.hasDetail = true;
+    });
+  }
+
+  toggleDetail() {
+    if (!this.hasDetail && !this.inDocument) {
+      this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+        this.getFullId();
+      });
+    }
+    this.detailExpanded = !this.detailExpanded;
+  }
+
   cropped(s: string) {
     if (s.length > 100) {
       return s.slice(0, 100) + '(...)'
@@ -90,17 +118,4 @@ export class LokalitaComponent implements OnInit {
       panelClass: 'app-document-dialog'
     });
   }
-
-  toggleDetail() {
-    if (!this.hasDetail && !this.inDocument) {
-      this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-        this.result.dokument = res.response.docs[0].dokument;
-        this.hasDetail = true;
-      });
-    }
-    this.detailExpanded = !this.detailExpanded;
-  }
-
-
-
 }

@@ -48,12 +48,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   };
 
   options = {
-    layers: [
-      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
-      })
-    ],
+    layers: [],
     zoom: 4,
     zoomControl: false,
     zoomSnap: 0,
@@ -112,6 +107,11 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.hitMarker(res);
       }
     }));
+    this.options.layers.push(
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: this.config.mapOptions.maxZoom,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
+      }));
     this.options.zoom = this.config.mapOptions.zoom;
     if (this.state.mapResult) {
       this.options.zoom = this.config.mapOptions.hitZoomLevel;
@@ -398,6 +398,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
 
     map.on('zoomend', (e) => {
+      console.log(this.map.getZoom());
        if (!this.zoomingOnMarker) {
         this.updateBounds(map.getBounds());
        }

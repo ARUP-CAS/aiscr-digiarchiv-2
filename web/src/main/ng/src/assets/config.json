@@ -6,8 +6,9 @@
   "amcr": "http://localhost:8080/amcr/",
 
   "mapOptions": {
+    "maxZoom": 19,
     "zoom": 8,
-    "hitZoomLevel": 10,
+    "hitZoomLevel": 16,
     "centerX": 49.803,
     "centerY": 15.496,
     "heatmapOptions": {

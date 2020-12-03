@@ -49,14 +49,32 @@ export class SamostatnyNalezComponent implements OnInit {
      }`;
   }
 
+  ngOnChanges(c) {
+    if (c.result) {
+      this.hasDetail = false;
+      this.detailExpanded = false;
+    }
+    if (this.mapDetail) {
+      this.getFullId();
+    }
+  }
+
+  getFullId() {
+    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+      this.result = res.response.docs[0];
+      // this.result.akce = res.response.docs[0].akce;
+      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.hasDetail = true;
+    });
+  }
+
   toggleDetail() {
-    this.detailExpanded = !this.detailExpanded;
     if (!this.hasDetail && !this.inDocument) {
       this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-        this.result.projekt = res.response.docs[0].projekt;
-        this.hasDetail = true;
+        this.getFullId();
       });
     }
+    this.detailExpanded = !this.detailExpanded;
   }
 
   print() {

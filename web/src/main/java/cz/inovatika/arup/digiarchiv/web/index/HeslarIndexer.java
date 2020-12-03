@@ -60,10 +60,10 @@ public class HeslarIndexer {
         return new JSONObject().put("error", "Cant connect");
       }
       int total = 0;
-//      String[] hs = Options.getInstance().getStrings("heslare");
-//      for (String h : hs) {
-//        jo.put(h, indexHeslar(amcr, h));
-//      }
+      String[] hs = Options.getInstance().getStrings("heslare");
+      for (String h : hs) {
+        jo.put(h, indexHeslar(amcr, h));
+      }
       jo.put("obdobi_prvni", indexHeslar(amcr, "obdobi_prvni"));
       Date end = new Date();
 

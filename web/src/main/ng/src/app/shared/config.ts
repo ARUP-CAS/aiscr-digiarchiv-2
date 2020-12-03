@@ -27,6 +27,7 @@ export class Configuration {
   poleToHeslar: { [key: string]: string };
 
   mapOptions: {
+    maxZoom: number,
     zoom: number,
     hitZoomLevel: number,
     centerX: number,
