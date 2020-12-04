@@ -10,9 +10,9 @@
       <div fxLayout="row wrap" class="app-entities-wrapper">
         <ng-container *ngFor="let entity of config.entities">
           <mat-card [class]="'app-entity-' + entity" class="app-card-entity">
-            <mat-card-header>
+            <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity}">
               <mat-card-title fxLayout="row">
-                <a fxFlex routerLink="/results" [queryParams]="{'entity' : entity}">
+                <a fxFlex>
                   <mat-icon fxFlex="28px">{{ config.entityIcons[entity] }}</mat-icon><span>{{ 'entities.' + entity | translate }}</span>
                 </a>
               </mat-card-title>
@@ -30,9 +30,9 @@
         <mat-card fxFlex="100%" *ngIf="showingCat" class="app-doctype">
           <mat-card-content fxLayout="row wrap">
             <mat-card fxFlex *ngFor="let doctype of kategories" class="app-card-doctype mat-elevation-z0">
-              <mat-card-header>
+              <mat-card-header routerLink="/results" [queryParams]="{'kategorie_dokumentu' : doctype, 'entity': 'dokument'}">
                 <mat-card-title>
-                  <a routerLink="/results" [queryParams]="{'kategorie_dokumentu' : doctype, 'entity': 'dokument'}">
+                  <a>
                     <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'kategorie_dokumentu.' + doctype | translate }}
                   </a>
                 </mat-card-title>
