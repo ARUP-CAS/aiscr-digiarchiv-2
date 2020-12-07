@@ -4,6 +4,10 @@
   .mat-dialog-container {
     @extend .app-clean-pd;
 
+    .mat-dialog-content {
+      @extend .app-clean-pd, .app-clean-mg;
+    }
+
     .app-table-cell {
       @extend .app-clean-pd;
 

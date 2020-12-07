@@ -1,4 +1,4 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-dokument]="!isChild" (click)="state.setMapResult(result, mapDetail)">
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-dokument]="!isChild && !isDocumentDialogOpen" (click)="state.setMapResult(result, mapDetail)">
   <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
@@ -15,7 +15,6 @@
       </ng-container><span class="app-pipe"></span>
       <app-inline-filter [field]="'f_rok_vzniku'" [value]="result.rok_vzniku" [isYear]="true"></app-inline-filter>
       <span class="app-pipe"></span>
-      
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>

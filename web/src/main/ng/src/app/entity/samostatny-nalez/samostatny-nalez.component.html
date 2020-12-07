@@ -1,4 +1,4 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-samostatny_nalez]="!isChild" (click)="state.setMapResult(result, mapDetail)">
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-samostatny_nalez]="!isChild && !isDocumentDialogOpen" (click)="state.setMapResult(result, mapDetail)">
   <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
@@ -14,11 +14,14 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16">
+    <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16" fxFlexFill>
       <div *ngIf="imgSrc" class="app-thumb">
         <a (click)="viewFiles()">
           <img [src]="imgSrc" /> 
         </a>
+      </div>
+      <div *ngIf="!imgSrc && state.itemView === 'col' && !isDocumentDialogOpen" fxFlex class="app-thumb app-thumb-missing" [matTooltip]="'Obrázek není k dispozici' | translate">
+        <mat-icon>image_not_supported</mat-icon>
       </div>
       <div fxFlex class="app-metadata">
         <div *ngIf="result.predano_organizace || result.inv_cislo || result.pristupnost">
@@ -90,8 +93,14 @@
       <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
         <mat-icon>grade</mat-icon>
       </button>
-      <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
+      <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'" *ngIf="!isDocumentDialogOpen">
         {{(detailExpanded ? 'Skrýt detail' : 'Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+      </button>
+      <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">
+        {{ 'Zobrazit detail' | translate }}
+      </button>
+      <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false" *ngIf="state.itemView === 'col' && isDocumentDialogOpen">
+        {{ 'Skrýt detail' | translate }}
       </button>
     </div>
   </mat-card-actions>

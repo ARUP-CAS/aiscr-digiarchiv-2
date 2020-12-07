@@ -9,7 +9,9 @@
   app-dokument,
   app-projekt,
   app-akce,
-  app-lokalita {
+  app-lokalita,
+  app-samostatny-nalez,
+  app-knihovna3d {
     $flex-width: 25%;
     $flex-gap: 12px; // default val 16px - 4px because every 4 item has gap 0
     flex: 1 1 calc(#{$flex-width} - #{$flex-gap});

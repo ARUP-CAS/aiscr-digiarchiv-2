@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { AppService } from 'src/app/app.service';
 import { DatePipe } from '@angular/common';
+import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 
 @Component({
   selector: 'app-samostatny-nalez',
@@ -19,6 +20,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   @Input() isChild: boolean;
   @Input() inDocument = false;
   @Input() mapDetail: boolean;
+  @Input() isDocumentDialogOpen: boolean;
   hasRights: boolean;
   hasDetail: boolean;
   imgSrc: string;
@@ -111,6 +113,14 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
         this.result.isFav = true;
       });
     }
+  }
+
+  openDocument() {
+    this.state.dialogRef = this.dialog.open(DocumentDialogComponent, {
+      width: '900px',
+      data: this.result,
+      panelClass: 'app-document-dialog'
+    });
   }
 
 }
