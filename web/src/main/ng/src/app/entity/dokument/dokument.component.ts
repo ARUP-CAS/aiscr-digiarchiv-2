@@ -201,7 +201,7 @@ export class DokumentComponent implements OnInit, OnChanges {
     if (canView) {
       this.state.dialogRef = this.dialog.open(FileViewerComponent, {
         panelClass: 'app-file-viewer',
-        width: '755px',
+        width: '1055px',
         data: this.result
       });
     } else {
