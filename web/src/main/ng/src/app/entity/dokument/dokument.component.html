@@ -381,8 +381,8 @@
               {{ 'Související záznamy' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-          <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+          <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+          <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

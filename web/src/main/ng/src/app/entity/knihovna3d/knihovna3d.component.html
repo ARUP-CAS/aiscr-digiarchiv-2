@@ -28,7 +28,7 @@
       <div *ngIf="!imgSrc && state.itemView === 'col' && !isDocumentDialogOpen" fxFlex class="app-thumb app-thumb-missing" [matTooltip]="'Obrázek není k dispozici' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
-      <div fxFlex class="app-metadata">
+      <div fxFlex *ngIf="mapDetail || state.isMapaCollapsed" class="app-metadata">
         <div *ngIf="result.typ_dokumentu || result.material_originalu || result.rada || result.pristupnost">
           <ng-container *ngIf="result.typ_dokumentu">
             <label class="app-label">{{ 'field.f_typ_dokumentu' | translate }}:</label>&#160;
@@ -359,8 +359,8 @@
               {{ 'Související záznamy' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-          <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+          <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+          <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

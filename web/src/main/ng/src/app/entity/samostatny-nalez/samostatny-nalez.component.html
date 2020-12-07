@@ -135,7 +135,7 @@
             {{ 'Související záznamy' | translate }}:
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <app-projekt *ngFor="let projekt of result.projekt" [result]="projekt" [isChild]="true" class="app-related-item"></app-projekt>
+        <app-projekt *ngFor="let projekt of result.projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
       </mat-expansion-panel>
     </div>
   </mat-card-content>

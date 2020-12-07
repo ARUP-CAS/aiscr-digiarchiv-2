@@ -148,8 +148,8 @@
               {{ 'Související záznamy' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-          <app-samostatny-nalez *ngFor="let sn of result.samostatny_nalez" [result]="sn" [isChild]="true"  class="app-related-item"></app-samostatny-nalez>
+          <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+          <app-samostatny-nalez *ngFor="let sn of result.samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
