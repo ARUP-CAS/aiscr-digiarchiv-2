@@ -20,6 +20,8 @@ app-facets-search {
               align-items: center;
 
               .mat-form-field-suffix {
+                margin-right: $app-gap-icon;
+                
                 .mat-icon {
                   margin-top: 3px;
                 }

@@ -25,9 +25,9 @@
       }
 
       .mat-expansion-panel-content {
-        height: auto;
+        /* height: auto;
         max-height: 200px;
-        overflow-y: auto;
+        overflow-y: auto; */
 
         .mat-expansion-panel-body {
           padding-bottom: 0;
@@ -83,9 +83,11 @@
             }
           }
 
-          .mat-flat-button {
-            background-color: $app-gray-2;
-          }
+          /* .mat-flat-button {
+            &:not(.app-apply-filter) {
+              background-color: $app-gray-2;
+            }
+          } */
         }
       }
     }
@@ -216,6 +218,19 @@
       &.app-node-child {
         padding-left: 0 !important;
       }
+    }
+  }
+
+  .app-apply-filter {
+    line-height: 28px;
+
+    &:not(.app-facet-dynamic) {
+      margin-left: $app-gap-icon;
+      margin-top: $app-gap-half;
+    }
+
+    &.app-facet-dynamic {
+      margin-top: $app-gap;
     }
   }
 }

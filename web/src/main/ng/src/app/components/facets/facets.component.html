@@ -55,42 +55,46 @@
     <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered">
       <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
         <mat-panel-title>
-          <a class="app-filter-badge app-gap-icon-right" [matTooltip]="'Aplikovat filtr' | translate"
-          (click)="applyFilters()">
-            <mat-icon mat-flat-button>filter_list</mat-icon></a>
+          <!-- <a class="app-filter-badge app-gap-icon-right" [matTooltip]="'Aplikovat filtr' | translate" (click)="applyFilters()">
+            <mat-icon mat-flat-button>filter_list</mat-icon>
+          </a> -->
           {{ 'field.'+facetField.field | translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
         <mat-list role="list">
           <cdk-virtual-scroll-viewport itemSize="10" [style.height.px]="math.min(200, facetField.values.length * 22)">
-          <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-table">
-            <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown" [matTooltip]="facet.operator ? ('Operátor ' + facet.operator | translate) : ('Zvolit operátor pro filtrování' | translate)">
-              <mat-icon *ngIf="!facet.operator || facet.operator === 'delete'">more_vert</mat-icon>
-              <span *ngIf="facet.operator && facet.operator !== 'delete'" [class]="'app-badge-op ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
-            </a>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="addFilter(facetField.field, facet, 'or')">
-                <span class="app-badge-op or">OR</span> 
-                <span>{{ 'Operátor OR' | translate }}</span>
-              </button>
-              <button mat-menu-item (click)="addFilter(facetField.field, facet, 'and')">
-                <span class="app-badge-op and">AND</span> 
-                <span>{{ 'Operátor AND' | translate }}</span>
-              </button>
-              <button mat-menu-item (click)="addFilter(facetField.field, facet, 'not')">
-                <span class="app-badge-op not">NOT</span> 
-                <span>{{ 'Operátor NOT' | translate }}</span>
-              </button>
-            </mat-menu>
-            <div class="app-list-content">
-              <a (click)="clickFacet(facetField.field, facet)">
-                {{ facet.name | translateHeslar : facetField.field }}
+            <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-table">
+              <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown" [matTooltip]="facet.operator ? ('Operátor ' + facet.operator | translate) : ('Zvolit operátor pro filtrování' | translate)">
+                <mat-icon *ngIf="!facet.operator || facet.operator === 'delete'">more_vert</mat-icon>
+                <span *ngIf="facet.operator && facet.operator !== 'delete'" [class]="'app-badge-op ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
               </a>
-              <span>({{ facet.value }})</span>
-            </div>
-          </mat-list-item>
-        </cdk-virtual-scroll-viewport>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="addFilter(facetField.field, facet, 'or')">
+                  <span class="app-badge-op or">OR</span> 
+                  <span>{{ 'Operátor OR' | translate }}</span>
+                </button>
+                <button mat-menu-item (click)="addFilter(facetField.field, facet, 'and')">
+                  <span class="app-badge-op and">AND</span> 
+                  <span>{{ 'Operátor AND' | translate }}</span>
+                </button>
+                <button mat-menu-item (click)="addFilter(facetField.field, facet, 'not')">
+                  <span class="app-badge-op not">NOT</span> 
+                  <span>{{ 'Operátor NOT' | translate }}</span>
+                </button>
+              </mat-menu>
+              <div class="app-list-content">
+                <a (click)="clickFacet(facetField.field, facet)">
+                  {{ facet.name | translateHeslar : facetField.field }}
+                </a>
+                <span>({{ facet.value }})</span>
+              </div>
+            </mat-list-item>
+          </cdk-virtual-scroll-viewport>
+          <button mat-flat-button (click)="applyFilters()" color="accent" class="app-apply-filter">
+            <mat-icon mat-flat-button>filter_list</mat-icon>
+            {{ 'Aplikovat filtr' | translate }}
+          </button>
         </mat-list>
       </ng-template>
     </mat-expansion-panel> 
