@@ -1,11 +1,11 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-dokument]="!isChild" (click)="state.setMapResult(result, mapDetail)">
   <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   <mat-card-header>
     <mat-card-title>
       <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
-      <mat-icon *ngIf="isChild" class="app-entity-dokument" [matTooltip]="'entities.dokument' | translate">{{ config.entityIcons["dokument"] }}</mat-icon>
+      <mat-icon class="app-entity-dokument" [matTooltip]="'entities.dokument' | translate">{{ config.entityIcons["dokument"] }}</mat-icon>
       <ng-container [ngSwitch]="isChild">
         <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
         <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>

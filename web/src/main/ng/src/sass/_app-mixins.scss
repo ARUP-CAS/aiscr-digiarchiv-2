@@ -80,7 +80,7 @@
     }
     @else if ($type == card) {
       &.app-entity-#{$entity} {
-        border-left: 5px solid #{$color} !important;
+        border-left: 4px solid #{$color} !important;
       }   
     }
     @else if ($type == home_card) {

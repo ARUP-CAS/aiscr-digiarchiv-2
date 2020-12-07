@@ -225,6 +225,8 @@ a {
 
 // card
 .mat-card {
+  @include setEntityColor(card);
+  
   .app-link-close {
     position: absolute;
     top: $app-gap;
