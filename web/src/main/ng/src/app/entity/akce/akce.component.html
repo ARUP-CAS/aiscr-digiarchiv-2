@@ -26,7 +26,14 @@
       <div *ngIf="result.datum_zahajeni || result.je_nz || result.pristupnost">
         <ng-container *ngIf="result.datum_zahajeni">
           <label class="app-label">{{ 'field.datum_provedeni' | translate }}:</label>&#160;
-          {{ result.specifikace_data }} {{ result.datum_zahajeni | date : 'dd.MM.yyyy' }}<ng-container *ngIf="result.datum_ukonceni"> - </ng-container>{{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}<span class="app-pipe"></span>
+          {{ result.specifikace_data }} 
+          <ng-container *ngIf="result.specifikace_data === 'přesně'">
+            {{ result.datum_zahajeni | date : 'dd.MM.yyyy' }}
+          </ng-container>
+          <ng-container *ngIf="result.specifikace_data !== 'přesně'">
+            {{ result.datum_zahajeni }}
+          </ng-container>
+          <ng-container *ngIf="result.datum_ukonceni"> - </ng-container>{{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}<span class="app-pipe"></span>
         </ng-container>
         <ng-container><!-- *ngIf="result.je_nz"-->
           <label class="app-label">{{ 'Nahrazuje NZ' | translate }}:</label>&#160;

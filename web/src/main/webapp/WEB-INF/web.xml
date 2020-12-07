@@ -27,6 +27,7 @@
         <url-pattern>/id_old</url-pattern>
         <url-pattern>/registrace</url-pattern>
         <url-pattern>/results/*</url-pattern>
+        <url-pattern>/print/*</url-pattern>
         <url-pattern>/favorites</url-pattern>
         <url-pattern>/export</url-pattern>
     </servlet-mapping>
