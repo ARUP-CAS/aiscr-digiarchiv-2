@@ -185,7 +185,7 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
     if (canView) {
       this.state.dialogRef = this.dialog.open(FileViewerComponent, {
         panelClass: 'app-file-viewer',
-        width: '1055px',
+        width: '1000px',
         data: this.result
       });
     } else {

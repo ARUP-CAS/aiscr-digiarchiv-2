@@ -32,26 +32,14 @@ app-file-viewer {
       }
     }
 
-    .app-carousel {
-      .ngucarousel {
-        .ngucarousel-items {
-          & > div {
-            /* position: relative;
-            min-width: 755px;
-            min-height: 400px;
-            max-height: 560px;
-            overflow-y: auto; */
-
-            img {
-              width: 100%;
-            }
+    .ngucarousel {
+      & > .ngu-touch-container {
+        & > .ngucarousel-items {
+          & > .item {
+            text-align: center !important;
           }
         }
       }
     }
   }
-}
-
-.app-file-viewer {
-  height: 95%;
 }
