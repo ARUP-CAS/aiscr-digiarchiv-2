@@ -46,14 +46,14 @@ $app-container: 1280px !default;
 $app-border-radius: 4px !default;
 
 // navbar
-$app-navbar-height: 108px !default;
+$app-navbar-height: 80px !default; // 108 puvodni
 $app-navbar-color: $app-gray-6 !default;
 $app-navbar-bg-color: $app-color-lightnes !default;
 $app-navbar-link-color: $app-navbar-color !default;
 $app-navbar-active-color: $app-primary-color !default;
 
 // searchbar
-$app-searchbar-height: 110px !default;
+$app-searchbar-height: 95px !default; // 110 puvodni
 $app-searchbar-field-height: 46px !default;
 $app-searchbar-field-max-width: 640px !default;
 $app-searchbar-field-color: $app-color-darknes !default;
