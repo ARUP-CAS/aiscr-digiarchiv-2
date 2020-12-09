@@ -1,5 +1,14 @@
-<a *ngIf="!isDocument && !isDate && !isYear" (click)="addFilter()" class="app-filter-badge">{{heslar ? (value | translateHeslar: heslar) : value }} <mat-icon>filter_list</mat-icon></a>
-<a *ngIf="!isDocument && isDate" (click)="addFilter()" class="app-filter-badge">{{value | date : 'yyyy-MM-dd'}} <mat-icon>filter_list</mat-icon></a>
-<a *ngIf="!isDocument && isYear" (click)="addFilter()" class="app-filter-badge">{{value | date : 'yyyy'}} <mat-icon>filter_list</mat-icon></a>
-<ng-container *ngIf="isDocument && !isDate">{{heslar ? (value | translateHeslar: heslar) : value }}</ng-container>
-<ng-container *ngIf="isDocument && isDate">{{value | date : 'yyyy-MM-dd'}}</ng-container>
+<ng-container *ngIf="isChild">
+  <span *ngIf="!isDocument && !isDate && !isYear" >{{heslar ? (value | translateHeslar: heslar) : value }} </span>
+  <span *ngIf="!isDocument && isDate" >{{value | date : 'yyyy-MM-dd'}} </span>
+  <span *ngIf="!isDocument && isYear" >{{value | date : 'yyyy'}} </span>
+  <ng-container *ngIf="isDocument && !isDate">{{heslar ? (value | translateHeslar: heslar) : value }}</ng-container>
+  <ng-container *ngIf="isDocument && isDate">{{value | date : 'yyyy-MM-dd'}}</ng-container>
+</ng-container>
+<ng-container *ngIf="!isChild">
+  <a *ngIf="!isDocument && !isDate && !isYear" (click)="addFilter()" class="app-filter-badge">{{heslar ? (value | translateHeslar: heslar) : value }} <mat-icon>filter_list</mat-icon></a>
+  <a *ngIf="!isDocument && isDate" (click)="addFilter()" class="app-filter-badge">{{value | date : 'yyyy-MM-dd'}} <mat-icon>filter_list</mat-icon></a>
+  <a *ngIf="!isDocument && isYear" (click)="addFilter()" class="app-filter-badge">{{value | date : 'yyyy'}} <mat-icon>filter_list</mat-icon></a>
+  <ng-container *ngIf="isDocument && !isDate">{{heslar ? (value | translateHeslar: heslar) : value }}</ng-container>
+  <ng-container *ngIf="isDocument && isDate">{{value | date : 'yyyy-MM-dd'}}</ng-container>
+</ng-container>

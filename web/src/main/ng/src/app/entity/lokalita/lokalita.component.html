@@ -11,8 +11,8 @@
         <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
       </ng-container><span class="app-pipe"></span>
       <ng-container *ngIf="hasRights">
-        <app-inline-filter [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
-      </ng-container>&#160;(<app-inline-filter [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
+        <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
+      </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
       <span class="app-pipe"></span><ng-container *ngIf="hasRights">{{ result.nazev }}<span class="app-pipe"></span></ng-container>
     </mat-card-title>
   </mat-card-header>
@@ -24,25 +24,25 @@
       <div *ngIf="result.typ_lokality">
         <ng-container *ngIf="result.typ_lokality || result.druh || result.pristupnost">
           <label class="app-label">{{ 'field.f_typ_dokumentu' | translate }}:</label>&#160;
-          <app-inline-filter [field]="'f_typ_lokality'" [value]="result.typ_lokality" [heslar]="'typ_lokality'"></app-inline-filter>
+          <app-inline-filter [isChild]="isChild" [field]="'f_typ_lokality'" [value]="result.typ_lokality" [heslar]="'typ_lokality'"></app-inline-filter>
           <span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.druh">
           <label class="app-label">{{ 'field.druh' | translate }}:</label>&#160;
-          <app-inline-filter [field]="'f_druh_lokality'" [value]="result.druh" [heslar]="'druh_lokality_druha'"></app-inline-filter>
+          <app-inline-filter [isChild]="isChild" [field]="'f_druh_lokality'" [value]="result.druh" [heslar]="'druh_lokality_druha'"></app-inline-filter>
           <span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.pristupnost">
           <label class="app-label">{{ 'field.pristupnost' | translate }}:</label>&#160;
-          <app-inline-filter [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+          <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
           <span class="app-pipe"></span>
         </ng-container>
       </div>
       <div *ngIf="result.dalsi_katastry && hasRights">
         <label class="app-label">{{ 'field.dalsi_katastry' | translate }}:</label>&#160;
         <ng-container *ngFor="let k of result.dalsi_katastry; let last = last">
-          <app-inline-filter [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
-          (<app-inline-filter [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
+          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
       <div *ngIf="result.popis && hasRights" class="app-truncate-text">

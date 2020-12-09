@@ -27,7 +27,7 @@
         <div *ngIf="result.predano_organizace || result.inv_cislo || result.pristupnost">
           <ng-container *ngIf="result.predano_organizace">
             <label class="app-label">{{ 'field.predano_organizace' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'predano_organizace'" [value]="result.predano_organizace"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.predano_organizace"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.inv_cislo">
@@ -36,28 +36,28 @@
           </ng-container>
           <ng-container *ngIf="result.pristupnost">
             <label class="app-label">{{ 'field.pristupnost' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter> 
+            <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter> 
           </ng-container>
         </div>
         <div>
           <ng-container *ngIf="result.obdobi"><label class="app-label">{{ 'field.obdobi' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'f_obdobi'" [value]="result.obdobi"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi"></app-inline-filter>
           </ng-container>
           <ng-container *ngIf="result.presna_datace && result.presna_datace !== ''">({{result.presna_datace}})</ng-container>
           <ng-container *ngIf="result.druh">
             <span class="app-pipe"></span>
             <label class="app-label">{{ 'Nález' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'f_druh_nalezu'" [value]="result.druh" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_druh_nalezu'" [value]="result.druh" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
             <ng-container *ngIf="result.specifikace && result.specifikace !== ''">
-              (<app-inline-filter [field]="'f_specifikace'" [value]="result.specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>)
+              (<app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" [value]="result.specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>)
             </ng-container>
           </ng-container>
         </div>
         <div>
           <ng-container *ngIf="hasRights">
             <label class="app-label">{{'Katastr (okres)' | translate}}:</label>&#160;
-            <app-inline-filter [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>&#160;
-          (<app-inline-filter [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
+            <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>&#160;
+          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
           </ng-container>
           <ng-container *ngIf="!hasRights">
             <label class="app-label">{{'field.f_okres' | translate}}:</label>&#160;({{result.okres}})

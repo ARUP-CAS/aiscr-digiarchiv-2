@@ -45,12 +45,12 @@
               <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
               {{ 'Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
               <ng-container *ngIf="kd.obdobi">
-                <app-inline-filter [field]="'f_obdobi'" [value]="kd.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
+                <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
               </ng-container>
               <ng-container *ngIf="kd.jistota || kd.presna_datace">(<ng-container *ngIf="kd.jistota">{{ kd.jistota }};</ng-container>{{ kd.presna_datace }})</ng-container>
-              <ng-container *ngIf="kd.areal">&#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="kd.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
+              <ng-container *ngIf="kd.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="kd.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
               <ng-container *ngIf="kd.aktivita">
-                &#160;(<ng-container *ngFor="let ak of kd.aktivita; let last = last;"> <app-inline-filter [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
+                &#160;(<ng-container *ngFor="let ak of kd.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
                 <span *ngIf="!last">,&#160; </span></ng-container>)
               </ng-container>
             </mat-panel-title>
@@ -88,9 +88,9 @@
             <tr *ngIf="neident_akce.katastr || neident_akce.okres">
               <th class="app-label">{{ 'Katastr (okres)' | translate }}:</th>
               <td>
-                <app-inline-filter [field]="'f_katastr'" [value]="neident_akce.katastr"></app-inline-filter>
+                <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="neident_akce.katastr"></app-inline-filter>
                 <ng-container *ngIf="neident_akce.okres">
-                  &#160;(<app-inline-filter [field]="'f_okres'" [value]="neident_akce.okres"></app-inline-filter>)
+                  &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="neident_akce.okres"></app-inline-filter>)
                 </ng-container></td>
             </tr>
             <tr *ngIf="neident_akce.vedouci">

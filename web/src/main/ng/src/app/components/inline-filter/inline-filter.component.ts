@@ -13,6 +13,7 @@ export class InlineFilterComponent implements OnInit {
   @Input() field: string;
   @Input() value: string;
   @Input() heslar: string;
+  @Input() isChild: boolean;
   @Input() isDate = false;
   @Input() isYear= false;
   isDocument: boolean;
