@@ -196,6 +196,10 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   viewFiles() {
+    if (this.isChild) {
+      this.gotoDoc();
+      return;
+    }
     const canView = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     // const canView = true;
     if (canView) {

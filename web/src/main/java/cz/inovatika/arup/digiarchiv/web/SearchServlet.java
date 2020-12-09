@@ -115,7 +115,9 @@ public class SearchServlet extends HttpServlet {
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             String entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+            System.out.println(entity);
             EntitySearcher searcher = SearchUtils.getSearcher(entity);
+            System.out.println(searcher);
             if (searcher != null) {
               searcher.getChilds(jo, client, request);
             }

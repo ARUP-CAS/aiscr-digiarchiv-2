@@ -172,6 +172,9 @@ public class SearchUtils {
       case "adb":
         searcher = new ADBSearcher();
         break;
+      case "dokument":
+        searcher = new DokumentSearcher();
+        break;
       default:
         searcher = null;
     }
