@@ -241,7 +241,7 @@ public class Akce implements Entity {
       String ukonceni = "*";
       if (datum_ukonceni_v != null) {
         SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", datum_ukonceni_v);
-        if (datum_ukonceni_v.after(datum_zahajeni_v)) {
+        if (!datum_ukonceni_v.before(datum_zahajeni_v)) {
           ukonceni = datum_ukonceni_v.toInstant().toString();
         }
       }
