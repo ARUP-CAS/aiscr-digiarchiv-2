@@ -8,8 +8,8 @@
     </div>
   </h3>
   <mat-list-item role="listitem" *ngFor="let facet of state.breadcrumbs" >
-  <div  *ngIf="facet.field === 'separator'" class="app-display-table">
-    -- AND --
+  <div  *ngIf="facet.field === 'separator'" class="app-and-separator">
+  <span>-- AND --</span>
   </div>
   <div *ngIf="facet.field !== 'separator'" class="app-display-table">
     <a [matTooltip]="'Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">

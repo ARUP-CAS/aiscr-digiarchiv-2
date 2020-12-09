@@ -646,3 +646,12 @@ a {
     color: $app-badge-color;
   }
 }
+
+// in facets used
+.app-and-separator {
+  span {
+    font-size: 13px;
+    color: $app-gray-5;
+    margin-left: 25px;
+  }
+}
