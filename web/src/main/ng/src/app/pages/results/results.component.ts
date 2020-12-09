@@ -139,4 +139,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   setItemView(view: string) {
     this.state.itemView = view;
   }
+
+  setEntity(entity) {
+    this.router.navigate([], { queryParams: { entity, page: 0 }, queryParamsHandling: 'merge' });
+  }
 }
