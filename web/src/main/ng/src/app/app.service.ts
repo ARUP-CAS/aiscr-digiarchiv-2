@@ -407,6 +407,7 @@ export class AppService {
     let url = '/results';
     if (isPian) {
       p.pian_id = result.ident_cely;
+      p.entity = result.akce ? 'akce' : (result.lokalita ? 'lokalita' : 'akce');
       this.state.setMapResult(null, false);
     } else if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);

@@ -19,7 +19,7 @@ export class DokJednotkaComponent implements OnInit {
     private service: AppService
   ) {}
 
-  ngOnInit(): void {  }
+  ngOnInit(): void { }
 
   pian(id: string) {
     if (this.pians) {
