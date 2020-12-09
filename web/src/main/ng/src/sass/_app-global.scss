@@ -440,8 +440,13 @@ a {
         font-weight: bold;
       }
 
-      .mat-icon {
-        @include setIcon($position: bottom, $color: $app-color-info);
+      .app-info-badge {
+        @include setEntityColor(cardInfoBadge);
+
+        .mat-icon {
+          margin-right: $app-gap-icon;
+          @include setIcon(18, inherit, bottom);
+        }
       }
     }
   }

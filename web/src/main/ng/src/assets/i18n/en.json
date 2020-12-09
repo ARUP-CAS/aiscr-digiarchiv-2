@@ -163,6 +163,9 @@
   "záznamů": "records",
   "O projektu": "About the archive",
   "Novinky": "News",
+  "Zkuste zadat jiný dotaz": "Try another query",
+  "nalezených výsledků v entitě": "results found in the entity",
+  "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "or switch to another entity where we found the results",
 
   "field": {
     "kategorie_dokumentu": "Document type",

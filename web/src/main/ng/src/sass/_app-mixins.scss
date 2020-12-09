@@ -83,6 +83,11 @@
         border-left: 4px solid #{$color} !important;
       }   
     }
+    @else if ($type == cardInfoBadge) {
+      &.app-entity-#{$entity} {
+        color: $color !important;
+      }   
+    }
     @else if ($type == home_card) {
       &.app-entity-#{$entity} {
         background-color: $color !important;  
