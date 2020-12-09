@@ -29,7 +29,7 @@ export class AppState {
   private mapViewSubject: Subject<string> = new Subject();
   public mapViewChanged: Observable<string> = this.mapViewSubject.asObservable();
 
-  
+
 
   entity: string;
 
@@ -128,6 +128,9 @@ export class AppState {
       from: this.stats.datum_provedeni_od.min,
       until: this.stats.datum_provedeni_do.max
     };
+
+    this.setEntityTotals(resp.facet_counts.facet_fields['entity']);
+
     this.resultsSubject.next('results');
     setTimeout(() => {
       this.setFacets(resp);
@@ -173,7 +176,7 @@ export class AppState {
     this.facetsFiltered = Object.assign([], this.facets);
     this.setFacetPivots(resp);
     this.facetRanges = resp.facet_counts.facet_ranges;
-    
+
     this.facetsSubject.next('facets');
   }
 

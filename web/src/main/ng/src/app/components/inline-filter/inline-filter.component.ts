@@ -23,7 +23,7 @@ export class InlineFilterComponent implements OnInit {
     private service: AppService) { }
 
   ngOnInit(): void {
-    this.isDocument = this.router.isActive('id', false);
+    this.isDocument = this.router.isActive('id', false) || this.router.isActive('print', false);
   }
 
   addFilter() {

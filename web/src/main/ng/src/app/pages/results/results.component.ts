@@ -38,6 +38,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   isChartBarCollapsed = true;
   exportUrl: string;
   inFav: boolean;
+  hasResultsInOther: boolean;
 
   constructor(
     private titleService: Title,
@@ -117,6 +118,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.docs = resp.response.docs;
       this.loading = false;
       this.state.loading = false;
+      this.hasResultsInOther = this.config.entities.findIndex(e => this.state.totals[e] > 0) > -1;
     });
 
   }
