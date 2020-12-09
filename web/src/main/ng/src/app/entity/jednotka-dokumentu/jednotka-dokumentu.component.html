@@ -38,7 +38,87 @@
       </ng-container>
 
       <mat-accordion multi="true">
-        <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [detailExpanded]="true"></app-dok-jednotka>
+        <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka> -->
+        <mat-expansion-panel #panel *ngFor="let kd of result.komponenta_dokument" [expanded]="true" hideToggle class="app-panel-inner">
+          <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+            <mat-panel-title>
+              <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+              {{ 'Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
+              <ng-container *ngIf="kd.obdobi">
+                <app-inline-filter [field]="'f_obdobi'" [value]="kd.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
+              </ng-container>
+              <ng-container *ngIf="kd.jistota || kd.presna_datace">(<ng-container *ngIf="kd.jistota">{{ kd.jistota }};</ng-container>{{ kd.presna_datace }})</ng-container>
+              <ng-container *ngIf="kd.areal">&#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="kd.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
+              <ng-container *ngIf="kd.aktivita">
+                &#160;(<ng-container *ngFor="let ak of kd.aktivita; let last = last;"> <app-inline-filter [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
+                <span *ngIf="!last">,&#160; </span></ng-container>)
+              </ng-container>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-container *ngIf="kd.poznamka">{{ kd.poznamka }}</ng-container>
+          <mat-expansion-panel #panel *ngIf="kd.nalez_dokumentu" [expanded]="true" hideToggle class="app-panel-inner">
+            <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+              <mat-panel-title>
+                <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+                {{ 'Nálezy' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul class="app-list-inside">
+              <ng-container *ngIf="kd.nalez_dokumentu.length">
+                <li *ngFor="let nalez_dokumentu of kd.nalez_dokumentu">
+                  <app-nalez [result]="nalez_dokumentu"></app-nalez>
+                </li>
+              </ng-container>
+              <ng-container *ngIf="!kd.nalez_dokumentu.length">
+                <li>
+                  <app-nalez [result]="kd.nalez_dokumentu"></app-nalez>
+                </li>
+              </ng-container>
+            </ul>
+          </mat-expansion-panel>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panel *ngFor="let neident_akce of result.neident_akce" [expanded]="true" hideToggle class="app-panel-inner">
+          <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+            <mat-panel-title>
+              <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+              {{ 'Neidentifikovaná akce' | translate }}:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <table>
+            <tr *ngIf="neident_akce.katastr || neident_akce.okres">
+              <th class="app-label">{{ 'Katastr (okres)' | translate }}:</th>
+              <td>
+                <app-inline-filter [field]="'f_katastr'" [value]="neident_akce.katastr"></app-inline-filter>
+                <ng-container *ngIf="neident_akce.okres">
+                  &#160;(<app-inline-filter [field]="'f_okres'" [value]="neident_akce.okres"></app-inline-filter>)
+                </ng-container></td>
+            </tr>
+            <tr *ngIf="neident_akce.vedouci">
+              <th class="app-label">{{ 'field.vedouci_akce' | translate }}:</th>
+              <td>{{ neident_akce.vedouci }}</td>
+            </tr>
+            <tr *ngIf="neident_akce.rok_zahajeni || neident_akce.rok_ukonceni">
+              <th class="app-label">{{ 'Rok od-do' | translate }}:</th>
+              <td>{{ neident_akce.rok_zahajeni }}<ng-container *ngIf="neident_akce.rok_ukonceni">-{{ neident_akce.rok_ukonceni }}</ng-container></td>
+            </tr>
+            <tr *ngIf="neident_akce.lokalizace">
+              <th class="app-label">{{ 'field.lokalizace' | translate }}:</th>
+              <td>{{ neident_akce.lokalizace }}</td>
+            </tr>
+            <tr *ngIf="neident_akce.popis">
+              <th class="app-label">{{ 'field.f_popis' | translate }}:</th>
+              <td>{{ neident_akce.popis }}</td>
+            </tr>
+            <tr *ngIf="neident_akce.poznamka">
+              <th class="app-label">{{ 'field.f_poznamka' | translate }}:</th>
+              <td>{{ neident_akce.poznamka }}</td>
+            </tr>
+            <tr *ngIf="neident_akce.pian">
+              <th class="app-label">{{ 'PIAN' | translate }}:</th>
+              <td>{{ neident_akce.pian }}</td>
+            </tr>
+          </table> 
+        </mat-expansion-panel>
       </mat-accordion>
     </div>
   </mat-card-content>

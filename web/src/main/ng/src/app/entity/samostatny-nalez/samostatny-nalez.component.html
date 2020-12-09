@@ -31,8 +31,7 @@
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.inv_cislo">
-            <label class="app-label">{{ 'field.inv_cislo' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'inv_cislo'" [value]="result.inv_cislo"></app-inline-filter>
+            <label class="app-label">{{ 'field.inv_cislo' | translate }}:</label>&#160;{{result.inv_cislo}}
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.pristupnost">
