@@ -44,7 +44,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private route: ActivatedRoute,
     private router: Router,
-    private config: AppConfiguration,
+    public config: AppConfiguration,
     public state: AppState,
     private service: AppService,
     public mediaMatcher: MediaMatcher,

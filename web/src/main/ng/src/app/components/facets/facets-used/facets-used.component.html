@@ -7,16 +7,19 @@
       </a>
     </div>
   </h3>
-  <mat-list-item role="listitem" *ngFor="let facet of state.breadcrumbs">
-    <div class="app-display-table">
-      <a [matTooltip]="'Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
-        <mat-icon>close</mat-icon>
-      </a>
-      <span class="app-facet-name">
-        <span *ngIf="facet.operator" [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
-        <ng-container *ngIf="facet.field !== 'q'">{{ 'field.' + facet.field | translate}}:&#160;</ng-container>
-        <span class="app-font-bold">{{ facet.display }}</span> 
-      </span> 
-    </div>
+  <mat-list-item role="listitem" *ngFor="let facet of state.breadcrumbs" >
+  <div  *ngIf="facet.field === 'separator'" class="app-display-table">
+    -- AND --
+  </div>
+  <div *ngIf="facet.field !== 'separator'" class="app-display-table">
+    <a [matTooltip]="'Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
+      <mat-icon>close</mat-icon>
+    </a>
+    <span class="app-facet-name">
+      <span *ngIf="facet.operator" [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
+      <ng-container *ngIf="facet.field !== 'q'">{{ 'field.' + facet.field | translate}}:&#160;</ng-container>
+      <span class="app-font-bold">{{ facet.display }}</span> 
+    </span> 
+  </div>
   </mat-list-item>
 </mat-list>
