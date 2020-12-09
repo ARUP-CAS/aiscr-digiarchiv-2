@@ -17,14 +17,17 @@
     <div class="app-table-cell app-right">
       <mat-card *ngIf="state.numFound === 0" class="app-card-info">
         <mat-card-content>
-          {{ 'Počet nalezených výsledků' | translate }}: <strong>{{ state.numFound }}</strong>. {{ 'Zkuste zadat jiný dotaz' | translate }} 
-          <ng-container *ngIf="inFav">
-          {{ 'nebo' | translate }} {{ 'zrušit volbu' | translate }} "{{ 'Favorites' | translate }}".
-          <a  *ngIf="state.inFavorites" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'Favorites' | translate">
-            <mat-icon>grade</mat-icon>
-          </a>
+          {{ 'Počet nalezených výsledků' | translate }} v entitě "{{ 'entities.' + state.entity | translate }}": <strong>{{ state.numFound }}</strong>. 
+          {{ 'Zkuste zadat jiný dotaz' | translate }}
+          <ng-container>
+            nebo se přepněte do jiné entity, kde jsme nalezli výsledky: <a>neco</a>, <a>neco</a>.
           </ng-container>
-           
+          <ng-container *ngIf="inFav">
+            {{ 'nebo' | translate }} {{ 'zrušit volbu' | translate }} "{{ 'Favorites' | translate }}".
+            <a  *ngIf="state.inFavorites" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'Favorites' | translate">
+              <mat-icon>grade</mat-icon>
+            </a>
+          </ng-container> 
         </mat-card-content>
       </mat-card>
       <div *ngIf="state.numFound > 0" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
