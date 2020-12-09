@@ -334,6 +334,7 @@ export class AppService {
         this.state.breadcrumbs.push(new Crumb('separator', '', ''));
       }
     });
+    this.state.breadcrumbs.pop();
   }
 
   // shouldTranslate(field: string) {
