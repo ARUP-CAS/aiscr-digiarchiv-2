@@ -18,6 +18,15 @@
 
   .mat-card {
     box-shadow: none !important;
+
+    &.app-entity-dokument,
+    &.app-entity-projekt,
+    &.app-entity-akce,
+    &.app-entity-lokalita,
+    &.app-entity-samostatny_nalez,
+    &.app-entity-knihovna_3d {
+      border-left: 0 !important;
+    }
     
     &:not(.app-card-info) {
       padding: 0 !important;
@@ -48,7 +57,13 @@
           }
         }
       }
-    }    
+    }
+
+    .app-filter-badge {
+      .mat-icon {
+        display: none !important;  
+      }  
+    }
 
     .mat-card-actions {
       display: none !important;
