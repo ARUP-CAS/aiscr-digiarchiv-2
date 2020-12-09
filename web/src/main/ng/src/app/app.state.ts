@@ -129,7 +129,10 @@ export class AppState {
       until: this.stats.datum_provedeni_do.max
     };
 
-    this.setEntityTotals(resp.facet_counts.facet_fields['entity']);
+    if (resp.facet_counts) {
+      this.setEntityTotals(resp.facet_counts.facet_fields['entity']);
+    }
+    
 
     this.resultsSubject.next('results');
     setTimeout(() => {
