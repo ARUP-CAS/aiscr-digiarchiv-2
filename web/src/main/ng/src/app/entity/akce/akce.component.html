@@ -23,18 +23,22 @@
       <mat-icon>image_not_supported</mat-icon>
     </div>
     <div class="app-metadata app-row-gap-16" >
-      <div *ngIf="result.datum_zahajeni || result.je_nz || result.pristupnost">
-        <ng-container *ngIf="result.datum_zahajeni">
+      <div>
           <label class="app-label">{{ 'field.datum_provedeni' | translate }}:</label>&#160;
           {{ result.specifikace_data }} 
           <ng-container *ngIf="result.specifikace_data === 'přesně'">
             {{ result.datum_zahajeni | date : 'dd.MM.yyyy' }}
+            <ng-container *ngIf="result.datum_ukonceni"> - {{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}</ng-container>
           </ng-container>
           <ng-container *ngIf="result.specifikace_data !== 'přesně'">
             {{ result.datum_zahajeni }}
+            <ng-container *ngIf="result.datum_ukonceni">
+              <ng-container *ngIf="result.specifikace_data !== 'před rokem'"> - </ng-container>
+              {{ result.datum_ukonceni }}
+            </ng-container>
           </ng-container>
-          <ng-container *ngIf="result.datum_ukonceni"> - </ng-container>{{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}<span class="app-pipe"></span>
-        </ng-container>
+          
+          <span class="app-pipe"></span>
         <ng-container><!-- *ngIf="result.je_nz"-->
           <label class="app-label">{{ 'Nahrazuje NZ' | translate }}:</label>&#160;
           {{ result.je_nz ? 'Ano' : 'Ne' }}<span class="app-pipe"></span>

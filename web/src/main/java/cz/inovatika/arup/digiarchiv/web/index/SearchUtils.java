@@ -173,7 +173,7 @@ public class SearchUtils {
         searcher = new ADBSearcher();
         break;
       default:
-        searcher = new DokumentSearcher();
+        searcher = null;
     }
     return searcher;
   }

@@ -5,6 +5,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
+import cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
@@ -108,28 +109,19 @@ public class SearchServlet extends HttpServlet {
            SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                    .setFacet(false);
            query.setRequestHandler("/search");
-//          SolrQuery query = new SolrQuery();
-//          query.setRequestHandler("/get");
-//          query.addFilterQuery("searchable:true");
-//          query.set("id", request.getParameter("id"));
           query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
                   + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],"
-                  + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta_dokument:[json]");
+                  + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta_dokument:[json],neident_akce:[json]");
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             String entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
             EntitySearcher searcher = SearchUtils.getSearcher(entity);
-            searcher.getChilds(jo, client, request);
-            json = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            if (searcher != null) {
+              searcher.getChilds(jo, client, request);
+            }
+            // json = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 
           }
-//          if (jo.getJSONObject("doc") != null) {
-//            String entity = jo.getJSONObject("doc").getString("entity");
-//            EntitySearcher searcher = SearchUtils.getSearcher(entity);
-//            searcher.getChilds(jo, client, request);
-//            json = jo.getJSONObject("doc");
-//
-//          }
           return jo.toString();
 
         } catch (Exception ex) {
@@ -145,8 +137,10 @@ public class SearchServlet extends HttpServlet {
 
         String entity = "" + request.getParameter("entity");
         EntitySearcher searcher = SearchUtils.getSearcher(entity);
+        if (searcher == null) {
+          searcher = new DokumentSearcher();
+        }
         JSONObject jo = searcher.search(request);
-        // searcher.getChilds(jo, client, request);
         return jo.toString();
       }
     },
