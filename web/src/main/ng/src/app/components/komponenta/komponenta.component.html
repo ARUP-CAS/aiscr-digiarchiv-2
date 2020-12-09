@@ -16,7 +16,7 @@
   <div *ngIf="result.poznamka">
     <label class="app-label">{{ 'field.f_poznamka' | translate }}:</label>&#160;{{ result.poznamka }}
   </div>
-  <mat-expansion-panel #panel1 *ngIf="result.nalez?.length > 0" [expanded]="true" hideToggle class="app-panel-inner">
+  <mat-expansion-panel #panel1 *ngIf="result.nalez" [expanded]="true" hideToggle class="app-panel-inner">
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
       <mat-panel-title>
         <mat-icon>{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>

@@ -19,7 +19,7 @@ export class KomponentaComponent implements OnInit {
   opened = false;
   idShort: string;
 
-  nalez: Nalez[] = [];
+  // nalez: Nalez[] = [];
   aktivity: string[] = []; 
 
   constructor(
@@ -31,6 +31,9 @@ export class KomponentaComponent implements OnInit {
     // this.service.getNalez(this.data.ident_cely).subscribe(res => {
     //   this.nalez = res;
     // });
+    if (this.result.nalez && !this.result.nalez.hasOwnProperty('length')) {
+      this.result.nalez = [this.result.nalez];
+    }
     this.fillAktivity();
   }
 
