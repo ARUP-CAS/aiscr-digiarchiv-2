@@ -123,7 +123,7 @@
             </tr>
             <tr *ngIf="result.nalezove_okolnosti">
               <th class="app-label">{{ 'field.nalezove_okolnosti' | translate }}:</th>
-              <td>{{ result.nalezove_okolnosti }}</td>
+              <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.nalezove_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
             </tr>
             <tr *ngIf="result.hloubka">
               <th class="app-label">{{ 'field.hloubka' | translate }}:</th>

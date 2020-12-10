@@ -287,12 +287,14 @@ export class AppService {
     if (params.has('q')) {
       this.state.q = params.get('q');
       this.state.breadcrumbs.push(new Crumb('q', params.get('q'), params.get('q')));
+      this.state.breadcrumbs.push(new Crumb('separator', '', ''));
     }
 
     if (params.has('loc_rpt')) {
       if (this.state.locationFilterEnabled) {
         const value = params.get('loc_rpt');
         this.state.breadcrumbs.push(new Crumb('loc_rpt', value, this.formatLocation(value)));
+        this.state.breadcrumbs.push(new Crumb('separator', '', ''));
       }
     } else {
       this.state.locationFilterEnabled = false;
@@ -313,6 +315,7 @@ export class AppService {
             display = this.formatObdobi(value);
             this.state.obdobi = value;
             this.state.breadcrumbs.push(new Crumb(field, value, display));
+            this.state.breadcrumbs.push(new Crumb('separator', '', ''));
             break;
           }
           case 'pian_id': {
@@ -328,10 +331,10 @@ export class AppService {
               display = this.getHeslarTranslation(parts[0], field);
               this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
             });
-
+this.state.breadcrumbs.push(new Crumb('separator', '', ''));
           }
         }
-        this.state.breadcrumbs.push(new Crumb('separator', '', ''));
+        
       }
     });
     this.state.breadcrumbs.pop();

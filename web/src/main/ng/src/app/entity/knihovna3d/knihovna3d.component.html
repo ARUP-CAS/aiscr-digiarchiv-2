@@ -20,9 +20,11 @@
   <mat-card-content>
     <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16" fxFlexFill>
       <div *ngIf="imgSrc" class="app-thumb">
-        <a (click)="viewFiles()">
+        <a *ngIf="isChild" [routerLink]="'/id/' + result.ident_cely" target="_blank">
           <img [src]="imgSrc" />
-          <!-- <img src="assets/img/result-item-thumb.gif" /> -->
+        </a>
+        <a *ngIf="!isChild" (click)="viewFiles()">
+          <img [src]="imgSrc" />
         </a>
       </div>
       <div *ngIf="!imgSrc && state.itemView === 'col' && !isDocumentDialogOpen" fxFlex class="app-thumb app-thumb-missing" [matTooltip]="'Obrázek není k dispozici' | translate">
