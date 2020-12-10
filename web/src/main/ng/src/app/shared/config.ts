@@ -13,6 +13,8 @@ export class Configuration {
 
   entities: string[];
 
+  uiVars: {[key: string]: any};
+
   home: {
     boxes: {
       'label': string,

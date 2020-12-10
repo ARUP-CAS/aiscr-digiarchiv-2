@@ -377,7 +377,7 @@
         </mat-expansion-panel>
 
         <mat-expansion-panel *ngIf="result.akce?.length > 0 || result.lokalita?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-          <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeigh" [collapsedHeight]="config.uiVars.panelHeigh">
             <mat-panel-title>
               {{ 'Související záznamy' | translate }}:
             </mat-panel-title>

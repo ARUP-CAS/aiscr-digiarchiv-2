@@ -86,6 +86,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.entities;
     }
 
+    public get uiVars() {
+        return this.config.uiVars;
+    }
+
     /**
      * List the files holding section configuration in assets/configs folder
      * ['search'] will look for /assets/configs/search.json

@@ -192,5 +192,9 @@
       "vyskovy_bod.typ", "let_letiste_start", "let_letiste_cil", "extra_data_format", "let_organizace",
       "let_pocasi", "let_dohlednost", "tvar_tvar", "typ", "f_zachovalost", "f_nahrada", "f_zeme", "f_typ_lokality",
       "f_typ_projektu", "inv_cislo", "predano_organizace"
-    ]
+    ],
+
+    "uiVars": {
+      "panelHeigh": "48px"
+    }
 }
