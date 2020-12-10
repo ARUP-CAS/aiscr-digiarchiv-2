@@ -16,7 +16,9 @@
       <mat-icon>close</mat-icon>
     </a>
     <span class="app-facet-name">
-      <span *ngIf="facet.operator && facet.operator !== 'or'" [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
+      <span *ngIf="facet.operator && facet.operator !== 'or'" [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">
+        <mat-icon class="app-icon-op">{{ 'operator.' + facet.operator | translate }}</mat-icon>
+      </span>
       <ng-container *ngIf="facet.field !== 'q'">{{ 'field.' + facet.field | translate}}:&#160;</ng-container>
       <span class="app-font-bold">{{ facet.display }}</span> 
     </span> 

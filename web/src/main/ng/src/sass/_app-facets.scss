@@ -114,7 +114,9 @@
 
       .app-in-facet-dynamic {
         .mat-icon {
-          width:28px;
+          &:not(.app-icon-op) {
+            width: 28px;
+          }
         }
       }
     }

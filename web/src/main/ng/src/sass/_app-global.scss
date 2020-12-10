@@ -195,6 +195,12 @@ a {
   border-radius: 4px;
   height: 17px;
   align-items: center;
+  vertical-align: sub;
+
+  .mat-icon {
+    @extend .app-clean-mg;
+    @include setIcon(14, $app-color-lightnes);
+  }
 
   &.or {
     background-color: $app-badge-or;
@@ -436,8 +442,10 @@ a {
 
   .mat-list-item-content {
     .mat-icon {
-      @include setIcon(18, $position: bottom);
-      color: $app-primary-color-darker;
+      &:not(.app-icon-op) {
+        @include setIcon(18, $position: bottom);
+        color: $app-primary-color-darker;
+      }
     } 
   }
 
@@ -459,12 +467,16 @@ a {
 
   .mat-list-item {
     .mat-icon {
-      margin-right: $app-gap-icon !important;
+      &:not(.app-icon-op) {
+        margin-right: $app-gap-icon !important;
+      }   
     }
   }
 
   .mat-icon {
-    @include setIcon(18, $position: text-top);
+    &:not(.app-icon-op) {
+      @include setIcon(18, $position: text-top);
+    }
   }
 
   &.app-list-view-facet {

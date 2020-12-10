@@ -67,19 +67,21 @@
             <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-table">
               <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown" [matTooltip]="facet.operator ? ('Operátor ' + facet.operator | translate) : ('Zvolit operátor pro filtrování' | translate)">
                 <mat-icon *ngIf="!facet.operator || facet.operator === 'delete'">more_vert</mat-icon>
-                <span *ngIf="facet.operator && facet.operator !== 'delete'" [class]="'app-badge-op ' + facet.operator">{{facet.operator.toUpperCase()}}</span>
+                <span *ngIf="facet.operator && facet.operator !== 'delete'" [class]="'app-badge-op ' + facet.operator">
+                  <mat-icon class="app-icon-op">{{ 'operator.' + facet.operator | translate }}</mat-icon>
+                </span>
               </a>
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="addFilter(facetField.field, facet, 'or')">
-                  <span class="app-badge-op or">OR</span> 
+                  <span class="app-badge-op or"><mat-icon>{{ 'operator.or' | translate }}</mat-icon></span> 
                   <span>{{ 'Operátor OR' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="addFilter(facetField.field, facet, 'and')">
-                  <span class="app-badge-op and">AND</span> 
+                  <span class="app-badge-op and"><mat-icon>{{ 'operator.and' | translate }}</mat-icon></span> 
                   <span>{{ 'Operátor AND' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="addFilter(facetField.field, facet, 'not')">
-                  <span class="app-badge-op not">NOT</span> 
+                  <span class="app-badge-op not"><mat-icon>{{ 'operator.not' | translate }}</mat-icon></span> 
                   <span>{{ 'Operátor NOT' | translate }}</span>
                 </button>
               </mat-menu>

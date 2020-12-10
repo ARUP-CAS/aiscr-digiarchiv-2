@@ -19,19 +19,21 @@
       <div fxLayout="row" fxLayoutGap="16px" *ngIf="filterField" [ngSwitch]="filterField.type">
         <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown app-in-facet-dynamic" [matTooltip]="filterField ? ('Operátor OR' | translate) : ('Zvolit operátor pro filtrování' | translate)">
           <mat-icon *ngIf="!filterOperator">more_vert</mat-icon>
-          <span *ngIf="filterOperator" [class]="'app-badge-op ' + filterOperator">{{filterOperator.toUpperCase()}}</span>
+          <span *ngIf="filterOperator" [class]="'app-badge-op ' + filterOperator">
+            <mat-icon class="app-icon-op">{{ 'operator.' + filterOperator | translate }}</mat-icon>
+          </span>
         </a>
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="filterOperator = 'or'">
-            <span class="app-badge-op or">OR</span> 
+            <span class="app-badge-op or"><mat-icon>{{ 'operator.or' | translate }}</mat-icon></span> 
             <span>{{ 'Operátor OR' | translate }}</span>
           </button>
           <button mat-menu-item (click)="filterOperator = 'and'">
-            <span class="app-badge-op and">AND</span> 
+            <span class="app-badge-op and"><mat-icon>{{ 'operator.and' | translate }}</mat-icon></span> 
             <span>{{ 'Operátor AND' | translate }}</span>
           </button>
           <button mat-menu-item (click)="filterOperator = 'not'">
-            <span class="app-badge-op not">NOT</span> 
+            <span class="app-badge-op not"><mat-icon>{{ 'operator.not' | translate }}</mat-icon></span> 
             <span>{{ 'Operátor NOT' | translate }}</span>
           </button>
         </mat-menu>
@@ -77,10 +79,10 @@
         </ng-container>
         <ng-container *ngSwitchCase="'boolean'">
 
-          <mat-radio-group aria-label="Select an option" [(ngModel)]="boolValue">
-            <mat-radio-button value="1">{{ 'Ano' | translate}}</mat-radio-button>&#160;
-            <mat-radio-button value="0">{{ 'Ne' | translate}}</mat-radio-button>
-          </mat-radio-group>
+        <mat-radio-group aria-label="Select an option" [(ngModel)]="boolValue">
+          <mat-radio-button value="1">{{ 'Ano' | translate}}</mat-radio-button>&#160;
+          <mat-radio-button value="0">{{ 'Ne' | translate}}</mat-radio-button>
+        </mat-radio-group>
 
 
         </ng-container>

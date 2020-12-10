@@ -167,6 +167,12 @@
   "nalezených výsledků v entitě": "results found in the entity",
   "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "or switch to another entity where we found the results",
 
+  "operator": {
+    "or": "check",
+    "and": "drag_handle",
+    "not": "block"
+  },
+
   "field": {
     "kategorie_dokumentu": "Document type",
     "rada": "Series",
