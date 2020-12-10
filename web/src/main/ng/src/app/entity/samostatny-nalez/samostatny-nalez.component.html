@@ -41,7 +41,7 @@
         </div>
         <div>
           <ng-container *ngIf="result.obdobi"><label class="app-label">{{ 'field.obdobi' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
           </ng-container>
           <ng-container *ngIf="result.presna_datace && result.presna_datace !== ''">({{result.presna_datace}})</ng-container>
           <ng-container *ngIf="result.druh">
