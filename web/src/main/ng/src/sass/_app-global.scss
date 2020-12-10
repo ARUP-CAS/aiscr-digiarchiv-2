@@ -262,21 +262,12 @@ a {
   }
 
   .mat-card-content {
-    //margin-bottom: calc(#{$app-gap} / 2);
-
     .app-metadata {
       .mat-icon {
         @include setIcon(18);
         @extend .app-clean-mg;
       }
     }
-
-    /* .mat-icon {
-      &:not(.app-icon-showing-more) {
-        @extend .app-gap-icon-right;
-        @include setIcon($position: text-bottom); 
-      } 
-    } */
 
     // specific behavior for expansion panel in first level of card
     .app-card-detail {
@@ -328,52 +319,19 @@ a {
 
           .mat-expansion-panel-header-title {
             color: $app-gray-9;
-            //white-space: nowrap;  commented based on David issue
             flex-wrap: wrap;
 
             .mat-icon {
               @include setIcon($size: 20);
             }
-
-            /* .app-badge {
-              background-color: $app-color-darknes;
-              font-weight: normal;
-              font-size: 14px;
-              color: $app-color-lightnes;
-              padding-left: $app-gap-icon;
-              margin: 0 2px;
-              border-radius: $app-border-radius;
-            
-              .mat-icon {
-                @include setIcon($size: 18, $position: sub);
-              }
-            } */
           } 
         }
 
         .mat-expansion-panel-content {
           .mat-expansion-panel-body {
-            padding-top: 2px;
-            padding-bottom: 0;
-
-            /* .app-badge {
-              background-color: $app-color-darknes;
-              font-weight: normal;
-              font-size: 14px;
-              color: $app-color-lightnes;
-              padding-left: $app-gap-icon;
-              margin: 0 2px;
-              border-radius: $app-border-radius;
-            
-              .mat-icon {
-                @include setIcon($size: 18, $position: sub);
-              }
-
-              &.app-badge-body {
-                padding-top: 2px;
-                padding-bottom: 2px;
-              }
-            } */
+            /* padding-top: 2px;
+            padding-bottom: 0; */
+            padding: 2px 20px 0px 20px; // issue #44
           }  
         }
       }
@@ -435,7 +393,6 @@ a {
   }
 
   &.app-card-info {
-    //@extend .app-clean-mg;
     background-color: $app-card-info-bg;
 
     .mat-card-content {
@@ -491,14 +448,6 @@ a {
       padding-right: $app-gap;
     }
   }
-
-  /* zakomentovano, chovani chci jen pokud jsou ve facetech
-  .mat-expansion-panel-header,
-  .mat-expansion-panel-body {
-    padding-left: $app-gap;
-    padding-right: $app-gap;
-  } 
-  */
 }
 
 
@@ -512,11 +461,6 @@ a {
     .mat-icon {
       margin-right: $app-gap-icon !important;
     }
-
-    /* &.active {
-      color: $app-primary-color !important;
-      font-weight: bold;
-    } */
   }
 
   .mat-icon {
