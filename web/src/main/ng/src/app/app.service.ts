@@ -67,22 +67,23 @@ export class AppService {
 
   }
 
-  addFilter(field: string, value: string) {
+  addFilter(field: string, value: string, operator: string) {
     let used = false;
-    const params = {};
+    const params: any = {};
     params[field] = [];
     this.state.breadcrumbs.forEach((c: Crumb) => {
       if (c.field === field) {
         if (c.value !== value) {
-          params[field].push(c.value);
+          params[field].push(c.value + ':' + c.operator);
         } else {
           used = true;
         }
       }
     });
     if (!used) {
-      params[field].push(value);
+      params[field].push(value + ':' + operator);
     }
+    params.page = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
@@ -331,7 +332,7 @@ export class AppService {
               display = this.getHeslarTranslation(parts[0], field);
               this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
             });
-this.state.breadcrumbs.push(new Crumb('separator', '', ''));
+            this.state.breadcrumbs.push(new Crumb('separator', '', ''));
           }
         }
         

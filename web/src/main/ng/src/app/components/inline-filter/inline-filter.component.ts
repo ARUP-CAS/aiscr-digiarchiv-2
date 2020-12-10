@@ -32,7 +32,7 @@ export class InlineFilterComponent implements OnInit {
     if (this.config.dateFacets.includes(this.field)) {
       v += ',' + v;
     }
-    this.service.addFilter(this.field, v + ':and');
+    this.service.addFilter(this.field, v, 'and');
   }
 
 }
