@@ -321,7 +321,7 @@ a {
           margin-top: 4px;
 
           .mat-expansion-panel-header-title {
-            color: $app-primary-color;
+            color: $app-gray-9;
             //white-space: nowrap;  commented based on David issue
             flex-wrap: wrap;
 
@@ -593,6 +593,7 @@ a {
 // ident badge
 .app-ident-badge {
   margin-right: 2px;
+  color: $app-gray-9;
 
   .mat-icon {
     $size: 18;
