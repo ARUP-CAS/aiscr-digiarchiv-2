@@ -396,7 +396,7 @@ public class Dokument implements Entity {
                   Calendar c2 = Calendar.getInstance();
                   c2.set(end, 12, 31);
                   SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", c2.toInstant().toString());
-                  if (c2.after(c1)) {
+                  if (!c2.before(c1)) {
                     ukonceni = c2.toInstant().toString();
                   }
                 }
