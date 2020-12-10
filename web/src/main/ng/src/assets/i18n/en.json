@@ -2,7 +2,7 @@
   "help": "Help",
   "q.placeholder": "Enter search criteria",
   "q.tooltip": "Use quotation marks when entering multi-word terms (such as \"search term\" or \"search-term\"). Otherwise, all occurrences of specific used words are searched separately.",
-  "search map": "Search map",
+  "open map": "Open map",
   "close map": "Close map",
   "Skrýt detail": "Hide detail",
   "Zobrazit detail": "Show detail",

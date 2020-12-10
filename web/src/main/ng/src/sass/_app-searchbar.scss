@@ -73,6 +73,8 @@ app-searchbar {
   }
 
   .app-fx-right {
+    text-align: right;
+    
     .mat-flat-button {
       line-height: calc(#{$app-searchbar-field-height} - 2px);
       height: calc(#{$app-searchbar-field-height} - 2px);

@@ -2,7 +2,7 @@
   "help": "Nápověda",
   "q.placeholder": "Zadejte dotaz pro vyhledávání v dokumentech",
   "q.tooltip": "Při zadávání víceslovných výrazů použijte uvozovky (např. \"hledaný výraz\" či \"hledaný-výraz\"). V opačném případě dojde k vyhledání všech výskytů dílčích užitých slov samostatně.",
-  "search map": "Hledej na mapě",
+  "open map": "Otevřít mapu",
   "close map": "Zavřít mapu",
   "Skrýt detail": "Skrýt detail",
   "Zobrazit detail": "Zobrazit detail",

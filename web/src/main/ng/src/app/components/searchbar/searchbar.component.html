@@ -19,8 +19,9 @@
       </div>
       <div fxFlex class="app-fx-right fxHide_xs">
         <button mat-flat-button color="primary" (click)="toggleMapa()" [class.app-active]="!state.isMapaCollapsed">
+          <mat-icon *ngIf="state.isMapaCollapsed" class="fxHide_sm fxHide_xs app-gap-icon-right">map</mat-icon>
           <mat-icon *ngIf="!state.isMapaCollapsed" class="fxHide_sm fxHide_xs">clear</mat-icon>
-          <span class="fxHide_sm fxHide_xs"><ng-container *ngIf="!state.isMapaCollapsed">&#160;</ng-container>{{ state.isMapaCollapsed ? ('search map' | translate) : ('close map' | translate) }}</span>
+          <span class="fxHide_sm fxHide_xs"><ng-container *ngIf="!state.isMapaCollapsed">&#160;</ng-container>{{ state.isMapaCollapsed ? ('open map' | translate) : ('close map' | translate) }}</span>
           <mat-icon class="fxHide_gt-sm">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
         </button>
         <!-- temporary commented based David agreement
