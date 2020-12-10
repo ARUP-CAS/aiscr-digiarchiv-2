@@ -105,46 +105,48 @@
   </mat-card-actions>
   <mat-card-content *ngIf="detailExpanded && !isChild">
     <div class="app-card-detail">
-      <mat-expansion-panel [expanded]="true">
-        <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
-          <mat-panel-title>
-            {{ 'Popis nálezu' | translate }}:
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <table>
-          <tbody>
-            <tr *ngIf="result.pocet">
-              <th class="app-label">{{ 'field.pocet' | translate }}:</th>
-              <td>{{ result.pocet }}</td>
-            </tr>
-            <tr *ngIf="hasRights && result.lokalizace">
-              <th class="app-label">{{ 'field.lokalizace' | translate }}:</th>
-              <td>{{ result.lokalizace }}</td>
-            </tr>
-            <tr *ngIf="result.nalezove_okolnosti">
-              <th class="app-label">{{ 'field.nalezove_okolnosti' | translate }}:</th>
-              <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.nalezove_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
-            </tr>
-            <tr *ngIf="result.hloubka">
-              <th class="app-label">{{ 'field.hloubka' | translate }}:</th>
-              <td>{{ result.hloubka }} cm</td>
-            </tr>
-            <tr *ngIf="result.poznamka">
-              <th class="app-label">{{ 'field.f_poznamka' | translate }}:</th>
-              <td>{{ result.poznamka }}</td>
-            </tr>
-            </tbody>
-          </table>
-      </mat-expansion-panel>
-  
-      <mat-expansion-panel *ngIf="result.projekt?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-        <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
-          <mat-panel-title>
-            {{ 'Související záznamy' | translate }}:
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-projekt *ngFor="let projekt of result.projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-      </mat-expansion-panel>
+      <mat-accordion multi="true">
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
+            <mat-panel-title>
+              {{ 'Popis nálezu' | translate }}:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <table>
+            <tbody>
+              <tr *ngIf="result.pocet">
+                <th class="app-label">{{ 'field.pocet' | translate }}:</th>
+                <td>{{ result.pocet }}</td>
+              </tr>
+              <tr *ngIf="hasRights && result.lokalizace">
+                <th class="app-label">{{ 'field.lokalizace' | translate }}:</th>
+                <td>{{ result.lokalizace }}</td>
+              </tr>
+              <tr *ngIf="result.nalezove_okolnosti">
+                <th class="app-label">{{ 'field.nalezove_okolnosti' | translate }}:</th>
+                <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.nalezove_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
+              </tr>
+              <tr *ngIf="result.hloubka">
+                <th class="app-label">{{ 'field.hloubka' | translate }}:</th>
+                <td>{{ result.hloubka }} cm</td>
+              </tr>
+              <tr *ngIf="result.poznamka">
+                <th class="app-label">{{ 'field.f_poznamka' | translate }}:</th>
+                <td>{{ result.poznamka }}</td>
+              </tr>
+              </tbody>
+            </table>
+        </mat-expansion-panel>
+    
+        <mat-expansion-panel *ngIf="result.projekt?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
+            <mat-panel-title>
+              {{ 'Související záznamy' | translate }}:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-projekt *ngFor="let projekt of result.projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   </mat-card-content>
 </mat-card>

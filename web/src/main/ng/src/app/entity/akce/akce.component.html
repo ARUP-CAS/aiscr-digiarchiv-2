@@ -109,7 +109,7 @@
     <div class="app-card-detail">
       <mat-accordion multi="true">
         <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'Popis akce' | translate }}:
             </mat-panel-title>
@@ -156,7 +156,7 @@
         </mat-expansion-panel>
 
         <mat-expansion-panel *ngIf="result.ext_zdroj?.length > 0" [expanded]="true">
-          <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'Externí zdroje' | translate }}:
             </mat-panel-title>
@@ -167,7 +167,7 @@
         </mat-expansion-panel> 
         
         <mat-expansion-panel *ngIf="result.child_dokument?.length > 0 || result.projekt?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-          <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'Související záznamy' | translate }}:
             </mat-panel-title>

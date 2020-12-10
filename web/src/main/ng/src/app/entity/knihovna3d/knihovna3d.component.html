@@ -122,7 +122,7 @@
     <div class="app-card-detail">
       <mat-accordion multi="true">
         <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'Popis dokumentu' | translate }}:
             </mat-panel-title>
@@ -356,7 +356,7 @@
         </mat-expansion-panel>
 
         <mat-expansion-panel *ngIf="testData('souvisejici_zaznamy')" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-          <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'Související záznamy' | translate }}:
             </mat-panel-title>
