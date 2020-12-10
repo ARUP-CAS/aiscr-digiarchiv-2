@@ -36,7 +36,7 @@
     "@nguniversal/express-engine": "^10.0.1",
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
-    "bootstrap": "4.1.1",
+    "bootstrap": "4.3.1",
     "express": "^4.15.2",
     "flot": "^0.8.0-alpha",
     "hammerjs": "^2.0.8",
