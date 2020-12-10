@@ -390,11 +390,11 @@ public class Dokument implements Entity {
                 int end = naDoc.optInt("rok_ukonceni", 0);
                 String ukonceni = "*";
                 Calendar c1 = Calendar.getInstance();
-                c1.set(start, 1, 1);
+                c1.set(start, 0, 1);
                 SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", c1.toInstant().toString());
                 if (end != 0) {
                   Calendar c2 = Calendar.getInstance();
-                  c2.set(end, 12, 31);
+                  c2.set(end, 11, 31);
                   SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", c2.toInstant().toString());
                   if (!c2.before(c1)) {
                     ukonceni = c2.toInstant().toString();
