@@ -31,32 +31,37 @@
   },
 
   "sorts": [
-    { "label": "Dle idetifikátoru", "field": "ident_cely asc", "dir": "asc" },
-    { "label": "Dle idetifikátoru", "field": "ident_cely desc", "dir": "desc" },
-    { "label": "Dle okres + katastr", "field": "okres_sort asc", "dir": "asc", "entity": ["projekt", "akce", "lokalita"] },
-    { "label": "Dle okres + katastr", "field": "okres_sort desc", "dir": "desc", "entity": ["projekt", "akce", "lokalita"] },
-    { "label": "Dle autora", "field": "autor_sort asc", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
-    { "label": "Dle autora", "field": "autor_sort desc", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
-    { "label": "Dle nalezce", "field": "autor_sort asc", "dir": "asc", "entity": ["samostatny_nalez"] },
-    { "label": "Dle nalezce", "field": "autor_sort desc", "dir": "desc", "entity": ["samostatny_nalez"] },
-    { "label": "Dle datum nalezu", "field": "datum_nalezu asc", "dir": "asc", "entity": ["samostatny_nalez"] },
-    { "label": "Dle datum nalezu", "field": "datum_nalezu desc", "dir": "desc", "entity": ["samostatny_nalez"] },
-    { "label": "Dle vedouci akce", "field": "autor_sort asc", "dir": "asc", "entity": ["akce"] },
-    { "label": "Dle vedouci akce", "field": "autor_sort desc", "dir": "desc", "entity": ["akce"] },
-    { "label": "Dle vedouci projektu", "field": "autor_sort asc", "dir": "asc", "entity": ["projekt"] },
-    { "label": "Dle vedouci projektu", "field": "autor_sort desc", "dir": "desc", "entity": ["projekt"] },
-    { "label": "Dle data", "field": "rok_vzniku asc", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
-    { "label": "Dle data", "field": "rok_vzniku desc", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
-    { "label": "Dle nazev", "field": "nazev_sort asc", "dir": "asc", "entity": ["lokalita"] },
-    { "label": "Dle nazev", "field": "nazev_sort desc", "dir": "desc", "entity": ["lokalita"] },
-    { "label": "Dle organizace", "field": "organizace_sort asc", "dir": "asc", "entity": ["dokument", "projekt", "akce", "knihovna_3d"] },
-    { "label": "Dle organizace", "field": "organizace_sort desc", "dir": "desc", "entity": ["dokument", "projekt","akce", "knihovna_3d"] }
+    { "label": "Idetifikátor", "field": "ident_cely asc", "dir": "asc" },
+    { "label": "Idetifikátor", "field": "ident_cely desc", "dir": "desc" },
+    { "label": "Okres + katastr", "field": "okres_sort asc", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "Okres + katastr", "field": "okres_sort desc", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "Katastr", "field": "katastr asc", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "Katastr", "field": "katastr desc", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "Autor", "field": "autor_sort asc", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
+    { "label": "Autor", "field": "autor_sort desc", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
+    { "label": "Nálezce", "field": "autor_sort asc", "dir": "asc", "entity": ["samostatny_nalez"] },
+    { "label": "Nálezce", "field": "autor_sort desc", "dir": "desc", "entity": ["samostatny_nalez"] },
+    { "label": "Datum nálezu", "field": "datum_nalezu asc", "dir": "asc", "entity": ["samostatny_nalez"] },
+    { "label": "Datum nálezu", "field": "datum_nalezu desc", "dir": "desc", "entity": ["samostatny_nalez"] },
+    { "label": "Vedoucí akce", "field": "autor_sort asc", "dir": "asc", "entity": ["akce"] },
+    { "label": "Vedoucí akce", "field": "autor_sort desc", "dir": "desc", "entity": ["akce"] },
+    { "label": "Datum ukončení", "field": "datum_ukonceni_v asc", "dir": "asc", "entity": ["akce"] },
+    { "label": "Datum ukončení", "field": "datum_ukonceni_v desc", "dir": "desc", "entity": ["akce"] },
+    { "label": "Vedoucí projektu", "field": "autor_sort asc", "dir": "asc", "entity": ["projekt"] },
+    { "label": "Vedoucí projektu", "field": "autor_sort desc", "dir": "desc", "entity": ["projekt"] },
+    { "label": "Rok vzniku", "field": "rok_vzniku asc", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
+    { "label": "Rok vzniku", "field": "rok_vzniku desc", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
+    { "label": "Název", "field": "nazev_sort asc", "dir": "asc", "entity": ["lokalita"] },
+    { "label": "Název", "field": "nazev_sort desc", "dir": "desc", "entity": ["lokalita"] },
+    { "label": "Organizace", "field": "organizace_sort asc", "dir": "asc", "entity": ["dokument", "projekt", "akce", "knihovna_3d"] },
+    { "label": "Organizace", "field": "organizace_sort desc", "dir": "desc", "entity": ["dokument", "projekt","akce", "knihovna_3d"] }
   ],
 
-  "selRows": [10, 20, 50],
+  "selRows": [10, 20, 50, 100],
   "defaultRows": 50,
 
   "entities": ["dokument", "projekt", "akce", "lokalita", "samostatny_nalez", "knihovna_3d"],
+  
   "entityIcons": {
     "dokument": "description", 
     "samostatny_nalez": "location_on",
@@ -76,6 +81,7 @@
 
   "exportRowsLimit": 1000,
   
+  //DN: K čemu je toto níže (aktivity)? Nejlépe řešit jako běžný heslář (CSV existuje).
   "aktivity": {
     "sídlištní": "sidlistni",
     "pohřbívání": "pohrebni",
@@ -89,6 +95,7 @@
     "intruze": "intruze"
   },
 
+  //DN: Kde se můžu podívat na strukturu indexu? Jak přesně mám referovat konkrétní pole v konrétní datové třídě?
   "filterFields": [
     {
       "type": "text",
@@ -141,49 +148,116 @@
     
   ],
   
+  //DN: Co to je?
   "user": {
     "jmeno": "Jaroslava Svobodova",
     "prijmeni": ""
   },
-  "facets": ["pristupnost", "f_areal", "f_obdobi", "f_aktivita",
-    "f_kategorie", "f_druh_nalezu", "f_specifikace", "f_typ_nalezu",
-    "f_okres", "f_katastr", "f_typ_vyzkumu", "f_dok_jednotka_typ",
-    "f_adb_typ_sondy","f_adb_podnet", "f_pian_typ", "f_pian_presnost", "f_pian_zm10"],
-
+  
+  //DN: PVýčet byl neúplný a nevím, zda jsem to doplnil dobře. Prosím o kontrolu.
+  "facets": [
+    "pristupnost",
+    
+    "f_organizace",
+    
+    "f_zeme",
+    "f_okres",
+    "f_katastr",
+    
+    "f_autor",
+    "f_vedouci",
+    "f_nalezce",
+    "f_osoby",
+    
+    "f_obdobi",
+    "f_areal",
+    "f_aktivita",
+    "f_typ_nalezu",
+    "f_kategorie",
+    "f_druh_nalezu",
+    "f_specifikace",
+    "f_tvar",
+    
+    "f_typ_vyzkumu",
+    "f_adb_typ_sondy",
+    "f_adb_podnet",    
+    "f_nalezove_okolnosti",    
+    "f_typ_lokality",    
+    "f_druh_lokality",
+    "f_typ_projektu",
+    "f_kulturni_pamatka",
+    
+    "kategorie_dokumentu",
+    "f_rada",
+    "f_typ_dokumentu",
+    "f_material_dokumentu",
+    "f_typ_dokumentu_posudek",
+    "f_jazyk_dokumentu",
+    "f_ulozeni_originalu",
+    "f_format",
+    "f_zachovalost",
+    
+    "f_dok_jednotka_typ",
+    "f_pian_typ",
+    "f_pian_presnost",
+    "f_pian_zm10",
+    
+    "f_let_pozorovatel",
+    "f_let_pilot",
+    "f_let_organizace",
+    "f_let_pocasi",
+    "f_let_dohlednost",
+    "f_let_letiste_start",
+    "f_let_letiste_cil" 
+  ],
+  
+  //DN: Není toto k vymazání, když už máme filterFields?
   "dateFacets": ["datum_zverejneni", "datum_provedeni", "extra_data_datum_vzniku", "let_datum", "datum_nalezu"],
   "numberFacets": ["hloubka"],
-
+  
   "heslarToPole": {
-    "areal_druha": "f_areal",
-    "druh_lokality_druha": "f_druh_lokality",
-    "typ_dokumentu": ["f_typ_dokumentu", "kategorie_dokumentu"],
-    "organizace": "f_organizace",
-    "obdobi_druha": "f_obdobi",
     "aktivity" : "f_aktivita",
-    "objekt_druh": "f_druh_nalezu",
-    "predmet_druh":"f_druh_nalezu",
-    "zachovalost": "f_zachovalost",
-    "rada": "f_rada",
-    "typ_nalezu": "f_typ_nalezu",
-    "material_dokumentu": "f_material_dokumentu",
+    "areal_druha": "f_areal",
+    "dohlednost": "f_let_dohlednost", //DN: chybělo, doplnit?
+    "druh_lokality_druha": "f_druh_lokality",
+    "format_dokumentu": "f_format", //DN: chybělo, doplnit?
     "jazyk_dokumentu": "f_jazyk_dokumentu",
-    "posudek": "f_typ_dokumentu_posudek",
-    "ulozeni_originalu": "f_ulozeni_originalu",
-    "typ_pian": "f_pian_typ",
     "kulturni_pamatka": "f_kulturni_pamatka",
-    "typ_projektu": "f_typ_projektu",
+    "material_dokumentu": "f_material_dokumentu",
+    "nahrada": "extra_data_nahrada", //DN: chybělo, doplnit?
+    "nalezove_okolnosti": "f_nalezove_okolnosti", //DN: chybělo, doplnit?
+    "obdobi_druha": "f_obdobi",
+    "objekt_druh": "f_druh_nalezu",
+    "objekt_kategorie": ["f_kategorie", "nalez_kategorie"], //DN: proč je tady mapováno také f_kategorie a u predmet_kategorie nikoli?
+    "organizace": "f_organizace",
+    "pocasi": "f_let_pocasi",
+    "podnet": "f_adb_podnet",
+    "posudek": "f_typ_dokumentu_posudek",
+    "predmet_druh":"f_druh_nalezu",
+    "predmet_kategorie": "nalez_kategorie",
+    "presnost": "f_pian_presnost",
+    "pristupnost": "pristupnost", //DN: chybělo, doplnit?
+    "rada": "f_rada",
+    "specifikace_objektu_druha": "nalez_kategorie", //DN: nemělo by být f_specifikace?
+    "specifikace_predmetu": "f_specifikace", //DN: chybělo, doplnit?
+    "tvar": "f_tvar",
     "typ_akce_druha": ["f_hlavni_typ", "f_vedlejsi_typ"],
     "typ_dj": "f_dok_jednotka_typ",
-    "presnost": "f_pian_presnost",
-    "tvar": "f_tvar",
-    "pocasi": "f_let_pocasi",
-    "objekt_kategorie": ["f_kategorie", "nalez_kategorie"],
-    "podnet": "f_adb_podnet",
-    "typ_sondy": "f_adb_typ_sondy",
+    "typ_dokumentu": ["f_typ_dokumentu", "kategorie_dokumentu"],
+    "typ_externiho_zdroje": "ext_zdroj_typ", //DN: chybělo, doplnit?
     "typ_lokality": "f_typ_lokality",
-    "specifikace_objektu_druha": "nalez_kategorie",
-    "predmet_kategorie": "nalez_kategorie"
+    "typ_nalezu": "f_typ_nalezu",
+    "typ_pian": "f_pian_typ",
+    "typ_projektu": "f_typ_projektu",
+    "typ_sondy": "f_adb_typ_sondy",
+    "typ_udalosti": "extra_data_udalost_typ", //DN: chybělo, doplnit?
+    "typ_vyskovy_bod": "vyskovy_bod_typ", //DN: chybělo, doplnit?
+    "ulozeni_originalu": "f_ulozeni_originalu",
+    "zachovalost": "f_zachovalost",
+    "zeme": "f_zeme" //DN: chybělo, doplnit?
   },
+  
+  //DN: Co to je? In-line filtry?
   "urlFields": ["f_organizace", "f_rok_vzniku", "f_okres", "f_katastr", "f_obdobi",
       "f_areal", "f_aktivita", "f_druh_lokality", "f_druh_nalezu", "f_autor", "f_vedlejsi_typ", "f_hlavni_typ",
       "f_material_dokumentu", "f_jazyk_dokumentu", "rada", "kategorie_dokumentu",
