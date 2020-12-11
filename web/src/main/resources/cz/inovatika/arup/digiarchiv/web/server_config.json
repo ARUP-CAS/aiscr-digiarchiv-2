@@ -16,7 +16,7 @@
   "mediumHeight": 1000,
   "maxPixels": 5000000,
   "watermark.alpha": 0,
-  "sessionTimeout": 300,
+  "sessionTimeout": 1800,
   "indexSecLevel": "E",
   
   //DN: Tomuto nerozumím - proč zde nejsou všechny hesláře, nebo o co přesně jde?
