@@ -1,7 +1,7 @@
 {
   "help": "Help",
-  "q.placeholder": "Enter search criteria",
-  "q.tooltip": "Use quotation marks when entering multi-word terms (such as \"search term\" or \"search-term\"). Otherwise, all occurrences of specific used words are searched separately.",
+  "q.placeholder": "Enter search query",
+  "q.tooltip": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms (e.g. \"search term\" or \"search-term\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
   "open map": "Open map",
   "close map": "Close map",
   "Skrýt detail": "Hide detail",
@@ -109,10 +109,10 @@
   "výsledků": "results",
   "Export": "Export",
   "Řazení": "Order by",
-  "Zobrazení výsledků": "Results display",
-  "Řádkové zobrazení výsledků": "Display in lines",
-  "Sloupcové zobrazení výsledků": "Display in columns",
-  "Výchozí zobrazení výsledků": "Default display",
+  "Zobrazení výsledků": "Results view type",
+  "Řádkové zobrazení výsledků": "Line view (caption only)",
+  "Sloupcové zobrazení výsledků": "Gallery (thumbnail only)",
+  "Výchozí zobrazení výsledků": "Full view (caption, thumbnail, description)",
   "Zobrazit časovou osu": "Display time axis",
   "Skrýt časovou osu": "Hide chart bar",
   "Objekt/kontext": "Feature/context",
@@ -183,7 +183,7 @@
     "extra_data_datum_vzniku": "Year of publication",
 		"let_datum": "Date of flight",
     "rok_vzniku": "Year of publication",
-    "datum_provedeni": "Date of implementation",
+    "datum_provedeni": "Date of fieldwork",
     "datum_nalezu": "Date of finding",
     "filtruj_dle_pole": "Filter by field",
     "filtruj_dle": "Filter by",
@@ -285,7 +285,8 @@
     "ddata": "Digital data",
     "mplany": "Plans and maps",
     "neuvedeno": "Unspecified",
-    "pas": "Individual finds"
+    "pas": "Individual finds",
+    "ddata3d": "3D modely"
   },
 
   "entities": {
