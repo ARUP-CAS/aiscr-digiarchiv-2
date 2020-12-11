@@ -94,18 +94,18 @@
       "jednotka_dokumentu_vazba_lokalita",
       "jednotka_dokumentu_poznamka",      
       
-      "komponenta_ident_cely",
-      "komponenta_obdobi", //indexovat překlad místo klíče
-      "komponenta_presna_datace",
-      "komponenta_areal", //indexovat překlad místo klíče
-      "f_aktivita", //indexovat překlad místo klíče
-      "komponenta_poznamka",
+      "komponenta_dokument_ident_cely",
+      "komponenta_dokument_obdobi", //indexovat překlad místo klíče
+      "komponenta_dokument_presna_datace",
+      "komponenta_dokument_areal", //indexovat překlad místo klíče
+      "f_aktivita", //indexovat překlad místo klíče; jak správně označit komponentu dokumentu?
+      "komponenta_dokument_poznamka",
       
-      "nalez_typ_nalezu", //indexovat překlad místo klíče
-      "nalez_druh_nalezu", //indexovat překlad místo klíče
-      "nalez_kategorie", //indexovat překlad místo klíče
-      "nalez_specifikace", //indexovat překlad místo klíče
-      "nalez_poznamka",
+      "nalez_dokumentu_typ_nalezu", //indexovat překlad místo klíče
+      "nalez_dokumentu_druh_nalezu", //indexovat překlad místo klíče
+      "nalez_dokumentu_kategorie", //indexovat překlad místo klíče
+      "nalez_dokumentu_specifikace", //indexovat překlad místo klíče
+      "nalez_dokumentu_poznamka",
       
       "pian_id",
       
