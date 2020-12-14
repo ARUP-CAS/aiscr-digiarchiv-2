@@ -77,7 +77,7 @@
       <button *ngIf="!mapDetail && hasRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'Zobrazit na mapě' | translate">
         <mat-icon>map</mat-icon>
       </button>
-      <a mat-flat-button [routerLink]="'/id/' + result.ident_cely" target="_blank">
+      <a mat-flat-button [routerLink]="'/id/' + result.ident_cely" target="_blank" [matTooltip]="'Persistentní odkaz' | translate">
         <mat-icon>link</mat-icon>
       </a>
       <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">

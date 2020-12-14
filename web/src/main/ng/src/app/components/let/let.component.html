@@ -15,8 +15,8 @@
         <tr *ngIf="result.letiste_start || result.letiste_cil">
           <th class="app-label">{{ 'Trasa' | translate }}:</th>
           <td>
-            <app-inline-filter [field]="'let_letiste_start'" [value]="result.letiste_start"></app-inline-filter>&#160;-&#160; 
-            <app-inline-filter [field]="'let_letiste_cil'" [value]="result.letiste_cil"></app-inline-filter>
+            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.letiste_start"></app-inline-filter>&#160;-&#160; 
+            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.letiste_cil"></app-inline-filter>
           </td>
         </tr>
         <tr *ngIf="result.ucel_letu">
@@ -33,7 +33,7 @@
         </tr>
         <tr *ngIf="result.organizace">
           <th class="app-label">{{ 'field.f_organizace' | translate }}:</th>
-          <td><app-inline-filter [field]="'let_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.uzivatelske_oznaceni">
           <th class="app-label">{{ 'Uživatelské označení' | translate }}:</th>
@@ -49,11 +49,11 @@
         </tr>
         <tr *ngIf="result.pocasi">
           <th class="app-label">{{ 'Počasí' | translate }}:</th>
-          <td><app-inline-filter [field]="'let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.dohlednost">
           <th class="app-label">{{ 'Dohlednost' | translate }}:</th>
-          <td><app-inline-filter [field]="'let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
         </tr>
       </tbody>
     </table>
@@ -148,11 +148,11 @@
                 </tr>
                 <tr *ngIf="result.pocasi">
                   <th class="app-label">{{ 'Počasí' | translate }}:</th>
-                  <td><app-inline-filter [field]="'let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
+                  <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
                 </tr>
                 <tr *ngIf="result.dohlednost">
                   <th class="app-label">{{ 'Dohlednost' | translate }}:</th>
-                  <td><app-inline-filter [field]="'let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
+                  <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
                 </tr>
               </tbody>
             </table>
