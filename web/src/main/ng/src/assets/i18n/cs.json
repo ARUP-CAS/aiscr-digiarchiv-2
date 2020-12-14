@@ -174,6 +174,20 @@
   "nalezených výsledků v entitě": "nalezených výsledků v entitě",
   "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "nebo se přepněte do jiné entity, kde jsme nalezli výsledky",
 
+  "sortBy": {
+    "ident_cely": "Dle idetifikátoru",
+    "okres": "Dle okres + katastr",
+    "autor": "Dle autora",
+    "nalezce": "Dle nalezce",
+    "datum_nalezu": "Dle datum nalezu",
+    "vedouci_akce": "Dle vedouci akce",
+    "vedouci_projektu": "Dle vedouci projektu",
+    "rok_vzniku": "Dle data",
+    "nazev": "Dle nazev",
+    "organizace": "Dle organizace"
+  },
+
+
   "operator": {
     "or": "check",
     "and": "drag_handle",
@@ -271,20 +285,9 @@
 		"f_poznamka": "Poznámka",
 		"f_popis": "Popis",
 		"f_podnazev": "Podnázev",
-		"f_nalezove_okolnosti": "Nálezové okolnosti"
-	},
-	
-  "pivot": {
-    "rada": {
-      "TX": "zprávy a hlášení",
-      "FT": "foto terén",
-      "DT": "digitální terén",
-      "ZA": "archiv ZAA",
-      "ZL": "archiv lokalit",
-      "DD": "digitální data"
-    }
-	},
-	
+    "f_nalezove_okolnosti": "Nálezové okolnosti"
+  },
+  
   "kategorie_dokumentu": {
     "texty": "Texty",
     "foto": "Fotografie",
@@ -293,7 +296,7 @@
     "mplany": "Plány a mapy",
     "neuvedeno": "Neuvedeno",
     "pas": "Samostatné nálezy"
-	},
+  },
 	
   "entities": {
 		"dokument": "Dokumenty", 

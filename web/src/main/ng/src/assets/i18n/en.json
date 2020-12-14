@@ -174,6 +174,19 @@
   "nalezených výsledků v entitě": "results found in the entity",
   "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "or switch to another entity where we found the results",
 
+  "sortBy": {
+    "ident_cely": "By identifier",
+    "okres": "By  district + cadastre",
+    "autor": "By author",
+    "nalezce": "By finder",
+    "datum_nalezu": "By find date",
+    "vedouci_akce": "By event leader",
+    "vedouci_projektu": "By project manager",
+    "rok_vzniku": "By date",
+    "nazev": "By name",
+    "organizace": "By organization"
+  },
+
   "operator": {
     "or": "check",
     "and": "drag_handle",
@@ -272,17 +285,6 @@
     "f_popis": "Description",
     "f_podnazev": "Subtitle",
     "f_nalezove_okolnosti": "Finding circumstances"
-  },
-
-  "pivot": {
-    "rada": {
-      "TX": "text reports",
-      "FT": "field photos",
-      "DT": "digital field photos",
-      "ZA": "fieldwork record archive",
-      "ZL": "site record archive",
-      "DD": "digital data"
-    }
   },
 
   "kategorie_dokumentu": {

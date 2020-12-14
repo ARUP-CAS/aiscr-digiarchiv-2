@@ -71,9 +71,6 @@ public class DokumentSearcher implements EntitySearcher {
     if ("E".equals(pristupnost)) {
       pristupnost = "D";
     }
-//    if (request.getParameter("hideWithoutThumbs") != null) {
-//      query.addFilterQuery("-hasThumb:false");
-//    }
     SolrSearcher.addFilters(request, query, pristupnost);
     query.set("df", "text_all_A");
     
@@ -84,11 +81,6 @@ public class DokumentSearcher implements EntitySearcher {
       query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]");
     }
     
-
-//    query.set("facet.range", "obdobi_poradi");
-//    query.set("facet.range.start", "100");
-//    query.set("facet.range.end", "2600");
-//    query.set("facet.range.gap", "100");
   }
   
   /**

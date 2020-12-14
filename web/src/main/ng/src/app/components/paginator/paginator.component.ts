@@ -43,7 +43,7 @@ export class PaginatorComponent implements OnInit {
 
   sortBy(sort: Sort) {
     this.state.sort = sort;
-    this.router.navigate([], { queryParams: { sort: sort.field }, queryParamsHandling: 'merge' });
+    this.router.navigate([], { queryParams: { sort: sort.field + ' ' + sort.dir }, queryParamsHandling: 'merge' });
   }
 
 }

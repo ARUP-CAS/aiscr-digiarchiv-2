@@ -319,6 +319,16 @@ export class AppService {
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
             break;
           }
+          case 'kategorie_dokumentu': {
+            const values = params.getAll(field);
+            values.forEach(value => {
+              const parts = value.split(':');
+              display = this.translate.instant('kategorie_dokumentu.' + parts[0]);
+              this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
+            });
+            this.state.breadcrumbs.push(new Crumb('separator', '', ''));
+            break;
+          }
           case 'pian_id': {
             break;
           }
