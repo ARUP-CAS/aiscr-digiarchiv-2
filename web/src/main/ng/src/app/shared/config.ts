@@ -52,6 +52,7 @@ export class Configuration {
 
   selRows: number[];
   defaultRows: number;
+  exportRowsLimit: number;
   urlFields: string[];
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};

@@ -20,8 +20,8 @@ export class AppState {
   private facetsSubject: Subject<string> = new Subject();
   public facetsChanged: Observable<string> = this.facetsSubject.asObservable();
 
-  private loggedSubject: Subject<string> = new Subject();
-  public loggedChanged: Observable<string> = this.loggedSubject.asObservable();
+  private loggedSubject: Subject<boolean> = new Subject();
+  public loggedChanged: Observable<boolean> = this.loggedSubject.asObservable();
 
   private mapResultSubject: Subject<string> = new Subject();
   public mapResultChanged: Observable<string> = this.mapResultSubject.asObservable();
@@ -299,6 +299,7 @@ export class AppState {
   }
 
   setLogged(res: any) {
+    const changed = this.logged;
     if (res.error) {
       this.logged = false;
       this.user = null;
@@ -313,7 +314,7 @@ export class AppState {
         }
       }
     }
-    this.loggedSubject.next('');
+    this.loggedSubject.next(changed === this.logged);
   }
 
 }

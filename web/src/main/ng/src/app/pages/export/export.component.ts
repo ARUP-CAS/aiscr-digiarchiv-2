@@ -6,6 +6,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { SolrResponse } from 'src/app/shared/solr-response';
 import { AppService } from 'src/app/app.service';
+import { AppConfiguration } from 'src/app/app-configuration';
 
 @Component({
   selector: 'app-export',
@@ -112,6 +113,7 @@ export class ExportComponent implements OnInit {
   constructor(
     private titleService: Title,
     private route: ActivatedRoute,
+    private config: AppConfiguration,
     public state: AppState,
     private service: AppService
   ) {
@@ -134,9 +136,10 @@ export class ExportComponent implements OnInit {
   }
 
   search(params: Params) {
-    this.service.search(params as HttpParams).subscribe((resp: SolrResponse) => {
-      this.docs = resp.response.docs.filter(doc => doc.doctype !== 'pas');
-      this.pas = resp.response.docs.filter(doc => doc.doctype === 'pas');
+    const p = Object.assign({}, params);
+    p.rows = this.config.exportRowsLimit;
+    this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+      this.docs = resp.response.docs;
     });
   }
 

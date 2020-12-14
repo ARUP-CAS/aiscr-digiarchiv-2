@@ -70,6 +70,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.defaultRows;
     }
 
+    public get exportRowsLimit() {
+        return this.config.exportRowsLimit;
+    }
+    
     public get urlFields() {
         return this.config.urlFields;
     }
