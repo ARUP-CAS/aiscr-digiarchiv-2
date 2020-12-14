@@ -37,6 +37,7 @@ public class DokumentSearcher implements EntitySearcher {
       String pristupnost = LoginServlet.pristupnost(request.getSession());
       filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
       SolrSearcher.addFavorites(jo, client, request);
+      getChilds(jo, client, request);
       return jo;
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
@@ -52,9 +53,9 @@ public class DokumentSearcher implements EntitySearcher {
     String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";  
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      if (LoginServlet.userId(request) != null) {
-        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
-      }
+//      if (LoginServlet.userId(request) != null) {
+//        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+//      }
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_akce", "akce", fieldsAkce);
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_akce", "akce", fieldsAkce);
       
