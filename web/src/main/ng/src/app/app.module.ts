@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe, registerLocaleData, DecimalPipe, CommonModule } from '@angular/common';
 import localeCs from '@angular/common/locales/cs';
 
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService, TranslateParser } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -45,6 +45,7 @@ import { DokumentComponent } from './entity/dokument/dokument.component';
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { NapovedaComponent } from './pages/napoveda/napoveda.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
+import { PaginatorI18n } from './components/paginator/paginator-i18n';
 import { FacetsUsedComponent } from './components/facets/facets-used/facets-used.component';
 import { FacetsSearchComponent } from './components/facets/facets-search/facets-search.component';
 import { FlotComponent } from './components/flot/flot.component';
@@ -73,6 +74,7 @@ import { Knihovna3dComponent } from './entity/knihovna3d/knihovna3d.component';
 import { VyskovyBodComponent } from './components/vyskovy-bod/vyskovy-bod.component';
 import { FacetsDynamicComponent } from './components/facets-dynamic/facets-dynamic.component';
 import { BibtextDialogComponent } from './components/bibtext-dialog/bibtext-dialog.component';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -101,14 +103,22 @@ export const MY_FORMATS = {
   },
 };
 
+export function createCustomMatPaginatorIntl(
+  translateService: TranslateService
+  ) {return new PaginatorI18n(translateService);}
+
 const providers: any[] =[
   { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
   { provide: MAT_DATE_LOCALE, useValue: 'cs-CZ' },
   {provide: DateAdapter, useClass: MomentDateAdapter,deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]},
   // {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  AppState, AppConfiguration, HttpClient,
+  AppState, AppConfiguration, HttpClient, 
   { provide: APP_INITIALIZER, useFactory: (config: AppConfiguration) => () => config.load(), deps: [AppConfiguration], multi: true },
+  {
+    provide: MatPaginatorIntl, deps: [TranslateService],
+    useFactory: createCustomMatPaginatorIntl
+  },
   DatePipe, DecimalPipe, AppService, AppHeslarService
 ];
 

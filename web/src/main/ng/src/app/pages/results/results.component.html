@@ -47,7 +47,7 @@
           <!-- <a (click)="showChartBar()"
           [matTooltip]="isChartBarCollapsed ? ('Zobrazit časovou osu' | translate) : ('Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
           <span class="app-pipe"></span> -->
-          <a [matMenuTriggerFor]="menuView" [matTooltip]="state.itemView + '.Zobrazení výsledků' | translate">
+          <a [matMenuTriggerFor]="menuView" [matTooltip]="'itemView.' + state.itemView | translate">
             <mat-icon [ngSwitch]="state.itemView">
               <ng-container *ngSwitchCase="'row'">reorder</ng-container>
               <ng-container *ngSwitchCase="'col'">apps</ng-container>
@@ -56,13 +56,13 @@
           </a><span class="app-pipe"></span>
           <mat-menu #menuView="matMenu">
             <button mat-menu-item (click)="setItemView('row')">
-              <mat-icon>reorder</mat-icon>{{ 'Řádkové zobrazení výsledků' | translate }}
+              <mat-icon>reorder</mat-icon>{{ 'itemView.row' | translate }}
             </button>
             <button mat-menu-item (click)="setItemView('col')">
-              <mat-icon>apps</mat-icon>{{ 'Sloupcové zobrazení výsledků' | translate }}
+              <mat-icon>apps</mat-icon>{{ 'itemView.col' | translate }}
             </button>
             <button mat-menu-item (click)="setItemView('default')">
-              <mat-icon>tv</mat-icon>{{ 'Výchozí zobrazení výsledků' | translate }}
+              <mat-icon>tv</mat-icon>{{ 'itemView.default' | translate }}
             </button>
           </mat-menu>
           <a [href]="exportUrl" [matTooltip]="'Export' | translate" target="_blank"><mat-icon>get_app</mat-icon></a>
