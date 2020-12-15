@@ -57,7 +57,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });
-    this.route.queryParams.subscribe(val => {
+    this.state.routeChanged.subscribe(val => {
       this.search(val);
       const parts = this.router.url.split('?');
       const str = parts.length > 1 ? parts[1] : '' + '&lang=' + this.state.currentLang;

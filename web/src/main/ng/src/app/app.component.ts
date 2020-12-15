@@ -51,6 +51,8 @@ export class AppComponent implements OnInit {
           this.document.body.classList.remove('app-view-map');
         }
 
+        this.state.setRouteChanged(val);
+
       }
     });
   }

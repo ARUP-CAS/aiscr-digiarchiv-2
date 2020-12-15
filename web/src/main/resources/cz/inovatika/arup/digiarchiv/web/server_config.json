@@ -19,7 +19,6 @@
   "sessionTimeout": 1800,
   "indexSecLevel": "E",
   
-  //DN: Tomuto nerozumím - proč zde nejsou všechny hesláře, nebo o co přesně jde?
   "translations": {
     "jazyk_dokumentu": {
       "heslar": "jazyk_dokumentu",
@@ -71,23 +70,23 @@
   "indexFieldsByType": {
     "dokument": [
       "ident_cely",
-      "typ_dokumentu", //indexovat překlad místo klíče
-      "material_originalu", //indexovat překlad místo klíče
-      "rada", //indexovat překlad místo klíče
+      "typ_dokumentu",
+      "material_originalu",
+      "rada",
       "autor",
       "rok_vzniku",
-      "organizace", //indexovat překlad místo klíče
-      "jazyk_dokumentu", //indexovat překlad místo klíče
-      "ulozeni_originalu", //indexovat překlad místo klíče
+      "organizace",
+      "jazyk_dokumentu",
+      "ulozeni_originalu",
       "child_soubor",
       "popis",
       "poznamka",
-      "typ_dokumentu_posudek", //indexovat překlad místo klíče
+      "typ_dokumentu_posudek",
       "oznaceni_originalu",
       
       "soubor_nazev",
       
-      "kategorie", //DN: co to je? asi neindexovat?
+      "kategorie",
       
       "jednotka_dokumentu_ident_cely",
       "jednotka_dokumentu_vazba_akce",
@@ -95,49 +94,49 @@
       "jednotka_dokumentu_poznamka",      
       
       "komponenta_dokument_ident_cely",
-      "komponenta_dokument_obdobi", //indexovat překlad místo klíče
+      "komponenta_dokument_obdobi", 
       "komponenta_dokument_presna_datace",
-      "komponenta_dokument_areal", //indexovat překlad místo klíče
-      "f_aktivita", //indexovat překlad místo klíče; jak správně označit komponentu dokumentu?
+      "komponenta_dokument_areal", 
+      "f_aktivita", 
       "komponenta_dokument_poznamka",
       
-      "nalez_dokumentu_typ_nalezu", //indexovat překlad místo klíče
-      "nalez_dokumentu_druh_nalezu", //indexovat překlad místo klíče
-      "nalez_dokumentu_kategorie", //indexovat překlad místo klíče
-      "nalez_dokumentu_specifikace", //indexovat překlad místo klíče
+      "nalez_dokumentu_typ_nalezu", 
+      "nalez_dokumentu_druh_nalezu", 
+      "nalez_dokumentu_kategorie", 
+      "nalez_dokumentu_specifikace", 
       "nalez_dokumentu_poznamka",
       
       "pian_id",
       
       "extra_data_region",
       "extra_data_cislo_objektu",
-      "extra_data_format", //indexovat překlad místo klíče
-      "extra_data_zachovalost", //indexovat překlad místo klíče
-      "extra_data_nahrada", //indexovat překlad místo klíče
+      "extra_data_format", 
+      "extra_data_zachovalost", 
+      "extra_data_nahrada", 
       "extra_data_odkaz",
       "extra_data_index",
       "extra_data_datum_vzniku",
-      "extra_data_udalost_typ", //indexovat překlad místo klíče
+      "extra_data_udalost_typ", 
       "extra_data_udalost",
-      "extra_data_zeme", //indexovat překlad místo klíče
+      "extra_data_zeme", 
       "extra_data_osoby",
       
       "let_ident_cely",
       "let_datum",
       "let_pozorovatel",
-      "let_organizace", //indexovat překlad místo klíče
+      "let_organizace", 
       "let_fotoaparat",
       "let_pilot",
       "let_typ_letounu",
       "let_ucel_letu",
-      "let_letiste_start", //indexovat překlad místo klíče
-      "let_letiste_cil", //indexovat překlad místo klíče
-      "let_pocasi", //indexovat překlad místo klíče
-      "let_dohlednost", //indexovat překlad místo klíče
+      "let_letiste_start", 
+      "let_letiste_cil", 
+      "let_pocasi", 
+      "let_dohlednost", 
       "let_uzivatelske_oznaceni",
       
-      "tvar_tvar", //indexovat překlad místo klíče
-      "tvar_poznamka"
+      "tvar_tvar", 
+      "tvar_poznamka",
       
       "neident_akce_okres",
       "neident_akce_katastr",
@@ -157,33 +156,33 @@
       "katastr",
       "dalsi_katastry",
       "vedouci_akce",
-      "organizace", //indexovat překlad místo klíče
-      "organizace_ostatni", //indexovat překlad místo klíče
+      "organizace", 
+      "organizace_ostatni", 
       "vedouci_akce_ostatni",
-      "hlavni_typ", //indexovat překlad místo klíče
-      "vedlejsi_typ", //indexovat překlad místo klíče
+      "hlavni_typ", 
+      "vedlejsi_typ", 
       "datum_zahajeni_v",
       "datum_ukonceni_v",
       "lokalizace",
-      "ulozeni_nalezu"
+      "ulozeni_nalezu",
       "uzivatelske_oznaceni",
       "child_dokument",
       
       "vazba_projekt_akce_id_projekt",
       
       "dok_jednotka_ident_cely",
-      "dok_jednotka_typ", //indexovat překlad místo klíče
+      "dok_jednotka_typ", 
       "dok_jednotka_nazev",
       
       "pian_ident_cely",
       
       "adb_ident_cely",
-      "adb_typ_sondy", //indexovat překlad místo klíče
+      "adb_typ_sondy", 
       "adb_uzivatelske_oznaceni_sondy",
       "adb_trat",
       "adb_cislo_popisne",
       "adb_parcelni_cislo",
-      "adb_podnet", //indexovat překlad místo klíče
+      "adb_podnet", 
       "adb_autor_popisu",
       "adb_rok_popisu",
       "adb_autor_revize",
@@ -191,23 +190,23 @@
       "adb_poznamka",
       
       "vyskovy_bod_ident_cely",
-      "vyskovy_bod_typ", //indexovat překlad místo klíče
+      "vyskovy_bod_typ", 
       
       "komponenta_ident_cely",
-      "komponenta_obdobi", //indexovat překlad místo klíče
+      "komponenta_obdobi", 
       "komponenta_presna_datace",
-      "komponenta_areal", //indexovat překlad místo klíče
-      "f_aktivita", //indexovat překlad místo klíče
+      "komponenta_areal", 
+      "f_aktivita", 
       "komponenta_poznamka",
       
-      "nalez_typ_nalezu", //indexovat překlad místo klíče
-      "nalez_druh_nalezu", //indexovat překlad místo klíče
-      "nalez_kategorie", //indexovat překlad místo klíče
-      "nalez_specifikace", //indexovat překlad místo klíče
+      "nalez_typ_nalezu", 
+      "nalez_druh_nalezu", 
+      "nalez_kategorie", 
+      "nalez_specifikace", 
       "nalez_poznamka",
       
       "ext_zdroj_ident_cely",
-      "ext_zdroj_typ", //indexovat překlad místo klíče
+      "ext_zdroj_typ", 
       "ext_zdroj_sysno",
       "ext_zdroj_autori",
       "ext_zdroj_nazev",
@@ -223,8 +222,8 @@
       "ext_zdroj_casopis_denik_nazev",
       "ext_zdroj_datum_rd",
       "ext_zdroj_link",
-      "ext_zdroj_typ_dokumentu", //indexovat překlad místo klíče
-      "ext_zdroj_organizace", //indexovat překlad místo klíče
+      "ext_zdroj_typ_dokumentu", 
+      "ext_zdroj_organizace", 
       "ext_zdroj_oznaceni"
     ],
     
@@ -233,35 +232,35 @@
       "okres",
       "katastr",
       "dalsi_katastry",
-      "typ_lokality", //indexovat překlad místo klíče
+      "typ_lokality", 
       "nazev",
-      "druh", //indexovat překlad místo klíče
+      "druh", 
       "popis",
       "poznamka",
       "uzivatelske_oznaceni",
       "child_dokument",
       
       "dok_jednotka_ident_cely",
-      "dok_jednotka_typ", //indexovat překlad místo klíče
+      "dok_jednotka_typ", 
       "dok_jednotka_nazev",
       
       "pian_ident_cely",
       
       "komponenta_ident_cely",
-      "komponenta_obdobi", //indexovat překlad místo klíče
+      "komponenta_obdobi", 
       "komponenta_presna_datace",
-      "komponenta_areal", //indexovat překlad místo klíče
-      "f_aktivita", //indexovat překlad místo klíče
+      "komponenta_areal", 
+      "f_aktivita", 
       "komponenta_poznamka",
       
-      "nalez_typ_nalezu", //indexovat překlad místo klíče
-      "nalez_druh_nalezu", //indexovat překlad místo klíče
-      "nalez_kategorie", //indexovat překlad místo klíče
-      "nalez_specifikace", //indexovat překlad místo klíče
+      "nalez_typ_nalezu", 
+      "nalez_druh_nalezu", 
+      "nalez_kategorie", 
+      "nalez_specifikace", 
       "nalez_poznamka",
       
       "ext_zdroj_ident_cely",
-      "ext_zdroj_typ", //indexovat překlad místo klíče
+      "ext_zdroj_typ", 
       "ext_zdroj_sysno",
       "ext_zdroj_autori",
       "ext_zdroj_nazev",
@@ -277,14 +276,14 @@
       "ext_zdroj_casopis_denik_nazev",
       "ext_zdroj_datum_rd",
       "ext_zdroj_link",
-      "ext_zdroj_typ_dokumentu", //indexovat překlad místo klíče
-      "ext_zdroj_organizace", //indexovat překlad místo klíče
+      "ext_zdroj_typ_dokumentu", 
+      "ext_zdroj_organizace", 
       "ext_zdroj_oznaceni"
     ],
     
     "projekt": [
       "ident_cely",
-      "typ_projektu", //indexovat překlad místo klíče
+      "typ_projektu", 
       "okres",
       "katastr",
       "dalsi_katastry",
@@ -293,9 +292,9 @@
       "parcelni_cislo",
       "planovane_zahajeni",
       "vedouci_projektu",
-      "organizace_prihlaseni", //indexovat překlad místo klíče
+      "organizace_prihlaseni", 
       "uzivatelske_oznaceni",
-      "kulturni_pamatka", //indexovat překlad místo klíče
+      "kulturni_pamatka", 
       "nkp_cislo",
       "nkp_popis",
       "datum_zahajeni",
@@ -308,14 +307,14 @@
       "ident_cely",
       "inv_cislo",
       "okres",
-      "nalezove_okolnosti", //indexovat překlad místo klíče
-      "obdobi", //indexovat překlad místo klíče
+      "nalezove_okolnosti", 
+      "obdobi", 
       "presna_datace",
-      "druh", //indexovat překlad místo klíče
-      "specifikace", //indexovat překlad místo klíče
+      "druh", 
+      "specifikace", 
       "poznamka",
       "nalezce",
-      "predano_organizace", //indexovat překlad místo klíče
+      "predano_organizace", 
       "katastr",
       "lokalizace",
       "projekt_id",
@@ -393,7 +392,7 @@
     "letiste",
     "material_dokumentu",
     "nahrada",
-    "nalezove_okolnosti", //DN: chybělo - doplněno
+    "nalezove_okolnosti", 
     "obdobi_druha",
     "obdobi_prvni",
     "objekt_druh",
@@ -403,7 +402,7 @@
     "pocasi",
     "podnet",
     "posudek",
-    "povrch", //DN: co to je za heslář?
+    "povrch", 
     "predmet_druh",
     "predmet_kategorie",
     "presnost",
@@ -437,5 +436,5 @@
   ],
 
   
-  "pasSecuredFields": ["lokalizace", "katastr"] //DN: kde se definují ostaní secure pole pro jiné entity?
+  "pasSecuredFields": ["lokalizace", "katastr"] 
 }

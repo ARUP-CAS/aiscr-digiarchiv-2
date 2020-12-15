@@ -17,6 +17,9 @@ export class AppState {
   private resultsSubject: Subject<string> = new Subject();
   public resultsChanged: Observable<string> = this.resultsSubject.asObservable();
 
+  private routeSubject: ReplaySubject<Params> = new ReplaySubject(1);
+  public routeChanged: Observable<Params> = this.routeSubject.asObservable();
+
   private facetsSubject: Subject<string> = new Subject();
   public facetsChanged: Observable<string> = this.facetsSubject.asObservable();
 
@@ -28,8 +31,6 @@ export class AppState {
 
   private mapViewSubject: Subject<string> = new Subject();
   public mapViewChanged: Observable<string> = this.mapViewSubject.asObservable();
-
-
 
   entity: string;
 
@@ -228,6 +229,10 @@ export class AppState {
       });
     }
 
+  }
+
+  setRouteChanged(val) {
+    this.routeSubject.next(val);
   }
 
   processParams(params: ParamMap) {
