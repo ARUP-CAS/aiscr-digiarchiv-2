@@ -772,10 +772,6 @@
        <str name="stats.field">datum_provedeni_do</str>
        <str name="stats.field">lat</str>
        <str name="stats.field">lng</str>
-	   <!--
-       <str name="f.rok_vzniku.facet.limit">-1</str>
-	   rok_vydani_vzniku
-	   -->
        
      </lst>
      <lst name="appends">

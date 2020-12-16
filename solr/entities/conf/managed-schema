@@ -292,6 +292,28 @@
  <uniqueKey>ident_cely</uniqueKey>
 
 
+<!--
+<copyField source="okres" dest="f_okres" />
+<copyField source="*_okres" dest="f_okres" />
+<copyField source="katastr" dest="f_katastr" />
+<copyField source="*_katastr" dest="f_katastr" />
+<copyField source="dalsi_katastry" dest="f_katastr" />
+
+<copyField source="obdobi" dest="f_obdobi" />
+<copyField source="*_obdobi" dest="f_obdobi" />
+
+<copyField source="areal" dest="f_areal" />
+<copyField source="*_areal" dest="f_areal" />
+
+<copyField source="*typ_nalezu" dest="f_typ_nalezu" />
+
+<copyField source="druh_nalezu" dest="f_druh_nalezu" />
+<copyField source="*druh_nalezu" dest="f_druh_nalezu" />
+<copyField source="nalez_kategorie" dest="f_kategorie" />
+<copyField source="*specifikace" dest="f_specifikace" />
+<copyField source="dok_jednotka_typ" dest="f_dok_jednotka_typ" />
+-->
+
 <copyField source="typ_dokumentu" dest="f_typ_dokumentu" /> 
 <copyField source="autor" dest="f_autor" />
 <copyField source="adb_autor_popisu" dest="f_autor" />
@@ -315,20 +337,8 @@
 <copyField source="akce_vedouci_akce" dest="adv_jmeno" />
 <copyField source="akce_vedouci_akce_ostatni" dest="adv_jmeno" />
 
-<copyField source="okres" dest="f_okres" />
-<copyField source="*_okres" dest="f_okres" />
-<copyField source="katastr" dest="f_katastr" />
-<copyField source="*_katastr" dest="f_katastr" />
-<copyField source="dalsi_katastry" dest="f_katastr" />
-
 <copyField source="rok_vzniku" dest="f_rok_vzniku" />
 <copyField source="rok_vydani" dest="f_rok_vydani" />
-
-<copyField source="obdobi" dest="f_obdobi" />
-<copyField source="*_obdobi" dest="f_obdobi" />
-
-<copyField source="areal" dest="f_areal" />
-<copyField source="*_areal" dest="f_areal" />
 
 <copyField source="*_obdobi_poradi" dest="obdobi_poradi" />
 
@@ -345,11 +355,6 @@
 <copyField source="let_dohlednost" dest="f_let_dohlednost" />
 
 <copyField source="tvar_tvar" dest="f_tvar" />
-
-<!--
-<copyField source="hlavni_typ" dest="f_typ_vyzkumu" />
-<copyField source="vedlejsi_typ" dest="f_typ_vyzkumu" />
--->
 
 <copyField source="material_originalu" dest="f_material_dokumentu" />
 
@@ -373,19 +378,11 @@
 <copyField source="typ_lokality" dest="f_typ_lokality" />
 <copyField source="druh" dest="f_druh_lokality" />
 
-<copyField source="*typ_nalezu" dest="f_typ_nalezu" />
-
-<copyField source="druh_nalezu" dest="f_druh_nalezu" />
-<copyField source="*druh_nalezu" dest="f_druh_nalezu" />
-<copyField source="nalez_kategorie" dest="f_kategorie" />
-<copyField source="*specifikace" dest="f_specifikace" />
-
 <copyField source="adb_typ_sondy" dest="f_adb_typ_sondy" />
 <copyField source="adb_podnet" dest="f_adb_podnet" />
 <copyField source="pian_typ" dest="f_pian_typ" />
 <copyField source="pian_presnost" dest="f_pian_presnost" />
 <copyField source="pian_zm10" dest="f_pian_zm10" />
-<copyField source="dok_jednotka_typ" dest="f_dok_jednotka_typ" />
 
 
 <copyField source="popis" dest="f_popis" />

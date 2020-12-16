@@ -345,7 +345,7 @@ public class Projekt implements Entity {
   }
 
   @Override
-  public boolean isSearchable() {
+  public boolean isEntity() {
     return true;
   }
   

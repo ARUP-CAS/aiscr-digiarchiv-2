@@ -342,7 +342,7 @@ public class Lokalita implements Entity {
   } 
 
   @Override
-  public boolean isSearchable() {
+  public boolean isEntity() {
     return true;
   }
 }

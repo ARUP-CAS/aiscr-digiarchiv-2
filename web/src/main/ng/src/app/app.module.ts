@@ -86,7 +86,7 @@ export function createTranslateLoader(http: HttpClient) {
   if (environment.mocked) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
   } else {
-    return new TranslateHttpLoader(http, '/api/assets/i18n/', '.json');
+    return new TranslateHttpLoader(http, 'api/assets/i18n/', '.json');
   }
 }
 

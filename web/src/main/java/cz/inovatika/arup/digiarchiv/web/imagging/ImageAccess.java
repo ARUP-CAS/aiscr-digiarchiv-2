@@ -13,12 +13,9 @@ public class ImageAccess {
     boolean full = Boolean.parseBoolean(request.getParameter("full"));
     boolean allow;
       String userPr = LoginServlet.pristupnost(request.getSession());
-//    if (full) {
-//      // same as FileViewerComponent (in frontend)
-//      allow = (userPr != null) && (userPr.compareToIgnoreCase("D") >= 0);
-//    } else {
       String size = request.getParameter("size");
-      if ((size == null) || "thumb".equals(size)) {
+      boolean isThumb = !full && ((size == null) || "thumb".equals(size));
+      if (isThumb) {
         allow = true;
       } else {
         String id = request.getParameter("id");
@@ -27,6 +24,9 @@ public class ImageAccess {
           field = "dokument";
         }
         JSONObject dok = SolrSearcher.getDokBySoubor(id);
+        if (dok == null) {
+          return false;
+        }
         String imgPr = dok.getString("pristupnost");
         boolean sameOrg = LoginServlet.organizace(request.getSession()).toLowerCase().equals(dok.getString("organizace").toLowerCase())  && "C".compareTo(userPr) >= 0;
         if ("A".equals(imgPr)) {
@@ -35,7 +35,6 @@ public class ImageAccess {
           allow = (userPr != null) && (userPr.compareToIgnoreCase(imgPr) >= 0 || sameOrg);
         }
       }
-    // }
     
     return allow;
   }

@@ -97,7 +97,7 @@ public class SolrSearcher {
       query.setStart(start);
     }
     
-    List<Object> facetFields = Options.getInstance().getClientConf().getJSONArray("facets").toList();
+    List<Object> facetFields = Options.getInstance().getJSONArray("securedFacets").toList();
     for (Object f : facetFields) {
       if (!((String)f).contains("okres") && !((String)f).equals("pristupnost")) {
         //query.addFacetField("{!ex=" + f + "F key=" + f + "}" + f + "_" + pristupnost);

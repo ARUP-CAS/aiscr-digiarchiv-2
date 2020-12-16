@@ -144,7 +144,7 @@ public class DokJednotka implements Entity {
   }
   
   @Override
-  public boolean isSearchable() {
+  public boolean isEntity() {
     return true;
   }
   

@@ -57,7 +57,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });
-    this.state.routeChanged.subscribe(val => {
+    this.route.queryParams.subscribe(val => {
       this.search(val);
       const parts = this.router.url.split('?');
       const str = parts.length > 1 ? parts[1] : '' + '&lang=' + this.state.currentLang;
@@ -112,7 +112,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.state.loading = true;
     const p = Object.assign({}, params);
-    p.mapa = !this.state.isMapaCollapsed;
+    // p.mapa = !this.state.isMapaCollapsed;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       this.state.setSearchResponse(resp);
       this.docs = resp.response.docs;

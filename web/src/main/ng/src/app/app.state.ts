@@ -17,7 +17,7 @@ export class AppState {
   private resultsSubject: Subject<string> = new Subject();
   public resultsChanged: Observable<string> = this.resultsSubject.asObservable();
 
-  private routeSubject: ReplaySubject<Params> = new ReplaySubject(1);
+  private routeSubject: ReplaySubject<Params> = new ReplaySubject(0);
   public routeChanged: Observable<Params> = this.routeSubject.asObservable();
 
   private facetsSubject: Subject<string> = new Subject();

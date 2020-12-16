@@ -63,7 +63,7 @@ public class Soubor implements Entity {
   }
   
   @Override
-  public boolean isSearchable() {
+  public boolean isEntity() {
     return false;
   }
   

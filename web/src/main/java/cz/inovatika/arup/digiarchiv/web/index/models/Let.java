@@ -83,7 +83,7 @@ public class Let implements Entity {
   }
   
   @Override
-  public boolean isSearchable() {
+  public boolean isEntity() {
     return true;
   }
   

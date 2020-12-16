@@ -150,7 +150,7 @@ public class OAIUtils {
       SolrInputDocument idoc = dob.toSolrInputDocument(bean);
       bean.fillFields(idoc);
       bean.addRelations(solrRels, idoc);
-      if (bean.isSearchable()) {
+      if (bean.isEntity()) {
         if ("dokument".equals(entity) && "3D".equals(idoc.getFieldValue("rada"))) {
           idoc.addField("entity", "knihovna_3d");
         } else {
@@ -190,7 +190,7 @@ public class OAIUtils {
         if (second) {
           bean.secondRound(solrRels, idoc);
         }
-        if (bean.isSearchable()) {
+        if (bean.isEntity()) {
           if ("dokument".equals(entity) && idoc.getFieldValue("rada").equals("3D")) {
             idoc.addField("entity", "knihovna_3d");
           } else {

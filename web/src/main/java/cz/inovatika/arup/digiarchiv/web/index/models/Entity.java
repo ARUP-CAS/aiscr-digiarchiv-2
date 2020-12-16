@@ -22,6 +22,6 @@ public interface Entity {
   public void addRelations(HttpSolrClient client, SolrInputDocument idoc);
   public void setFullText(SolrInputDocument idoc);
   public void secondRound(HttpSolrClient client, SolrInputDocument idoc);
-  public boolean isSearchable();
+  public boolean isEntity();
   
 }

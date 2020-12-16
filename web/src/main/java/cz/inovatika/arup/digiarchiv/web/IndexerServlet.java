@@ -161,7 +161,7 @@ public class IndexerServlet extends HttpServlet {
             JSONArray ja = new JSONArray();
             Options.resetInstance();
             HeslarIndexer h = new HeslarIndexer();
-            boolean clean = Boolean.parseBoolean(req.getParameter("clean"));
+            boolean clean = req.getParameter("clean") == null || Boolean.parseBoolean(req.getParameter("clean"));
             if (clean) {
               h.clean();
             }

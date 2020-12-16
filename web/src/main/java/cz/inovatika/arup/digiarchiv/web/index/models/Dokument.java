@@ -513,7 +513,7 @@ public class Dokument implements Entity {
   }
 
   @Override
-  public boolean isSearchable() {
+  public boolean isEntity() {
     return true;
   }
   

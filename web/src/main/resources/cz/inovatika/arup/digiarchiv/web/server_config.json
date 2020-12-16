@@ -67,6 +67,11 @@
     "user": "",
     "pwd": ""
   },
+  
+  "securedFacets": ["f_areal", "f_obdobi", "f_aktivita",
+    "f_kategorie", "f_druh_nalezu", "f_specifikace", "f_typ_nalezu",
+    "f_okres", "f_katastr", "f_typ_vyzkumu","f_dok_jednotka_typ"],
+  
   "indexFieldsByType": {
     "dokument": [
       "ident_cely",
