@@ -176,11 +176,13 @@
 
   "sortBy": {
     "ident_cely": "Idetifikátor",
-    "okres": "Okres + katastr",
+    "okres": "Okres, katastr",
+    "katastr": "Katastr",
     "autor": "Autor",
     "nalezce": "Nálezce",
     "datum_nalezu": "Datum nálezu",
     "vedouci_akce": "Vedoucí akce",
+    "datum_ukonceni": "Datum ukončení",
     "vedouci_projektu": "Vedoucí projektu",
     "rok_vzniku": "Rok vzniku",
     "nazev": "Název",
