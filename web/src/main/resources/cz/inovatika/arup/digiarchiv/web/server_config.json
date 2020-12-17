@@ -176,7 +176,7 @@
       "dok_jednotka_typ", 
       "dok_jednotka_nazev",
       
-      "pian_ident_cely",
+      "pian_id",
       
       "adb_ident_cely",
       "adb_typ_sondy", 
@@ -225,7 +225,7 @@
       "dok_jednotka_typ", 
       "dok_jednotka_nazev",
       
-      "pian_ident_cely",
+      "pian_id",
       
       "komponenta_ident_cely",
       "komponenta_obdobi", 
