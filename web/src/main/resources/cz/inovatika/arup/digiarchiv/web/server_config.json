@@ -205,28 +205,7 @@
       "nalez_druh_nalezu", 
       "nalez_kategorie", 
       "nalez_specifikace", 
-      "nalez_poznamka",
-      
-      "ident_cely",
-      "typ", 
-      "sysno",
-      "autori",
-      "nazev",
-      "podnazev",
-      "edice_rada",
-      "rok_vydani_vzniku",
-      "isbn",
-      "issn",
-      "vydavatel",
-      "sbornik_editor",
-      "sbornik_nazev",
-      "misto",
-      "casopis_denik_nazev",
-      "datum_rd",
-      "link",
-      "typ_dokumentu", 
-      "organizace", 
-      "oznaceni"
+      "nalez_poznamka"
     ],
     
     "lokalita": [
@@ -259,28 +238,7 @@
       "nalez_druh_nalezu", 
       "nalez_kategorie", 
       "nalez_specifikace", 
-      "nalez_poznamka",
-      
-      "ident_cely",
-      "typ", 
-      "sysno",
-      "autori",
-      "nazev",
-      "podnazev",
-      "edice_rada",
-      "rok_vydani_vzniku",
-      "isbn",
-      "issn",
-      "vydavatel",
-      "sbornik_editor",
-      "sbornik_nazev",
-      "misto",
-      "casopis_denik_nazev",
-      "datum_rd",
-      "link",
-      "typ_dokumentu", 
-      "organizace", 
-      "oznaceni"
+      "nalez_poznamka"
     ],
     
     "projekt": [
