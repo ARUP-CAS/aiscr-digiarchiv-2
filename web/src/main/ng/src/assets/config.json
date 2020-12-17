@@ -95,7 +95,6 @@
     "intruze": "intruze"
   },
 
-  //DN: Kde se můžu podívat na strukturu indexu? Jak přesně mám referovat konkrétní pole v konrétní datové třídě?
   "filterFields": [
     {
       "type": "text",
