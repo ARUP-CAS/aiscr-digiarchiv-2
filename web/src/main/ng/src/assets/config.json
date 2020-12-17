@@ -33,8 +33,10 @@
   "sorts": [
     { "label": "ident_cely", "field": "ident_cely", "dir": "asc" },
     { "label": "ident_cely", "field": "ident_cely", "dir": "desc" },
-    { "label": "okres", "field": "okres_sort", "dir": "asc", "entity": ["projekt", "akce", "lokalita"] },
-    { "label": "okres", "field": "okres_sort", "dir": "desc", "entity": ["projekt", "akce", "lokalita"] },
+    { "label": "okres", "field": "okres_sort", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "okres", "field": "okres_sort", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "katastr", "field": "katastr", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "katastr", "field": "katastr", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
     { "label": "autor", "field": "autor_sort", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
     { "label": "autor", "field": "autor_sort", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
     { "label": "nalezce", "field": "autor_sort", "dir": "asc", "entity": ["samostatny_nalez"] },
@@ -43,6 +45,8 @@
     { "label": "datum_nalezu", "field": "datum_nalezu", "dir": "desc", "entity": ["samostatny_nalez"] },
     { "label": "vedouci_akce", "field": "autor_sort", "dir": "asc", "entity": ["akce"] },
     { "label": "vedouci_akce", "field": "autor_sort", "dir": "desc", "entity": ["akce"] },
+    { "label": "datum_ukonceni", "field": "datum_ukonceni_v", "dir": "asc", "entity": ["akce"] },
+    { "label": "datum_ukonceni", "field": "datum_ukonceni_v", "dir": "desc", "entity": ["akce"] },
     { "label": "vedouci_projektu", "field": "autor_sort", "dir": "asc", "entity": ["projekt"] },
     { "label": "vedouci_projektu", "field": "autor_sort", "dir": "desc", "entity": ["projekt"] },
     { "label": "rok_vzniku", "field": "rok_vzniku", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
@@ -91,55 +95,18 @@
   },
 
   "filterFields": [
-    {
-      "type": "text",
-      "field": "f_poznamka"
-    },
-    {
-      "type": "text",
-      "field": "f_popis"
-    },
-    {
-      "type": "text",
-      "field": "f_podnazev"
-    },
-    {
-      "type": "number",
-      "field": "hloubka"
-    },
-    {
-      "type": "date",
-      "field": "datum_zverejneni"
-    },
-    {
-      "type": "date",
-      "field": "datum_provedeni"
-    },
-    {
-      "type": "date",
-      "field": "extra_data_datum_vzniku"
-    },
-    {
-      "type": "date",
-      "field": "let_datum"
-    },
-    {
-      "type": "date",
-      "field": "datum_nalezu"
-    },
-    {
-      "type": "rok",
-      "field": "rok_vzniku"
-    },
-    {
-      "type": "boolean",
-      "field": "je_nz"
-    },
-    {
-      "type": "boolean",
-      "field": "dok_jednotka_negativni_jednotka"
-    }
-    
+    {"type": "text", "field": "f_poznamka"},
+    {"type": "text", "field": "f_popis"},
+    {"type": "text", "field": "f_podnazev"},
+    {"type": "number", "field": "hloubka"},
+    {"type": "date", "field": "datum_zverejneni"},
+    {"type": "date", "field": "datum_provedeni"},
+    {"type": "date", "field": "extra_data_datum_vzniku"},
+    {"type": "date", "field": "let_datum"},
+    {"type": "date", "field": "datum_nalezu"},
+    {"type": "rok",  "field": "rok_vzniku"},
+    {"type": "boolean", "field": "je_nz"},
+    {"type": "boolean", "field": "dok_jednotka_negativni_jednotka"}    
   ],
   
   "user": {
@@ -156,11 +123,6 @@
     "f_okres",
     "f_katastr",
     
-    "f_autor",
-    "f_vedouci",
-    "f_nalezce",
-    "f_osoby",
-    
     "f_obdobi",
     "f_areal",
     "f_aktivita",
@@ -168,17 +130,19 @@
     "f_kategorie",
     "f_druh_nalezu",
     "f_specifikace",
-    "f_tvar",
     
+    "f_vedouci",
     "f_typ_vyzkumu",
     "f_adb_typ_sondy",
     "f_adb_podnet",    
+    "f_nalezce",
     "f_nalezove_okolnosti",    
     "f_typ_lokality",    
     "f_druh_lokality",
     "f_typ_projektu",
     "f_kulturni_pamatka",
     
+    "f_autor",
     "kategorie_dokumentu",
     "f_rada",
     "f_typ_dokumentu",
@@ -188,6 +152,8 @@
     "f_ulozeni_originalu",
     "f_format",
     "f_zachovalost",
+    "f_tvar",
+    "f_osoby",
     
     "f_dok_jednotka_typ",
     "f_pian_typ",
