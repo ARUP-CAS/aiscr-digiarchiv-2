@@ -98,7 +98,7 @@
       "komponenta_dokument_obdobi", //indexovat překlad místo klíče
       "komponenta_dokument_presna_datace",
       "komponenta_dokument_areal", //indexovat překlad místo klíče
-      "f_aktivita", //indexovat překlad místo klíče; jak správně označit komponentu dokumentu?
+      "f_aktivita", //indexovat překlad místo klíče
       "komponenta_dokument_poznamka",
       
       "nalez_dokumentu_typ_nalezu", //indexovat překlad místo klíče
@@ -393,7 +393,7 @@
     "letiste",
     "material_dokumentu",
     "nahrada",
-    "nalezove_okolnosti", //DN: chybělo - doplněno
+    "nalezove_okolnosti",
     "obdobi_druha",
     "obdobi_prvni",
     "objekt_druh",
