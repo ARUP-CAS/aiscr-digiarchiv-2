@@ -176,11 +176,13 @@
 
   "sortBy": {
     "ident_cely": "Identifier",
-    "okres": "District + cadastre",
+    "okres": "District, cadastre",
+    "katastr": "Cadastre",
     "autor": "Author",
     "nalezce": "Finder",
     "datum_nalezu": "Finding date",
     "vedouci_akce": "Principal researcher",
+    "datum_ukonceni": "Ending date",
     "vedouci_projektu": "Project manager",
     "rok_vzniku": "Year of creation",
     "nazev": "Name",
