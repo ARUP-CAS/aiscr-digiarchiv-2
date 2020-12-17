@@ -475,12 +475,12 @@ public class SolrSearcher {
         idoc.addField("f_specifikace_" + sufix, idoc.getFieldValues(field));
       }
     }
-//
-//    if (field.contains("okres")) {
-//      for (String sufix : prSufix) {
-//        idoc.addField("f_okres_" + sufix, idoc.getFieldValues(field));
-//      }
-//    }
+
+    if (field.equals("okres")) {
+      for (String sufix : prSufix) {
+        idoc.addField("f_okres_" + sufix, idoc.getFieldValues(field));
+      }
+    }
     if (field.contains("katastr")&& !field.equals("dalsi_katastry")) {
       for (String sufix : prSufix) {
         idoc.addField("f_katastr_" + sufix, idoc.getFieldValues(field));

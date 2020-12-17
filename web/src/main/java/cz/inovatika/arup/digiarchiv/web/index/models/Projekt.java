@@ -61,25 +61,7 @@ public class Projekt implements Entity {
   public String planovane_zahajeni;
 
   @Field
-  public String objednatel;
-
-  @Field
-  public String odpovedna_osoba;
-
-  @Field
-  public String adresa;
-
-  @Field
-  public String telefon;
-
-  @Field
-  public String email;
-
-  @Field
   public String vedouci_projektu;
-
-  @Field
-  public String organizace_zapisu;
 
   @Field
   public String organizace_prihlaseni;

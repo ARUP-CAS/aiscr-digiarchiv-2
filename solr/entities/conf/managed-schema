@@ -314,6 +314,9 @@
 <copyField source="dok_jednotka_typ" dest="f_dok_jednotka_typ" />
 -->
 
+<copyField source="okres" dest="f_okres" />
+<copyField source="*_okres" dest="f_okres" />
+
 <copyField source="typ_dokumentu" dest="f_typ_dokumentu" /> 
 <copyField source="autor" dest="f_autor" />
 <copyField source="adb_autor_popisu" dest="f_autor" />
@@ -376,7 +379,9 @@
 <copyField source="nalezove_okolnosti" dest="f_nalezove_okolnosti" /> 
 
 <copyField source="typ_lokality" dest="f_typ_lokality" />
+<!--
 <copyField source="druh" dest="f_druh_lokality" />
+-->
 
 <copyField source="adb_typ_sondy" dest="f_adb_typ_sondy" />
 <copyField source="adb_podnet" dest="f_adb_podnet" />

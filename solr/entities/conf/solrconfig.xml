@@ -822,6 +822,11 @@
        <str name="facet.field">f_tvar</str>
 
        <str name="facet.field">f_nalezove_okolnosti</str>
+       <str name="facet.field">f_pian_typ</str>
+       <str name="facet.field">f_pian_presnost</str>
+       <str name="facet.field">f_pian_zm10</str>
+       <str name="facet.field">f_adb_typ_sondy</str>
+       <str name="facet.field">f_adb_podnet</str>
 
      </lst>
   </initParams>
