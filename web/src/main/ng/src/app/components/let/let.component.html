@@ -10,7 +10,7 @@
       <tbody>
         <tr *ngIf="result.datum || result.hodina_zacatek || result.hodina_konec">
           <th class="app-label">{{ 'Datum a čas' | translate }}:</th>
-          <td>{{ result.datum | date : 'dd.MM.yyyy' }} {{ result.hodina_zacatek }}-{{ result.hodina_konec }}</td>
+          <td>{{ result.datum | date : 'yyyy-MM-dd' }} {{ result.hodina_zacatek }} - {{ result.hodina_konec }}</td>
         </tr>
         <tr *ngIf="result.letiste_start || result.letiste_cil">
           <th class="app-label">{{ 'Trasa' | translate }}:</th>
@@ -25,11 +25,11 @@
         </tr>
         <tr *ngIf="result.pozorovatel">
           <th class="app-label">{{ 'field.f_pozorovatel' | translate }}:</th>
-          <td>{{ result.pozorovatel }}</td>
+          <td><app-inline-filter [field]="'f_let_pozorovatel'" [value]="result.pozorovatel"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.pilot">
           <th class="app-label">{{ 'Pilot' | translate }}:</th>
-          <td>{{ result.pilot }}</td>
+          <td><app-inline-filter [field]="'f_let_pilot'" [value]="result.pilot"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.organizace">
           <th class="app-label">{{ 'field.f_organizace' | translate }}:</th>
