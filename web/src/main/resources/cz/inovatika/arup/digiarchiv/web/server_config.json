@@ -87,8 +87,6 @@
       
       "soubor_nazev",
       
-      "kategorie", //DN: co to je? asi neindexovat?
-      
       "jednotka_dokumentu_ident_cely",
       "jednotka_dokumentu_vazba_akce",
       "jednotka_dokumentu_vazba_lokalita",
