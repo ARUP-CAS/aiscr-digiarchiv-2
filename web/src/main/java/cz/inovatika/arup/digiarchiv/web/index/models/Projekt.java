@@ -167,6 +167,7 @@ public class Projekt implements Entity {
       String okres_sort = okres;
       if (katastr != null) {
         okres_sort += " " + katastr;
+        SolrSearcher.addFieldNonRepeat(idoc, "katastr_sort", katastr);
       }
       SolrSearcher.addFieldNonRepeat(idoc, "okres_sort", okres_sort);
     }

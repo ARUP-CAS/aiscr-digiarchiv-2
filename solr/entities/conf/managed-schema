@@ -276,6 +276,7 @@
    <field name="autor_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    <field name="organizace_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    <field name="okres_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
+   <field name="katastr_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    
    <!-- For all other fields -->
    <dynamicField name="*" type="lowercase_cs" multiValued="false"/>

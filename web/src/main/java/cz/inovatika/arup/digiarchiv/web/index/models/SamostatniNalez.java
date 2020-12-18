@@ -122,7 +122,7 @@ public class SamostatniNalez implements Entity {
       SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
       SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
     }
-    
+     
     if (nalezce != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", nalezce);
     }
@@ -133,6 +133,7 @@ public class SamostatniNalez implements Entity {
       String okres_sort = okres;
       if (katastr != null) {
         okres_sort += " " + katastr;
+        SolrSearcher.addFieldNonRepeat(idoc, "katastr_sort", katastr);
       }
       SolrSearcher.addFieldNonRepeat(idoc, "okres_sort", okres_sort);
     }
