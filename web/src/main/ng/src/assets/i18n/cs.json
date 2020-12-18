@@ -338,16 +338,14 @@
 		"record" : "AMČR: Záznam"
 	},
 	
-	"f_aktivita": {
-		"sidlistni": "sídlištní",
-		"pohrebni": "pohřební",
-		"vyrobni": "výrobní",
-		"tezebni": "těžební",
-		"kultovni": "kultovní",
-		"komunikace": "komunikační",
-		"deponovani": "deponování",
-		"boj": "boj",
-		"jina": "jiný druh aktivity",
-		"intruze": "intruze"
-	}
+		"f_aktivita_sidlistni": "sídlištní",
+		"f_aktivita_pohrebni": "pohřební",
+		"f_aktivita_vyrobni": "výrobní",
+		"f_aktivita_tezebni": "těžební",
+		"f_aktivita_kultovni": "kultovní",
+		"f_aktivita_komunikace": "komunikační",
+		"f_aktivita_deponovani": "deponování",
+		"f_aktivita_boj": "boj",
+		"f_aktivita_jina": "jiný druh aktivity",
+		"f_aktivita_intruze": "intruze"
 }

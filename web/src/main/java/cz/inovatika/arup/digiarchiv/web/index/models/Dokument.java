@@ -118,12 +118,31 @@ public class Dokument implements Entity {
 
   @Field
   public List<String> odkaz;
+  
+  List<String> prSufix = new ArrayList<>();
 
   @Override
   public void fillFields(SolrInputDocument idoc) {
 
     boolean searchable = stav == 3 && !"zl".equals(rada.toLowerCase()) && !"za".equals(rada.toLowerCase());
     idoc.setField("searchable", searchable);
+    
+    String pr = (String) idoc.getFieldValue("pristupnost");
+    // pr = "A";
+
+    if ("A".compareTo(pr) >= 0) {
+      prSufix.add("A");
+    }
+    if ("B".compareTo(pr) >= 0) {
+      prSufix.add("B");
+    }
+    if ("C".compareTo(pr) >= 0) {
+      prSufix.add("C");
+    }
+    if ("D".compareTo(pr) >= 0) {
+      prSufix.add("D");
+    }
+
     String kategorie = Options.getInstance().getJSONObject("kategoriet").optString(typ_dokumentu);
     SolrSearcher.addFieldNonRepeat(idoc, "kategorie_dokumentu", kategorie);
 
@@ -211,6 +230,7 @@ public class Dokument implements Entity {
 
       if (doc.has("katastr")) {
         SolrSearcher.addFieldNonRepeat(idoc, field + "_katastr", doc.getString("katastr"));
+        // SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), prSufix);
         SolrSearcher.addFieldNonRepeat(idoc, field + "_okres", doc.getString("okres"));
       }
       if (doc.has("komponenta")) {
@@ -481,27 +501,11 @@ public class Dokument implements Entity {
   public void setFullText(SolrInputDocument idoc) {
     Object[] fields = idoc.getFieldNames().toArray();
     List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("dokument").toList();
-    String pr = (String) idoc.getFieldValue("pristupnost");
-    pr = "A";
-    List<String> prSufix = new ArrayList<>();
-
-    if ("A".compareTo(pr) >= 0) {
-      prSufix.add("A");
-    }
-    if ("B".compareTo(pr) >= 0) {
-      prSufix.add("B");
-    }
-    if ("C".compareTo(pr) >= 0) {
-      prSufix.add("C");
-    }
-    if ("D".compareTo(pr) >= 0) {
-      prSufix.add("D");
-    }
-
+    
     for (Object f : fields) {
       String s = (String) f;
       
-      SolrSearcher.addCommonFieldFacets(s, idoc, prSufix);
+      SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {

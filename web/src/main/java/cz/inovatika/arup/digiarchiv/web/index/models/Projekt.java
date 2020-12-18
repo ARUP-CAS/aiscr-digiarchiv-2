@@ -316,7 +316,7 @@ public class Projekt implements Entity {
     Object[] fields = idoc.getFieldNames().toArray();
     for (Object f : fields) {
       String s = (String) f;
-      SolrSearcher.addCommonFieldFacets(s, idoc, prSufix);
+      SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {

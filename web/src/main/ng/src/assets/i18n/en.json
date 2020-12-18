@@ -336,16 +336,15 @@
     "record":"AMCR: Record"
 	},
 
-  "f_aktivita": {
-    "sidlistni": "residential",
-    "pohrebni": "burial",
-    "vyrobni": "production",
-    "tezebni": "mining",
-    "kultovni": "ritual",
-    "komunikace": "transportation",
-    "deponovani": "deposition",
-    "boj": "fighting",
-    "jina": "other activity",
-    "intruze": "find intrusion"
-  }
+  
+    "f_aktivita_sidlistni": "residential",
+    "f_aktivita_pohrebni": "burial",
+    "f_aktivita_vyrobni": "production",
+    "f_aktivita_tezebni": "mining",
+    "f_aktivita_kultovni": "ritual",
+    "f_aktivita_komunikace": "transportation",
+    "f_aktivita_deponovani": "deposition",
+    "f_aktivita_boj": "fighting",
+    "f_aktivita_jina": "other activity",
+    "f_aktivita_intruze": "find intrusion"
 }

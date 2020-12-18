@@ -51,7 +51,6 @@ public class ExtZdroj implements Entity {
 
   @Field
   public String isbn;
-  ;
 
   @Field
   public String issn;

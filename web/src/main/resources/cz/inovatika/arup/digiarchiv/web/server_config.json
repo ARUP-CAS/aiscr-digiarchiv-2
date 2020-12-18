@@ -56,7 +56,7 @@
       "heslar": "katastr",
       "label": "caption"
     },
-    "okres": {
+    "okres": { 
       "heslar": "okresy",
       "label": "full_name"
     }

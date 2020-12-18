@@ -342,6 +342,7 @@ public class Akce implements Entity {
               pianDoc = pians.getJSONObject(0);
               for (int pian = 0; pian < pians.length(); pian++) {
                 SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pians.getJSONObject(pian).optString("ident_cely"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian_ident_cely", pians.getJSONObject(pian).optString("ident_cely"));
                 SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pians.getJSONObject(pian).optString("typ"));
                 SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pians.getJSONObject(pian).optString("presnost"));
                 SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pians.getJSONObject(pian).optString("zm10"));
@@ -349,7 +350,7 @@ public class Akce implements Entity {
 
             } else {
               pianDoc = (JSONObject) p;
-              SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pianDoc.optString("ident_cely"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian_ident_cely", pianDoc.optString("ident_cely"));
               SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pianDoc.optString("typ"));
               SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pianDoc.optString("presnost"));
               SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pianDoc.optString("zm10"));
@@ -422,7 +423,7 @@ public class Akce implements Entity {
     for (Object f : fields) {
       String s = (String) f;
       
-      SolrSearcher.addCommonFieldFacets(s, idoc, prSufix);
+      SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {

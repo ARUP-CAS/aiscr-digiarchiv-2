@@ -53,6 +53,7 @@ export class Configuration {
   selRows: number[];
   defaultRows: number;
   exportRowsLimit: number;
+  exportFields: {[entity: string]: {name: string, heslar?: string, secured?: boolean}};
   urlFields: string[];
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};

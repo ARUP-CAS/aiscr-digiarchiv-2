@@ -258,7 +258,6 @@ public class Lokalita implements Entity {
           }
         }
         if (doc.has("pian")) {
-          // addGeometry(client, idoc, doc.getJSONArray("pian").getJSONObject(0).getString("ident_cely"));
           JSONObject pianDoc;
           Object p = doc.get("pian");
           if (p instanceof JSONArray) {
@@ -315,7 +314,7 @@ public class Lokalita implements Entity {
     Object[] fields = idoc.getFieldNames().toArray();
     for (Object f : fields) {
       String s = (String) f;
-      SolrSearcher.addCommonFieldFacets(s, idoc, prSufix);
+      SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
       
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {

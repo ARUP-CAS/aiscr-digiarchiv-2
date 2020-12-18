@@ -29,6 +29,9 @@ public class ADB implements Entity {
 
   @Field
   public String parent;
+  
+  @Field
+  public String uzivatelske_oznaceni_sondy;
 
   @Field
   public String datum;

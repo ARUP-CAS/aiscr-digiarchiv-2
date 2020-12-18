@@ -3,13 +3,13 @@
     <thead>
       <tr>
         <th>#</th>
-        <th *ngFor="let field of fields[state.entity]">{{'field.' + field.name | translate}}</th>
+        <th *ngFor="let field of config.exportFields[state.entity]">{{'field.' + field.name | translate}}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let r of docs; let idx = index">
         <td>{{idx + 1}}</td>
-        <td *ngFor="let field of fields[state.entity]">
+        <td *ngFor="let field of config.exportFields[state.entity]">
           <ng-container *ngIf="!field.secured || hasRights(r)">
             <ng-container *ngIf="!field.heslar">
               {{r[field.name]}}

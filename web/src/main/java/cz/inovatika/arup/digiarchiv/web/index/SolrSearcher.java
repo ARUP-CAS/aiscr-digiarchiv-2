@@ -82,7 +82,7 @@ public class SolrSearcher {
       // Zohlednit organizace. Hledame full_text pro "D" + organizace
       q += " OR (text_all_D:(" + q + ") AND organizace:\"" + organizace + "\")";
     }
-    query.setQuery(q); 
+    query.setQuery(q);
 
     int rows = Options.getInstance().getClientConf().getInt("defaultRows");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
@@ -96,20 +96,20 @@ public class SolrSearcher {
       start = (Integer.parseInt(request.getParameter("page"))) * rows;
       query.setStart(start);
     }
-    
+
     List<Object> facetFields = Options.getInstance().getJSONArray("securedFacets").toList();
     for (Object f : facetFields) {
-      if (!((String)f).contains("okres") && !((String)f).equals("pristupnost")) {
+      if (!((String) f).contains("okres") && !((String) f).equals("pristupnost")) {
         //query.addFacetField("{!ex=" + f + "F key=" + f + "}" + f + "_" + pristupnost);
         query.addFacetField("{!key=" + f + "}" + f + "_" + pristupnost);
       }
     }
     //if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
-      if (request.getParameter("sort") != null) {
-        query.setParam("sort", request.getParameter("sort"));
-      } else {
-        query.setParam("sort", "ident_cely asc");
-      }
+    if (request.getParameter("sort") != null) {
+      query.setParam("sort", request.getParameter("sort"));
+    } else {
+      query.setParam("sort", "ident_cely asc");
+    }
     //}
 
     if (request.getParameter("inFavorites") != null) {
@@ -218,13 +218,13 @@ public class SolrSearcher {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (field.startsWith("f_typ_vyzkumu")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_dok_jednotka_typ")) { 
+        } else if (field.startsWith("f_dok_jednotka_typ")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_adb_typ_sondy")) { 
+        } else if (field.startsWith("f_adb_typ_sondy")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_adb_podnet")) { 
+        } else if (field.startsWith("f_adb_podnet")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_pian_")) { 
+        } else if (field.startsWith("f_pian_")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (field.equals("f_obdobi")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
@@ -233,7 +233,7 @@ public class SolrSearcher {
         } else {
           addFilter(query, field, request.getParameterValues(field));
         }
-        
+
       }
     }
 
@@ -414,7 +414,7 @@ public class SolrSearcher {
       }
     }
   }
-  
+
   public static void addFavorites(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
@@ -434,7 +434,7 @@ public class SolrSearcher {
     }
   }
 
-  public static void addCommonFieldFacets(String field, SolrInputDocument idoc, List<String> prSufix) {
+  public static void addSecuredFieldFacets(String field, SolrInputDocument idoc, List<String> prSufix) {
     if (field.equals("loc_rpt")) {
       for (String sufix : prSufix) {
         idoc.addField("loc_rpt_" + sufix, idoc.getFieldValues(field));
@@ -455,7 +455,7 @@ public class SolrSearcher {
         idoc.addField("f_obdobi_" + sufix, idoc.getFieldValues(field));
       }
     }
-    if (field.contains("f_aktivita")) {
+    if (field.equals("f_aktivita")) {
       for (String sufix : prSufix) {
         idoc.addField("f_aktivita_" + sufix, idoc.getFieldValues(field));
       }
@@ -481,7 +481,7 @@ public class SolrSearcher {
         idoc.addField("f_okres_" + sufix, idoc.getFieldValues(field));
       }
     }
-    if (field.contains("katastr")&& !field.equals("dalsi_katastry")) {
+    if (field.contains("katastr") && !field.equals("dalsi_katastry")) {
       for (String sufix : prSufix) {
         idoc.addField("f_katastr_" + sufix, idoc.getFieldValues(field));
       }
@@ -511,8 +511,7 @@ public class SolrSearcher {
         idoc.addField("f_" + field + "_" + sufix, idoc.getFieldValues(field));
       }
     }
-    
-    
+
     if (field.equals("dok_jednotka_typ")) {
       for (String sufix : prSufix) {
         idoc.addField("f_dok_jednotka_typ_" + sufix, idoc.getFieldValues(field));
@@ -520,14 +519,22 @@ public class SolrSearcher {
     }
 
   }
-  
+
   public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
-    
     if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
       idoc.addField(field, value);
     }
   }
-  
+
+  public static void addSecuredFieldNonRepeat(SolrInputDocument idoc, String field, Object value, List<String> prSufix) {
+    for (String sufix : prSufix) {
+      String f = field + "_" + sufix;
+      if (idoc.getFieldValues(f) == null || !idoc.getFieldValues(f).contains(value)) {
+        idoc.addField(f, value);
+      }
+    }
+  }
+
 //  public static void cleanRepeated(SolrInputDocument idoc) {
 //    for (String field : idoc.getFieldNames()) {
 //      Collection<Object> vals = idoc.getFieldValues(field);

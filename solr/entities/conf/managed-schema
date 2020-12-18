@@ -37,6 +37,7 @@
    <field name="lng" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="lat" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="pian_id" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="pian_ident_cely" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <field name="pian_typ" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="pian_presnost" type="string" indexed="true" stored="true" multiValued="true" />
@@ -165,7 +166,7 @@
    <field name="obdobi_poradi" type="pint" indexed="true" stored="true" multiValued="true" /> 
    
    <!-- pole pro facety -->
-   <field name="f_aktivita" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_aktivita" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_aktivita_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_aktivita_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_aktivita_C" type="string" indexed="true" stored="true" multiValued="true" />
@@ -184,19 +185,21 @@
    <field name="f_organizace" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_okres" type="string" indexed="true" stored="true" multiValued="true" /> 
    
-   <field name="f_katastr" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_katastr" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_katastr_A" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_katastr_B" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_katastr_C" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_katastr_D" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_rok_vzniku" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="f_rok_vydani" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="f_obdobi" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_rok_vydani" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_obdobi" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_obdobi_A" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_obdobi_B" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_obdobi_C" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_obdobi_D" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="f_areal" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_areal" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_areal_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_areal_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_areal_C" type="string" indexed="true" stored="true" multiValued="true" />
@@ -204,28 +207,32 @@
    <field name="f_druh_lokality" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_typ_lokality" type="string" indexed="true" stored="true" multiValued="true" />
    
-   <field name="f_typ_nalezu" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_typ_nalezu" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_typ_nalezu_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_typ_nalezu_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_typ_nalezu_C" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_typ_nalezu_D" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="f_druh_nalezu" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_druh_nalezu" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_druh_nalezu_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_druh_nalezu_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_druh_nalezu_C" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_druh_nalezu_D" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="f_kategorie" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_kategorie" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_kategorie_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_kategorie_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_kategorie_C" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_kategorie_D" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="f_specifikace" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="f_specifikace" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_specifikace_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_specifikace_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_specifikace_C" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_specifikace_D" type="string" indexed="true" stored="true" multiValued="true" />
    
-   <field name="f_typ_vyzkumu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_typ_vyzkumu" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_typ_vyzkumu_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_typ_vyzkumu_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_typ_vyzkumu_C" type="string" indexed="true" stored="true" multiValued="true" />
@@ -257,8 +264,7 @@
    <field name="f_typ_projektu" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_kulturni_pamatka" type="string" indexed="true" stored="true" multiValued="true" />
    
-   
-   <field name="f_dok_jednotka_typ" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_dok_jednotka_typ" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_dok_jednotka_typ_A" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_dok_jednotka_typ_B" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_dok_jednotka_typ_C" type="string" indexed="true" stored="true" multiValued="true" />
@@ -312,10 +318,10 @@
 <copyField source="nalez_kategorie" dest="f_kategorie" />
 <copyField source="*specifikace" dest="f_specifikace" />
 <copyField source="dok_jednotka_typ" dest="f_dok_jednotka_typ" />
--->
 
 <copyField source="okres" dest="f_okres" />
 <copyField source="*_okres" dest="f_okres" />
+-->
 
 <copyField source="typ_dokumentu" dest="f_typ_dokumentu" /> 
 <copyField source="autor" dest="f_autor" />
