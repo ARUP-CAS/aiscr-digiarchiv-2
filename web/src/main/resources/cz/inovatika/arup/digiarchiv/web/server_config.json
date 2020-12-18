@@ -91,12 +91,10 @@
       
       "soubor_nazev",
       
-      "kategorie",
-      
       "jednotka_dokumentu_ident_cely",
       "jednotka_dokumentu_vazba_akce",
       "jednotka_dokumentu_vazba_lokalita",
-      "jednotka_dokumentu_poznamka",      
+      "jednotka_dokumentu_poznamka",
       
       "komponenta_dokument_ident_cely",
       "komponenta_dokument_obdobi", 
@@ -119,9 +117,8 @@
       "extra_data_zachovalost", 
       "extra_data_nahrada", 
       "extra_data_odkaz",
-      "extra_data_index",
       "extra_data_datum_vzniku",
-      "extra_data_udalost_typ", 
+      "extra_data_udalost_typ",
       "extra_data_udalost",
       "extra_data_zeme", 
       "extra_data_osoby",
@@ -129,7 +126,7 @@
       "let_ident_cely",
       "let_datum",
       "let_pozorovatel",
-      "let_organizace", 
+      "let_organizace",
       "let_fotoaparat",
       "let_pilot",
       "let_typ_letounu",
@@ -179,7 +176,7 @@
       "dok_jednotka_typ", 
       "dok_jednotka_nazev",
       
-      "pian_ident_cely",
+      "pian_id",
       
       "adb_ident_cely",
       "adb_typ_sondy", 
@@ -208,28 +205,7 @@
       "nalez_druh_nalezu", 
       "nalez_kategorie", 
       "nalez_specifikace", 
-      "nalez_poznamka",
-      
-      "ext_zdroj_ident_cely",
-      "ext_zdroj_typ", 
-      "ext_zdroj_sysno",
-      "ext_zdroj_autori",
-      "ext_zdroj_nazev",
-      "ext_zdroj_podnazev",
-      "ext_zdroj_edice_rada",
-      "ext_zdroj_rok_vydani_vzniku",
-      "ext_zdroj_isbn",
-      "ext_zdroj_issn",
-      "ext_zdroj_vydavatel",
-      "ext_zdroj_sbornik_editor",
-      "ext_zdroj_sbornik_nazev",
-      "ext_zdroj_misto",
-      "ext_zdroj_casopis_denik_nazev",
-      "ext_zdroj_datum_rd",
-      "ext_zdroj_link",
-      "ext_zdroj_typ_dokumentu", 
-      "ext_zdroj_organizace", 
-      "ext_zdroj_oznaceni"
+      "nalez_poznamka"
     ],
     
     "lokalita": [
@@ -249,7 +225,7 @@
       "dok_jednotka_typ", 
       "dok_jednotka_nazev",
       
-      "pian_ident_cely",
+      "pian_id",
       
       "komponenta_ident_cely",
       "komponenta_obdobi", 
@@ -262,28 +238,7 @@
       "nalez_druh_nalezu", 
       "nalez_kategorie", 
       "nalez_specifikace", 
-      "nalez_poznamka",
-      
-      "ext_zdroj_ident_cely",
-      "ext_zdroj_typ", 
-      "ext_zdroj_sysno",
-      "ext_zdroj_autori",
-      "ext_zdroj_nazev",
-      "ext_zdroj_podnazev",
-      "ext_zdroj_edice_rada",
-      "ext_zdroj_rok_vydani_vzniku",
-      "ext_zdroj_isbn",
-      "ext_zdroj_issn",
-      "ext_zdroj_vydavatel",
-      "ext_zdroj_sbornik_editor",
-      "ext_zdroj_sbornik_nazev",
-      "ext_zdroj_misto",
-      "ext_zdroj_casopis_denik_nazev",
-      "ext_zdroj_datum_rd",
-      "ext_zdroj_link",
-      "ext_zdroj_typ_dokumentu", 
-      "ext_zdroj_organizace", 
-      "ext_zdroj_oznaceni"
+      "nalez_poznamka"
     ],
     
     "projekt": [
@@ -295,7 +250,6 @@
       "podnet",
       "lokalita",
       "parcelni_cislo",
-      "planovane_zahajeni",
       "vedouci_projektu",
       "organizace_prihlaseni", 
       "uzivatelske_oznaceni",
@@ -315,7 +269,7 @@
       "nalezove_okolnosti", 
       "obdobi", 
       "presna_datace",
-      "druh", 
+      "druh_nalezu", 
       "specifikace", 
       "poznamka",
       "nalezce",

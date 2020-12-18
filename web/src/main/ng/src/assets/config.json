@@ -31,10 +31,14 @@
   },
 
   "sorts": [
+    { "label": "rok_vzniku", "field": "rok_vzniku", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
+    { "label": "rok_vzniku", "field": "rok_vzniku", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
+    { "label": "katastr", "field": "katastr", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "katastr", "field": "katastr", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
     { "label": "ident_cely", "field": "ident_cely", "dir": "asc" },
     { "label": "ident_cely", "field": "ident_cely", "dir": "desc" },
-    { "label": "okres", "field": "okres_sort", "dir": "asc", "entity": ["projekt", "akce", "lokalita"] },
-    { "label": "okres", "field": "okres_sort", "dir": "desc", "entity": ["projekt", "akce", "lokalita"] },
+    { "label": "okres", "field": "okres_sort", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
+    { "label": "okres", "field": "okres_sort", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
     { "label": "autor", "field": "autor_sort", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
     { "label": "autor", "field": "autor_sort", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
     { "label": "nalezce", "field": "autor_sort", "dir": "asc", "entity": ["samostatny_nalez"] },
@@ -43,10 +47,10 @@
     { "label": "datum_nalezu", "field": "datum_nalezu", "dir": "desc", "entity": ["samostatny_nalez"] },
     { "label": "vedouci_akce", "field": "autor_sort", "dir": "asc", "entity": ["akce"] },
     { "label": "vedouci_akce", "field": "autor_sort", "dir": "desc", "entity": ["akce"] },
+    { "label": "datum_ukonceni", "field": "datum_ukonceni_v", "dir": "asc", "entity": ["akce"] },
+    { "label": "datum_ukonceni", "field": "datum_ukonceni_v", "dir": "desc", "entity": ["akce"] },
     { "label": "vedouci_projektu", "field": "autor_sort", "dir": "asc", "entity": ["projekt"] },
     { "label": "vedouci_projektu", "field": "autor_sort", "dir": "desc", "entity": ["projekt"] },
-    { "label": "rok_vzniku", "field": "rok_vzniku", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
-    { "label": "rok_vzniku", "field": "rok_vzniku", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
     { "label": "nazev", "field": "nazev_sort", "dir": "asc", "entity": ["lokalita"] },
     { "label": "nazev", "field": "nazev_sort", "dir": "desc", "entity": ["lokalita"] },
     { "label": "organizace", "field": "organizace_sort", "dir": "asc", "entity": ["dokument", "projekt", "akce", "knihovna_3d"] },
@@ -78,55 +82,117 @@
   "exportRowsLimit": 1000,
 
   "filterFields": [
-    {
-      "type": "text",
-      "field": "f_poznamka"
-    },
-    {
-      "type": "text",
-      "field": "f_popis"
-    },
-    {
-      "type": "text",
-      "field": "f_podnazev"
-    },
-    {
-      "type": "number",
-      "field": "hloubka"
-    },
-    {
-      "type": "date",
-      "field": "datum_zverejneni"
-    },
-    {
-      "type": "date",
-      "field": "datum_provedeni"
-    },
-    {
-      "type": "date",
-      "field": "extra_data_datum_vzniku"
-    },
-    {
-      "type": "date",
-      "field": "let_datum"
-    },
-    {
-      "type": "date",
-      "field": "datum_nalezu"
-    },
-    {
-      "type": "rok",
-      "field": "rok_vzniku"
-    },
-    {
-      "type": "boolean",
-      "field": "je_nz"
-    },
-    {
-      "type": "boolean",
-      "field": "dok_jednotka_negativni_jednotka"
-    }
+    {"type": "text", "field": "ident_cely"},
+    {"type": "text", "field": "popis"},
+    {"type": "text", "field": "poznamka"},
+    {"type": "text", "field": "uzivatelske_oznaceni"},
+    {"type": "date", "field": "datum_provedeni"},
     
+    {"type": "rok", "field": "rok_vzniku"},
+    {"type": "date", "field": "datum_zverejneni"},
+    {"type": "text", "field": "oznaceni_originalu"},
+
+    {"type": "text", "field": "extra_data_cislo_objektu"},
+    {"type": "text", "field": "extra_data_meritko"},
+    {"type": "number", "field": "extra_data_vyska"},
+    {"type": "number", "field": "extra_data_sirka"},
+    {"type": "number", "field": "extra_data_pocet_variant_originalu"},
+    {"type": "text", "field": "extra_data_odkaz"},
+    {"type": "date", "field": "extra_data_datum_vzniku"},
+    {"type": "text", "field": "extra_data_udalost"},
+    {"type": "text", "field": "extra_data_region"},
+    {"type": "rok", "field": "extra_data_rok_od"},
+    {"type": "rok", "field": "extra_data_rok_do"},
+    {"type": "number", "field": "extra_data_duveryhodnost"},
+
+    {"type": "text", "field": "let_ident_cely"},
+    {"type": "date", "field": "let_datum"},
+    {"type": "text", "field": "let_fotoaparat"},
+    {"type": "text", "field": "let_typ_letounu"},
+    {"type": "text", "field": "let_ucel_letu"},
+    {"type": "text", "field": "let_uzivatelske_oznaceni"},
+
+    {"type": "text", "field": "tvar_poznamka"},
+
+    {"type": "text", "field": "jednotka_dokumentu_ident_cely"},
+    {"type": "text", "field": "jednotka_dokumentu_poznamka"},
+    {"type": "text", "field": "jednotka_dokumentu_vazba_akce"},
+    {"type": "text", "field": "jednotka_dokumentu_vazba_lokalita"},
+
+    {"type": "text", "field": "komponenta_dokument_ident_cely"},
+    {"type": "boolean", "field": "komponenta_dokument_jistota"},
+    {"type": "text", "field": "komponenta_dokument_presna_datace"},
+    {"type": "text", "field": "komponenta_dokument_poznamka"},
+
+    {"type": "text", "field": "nalez_dokumentu_pocet"},
+    {"type": "text", "field": "nalez_dokumentu_poznamka"},
+
+    {"type": "rok", "field": "neident_akce_rok_zahajeni"},
+    {"type": "rok", "field": "neident_akce_rok_ukonceni"},
+    {"type": "text", "field": "neident_akce_lokalizace"},
+    {"type": "text", "field": "neident_akce_popis"},
+    {"type": "text", "field": "neident_akce_poznamka"},
+    {"type": "text", "field": "neident_akce_pian"},
+
+    {"type": "number", "field": "soubor_rozsah"},
+    {"type": "number", "field": "soubor_size_bytes"},
+
+    {"type": "text", "field": "podnet"},
+    {"type": "text", "field": "lokalita"},
+    {"type": "text", "field": "parcelni_cislo"},
+    {"type": "text", "field": "planovane_zahajeni"},
+    {"type": "text", "field": "nkp_cislo"},
+    {"type": "text", "field": "nkp_popis"},
+    {"type": "date", "field": "datum_zahajeni"},
+    {"type": "date", "field": "datum_ukonceni"},
+    {"type": "text", "field": "child_akce"},
+    {"type": "text", "field": "child_samostatny_nalez"},
+
+    {"type": "text", "field": "lokalizace"},
+    {"type": "text", "field": "child_dokument"},
+    {"type": "text", "field": "child_ext_zdroj"},
+    
+    {"type": "boolean", "field": "je_nz"},
+    {"type": "date", "field": "datum_zahajeni_v"},
+    {"type": "date", "field": "datum_ukonceni_v"},
+    {"type": "text", "field": "ulozeni_nalezu"},
+    {"type": "text", "field": "vazba_projekt_akce_id_projekt"},
+    
+    {"type": "text", "field": "inv_cislo"},
+    {"type": "number", "field": "hloubka"},
+    {"type": "text", "field": "presna_datace"},
+    {"type": "text", "field": "pocet"},
+    {"type": "date", "field": "datum_nalezu"},
+    {"type": "text", "field": "projekt_id"},
+
+    {"type": "text", "field": "nazev"},
+
+    {"type": "text", "field": "dok_jednotka_ident_cely"},
+    {"type": "boolean", "field": "dok_jednotka_negativni_jednotka"},
+    {"type": "text", "field": "dok_jednotka_nazev"},
+    
+    {"type": "text", "field": "pian_id"},
+
+    {"type": "text", "field": "adb_ident_cely"},
+    {"type": "text", "field": "adb_uzivatelske_oznaceni_sondy"},
+    {"type": "text", "field": "adb_trat"},
+    {"type": "text", "field": "adb_cislo_popisne"},
+    {"type": "text", "field": "adb_parcelni_cislo"},
+    {"type": "number", "field": "adb_stratigraficke_jednotky"},
+    {"type": "rok", "field": "adb_rok_popisu"},
+    {"type": "rok", "field": "adb_rok_revize"},
+    {"type": "text", "field": "adb_poznamka"},
+
+    {"type": "text", "field": "vyskovy_bod_ident_cely"},
+    {"type": "number", "field": "vyskovy_bod_niveleta"},
+
+    {"type": "text", "field": "komponenta_ident_cely"},
+    {"type": "boolean", "field": "komponenta_jistota"},
+    {"type": "text", "field": "komponenta_presna_datace"},
+    {"type": "text", "field": "komponenta_poznamka"},
+
+    {"type": "text", "field": "nalez_pocet"},
+    {"type": "text", "field": "nalez_poznamka"}   
   ],
   
   "facets": [
@@ -138,11 +204,6 @@
     "f_okres",
     "f_katastr",
     
-    "f_autor",
-    "f_vedouci",
-    "f_nalezce",
-    "f_osoby",
-    
     "f_obdobi",
     "f_areal",
     "f_aktivita",
@@ -150,17 +211,19 @@
     "f_kategorie",
     "f_druh_nalezu",
     "f_specifikace",
-    "f_tvar",
     
+    "f_vedouci",
     "f_typ_vyzkumu",
     "f_adb_typ_sondy",
     "f_adb_podnet",    
+    "f_nalezce",
     "f_nalezove_okolnosti",    
     "f_typ_lokality",    
     "f_druh_lokality",
     "f_typ_projektu",
     "f_kulturni_pamatka",
     
+    "f_autor",
     "kategorie_dokumentu",
     "f_rada",
     "f_typ_dokumentu",
@@ -170,6 +233,8 @@
     "f_ulozeni_originalu",
     "f_format",
     "f_zachovalost",
+    "f_tvar",
+    "f_osoby",
     
     "f_dok_jednotka_typ",
     "f_pian_typ",
