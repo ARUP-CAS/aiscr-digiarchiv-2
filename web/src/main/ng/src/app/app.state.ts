@@ -249,7 +249,7 @@ export class AppState {
     }
     this.pianId = params.has('pian_id') ? params.get('pian_id') : null;
 
-
+    this.sort = null;
     if (params.has('sort')) {
       this.sort = this.sorts.find(s => (s.field + ' ' + s.dir) === params.get('sort'));
     }

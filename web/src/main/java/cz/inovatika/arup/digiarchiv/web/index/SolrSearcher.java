@@ -66,7 +66,9 @@ public class SolrSearcher {
             .setParam("facet.heatmap.maxCells", "400000");
   }
 
-  public static void addCommonParams(HttpServletRequest request, SolrQuery query) throws IOException {
+  public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {
+    
+    query.addFilterQuery("{!tag=entityF}entity:" + entity);
     String q = "*:*";
     if (request.getParameter("q") != null) {
       q = request.getParameter("q");
@@ -104,13 +106,25 @@ public class SolrSearcher {
         query.addFacetField("{!key=" + f + "}" + f + "_" + pristupnost);
       }
     }
-    //if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+    
     if (request.getParameter("sort") != null) {
       query.setParam("sort", request.getParameter("sort"));
     } else {
-      query.setParam("sort", "ident_cely asc");
+      JSONArray sorts = Options.getInstance().getClientConf().getJSONArray("sorts");
+      for (Object s: sorts) {
+        JSONObject sort = (JSONObject) s;
+        if (!sort.has("entity")) {
+          query.setParam("sort", sort.getString("field") + " " + sort.getString("dir"));
+          break;
+        }
+        if (sort.has("entity") && sort.getJSONArray("entity").join(",").contains(entity)) {
+          query.setParam("sort", sort.getString("field") + " " + sort.getString("dir"));
+          break;
+        }
+        
+      }
+      
     }
-    //}
 
     if (request.getParameter("inFavorites") != null) {
       String username = LoginServlet.userId(request);

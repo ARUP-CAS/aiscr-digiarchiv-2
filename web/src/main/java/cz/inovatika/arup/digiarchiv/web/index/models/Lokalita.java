@@ -9,8 +9,6 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -117,6 +115,10 @@ public class Lokalita implements Entity {
 
     if (nazev != null) {
       idoc.addField("nazev_sort", nazev);
+    }
+    
+    if (druh != null) {
+      idoc.addField("f_druh_lokality", druh);
     }
 
     if (okres != null) {

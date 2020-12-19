@@ -72,8 +72,7 @@ public class Library3DSearcher implements EntitySearcher {
   
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
-    SolrSearcher.addCommonParams(request, query);
-    query.addFilterQuery("{!tag=entityF}entity:"+ENTITY);
+    SolrSearcher.addCommonParams(request, query, ENTITY);
     query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json]");
     //   query.addFilterQuery("{!tag=entityF}(stav:3 AND rada:3D)");
       

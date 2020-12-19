@@ -65,8 +65,7 @@ public class LokalitaSearcher implements EntitySearcher {
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
-    SolrSearcher.addCommonParams(request, query);
-    query.addFilterQuery("{!tag=entityF}entity:" + ENTITY);
+    SolrSearcher.addCommonParams(request, query, ENTITY);
     // query.addFilterQuery("{!tag=entityF}stav:3");
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {

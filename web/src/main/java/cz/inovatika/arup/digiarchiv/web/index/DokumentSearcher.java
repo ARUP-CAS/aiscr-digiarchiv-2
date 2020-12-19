@@ -65,8 +65,7 @@ public class DokumentSearcher implements EntitySearcher {
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
-    SolrSearcher.addCommonParams(request, query);
-    query.addFilterQuery("{!tag=entityF}entity:" + ENTITY);
+    SolrSearcher.addCommonParams(request, query, ENTITY);
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
       pristupnost = "D";

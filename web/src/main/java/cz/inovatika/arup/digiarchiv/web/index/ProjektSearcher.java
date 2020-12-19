@@ -62,9 +62,8 @@ public class ProjektSearcher implements EntitySearcher {
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
-    SolrSearcher.addCommonParams(request, query);
+    SolrSearcher.addCommonParams(request, query, ENTITY);
     query.setFields("*,akce:[json],pian:[json]");
-    query.addFilterQuery("{!tag=entityF}entity:" + ENTITY);
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
       pristupnost = "D";

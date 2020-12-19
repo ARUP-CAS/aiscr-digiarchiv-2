@@ -53,34 +53,12 @@ public class ConfigServlet extends HttpServlet {
     try {
 
       response.setContentType("application/json;charset=UTF-8");
-      HttpSession session = request.getSession();
 
       if(request.getParameter("reset") != null){
         Options.resetInstance();
       }
       PrintWriter out = response.getWriter();
       JSONObject js = Options.getInstance().getClientConf();
-
-      if (request.getUserPrincipal() != null) {
-        
-      
-      
-        String name = request.getUserPrincipal().getName();
-        String usrname = name.split("\\\\")[1];
-        String domain = name.split("\\\\")[0];
-        
-        
-
-        js.getJSONObject("user").put("id", domain + "_" + usrname);
-        js.getJSONObject("user").put("name", usrname);
-        js.getJSONObject("user").put("domain", domain);
-
-      } else {
-        js.getJSONObject("user").put("id", "nodomain_nologged");
-        js.getJSONObject("user").put("name", "nologged");
-        js.getJSONObject("user").put("domain", "");
-
-      }
       out.print(js.toString());
     } catch (IOException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
