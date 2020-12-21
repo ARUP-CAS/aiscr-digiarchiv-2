@@ -122,7 +122,7 @@
               </tr>
               <tr *ngIf="result.vedlejsi_typ">
                 <th class="app-label">{{ 'field.f_vedlejsi_typ' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.vedlejsi_typ" [heslar]="'result.vedlejsi_typ'"></app-inline-filter></td>
+                <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.vedlejsi_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
               </tr>
               <tr *ngIf="result.vedouci_akce_ostatni">
                 <th class="app-label">{{ 'Ostatní vedoucí' | translate }}:</th>
