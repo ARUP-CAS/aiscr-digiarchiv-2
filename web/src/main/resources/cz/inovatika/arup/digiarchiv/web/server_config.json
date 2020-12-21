@@ -19,7 +19,6 @@
   "sessionTimeout": 1800,
   "indexSecLevel": "E",
   
-  //DN: Tomuto nerozumím - proč zde nejsou všechny hesláře, nebo o co přesně jde?
   "translations": {
     "jazyk_dokumentu": {
       "heslar": "jazyk_dokumentu",
