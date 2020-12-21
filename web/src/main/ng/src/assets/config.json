@@ -80,20 +80,6 @@
   },
 
   "exportRowsLimit": 1000,
-  
-  //DN: K čemu je toto níže (aktivity)? Nejlépe řešit jako běžný heslář (CSV existuje).
-  "aktivity": {
-    "sídlištní": "sidlistni",
-    "pohřbívání": "pohrebni",
-    "výroba": "vyrobni",
-    "těžba": "tezebni",
-    "kult": "kultovni",
-    "komunikace": "komunikace",
-    "deponování": "deponovani",
-    "boj": "boj",
-    "jiný druh aktivity": "jina",
-    "intruze": "intruze"
-  },
 
   "filterFields": [
     {
@@ -146,12 +132,6 @@
     }
     
   ],
-  
-  //DN: Co to je?
-  "user": {
-    "jmeno": "Jaroslava Svobodova",
-    "prijmeni": ""
-  },
   
   "facets": [
     "pristupnost",
