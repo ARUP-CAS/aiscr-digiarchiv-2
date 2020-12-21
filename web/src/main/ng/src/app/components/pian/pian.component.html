@@ -4,7 +4,7 @@
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
         {{ 'PIAN' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
-        <app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
+        <app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_pian'"></app-inline-filter>
         <ng-container *ngIf="result.presnost">&#160;({{'přesnost' | translate }}:&#160;
           <app-inline-filter [field]="'f_pian_presnost'" [value]="result.presnost" [heslar]="'presnost'"></app-inline-filter>
           )</ng-container>
@@ -25,7 +25,7 @@
     <mat-card-header>
       <mat-card-title>
         {{ 'PIAN' | translate }}&#160;{{ result.ident_cely }}
-        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
+        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_pian'"></app-inline-filter>
         <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="result.presnost" [heslar]="'presnost'"></app-inline-filter>
         <span class="app-pipe"></span>
       </mat-card-title>

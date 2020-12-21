@@ -1,14 +1,9 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
-import cz.inovatika.arup.digiarchiv.web.Options;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.json.JSONObject;
 
 /**

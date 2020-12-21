@@ -185,7 +185,6 @@ public class Lokalita implements Entity {
           if (jd.has("vazba_lokalita") && ident_cely.equals(jd.getString("vazba_lokalita"))) {
             SearchUtils.addJSONFields(jd, "jednotka_dokumentu", idoc);
           }
-          
         }
       }
     }
