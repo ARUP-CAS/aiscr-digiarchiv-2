@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppState } from 'src/app/app.state';
 import { TranslateService } from '@ngx-translate/core';
-import { ReplaySubject, Observable, BehaviorSubject } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { Crumb } from 'src/app/shared/crumb';
@@ -22,7 +22,7 @@ export class AppService {
 
   // Observe language
   // private langSubject: ReplaySubject<string> = new ReplaySubject(3);
-  private langSubject: BehaviorSubject<string> = new BehaviorSubject('');
+  private langSubject: Subject<string> = new Subject();
   public currentLang: Observable<string> = this.langSubject.asObservable();
 
   constructor(

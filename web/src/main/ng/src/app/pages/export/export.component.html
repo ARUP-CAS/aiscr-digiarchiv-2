@@ -11,11 +11,14 @@
         <td>{{idx + 1}}</td>
         <td *ngFor="let field of config.exportFields[state.entity]">
           <ng-container *ngIf="!field.secured || hasRights(r)">
-            <ng-container *ngIf="!field.heslar">
-              {{r[field.name]}}
-            </ng-container>
             <ng-container *ngIf="field.heslar">
-              {{r[field.name | translateHeslar: field.heslar]}}
+              {{r[field.name] | translateHeslar : field.heslar}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type === 'date'">
+              {{r[field.name] | date : 'yyyy-MM-dd'}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type !== 'date'">
+              {{r[field.name]}}
             </ng-container>
           </ng-container>
           

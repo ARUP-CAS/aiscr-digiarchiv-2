@@ -315,26 +315,26 @@
         {"name": "f_autor"},
         {"name": "rok_vzniku"},
         {"name": "f_organizace", "heslar": "organizace"},
-        {"name": "typ_dokumentu"},
-        {"name": "material_originalu"},
+        {"name": "typ_dokumentu", "heslar": "typ_dokumentu"},
+        {"name": "material_originalu", "heslar": "material_originalu"},
         {"name": "popis"},
         {"name": "poznamka"},
         {"name": "oznaceni_originalu"},
         {"name": "f_okres"},
         {"name": "f_katastr", "secured":true},
-        {"name": "pristupnost"}
+        {"name": "pristupnost", "heslar": "pristupnost"}
       ],
       "knihovna_3d": [
         {"name": "ident_cely"},
         {"name": "f_autor"},
         {"name": "rok_vzniku"},
         {"name": "f_organizace", "heslar": "organizace"},
-        {"name": "typ_dokumentu"},
+        {"name": "typ_dokumentu", "heslar": "typ_dokumentu"},
         {"name": "popis"},
         {"name": "poznamka"},
         {"name": "oznaceni_originalu"},
-        {"name": "f_obdobi"},
-        {"name": "f_areal"},
+        {"name": "f_obdobi", "heslar": "obdobi_druha"},
+        {"name": "f_areal", "heslar": "areal_druha"},
         {"name": "extra_data_odkaz"}
       ],
       "akce": [
@@ -347,11 +347,11 @@
         {"name": "specifikace_data"},
         {"name": "datum_zahajeni"},
         {"name": "datum_ukonceni"},
-        {"name": "hlavni_typ"},
-        {"name": "vedlejsi_typ"},
+        {"name": "f_hlavni_typ", "heslar": "typ_akce_druha"},
+        {"name": "f_vedlejsi_typ", "heslar": "typ_akce_druha"},
         {"name": "lokalizace", "secured": true},
         {"name": "je_nz"},
-        {"name": "pristupnost"}
+        {"name": "pristupnost", "heslar": "pristupnost"}
       ],
       "lokalita": [
         {"name": "ident_cely"},
@@ -359,19 +359,19 @@
         {"name": "f_katastr", "secured": true},
         {"name": "dalsi_katastry", "secured": true},
         {"name": "nazev", "secured": true},
-        {"name": "f_typ_lokality"},
+        {"name": "f_typ_lokality", "heslar": "typ_lokality"},
         {"name": "druh"},
         {"name": "popis", "secured": true},
-        {"name": "pristupnost"}
+        {"name": "pristupnost", "heslar": "pristupnost"}
       ],
       "projekt": [
         {"name": "ident_cely"},
         {"name": "f_okres"},
         {"name": "f_katastr", "secured": true},
         {"name": "dalsi_katastry", "secured": true},
-        {"name": "f_typ_projektu"},
-        {"name": "datum_zahajeni"},
-        {"name": "datum_ukonceni"},
+        {"name": "typ_projektu", "heslar": "typ_projektu"},
+        {"name": "datum_zahajeni", "type": "date"},
+        {"name": "datum_ukonceni", "type": "date"},
         {"name": "podnet"},
         {"name": "vedouci_projektu"},
         {"name": "organizace_prihlaseni", "heslar": "organizace"},
@@ -380,20 +380,20 @@
       "samostatny_nalez": [
         {"name": "ident_cely"},
         {"name": "f_nalezce"},
-        {"name": "datum_nalezu"},
+        {"name": "datum_nalezu", "type": "date"},
         {"name": "f_okres"},
         {"name": "f_katastr", "secured": true},
         {"name": "lokalizace", "secured": true},
-        {"name": "nalezove_okolnosti"},
+        {"name": "nalezove_okolnosti", "heslar": "nalezove_okolnosti"},
         {"name": "hloubka"},
-        {"name": "obdobi"},
-        {"name": "druh"},
-        {"name": "specifikace"},
+        {"name": "obdobi", "heslar": "obdobi_druha"},
+        {"name": "druh", "heslar": "f_druh_nalezu"},
+        {"name": "specifikace", "heslar": "specifikace_objektu_druha"},
         {"name": "pocet"},
         {"name": "poznamka"},
         {"name": "predano_organizace", "heslar": "organizace"},
         {"name": "inv_cislo"},
-        {"name": "pristupnost"}
+        {"name": "pristupnost", "heslar": "pristupnost"}
       ]
     }
 }

@@ -1,5 +1,5 @@
 import { SolrDocument } from 'src/app/shared/solr-document';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -19,6 +19,7 @@ export class ExportComponent implements OnInit {
   pas: any[] = [];
 
   constructor(
+    private ref: ChangeDetectorRef,
     private titleService: Title,
     private route: ActivatedRoute,
     public config: AppConfiguration,
@@ -32,6 +33,7 @@ export class ExportComponent implements OnInit {
   ngOnInit(): void {
     this.service.currentLang.subscribe(res => {
       this.setTitle();
+      this.ref.detectChanges();
     });
     this.route.queryParams.subscribe(val => {
       this.search(val);

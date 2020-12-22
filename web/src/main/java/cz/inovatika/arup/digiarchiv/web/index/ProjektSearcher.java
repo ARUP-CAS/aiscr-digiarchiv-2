@@ -63,12 +63,12 @@ public class ProjektSearcher implements EntitySearcher {
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);
-    query.setFields("*,akce:[json],pian:[json]");
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
+    query.setFields("*,akce:[json],pian:[json]","f_katastr:katastr","f_okres:okres");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
     }

@@ -56,11 +56,14 @@ export class ResultsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.service.currentLang.subscribe(res => {
       this.setTitle();
+      const parts = this.router.url.split('?');
+      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
+      this.exportUrl = 'export?' + str;
     });
     this.route.queryParams.subscribe(val => {
       this.search(val);
       const parts = this.router.url.split('?');
-      const str = parts.length > 1 ? parts[1] : '' + '&lang=' + this.state.currentLang;
+      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
       this.exportUrl = 'export?' + str;
     });
 
