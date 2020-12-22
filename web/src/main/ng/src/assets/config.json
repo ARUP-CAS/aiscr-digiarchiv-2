@@ -360,7 +360,7 @@
         {"name": "dalsi_katastry", "secured": true},
         {"name": "nazev", "secured": true},
         {"name": "f_typ_lokality", "heslar": "typ_lokality"},
-        {"name": "druh"},
+        {"name": "f_druh_lokality", "heslar": "druh_lokality_druha"},
         {"name": "popis", "secured": true},
         {"name": "pristupnost", "heslar": "pristupnost"}
       ],
@@ -369,13 +369,13 @@
         {"name": "f_okres"},
         {"name": "f_katastr", "secured": true},
         {"name": "dalsi_katastry", "secured": true},
-        {"name": "typ_projektu", "heslar": "typ_projektu"},
+        {"name": "f_typ_projektu", "heslar": "typ_projektu"},
         {"name": "datum_zahajeni", "type": "date"},
         {"name": "datum_ukonceni", "type": "date"},
         {"name": "podnet"},
         {"name": "vedouci_projektu"},
         {"name": "organizace_prihlaseni", "heslar": "organizace"},
-        {"name": "kulturni_pamatka"}
+        {"name": "f_kulturni_pamatka", "heslar": "kulturni_pamatka"}
       ],
       "samostatny_nalez": [
         {"name": "ident_cely"},
