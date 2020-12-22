@@ -173,6 +173,7 @@
   "Zkuste zadat jiný dotaz": "Try another query",
   "nalezených výsledků v entitě": "results found for this record type",
   "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "or switch to another record type where we found these results",
+  "sessionTimeout": "Session timeout",
 
   "sortBy": {
     "ident_cely": "Identifier",

@@ -173,6 +173,7 @@
   "Zkuste zadat jiný dotaz": "Zkuste zadat jiný dotaz",
   "nalezených výsledků v entitě": "nalezených výsledků pro tento typ záznamu",
   "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "nebo se přepněte na jiný typ záznamu, kde jsme nalezli tyto výsledky",
+  "sessionTimeout": "Relace vyprsela",
 
   "sortBy": {
     "ident_cely": "Idetifikátor",

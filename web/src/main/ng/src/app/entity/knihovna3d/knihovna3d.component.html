@@ -54,10 +54,13 @@
         </div>
         <div *ngIf="result.komponenta_dokument_obdobi || result.komponenta_dokument_presna_datace || result.komponenta_dokument_areal">
           <ng-container *ngIf="result.komponenta_dokument_obdobi || result.komponenta_dokument_presna_datace">
-            <label class="app-label">{{ 'field.obdobi' | translate }}:</label>&#160;{{ result.komponenta_dokument_obdobi }}<ng-container *ngIf="result.presna_datace">&#160;({{ result.komponenta_dokument_presna_datace }})</ng-container> 
+            <label class="app-label">{{ 'field.obdobi' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.komponenta_dokument_obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
+            <ng-container *ngIf="result.presna_datace">&#160;({{ result.komponenta_dokument_presna_datace }})</ng-container> 
           </ng-container><span class="app-pipe"></span>
           <ng-container *ngIf="result.komponenta_dokument_areal">
-            <label class="app-label">{{ 'field.f_areal' | translate }}:</label>&#160;{{ result.komponenta_dokument_areal }}
+            <label class="app-label">{{ 'field.f_areal' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.komponenta_dokument_areal" [heslar]="'areal_druha'"></app-inline-filter>
           </ng-container><span class="app-pipe"></span>
         </div>
         <div *ngIf="result.extra_data_odkaz">
