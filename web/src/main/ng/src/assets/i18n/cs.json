@@ -173,7 +173,7 @@
   "Zkuste zadat jiný dotaz": "Zkuste zadat jiný dotaz",
   "nalezených výsledků v entitě": "nalezených výsledků pro tento typ záznamu",
   "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "nebo se přepněte na jiný typ záznamu, kde jsme nalezli tyto výsledky",
-  "sessionTimeout": "Relace vyprsela",
+  "sessionTimeout": "Z důvodu nečinnosti jste byli automaticky odhlášeni.",
 
   "sortBy": {
     "ident_cely": "Idetifikátor",
@@ -210,7 +210,7 @@
 		"datum_nalezu": "Sam. nález - datum nálezu",
 		"filtruj_dle_pole": "Filtruj podle pole",
 		"filtruj_dle": "Filtruj podle pole (texty, data, čísla)",
-		"hloubka": "Sam. nález - hloubka",
+		"hloubka": "Sam. nález - hloubka (cm)",
     "dok_jednotka_negativni_jednotka": "Dok. jednotka - negativní zjištění",
     "podnet": "Projekt - podnět",
     "dalsi_katastry": "Další katastry",
