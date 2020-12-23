@@ -83,7 +83,8 @@ export function createTranslateLoader(http: HttpClient) {
   if (environment.mocked) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
   } else {
-    let server = 'http://localhost:8080/amcr/';
+    // let server = 'http://localhost:8080/amcr/';
+    let server = '';
     const args = process.argv;
     if (args.length > 2) {
       server = args[2];

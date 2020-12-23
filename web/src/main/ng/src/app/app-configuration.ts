@@ -114,7 +114,6 @@ import { isPlatformBrowser } from '@angular/common';
                 if (args.length > 2) {
                     this.server = args[2];
                 }
-                // this.server = 'http://localhost:8080/amcr/';
             }
         }
 

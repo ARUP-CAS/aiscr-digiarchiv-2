@@ -107,8 +107,10 @@ public class Lokalita implements Entity {
         String[] parts = kat.split("\\(");
         String kt = parts[0];
         String ok = parts[1].substring(0, parts[1].length() - 1);
-        idoc.addField("dalsi_katastr", kt.trim());
-        idoc.addField("dalsi_okres", ok.trim());
+        SolrSearcher.addFieldNonRepeat(idoc, "dalsi_katastr", kt.trim());
+        SolrSearcher.addFieldNonRepeat(idoc, "dalsi_okres",ok.trim());
+//        idoc.addField("dalsi_katastr", kt.trim());
+//        idoc.addField("dalsi_okres", ok.trim());
       }
       idoc.setField("dalsi_katastry", kats);
     }

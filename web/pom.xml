@@ -12,7 +12,7 @@
   <properties>
     <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <context.name>amcr</context.name>
+    <context.name></context.name>
     <skipNg>false</skipNg>
   </properties>
     
@@ -224,7 +224,7 @@
                 </replacement> 
                 <replacement> 
                   <token>base href="/"</token> 
-                  <value>base href="/${context.name}/"</value> 
+                  <value>base href="${context.name}/"</value> 
                 </replacement> 
               </replacements> 
             </configuration> 
@@ -241,7 +241,7 @@
               <replacements>  
                 <replacement> 
                   <token>base href="/"</token> 
-                  <value>base href="/${context.name}/"</value> 
+                  <value>base href="${context.name}/"</value> 
                 </replacement> 
               </replacements> 
             </configuration> 
@@ -262,7 +262,7 @@
                 </replacement> 
                 <replacement> 
                   <token>"context": "",</token> 
-                  <value>"context": "/${context.name}",</value> 
+                  <value>"context": "${context.name}",</value> 
                 </replacement> 
               </replacements> 
             </configuration> 
@@ -279,7 +279,7 @@
               <replacements> 
                 <replacement> 
                   <token>path="/(.)*"</token> 
-                  <value>path="/${context.name}"</value> 
+                  <value>path="${context.name}"</value> 
                 </replacement> 
               </replacements> 
             </configuration> 

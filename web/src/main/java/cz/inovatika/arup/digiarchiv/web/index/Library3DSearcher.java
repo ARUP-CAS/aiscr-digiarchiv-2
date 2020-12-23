@@ -73,7 +73,7 @@ public class Library3DSearcher implements EntitySearcher {
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);
-    query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json]");
+    // query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json]");
     //   query.addFilterQuery("{!tag=entityF}(stav:3 AND rada:3D)");
       
     String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -87,7 +87,8 @@ public class Library3DSearcher implements EntitySearcher {
       SolrSearcher.addLocationParams(request, query);
       query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres");
     } else {
-      query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]");
+      query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
+              "f_areal:f_areal_"+pristupnost,"f_obdobi:f_obdobi_"+pristupnost);
     }
   }
 

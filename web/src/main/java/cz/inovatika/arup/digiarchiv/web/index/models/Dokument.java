@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.inovatika.arup.digiarchiv.web.index.models;
 
 import cz.inovatika.arup.digiarchiv.web.Options;
@@ -120,6 +115,7 @@ public class Dokument implements Entity {
   public List<String> odkaz;
   
   List<String> prSufix = new ArrayList<>();
+  // String[] sufixes = new String[]{"A", "B", "C", "D"};
 
   @Override
   public void fillFields(SolrInputDocument idoc) {
@@ -128,7 +124,8 @@ public class Dokument implements Entity {
     idoc.setField("searchable", searchable);
     
     String pr = (String) idoc.getFieldValue("pristupnost");
-    // pr = "A";
+      // Pro dokument do full text pridame vsechny
+    pr = "A";
 
     if ("A".compareTo(pr) >= 0) {
       prSufix.add("A");
