@@ -68,7 +68,7 @@ public class ProjektSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields("*,akce:[json],pian:[json]","f_katastr:katastr","f_okres:okres");
+    query.setFields("*,akce:[json],pian:[json]","katastr","okres","f_katastr:katastr","f_okres:okres");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
     }
