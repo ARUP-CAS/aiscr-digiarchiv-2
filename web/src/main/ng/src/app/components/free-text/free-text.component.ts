@@ -19,6 +19,7 @@ export class FreeTextComponent implements OnInit {
     this.service.currentLang.subscribe(r => {
       this.setText();
     });
+    this.setText();
   }
 
   setText() {
