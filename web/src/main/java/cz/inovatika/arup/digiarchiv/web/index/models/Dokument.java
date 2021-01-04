@@ -116,6 +116,10 @@ public class Dokument implements Entity {
   
   List<String> prSufix = new ArrayList<>();
   // String[] sufixes = new String[]{"A", "B", "C", "D"};
+  
+  int numAkce;
+  int numLokalita;
+  int numNeidentAkce;
 
   @Override
   public void fillFields(SolrInputDocument idoc) {
@@ -398,6 +402,7 @@ public class Dokument implements Entity {
         for (String s : doc.keySet()) {
           switch (s) {
             case "neident_akce":
+              numNeidentAkce++;
               JSONObject naDoc = doc.getJSONObject("neident_akce");
               SolrSearcher.addFieldNonRepeat(idoc, "neident_akce", naDoc.toString());
               addJSONFields(naDoc, "neident_akce", idoc);
@@ -434,6 +439,7 @@ public class Dokument implements Entity {
 
               break;
             case "vazba_akce":
+              numAkce++;
               // Chceme pian
               //String vazba_akce = (String) doc.get("vazba_akce");
               SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_akce", doc.optString(s));
@@ -441,6 +447,7 @@ public class Dokument implements Entity {
               processAkce(client, idoc, "parent_akce", doc.optString(s));
               break;
             case "vazba_lokalita":
+              numLokalita++;
               // Chceme pian
               SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_lokalita", doc.optString(s));
               dok_jednotka = addDokJednotka(client, idoc, "parent_lokalita", (String) doc.get("vazba_lokalita"));
@@ -496,6 +503,9 @@ public class Dokument implements Entity {
 
   @Override
   public void setFullText(SolrInputDocument idoc) {
+    idoc.setField("numAkce", numAkce);
+    idoc.setField("numLokalita", numLokalita);
+    idoc.setField("numNeidentAkce", numNeidentAkce); 
     Object[] fields = idoc.getFieldNames().toArray();
     List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("dokument").toList();
     
