@@ -178,7 +178,6 @@
     {"type": "text", "field": "adb_trat"},
     {"type": "text", "field": "adb_cislo_popisne"},
     {"type": "text", "field": "adb_parcelni_cislo"},
-    {"type": "number", "field": "adb_stratigraficke_jednotky"},
     {"type": "rok", "field": "adb_rok_popisu"},
     {"type": "rok", "field": "adb_rok_revize"},
     {"type": "text", "field": "adb_poznamka"},
