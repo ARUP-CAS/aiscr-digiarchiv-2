@@ -187,12 +187,20 @@ public class SolrSearcher {
   public static void addFilters(HttpServletRequest request, SolrQuery query, String pristupnost) throws IOException {
     List<Object> fields = Options.getInstance().getClientConf().getJSONArray("urlFields").toList();
     JSONArray filterFieldsObj = Options.getInstance().getClientConf().getJSONArray("filterFields");
-    List<String> filterFields = new ArrayList<>();
-    for (int i = 0; i < filterFieldsObj.length(); i++) {
-      filterFields.add(filterFieldsObj.getJSONObject(i).getString("field"));
-    }
     List<Object> dateFacets = Options.getInstance().getClientConf().getJSONArray("dateFacets").toList();
     List<Object> numberFacets = Options.getInstance().getClientConf().getJSONArray("numberFacets").toList();
+    List<String> filterFields = new ArrayList<>();
+    for (int i = 0; i < filterFieldsObj.length(); i++) {
+      String type = filterFieldsObj.getJSONObject(i).getString("type");
+      String field = filterFieldsObj.getJSONObject(i).getString("field");
+      filterFields.add(field);
+      if ("number".equals(type) || "rok".equals(type)) {
+        numberFacets.add(field);
+      } else if ("date".equals(type)) {
+        dateFacets.add(field);
+      }
+    }
+    
     for (String field : request.getParameterMap().keySet()) {
       if ((field.startsWith("f_")
               || filterFields.contains(field)
@@ -532,6 +540,19 @@ public class SolrSearcher {
       }
     }
 
+  }
+  
+  public static void addJSONFields(JSONObject doc, String prefix, SolrInputDocument idoc) {
+    for (String s : doc.keySet()) {
+      switch (s) {
+        case "_version_":
+        case "_root_":
+        case "indextime":
+          break;
+        default:
+          SolrSearcher.addFieldNonRepeat(idoc, prefix + "_" + s, doc.optString(s));
+      }
+    }
   }
 
   public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {

@@ -143,8 +143,8 @@
     {"type": "text", "field": "planovane_zahajeni"},
     {"type": "text", "field": "nkp_cislo"},
     {"type": "text", "field": "nkp_popis"},
-    {"type": "date", "field": "datum_zahajeni"},
-    {"type": "date", "field": "datum_ukonceni"},
+    {"type": "date", "field": "datum_zahajeni_v"},
+    {"type": "date", "field": "datum_ukonceni_v"},
     {"type": "text", "field": "child_akce"},
     {"type": "text", "field": "child_samostatny_nalez"},
 
@@ -156,7 +156,7 @@
     {"type": "date", "field": "datum_zahajeni_v"},
     {"type": "date", "field": "datum_ukonceni_v"},
     {"type": "text", "field": "ulozeni_nalezu"},
-    {"type": "text", "field": "vazba_projekt_akce_id_projekt"},
+    {"type": "text", "field": "vazba_projekt"},
     
     {"type": "text", "field": "inv_cislo"},
     {"type": "number", "field": "hloubka"},
@@ -171,7 +171,7 @@
     {"type": "boolean", "field": "dok_jednotka_negativni_jednotka"},
     {"type": "text", "field": "dok_jednotka_nazev"},
     
-    {"type": "text", "field": "pian_id"},
+    {"type": "text", "field": "pian_ident_cely"},
 
     {"type": "text", "field": "adb_ident_cely"},
     {"type": "text", "field": "adb_uzivatelske_oznaceni_sondy"},

@@ -289,7 +289,7 @@
     "projekt_id": "Sam. nález - související projekt",
     "dok_jednotka_ident_cely": "Dok. jednotka - identifikátor",
     "dok_jednotka_nazev": "Dok. jednotka - název",
-    "pian_id": "Dok. jednotka - související PIAN",
+    "pian_ident_cely": "Dok. jednotka - související PIAN",
     "adb_ident_cely": "ADB - identifikátor",
     "adb_uzivatelske_oznaceni_sondy": "ADB - uživatelské označení",
     "adb_trat": "ADB - ulice/trať",

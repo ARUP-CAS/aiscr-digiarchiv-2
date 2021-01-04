@@ -289,7 +289,7 @@
     "projekt_id": "Ind. find - related project",
     "dok_jednotka_ident_cely": "Doc. unit - identifier",
     "dok_jednotka_nazev": "Doc. unit - label",
-    "pian_id": "Doc. unit - related spatial unit",
+    "pian_ident_cely": "Doc. unit - related spatial unit",
     "adb_ident_cely": "ADP - identifier",
     "adb_uzivatelske_oznaceni_sondy": "ADP - user label",
     "adb_trat": "ADP - street/track",

@@ -46,6 +46,7 @@
    <!-- Dokument fields -->
    <field name="extra_data_rok_od" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="extra_data_rok_do" type="pint" indexed="true" stored="true"  multiValued="true" />
+   <field name="extra_data_duveryhodnost" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />
    
    
@@ -57,14 +58,14 @@
    
    <field name="soubor_vytvoreno" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <field name="soubor_rozsah" type="pint" indexed="true" stored="true"  multiValued="true" />
+   <field name="soubor_size_bytes" type="pint" indexed="true" stored="true"  multiValued="true" />
    
    <field name="autor" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    <field name="typ_dokumentu_posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    
    <field name="extra_data" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <!--
-   <field name="extra_data_duveryhodnost" type="pint" indexed="true" stored="true"  multiValued="true" />
-   -->
+   
+  
    
    <field name="tvar" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="jednotka_dokumentu" type="string" indexed="false" stored="true" multiValued="true" docValues="false" />   
@@ -120,6 +121,17 @@
    <!-- Projekt fields -->
    <field name="child_akce" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="child_samostatny_nalez" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <!--
+   Musime prejmenovat pro projekt. Akce ma nevalidni data pro tyto pole.
+   Misto toho pouzivame datum_zahajeni_v a datum_ukonceni_v
+   <field name="datum_zahajeni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_ukonceni" type="pdate" indexed="true" stored="true" />
+   -->
+   <field name="datum_prihlaseni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_zapisu_zahajeni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_zapisu_ukonceni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_navrhu_archivace" type="pdate" indexed="true" stored="true" />
+   
    
    <!-- Samostatny nalez fields -->
    <field name="hloubka" type="pint" indexed="true" stored="true" multiValued="false" /> 
@@ -129,6 +141,9 @@
    
    <!-- ADB fields -->
    <field name="vyskovy_bod" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <field name="vyskovy_bod_niveleta" type="pfloat" indexed="true" stored="true" multiValued="true" /> 
+   <field name="adb_rok_popisu" type="pint" indexed="true" stored="true" multiValued="true" /> 
+   <field name="adb_rok_revize" type="pint" indexed="true" stored="true" multiValued="true" /> 
    
    <!-- PIAN fields -->
    <field name="geom_gml" type="string_big" indexed="false" stored="true" multiValued="false" /> 

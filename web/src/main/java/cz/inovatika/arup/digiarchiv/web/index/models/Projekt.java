@@ -187,9 +187,11 @@ public class Projekt implements Entity {
 
     if (datum_zahajeni != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", datum_zahajeni);
+      SolrSearcher.addFieldNonRepeat(idoc, "datum_zahajeni_v", datum_zahajeni);
       String ukonceni = "*";
       if (datum_ukonceni != null) {
         SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", datum_ukonceni);
+        SolrSearcher.addFieldNonRepeat(idoc, "datum_ukonceni_v", datum_ukonceni);
         if (!datum_ukonceni.before(datum_zahajeni)) {
           ukonceni = datum_ukonceni.toInstant().toString();
         }
