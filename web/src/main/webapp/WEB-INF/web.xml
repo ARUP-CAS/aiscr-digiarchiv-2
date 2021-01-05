@@ -30,6 +30,7 @@
         <url-pattern>/results/*</url-pattern>
         <url-pattern>/print/*</url-pattern>
         <url-pattern>/favorites</url-pattern>
+        <url-pattern>/napoveda</url-pattern> 
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HandleServlet</servlet-name>
