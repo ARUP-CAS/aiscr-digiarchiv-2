@@ -120,7 +120,7 @@
     {"type": "text", "field": "jednotka_dokumentu_vazba_lokalita"},
 
     {"type": "text", "field": "komponenta_dokument_ident_cely"},
-    {"type": "boolean", "field": "komponenta_dokument_jistota"},
+    {"type": "text", "field": "komponenta_dokument_jistota"},
     {"type": "text", "field": "komponenta_dokument_presna_datace"},
     {"type": "text", "field": "komponenta_dokument_poznamka"},
 
@@ -186,7 +186,7 @@
     {"type": "number", "field": "vyskovy_bod_niveleta"},
 
     {"type": "text", "field": "komponenta_ident_cely"},
-    {"type": "boolean", "field": "komponenta_jistota"},
+    {"type": "text", "field": "komponenta_jistota"},
     {"type": "text", "field": "komponenta_presna_datace"},
     {"type": "text", "field": "komponenta_poznamka"},
 
