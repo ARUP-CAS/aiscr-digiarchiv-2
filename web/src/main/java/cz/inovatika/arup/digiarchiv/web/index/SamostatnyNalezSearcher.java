@@ -53,7 +53,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
       JSONObject jo = SearchUtils.json(query, client, "entities");
 
       String pristupnost = LoginServlet.pristupnost(request.getSession());
-      filter(jo, pristupnost);
+      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
       SolrSearcher.addFavorites(jo, client, request);
       return jo;
 
@@ -71,7 +71,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields("*","katastr", "f_katastr:f_katastr_"+pristupnost);
+    query.setFields("*", "katastr", "f_katastr:f_katastr_" + pristupnost);
 
     SolrSearcher.addFilters(request, query, pristupnost);
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
@@ -80,68 +80,20 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
   }
 
   /**
-   * Odstrani akce a lokalit z vysledku podle pristupnosti
+   * Filter katastr podle pristupnosti
    *
    * @param jo
    * @param pristupnost
    */
-  private void filter(JSONObject jo, String pristupnost) {
+  private void filter(JSONObject jo, String pristupnost, String org) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      if (doc.has("lokalita_pristupnost")) {
-        JSONArray lp = doc.getJSONArray("lokalita_pristupnost");
-        for (int j = lp.length() - 1; j > -1; j--) {
-          if (lp.getString(j).compareTo(pristupnost) > 0) {
-            removeVal(doc, "lokalita_ident_cely", j);
-
-            removeVal(doc, "lokalita_poznamka", j);
-            removeVal(doc, "lokalita_katastr", j);
-            removeVal(doc, "lokalita_typ_lokality", j);
-            removeVal(doc, "lokalita_nazev", j);
-            removeVal(doc, "lokalita_dalsi_katastry", j);
-            removeVal(doc, "lokalita_stav", j);
-            removeVal(doc, "lokalita_okres", j);
-            removeVal(doc, "lokalita_druh", j);
-            removeVal(doc, "lokalita_popis", j);
-
-          }
-        }
+      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+        doc.remove("katastr");
+        doc.remove("f_katastr");
+        doc.remove("f_katastr_" + pristupnost);
       }
-
-      if (doc.has("akce_pristupnost")) {
-        JSONArray lp = doc.getJSONArray("akce_pristupnost");
-        for (int j = lp.length() - 1; j > -1; j--) {
-          if (lp.getString(j).compareTo(pristupnost) > 0) {
-            removeVal(doc, "akce_ident_cely", j);
-            removeVal(doc, "akce_okres", j);
-            removeVal(doc, "akce_katastr", j);
-            removeVal(doc, "akce_dalsi_katastry", j);
-            removeVal(doc, "akce_vedouci_akce", j);
-            removeVal(doc, "akce_organizace", j);
-            removeVal(doc, "akce_hlavni_typ", j);
-            removeVal(doc, "akce_typ", j);
-            removeVal(doc, "akce_vedlejsi_typ", j);
-            removeVal(doc, "akce_datum_zahajeni_v", j);
-            removeVal(doc, "akce_datum_ukonceni_v", j);
-            removeVal(doc, "akce_lokalizace", j);
-            removeVal(doc, "akce_poznamka", j);
-            removeVal(doc, "akce_ulozeni_nalezu", j);
-            removeVal(doc, "akce_vedouci_akce_ostatni", j);
-            removeVal(doc, "akce_organizace_ostatni", j);
-            removeVal(doc, "akce_stav", j);
-
-          }
-        }
-      }
-
     }
   }
-
-  private void removeVal(JSONObject doc, String key, int j) {
-    if (doc.optJSONArray(key) != null) {
-      doc.getJSONArray(key).remove(j);
-    }
-  }
-
 }

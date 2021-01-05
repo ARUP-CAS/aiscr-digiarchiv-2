@@ -61,7 +61,7 @@ public class SamostatniNalez implements Entity {
 //  public String geom_gml;
   @Field
   public int hloubka;
-  
+
   @Field
   public String nalezove_okolnosti;
 
@@ -106,15 +106,21 @@ public class SamostatniNalez implements Entity {
 
   @Field
   public Date datum_archivace;
-  
-  String[] facetFields = new String[]{"komponenta_areal","f_aktivita","nalez_kategorie"};
+
+  String[] facetFields = new String[]{"komponenta_areal", "f_aktivita", "nalez_kategorie"};
+
+  List<String> prSufixAll = new ArrayList<>();
 
   @Override
   public void fillFields(SolrInputDocument idoc) {
 
+    prSufixAll.add("A");
+    prSufixAll.add("B");
+    prSufixAll.add("C");
+    prSufixAll.add("D");
     boolean searchable = stav == 4;
     idoc.setField("searchable", searchable);
-    
+
     if (this.centroid_n != null) {
       String loc = this.centroid_n + "," + this.centroid_e;
       SolrSearcher.addFieldNonRepeat(idoc, "lat", this.centroid_n);
@@ -122,7 +128,7 @@ public class SamostatniNalez implements Entity {
       SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
       SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
     }
-     
+
     if (nalezce != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", nalezce);
     }
@@ -145,7 +151,7 @@ public class SamostatniNalez implements Entity {
     if (idoc.containsKey("obdobi") && idoc.getFieldValue("obdobi") != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "obdobi_poradi", SearchUtils.getObdobiPoradi((String) idoc.getFieldValue("obdobi")));
     }
-    
+
     // addPian(client, idoc);
   }
 
@@ -177,8 +183,8 @@ public class SamostatniNalez implements Entity {
   @Override
   public void setFullText(SolrInputDocument idoc) {
     List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("samostatny_nalez").toList();
-    List<String> excludePas = Arrays.asList(Options.getInstance().getStrings("pasSecuredFields"));
-    
+    // List<String> excludePas = Arrays.asList(Options.getInstance().getStrings("pasSecuredFields"));
+
     String pristupnost = (String) idoc.getFieldValue("pristupnost");
     List<String> prSufix = new ArrayList<>();
 
@@ -197,23 +203,27 @@ public class SamostatniNalez implements Entity {
     Object[] fields = idoc.getFieldNames().toArray();
     for (Object f : fields) {
       String s = (String) f;
-      
-      SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
-      
+
+      if (s.equals("katastr")) {
+        SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
+      } else {
+        SolrSearcher.addSecuredFieldFacets(s, idoc, prSufixAll);
+      }
+
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {
           SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
-      } 
+      }
     }
-    
+
   }
-  
+
   @Override
   public boolean isEntity() {
     return true;
   }
-  
+
   @Override
   public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
   }
