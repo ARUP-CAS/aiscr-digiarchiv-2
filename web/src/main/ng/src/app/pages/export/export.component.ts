@@ -16,7 +16,6 @@ import { AppConfiguration } from 'src/app/app-configuration';
 export class ExportComponent implements OnInit {
 
   docs: any[] = [];
-  pas: any[] = [];
 
   constructor(
     private ref: ChangeDetectorRef,

@@ -320,7 +320,7 @@
         {"name": "poznamka"},
         {"name": "oznaceni_originalu"},
         {"name": "f_okres"},
-        {"name": "f_katastr", "secured":true},
+        {"name": "f_katastr"},
         {"name": "pristupnost", "heslar": "pristupnost"}
       ],
       "knihovna_3d": [

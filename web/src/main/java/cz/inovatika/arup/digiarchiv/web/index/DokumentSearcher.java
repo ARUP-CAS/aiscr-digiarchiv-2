@@ -5,8 +5,6 @@ import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -35,9 +33,9 @@ public class DokumentSearcher implements EntitySearcher {
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
       String pristupnost = LoginServlet.pristupnost(request.getSession());
-      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
       SolrSearcher.addFavorites(jo, client, request);
       getChilds(jo, client, request);
+      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
       return jo;
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
@@ -78,7 +76,7 @@ public class DokumentSearcher implements EntitySearcher {
       query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres");
     } else {
       query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
-              "okres","f_okres", "katastr", "f_katastr:f_katastr_"+pristupnost);
+              "okres","f_okres");
     }
     
   }
@@ -95,49 +93,29 @@ public class DokumentSearcher implements EntitySearcher {
       JSONObject doc = ja.getJSONObject(i);
       String organizace = doc.getString("organizace");
       boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
-      if (doc.has("lokalita_pristupnost")) {
-        JSONArray lp = doc.getJSONArray("lokalita_pristupnost");
+      if (doc.has("neident_akce")) {
+        doc.put("f_katastr", doc.getJSONArray("neident_akce_katastr").toList());
+      }
+      if (doc.has("lokalita")) {
+        JSONArray lp = doc.getJSONArray("lokalita");
         for (int j = lp.length() - 1; j > -1; j--) {
-          if (lp.getString(j).compareTo(pristupnost) > 0 && !sameOrg) {
+          if (lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
             removeVal(doc, "lokalita", j);
-            removeVal(doc, "lokalita_ident_cely", j);
-            removeVal(doc, "lokalita_poznamka", j);
-            removeVal(doc, "lokalita_katastr", j);
-            removeVal(doc, "lokalita_typ_lokality", j);
-            removeVal(doc, "lokalita_nazev", j);
-            removeVal(doc, "lokalita_dalsi_katastry", j);
-            removeVal(doc, "lokalita_stav", j);
-            removeVal(doc, "lokalita_okres", j);
-            removeVal(doc, "lokalita_druh", j);
-            removeVal(doc, "lokalita_popis", j);
 
+          } else {
+            doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
           }
         }
       }
 
-      if (doc.has("akce_pristupnost")) {
-        JSONArray lp = doc.getJSONArray("akce_pristupnost");
+      if (doc.has("akce")) {
+        JSONArray lp = doc.getJSONArray("akce");
         for (int j = lp.length() - 1; j > -1; j--) {
-          if (lp.getString(j).compareTo(pristupnost) > 0 && !sameOrg) {
+          if (lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
             removeVal(doc, "akce", j);
-            removeVal(doc, "akce_ident_cely", j);
-            removeVal(doc, "akce_okres", j);
-            removeVal(doc, "akce_katastr", j);
-            removeVal(doc, "akce_dalsi_katastry", j);
-            removeVal(doc, "akce_vedouci_akce", j);
-            removeVal(doc, "akce_organizace", j);
-            removeVal(doc, "akce_hlavni_typ", j);
-            removeVal(doc, "akce_typ", j);
-            removeVal(doc, "akce_vedlejsi_typ", j);
-            removeVal(doc, "akce_datum_zahajeni_v", j);
-            removeVal(doc, "akce_datum_ukonceni_v", j);
-            removeVal(doc, "akce_lokalizace", j);
-            removeVal(doc, "akce_poznamka", j);
-            removeVal(doc, "akce_ulozeni_nalezu", j);
-            removeVal(doc, "akce_vedouci_akce_ostatni", j);
-            removeVal(doc, "akce_organizace_ostatni", j);
-            removeVal(doc, "akce_stav", j);
 
+          } else {
+            doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
           }
         }
       }
