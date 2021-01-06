@@ -284,7 +284,7 @@
     "datum_zahajeni_v": "Fieldwork - starting date",
     "datum_ukonceni_v": "Fieldwork - ending date",
     "ulozeni_nalezu": "Fieldwork - finds repository",
-    "vazba_projekt_akce_id_projekt": "Fieldwork - related project",
+    "vazba_projekt": "Fieldwork - related project",
     "presna_datace": "Ind. find - precise dating",
     "projekt_id": "Ind. find - related project",
     "dok_jednotka_ident_cely": "Doc. unit - identifier",
