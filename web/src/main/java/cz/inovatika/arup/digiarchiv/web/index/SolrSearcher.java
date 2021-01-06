@@ -214,7 +214,14 @@ public class SolrSearcher {
           query.addFilterQuery(fq);
         } else if (field.equals("rok_vzniku")) {
           String[] parts = request.getParameter(field).split(":")[0].split(",");
-          String fq = "rok_vzniku:[" + parts[0] + " TO " + parts[1] + "]";
+          String end = "*";
+          if ("".equals(parts[0])) {
+            parts[0] = "*";
+          }
+          if (parts.length > 1) {
+            end = parts[1];
+          }
+          String fq = "rok_vzniku:[" + parts[0] + " TO " + end + "]";
           query.addFilterQuery(fq);
         } else if (dateFacets.contains(field)) {
           String[] parts = request.getParameter(field).split(":")[0].split(",");
@@ -222,7 +229,14 @@ public class SolrSearcher {
           query.addFilterQuery(fq);
         } else if (numberFacets.contains(field)) {
           String[] parts = request.getParameter(field).split(":")[0].split(",");
-          String fq = field + ":[" + parts[0] + " TO " + parts[1] + "]";
+          String end = "*";
+          if ("".equals(parts[0])) {
+            parts[0] = "*";
+          }
+          if (parts.length > 1) {
+            end = parts[1];
+          }
+          String fq = field + ":[" + parts[0] + " TO " + end + "]";
           query.addFilterQuery(fq);
         } else if (field.startsWith("f_typ_nalezu")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
