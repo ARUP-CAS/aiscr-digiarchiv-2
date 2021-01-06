@@ -32,10 +32,8 @@ public class DokumentSearcher implements EntitySearcher {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
-      String pristupnost = LoginServlet.pristupnost(request.getSession());
       SolrSearcher.addFavorites(jo, client, request);
       getChilds(jo, client, request);
-      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
       return jo;
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
@@ -60,6 +58,8 @@ public class DokumentSearcher implements EntitySearcher {
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_lokalita", "lokalita", fieldsLok);
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_lokalita", "lokalita", fieldsLok);
     }
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -101,7 +101,7 @@ public class DokumentSearcher implements EntitySearcher {
         for (int j = lp.length() - 1; j > -1; j--) {
           if (lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
             removeVal(doc, "lokalita", j);
-
+            lp.getJSONObject(j).remove("katastr");
           } else {
             doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
           }
@@ -112,8 +112,8 @@ public class DokumentSearcher implements EntitySearcher {
         JSONArray lp = doc.getJSONArray("akce");
         for (int j = lp.length() - 1; j > -1; j--) {
           if (lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
-            removeVal(doc, "akce", j);
-
+            // removeVal(doc, "akce", j);
+            lp.getJSONObject(j).remove("katastr");
           } else {
             doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
           }
