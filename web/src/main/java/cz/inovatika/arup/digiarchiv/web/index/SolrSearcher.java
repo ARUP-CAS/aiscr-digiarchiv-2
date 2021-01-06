@@ -67,7 +67,7 @@ public class SolrSearcher {
   }
 
   public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {
-    
+
     query.addFilterQuery("{!tag=entityF}entity:" + entity);
     String q = "*:*";
     if (request.getParameter("q") != null) {
@@ -106,12 +106,12 @@ public class SolrSearcher {
         query.addFacetField("{!key=" + f + "}" + f + "_" + pristupnost);
       }
     }
-    
+
     if (request.getParameter("sort") != null) {
       query.setParam("sort", request.getParameter("sort"));
     } else {
       JSONArray sorts = Options.getInstance().getClientConf().getJSONArray("sorts");
-      for (Object s: sorts) {
+      for (Object s : sorts) {
         JSONObject sort = (JSONObject) s;
         if (!sort.has("entity")) {
           query.setParam("sort", sort.getString("field") + " " + sort.getString("dir"));
@@ -121,9 +121,9 @@ public class SolrSearcher {
           query.setParam("sort", sort.getString("field") + " " + sort.getString("dir"));
           break;
         }
-        
+
       }
-      
+
     }
 
     if (request.getParameter("inFavorites") != null) {
@@ -200,7 +200,7 @@ public class SolrSearcher {
         dateFacets.add(field);
       }
     }
-    
+
     for (String field : request.getParameterMap().keySet()) {
       if ((field.startsWith("f_")
               || filterFields.contains(field)
@@ -230,10 +230,10 @@ public class SolrSearcher {
         } else if (numberFacets.contains(field)) {
           String[] parts = request.getParameter(field).split(":")[0].split(",");
           String end = "*";
-          if ("".equals(parts[0])) {
+          if ("".equals(parts[0]) || !isInteger(parts[0])){
             parts[0] = "*";
           }
-          if (parts.length > 1) {
+          if (parts.length > 1 && isInteger(parts[1])) {
             end = parts[1];
           }
           String fq = field + ":[" + parts[0] + " TO " + end + "]";
@@ -555,7 +555,7 @@ public class SolrSearcher {
     }
 
   }
-  
+
   public static void addJSONFields(JSONObject doc, String prefix, SolrInputDocument idoc) {
     for (String s : doc.keySet()) {
       switch (s) {
@@ -581,6 +581,15 @@ public class SolrSearcher {
       if (idoc.getFieldValues(f) == null || !idoc.getFieldValues(f).contains(value)) {
         idoc.addField(f, value);
       }
+    }
+  }
+
+  public static boolean isInteger(String s) {
+    try {
+      Integer.parseInt(s);
+      return true;
+    } catch (NumberFormatException ex) {
+      return false;
     }
   }
 
