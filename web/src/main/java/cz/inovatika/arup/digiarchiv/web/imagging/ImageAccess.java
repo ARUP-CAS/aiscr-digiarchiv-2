@@ -28,7 +28,7 @@ public class ImageAccess {
           return false;
         }
         String imgPr = dok.getString("pristupnost");
-        boolean sameOrg = LoginServlet.organizace(request.getSession()).toLowerCase().equals(dok.getString("organizace").toLowerCase())  && "C".compareTo(userPr) >= 0;
+        boolean sameOrg = dok.has("organizace") && LoginServlet.organizace(request.getSession()).toLowerCase().equals(dok.getString("organizace").toLowerCase())  && "C".compareTo(userPr) >= 0;
         if ("A".equals(imgPr)) {
           allow = true;
         } else {

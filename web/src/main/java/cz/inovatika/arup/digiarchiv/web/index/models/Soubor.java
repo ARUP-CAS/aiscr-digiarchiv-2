@@ -29,6 +29,9 @@ public class Soubor implements Entity {
   public String dokument;
   
   @Field
+  public String samostatny_nalez;
+  
+  @Field
   public String projekt;
   
   @Field

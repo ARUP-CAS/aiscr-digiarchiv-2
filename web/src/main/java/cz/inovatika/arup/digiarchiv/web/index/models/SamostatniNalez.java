@@ -162,6 +162,7 @@ public class SamostatniNalez implements Entity {
     JSONObject json = SearchUtils.json(query, client, "soubor");
     if (json.getJSONObject("response").getInt("numFound") > 0) {
       JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+      SolrSearcher.addFieldNonRepeat(idoc, "soubor", doc.toString());
       addJSONFields(doc, "soubor", idoc);
     }
 
