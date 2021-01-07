@@ -22,6 +22,8 @@ import cz.inovatika.arup.digiarchiv.web.index.models.SamostatniNalez;
 import cz.inovatika.arup.digiarchiv.web.index.models.Soubor;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,10 +64,13 @@ public class IndexerServlet extends HttpServlet {
     try {
       String action = request.getPathInfo().substring(1);
       if (action != null) {
+        boolean isLocalhost = request.getRequestURL().toString().startsWith("http://digiarchiv:8080");
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         String confLevel = Options.getInstance().getString("indexSecLevel", "E");
-        LOGGER.log(Level.FINE, "pristupnost ->{0}. confLevel ->{1}", new Object[]{pristupnost, confLevel});
-        if (pristupnost.compareTo(confLevel) >= 0) {
+        LOGGER.log(Level.INFO, 
+                "pristupnost -> {0}. confLevel -> {1}. isLocalhost -> {2}. request -> {3}", 
+                new Object[]{pristupnost, confLevel, isLocalhost, request.getRequestURL().toString()}); 
+        if (isLocalhost || pristupnost.compareTo(confLevel) >= 0) {
           Actions actionToDo = Actions.valueOf(action.toUpperCase());
           JSONObject json = actionToDo.doPerform(request, response);
           out.println(json.toString(2));

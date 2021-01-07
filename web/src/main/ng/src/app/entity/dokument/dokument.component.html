@@ -62,19 +62,19 @@
           <label class="app-label">{{'Katastr (okres)' | translate}}:</label>&#160;
           <ng-container *ngIf="result.akce">
             <ng-container *ngFor="let item of result.akce">
-              <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
+              <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
              (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
             </ng-container>
           </ng-container>
           <ng-container *ngIf="result.lokalita">
             <ng-container *ngFor="let item of result.lokalita">
-              <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
+              <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
              (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
             </ng-container>
           </ng-container>
           <ng-container *ngIf="result.neident_akce">
             <ng-container *ngFor="let item of result.neident_akce">
-              <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
+              <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
              (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
             </ng-container>
           </ng-container>
