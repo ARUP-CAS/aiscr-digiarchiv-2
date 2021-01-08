@@ -4,6 +4,21 @@ app-file-viewer {
   .mat-dialog-title {
     position: relative;
 
+    .app-list-files-wrapper {
+      width: 900px;
+
+      a {
+        font-size: 16px !important;
+
+        &.active {
+          background-color: $app-primary-color;
+          color: $app-color-lightnes;
+          border-radius: $app-border-radius;
+          padding: $app-gap-icon $app-gap-half;
+        }
+      }
+    }
+
     .app-close-icon {
       position: absolute;
       top: 5px;

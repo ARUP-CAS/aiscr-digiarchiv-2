@@ -1,7 +1,9 @@
 <h1 mat-dialog-title>
-	<ng-container *ngFor="let file of files; let idx = index">
-    <a (click)="selectFile(file, idx)" [class.active]="file === selectedFile">{{ file.nazev }}</a>
-  </ng-container>
+  <div class="app-list-files-wrapper">
+    <ng-container *ngFor="let file of files; let idx = index">
+      <a (click)="selectFile(file, idx)" [class.active]="file === selectedFile">{{ file.nazev }}</a>&#160;
+    </ng-container>
+  </div>
 	<a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
 </h1>
 <div mat-dialog-content *ngIf="selectedFile">
