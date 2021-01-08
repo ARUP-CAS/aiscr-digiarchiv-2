@@ -390,7 +390,7 @@ public class SolrSearcher {
           dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
         }
 
-        SolrQuery queryDok = new SolrQuery("*").addFilterQuery("ident_cely:\"" + dok + "\"").setRows(1).setFields("pristupnost,organizace");
+        SolrQuery queryDok = new SolrQuery("*").addFilterQuery("ident_cely:\"" + dok + "\"").setRows(1).setFields("pristupnost,organizace,entity");
         JSONObject jo = json(client, "entities", queryDok);
         if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
           return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
