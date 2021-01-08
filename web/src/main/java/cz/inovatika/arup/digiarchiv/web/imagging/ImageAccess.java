@@ -27,6 +27,11 @@ public class ImageAccess {
         if (dok == null) {
           return false;
         }
+        if ("samostatny_nalez".equals(dok.getString("entity"))) {
+          // Pro samostatne nalezy neni omezeni
+          // https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/85
+          return true;
+        }
         String imgPr = dok.getString("pristupnost");
         boolean sameOrg = dok.has("organizace") && LoginServlet.organizace(request.getSession()).toLowerCase().equals(dok.getString("organizace").toLowerCase())  && "C".compareTo(userPr) >= 0;
         if ("A".equals(imgPr)) {
