@@ -1,6 +1,7 @@
 {
   "/api/**": {
     "target": "http://digiarchiv:8080/api",
+    "logLevel": "debug",
     "pathRewrite": {
       "^/api":""
     },
