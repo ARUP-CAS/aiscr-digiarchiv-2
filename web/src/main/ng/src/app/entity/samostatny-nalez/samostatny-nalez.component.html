@@ -60,7 +60,8 @@
           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
           </ng-container>
           <ng-container *ngIf="!hasRights">
-            <label class="app-label">{{'field.f_okres' | translate}}:</label>&#160;({{result.okres}})
+            <label class="app-label">{{'field.f_okres' | translate}}:</label>&#160;
+            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
           </ng-container>
         </div>
       </div>
