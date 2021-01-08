@@ -94,7 +94,8 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
     if (canView) {
       this.state.dialogRef = this.dialog.open(FileViewerComponent, {
         panelClass: 'app-file-viewer',
-        width: '755px',
+        width: '1000px',
+        height: '900px',
         data: this.result
       });
     } else {
