@@ -96,7 +96,12 @@ export class FileViewerComponent implements OnInit {
 
       if (result) {
         if (isPlatformBrowser(this.platformId)) {
-          this.windowRef.nativeWindow.open(this.downloadUrl());
+          // this.windowRef.nativeWindow.open(this.downloadUrl());
+
+          const link = this.windowRef.nativeWindow.document.createElement('a');
+          link.href = this.downloadUrl();
+          link.download = this.selectedFile.nazev;
+          link.click();
         }
 
       }
