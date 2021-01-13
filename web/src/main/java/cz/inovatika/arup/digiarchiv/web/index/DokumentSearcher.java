@@ -100,7 +100,7 @@ public class DokumentSearcher implements EntitySearcher {
         JSONArray lp = doc.getJSONArray("lokalita");
         for (int j = lp.length() - 1; j > -1; j--) {
           if (lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
-            removeVal(doc, "lokalita", j);
+            // removeVal(doc, "lokalita", j);
             lp.getJSONObject(j).remove("katastr");
           } else {
             doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
