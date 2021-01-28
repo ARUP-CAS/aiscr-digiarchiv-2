@@ -46,13 +46,12 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
     }
 
     const autor = this.result.autor.join(' and ');
-    this.bibTex = `@misc{
-      https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
-      author = “${autor}”, 
-      title = “Dokument ${this.result.ident_cely}”,
-      howpublished = “\\url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}}”,
-      year = ${this.result.rok_vzniku}, 
-      note = “${this.result.organizace}”
+    this.bibTex = `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+      author = {${autor}}, 
+      title = {Dokument ${this.result.ident_cely}},
+      url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+      year = {${this.result.rok_vzniku}}, 
+      note = {${this.result.organizace}}
     }`;
   }
 

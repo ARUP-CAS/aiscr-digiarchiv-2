@@ -38,12 +38,11 @@ export class AkceComponent implements OnInit, OnChanges {
     const sd = new Date(this.result.specifikace_data);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-     `@misc{
-       https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
-       author = “AMČR”, 
-       title = “Záznam ${this.result.ident_cely}”,
-       howpublished = “\\url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}}”,
-       note = “Archeologická mapa České republiky [cit. ${now}]”
+     `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+       author = {AMČR},
+       title = {Záznam ${this.result.ident_cely}},
+       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
 
