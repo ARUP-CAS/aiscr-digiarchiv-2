@@ -66,6 +66,9 @@ public class Indexer {
     }
 
     public SolrClient getClient(String core) throws IOException {
+      LOGGER.log(Level.INFO, "Getting solr client at {0} ", String.format("%s%s",
+                host(),
+                core));
         SolrClient server = new HttpSolrClient.Builder(String.format("%s%s",
                 host(),
                 core)).build();
@@ -79,11 +82,11 @@ public class Indexer {
         try {
             File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "skipped.txt");
             FileUtils.writeStringToFile(file, "Create thums started at " + start.toString() + System.getProperty("line.separator"), "UTF-8", true);
-            dokumentClient = getClient(opts.getString("csvDokumentCore", "dokument/"));
-            String sort = opts.getString("uniqueid", "uniqueid");
+            dokumentClient = getClient("entities/");
+            String sort = "path";
             int rows = 200;
             SolrQuery query = new SolrQuery();
-            //query.setRequestHandler(core);
+            query.addFilterQuery("entity:dokument");
             query.setQuery("soubor:[* TO *]");
             query.setFields("soubor");
             query.set("wt", "json");
@@ -178,13 +181,11 @@ public class Indexer {
         try {
             File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "skipped.txt");
             FileUtils.writeStringToFile(file, "Create thums started at " + start.toString() + System.getProperty("line.separator"), "UTF-8", true);
-            relationsClient = getClient(opts.getString("csvRelationsCore", "relations/"));
-            String sort = opts.getString("uniqueid", "uniqueid");
+            relationsClient = getClient("soubor/");
+            String sort = "path";
             int rows = 200;
-            SolrQuery query = new SolrQuery();
-            //query.setRequestHandler(core);
-            query.setQuery("doctype:soubor");
-            query.addFilterQuery("dokument:[* TO *]");
+            SolrQuery query = new SolrQuery("*");
+            // query.addFilterQuery("dokument:[* TO *]");
             query.addFilterQuery("-(dokument:\"\" AND samostatny_nalez:\"\")");
             query.addFilterQuery("-dokument:X*");
             query.addFilterQuery("-dokument:ZA*");
@@ -193,18 +194,20 @@ public class Indexer {
               query.addFilterQuery(fq);
             }
             query.setRows(rows);
-            query.setSort(SolrQuery.SortClause.asc(sort));
-            query.setTimeAllowed(0);
+            query.setSort("path", SolrQuery.ORDER.asc);
+            // query.setTimeAllowed(0);
 
             String cursorMark = CursorMarkParams.CURSOR_MARK_START;
 
             boolean done = false;
             QueryResponse rsp = null;
+            LOGGER.log(Level.INFO, "Searching soubor with query {0}", query.toQueryString());
 
             while (!done) {
                 query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursorMark);
                 try {
                     rsp = relationsClient.query(query);
+                    LOGGER.log(Level.INFO, "Core soubor has {0} records", rsp.getResults().getNumFound());
                 } catch (SolrServerException e) {
                     LOGGER.log(Level.SEVERE, null, e);
 
@@ -326,11 +329,10 @@ public class Indexer {
     public void createThumb(String nazev, boolean onlySmall, boolean force, boolean onlyThumbs) {
         try {
 
-            relationsClient = getClient(opts.getString("csvRelationsCore", "relations/"));
+            relationsClient = getClient("soubor/");
             SolrQuery query = new SolrQuery();
             //query.setRequestHandler(core);
             query.setQuery("nazev:\"" + nazev + "\"");
-            query.addFilterQuery("doctype:soubor");
 
             Options opts = Options.getInstance();
 

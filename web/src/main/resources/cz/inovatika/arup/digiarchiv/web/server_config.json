@@ -63,7 +63,8 @@
   },
 
   "amcrapi": {
-    "url":"http://api.archeologickamapa.cz/xmlrpc/0/?t=600",
+    "url_old":"http://api.archeologickamapa.cz/xmlrpc/0/?t=600",
+    "url":"https://backend.aiscr.cz/xmlrpc/0/?t=600",
     "user": "",
     "pwd": ""
   },
