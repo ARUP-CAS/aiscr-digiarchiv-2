@@ -121,13 +121,6 @@ public class SamostatniNalez implements Entity {
     boolean searchable = stav == 4;
     idoc.setField("searchable", searchable);
 
-    if (this.centroid_n != null) {
-      String loc = this.centroid_n + "," + this.centroid_e;
-      SolrSearcher.addFieldNonRepeat(idoc, "lat", this.centroid_n);
-      SolrSearcher.addFieldNonRepeat(idoc, "lng", this.centroid_e);
-      SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
-      SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
-    }
 
     if (nalezce != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", nalezce);
@@ -216,6 +209,15 @@ public class SamostatniNalez implements Entity {
           SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       }
+    }
+    
+    
+    if (this.centroid_n != null) {
+      String loc = this.centroid_n + "," + this.centroid_e;
+      SolrSearcher.addSecuredFieldNonRepeat(idoc, "lat", this.centroid_n, prSufix);
+      SolrSearcher.addSecuredFieldNonRepeat(idoc, "lng", this.centroid_e, prSufix);
+      SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc", loc, prSufix);
+      SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc_rpt", loc, prSufix);
     }
 
   }
