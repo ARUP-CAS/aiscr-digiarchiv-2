@@ -1,5 +1,6 @@
 import { AppService } from 'src/app/app.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-free-text',
@@ -9,9 +10,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FreeTextComponent implements OnInit {
 
   @Input() id: string;
-  text: string;
+  text: SafeHtml;
 
   constructor(
+    private sanitized: DomSanitizer,
     private service: AppService
   ) { }
 
@@ -23,7 +25,9 @@ export class FreeTextComponent implements OnInit {
   }
 
   setText() {
-    this.service.getText(this.id).subscribe(t => this.text = t);
+    this.service.getText(this.id).subscribe(t => {
+      this.text = this.sanitized.bypassSecurityTrustHtml(t);
+    });
   }
 
 }
