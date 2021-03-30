@@ -215,14 +215,7 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   testData(val: string) {
-    if (val === 'neidentifikovana_akce') {
-      if (this.result.neident_akce_katastr || this.result.neident_akce_okres || this.result.neident_akce_vedouci ||
-        this.result.neident_akce_rok_zahajeni || this.result.neident_akce_rok_ukonceni ||
-        this.result.neident_akce_lokalizace || this.result.neident_akce_popis ||
-        this.result.neident_akce_poznamka || this.result.neident_akce_pian) {
-        return true;
-      }
-    } else if (val === 'souvisejici_zaznamy') {
+    if (val === 'souvisejici_zaznamy') {
       if (this.result.jednotka_dokumentu_vazba_akce || this.result.jednotka_dokumentu_vazba_druha_akce ||
         this.result.jednotka_dokumentu_vazba_lokalita || this.result.jednotka_dokumentu_vazba_druha_lokalita) {
         return true;

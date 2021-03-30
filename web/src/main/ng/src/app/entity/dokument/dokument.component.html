@@ -329,7 +329,7 @@
                     </ul>
                   </mat-expansion-panel>
                 </mat-expansion-panel>
-                <mat-expansion-panel #panel *ngIf="testData('neidentifikovana_akce')" [expanded]="true" hideToggle class="app-panel-inner">
+                <mat-expansion-panel #panel *ngIf="jednotka_dokumentu.neident_akce" [expanded]="true" hideToggle class="app-panel-inner">
                   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                     <mat-panel-title>
                       <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -337,37 +337,37 @@
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <table>
-                    <tr *ngIf="result.neident_akce_katastr || result.neident_akce_okres">
+                    <tr *ngIf="jednotka_dokumentu.neident_akce.katastr || jednotka_dokumentu.neident_akce.okres">
                       <th class="app-label">{{ 'Katastr (okres)' | translate }}:</th>
                       <td>
-                        <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.neident_akce_katastr"></app-inline-filter>
-                        <ng-container *ngIf="result.neident_akce_okres">
-                          &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.neident_akce_okres"></app-inline-filter>)
+                        <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="jednotka_dokumentu.neident_akce.katastr"></app-inline-filter>
+                        <ng-container *ngIf="jednotka_dokumentu.neident_akce.okres">
+                          &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="jednotka_dokumentu.neident_akce.okres"></app-inline-filter>)
                         </ng-container></td>
                     </tr>
-                    <tr *ngIf="result.neident_akce_vedouci">
+                    <tr *ngIf="jednotka_dokumentu.neident_akce.vedouci">
                       <th class="app-label">{{ 'field.vedouci_akce' | translate }}:</th>
-                      <td>{{ result.neident_akce_vedouci }}</td>
+                      <td>{{ jednotka_dokumentu.neident_akce.vedouci }}</td>
                     </tr>
-                    <tr *ngIf="result.neident_akce_rok_zahajeni || result.neident_akce_rok_ukonceni">
+                    <tr *ngIf="jednotka_dokumentu.neident_akce.rok_zahajeni || jednotka_dokumentu.neident_akce.rok_ukonceni">
                       <th class="app-label">{{ 'Rok od-do' | translate }}:</th>
-                      <td>{{ result.neident_akce_rok_zahajeni }}<ng-container *ngIf="result.neident_akce_rok_ukonceni">-{{ result.neident_akce_rok_ukonceni }}</ng-container></td>
+                      <td>{{ jednotka_dokumentu.neident_akce.rok_zahajeni }}<ng-container *ngIf="jednotka_dokumentu.neident_akce.rok_ukonceni">-{{ jednotka_dokumentu.neident_akce.rok_ukonceni }}</ng-container></td>
                     </tr>
-                    <tr *ngIf="result.neident_akce_lokalizace">
+                    <tr *ngIf="jednotka_dokumentu.neident_akce.lokalizace">
                       <th class="app-label">{{ 'field.lokalizace' | translate }}:</th>
-                      <td>{{ result.neident_akce_lokalizace }}</td>
+                      <td>{{ jednotka_dokumentu.neident_akce.lokalizace }}</td>
                     </tr>
-                    <tr *ngIf="result.neident_akce_popis">
+                    <tr *ngIf="jednotka_dokumentu.neident_akce.popis">
                       <th class="app-label">{{ 'field.f_popis' | translate }}:</th>
-                      <td>{{ result.neident_akce_popis }}</td>
+                      <td>{{ jednotka_dokumentu.neident_akce.popis }}</td>
                     </tr>
-                    <tr *ngIf="result.neident_akce_poznamka">
+                    <tr *ngIf="jednotka_dokumentu.neident_akce.poznamka">
                       <th class="app-label">{{ 'field.f_poznamka' | translate }}:</th>
-                      <td>{{ result.neident_akce_poznamka }}</td>
+                      <td>{{ jednotka_dokumentu.neident_akce.poznamka }}</td>
                     </tr>
-                    <tr *ngIf="result.neident_akce_pian">
+                    <tr *ngIf="jednotka_dokumentu.neident_akce.pian">
                       <th class="app-label">{{ 'PIAN' | translate }}:</th>
-                      <td>{{ result.neident_akce_pian }}</td>
+                      <td>{{ jednotka_dokumentu.neident_akce.pian }}</td>
                     </tr>
                   </table> 
                 </mat-expansion-panel>

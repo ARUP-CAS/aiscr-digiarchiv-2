@@ -3,12 +3,8 @@ import { Router } from '@angular/router';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
-import { NeidentAkce } from 'src/app/shared/neident-akce';
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { Lokalita } from 'src/app/shared/lokalita';
-import { Akce } from 'src/app/shared/akce';
-import { KomponentaDok } from 'src/app/shared/komponenta-dok';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 
@@ -195,14 +191,7 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
   }
 
   testData(val: string) {
-    if (val === 'neidentifikovana_akce') {
-      if (this.result.neident_akce_katastr || this.result.neident_akce_okres || this.result.neident_akce_vedouci ||
-        this.result.neident_akce_rok_zahajeni || this.result.neident_akce_rok_ukonceni ||
-        this.result.neident_akce_lokalizace || this.result.neident_akce_popis ||
-        this.result.neident_akce_poznamka || this.result.neident_akce_pian) {
-        return true;
-      }
-    } else if (val === 'souvisejici_zaznamy') {
+    if (val === 'souvisejici_zaznamy') {
       if (this.result.jednotka_dokumentu_vazba_akce || this.result.jednotka_dokumentu_vazba_druha_akce ||
         this.result.jednotka_dokumentu_vazba_lokalita || this.result.jednotka_dokumentu_vazba_druha_lokalita) {
         return true;
