@@ -39,7 +39,7 @@ public class ProjektSearcher implements EntitySearcher {
       String fields = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace.dalsi_katastry,lokalizace,pian:[json]";
       SolrSearcher.addChildField(client, doc, "child_akce", "akce", fields);
 
-      fields = "ident_cely,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace";
+      fields = "ident_cely,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
       SolrSearcher.addChildField(client, doc, "child_samostatny_nalez", "samostatny_nalez", fields);
     }
   }
