@@ -56,7 +56,7 @@
       <mat-expansion-panel-header expandedHeight="50px" collapsedHeight="50px">
         <mat-panel-title>
           <!-- <a class="app-filter-badge app-gap-icon-right" [matTooltip]="'Aplikovat filtr' | translate" (click)="applyFilters()">
-            <mat-icon mat-flat-button>filter_list</mat-icon>
+            <mat-icon mat-flat-button>filter_alt</mat-icon>
           </a> -->
           {{ 'field.'+facetField.field | translate }}
         </mat-panel-title>
@@ -94,7 +94,7 @@
             </mat-list-item>
           </cdk-virtual-scroll-viewport>
           <button mat-flat-button (click)="applyFilters()" color="accent" class="app-apply-filter">
-            <mat-icon mat-flat-button>filter_list</mat-icon>
+            <mat-icon mat-flat-button>filter_alt</mat-icon>
             {{ 'Aplikovat filtr' | translate }}
           </button>
         </mat-list>
