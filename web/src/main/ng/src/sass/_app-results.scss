@@ -9,7 +9,7 @@ app-results {
   }
 
   .app-right {
-    @import "./app-action-links";
+    @import "./app-toolbar";
     @import "./app-chart-bar";
     @import "./app-view-col";
     @import "./app-view-row";

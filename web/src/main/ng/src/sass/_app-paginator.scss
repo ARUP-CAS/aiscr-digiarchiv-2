@@ -27,8 +27,8 @@ app-paginator {
   }
 
   .mat-paginator-page-size {
-    @media #{$xs} {
+    /* @media #{$xs} {
       display: none;
-    }
+    } */
   }
 }

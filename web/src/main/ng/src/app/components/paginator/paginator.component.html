@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="start baseline">
+<div fxLayout="row" fxLayoutAlign="start baseline" class="app-paginator-wrapper">
   <mat-paginator fxFlex class="app-clean-bg"
     [length]="state.numFound"
     [pageSize]="state.rows"
@@ -8,7 +8,7 @@
     class="app-clean-bg">
   </mat-paginator>
   
-  <mat-form-field fxFlex="95px" class="app-page-num fxHide_sm fxHide_xs">
+  <mat-form-field fxFlex="70px" class="app-page-num"><!--fxHide_sm fxHide_xs-->
     <mat-label>{{ 'Číslo stránky' | translate }}</mat-label>
     <input matInput type="text" [(ngModel)]="pageIndex" (keyup.enter)="setPage()">
     <a matSuffix [matTooltip]="'Přejděte číslo stránky' | translate" (click)="setPage()">
@@ -16,7 +16,7 @@
     </a> 
   </mat-form-field>
   
-  <mat-form-field fxFlex="120px" class="app-sorting fxHide_md fxHide_sm fxHide_xs">
+  <mat-form-field fxFlex="120px" class="app-sorting"><!--fxHide_md fxHide_sm fxHide_xs-->
     <mat-label>{{ 'Řazení' | translate }}</mat-label>
     <mat-select [(ngModel)]="state.sort">
       <mat-select-trigger>
