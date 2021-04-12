@@ -25,10 +25,4 @@ app-paginator {
   .app-sorting {
     font-size: 12px;
   }
-
-  .mat-paginator-page-size {
-    @media #{$xs} {
-      display: none;
-    }
-  }
 }

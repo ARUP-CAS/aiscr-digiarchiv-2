@@ -42,7 +42,7 @@
           </ng-container> 
         </mat-card-content>
       </mat-card>
-      <div *ngIf="state.numFound > 0" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
+      <div *ngIf="state.numFound > 0" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center" class="app-toolbar">
         <div fxFlex="0 0 150px" class="app-action-links">
           <!-- <a (click)="showChartBar()"
           [matTooltip]="isChartBarCollapsed ? ('Zobrazit časovou osu' | translate) : ('Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
@@ -71,7 +71,7 @@
             <mat-icon>grade</mat-icon>
           </a>
         </div>
-        <div fxFlex="0 0 calc(100% - 166px)">
+        <div fxFlex="0 0 calc(100% - 166px)" class="app-paginator">
           <app-paginator></app-paginator>
         </div>
       </div>

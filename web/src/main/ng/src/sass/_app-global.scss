@@ -395,6 +395,26 @@ a {
           color: currentColor;
         }
       }
+
+      @media #{$lt-sm} {
+        margin-bottom: 8px !important;
+      }
+    }
+
+    @media #{$lt-sm} {
+      margin-bottom: -8px !important;
+    }
+
+    @media #{$lt-lg} {
+      flex-wrap: wrap;
+
+      .app-metadata {
+        margin-bottom: 8px;
+      }
+
+      & > div {
+        flex: 0 0 100%;
+      }
     }
   }
 

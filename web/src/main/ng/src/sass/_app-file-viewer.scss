@@ -5,7 +5,7 @@ app-file-viewer {
     position: relative;
 
     .app-list-files-wrapper {
-      width: 900px;
+      width: calc(100% - 40px);
 
       a {
         font-size: 16px !important;
@@ -30,20 +30,31 @@ app-file-viewer {
   .mat-dialog-content {
     overflow: unset;
 
-   .app-controls {
-      .mat-icon {
-      @include setIcon($position: middle);  
+    .app-toolbar-wrapper {
+      .app-controls {
+        .mat-icon {
+        @include setIcon($position: middle);  
+        }
+       
+        .mat-form-field {
+          width: 30px;
+          font-weight: bold;
+        }
       }
-     
-      .mat-form-field {
-        width: 30px;
-        font-weight: bold;
+  
+      .app-metadata {
+        .mat-icon {
+          @include setIcon($position: middle);
+        }
       }
-    }
 
-    .app-metadata {
-      .mat-icon {
-        @include setIcon($position: middle);
+      @media #{$lt-md} {
+        flex-wrap: wrap;
+
+        .app-controls,
+        .app-metadata {
+          flex: 0 0 100%;
+        }
       }
     }
 
@@ -52,6 +63,12 @@ app-file-viewer {
         & > .ngucarousel-items {
           & > .item {
             text-align: center !important;
+
+            @media #{$lt-md} {
+              img {
+                width: 100%;
+              }     
+            }
           }
         }
       }

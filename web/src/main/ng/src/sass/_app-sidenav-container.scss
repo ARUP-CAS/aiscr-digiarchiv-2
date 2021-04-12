@@ -83,13 +83,17 @@
     top: $app-gap;
     right: $app-gap;
     z-index: 1002;
-    width: 880px;
+    width: 850px;
 
     max-height: calc(100% - 16px);
     overflow-y: auto;
 
     .mat-card-title {
       max-width: 640px;
+    }
+
+    @media #{$lt-lg} {
+      width: calc(100% - 85px);
     }
   }
 
