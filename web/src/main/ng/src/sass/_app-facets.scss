@@ -190,8 +190,9 @@
         }
 
         &.app-list-table {
-          height: auto;
-          min-height: 22px;
+          // height: auto;
+          // min-height: 22px;
+          overflow: hidden;
           
           .mat-list-item-content {
             display: table;
@@ -199,6 +200,10 @@
             .mat-checkbox,
             .app-list-content {
               display: table-cell;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              max-width: 270px;
             }
           }
         }
