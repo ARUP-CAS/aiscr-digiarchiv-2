@@ -93,7 +93,9 @@ public class ImageSupport {
       int t_width = opts.getInt("thumbWidth", 100);
       int t_height = opts.getInt("thumbHeight", 100);
 
-      resizeAndCropWithThumbnailator(srcImage, t_width, t_height, new File(outputFile + "_thumb.jpg"), getImageType(f, srcImage));
+      // Podle https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/111
+      // resizeAndCropWithThumbnailator(srcImage, t_width, t_height, new File(outputFile + "_thumb.jpg"), getImageType(f, srcImage));
+      resizeWithThumbnailator(srcImage, t_width, t_height, new File(outputFile + "_thumb.jpg"), getImageType(f, srcImage));
 
       if (!onlyThumbs) {
         int max = opts.getInt("mediumHeight", 1000);
@@ -143,7 +145,7 @@ public class ImageSupport {
   }
 
   public static void resizeWithThumbnailator(BufferedImage srcImage, int w, int h, File f, int imageType) {
-    byte[] retval = null;
+//    byte[] retval = null;
     try {
 //                ByteArrayOutputStream os = new ByteArrayOutputStream();
 
