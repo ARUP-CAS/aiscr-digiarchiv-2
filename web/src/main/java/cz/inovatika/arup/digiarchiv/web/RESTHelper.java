@@ -44,7 +44,7 @@ public class RESTHelper {
             String pass) throws MalformedURLException, IOException {
         URL url = new URL(urlString);
         URLConnection uc = url.openConnection();
-        uc.setReadTimeout(Integer.parseInt("100000"));
+        uc.setReadTimeout(Integer.parseInt("1000000"));
         uc.setConnectTimeout(Integer.parseInt("10000"));
         String userPassword = user + ":" + pass;
         String encoded = Base64.encodeBase64String(userPassword.getBytes());

@@ -43,7 +43,10 @@ public class OAIUtils {
       String url = Options.getInstance().getJSONObject("OAI").getString("url")
               + "?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api.aiscr.cz/id/" + id;
       // LOGGER.log(Level.INFO, "Retreiving {0}", url);
-      String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
+      // String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
+      String user = Options.getInstance().getJSONObject("amcrapi").getString("user");
+      String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
+      String xml = RESTHelper.toString(url, user, pwd);
       return XML.toJSONObject(xml, XMLParserConfiguration.ORIGINAL);
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
@@ -56,7 +59,10 @@ public class OAIUtils {
       String url = Options.getInstance().getJSONObject("OAI").getString("url")
               + "?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api.aiscr.cz/id/" + id;
       LOGGER.log(Level.INFO, "Retreiving {0}", url);
-      String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
+      // String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
+      String user = Options.getInstance().getJSONObject("amcrapi").getString("user");
+      String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
+      String xml = RESTHelper.toString(url, user, pwd);
       JSONObject json = XML.toJSONObject(xml, XMLParserConfiguration.ORIGINAL);
       return json.getJSONObject("OAI-PMH")
               .getJSONObject("GetRecord")
@@ -83,12 +89,13 @@ public class OAIUtils {
     Date start = new Date();
     int indexed = 0;
     String rels = Options.getInstance().getString("solrRels");
+    String url = "";
     try (HttpSolrClient solrRels = new HttpSolrClient.Builder(rels).build()) {
       String user = Options.getInstance().getJSONObject("amcrapi").getString("user");
       String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
       String login = user + ":" + pwd;
 
-      String url = Options.getInstance().getJSONObject("OAI").getString("url")
+      url = Options.getInstance().getJSONObject("OAI").getString("url")
               + "?verb=ListRecords&metadataPrefix=oai_amcr&set=" + entity;
       LOGGER.log(Level.INFO, "Retreiving {0}", url);
       String xml = RESTHelper.toString(url, user, pwd);
@@ -111,6 +118,7 @@ public class OAIUtils {
       }
       ret.put(entity, indexed);
     } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "error indexing {0}: {1}", new Object[]{url, ex});
       LOGGER.log(Level.SEVERE, null, ex);
       ret.put(entity, "error: " + ex);
     }

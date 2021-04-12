@@ -107,6 +107,9 @@ public class SamostatniNalez implements Entity {
   @Field
   public Date datum_archivace;
 
+  @Field
+  public List<String> child_soubor;
+
   String[] facetFields = new String[]{"komponenta_areal", "f_aktivita", "nalez_kategorie"};
 
   List<String> prSufixAll = new ArrayList<>();
@@ -120,7 +123,6 @@ public class SamostatniNalez implements Entity {
     prSufixAll.add("D");
     boolean searchable = stav == 4;
     idoc.setField("searchable", searchable);
-
 
     if (nalezce != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "autor_sort", nalezce);
@@ -140,7 +142,9 @@ public class SamostatniNalez implements Entity {
 
   @Override
   public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
-    addSoubor(client, idoc);
+    if (this.child_soubor != null) {
+      addSoubor(client, idoc);
+    }
     if (idoc.containsKey("obdobi") && idoc.getFieldValue("obdobi") != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "obdobi_poradi", SearchUtils.getObdobiPoradi((String) idoc.getFieldValue("obdobi")));
     }
@@ -149,14 +153,20 @@ public class SamostatniNalez implements Entity {
   }
 
   private void addSoubor(HttpSolrClient client, SolrInputDocument idoc) {
-    SolrQuery query = new SolrQuery("samostatny_nalez:\"" + this.ident_cely + "\"")
-            .setFields("filepath,nazev,uzivatelske_oznaceni,mimetype,rozsah,"
-                    + "size_bytes,vytvoreno,stav,dokument,projekt,samostatny_nalez");
-    JSONObject json = SearchUtils.json(query, client, "soubor");
-    if (json.getJSONObject("response").getInt("numFound") > 0) {
-      JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-      SolrSearcher.addFieldNonRepeat(idoc, "soubor", doc.toString());
-      addJSONFields(doc, "soubor", idoc);
+    for (int i = 0; i < child_soubor.size(); i++) {
+      String soubor = this.child_soubor.get(i);
+//      SolrQuery query = new SolrQuery("samostatny_nalez:\"" + this.ident_cely + "\"")
+//              .setFields("filepath,nazev,uzivatelske_oznaceni,mimetype,rozsah,"
+//                      + "size_bytes,vytvoreno,stav,dokument,projekt,samostatny_nalez");
+      SolrQuery query = new SolrQuery("filepath:\"" + soubor + "\"")
+              .setFields("filepath,nazev,uzivatelske_oznaceni,mimetype,rozsah,"
+                      + "size_bytes,vytvoreno,stav,dokument,projekt,samostatny_nalez");
+      JSONObject json = SearchUtils.json(query, client, "soubor");
+      if (json.getJSONObject("response").getInt("numFound") > 0) {
+        JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+        SolrSearcher.addFieldNonRepeat(idoc, "soubor", doc.toString());
+        addJSONFields(doc, "soubor", idoc);
+      }
     }
 
   }
@@ -210,8 +220,7 @@ public class SamostatniNalez implements Entity {
         }
       }
     }
-    
-    
+
     if (this.centroid_n != null) {
       String loc = this.centroid_n + "," + this.centroid_e;
       SolrSearcher.addSecuredFieldNonRepeat(idoc, "lat", this.centroid_n, prSufix);

@@ -73,6 +73,9 @@
         {{'Počet projektů' | translate}}: <strong>1</strong>
         <span class="app-pipe"></span>
       </ng-container> -->
+      <ng-container *ngIf="result.soubor?.length > 0">
+        {{'Počet souborů' | translate}}: <strong>{{result.soubor.length}}</strong>
+      </ng-container>
     </div>
     <div>
       <button *ngIf="!mapDetail && hasRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'Zobrazit na mapě' | translate">
