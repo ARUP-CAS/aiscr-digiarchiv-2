@@ -31,13 +31,13 @@ export class LoginDialogComponent implements OnInit {
     this.loading = true;
     this.service.login(this.user, this.pwd).subscribe(res => {
       this.state.setLogged(res);
+      this.loading = false;
       if (res.error) {
         this.loginError = true;
       } else {
         this.loginError = false;
         this.user = '';
         this.pwd = '';
-        this.loading = false;
         this.dialogRef.close();
       }
     });
