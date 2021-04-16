@@ -64,10 +64,12 @@ app-file-viewer {
           & > .item {
             text-align: center !important;
 
-            @media #{$lt-md} {
-              img {
-                width: 100%;
-              }     
+            img {
+              max-width: 100%;
+
+              @media #{$lt-md} {
+                width: 100%;  
+              }
             }
           }
         }
