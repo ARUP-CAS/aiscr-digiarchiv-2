@@ -27,7 +27,7 @@
         <div *ngIf="result.predano_organizace || result.inv_cislo || result.pristupnost">
           <ng-container *ngIf="result.predano_organizace">
             <label class="app-label">{{ 'field.predano_organizace' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.predano_organizace"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.predano_organizace" [heslar]="'organizace'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.inv_cislo">

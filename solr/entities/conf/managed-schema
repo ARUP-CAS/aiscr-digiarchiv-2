@@ -372,6 +372,7 @@
 <copyField source="organizace" dest="f_organizace" />
 <copyField source="organizace_ostatni" dest="f_organizace" />
 <copyField source="organizace_prihlaseni" dest="f_organizace" />
+<copyField source="predano_organizace" dest="f_organizace" />
 
 <copyField source="let_pozorovatel" dest="f_let_pozorovatel" />
 <copyField source="let_organizace" dest="f_let_organizace" />

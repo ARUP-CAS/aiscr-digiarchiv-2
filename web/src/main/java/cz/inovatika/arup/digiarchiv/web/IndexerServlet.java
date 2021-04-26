@@ -20,13 +20,9 @@ import cz.inovatika.arup.digiarchiv.web.index.models.Pian;
 import cz.inovatika.arup.digiarchiv.web.index.models.Projekt;
 import cz.inovatika.arup.digiarchiv.web.index.models.SamostatniNalez;
 import cz.inovatika.arup.digiarchiv.web.index.models.Soubor;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.URL;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -35,12 +31,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.XML;
-import org.json.XMLParserConfiguration;
 
 /**
  *
@@ -112,31 +105,6 @@ public class IndexerServlet extends HttpServlet {
 
   enum Actions {
 
-    HTTP {
-      @Override
-      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        JSONObject json = new JSONObject();
-        try {
-          String url = Options.getInstance().getJSONObject("OAI").getString("url")
-                + "?verb=ListRecords&resumptionToken=" + req.getParameter("rt");
-          String user = Options.getInstance().getJSONObject("amcrapi").getString("user");
-          String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
-          LOGGER.log(Level.INFO, "Retreiving {0}", url);
-          String xml = RESTHelper.toString(url, user, pwd);
-          FileUtils.writeStringToFile(new File("c:\\Users\\alberto\\Projects\\DigiArchiv\\kk.txt"), xml, "UTF-8");
-          // System.out.println(xml);
-          //1463539
-          char[] dst = new char[80];
-          xml.getChars(1463539 - 20, 1463539-1, dst, 0);
-          System.out.println(dst);
-          json = XML.toJSONObject(xml, XMLParserConfiguration.ORIGINAL);
-        } catch (JSONException ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
-          json.put("error", ex.toString());
-        }
-        return json;
-      }
-    },
     SHOWID {
       @Override
       JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {

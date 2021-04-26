@@ -75,6 +75,16 @@ public class ThumbsGenerator {
           }
           return;
         }
+        case "-fqo": {
+          String fq = args[1];
+          Indexer indexer = new Indexer(true);
+          try {
+            indexer.createThumbs(true, false, fq);
+          } catch (Exception ex) {
+            Logger.getLogger(ThumbsGenerator.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          return;
+        }
         case "-used": {
           try {
 
