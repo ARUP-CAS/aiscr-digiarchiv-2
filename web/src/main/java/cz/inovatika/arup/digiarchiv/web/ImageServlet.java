@@ -82,7 +82,13 @@ public class ImageServlet extends HttpServlet {
             }
           }
           if (f.exists()) {
-            response.setContentType("image/jpeg");
+            String mime = getServletContext().getMimeType(f.getName());
+            if ( mime != null) {
+              response.setContentType(mime);
+            } else {
+              response.setContentType("image/jpeg"); 
+            }
+            
             BufferedImage bi = ImageIO.read(f);
             ImageSupport.addWatermark(bi, logoImg(response, out), (float) opts.getDouble("watermark.alpha", 0.2f));
             ImageIO.write(bi, "jpg", out);
