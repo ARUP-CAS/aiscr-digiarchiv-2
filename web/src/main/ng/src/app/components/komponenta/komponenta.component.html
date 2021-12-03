@@ -2,7 +2,7 @@
   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-      {{ 'Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+      {{ 'Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
       <app-inline-filter [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
       <ng-container *ngIf="result.jistota || result.presna_datace">&#160;({{result.jistota}}<ng-container *ngIf="result.jistota && result.presna_datace">;&#160;</ng-container><ng-container *ngIf="result.presna_datace">{{result.presna_datace}}</ng-container>)</ng-container>
       <ng-container *ngIf="result.areal">&#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="result.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>

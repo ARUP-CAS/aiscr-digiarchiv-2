@@ -2,7 +2,7 @@
   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-      {{ 'Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+      {{ 'Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
       <app-inline-filter [field]="'f_dok_jednotka_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
       <ng-container *ngIf="result.nazev">&#160;({{result.nazev}})</ng-container>
     </mat-panel-title>

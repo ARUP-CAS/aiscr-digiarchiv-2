@@ -115,6 +115,7 @@ const providers: any[] =[
   {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   AppState, AppConfiguration, HttpClient, 
   { provide: APP_INITIALIZER, useFactory: (config: AppConfiguration) => () => config.load(), deps: [AppConfiguration], multi: true },
+  TranslateService,
   {
     provide: MatPaginatorIntl, deps: [TranslateService],
     useFactory: createCustomMatPaginatorIntl
