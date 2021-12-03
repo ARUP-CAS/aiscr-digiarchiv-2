@@ -97,6 +97,14 @@
             <mat-icon mat-flat-button>filter_alt</mat-icon>
             {{ 'Aplikovat filtr' | translate }}
           </button>
+          <button mat-flat-button color="primary" class="app-apply-filter" [matMenuTriggerFor]="sortBy">
+            <mat-icon mat-flat-button>sort</mat-icon>
+            {{ 'Radit podle' | translate }}
+          </button>
+          <mat-menu #sortBy="matMenu">
+            <button mat-menu-item>Dle ....</button>
+            <button mat-menu-item>Dle ....</button>
+          </mat-menu>
         </mat-list>
       </ng-template>
     </mat-expansion-panel> 
