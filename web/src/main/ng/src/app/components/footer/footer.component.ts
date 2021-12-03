@@ -15,7 +15,7 @@ export class FooterComponent implements OnInit {
   constructor(
     public state: AppState,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit(): void {
   }
