@@ -44,6 +44,7 @@ $app-gap-icon: 5px !default;
 $app-gap-button: 8px !default;
 $app-container: 1280px !default;
 $app-border-radius: 4px !default;
+$app-component-height: 40px !default;
 
 // navbar
 $app-navbar-height: 80px !default; // 108 puvodni
@@ -53,8 +54,8 @@ $app-navbar-link-color: $app-navbar-color !default;
 $app-navbar-active-color: $app-primary-color !default;
 
 // searchbar
-$app-searchbar-height: 95px !default; // 110 puvodni
-$app-searchbar-field-height: 46px !default;
+$app-searchbar-height: 90px !default; // 110 puvodni
+$app-searchbar-field-height: $app-component-height !default;
 $app-searchbar-field-max-width: 640px !default;
 $app-searchbar-field-color: $app-color-darknes !default;
 $app-searchbar-field-bg: $app-color-lightnes !default;
@@ -69,7 +70,7 @@ $app-list-view-facet-item-height: 22px !default;
 $app-list-view-facet-item-color: $app-gray-6 !default;
 
 // facet entities
-$app-facet-entity-height: 40px !default;
+$app-facet-entity-height: $app-component-height !default;
 $app-facet-entity-border-color-opacity: .3 !default;
 $app-facet-entity-bg-color-opacity: .1 !default;
 

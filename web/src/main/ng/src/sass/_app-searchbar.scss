@@ -76,8 +76,8 @@ app-searchbar {
     text-align: right;
     
     .mat-flat-button {
-      line-height: calc(#{$app-searchbar-field-height} - 2px);
-      height: calc(#{$app-searchbar-field-height} - 2px);
+      line-height: $app-searchbar-field-height;
+      height: $app-searchbar-field-height;
       margin-right: $app-gap-button;
 
       &:last-child {

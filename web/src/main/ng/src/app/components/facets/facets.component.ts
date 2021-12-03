@@ -41,6 +41,7 @@ export class FacetsComponent implements OnInit, AfterViewInit {
   @ViewChild('tree') tree;
 
   loading: boolean;
+  facetHeight: string = "40px";
 
   activeOP: boolean; // _temp pro test, pak vymazat
 

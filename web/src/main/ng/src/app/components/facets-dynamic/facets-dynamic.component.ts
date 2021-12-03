@@ -28,6 +28,8 @@ export class FacetsDynamicComponent implements OnInit {
   filterOperator: string;
   boolValue: string = '0';
 
+  facetHeight: string = "40px";
+
   constructor(
     private router: Router,
     private datePipe: DatePipe,

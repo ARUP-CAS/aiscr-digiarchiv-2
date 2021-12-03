@@ -644,3 +644,13 @@ a {
 .mat-menu-panel {
   max-width: 320px !important;
 }
+
+// mat form field
+.mat-form-field {
+  &.mat-form-field-appearance-fill {
+    .mat-form-field-infix {
+      padding: 0.25em 0 0.75em 0;
+      padding: 0.1em 0 0.65em 0;
+    }
+  }
+}
