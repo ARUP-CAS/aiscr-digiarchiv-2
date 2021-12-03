@@ -1,2 +1,2 @@
-<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
 (<app-inline-filter [field]="'typ'" [value]="result.typ"></app-inline-filter>) – {{result.niveleta}} m n. m. ({{result.easting}} : {{result.northing}})

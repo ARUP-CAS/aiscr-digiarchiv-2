@@ -7,7 +7,7 @@
       <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
       <mat-icon class="app-entity-samostatny_nalez" [matTooltip]="'entities.samostatny_nalez' | translate">{{ config.entityIcons["samostatny_nalez"] }}</mat-icon>
       <ng-container [ngSwitch]="isChild">
-        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
         <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
       </ng-container><span class="app-pipe"></span>
       {{ result.nalezce }}<span class="app-pipe"></span>{{ result.datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
@@ -81,7 +81,7 @@
       <button *ngIf="!mapDetail && hasRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'Zobrazit na mapě' | translate">
         <mat-icon>map</mat-icon>
       </button>
-      <a mat-flat-button [routerLink]="'/id/' + result.ident_cely" target="_blank" [matTooltip]="'Persistentní odkaz' | translate">
+      <a mat-flat-button [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" [matTooltip]="'Persistentní odkaz' | translate">
         <mat-icon>link</mat-icon>
       </a>
       <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">

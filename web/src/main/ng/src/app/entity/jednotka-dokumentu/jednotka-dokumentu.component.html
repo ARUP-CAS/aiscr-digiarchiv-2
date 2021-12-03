@@ -7,10 +7,10 @@
       <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
       <mat-icon *ngIf="isChild" class="app-entity-akce" [matTooltip]="'entities.akce' | translate">turned_in</mat-icon>
       <ng-container [ngSwitch]="isChild">
-        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
         <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
       </ng-container><span class="app-pipe"></span>
-      {{ 'Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+      {{ 'Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
       <ng-container *ngIf="result.poznamka"> ({{ result.poznamka }})</ng-container> 
       <span class="app-pipe"></span>
     </mat-card-title>
@@ -24,16 +24,16 @@
       <ng-container *ngIf="result.vazba_akce || result.vazba_lokalita">
         <label class="app-label">{{ 'Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
         <ng-container *ngIf="result.vazba_akce">
-          <a [routerLink]="'/id/' + result.vazba_akce" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_akce }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
+          <a [routerLink]="'/id/' + result.vazba_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_akce }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
         </ng-container>
         <ng-container *ngIf="result.vazba_druha_akce">
-          <a [routerLink]="'/id/' + result.vazba_druha_akce" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + result.vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
         </ng-container>
         <ng-container *ngIf="result.vazba_lokalita">
-          <a [routerLink]="'/id/' + result.vazba_lokalita" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_lokalita }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + result.vazba_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_lokalita }} <mat-icon>link</mat-icon></a>
         </ng-container>
         <ng-container *ngIf="result.vazba_druha_lokalita">
-          <a [routerLink]="'/id/' + result.vazba_druha_lokalita" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + result.vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
         </ng-container>
       </ng-container>
 
@@ -43,7 +43,7 @@
           <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
             <mat-panel-title>
               <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-              {{ 'Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
+              {{ 'Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
               <ng-container *ngIf="kd.obdobi">
                 <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
               </ng-container>
@@ -127,7 +127,7 @@
     
     <div>
       <button mat-flat-button>
-        <a [routerLink]="'/id/' + result.ident_cely" target="_blank">
+        <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
           <mat-icon>link</mat-icon>
         </a>
       </button>

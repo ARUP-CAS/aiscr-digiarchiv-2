@@ -3,7 +3,7 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-        {{ 'PIAN' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+        {{ 'PIAN' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
         <app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_pian'"></app-inline-filter>
         <ng-container *ngIf="result.presnost">&#160;({{'přesnost' | translate }}:&#160;
           <app-inline-filter [field]="'f_pian_presnost'" [value]="result.presnost" [heslar]="'presnost'"></app-inline-filter>

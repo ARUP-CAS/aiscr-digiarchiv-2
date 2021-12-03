@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AppState } from 'src/app/app.state';
 
 @Component({
   selector: 'app-vyskovy-bod',
@@ -12,7 +13,7 @@ export class VyskovyBodComponent implements OnInit {
   @Input() isChild: boolean;
   @Input() inDocument = false;
 
-  constructor() { }
+  constructor(public state: AppState) { }
 
   ngOnInit(): void {
   }

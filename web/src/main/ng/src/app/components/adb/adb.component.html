@@ -2,7 +2,7 @@
   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-      {{ 'Archeologický dokumentační bod' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+      {{ 'Archeologický dokumentační bod' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
       <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
     </mat-panel-title>
   </mat-expansion-panel-header>
@@ -54,7 +54,7 @@
       </mat-expansion-panel-header>
       <ul class="app-list-inside">
         <li *ngFor="let vb of result.vyskovy_bod">
-          <a [routerLink]="'/id/' + vb.ident_cely" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
           (<app-inline-filter [field]="'typ'" [value]="vb.typ"></app-inline-filter>) – {{vb.niveleta}} m n. m. ({{vb.easting}} : {{vb.northing}})
         </li>
       </ul>
