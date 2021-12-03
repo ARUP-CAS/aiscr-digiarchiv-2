@@ -39,7 +39,7 @@
 
       <mat-accordion multi="true">
         <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka> -->
-        <mat-expansion-panel #panel *ngFor="let kd of result.komponenta_dokument" [expanded]="true" hideToggle class="app-panel-inner">
+        <mat-expansion-panel #panel *ngFor="let kd of result.komponenta_dokument[0]" [expanded]="true" hideToggle class="app-panel-inner">
           <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
             <mat-panel-title>
               <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -152,3 +152,12 @@
     </div>
   </mat-card-actions>
 </mat-card>
+
+<mat-expansion-panel *ngIf="result.dokument && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+  <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+    <mat-panel-title>
+      {{ 'Související záznamy' | translate }}:
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <app-dokument *ngFor="let dokument of result.dokumenty" [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
+</mat-expansion-panel> 

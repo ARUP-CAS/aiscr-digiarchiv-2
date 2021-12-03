@@ -13,7 +13,6 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public interface EntitySearcher {
-  public JSONObject search(HttpServletRequest request);
-  public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request);
+public interface ComponentSearcher {
+  public void getRelated(JSONObject jo, HttpSolrClient client, HttpServletRequest request);
 }

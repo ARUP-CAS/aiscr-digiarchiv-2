@@ -5,6 +5,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
+import cz.inovatika.arup.digiarchiv.web.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
@@ -118,6 +119,10 @@ public class SearchServlet extends HttpServlet {
             EntitySearcher searcher = SearchUtils.getSearcher(entity);
             if (searcher != null) {
               searcher.getChilds(jo, client, request);
+            }
+            ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
+            if (cs != null) {
+              cs.getRelated(jo, client, request);
             }
             // json = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 

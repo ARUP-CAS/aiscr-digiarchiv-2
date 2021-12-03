@@ -21,7 +21,8 @@ export class DokJednotkaComponent implements OnInit {
     public state: AppState
   ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+  }
 
   pian(id: string) {
     if (this.pians) {

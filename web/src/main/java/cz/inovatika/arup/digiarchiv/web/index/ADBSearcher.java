@@ -15,21 +15,34 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public class ADBSearcher implements EntitySearcher{
-  
+public class ADBSearcher implements EntitySearcher {
+
   public static final Logger LOGGER = Logger.getLogger(ADBSearcher.class.getName());
-  
+
   final String ENTITY = "adb";
-  
+
   @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    
+    String fields = "ident_cely,entity,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
+            + ",nazev,typ_lokality,druh,popis";
+
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
       if (LoginServlet.userId(request) != null) {
         SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
       }
+
+      if (doc.has("parent")) {
+        String p = doc.getString("parent");
+        p = p.substring(0, p.length() - 4);
+        JSONObject sub = SolrSearcher.getById(client, p, fields);
+        if (sub != null) {
+          doc.append(sub.getString("entity"), sub);
+        }
+
+      }
+
     }
   }
 
@@ -60,8 +73,8 @@ public class ADBSearcher implements EntitySearcher{
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
     }
-    
+
     SolrSearcher.addFilters(request, query, pristupnost);
   }
-  
+
 }

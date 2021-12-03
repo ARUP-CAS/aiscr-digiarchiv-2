@@ -180,6 +180,24 @@ public class SearchUtils {
     }
     return searcher;
   }
+
+  public static ComponentSearcher getComponentSearcher(String component) {
+    ComponentSearcher searcher;
+    switch ((String) component) {
+      case "dok_jednotka":
+        searcher = new DokJednotkaSearcher();
+        break;
+      case "jednotka_dokumentu":
+        searcher = new JednotkaDokumentuSearcher();
+        break;
+      case "komponenta":
+        searcher = new KomponentaSearcher();
+        break;
+      default:
+        searcher = null;
+    }
+    return searcher;
+  }
   
   public static void addJSONFields(JSONObject doc, SolrInputDocument idoc) {
     for (String s : doc.keySet()) {
