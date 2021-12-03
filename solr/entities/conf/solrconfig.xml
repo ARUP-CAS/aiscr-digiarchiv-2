@@ -779,7 +779,13 @@
 	   
        <str name="facet.field">{!ex=entityF}entity</str>
        <str name="f.entity.facet.mincount">0</str>
+	   
+	   <!--
        <str name="facet.pivot">{!ex=f_typ_dokumentuF}kategorie_dokumentu,f_typ_dokumentu</str>
+	   -->
+	   
+       <str name="facet.field">kategorie_dokumentu</str>
+       <str name="facet.field">f_typ_dokumentu</str>
 	   
        <str name="facet.field">pristupnost</str>
 	   
