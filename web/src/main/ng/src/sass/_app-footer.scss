@@ -62,6 +62,12 @@ app-footer {
         img {
           height: 60px;
           margin: 0 $app-gap $app-gap 0;
+
+          &.app-logo-re3data {
+            /* -webkit-filter: grayscale(1);
+            filter: gray;
+            filter: grayscale(1); */
+          }
         }
 
         // mq
