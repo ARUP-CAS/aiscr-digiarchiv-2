@@ -13,7 +13,7 @@
       {{ result.nalezce }}<span class="app-pipe"></span>{{ result.datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content [class.app-detail-closed]="!detailExpanded">
     <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16" fxFlexFill>
       <div *ngIf="imgSrc" class="app-thumb">
         <a (click)="viewFiles()">

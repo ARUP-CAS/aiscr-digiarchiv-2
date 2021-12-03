@@ -3,16 +3,8 @@
 .app-view-row {
   .mat-card {
     .mat-card-content {
-      .app-thumb {
+      &.app-detail-closed {
         display: none;
-      }
-      
-      .app-metadata {
-        div {
-          &:not(:first-child) {
-            display: none;
-          }
-        }
       }
     }
   }
