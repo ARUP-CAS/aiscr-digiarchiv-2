@@ -174,6 +174,32 @@ public class SearchServlet extends HttpServlet {
         return json.toString();
       }
     },
+    THESAURI {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        JSONObject json = new JSONObject();
+        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          String pristupnost = LoginServlet.pristupnost(request.getSession());
+          SolrQuery query = new SolrQuery("*")
+                  .setFields("heslar,pole,heslo,poradi")
+                  .setRows(5000);
+
+          QueryRequest req = new QueryRequest(query);
+
+          NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
+          rawJsonResponseParser.setWriterType("json");
+          req.setResponseParser(rawJsonResponseParser);
+
+          NamedList<Object> resp = client.request(req, "translations");
+          return (String) resp.get("response");
+
+        } catch (Exception ex) {
+          json.put("error", ex);
+        }
+        return json.toString();
+      }
+    },
     OBDOBI {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {

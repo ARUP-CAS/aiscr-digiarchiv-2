@@ -13,6 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 
     public obdobi;
     public obdobiStats;
+    public thesauri;
 
     public get context() {
         return this.config.context;
@@ -130,6 +131,8 @@ import { isPlatformBrowser } from '@angular/common';
                 this.config.amcr = this.server;
             }).then(() => {
                 return this.getObdobi();
+            }).then(() => {
+                return this.getThesauri();
             });
         return promise;
     }
@@ -141,6 +144,15 @@ import { isPlatformBrowser } from '@angular/common';
             .then((res: any) => {
                 this.obdobi = res.response.docs;
                 this.obdobiStats = res.stats.stats_fields.poradi;
+            });
+    }
+
+    getThesauri() {
+        const url = this.server + 'api/search/thesauri';
+        return this.http.get(url)
+            .toPromise()
+            .then((res: any) => {
+                this.thesauri = res.response.docs;
             });
     }
 
