@@ -430,5 +430,7 @@
   "f_aktivita_deponovani": "deposition",
   "f_aktivita_boj": "fighting",
   "f_aktivita_jina": "other activity",
-  "f_aktivita_intruze": "find intrusion"
+  "f_aktivita_intruze": "find intrusion",
+
+  "Přechod na API": "Transition to API"
 }

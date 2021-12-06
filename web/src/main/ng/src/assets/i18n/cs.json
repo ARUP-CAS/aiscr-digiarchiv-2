@@ -430,5 +430,7 @@
   "f_aktivita_deponovani": "deponování",
   "f_aktivita_boj": "boj",
   "f_aktivita_jina": "jiný druh aktivity",
-  "f_aktivita_intruze": "intruze"
+  "f_aktivita_intruze": "intruze",
+
+  "Přechod na API": "Přechod na API"
 }
