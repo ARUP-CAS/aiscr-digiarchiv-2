@@ -51,9 +51,9 @@
     </mat-expansion-panel>
   </ng-container>
 
-  <ng-container *ngFor="let facetField of state.facetsFiltered">
-    <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered">
-      <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight">
+  <ng-container *ngFor="let facetField of facetsSorted">
+    <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered || expandedFacets[facetField.field]">
+      <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight" (click)="expandedFacets[facetField.field] = !expandedFacets[facetField.field]">
         <mat-panel-title>
           <!-- <a class="app-filter-badge app-gap-icon-right" [matTooltip]="'Aplikovat filtr' | translate" (click)="applyFilters()">
             <mat-icon mat-flat-button>filter_alt</mat-icon>
@@ -86,7 +86,7 @@
                 </button>
               </mat-menu>
               <div class="app-list-content" [matTooltip]="(facet.name | translateHeslar : facetField.field) + ' (' + facet.value + ')'">
-                <a (click)="clickFacet(facetField.field, facet)">
+                <a (click)="clickFacet(facetField.field, facet)"> 
                   {{ facet.name | translateHeslar : facetField.field }}
                 </a>
                 <span>({{ facet.value }})</span>
@@ -99,11 +99,12 @@
           </button>
           <button mat-flat-button color="primary" class="app-apply-filter" [matMenuTriggerFor]="sortBy">
             <mat-icon mat-flat-button>sort</mat-icon>
-            {{ 'Řazení' | translate }}
+            {{ 'Řazení' | translate }} {{  state.facetSort[facetField.field] }}
           </button>
           <mat-menu #sortBy="matMenu">
-            <button mat-menu-item>Dle ....</button>
-            <button mat-menu-item>Dle ....</button>
+            <button mat-menu-item (click)="setFacetSort(facetField.field, 'count')" [class.active]="state.facetSort[facetField.field] === 'count'">{{ 'count' | translate }}</button>
+            <button mat-menu-item (click)="setFacetSort(facetField.field, 'name')" [class.active]="state.facetSort[facetField.field] === 'name'">{{ 'name' | translate }}</button>
+            <button mat-menu-item (click)="setFacetSort(facetField.field, 'poradi')" [class.active]="state.facetSort[facetField.field] === 'poradi'">{{ 'poradi' | translate }}</button>
           </mat-menu>
         </mat-list>
       </ng-template>

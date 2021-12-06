@@ -92,6 +92,10 @@ export class AppState {
   totalPages: number;
   sorts: Sort[];
   sort: Sort;
+
+  // Pokud uzivatel zvoli jine razeni pro danou facetu, napr: {"obdobi": "poradi"}
+  facetSort: {[facetname: string]: string} = {};
+
   hideWithoutThumbs = false;
   inFavorites: boolean;
   obdobi: any;
@@ -155,13 +159,10 @@ export class AppState {
     }
     this.config.facets.forEach(f => {
       if (resp.facet_counts.facet_fields[f]) {
-        const ff: { name: string, type: string, value: number, operator: string, poradi: number }[] = resp.facet_counts.facet_fields[f];
+        const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
         ff.forEach(v => {
           v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
           // v.poradi = 
-        });
-        ff.sort((v1, v2) => {
-          return v1.name.localeCompare(v2.name, 'cs');
         });
         this.facets.push({ field: f, values: ff });
       }

@@ -1,7 +1,7 @@
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Crumb } from 'src/app/shared/crumb';
 import { SolrResponse } from 'src/app/shared/solr-response';
@@ -36,7 +36,7 @@ interface ExampleFlatNode {
   templateUrl: './facets.component.html',
   styleUrls: ['./facets.component.scss']
 })
-export class FacetsComponent implements OnInit, AfterViewInit {
+export class FacetsComponent implements OnInit {
 
   @ViewChild('tree') tree;
 
@@ -51,6 +51,9 @@ export class FacetsComponent implements OnInit, AfterViewInit {
   dataSource: MatTreeFlatDataSource<unknown, ExampleFlatNode>;
   changedFacets: Crumb[] = [];
   math = Math;
+
+  facetsSorted: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[];
+  expandedFacets: {[field: string]: boolean} = {};
 
   private flattener = (node: FacetNode, level: number) => {
     return {
@@ -82,16 +85,41 @@ export class FacetsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.state.facetsChanged.subscribe(() => {
       this.setTreeData();
+      this.orderFacets();
     });
-
   }
 
-  ngAfterViewInit() {
-    // setTimeout(() => {
-    //   if (this.tree) {
-    //     this.tree.treeControl.expandAll();
-    //   }
-    // }, 1000);
+  orderFacets() {
+    this.facetsSorted = [];
+    this.state.facetsFiltered.forEach(f => {
+        const ff: { name: string, type: string, value: number, operator: string, poradi?: number }[] = f.values;
+        // ff.poradi = this.config.thesauri[f.field + '_' + ff.name];
+        if ('poradi' === this.state.facetSort[f.field]) {
+          ff.forEach(v => {
+            v.poradi = this.config.thesauri[f.field + '_' + v.name];
+          });
+        }
+
+        if ('name' === this.state.facetSort[f.field]) {
+          ff.sort((v1, v2) => {
+            const n1 = this.service.getHeslarTranslation(v1.name, f.field).toLocaleUpperCase('cs');
+            const n2 = this.service.getHeslarTranslation(v2.name, f.field).toLocaleUpperCase('cs');
+            // facet.name | translateHeslar : facetField.field
+            return n1.localeCompare(n2, 'cs');
+          });
+        } else if ('poradi' === this.state.facetSort[f.field]) {
+          ff.sort((v1, v2) => {
+            return v1.poradi - v2.poradi
+          });
+        } else {
+          ff.sort((v1, v2) => {
+            return v2.value - v1.value
+          });
+        }
+        this.facetsSorted.push({ field: f.field, values: ff });
+    });
+
+
   }
 
   setTreeData() {
@@ -164,7 +192,7 @@ export class FacetsComponent implements OnInit, AfterViewInit {
 
   addFilter(field, facet, op: string) {
     if (!facet.operator || this.changedFacets.length === 0) {
-      this.changedFacets.push(new Crumb(field,  facet.name,  facet.name, op));
+      this.changedFacets.push(new Crumb(field, facet.name, facet.name, op));
     } else {
       let found = false;
       this.changedFacets.forEach((c: Crumb) => {
@@ -174,7 +202,7 @@ export class FacetsComponent implements OnInit, AfterViewInit {
         }
       });
       if (!found) {
-        this.changedFacets.push(new Crumb(field,  facet.name,  facet.name, op));
+        this.changedFacets.push(new Crumb(field, facet.name, facet.name, op));
       }
     }
     facet.operator = op;
@@ -221,5 +249,10 @@ export class FacetsComponent implements OnInit, AfterViewInit {
     });
     params.page = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
+  setFacetSort(facet: string, sort: string) {
+    this.state.facetSort[facet] = sort;
+    this.orderFacets();
   }
 }

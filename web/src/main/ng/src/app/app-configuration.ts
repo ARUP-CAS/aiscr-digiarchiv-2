@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 
     public obdobi;
     public obdobiStats;
-    public thesauri;
+    public thesauri: {[key: string]: number};
 
     public get context() {
         return this.config.context;
@@ -152,7 +152,7 @@ import { isPlatformBrowser } from '@angular/common';
         return this.http.get(url)
             .toPromise()
             .then((res: any) => {
-                this.thesauri = res.response.docs;
+                this.thesauri = res;
             });
     }
 

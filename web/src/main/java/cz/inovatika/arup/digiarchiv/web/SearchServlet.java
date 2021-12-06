@@ -5,6 +5,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
+import static cz.inovatika.arup.digiarchiv.web.I18n.LOGGER;
 import cz.inovatika.arup.digiarchiv.web.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
@@ -25,6 +26,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.util.NamedList;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -52,7 +54,7 @@ public class SearchServlet extends HttpServlet {
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
     response.setDateHeader("Expires", 0); // Proxies.
     PrintWriter out = response.getWriter();
-    
+
     request.getSession().setMaxInactiveInterval(Options.getInstance().getInt("sessionTimeout", 300));
     try {
       String action = request.getPathInfo().substring(1);
@@ -107,9 +109,9 @@ public class SearchServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
         try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
-                   .setFacet(false);
-           query.setRequestHandler("/search");
+          SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+                  .setFacet(false);
+          query.setRequestHandler("/search");
           query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
                   + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
                   + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json]");
@@ -178,11 +180,11 @@ public class SearchServlet extends HttpServlet {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        JSONObject json = new JSONObject();
+        JSONObject ret = new JSONObject();
         try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           String pristupnost = LoginServlet.pristupnost(request.getSession());
           SolrQuery query = new SolrQuery("*")
-                  .setFields("heslar,pole,heslo,poradi")
+                  .setFields("id,heslar,pole,heslo,poradi")
                   .setRows(5000);
 
           QueryRequest req = new QueryRequest(query);
@@ -192,12 +194,36 @@ public class SearchServlet extends HttpServlet {
           req.setResponseParser(rawJsonResponseParser);
 
           NamedList<Object> resp = client.request(req, "translations");
-          return (String) resp.get("response");
+          JSONArray docs = new JSONObject((String)resp.get("response"))
+                  .getJSONObject("response").getJSONArray("docs");
+          // return (String) resp.get("response");
 
+          JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
+          for (int i = 0; i < docs.length(); i++) {
+            // ret.put(docs.getJSONObject(i).getString("id"), docs.getJSONObject(i).getInt("poradi"));
+            String heslar = docs.getJSONObject(i).getString("heslar");
+            LOGGER.log(Level.FINE, heslar);
+            // String pole = heslar;
+            ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
+
+            if (heslarToPole.has(heslar)) {
+              Object obj = heslarToPole.get(heslar);
+              if (obj instanceof JSONArray) {
+                JSONArray poli = (JSONArray) obj;
+                for (int p = 0; p < poli.length(); p++) {
+                  ret.put(poli.getString(p) + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
+                }
+              } else {
+                heslar = (String) obj;
+                ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
+              }
+            }
+          } 
         } catch (Exception ex) {
-          json.put("error", ex);
+          LOGGER.log(Level.SEVERE, null, ex);
+          ret.put("error", ex);
         }
-        return json.toString();
+        return ret.toString();
       }
     },
     OBDOBI {
