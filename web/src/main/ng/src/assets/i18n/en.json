@@ -433,5 +433,9 @@
   "f_aktivita_jina": "other activity",
   "f_aktivita_intruze": "find intrusion",
 
-  "Přechod na API": "Transition to API"
+  "Přechod na API": "Transition to API",
+  "Řadit dle": "Sort by",
+  "name": "name",
+  "count": "count",
+  "poradi": "order"
 }

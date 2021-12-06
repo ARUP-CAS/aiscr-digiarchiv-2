@@ -433,5 +433,9 @@
   "f_aktivita_jina": "jiný druh aktivity",
   "f_aktivita_intruze": "intruze",
 
-  "Přechod na API": "Přechod na API"
+  "Přechod na API": "Přechod na API",
+  "Řadit dle": "Řadit dle",
+  "name": "jména",
+  "count": "počtu",
+  "poradi": "pořadí"
 }

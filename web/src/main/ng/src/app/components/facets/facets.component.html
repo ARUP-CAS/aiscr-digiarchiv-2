@@ -99,7 +99,7 @@
           </button>
           <button mat-flat-button color="primary" class="app-apply-filter" [matMenuTriggerFor]="sortBy">
             <mat-icon mat-flat-button>sort</mat-icon>
-            {{ 'Řazení' | translate }} {{  state.facetSort[facetField.field] }}
+            {{ 'Řadit dle' | translate }} {{  state.facetSort[facetField.field] | translate }}
           </button>
           <mat-menu #sortBy="matMenu">
             <button mat-menu-item (click)="setFacetSort(facetField.field, 'count')" [class.active]="state.facetSort[facetField.field] === 'count'">{{ 'count' | translate }}</button>
