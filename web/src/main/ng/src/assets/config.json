@@ -396,5 +396,11 @@
         {"name": "inv_cislo"},
         {"name": "pristupnost", "heslar": "pristupnost"}
       ]
-    }
+    },
+
+  "choiceAPI": [
+    {"label": "AMČR", "metadataPrefix": "oai_amcr"},
+    {"label": "Dublin Core,", "metadataPrefix": "oai_dc"},
+    {"label": "CIDOC-CRM", "metadataPrefix": "oai_rdf"}
+  ]
 }
