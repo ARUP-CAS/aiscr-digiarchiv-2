@@ -94,6 +94,14 @@
       <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
         <mat-icon>grade</mat-icon>
       </button>
+      <button mat-flat-button [matTooltip]="'Přechod na API' | translate" [matMenuTriggerFor]="choiceApi">
+        <mat-icon>api</mat-icon>
+      </button>
+      <mat-menu #choiceApi="matMenu">
+        <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
+          {{ item.label }}
+        </a>
+      </mat-menu>
       <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
         {{(detailExpanded ? 'Skrýt detail' : 'Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
       </button>
