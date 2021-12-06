@@ -128,7 +128,6 @@
       <button mat-flat-button [matTooltip]="'Prechod na API' | translate" [matMenuTriggerFor]="choiceApi">
         <mat-icon>api</mat-icon>
       </button>
-      {{ config.choiceApi }}
       <mat-menu #choiceApi="matMenu">
         <button mat-menu-item *ngFor="let item of config.choiceApi">Item 1 -> {{ item["label"] }}</button>
       </mat-menu>

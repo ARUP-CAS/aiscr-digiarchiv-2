@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
     providedIn: 'root'
 }) export class AppConfiguration {
 
-    private config: Configuration;
+    public config: Configuration;
     public invalidServer: boolean;
 
     public obdobi;
