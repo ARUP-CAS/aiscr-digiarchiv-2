@@ -148,8 +148,22 @@ public class SamostatniNalez implements Entity {
     if (idoc.containsKey("obdobi") && idoc.getFieldValue("obdobi") != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "obdobi_poradi", SearchUtils.getObdobiPoradi((String) idoc.getFieldValue("obdobi")));
     }
+    if (druh != null) {
+      addKategorie(client, idoc);
+    }
 
     // addPian(client, idoc);
+  }
+
+  private void addKategorie(HttpSolrClient client, SolrInputDocument idoc) {
+      SolrQuery query = new SolrQuery("heslo:\"" + druh + "\"")
+              .addFilterQuery("heslar:predmet_druh")
+              .setFields("predmet_kategorie");
+      JSONObject json = SearchUtils.json(query, client, "translations");
+      if (json.getJSONObject("response").getInt("numFound") > 0) {
+        String predmet_kategorie = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("predmet_kategorie");
+        SolrSearcher.addFieldNonRepeat(idoc, "predmet_kategorie", predmet_kategorie);
+      }
   }
 
   private void addSoubor(HttpSolrClient client, SolrInputDocument idoc) {

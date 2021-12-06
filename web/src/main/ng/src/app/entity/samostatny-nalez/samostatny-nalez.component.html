@@ -49,7 +49,13 @@
             <label class="app-label">{{ 'Nález' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild" [field]="'f_druh_nalezu'" [value]="result.druh" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
             <ng-container *ngIf="result.specifikace && result.specifikace !== ''">
-              (<app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" [value]="result.specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>)
+              (
+                <ng-container *ngIf="result.predmet_kategorie">
+                <app-inline-filter [isChild]="isChild" [field]="'predmet_kategorie'" [value]="result.predmet_kategorie" [heslar]="'predmet_kategorie'" ></app-inline-filter>
+                   - 
+                  </ng-container>
+                <app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" [value]="result.specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>
+                )
             </ng-container>
           </ng-container>
         </div>
@@ -145,6 +151,10 @@
               <tr *ngIf="result.poznamka">
                 <th class="app-label">{{ 'field.f_poznamka' | translate }}:</th>
                 <td>{{ result.poznamka }}</td>
+              </tr>
+              <tr *ngIf="result.centroid_e">
+                <th class="app-label">{{ 'Definiční bod (WGS-84)' | translate }}:</th>
+                <td>{{ result.centroid_e }} : {{ result.centroid_n }}</td>
               </tr>
               </tbody>
             </table>

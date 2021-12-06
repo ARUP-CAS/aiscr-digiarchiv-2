@@ -365,7 +365,8 @@
     "f_poznamka": "Poznámka",
     "f_popis": "Popis",
     "f_podnazev": "Podnázev",
-    "f_nalezove_okolnosti": "Sam. nález - okolnosti"
+    "f_nalezove_okolnosti": "Sam. nález - okolnosti",
+    "predmet_kategorie": "Kategorie předmětu"
   },
   
   "kategorie_dokumentu":

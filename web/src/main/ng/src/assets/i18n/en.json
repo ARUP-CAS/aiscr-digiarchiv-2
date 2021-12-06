@@ -366,7 +366,8 @@
     "f_poznamka": "Note",
     "f_popis": "Description",
     "f_podnazev": "Subtitle",
-    "f_nalezove_okolnosti": "Ind. find - context"
+    "f_nalezove_okolnosti": "Ind. find - context",
+    "predmet_kategorie": "Object category"
   },
 
   "kategorie_dokumentu":
