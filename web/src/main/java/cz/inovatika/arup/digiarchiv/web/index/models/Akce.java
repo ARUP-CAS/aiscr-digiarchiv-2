@@ -269,6 +269,7 @@ public class Akce implements Entity {
       JSONObject json = SearchUtils.json(query, client, "entities");
       if (json.getJSONObject("response").getInt("numFound") > 0) {
         JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+        SolrSearcher.addJSONFields(doc, "ext_zdroj", idoc);
         SolrSearcher.addFieldNonRepeat(idoc, "ext_zdroj", doc.toString());
         if (doc.has("rok_vydani_vzniku")) {
           String r = doc.getString("rok_vydani_vzniku");
