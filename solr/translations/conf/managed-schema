@@ -125,6 +125,7 @@
    <field name="poradi" type="pint" indexed="true" stored="true" multiValued="false" /> 
    <field name="cs" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="en" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="datestamp" type="pdate" indexed="true" stored="true" /> 
    
    <dynamicField name="*" type="string" multiValued="false"/>
    

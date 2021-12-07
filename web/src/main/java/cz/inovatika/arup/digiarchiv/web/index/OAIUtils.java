@@ -186,12 +186,14 @@ public class OAIUtils {
     int indexed = 0;
     try (HttpSolrClient solr = new HttpSolrClient.Builder(solrhost).build()) {
       for (int i = 0; i < records.length(); i++) {
+        String datestamp = records.getJSONObject(i).getJSONObject("header").getString("datestamp");
         String record = records.getJSONObject(i).getJSONObject("metadata").getJSONObject("oai_amcr:amcr").getJSONObject(entity).toString();
         Entity bean = Entity.parseJson(record, clazz);
 
         DocumentObjectBinder dob = new DocumentObjectBinder();
         SolrInputDocument idoc = dob.toSolrInputDocument(bean);
         bean.fillFields(idoc);
+        idoc.setField("datestamp", datestamp);
         if (addRelations) {
           bean.addRelations(solrRels, idoc);
         }
