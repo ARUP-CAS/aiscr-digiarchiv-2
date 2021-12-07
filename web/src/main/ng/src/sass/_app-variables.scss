@@ -19,6 +19,19 @@ $app-gray-7: mat-color($mat-gray, 700) !default;
 $app-gray-8: mat-color($mat-gray, 800) !default;
 $app-gray-9: mat-color($mat-gray, 900) !default;
 
+// gaps
+$gaps: (
+  "0": 0,
+  "1": 4,
+  "2": 8,
+  "3": 12,
+  "4": 16,
+  "5": 20,
+  "6": 24,
+  "7": 28,
+  "8": 32,
+);
+
 // entity colors
 $entities: (
   "dokument": #5882c4,
