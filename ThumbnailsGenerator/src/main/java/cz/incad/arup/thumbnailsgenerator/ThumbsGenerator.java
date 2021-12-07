@@ -55,8 +55,10 @@ public class ThumbsGenerator {
         }
         case "-f": {
           String file = args[1];
+          System.out.println("File: " + file);
           File f = new File(file);
-          ImageSupport.thumbnailzeImg(f, f.getName(), false);
+          String result = ImageSupport.thumbnailzeImg(f, f.getName(), false);
+          System.out.println(result);
           return;
         }
         case "-id": {

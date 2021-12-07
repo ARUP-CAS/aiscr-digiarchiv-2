@@ -1,6 +1,6 @@
 package cz.incad.arup.thumbnailsgenerator;
 
-import java.awt.Image;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -8,22 +8,15 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.io.FileInputStream;
-import java.io.StringWriter;
 import java.util.Date;
 import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataFormatImpl;
 import javax.imageio.stream.ImageInputStream;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import net.coobird.thumbnailator.ThumbnailParameter;
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.filters.Canvas;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -135,6 +128,7 @@ public class ImageSupport {
     try {
       Thumbnails.of(srcImage)
               .size(w, h)
+              .addFilter(new Canvas(w, h, Positions.CENTER, Color.WHITE))
               .crop(Positions.CENTER)
               .imageType(imageType)
               .outputFormat("jpg")
@@ -150,9 +144,10 @@ public class ImageSupport {
 //                ByteArrayOutputStream os = new ByteArrayOutputStream();
 
       Thumbnails.of(srcImage)
-              .size(w, h)
-              .imageType(imageType)
               .outputFormat("jpg")
+              .size(w, h)
+              .addFilter(new Canvas(w, h, Positions.CENTER, Color.WHITE))
+              .imageType(imageType)
               .toFile(f);
 //                retval = os.toByteArray();
 //                os.close();
@@ -165,25 +160,16 @@ public class ImageSupport {
 
   public static int getImageType(BufferedImage img) {
 
-//    WritableRaster raster = img.getRaster();
-//    int elemCount = raster.getNumDataElements();
-//    return (elemCount == 1) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
     return (img.getColorModel().getPixelSize() == 8) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
   }
 
   private static int getImageType(File f, BufferedImage img) {
 
-//    WritableRaster raster = img.getRaster();
-//    int elemCount = raster.getNumDataElements();
-    //System.out.println(elemCount);
-//    return (elemCount == 1) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
-//    System.out.println(img);
-//    ColorModel cm = img.getColorModel();
-//    System.out.println(cm);
-//    System.out.println(cm.getColorSpace().getType());
-//    return (img.getColorModel().getPixelSize() == 8) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
-    //return (isGray(f, img)) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
-    return (isGray(f, img)) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_INT_RGB;
+    // https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/132
+    // zmena z BufferedImage.TYPE_INT_RGB --> ThumbnailParameter.ORIGINAL_IMAGE_TYPE
+    // return (isGray(f, img)) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_INT_RGB;
+    
+    return (isGray(f, img)) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
   }
 
   private static boolean isGray(File f, BufferedImage img) {
