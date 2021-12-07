@@ -20,7 +20,7 @@
           <strong>{{ state.numFound }}</strong>
           {{ 'nalezených výsledků v entitě' | translate }}&#160;
           <span class="app-info-badge" [ngClass]="'app-entity-' + state.entity">
-            <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity] }}</mat-icon><strong>{{ 'entities.' + state.entity | translate }}</strong>
+            <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity] }}</mat-icon><strong>{{ 'entities.' + state.entity + '.title' | translate }}</strong>
           </span><br />
           {{ 'Zkuste zadat jiný dotaz' | translate }}<ng-container *ngIf="hasResultsInOther || inFav">,</ng-container>
           <ng-container *ngIf="hasResultsInOther">
@@ -29,7 +29,7 @@
             <ng-container *ngFor="let entity of config.entities">
               <div *ngIf="state.totals[entity] > 0" class="app-info-badge app-cursor-pointer" [ngClass]="'app-entity-' + entity" (click)="setEntity(entity)">
                   <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
-                  <strong>{{ 'entities.' + entity | translate }}</strong>
+                  <strong>{{ 'entities.' + entity + '.title' | translate }}</strong>
                   &#160;<span *ngIf="state.totals">({{ state.totals[entity] }})</span>   
               </div>
             </ng-container>

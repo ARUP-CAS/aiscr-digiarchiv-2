@@ -9,11 +9,11 @@
     <ng-container *ngIf="state.isMapaCollapsed">
       <div fxLayout="row wrap" class="app-entities-wrapper">
         <ng-container *ngFor="let entity of config.entities">
-          <mat-card [class]="'app-entity-' + entity" class="app-card-entity">
+          <mat-card [class]="'app-entity-' + entity" class="app-card-entity" [matTooltip]="'entities.' + entity + '.desc' | translate">
             <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity}" class="app-cursor-pointer">
               <mat-card-title fxLayout="row">
                 <a fxFlex>
-                  <mat-icon fxFlex="28px">{{ config.entityIcons[entity] }}</mat-icon><span>{{ 'entities.' + entity | translate }}</span>
+                  <mat-icon fxFlex="28px">{{ config.entityIcons[entity] }}</mat-icon><span>{{ 'entities.' + entity + '.title' | translate }}</span>
                 </a>
               </mat-card-title>
             </mat-card-header>

@@ -381,17 +381,43 @@
     "ddata3d": "3D modely"
   },
 	
-  "entities":
-  {
-    "dokument": "Dokumenty", 
-    "projekt": "Projekty",
-    "akce": "Akce",
-    "lokalita": "Lokality",
-    "samostatny_nalez": "Samostatné nálezy",
-    "pian": "PIAN",
-    "knihovna_3d": "Knihovna 3D",
-    "let": "Lety",
-    "ext_zdroj": "Externí zdroje"
+  "entities": {
+    "dokument": {
+      "title": "Dokumenty",
+      "desc": "Dokumenty lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    }, 
+    "projekt": {
+      "title": "Projekty",
+      "desc": "Projekty lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "akce": {
+      "title": "Akce",
+      "desc": "Akce lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "lokalita": {
+      "title": "Lokality",
+      "desc": "Lokality lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "samostatny_nalez": {
+      "title": "Samostatné nálezy",
+      "desc": "Samostatné nálezy lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "pian": {
+      "title": "PIAN",
+      "desc": "PIAN lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "knihovna_3d": {
+      "title": "Knihovna 3D",
+      "desc": "Knihovna 3D lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "let": {
+      "title": "Lety",
+      "desc": "Lety lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "ext_zdroj": {
+      "title": "Externí zdroje",
+      "desc": "Externí zdroje lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    }
   },
 	
   "citation" :

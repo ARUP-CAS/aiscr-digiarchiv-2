@@ -180,8 +180,7 @@
   "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "or switch to another record type where we found these results",
   "sessionTimeout": "You have been automatically logged off due to inactivity.",
 
-  "sortBy":
-  {
+  "sortBy": {
     "ident_cely": "Identifier",
     "okres": "District, cadastre",
     "katastr": "Cadastre",
@@ -383,15 +382,42 @@
   },
 
   "entities": {
-    "dokument": "Documents", 
-    "projekt": "Projects",
-    "akce": "Fieldwork Events",
-    "lokalita": "Sites",
-    "samostatny_nalez": "Individual Finds",
-    "pian": "Spatial Units",
-    "knihovna_3d": "3D Library",  
-    "let": "Flights",
-    "ext_zdroj": "External Sources"
+    "dokument": {
+      "title": "Documents",
+      "desc": "Documents lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    }, 
+    "projekt": {
+      "title": "Projects",
+      "desc": "Projects lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "akce": {
+      "title": "Fieldwork Events",
+      "desc": "Fieldwork Events lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "lokalita": {
+      "title": "Sites",
+      "desc": "Sites lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "samostatny_nalez": {
+      "title": "Individual Finds",
+      "desc": "Individual Finds lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "pian": {
+      "title": "Spatial Units",
+      "desc": "Spatial Units lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "knihovna_3d": {
+      "title": "3D Library",
+      "desc": "3D Library lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "let": {
+      "title": "Flights",
+      "desc": "Flights lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "ext_zdroj": {
+      "title": "External Sources",
+      "desc": "External Sources lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    } 
   },
 
   "citation" :
