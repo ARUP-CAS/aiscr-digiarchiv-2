@@ -25,8 +25,7 @@
     }
 
     .mat-card-header-text {
-      @extend .app-clean-mg;
-      width: 100%;
+      @extend .app-clean-mg, .app-w-100;
 
       .mat-icon {
         margin-right: $app-gap-icon;

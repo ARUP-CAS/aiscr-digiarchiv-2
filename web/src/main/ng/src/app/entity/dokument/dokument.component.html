@@ -3,7 +3,7 @@
     <mat-icon>clear</mat-icon>
   </a>
   <mat-card-header>
-    <mat-card-title fxLayout="row">
+    <mat-card-title fxLayout="row" fxLayoutGap="16px">
       <div fxFlex>    
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
         <mat-icon class="app-entity-dokument" [matTooltip]="'entities.dokument.title' | translate">{{ config.entityIcons["dokument"] }}</mat-icon>

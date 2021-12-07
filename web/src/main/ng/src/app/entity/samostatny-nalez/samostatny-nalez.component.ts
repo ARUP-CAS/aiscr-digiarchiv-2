@@ -25,6 +25,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   hasDetail: boolean;
   imgSrc: string;
   bibTex: string;
+  
 
   constructor(
     private datePipe: DatePipe,

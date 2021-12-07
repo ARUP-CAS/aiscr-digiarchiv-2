@@ -89,7 +89,7 @@
     overflow-y: auto;
 
     .mat-card-title {
-      max-width: 640px;
+      max-width: calc(100% - 35px);
     }
 
     @media #{$lt-lg} {
