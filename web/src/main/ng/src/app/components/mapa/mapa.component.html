@@ -1,5 +1,6 @@
 <ng-container *ngIf="isBrowser">
-	<div class="app-map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
+	<div class="app-map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)" 
+	[leafletLayersControl]="layersControl" [leafletLayersControlOptions]="{position: 'topleft'}">
 		<div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div>
 		<div [leafletLayer]="markers"></div>
 	</div> 

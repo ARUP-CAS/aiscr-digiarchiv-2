@@ -86,6 +86,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   mapReady = false;
   subs: any[] = [];
 
+  layersControl = {};
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     private renderer: Renderer2,
@@ -103,11 +105,44 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.options.layers.push(
-      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: this.config.mapOptions.maxZoom,
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
-      }));
+
+    const osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: this.config.mapOptions.maxZoom,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
+    });
+    // const mqi = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.png", {subdomains: ['otile1','otile2','otile3','otile4']});
+
+    var osmColor = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM map', maxZoom:25, maxNativeZoom: 19, minZoom: 6 }),
+    cuzkWMS = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'KN', maxZoom:25, maxNativeZoom: 20, minZoom: 17, opacity: 0.5 }),
+    cuzkWMS2 = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'prehledka_kat_uz', maxZoom:25, maxNativeZoom: 20, minZoom: 12, opacity: 0.5 }),
+    cuzkOrt = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/ortofoto_wm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'ortofoto_wm', maxZoom:25, maxNativeZoom: 19, minZoom: 6 }),
+    cuzkEL = L.tileLayer.wms('http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer?', { layers: 'dmr5g:GrayscaleHillshade', maxZoom: 25, maxNativeZoom: 20, minZoom: 6 }),
+    cuzkZM = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/zmwm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'zmwm', maxZoom: 25,maxNativeZoom:19, minZoom: 6 });
+
+
+    // var map = L.map('projectMap',{zoomControl:false,  layers: [cuzkZM]}).setView([49.84, 15.17], 7);
+
+    var baseLayers = {
+        "ČÚZK - Základní mapy ČR": cuzkZM,
+        "ČÚZK - Ortofotomapa": cuzkOrt,
+        "ČÚZK - Stínovaný reliéf 5G": cuzkEL,
+        "OpenStreetMap": osm,
+    };
+
+    this.options.layers = [cuzkZM, cuzkOrt, cuzkEL, osm];
+
+    this.layersControl = {
+      baseLayers
+    }
+
+
+    // this.options.layers.push(
+    //   L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     maxZoom: this.config.mapOptions.maxZoom,
+    //     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
+    //   }));
+
+        
     this.options.zoom = this.config.mapOptions.zoom;
     if (this.state.mapResult) {
       this.options.zoom = this.config.mapOptions.hitZoomLevel;
