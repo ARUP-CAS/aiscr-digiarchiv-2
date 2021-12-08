@@ -236,11 +236,12 @@ export class MapaComponent implements OnInit, OnDestroy {
               mrk.on('click', (e) => {
                 this.setPianId(e.target.pianId);
               });
-              mrk.bindTooltip(this.popUpHtml(pianId, presnost)).openTooltip();
+              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
 
               mrk.addTo(this.markers);
             } else {
               mrk.docId.push(doc.ident_cely);
+              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
             }
           }
         });
@@ -343,8 +344,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
   }
 
-  popUpHtml(id: string, presnost: string) {
-    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ')';
+  popUpHtml(id: string, presnost: string, docId: any[]) {
+    const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
+    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') ('+ t + ': ' + docId.length+')';
   }
 
   onMapReady(map: L.Map) {
