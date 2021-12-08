@@ -39,6 +39,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   exportUrl: string;
   inFav: boolean;
   hasResultsInOther: boolean;
+  math = Math;
 
   constructor(
     private titleService: Title,

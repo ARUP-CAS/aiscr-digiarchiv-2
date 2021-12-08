@@ -17,7 +17,7 @@
         &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
         <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.vedouci_projektu"></app-inline-filter><span class="app-pipe"></span>
       </div>
-      <div class="app-last-change">{{ 'Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
+      <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change">{{ 'Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
     </mat-card-title>
   </mat-card-header>
   <mat-card-content [class.app-detail-closed]="!detailExpanded">

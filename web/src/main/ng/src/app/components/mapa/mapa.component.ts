@@ -52,7 +52,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     zoom: 4,
     zoomControl: false,
     zoomSnap: 0,
-    center: L.latLng(49.803, 15.496)
+    center: L.latLng(49.803, 15.496),
+    preferCanvas: true
   };
 
   icon = L.icon({
@@ -102,11 +103,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subs.push(this.state.mapResultChanged.subscribe((res: any) => {
-      if (this.mapReady) {
-        this.hitMarker(res);
-      }
-    }));
     this.options.layers.push(
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: this.config.mapOptions.maxZoom,
@@ -121,11 +117,12 @@ export class MapaComponent implements OnInit, OnDestroy {
     L.control.zoom(this.zoomOptions);
 
     this.params = this.route.snapshot.queryParams as HttpParams;
-    // this.subs.push(this.route.queryParams.subscribe(val => {
-    //   if (this.mapReady) {
-    //     this.setData();
-    //   }
-    // }));
+
+    this.subs.push(this.state.mapResultChanged.subscribe((res: any) => {
+      if (this.mapReady) {
+        this.hitMarker(res);
+      }
+    }));
 
     this.subs.push(this.state.resultsChanged.subscribe(res => {
       if (this.mapReady) {
@@ -134,6 +131,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.push(this.state.facetsChanged.subscribe(res => {
+      const start = new Date();
       if (this.mapReady) {
         this.setHeatData();
       }
@@ -173,6 +171,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setData() {
+    const start = new Date().getMilliseconds();
     if (this.state.solrResponse) {
       this.setMarkersData();
 
@@ -188,7 +187,12 @@ export class MapaComponent implements OnInit, OnDestroy {
           // this.fitOnMarkers();
         }
 
-      }, 1000);
+      }, 100);
+
+      if (this.state.solrResponse.response.docs.length === 1) {
+        console.log('tady');
+        this.state.setMapResult(this.state.solrResponse.response.docs[0], false)
+      }
     }
   }
 
@@ -269,14 +273,12 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setPianId(pian_id: string) {
-    console.log('setPian');
     this.zone.run(() => {
       this.router.navigate([], { queryParams: { pian_id, page: 0 }, queryParamsHandling: 'merge' });
     });
   }
 
   clearPian() {
-    console.log('clearPian');
     this.router.navigate([], { queryParams: { pian_id: null, page: 0 }, queryParamsHandling: 'merge' });
   }
 
@@ -433,6 +435,19 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     this.setHeatData();
     this.mapReady = true;
+  }
+
+  debounce(func, wait, immediate) {
+      var timeout;
+      return function() {
+          var context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+              timeout = null;
+              if (!immediate) func.apply(context, args);
+          }, wait);
+          if (immediate && !timeout) func.apply(context, args);
+      };
   }
 
   updateBounds(mapBounds) {

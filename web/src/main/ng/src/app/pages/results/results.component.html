@@ -100,7 +100,7 @@
   <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
     <mat-sidenav-container class="app-sidenav-container">
       <mat-sidenav #sidenav mode="side" [(opened)]="opened">
-        <mat-tab-group [selectedIndex]="1">
+        <mat-tab-group [selectedIndex]="1" *ngIf="!loading">
           <mat-tab [label]="'Filtry' | translate">
             <div class="app-facets">
               <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
@@ -109,7 +109,8 @@
           </mat-tab>
           <mat-tab [label]="'Výsledky' | translate">
             <app-paginator></app-paginator>
-            <ng-container *ngFor="let result of docs">
+            <cdk-virtual-scroll-viewport itemSize="64" [style.height.px]="math.min(9*64, docs.length * 64)">
+            <ng-container *cdkVirtualFor="let result of docs">
               <ng-container [ngSwitch]="state.entity">
                 <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
                 <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
@@ -119,6 +120,7 @@
                 <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
               </ng-container>
             </ng-container>
+          </cdk-virtual-scroll-viewport>
           </mat-tab>
         </mat-tab-group>
       </mat-sidenav>
