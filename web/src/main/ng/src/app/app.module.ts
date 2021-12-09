@@ -75,6 +75,7 @@ import { VyskovyBodComponent } from './components/vyskovy-bod/vyskovy-bod.compon
 import { FacetsDynamicComponent } from './components/facets-dynamic/facets-dynamic.component';
 import { BibtextDialogComponent } from './components/bibtext-dialog/bibtext-dialog.component';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-dialog.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -171,7 +172,8 @@ const providers: any[] =[
     MapaComponent,
     VyskovyBodComponent,
     FacetsDynamicComponent,
-    BibtextDialogComponent
+    BibtextDialogComponent,
+    FeedbackDialogComponent
   ],
   imports: [
     CommonModule,
