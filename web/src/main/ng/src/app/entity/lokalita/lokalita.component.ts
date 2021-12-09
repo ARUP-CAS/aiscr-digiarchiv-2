@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { DatePipe } from '@angular/common';
+import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-lokalita',
@@ -117,4 +118,11 @@ export class LokalitaComponent implements OnInit, OnChanges {
       panelClass: 'app-document-dialog'
     });
   }
+
+  openFeedback() {
+    this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
+      width: '900px',
+      panelClass: 'app-feedback-dialog'
+    });
+  } 
 }

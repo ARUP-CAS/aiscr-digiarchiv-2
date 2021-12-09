@@ -7,6 +7,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
+import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-knihovna3d',
@@ -207,4 +208,10 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
     });
   }
 
+  openFeedback() {
+    this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
+      width: '900px',
+      panelClass: 'app-feedback-dialog'
+    });
+  } 
 }

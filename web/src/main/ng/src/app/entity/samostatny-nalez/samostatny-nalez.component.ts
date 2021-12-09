@@ -7,6 +7,7 @@ import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.
 import { AppService } from 'src/app/app.service';
 import { DatePipe } from '@angular/common';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
+import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-samostatny-nalez',
@@ -125,4 +126,10 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
     });
   }
 
+  openFeedback() {
+    this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
+      width: '900px',
+      panelClass: 'app-feedback-dialog'
+    });
+  } 
 }

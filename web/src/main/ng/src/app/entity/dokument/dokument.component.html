@@ -113,10 +113,10 @@
       <button *ngIf="!mapDetail && hasMapRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'Zobrazit na mapě' | translate">
         <mat-icon>map</mat-icon>
       </button>
-      <button mat-flat-button [matTooltip]="'Odkazy' | translate" [matMenuTriggerFor]="choiceApi">
+      <button mat-flat-button [matTooltip]="'Odkazy' | translate" [matMenuTriggerFor]="links">
         <mat-icon>link</mat-icon>
       </button>
-      <mat-menu #choiceApi="matMenu">
+      <mat-menu #links="matMenu">
         <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
           {{ 'Persistentní odkaz' | translate }}
         </a>
