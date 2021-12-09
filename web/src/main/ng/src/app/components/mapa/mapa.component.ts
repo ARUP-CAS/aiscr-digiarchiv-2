@@ -572,4 +572,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.map.addLayer(this.heatmapLayer);
   }
 
+  addWkt(geo: string){
+
+  }
+
 }
