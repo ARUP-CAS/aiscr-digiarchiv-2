@@ -16,4 +16,8 @@ export class FeedbackDialogComponent implements OnInit {
     // do it
   }
 
+  emailFormControl() {
+    // do it
+  }
+
 }
