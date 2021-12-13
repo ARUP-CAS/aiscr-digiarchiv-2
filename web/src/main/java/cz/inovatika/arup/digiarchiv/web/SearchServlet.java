@@ -138,6 +138,51 @@ public class SearchServlet extends HttpServlet {
         return json.toString();
       }
     },
+    GML {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        JSONObject json = new JSONObject();
+        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+                  .setFacet(false);
+          query.setRequestHandler("/search");
+          query.setFields("geom_gml:[json]");
+          JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+          return jo.toString();
+
+        } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, null, ex);
+          json.put("error", ex);
+        }
+        return json.toString();
+      }
+    },
+    WKT {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        JSONObject json = new JSONObject();
+        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+                  .setFacet(false);
+          query.setRequestHandler("/search");
+          query.setFields("geom_wkt");
+          
+                  
+                  
+          JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+          
+          jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
+          return jo.toString();
+
+        } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, null, ex);
+          json.put("error", ex);
+        }
+        return json.toString();
+      }
+    },
     QUERY {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {

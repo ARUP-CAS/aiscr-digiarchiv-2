@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
+import cz.inovatika.arup.digiarchiv.web.GPSconvertor;
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
@@ -59,6 +60,11 @@ public class PIANSearcher implements EntitySearcher{
           
         }
       }
+      
+      
+//      if (doc.has("geom_gml")) {
+//        doc.put("geojson", GPSconvertor.convertGeojson(doc.getString("geom_gml")));
+//      }
     }
   }
 

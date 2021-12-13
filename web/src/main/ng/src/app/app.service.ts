@@ -150,6 +150,16 @@ export class AppService {
     return this.get(`/search/id`, params);
   }
 
+  getGML(id: string) {
+    const params: HttpParams = new HttpParams().set('id', id);
+    return this.get(`/search/gml`, params);
+  }
+
+  getWKT(id: string) {
+    const params: HttpParams = new HttpParams().set('id', id);
+    return this.get(`/search/wkt`, params);
+  }
+
   searchMapa(params: HttpParams) {
     return this.get('/search/mapa', params);
   }

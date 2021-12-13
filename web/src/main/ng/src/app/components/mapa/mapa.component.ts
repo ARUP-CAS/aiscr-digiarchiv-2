@@ -17,11 +17,15 @@ import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 
 import 'node_modules/leaflet.fullscreen/Control.FullScreen.js';
-import { marker } from 'leaflet';
+import { geoJSON, marker } from 'leaflet';
 import { isPlatformBrowser } from '@angular/common';
 
 declare var L;
 declare var HeatmapOverlay;
+
+// declare var Wkt;
+import * as Wkt from 'wicket';
+// import { Wkt } from 'src/typings';
 
 
 @Component({
@@ -88,6 +92,26 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   layersControl = {};
 
+  osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: this.config.mapOptions.maxZoom,
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
+  });
+  
+  // osmColor = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM map', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
+  // cuzkWMS = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'KN', maxZoom: 25, maxNativeZoom: 20, minZoom: 17, opacity: 0.5 });
+  // cuzkWMS2 = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'prehledka_kat_uz', maxZoom: 25, maxNativeZoom: 20, minZoom: 12, opacity: 0.5 });
+  cuzkOrt = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/ortofoto_wm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'ortofoto_wm', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
+  cuzkEL = L.tileLayer.wms('http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer?', { layers: 'dmr5g:GrayscaleHillshade', maxZoom: 25, maxNativeZoom: 20, minZoom: 6 });
+  cuzkZM = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/zmwm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'zmwm', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
+
+baseLayers = {
+  "ČÚZK - Základní mapy ČR": this.cuzkZM,
+  "ČÚZK - Ortofotomapa": this.cuzkOrt,
+  "ČÚZK - Stínovaný reliéf 5G": this.cuzkEL,
+  "OpenStreetMap": this.osm,
+};
+overlays = new L.featureGroup();
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     private renderer: Renderer2,
@@ -105,34 +129,13 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
-    const osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: this.config.mapOptions.maxZoom,
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
-    });
     // const mqi = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.png", {subdomains: ['otile1','otile2','otile3','otile4']});
 
-    var osmColor = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM map', maxZoom:25, maxNativeZoom: 19, minZoom: 6 }),
-    cuzkWMS = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'KN', maxZoom:25, maxNativeZoom: 20, minZoom: 17, opacity: 0.5 }),
-    cuzkWMS2 = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'prehledka_kat_uz', maxZoom:25, maxNativeZoom: 20, minZoom: 12, opacity: 0.5 }),
-    cuzkOrt = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/ortofoto_wm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'ortofoto_wm', maxZoom:25, maxNativeZoom: 19, minZoom: 6 }),
-    cuzkEL = L.tileLayer.wms('http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer?', { layers: 'dmr5g:GrayscaleHillshade', maxZoom: 25, maxNativeZoom: 20, minZoom: 6 }),
-    cuzkZM = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/zmwm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'zmwm', maxZoom: 25,maxNativeZoom:19, minZoom: 6 });
 
-
-    // var map = L.map('projectMap',{zoomControl:false,  layers: [cuzkZM]}).setView([49.84, 15.17], 7);
-
-    var baseLayers = {
-        "ČÚZK - Základní mapy ČR": cuzkZM,
-        "ČÚZK - Ortofotomapa": cuzkOrt,
-        "ČÚZK - Stínovaný reliéf 5G": cuzkEL,
-        "OpenStreetMap": osm,
-    };
-
-    this.options.layers = [cuzkZM, cuzkOrt, cuzkEL, osm];
+    this.options.layers = [this.osm];
 
     this.layersControl = {
-      baseLayers
+      baseLayers: this.baseLayers
     }
 
 
@@ -142,7 +145,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     //     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
     //   }));
 
-        
+
     this.options.zoom = this.config.mapOptions.zoom;
     if (this.state.mapResult) {
       this.options.zoom = this.config.mapOptions.hitZoomLevel;
@@ -209,6 +212,13 @@ export class MapaComponent implements OnInit, OnDestroy {
     const start = new Date().getMilliseconds();
     if (this.state.solrResponse) {
       this.setMarkersData();
+      if (this.markersList.length === 1) {
+        if (this.markersList[0].pianPresnost < 4){
+          this.addShape(this.markersList[0].pianId);
+        }
+        
+      }
+      
 
       if (this.state.locationFilterEnabled) {
         this.locationFilter.enable();
@@ -225,7 +235,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       }, 100);
 
       if (this.state.solrResponse.response.docs.length === 1) {
-        console.log('tady');
         this.state.setMapResult(this.state.solrResponse.response.docs[0], false)
       }
     }
@@ -267,9 +276,11 @@ export class MapaComponent implements OnInit, OnDestroy {
               mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: this.icon, docId: [], riseOnHover: true });
               this.markersList.push(mrk);
               mrk.pianId = pianId;
+              mrk.pianPresnost = presnost;
               mrk.docId = [doc.ident_cely];
               mrk.on('click', (e) => {
                 this.setPianId(e.target.pianId);
+
               });
               mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
 
@@ -337,7 +348,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     const docId = res.ident_cely;
     let changed = true;
-    if ((this.selectedMarker.length > 0 && this.selectedMarker[0].docId.includes(docId)) ) {
+    if ((this.selectedMarker.length > 0 && this.selectedMarker[0].docId.includes(docId))) {
       // the same or document
       changed = false;
     }
@@ -381,7 +392,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   popUpHtml(id: string, presnost: string, docId: any[]) {
     const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
-    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') ('+ t + ': ' + docId.length+')';
+    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + docId.length + ')';
   }
 
   onMapReady(map: L.Map) {
@@ -431,8 +442,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.map.fitBounds(bounds.pad(.03));
       this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
 
-    // } else if(!this.isResults) {
-    //   this.locationFilter.setBounds(bounds.pad(-0.95));
+      // } else if(!this.isResults) {
+      //   this.locationFilter.setBounds(bounds.pad(-0.95));
     } else {
       this.locationFilter.setBounds(bounds.pad(-0.95));
     }
@@ -475,16 +486,16 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   debounce(func, wait, immediate) {
-      var timeout;
-      return function() {
-          var context = this, args = arguments;
-          clearTimeout(timeout);
-          timeout = setTimeout(function() {
-              timeout = null;
-              if (!immediate) func.apply(context, args);
-          }, wait);
-          if (immediate && !timeout) func.apply(context, args);
-      };
+    var timeout;
+    return function () {
+      var context = this, args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      }, wait);
+      if (immediate && !timeout) func.apply(context, args);
+    };
   }
 
   updateBounds(mapBounds) {
@@ -572,8 +583,29 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.map.addLayer(this.heatmapLayer);
   }
 
-  addWkt(geo: string){
+  addShapes() {
+    // const z = "LINESTRING(50.61908,15.90431 50.61912,15.90433 50.61930,15.90411)";
+    // wkt.read(z);
+    this.state.solrResponse.response.docs.forEach(doc => {
+      if (doc.pian && doc.pian.length > 0) {
+        doc.pian.forEach((pian: any) => {
+
+        });
+      }
+    });
+  }
+
+  addShape(ident_cely: string) {
+    this.service.getWKT(ident_cely).subscribe((resp: any) => {
+      // console.log(ident_cely, resp.geom_wkt_c);
+      const wkt = new Wkt.Wkt();
+      wkt.read(resp.geom_wkt_c);
+       const layer = geoJSON((wkt.toJson() as any), { style: () => ({ color: '#333', weight: 1, fillColor: '#000077', fillOpacity: .4 }) });
+       layer.addTo(this.overlays);
+       layer.addTo(this.markers);
+    });
 
   }
 
 }
+

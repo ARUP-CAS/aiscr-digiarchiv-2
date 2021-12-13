@@ -72,6 +72,7 @@ import { Knihovna3dComponent } from './entity/knihovna3d/knihovna3d.component';
 import { VyskovyBodComponent } from './components/vyskovy-bod/vyskovy-bod.component';
 import { FacetsDynamicComponent } from './components/facets-dynamic/facets-dynamic.component';
 import { BibtextDialogComponent } from './components/bibtext-dialog/bibtext-dialog.component';
+import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-dialog.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -165,7 +166,8 @@ const providers: any[] = [
     MapaShimComponent,
     Knihovna3dComponent,
     VyskovyBodComponent,
-    BibtextDialogComponent
+    BibtextDialogComponent,
+    FeedbackDialogComponent
   ],
   imports: [
     CommonModule,

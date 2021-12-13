@@ -52,13 +52,13 @@ public class ImageServlet extends HttpServlet {
       return;
     }
     
-    try (OutputStream out = response.getOutputStream()) {
+    
       boolean full = Boolean.parseBoolean(request.getParameter("full"));
       Options opts = Options.getInstance();
       if (full) {
         String imagesDir = opts.getString("imagesDir");
         File f = new File(imagesDir + id);
-        IOUtils.copy(new FileInputStream(f), out);
+        IOUtils.copy(new FileInputStream(f), response.getOutputStream());
         return;
       }
 
@@ -83,6 +83,8 @@ public class ImageServlet extends HttpServlet {
           }
           if (f.exists()) {
             String mime = getServletContext().getMimeType(f.getName());
+            System.out.println(fname);
+            System.out.println(mime);
             if ( mime != null) {
               response.setContentType(mime);
             } else {
@@ -90,35 +92,35 @@ public class ImageServlet extends HttpServlet {
             }
             
             BufferedImage bi = ImageIO.read(f);
-            ImageSupport.addWatermark(bi, logoImg(response, out), (float) opts.getDouble("watermark.alpha", 0.2f));
-            ImageIO.write(bi, "jpg", out);
+            ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream()), (float) opts.getDouble("watermark.alpha", 0.2f));
+            ImageIO.write(bi, "jpg", response.getOutputStream());
           } else {
             //LOG to file
             File file = new File(opts.getString("thumbsDir") + File.separator + "missed.txt");
             FileUtils.writeStringToFile(file, fname + System.getProperty("line.separator"), "UTF-8", true);
             LOGGER.log(Level.WARNING, "File does not exist in {0}. ", fname);
-            emptyImg(response, out);
+            emptyImg(response, response.getOutputStream());
           }
         } catch (Exception ex) {
           LOGGER.log(Level.SEVERE, null, ex);
-          emptyImg(response, out);
+          emptyImg(response, response.getOutputStream());
         }
       } else {
         LOGGER.info("no id");
-        emptyImg(response, out);
+        emptyImg(response, response.getOutputStream());
       }
-    }
+    
   }
 
   private BufferedImage logoImg(HttpServletResponse response, OutputStream out) throws IOException {
     String empty = getServletContext().getRealPath(File.separator) + "/assets/img/logo-watermark-white.png";
-    response.setContentType("image/gif");
     return ImageIO.read(new File(empty));
 
   }
 
   private void emptyImg(HttpServletResponse response, OutputStream out) throws IOException {
     String empty = getServletContext().getRealPath(File.separator) + "/assets/img/empty.gif";
+    System.out.println("problem");
     response.setContentType("image/gif");
     BufferedImage bi = ImageIO.read(new File(empty));
     ImageIO.write(bi, "gif", out);
