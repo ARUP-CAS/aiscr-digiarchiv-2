@@ -111,12 +111,18 @@ main {
   .app-view-map & {
     max-width: 100%;
 
+    .leaflet-control {
+      float: right;
+    }
+
     .leaflet-top {
-      top: 46px;
+      top: 0;
     }
 
     .leaflet-left {
-      left: 6px;
+      right: #{map-get($gaps, "3")}px;
+      left: unset !important;
+      z-index: 1003;
     }
   }
 }

@@ -100,6 +100,9 @@
   <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
     <mat-sidenav-container class="app-sidenav-container">
       <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+        <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
+          <mat-icon>last_page</mat-icon>
+        </button>
         <mat-tab-group [selectedIndex]="1" *ngIf="!loading">
           <mat-tab [label]="'Filtry' | translate">
             <div class="app-facets">
@@ -110,23 +113,23 @@
           <mat-tab [label]="'Výsledky' | translate">
             <app-paginator></app-paginator>
             <cdk-virtual-scroll-viewport itemSize="64" [style.height.px]="math.min(9*64, docs.length * 64)">
-            <ng-container *cdkVirtualFor="let result of docs">
-              <ng-container [ngSwitch]="state.entity">
-                <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-                <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
-                <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
-                <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
-                <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
-                <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+              <ng-container *cdkVirtualFor="let result of docs">
+                <ng-container [ngSwitch]="state.entity">
+                  <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
+                  <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
+                  <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
+                  <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
+                  <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
+                  <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+                </ng-container>
               </ng-container>
-            </ng-container>
-          </cdk-virtual-scroll-viewport>
+            </cdk-virtual-scroll-viewport>
           </mat-tab>
         </mat-tab-group>
       </mat-sidenav>
     
-      <mat-sidenav-content>
-        <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'">
+      <mat-sidenav-content style="margin-left: 0 !important;">
+        <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
           <mat-icon>last_page</mat-icon>
         </button>
         <app-mapa></app-mapa>

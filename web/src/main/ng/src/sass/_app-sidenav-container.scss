@@ -4,7 +4,26 @@
   height: calc(100vh - 217px);
 
   .mat-sidenav {
-    width: $app-table-cell-left-width;
+    @extend .app-clean-bg, .app-clean-border;
+    width: calc(#{$app-table-cell-left-width} + 40px);
+
+    .mat-drawer-inner-container {
+      background-color: $app-color-lightnes;
+      width: $app-table-cell-left-width;
+
+      .app-btn {
+        right: 0 !important;
+        left: unset !important;
+      }
+    }
+
+    @media #{$lt-sm} { 
+      width: 100%;
+
+      .mat-drawer-inner-container {
+        width: 100%;
+      }
+    }
 
     .mat-tab-group {
       .mat-tab-label {
@@ -70,9 +89,9 @@
 
   .app-btn {
     position: absolute;
-    top: $app-gap;
-    left: 18px;
-    z-index: 1002;
+    top: #{map-get($gaps, "3")}px;
+    left: #{map-get($gaps, "3")}px;
+    z-index: 1092;
     min-width: 0;
     line-height: 28px;
     padding: 0 1px;
@@ -80,8 +99,8 @@
 
   .app-view-card-info {
     position: absolute;
-    top: $app-gap;
-    right: $app-gap;
+    top: #{map-get($gaps, "3")}px;
+    right: 70px;
     z-index: 1002;
     width: 850px;
 
@@ -93,7 +112,7 @@
     }
 
     @media #{$lt-lg} {
-      width: calc(100% - 85px);
+      width: calc(100% - 130px);
     }
   }
 
@@ -116,3 +135,9 @@
     }
   }
 }
+
+
+/* .mat-drawer-inner-container {
+  overflow: hidden;
+} */
+
