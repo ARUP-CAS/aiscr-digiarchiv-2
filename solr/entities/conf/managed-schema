@@ -22,6 +22,7 @@
 
    <field name="_version_" type="plong" indexed="false" stored="false"/>
    <field name="indextime" type="pdate" indexed="true" stored="true" default="NOW" /> 
+   <field name="datestamp" type="pdate" indexed="true" stored="true" /> 
    <field name="ident_cely" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="searchable" type="boolean" indexed="true" stored="true" multiValued="false" />
    <field name="stav" type="pint" indexed="true" stored="true" multiValued="false" />

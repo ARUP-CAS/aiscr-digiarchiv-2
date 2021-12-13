@@ -23,7 +23,6 @@ public class GPSconvertor {
    * @param data
    */
   public static String convertGeojson(String data) {
-    System.out.println(data);
     StringBuilder output = new StringBuilder();
     // String p = "\\s(-{0,1}(\\d{0,}\\.{0,1}\\d{0,}),-{0,1}(\\d{0,}\\.{0,1}\\d{0,}))\\s"; // [-735280.35,-1034312.02]
     String p = "(?<=\\()[^()]+?(?=\\))"; // [-735280.35,-1034312.02]
@@ -47,7 +46,6 @@ public class GPSconvertor {
 //        data.replaceAll(matcher.group( ), "[" + coordinates.getElasticSuitableString() + "]");
     }
     matcher.appendTail(output);
-    System.out.println(output.toString());
 
     return output.toString();
 

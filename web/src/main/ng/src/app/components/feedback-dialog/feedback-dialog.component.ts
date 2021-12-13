@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FeedbackDialogComponent implements OnInit {
 
+  email: string;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -16,9 +18,9 @@ export class FeedbackDialogComponent implements OnInit {
     // do it
   }
 
-  emailFormControl() {
+  hasError() {
     // do it
-    return ''
+    return false
   }
 
 }

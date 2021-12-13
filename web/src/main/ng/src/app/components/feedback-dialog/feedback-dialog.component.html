@@ -1,14 +1,14 @@
 <h1 mat-dialog-title>{{ 'Odeslat komentář' | translate }}</h1>
 <div mat-dialog-content>
-  <mat-form-field class="app-w-100" appearance="fill" [class.app-mb-4]="emailFormControl()">
+  <mat-form-field class="app-w-100" appearance="fill" [class.app-mb-4]="hasError()">
     <mat-label>{{ 'Email' | translate }}</mat-label>
-    <input type="email" matInput [placeholder]="'Ex. pat@example.com' | translate">
-    <mat-error *ngIf="emailFormControl()">
+    <input type="email" matInput [placeholder]="'Ex. pat@example.com' | translate" [(ngModel)]="email" email required>
+    <mat-error>
       {{ 'Prosím zadejte platnou emailovou adresu' | translate }}!
     </mat-error>
-    <mat-error *ngIf="emailFormControl()">
+    <!-- <mat-error *ngIf="hasError()">
       {{ 'E-mail je povinný' | translate }}!
-    </mat-error>
+    </mat-error> -->
   </mat-form-field>
   <mat-form-field class="app-w-100" appearance="fill">
     <mat-label>{{ 'Komentář' | translate }}</mat-label>

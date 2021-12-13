@@ -67,7 +67,7 @@ public class AkceSearcher implements EntitySearcher{
       query.setFields("ident_cely,entity,vedouci_akce,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres");
     } else {
 
-      query.setFields("ident_cely","katastr","f_katastr:katastr","okres","f_okres:okres","vedouci_akce", "loc","entity",
+      query.setFields("ident_cely","katastr","f_katastr:katastr","okres","f_okres:okres","vedouci_akce", "loc","entity","datestamp",
       "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,
       "organizace","f_organizace:organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
       "hlavni_typ","f_hlavni_typ:hlavni_typ","vedlejsi_typ","f_vedlejsi_typ:vedlejsi_typ", "vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
