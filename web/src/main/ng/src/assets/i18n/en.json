@@ -381,6 +381,15 @@
     "ddata3d": "3D models"
   },
 
+  "kategorie_dokumentu_texty": "Texts",
+  "kategorie_dokumentu_foto": "Photographs",
+  "kategorie_dokumentu_lfoto": "Aerial images",
+  "kategorie_dokumentu_ddata": "Digital data",
+  "kategorie_dokumentu_mplany": "Plans and maps",
+  "kategorie_dokumentu_neuvedeno": "Unspecified",
+  "kategorie_dokumentu_pas": "Individual finds",
+  "kategorie_dokumentu_ddata3d": "3D models",
+
   "entities": {
     "dokument": {
       "title": "Documents",

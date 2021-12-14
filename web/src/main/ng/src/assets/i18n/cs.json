@@ -380,6 +380,15 @@
     "pas": "Samostatné nálezy",
     "ddata3d": "3D modely"
   },
+  
+  "kategorie_dokumentu_texty": "Texty",
+  "kategorie_dokumentu_foto": "Fotografie",
+  "kategorie_dokumentu_lfoto": "Letecké fotografie",
+  "kategorie_dokumentu_ddata": "Digitální data",
+  "kategorie_dokumentu_mplany": "Plány a mapy",
+  "kategorie_dokumentu_neuvedeno": "Neuvedeno",
+  "kategorie_dokumentu_pas": "Samostatné nálezy",
+  "kategorie_dokumentu_ddata3d": "3D modely",
 	
   "entities": {
     "dokument": {

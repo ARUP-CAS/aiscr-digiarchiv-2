@@ -32,7 +32,7 @@ import org.json.JSONObject;
  * @author alberto
  */
 public class IndexerTranslations {
-  
+
   static final Logger LOGGER = Logger.getLogger(IndexerTranslations.class.getName());
 
   public static JSONObject fromCSV() {
@@ -49,59 +49,59 @@ public class IndexerTranslations {
       File dir = new File(thesauriDir);
       LOGGER.log(Level.INFO, "indexing from {0}", thesauriDir);
       for (File file : dir.listFiles()) {
-        LOGGER.log(Level.INFO, "indexing from {0}", file.getName());
-        // Reader in = new FileReader(file);
-        Reader in = new FileReader(file, Charset.forName("UTF-8"));
-        //readOne( , uniqueid, "", translationsClient, ret, hasRelations);
+        if (!dir.isDirectory()) {
+          LOGGER.log(Level.INFO, "indexing from {0}", file.getName());
+          // Reader in = new FileReader(file);
+          Reader in = new FileReader(file, Charset.forName("UTF-8"));
+          //readOne( , uniqueid, "", translationsClient, ret, hasRelations);
 
-        Date tstart = new Date();
-        int tsuccess = 0;
-        int terrors = 0;
-        JSONObject typeJson = new JSONObject();
+          Date tstart = new Date();
+          int tsuccess = 0;
+          int terrors = 0;
+          JSONObject typeJson = new JSONObject();
 
-        //CSVFormat f = CSVFormat.newFormat('#').withEscape('\\').withQuote('\"').withFirstRecordAsHeader();
-        CSVFormat f = CSVFormat.newFormat('#').withEscape('\\').withFirstRecordAsHeader();
-        CSVParser parser = new CSVParser(in, f);
-        Map<String, Integer> header = parser.getHeaderMap();
-        try {
+          //CSVFormat f = CSVFormat.newFormat('#').withEscape('\\').withQuote('\"').withFirstRecordAsHeader();
+          CSVFormat f = CSVFormat.newFormat('#').withEscape('\\').withFirstRecordAsHeader();
+          CSVParser parser = new CSVParser(in, f);
+          Map<String, Integer> header = parser.getHeaderMap();
+          try {
 
-          for (final CSVRecord record : parser) {
-            try {
-              SolrInputDocument doc = new SolrInputDocument();
+            for (final CSVRecord record : parser) {
+              try {
+                SolrInputDocument doc = new SolrInputDocument();
 
-              doc.addField("id", record.get(0) + "_" + record.get(2));
-              for (Map.Entry<String, Integer> entry : header.entrySet()) {
-                doc.addField(entry.getKey().toLowerCase().trim(), record.get(entry.getKey()));
+                doc.addField("id", record.get(0) + "_" + record.get(2));
+                for (Map.Entry<String, Integer> entry : header.entrySet()) {
+                  doc.addField(entry.getKey().toLowerCase().trim(), record.get(entry.getKey()));
+                }
+
+                client.add("translations", doc);
+                tsuccess++;
+                success++;
+                if (success % 500 == 0) {
+                  client.commit("translations");
+                  LOGGER.log(Level.INFO, "Indexed {0} docs", success);
+                }
+              } catch (Exception ex) {
+                terrors++;
+                errors++;
+                ret.getJSONArray("errors msgs").put(record);
+                LOGGER.log(Level.SEVERE, "Error indexing doc {0}", record);
+                LOGGER.log(Level.SEVERE, null, ex);
               }
-
-              client.add("translations", doc);
-              tsuccess++;
-              success++;
-              if (success % 500 == 0) {
-                client.commit("translations");
-                LOGGER.log(Level.INFO, "Indexed {0} docs", success);
-              }
-            } catch (Exception ex) {
-              terrors++;
-              errors++;
-              ret.getJSONArray("errors msgs").put(record);
-              LOGGER.log(Level.SEVERE, "Error indexing doc {0}", record);
-              LOGGER.log(Level.SEVERE, null, ex);
             }
+
+            client.commit("translations");
+
+            typeJson.put("docs indexed", tsuccess).put("errors", terrors);
+            Date tend = new Date();
+
+            typeJson.put("ellapsed time", FormatUtils.formatInterval(tend.getTime() - tstart.getTime()));
+            ret.put(file.getName(), typeJson).put("docs indexed", success);
+          } finally {
+            parser.close();
           }
-
-          
-          client.commit("translations");
-
-          typeJson.put("docs indexed", tsuccess).put("errors", terrors);
-          Date tend = new Date();
-
-          typeJson.put("ellapsed time", FormatUtils.formatInterval(tend.getTime() - tstart.getTime()));
-          ret.put(file.getName(), typeJson).put("docs indexed", success);
-        } finally {
-          parser.close();
         }
-
       }
       I18n.resetInstance();
       LOGGER.log(Level.INFO, "Indexed Finished. {0} success, {1} errors", new Object[]{success, errors});
@@ -115,7 +115,6 @@ public class IndexerTranslations {
     }
     return new JSONObject().put("translations", ret);
   }
-  
 
   public void fromCSV(Map<String, Integer> header, CSVRecord record) {
 
