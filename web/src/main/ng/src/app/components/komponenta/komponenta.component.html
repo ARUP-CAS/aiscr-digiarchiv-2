@@ -29,6 +29,8 @@
       </li>
     </ul>
   </mat-expansion-panel>
+</mat-expansion-panel>
+
   <mat-expansion-panel *ngIf="(result.akce || result.lokalita) && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
     <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
       <mat-panel-title>
@@ -39,5 +41,3 @@
     <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
     <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
   </mat-expansion-panel> 
-</mat-expansion-panel>
-  

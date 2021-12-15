@@ -13,6 +13,7 @@ export class AdbComponent implements OnInit {
   @Input() detailExpanded: boolean;
   @Input() isChild: boolean;
   @Input() inDocument = false;
+  @Input() onlyHead = false;
 
   constructor(
     public service: AppService,

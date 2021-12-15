@@ -15,9 +15,9 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public class KomponentaSearcher implements ComponentSearcher {
+public class KomponentaDokumentSearcher implements ComponentSearcher {
 
-  public static final Logger LOGGER = Logger.getLogger(KomponentaSearcher.class.getName());
+  public static final Logger LOGGER = Logger.getLogger(KomponentaDokumentSearcher.class.getName());
 
   final String ENTITY = "komponenta";
 
@@ -29,22 +29,12 @@ public class KomponentaSearcher implements ComponentSearcher {
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
       if (doc.has("parent")) {
-        JSONObject ch = SolrSearcher.getById(client, doc.getString("parent"), fields);
-        if (ch != null) {
-          if (ch.has("parent_akce")) {
-            JSONObject sub = SolrSearcher.getById(client, ch.getString("parent_akce"), fields);
-            if (sub != null) {
-              doc.append(sub.getString("entity"), sub);
-            }
-          }
-          if (ch.has("parent_lokalita")) {
-            JSONObject sub = SolrSearcher.getById(client, ch.getString("parent_lokalita"), fields);
-            if (sub != null) {
-              doc.append(sub.getString("entity"), sub);
-            }
-          }
-
+        String p = doc.getString("parent");
+        JSONObject sub = SolrSearcher.getById(client, p, fields);
+        if (sub != null) {
+          doc.append(sub.getString("entity"), sub);
         }
+
       }
     }
   }

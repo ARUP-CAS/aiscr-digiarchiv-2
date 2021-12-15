@@ -83,8 +83,6 @@ public class ImageServlet extends HttpServlet {
           }
           if (f.exists()) {
             String mime = getServletContext().getMimeType(f.getName());
-            System.out.println(fname);
-            System.out.println(mime);
             if ( mime != null) {
               response.setContentType(mime);
             } else {

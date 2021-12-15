@@ -95,6 +95,7 @@ public class ADB implements Entity {
           vbdoc.setField("entity", "vyskovy_bod");
           vbdoc.setField("searchable", true);
           addJSONFields(vbJson, vbdoc);
+          vbdoc.setField("parent", ident_cely);
           idocs.add(vbdoc);
           // addAsEntity(client, vbdoc, "vyskovy_bod");
         }

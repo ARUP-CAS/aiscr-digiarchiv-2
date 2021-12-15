@@ -1,2 +1,12 @@
 <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
 (<app-inline-filter [field]="'typ'" [value]="result.typ"></app-inline-filter>) – {{result.niveleta}} m n. m. ({{result.easting}} : {{result.northing}})
+
+
+<mat-expansion-panel *ngIf="result.parent && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+  <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+    <mat-panel-title>
+      {{ 'Související záznamy' | translate }}:
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <app-adb *ngFor="let result of result.adb" [result]="result" [isChild]="true" [onlyHead]="true" class="app-related-item"></app-adb>
+</mat-expansion-panel> 

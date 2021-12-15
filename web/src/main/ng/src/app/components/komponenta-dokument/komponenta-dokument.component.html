@@ -1,0 +1,48 @@
+<mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+  <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+    <mat-panel-title>
+      <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+      {{ 'Komponenta' | translate }}&#160;<ng-container *ngIf="result.ident_cely"><a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
+      <ng-container *ngIf="result.obdobi">
+        <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
+      </ng-container>
+      <ng-container *ngIf="result.jistota || result.presna_datace">(<ng-container *ngIf="result.jistota">{{ result.jistota }};</ng-container>{{ result.presna_datace }})</ng-container>
+      <ng-container *ngIf="result.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
+      <ng-container *ngIf="result.aktivita">
+        &#160;(<ng-container *ngFor="let ak of result.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
+        <span *ngIf="!last">,&#160; </span></ng-container>)
+      </ng-container>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="result.poznamka">{{ result.poznamka }}</ng-container>
+  <mat-expansion-panel #panel *ngIf="result.nalez_dokumentu" [expanded]="true" hideToggle class="app-panel-inner">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+      <mat-panel-title>
+        <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+        {{ 'Nálezy' | translate }}:
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul class="app-list-inside">
+      <ng-container *ngIf="result.nalez_dokumentu.length">
+        <li *ngFor="let nalez_dokumentu of result.nalez_dokumentu">
+          <app-nalez [result]="nalez_dokumentu"></app-nalez>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="!result.nalez_dokumentu.length">
+        <li>
+          <app-nalez [result]="result.nalez_dokumentu"></app-nalez>
+        </li>
+      </ng-container>
+    </ul>
+  </mat-expansion-panel>
+</mat-expansion-panel>
+
+<mat-expansion-panel *ngIf="result.parent && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+  <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+    <mat-panel-title>
+      {{ 'Související záznamy' | translate }}:
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [isChild]="true" class="app-related-item"></app-dok-jednotka> -->
+  <app-jednotka-dokumentu [result]="result.jednotka_dokumentu[0]" [isChild]="true" class="app-related-item"></app-jednotka-dokumentu>
+</mat-expansion-panel> 

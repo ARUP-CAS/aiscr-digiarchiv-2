@@ -39,6 +39,7 @@
 
       <mat-accordion multi="true">
         <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka> -->
+        <ng-container *ngIf="result.komponenta_dokument">
         <mat-expansion-panel #panel *ngFor="let kd of result.komponenta_dokument[0]" [expanded]="true" hideToggle class="app-panel-inner">
           <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
             <mat-panel-title>
@@ -77,6 +78,8 @@
             </ul>
           </mat-expansion-panel>
         </mat-expansion-panel>
+        
+      </ng-container>
         <mat-expansion-panel #panel *ngFor="let neident_akce of result.neident_akce" [expanded]="true" hideToggle class="app-panel-inner">
           <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
             <mat-panel-title>

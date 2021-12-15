@@ -46,12 +46,13 @@
         <app-let *ngIf="result.entity === 'let'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
         <app-pian *ngIf="result.entity === 'pian'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
         <app-externi-zdroj *ngIf="result.entity === 'ext_zdroj'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
-        <mat-card *ngIf="result.entity === 'adb' || result.entity === 'dok_jednotka' || result.entity === 'komponenta' || result.entity === 'vyskovy_bod'">
+        <mat-card *ngIf="result.entity === 'adb' || result.entity === 'dok_jednotka' || result.entity === 'komponenta' || result.entity === 'komponenta_dokument' || result.entity === 'vyskovy_bod'">
           <mat-card-content>
             <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-adb>
             <app-vyskovy-bod *ngIf="result.entity === 'vyskovy_bod'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
             <app-dok-jednotka *ngIf="result.entity === 'dok_jednotka'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
             <app-komponenta *ngIf="result.entity === 'komponenta'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
+            <app-komponenta-dokument *ngIf="result.entity === 'komponenta_dokument'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta-dokument>
           </mat-card-content>
         </mat-card>
       </ng-container>

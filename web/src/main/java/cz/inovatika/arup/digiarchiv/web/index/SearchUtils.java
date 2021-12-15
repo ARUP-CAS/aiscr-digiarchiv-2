@@ -193,6 +193,12 @@ public class SearchUtils {
       case "komponenta":
         searcher = new KomponentaSearcher();
         break;
+      case "komponenta_dokument":
+        searcher = new KomponentaDokumentSearcher();
+        break;
+      case "vyskovy_bod":
+        searcher = new VyskovyBodSearcher();
+        break;
       default:
         searcher = null;
     }
