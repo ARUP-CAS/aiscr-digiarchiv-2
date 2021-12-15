@@ -154,13 +154,17 @@
       </button>
     </div>
   </mat-card-actions>
-</mat-card>
 
-<mat-expansion-panel *ngIf="result.dokument && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-  <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
-    <mat-panel-title>
-      {{ 'Související záznamy' | translate }}:
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-  <app-dokument *ngFor="let dokument of result.dokumenty" [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
-</mat-expansion-panel> 
+  <mat-card-content *ngIf="detailExpanded && !isChild">
+    <div class="app-card-detail">
+  <mat-expansion-panel *ngIf="result.dokument && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+    <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+      <mat-panel-title>
+        {{ 'Související záznamy' | translate }}:
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-dokument *ngFor="let dokument of result.dokumenty" [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
+  </mat-expansion-panel> 
+</div>
+</mat-card-content>
+</mat-card>
