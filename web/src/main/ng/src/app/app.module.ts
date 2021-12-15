@@ -70,6 +70,7 @@ import { NalezComponent } from './components/nalez/nalez.component';
 import { JednotkaDokumentuComponent } from './entity/jednotka-dokumentu/jednotka-dokumentu.component';
 import { MapaComponent } from './components/mapa/mapa.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 import { Knihovna3dComponent } from './entity/knihovna3d/knihovna3d.component';
 import { VyskovyBodComponent } from './components/vyskovy-bod/vyskovy-bod.component';
 import { FacetsDynamicComponent } from './components/facets-dynamic/facets-dynamic.component';
@@ -184,6 +185,7 @@ const providers: any[] =[
     FormsModule,
     AppRoutingModule,
     LeafletModule.forRoot(),
+    // LeafletMarkerClusterModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

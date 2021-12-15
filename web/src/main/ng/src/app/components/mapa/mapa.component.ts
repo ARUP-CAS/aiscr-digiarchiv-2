@@ -21,6 +21,7 @@ import { geoJSON, marker } from 'leaflet';
 import { isPlatformBrowser } from '@angular/common';
 
 declare var L;
+import 'leaflet.markercluster';
 declare var HeatmapOverlay;
 
 // declare var Wkt;
@@ -82,7 +83,9 @@ export class MapaComponent implements OnInit, OnDestroy {
   zoomingOnMarker = true;
 
   map;
-  markers = new L.featureGroup();
+  // markers = new L.featureGroup();
+  markers = new L.markerClusterGroup();
+  
   markersList: any[] = [];
   selectedMarker = [];
 
@@ -264,7 +267,8 @@ overlays = new L.featureGroup();
 
   setMarkersData() {
     this.markersList = [];
-    this.markers = new L.featureGroup();
+    // this.markers = new L.featureGroup();
+    this.markers = new L.markerClusterGroup();
     this.state.solrResponse.response.docs.forEach(doc => {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
@@ -413,7 +417,8 @@ overlays = new L.featureGroup();
 
     map.addLayer(this.locationFilter);
 
-    this.markers = new L.featureGroup();
+    //this.markers = new L.featureGroup();
+    this.markers = new L.markerClusterGroup();
     map.addLayer(this.markers);
 
     map.on('enterFullscreen', () => map.invalidateSize());
@@ -533,6 +538,7 @@ overlays = new L.featureGroup();
     const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
 
     this.showHeat = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
+    this.showHeat = false;
     if (!this.showHeat) {
       return;
     }

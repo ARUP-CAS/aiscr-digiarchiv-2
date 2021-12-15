@@ -3,7 +3,7 @@
 	 (leafletMapReady)="onMapReady($event)"
 	 [leafletLayersControl]="layersControl"
 	 [leafletLayersControlOptions]="{position: 'topleft'}">
-		<div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div>
+		<!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
 		<div [leafletLayer]="markers"></div>
 		<div [leafletLayer]="overlays"></div>
 	</div> 
