@@ -9,6 +9,7 @@ import static cz.inovatika.arup.digiarchiv.web.I18n.LOGGER;
 import cz.inovatika.arup.digiarchiv.web.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
+import cz.inovatika.arup.digiarchiv.web.index.PIANSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
@@ -193,6 +194,16 @@ public class SearchServlet extends HttpServlet {
           searcher = new DokumentSearcher();
         }
         JSONObject jo = searcher.search(request);
+        return jo.toString();
+      }
+    },
+    PIANS {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String entity = "" + request.getParameter("entity");
+        PIANSearcher searcher = new PIANSearcher();
+        JSONObject jo = searcher.getMapPians(request);
         return jo.toString();
       }
     },

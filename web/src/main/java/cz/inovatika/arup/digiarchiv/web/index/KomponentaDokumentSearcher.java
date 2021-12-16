@@ -1,12 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
-import cz.inovatika.arup.digiarchiv.web.LoginServlet;
-import cz.inovatika.arup.digiarchiv.web.Options;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +14,7 @@ public class KomponentaDokumentSearcher implements ComponentSearcher {
 
   public static final Logger LOGGER = Logger.getLogger(KomponentaDokumentSearcher.class.getName());
 
-  final String ENTITY = "komponenta";
+  final String ENTITY = "komponenta_dokument";
 
   @Override
   public void getRelated(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {

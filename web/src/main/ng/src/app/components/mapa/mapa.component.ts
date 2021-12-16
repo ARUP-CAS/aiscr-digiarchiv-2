@@ -3,13 +3,8 @@ import { Component, OnInit, NgZone, Renderer2, Inject, PLATFORM_ID, OnDestroy, I
 
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-// import { Renderer } from 'leaflet';
-
 
 import 'src/assets/js/locationfilter';
-// import 'leaflet/dist/images/marker-shadow.png';
-// import 'leaflet/dist/images/marker-icon.png';
-// import 'leaflet/dist/images/marker-icon-2x.png';
 
 import { AppService } from 'src/app/app.service';
 import { SolrResponse } from 'src/app/shared/solr-response';
@@ -64,15 +59,15 @@ export class MapaComponent implements OnInit, OnDestroy {
   icon = L.icon({
     iconSize: [25, 41],
     iconAnchor: [13, 41],
-    iconUrl: 'assets/marker-icon.png',
-    shadowUrl: 'assets/marker-shadow.png'
+    iconUrl: 'assets/img/marker-icon.png',
+    shadowUrl: 'assets/img/marker-shadow.png'
   });
 
   hitIcon = L.icon({
     iconSize: [25, 41],
     iconAnchor: [13, 41],
     iconUrl: 'assets/img/marker-icon-hit.png',
-    shadowUrl: 'assets/marker-shadow.png'
+    shadowUrl: 'assets/img/marker-shadow.png'
   });
 
   params: HttpParams;
@@ -85,7 +80,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   map;
   // markers = new L.featureGroup();
   markers = new L.markerClusterGroup();
-  
+
   markersList: any[] = [];
   selectedMarker = [];
 
@@ -99,7 +94,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     maxZoom: this.config.mapOptions.maxZoom,
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
   });
-  
+
   // osmColor = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM map', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
   // cuzkWMS = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'KN', maxZoom: 25, maxNativeZoom: 20, minZoom: 17, opacity: 0.5 });
   // cuzkWMS2 = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'prehledka_kat_uz', maxZoom: 25, maxNativeZoom: 20, minZoom: 12, opacity: 0.5 });
@@ -107,13 +102,13 @@ export class MapaComponent implements OnInit, OnDestroy {
   cuzkEL = L.tileLayer.wms('http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer?', { layers: 'dmr5g:GrayscaleHillshade', maxZoom: 25, maxNativeZoom: 20, minZoom: 6 });
   cuzkZM = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/zmwm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'zmwm', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
 
-baseLayers = {
-  "ČÚZK - Základní mapy ČR": this.cuzkZM,
-  "ČÚZK - Ortofotomapa": this.cuzkOrt,
-  "ČÚZK - Stínovaný reliéf 5G": this.cuzkEL,
-  "OpenStreetMap": this.osm,
-};
-overlays = new L.featureGroup();
+  baseLayers = {
+    "ČÚZK - Základní mapy ČR": this.cuzkZM,
+    "ČÚZK - Ortofotomapa": this.cuzkOrt,
+    "ČÚZK - Stínovaný reliéf 5G": this.cuzkEL,
+    "OpenStreetMap": this.osm,
+  };
+  overlays = new L.featureGroup();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -212,16 +207,25 @@ overlays = new L.featureGroup();
   }
 
   setData() {
-    const start = new Date().getMilliseconds();
     if (this.state.solrResponse) {
-      this.setMarkersData();
-      if (this.markersList.length === 1) {
-        if (this.markersList[0].pianPresnost < 4){
-          this.addShape(this.markersList[0].pianId);
-        }
-        
+      const showCluster = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
+      if (showCluster) {
+        this.markers = new L.markerClusterGroup();
+        this.markersList = [];
+        const p = Object.assign({}, this.route.snapshot.queryParams);
+        p.rows = this.state.solrResponse.response.numFound;
+        this.service.getPians(p as HttpParams).subscribe((res: any) => {
+          this.setClusterData(res.response.docs);
+        });
+      } else {
+        this.setMarkersData();
+        this.markersList.forEach(m => {
+          if (m.pianPresnost < 4) {
+            this.addShape(m.pianId);
+          }
+        });
       }
-      
+
 
       if (this.state.locationFilterEnabled) {
         this.locationFilter.enable();
@@ -265,10 +269,44 @@ overlays = new L.featureGroup();
     }
   }
 
+  setClusterData(docs: any[]) {
+    this.markers = new L.markerClusterGroup();
+    docs.forEach(doc => {
+      if (doc.pian && doc.pian.length > 0) {
+        doc.pian.forEach(pian => {
+          if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
+            const pianId = pian.ident_cely;
+            const presnost = pian.presnost;
+            let mrk = this.markerExists(pianId);
+            if (!mrk) {
+              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: this.icon,  docId: [], riseOnHover: true });
+              this.markersList.push(mrk);
+              mrk.pianId = pianId;
+              mrk.pianPresnost = presnost;
+              mrk.docId = [doc.ident_cely];
+              mrk.on('click', (e) => {
+                this.setPianId(e.target.pianId);
+
+              });
+              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
+
+              mrk.addTo(this.markers);
+            } else {
+              mrk.docId.push(doc.ident_cely);
+              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
+            }
+          }
+        });
+      }
+    });
+    console.log(this.state.solrResponse.response.numFound, this.markersList.length);
+    this.currentZoom = this.map.getZoom();
+  }
+
   setMarkersData() {
     this.markersList = [];
-    // this.markers = new L.featureGroup();
-    this.markers = new L.markerClusterGroup();
+    this.markers = new L.featureGroup();
+    //this.markers = new L.markerClusterGroup();
     this.state.solrResponse.response.docs.forEach(doc => {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
@@ -287,7 +325,6 @@ overlays = new L.featureGroup();
 
               });
               mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
-
               mrk.addTo(this.markers);
             } else {
               mrk.docId.push(doc.ident_cely);
@@ -337,7 +374,7 @@ overlays = new L.featureGroup();
 
     this.selectedMarker.forEach(m => {
       m.setIcon(L.icon({
-        iconUrl: 'assets/marker-icon.png'
+        iconUrl: 'assets/img/marker-icon.png'
       }));
       m.setZIndexOffset(0);
     });
@@ -606,9 +643,11 @@ overlays = new L.featureGroup();
       // console.log(ident_cely, resp.geom_wkt_c);
       const wkt = new Wkt.Wkt();
       wkt.read(resp.geom_wkt_c);
-       const layer = geoJSON((wkt.toJson() as any), { style: () => ({ color: '#333', weight: 1, fillColor: '#000077', fillOpacity: .4 }) });
-       layer.addTo(this.overlays);
-       layer.addTo(this.markers);
+      if (wkt.toJson().type !== 'Point') {
+        const layer = geoJSON((wkt.toJson() as any), { style: () => ({ color: '#333', weight: 1, fillColor: '#000077', fillOpacity: .4 }) });
+        // layer.addTo(this.overlays);
+        layer.addTo(this.markers);
+      }
     });
 
   }

@@ -61,10 +61,6 @@ public class PIANSearcher implements EntitySearcher{
         }
       }
       
-      
-//      if (doc.has("geom_gml")) {
-//        doc.put("geojson", GPSconvertor.convertGeojson(doc.getString("geom_gml")));
-//      }
     }
   }
 
@@ -98,6 +94,40 @@ public class PIANSearcher implements EntitySearcher{
     }
     
     SolrSearcher.addFilters(request, query, pristupnost);
+  }
+  
+  
+  public JSONObject getMapPians(HttpServletRequest request) {
+    JSONObject json = new JSONObject();
+    // Menime entity
+    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery()
+              .setFacet(false); 
+      String entity = "" + request.getParameter("entity");
+      SolrSearcher.addCommonParams(request, query, entity);
+      String pristupnost = LoginServlet.pristupnost(request.getSession());
+      if ("E".equals(pristupnost)) {
+        pristupnost = "D";
+      }
+      query.set("df", "text_all_" + pristupnost);
+      if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+        SolrSearcher.addLocationParams(request, query);
+      }
+      SolrSearcher.addFilters(request, query, pristupnost);
+      query.setRequestHandler("/select");
+      query.set("defType", "edismax");
+      query.setFields("pian:[json],ident_cely,organizace");
+      query.setRows(Math.min(20000, Integer.parseInt(request.getParameter("rows"))));
+      
+      JSONObject jo = SearchUtils.json(query, client, "entities");
+      SolrSearcher.addFavorites(jo, client, request);
+      return jo;
+
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      json.put("error", ex);
+    }
+    return json;
   }
   
 }

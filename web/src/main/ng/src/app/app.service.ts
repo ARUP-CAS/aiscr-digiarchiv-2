@@ -164,6 +164,10 @@ export class AppService {
     return this.get('/search/mapa', params);
   }
 
+  getPians(params: HttpParams) {
+    return this.get('/search/pians', params);
+  }
+
   getHome() {
     const params: HttpParams = new HttpParams();
     return this.get('/search/home');
