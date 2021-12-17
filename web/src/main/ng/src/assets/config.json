@@ -7,7 +7,7 @@
 
   "mapOptions": {
     "docsForMarker": 200,
-    "docsForCluster": 5000,
+    "docsForCluster": 10000,
     "maxZoom": 24,
     "zoom": 8,
     "hitZoomLevel": 16,

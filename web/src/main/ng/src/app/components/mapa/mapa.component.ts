@@ -203,14 +203,14 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setData() {
     if (this.state.solrResponse) {
+      this.markers = new L.markerClusterGroup();
+      this.markersList = [];
       const showCluster = this.state.solrResponse.response.numFound > this.maxNumMarkers 
          && this.state.solrResponse.response.numFound < this.config.mapOptions.docsForCluster 
          && this.map.getZoom() < this.markerZoomLevel;
      const showMarkers = this.state.solrResponse.response.numFound < this.maxNumMarkers;
       if (showCluster) {
         this.state.loading = true;
-        this.markers = new L.markerClusterGroup();
-        this.markersList = [];
         const p = Object.assign({}, this.route.snapshot.queryParams);
         p.rows = this.state.solrResponse.response.numFound;
         this.service.getPians(p as HttpParams).subscribe((res: any) => {
