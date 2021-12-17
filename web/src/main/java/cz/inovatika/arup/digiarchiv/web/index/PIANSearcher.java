@@ -101,8 +101,7 @@ public class PIANSearcher implements EntitySearcher{
     JSONObject json = new JSONObject();
     // Menime entity
     try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-      SolrQuery query = new SolrQuery()
-              .setFacet(false); 
+      SolrQuery query = new SolrQuery(); 
       String entity = "" + request.getParameter("entity");
       SolrSearcher.addCommonParams(request, query, entity);
       String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -114,10 +113,10 @@ public class PIANSearcher implements EntitySearcher{
         SolrSearcher.addLocationParams(request, query);
       }
       SolrSearcher.addFilters(request, query, pristupnost);
-      query.setRequestHandler("/select");
+      query.setFacet(false).setRequestHandler("/select");
       query.set("defType", "edismax");
-      query.setFields("pian:[json],ident_cely,organizace");
-      query.setRows(Math.min(20000, Integer.parseInt(request.getParameter("rows"))));
+      query.setFields("pian:[json],ident_cely,organizace,pristupnost,loc_rpt");
+      query.setRows(Math.min(Options.getInstance().getInt("maxDocsForCluster", 5000), Integer.parseInt(request.getParameter("rows"))));
       
       JSONObject jo = SearchUtils.json(query, client, "entities");
       SolrSearcher.addFavorites(jo, client, request);

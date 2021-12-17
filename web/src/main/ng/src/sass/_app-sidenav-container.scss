@@ -118,8 +118,9 @@
 
   .app-active-pian-facet {
     position: absolute;
-    top: $app-gap;
-    left: 60px;
+    // top: $app-gap;
+    top: #{map-get($gaps, "3")}px;
+    left: 400px;
     z-index: 1002;
     padding: 0 $app-gap-icon;
     min-height: 28px;

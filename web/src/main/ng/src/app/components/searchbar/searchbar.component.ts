@@ -70,4 +70,8 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
   }
+
+  exportMapa() {
+    
+  }
 }

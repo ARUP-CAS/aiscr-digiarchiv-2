@@ -45,6 +45,12 @@ export class Configuration {
       valueField: string,
       gradient: { [key: string]: string };
     }
+    shape: {
+      color: string,
+      fillColor: string,
+      weight: number,
+      fillOpacity: number
+    }
   };
 
   sorts: Sort[];

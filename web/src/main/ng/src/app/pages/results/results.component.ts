@@ -110,18 +110,17 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search(params: Params) {
-    if (!this.state.isMapaCollapsed) {
-    //  return;
-    }
-    this.loading = true;
     this.state.loading = true;
+    this.loading = true;
     const p = Object.assign({}, params);
     // p.mapa = !this.state.isMapaCollapsed;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       this.state.setSearchResponse(resp);
       this.docs = resp.response.docs;
+      if (this.state.isMapaCollapsed) {
+        this.state.loading = false;
+      }
       this.loading = false;
-      this.state.loading = false;
       this.hasResultsInOther = this.config.entities.findIndex(e => this.state.totals[e] > 0) > -1;
     });
 

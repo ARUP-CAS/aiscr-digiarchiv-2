@@ -6,7 +6,7 @@
   "amcr": "http://localhost:8080/amcr/",
 
   "mapOptions": {
-    "maxZoom": 19,
+    "maxZoom": 20,
     "zoom": 8,
     "hitZoomLevel": 16,
     "centerX": 49.803,
@@ -27,6 +27,12 @@
         "0.95": "rgb(255,255,0)",
         "1.0": "rgb(255,0,0)"
       }
+    },
+    "shape": {
+      "color": "#222",
+      "fillColor": "#00f",
+      "weight": 2,
+      "fillOpacity": 0.3
     }
   },
 
