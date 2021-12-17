@@ -10,6 +10,7 @@
     .mat-drawer-inner-container {
       background-color: $app-color-lightnes;
       width: $app-table-cell-left-width;
+      box-shadow: 0 -1px 24px rgb(0 0 0 / 40%);
 
       .app-btn {
         right: 0 !important;
@@ -17,7 +18,7 @@
       }
     }
 
-    @media #{$lt-sm} { 
+    @media #{$lt-md} { 
       width: 100%;
 
       .mat-drawer-inner-container {
