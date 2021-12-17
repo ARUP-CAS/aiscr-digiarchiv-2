@@ -32,6 +32,7 @@ import * as Wkt from 'wicket';
 export class MapaComponent implements OnInit, OnDestroy {
 
   @Input() isResults = true;
+  @Input() opened;
 
   isBrowser: boolean;
   data = {
