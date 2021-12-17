@@ -5,22 +5,23 @@
         <input type="text" [placeholder]="'q.placeholder' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'q.tooltip' | translate" matTooltipPosition="above" />
         <span fxFlex class="app-controls">
           <span class="app-mobile-controls fxHide_gt-xs">
+            <a (click)="exportMapa()">
+              <mat-icon>get_app</mat-icon>
+            </a>
             <a (click)="toggleMapa()">
               <mat-icon>{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
             </a>
-            <!-- <a (click)="changeShowWithoutThumbs()">
-              <mat-icon>{{ state.hideWithoutThumbs ? 'visibility_off' : 'visibility_on' }}</mat-icon>
-            </a> -->
           </span>
           <a (click)="search()">
             <mat-icon>search</mat-icon>
           </a>
         </span>
       </div>
-      <div fxFlex class="app-fx-right fxHide_xs">
+      <div class="app-fx-right fxHide_xs">
         <button mat-flat-button color="primary" (click)="exportMapa()" *ngIf="!state.isMapaCollapsed">
           <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
-          <span class="fxHide_sm fxHide_xs"><ng-container *ngIf="!state.isMapaCollapsed">&#160;</ng-container>{{ 'Export' | translate }}</span>
+          <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
+          <span class="fxHide_sm fxHide_xs">{{ 'Export' | translate }}</span>
         </button>
         <button mat-flat-button color="primary" (click)="toggleMapa()" [class.app-active]="!state.isMapaCollapsed">
           <mat-icon *ngIf="state.isMapaCollapsed" class="fxHide_sm fxHide_xs app-gap-icon-right">map</mat-icon>

@@ -17,11 +17,15 @@ app-searchbar {
     display: flex;
     align-items: center;
     height: $app-searchbar-field-height;
-    max-width: $app-searchbar-field-max-width;
     background-color: $app-searchbar-field-bg;
     border-radius: $app-border-radius;
     color: $app-searchbar-field-color;
     border: 1px solid $app-gray-3;
+
+    // mq
+    @media #{$gt-sm} {
+      max-width: $app-searchbar-field-max-width;
+    }
 
     &:focus-within {
       box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
@@ -49,7 +53,7 @@ app-searchbar {
       }
 
       @media #{$xs} {
-        width: calc(100% - 105px);
+        width: calc(100% - 140px);
       }
     }
 
@@ -74,6 +78,11 @@ app-searchbar {
 
   .app-fx-right {
     text-align: right;
+
+    // mq
+    @media #{$gt-sm} {
+      flex: 1 1 0%;
+    }
     
     .mat-flat-button {
       line-height: $app-searchbar-field-height;
