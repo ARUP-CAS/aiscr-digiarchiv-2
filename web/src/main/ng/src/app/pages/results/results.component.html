@@ -99,7 +99,7 @@
   </ng-container>
   <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
     <mat-sidenav-container class="app-sidenav-container">
-      <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+      <mat-sidenav #sidenav mode="side" [(opened)]="opened"><!--[(opened)]="opened"-->
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
           <mat-icon>last_page</mat-icon>
         </button>
@@ -132,7 +132,7 @@
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
           <mat-icon>last_page</mat-icon>
         </button>
-        <app-mapa></app-mapa>
+        <app-mapa [opened]="opened"></app-mapa>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </div>

@@ -103,9 +103,15 @@
     right: 70px;
     z-index: 1002;
     width: 850px;
-
+    margin-left: 142px;
     max-height: calc(100% - 16px);
     overflow-y: auto;
+
+    @media (max-width: 1465px) {
+      &.app-pian-visible {
+        width: calc(100% - 608px);
+      }
+    }
 
     .mat-card-title {
       max-width: calc(100% - 35px);
@@ -113,6 +119,10 @@
 
     @media #{$lt-lg} {
       width: calc(100% - 130px);
+      
+      &.app-pian-visible-sidenav-closed {
+        width: calc(100% - 255px);
+      }
     }
   }
 
@@ -125,6 +135,13 @@
     padding: 0 $app-gap-icon;
     min-height: 28px;
     background-color: rgba($app-color-lightnes, .8);
+
+    &.app-map-is-collapsed {
+      left: 48px;
+
+      -webkit-transition: all .4s cubic-bezier(0.25, .8, .25, 1) !important;
+      transition: all .4s cubic-bezier(0.25, .8, .25, 1) !important;
+    }
 
     a {
       vertical-align: sub;

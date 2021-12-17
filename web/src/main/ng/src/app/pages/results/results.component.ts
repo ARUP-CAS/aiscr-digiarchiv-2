@@ -30,7 +30,7 @@ import { NgZone } from '@angular/core';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit, OnDestroy {
-  opened = true;
+  opened = false;
   matcher: MediaQueryList;
   sideNavMapBreakPoint: string = "(min-width: 1280px)";
   loading = false;
