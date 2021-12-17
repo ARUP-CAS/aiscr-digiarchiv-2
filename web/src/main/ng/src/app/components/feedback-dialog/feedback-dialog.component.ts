@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { AppService } from 'src/app/app.service';
 
 @Component({
   selector: 'app-feedback-dialog',
@@ -7,15 +9,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FeedbackDialogComponent implements OnInit {
 
-  email: string;
+  name: string;
+  mail: string;
+  text: string;
 
-  constructor() { }
+  constructor(
+    public dialogRef: MatDialogRef<FeedbackDialogComponent>,
+    private service: AppService
+    ) { }
 
   ngOnInit(): void {
   }
 
   sendFeedback() {
-    // do it
+    this.service.feedback(this.name, this.mail, this.text).subscribe((res: any)=>{
+      if(res.hasError) {
+        alert(this.service.getTranslation('feedback_failed') + ": " + res.error);
+      } else {
+        alert(this.service.getTranslation('feedback_success'));
+        this.dialogRef.close();
+      }
+    });
   }
 
   hasError() {

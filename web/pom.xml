@@ -74,12 +74,25 @@
       <version>3.10</version>
       <type>jar</type>
     </dependency>
+    
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-email</artifactId>
+      <version>1.5</version>
+      <type>jar</type>
+    </dependency>
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-web-api</artifactId>
       <version>7.0</version>
       <scope>provided</scope>
     </dependency>
+
   </dependencies>
 
   <build>

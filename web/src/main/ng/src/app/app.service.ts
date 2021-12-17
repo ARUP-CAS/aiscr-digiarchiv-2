@@ -266,6 +266,11 @@ export class AppService {
 
   
 
+  feedback(name: string, mail: string, text: string) {
+    const url = '/feedback';
+    return this.post(url, { name, mail, text });
+  }
+
   addFav(identCely: string) {
     const url = '/fav/add';
     return this.post(url, { docid: identCely, entity: this.state.entity });

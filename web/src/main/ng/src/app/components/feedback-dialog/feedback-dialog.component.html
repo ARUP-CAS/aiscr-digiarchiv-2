@@ -1,8 +1,15 @@
 <h1 mat-dialog-title>{{ 'Odeslat komentář' | translate }}</h1>
 <div mat-dialog-content>
-  <mat-form-field class="app-w-100" appearance="fill" [class.app-mb-4]="hasError()">
+  <mat-form-field class="app-w-100" appearance="fill" >
+    <mat-label>{{ 'Jmeno' | translate }}</mat-label>
+    <input type="text" name="name" id="name"  matInput [placeholder]="'Jmeno' | translate" [(ngModel)]="name"  required #uname="ngModel">
+    <mat-error>
+      {{ 'Prosím zadejte jmeno' | translate }}!
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="app-w-100" appearance="fill">
     <mat-label>{{ 'Email' | translate }}</mat-label>
-    <input type="email" matInput [placeholder]="'Ex. pat@example.com' | translate" [(ngModel)]="email" email required>
+    <input type="email" name="mail" id="mail" matInput [placeholder]="'Ex. pat@example.com' | translate" [(ngModel)]="mail" email required #email="ngModel">
     <mat-error>
       {{ 'Prosím zadejte platnou emailovou adresu' | translate }}!
     </mat-error>
@@ -12,10 +19,11 @@
   </mat-form-field>
   <mat-form-field class="app-w-100" appearance="fill">
     <mat-label>{{ 'Komentář' | translate }}</mat-label>
-    <textarea matInput [placeholder]="'Napište komentář' | translate" rows="4"></textarea>
+    <textarea matInput [placeholder]="'Napište komentář' | translate" rows="4" [(ngModel)]="text"></textarea>
   </mat-form-field>
 </div>
+<div>{{ uname.errors }}</div>
 <div mat-dialog-actions>
-  <button mat-flat-button color="primary" (click)="sendFeedback()">{{ 'Odeslat' | translate }}</button>
+  <button mat-flat-button color="primary" [disabled]="(uname.errors || email.errors)" (click)="sendFeedback()">{{ 'Odeslat' | translate }}</button>
   <button mat-button mat-dialog-close cdkFocusInitial>{{ 'Zavřít' | translate }}</button>
 </div>

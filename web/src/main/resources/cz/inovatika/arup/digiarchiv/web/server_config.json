@@ -7,6 +7,13 @@
     "sets": ["soubor", "adb", "dok_jednotka", "ext_zdroj", "pian", "let", "projekt", "akce", "lokalita", "samostatny_nalez", "dokument"]
   },
   
+  "mail": {
+    "smtp.host": "mail.arup.cas.cz",
+    "smtp.port": 25,
+    "destMail": "info@amapa.cz",
+    "subject": "Feedback from DigiArchiv"
+  },
+  
   "imagesDir": "/home/alberto/Projects/ARUP/data/",
   "thumbsDir": "/home/alberto/.amcr/thumbs/",
   "thesauriDir": "/home/alberto/.amcr/thesauri/",
