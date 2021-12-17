@@ -300,6 +300,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setClusterDataByLoc(docs: any[]) {
+    this.markers = new L.markerClusterGroup();
+    this.markersList = [];
     docs.forEach(doc => {
       if (doc.loc_rpt) {
         if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
@@ -314,11 +316,13 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.setMarker(e.target.doc);
             });
             mrk.bindTooltip(doc.ident_cely).openTooltip();
-            mrk.addTo(this.markers);
+            // mrk.addTo(this.markers);
           }
         }
       }
     });
+    this.markers.addLayers(this.markersList);
+    this.currentZoom = this.map.getZoom();
   }
 
   setMarkersData() {

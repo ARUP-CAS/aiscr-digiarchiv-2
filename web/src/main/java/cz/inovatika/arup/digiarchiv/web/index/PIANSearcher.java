@@ -115,7 +115,7 @@ public class PIANSearcher implements EntitySearcher{
       SolrSearcher.addFilters(request, query, pristupnost);
       query.setFacet(false).setRequestHandler("/select");
       query.set("defType", "edismax");
-      query.setFields("pian:[json],ident_cely,organizace,pristupnost,loc_rpt");
+      query.setFields("pian:[json],ident_cely,organizace,pristupnost","loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost);
       query.setRows(Math.min(Options.getInstance().getInt("maxDocsForCluster", 5000), Integer.parseInt(request.getParameter("rows"))));
       
       JSONObject jo = SearchUtils.json(query, client, "entities");
