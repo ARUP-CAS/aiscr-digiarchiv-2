@@ -72,7 +72,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   params: HttpParams;
 
-  maxNumMarkers = 200;
+  maxNumMarkers = 0;
   markerZoomLevel = 16;
   currentZoom: number;
   zoomingOnMarker = true;
@@ -92,6 +92,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: this.config.mapOptions.maxZoom,
+    maxNativeZoom: 19,
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
   });
 
@@ -110,6 +111,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   };
   overlays = new L.featureGroup();
 
+  showDetail = false;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     private renderer: Renderer2,
@@ -127,7 +130,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.showDetail = false;
+    this.maxNumMarkers = this.config.mapOptions.docsForMarker;
     this.options.layers = [this.osm];
 
     this.layersControl = {
@@ -199,7 +203,10 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setData() {
     if (this.state.solrResponse) {
-      const showCluster = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
+      const showCluster = this.state.solrResponse.response.numFound > this.maxNumMarkers 
+         && this.state.solrResponse.response.numFound < this.config.mapOptions.docsForCluster 
+         && this.map.getZoom() < this.markerZoomLevel;
+     const showMarkers = this.state.solrResponse.response.numFound < this.maxNumMarkers;
       if (showCluster) {
         this.state.loading = true;
         this.markers = new L.markerClusterGroup();
@@ -214,7 +221,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           }
           this.state.loading = false;
         });
-      } else {
+      } else if(showMarkers) {
         this.setMarkersData();
         this.markersList.forEach(m => {
           if (m.pianPresnost < 4) {
@@ -222,7 +229,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           }
         });
         this.state.loading = false;
-      }
+      } 
 
 
       if (this.state.locationFilterEnabled) {
@@ -239,8 +246,9 @@ export class MapaComponent implements OnInit, OnDestroy {
 
       }, 100);
 
-      if (this.state.solrResponse.response.docs.length === 1) {
-        this.state.setMapResult(this.state.solrResponse.response.docs[0], false)
+      if (this.showDetail) {
+        this.state.setMapResult(this.state.solrResponse.response.docs[0], false);
+        this.showDetail = false;
       }
     }
   }
@@ -383,6 +391,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setPianId(pian_id: string) {
     this.zone.run(() => {
+      this.showDetail = true;
       this.router.navigate([], { queryParams: { pian_id, page: 0 }, queryParamsHandling: 'merge' });
     });
   }
@@ -405,7 +414,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   hitMarker(res) {
     if (!res) {
       this.clearSelectedMarker();
-      // this.fitOnMarkers();
       return;
     }
     const docId = res.ident_cely;
@@ -429,14 +437,9 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.map.setView(ms[ms.length - 1].getLatLng());
       }
 
-      // setTimeout(() => {
-      //   this.currentZoom = this.map.getZoom();
-      //   // this.map.setZoom(this.hitZoomLevel);
-      // }, 1000);
     }
     if (!ms || ms.length === 0) {
       this.state.mapResult = null;
-      //this.fitOnMarkers();
     }
     this.selectedMarker = ms;
   }
@@ -595,8 +598,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
 
-    this.showHeat = this.state.solrResponse.response.numFound > this.maxNumMarkers && this.map.getZoom() < this.markerZoomLevel;
-    this.showHeat = false;
+    this.showHeat = this.state.solrResponse.response.numFound > this.config.mapOptions.docsForCluster 
+        && this.map.getZoom() < this.markerZoomLevel;
+    // this.showHeat = false;
     if (!this.showHeat) {
       return;
     }
@@ -645,6 +649,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.heatmapLayer = new HeatmapOverlay(this.config.mapOptions.heatmapOptions);
     this.heatmapLayer.setData(this.data);
     this.map.addLayer(this.heatmapLayer);
+    this.state.loading = false;
   }
 
   addShapes() {
@@ -675,9 +680,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         });
         // layer.pianId = ident_cely;
         layer.on('click', (e) => {
-          this.zone.run(() => {
             this.setPianId(ident_cely);
-          });
         });
         layer.bindTooltip(this.popUpHtml(ident_cely, presnost, pocet)).openTooltip();
         // layer.addTo(this.overlays);

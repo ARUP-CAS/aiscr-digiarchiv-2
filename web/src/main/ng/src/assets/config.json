@@ -6,7 +6,9 @@
   "amcr": "http://localhost:8080/amcr/",
 
   "mapOptions": {
-    "maxZoom": 20,
+    "docsForMarker": 200,
+    "docsForCluster": 5000,
+    "maxZoom": 24,
     "zoom": 8,
     "hitZoomLevel": 16,
     "centerX": 49.803,

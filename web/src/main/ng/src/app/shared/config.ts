@@ -29,6 +29,8 @@ export class Configuration {
   poleToHeslar: { [key: string]: string };
 
   mapOptions: {
+    docsForMarker: number,
+    docsForCluster: number,
     maxZoom: number,
     zoom: number,
     hitZoomLevel: number,
