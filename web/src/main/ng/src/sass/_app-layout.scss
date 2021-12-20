@@ -36,6 +36,8 @@ main {
 
   @import "./app-home";
   @import "./app-results";
+  @import "./app-result-item";
+  @import "./app-mapa";
   @import "./app-export";
   @import "./app-facets";
   @import "./app-paginator";
@@ -110,20 +112,6 @@ main {
   // for view map resize container
   .app-view-map & {
     max-width: 100%;
-
-    .leaflet-control {
-      float: right;
-    }
-
-    .leaflet-top {
-      top: 0;
-    }
-
-    .leaflet-left {
-      right: #{map-get($gaps, "3")}px;
-      left: unset !important;
-      z-index: 1003;
-    }
   }
 }
 

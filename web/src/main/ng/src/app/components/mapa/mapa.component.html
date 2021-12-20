@@ -2,9 +2,8 @@
 	<div class="app-map" leaflet [leafletOptions]="options"
 	 (leafletMapReady)="onMapReady($event)"
 	 [leafletLayersControl]="layersControl"
-	 [leafletLayersControlOptions]="{position: 'topleft'}">
+	 [leafletLayersControlOptions]="{position: 'topright'}">
 		<!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
-		
 		<div [leafletLayer]="markers"></div>
 	</div> 
 
