@@ -58,31 +58,31 @@ export class MapaComponent implements OnInit, OnDestroy {
   };
 
   icon = L.icon({
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
+    iconSize: [12, 20],
+    iconAnchor: [6, 20],
     iconUrl: 'assets/img/pin.png',
-    shadowUrl: 'assets/img/marker-shadow.png'
+    //shadowUrl: 'assets/img/marker-shadow.png'
   });
-
+  
   iconPoint = L.icon({
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
+    iconSize: [16, 26],
+    iconAnchor: [8, 26],
     iconUrl: 'assets/img/pin-point.png',
-    shadowUrl: 'assets/img/marker-shadow.png'
+    //shadowUrl: 'assets/img/marker-shadow.png'
   });
-
+  
   hitIcon = L.icon({
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
+    iconSize: [12, 20],
+    iconAnchor: [6, 20],
     iconUrl: 'assets/img/pin-hit.png',
-    shadowUrl: 'assets/img/marker-shadow.png'
+    //shadowUrl: 'assets/img/marker-shadow.png'
   });
-
+  
   hitIconPoint = L.icon({
-    iconSize: [20, 33],
-    iconAnchor: [10, 33],
+    iconSize: [16, 26],
+    iconAnchor: [8, 26],
     iconUrl: 'assets/img/pin-hit-point.png',
-    shadowUrl: 'assets/img/marker-shadow.png'
+    //shadowUrl: 'assets/img/marker-shadow.png'
   });
 
   params: HttpParams;
