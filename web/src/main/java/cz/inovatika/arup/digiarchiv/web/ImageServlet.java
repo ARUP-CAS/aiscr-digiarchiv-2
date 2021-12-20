@@ -118,7 +118,6 @@ public class ImageServlet extends HttpServlet {
 
   private void emptyImg(HttpServletResponse response, OutputStream out) throws IOException {
     String empty = getServletContext().getRealPath(File.separator) + "/assets/img/empty.gif";
-    System.out.println("problem");
     response.setContentType("image/gif");
     BufferedImage bi = ImageIO.read(new File(empty));
     ImageIO.write(bi, "gif", out);

@@ -78,6 +78,13 @@ export class MapaComponent implements OnInit, OnDestroy {
     shadowUrl: 'assets/img/marker-shadow.png'
   });
 
+  hitIconPoint = L.icon({
+    iconSize: [20, 33],
+    iconAnchor: [10, 33],
+    iconUrl: 'assets/img/pin-hit-point.png',
+    shadowUrl: 'assets/img/marker-shadow.png'
+  });
+
   params: HttpParams;
 
   maxNumMarkers = 0;
@@ -270,10 +277,10 @@ export class MapaComponent implements OnInit, OnDestroy {
 
       }, 100);
 
-      if (this.showDetail) {
+      if (this.showDetail && this.state.solrResponse.response.docs.length === 1) {
         this.state.setMapResult(this.state.solrResponse.response.docs[0], false);
-        this.showDetail = false;
       }
+      this.showDetail = false;
     }
   }
 
@@ -429,9 +436,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   clearSelectedMarker() {
 
     this.selectedMarker.forEach(m => {
-      m.setIcon(L.icon({
-        iconUrl: 'assets/img/marker-icon.png'
-      }));
+      m.setIcon(m.pianTyp === 'bod' ? this.iconPoint : this.icon);
       m.setZIndexOffset(0);
     });
     this.selectedMarker = [];
@@ -452,7 +457,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.clearSelectedMarker();
     ms.forEach(m => {
       // m.fire('click');
-      m.setIcon(this.hitIcon);
+      m.setIcon(m.pianTyp === 'bod' ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
     });
     if (changed && ms.length > 0) {
