@@ -232,7 +232,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else if(showMarkers) {
         this.setMarkersData();
         this.markersList.forEach(m => {
-          if (m.pianPresnost < 4) {
+          if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
             this.addShape(m.pianId, m.pianPresnost, m.docId.length);
           }
         });
@@ -293,10 +293,11 @@ export class MapaComponent implements OnInit, OnDestroy {
             const presnost = pian.presnost;
             let mrk = this.markerExists(pianId);
             if (!mrk) {
-              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.type === 'POINT' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
+              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.typ === 'bod' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
               this.markersList.push(mrk);
               mrk.pianId = pianId;
               mrk.pianPresnost = presnost;
+              mrk.pianTyp = pian.typ;
               mrk.docId = [doc.ident_cely];
               mrk.on('click', (e) => {
                 this.setPianId(e.target.pianId);
@@ -353,10 +354,11 @@ export class MapaComponent implements OnInit, OnDestroy {
             const presnost = pian.presnost;
             let mrk = this.markerExists(pianId);
             if (!mrk) {
-              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.type === 'POINT' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
+              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.typ === 'bod' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
               this.markersList.push(mrk);
               mrk.pianId = pianId;
               mrk.pianPresnost = presnost;
+              mrk.pianTyp = pian.typ;
               mrk.docId = [doc.ident_cely];
               mrk.on('click', (e) => {
                 this.setPianId(e.target.pianId);
