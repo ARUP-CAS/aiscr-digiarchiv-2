@@ -16,6 +16,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
 
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
+  formats = ['XML/GML', 'CSV/WKT', 'GeoJSON'];
 
   constructor(
     private dialog: MatDialog,
@@ -71,7 +72,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
   }
 
-  exportMapa() {
+  exportMapa(format: string) {
     
   }
 }

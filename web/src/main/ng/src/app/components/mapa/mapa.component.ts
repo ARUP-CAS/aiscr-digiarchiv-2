@@ -231,11 +231,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else {
         this.showType = 'marker';
       }
-
-      //   const showCluster = this.state.solrResponse.response.numFound > this.maxNumMarkers 
-      //      && this.state.solrResponse.response.numFound < this.config.mapOptions.docsForCluster 
-      //      && this.map.getZoom() < this.markerZoomLevel;
-      //  const showMarkers = this.state.solrResponse.response.numFound < this.maxNumMarkers;
+      
       switch (this.showType) {
         case 'cluster': {
           this.state.loading = true;
@@ -258,6 +254,11 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.addShape(m.pianId, m.pianPresnost, m.docId.length);
             }
           });
+          this.state.loading = false;
+          break;
+        }
+        case 'heat': {
+          this.setMarkersData();
           this.state.loading = false;
           break;
         }
@@ -387,7 +388,9 @@ export class MapaComponent implements OnInit, OnDestroy {
                 this.setPianId(e.target.pianId);
               });
               mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId.length)).openTooltip();
-              mrk.addTo(this.markers);
+              if (this.showType !== 'heat') {
+                mrk.addTo(this.markers);
+              }
             } else {
               mrk.docId.push(doc.ident_cely);
               mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId.length)).openTooltip();
@@ -407,7 +410,9 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.setMarker(e.target.doc);
             });
             mrk.bindTooltip(doc.ident_cely).openTooltip();
-            mrk.addTo(this.markers);
+            if (this.showType !== 'heat') {
+              mrk.addTo(this.markers);
+            }
           }
         }
       }
@@ -440,6 +445,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       m.setZIndexOffset(0);
     });
     this.selectedMarker = [];
+    if (this.showType === 'heat') {
+      this.markers = new L.featureGroup();
+    }
   }
 
   hitMarker(res) {
@@ -459,6 +467,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       // m.fire('click');
       m.setIcon(m.pianTyp === 'bod' ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
+      if (this.showType === 'heat') {
+        m.addTo(this.markers);
+      }
     });
     if (changed && ms.length > 0) {
       this.zoomingOnMarker = true;
@@ -547,7 +558,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     map.on('zoomend', (e) => {
       console.log(e)
-      if (!this.zoomingOnMarker && this.showType !== 'marker') {
+      if (!this.zoomingOnMarker) {
         this.updateBounds(map.getBounds());
       }
       this.zoomingOnMarker = false;
