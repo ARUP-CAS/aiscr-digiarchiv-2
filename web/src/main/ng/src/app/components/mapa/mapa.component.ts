@@ -84,6 +84,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   markerZoomLevel = 16;
   currentZoom: number;
   zoomingOnMarker = true;
+  showType = 'marker'; // 'heat', 'cluster', 'marker'
 
   map;
   // markers = new L.featureGroup();
@@ -105,8 +106,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   });
 
   // osmColor = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM map', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
-  // cuzkWMS = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'KN', maxZoom: 25, maxNativeZoom: 20, minZoom: 17, opacity: 0.5 });
-  // cuzkWMS2 = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'prehledka_kat_uz', maxZoom: 25, maxNativeZoom: 20, minZoom: 12, opacity: 0.5 });
+  cuzkWMS = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'KN', maxZoom: 25, maxNativeZoom: 20, minZoom: 17, opacity: 0.5 });
+  cuzkWMS2 = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'prehledka_kat_uz', maxZoom: 25, maxNativeZoom: 20, minZoom: 12, opacity: 0.5 });
   cuzkOrt = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/ortofoto_wm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'ortofoto_wm', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
   cuzkEL = L.tileLayer.wms('http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer?', { layers: 'dmr5g:GrayscaleHillshade', maxZoom: 25, maxNativeZoom: 20, minZoom: 6 });
   cuzkZM = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/zmwm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'zmwm', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
@@ -117,8 +118,10 @@ export class MapaComponent implements OnInit, OnDestroy {
     "ČÚZK - Stínovaný reliéf 5G": this.cuzkEL,
     "OpenStreetMap": this.osm,
   };
-  overlays = new L.featureGroup();
-
+  overlays = {
+    "ČÚZK - Katastrální mapa": this.cuzkWMS,
+    "ČÚZK - Katastrální území": this.cuzkWMS2,
+  };
   showDetail = false;
 
   constructor(
@@ -143,7 +146,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.options.layers = [this.osm];
 
     this.layersControl = {
-      baseLayers: this.baseLayers
+      baseLayers: this.baseLayers,
+      overlays: this.overlays
     }
 
 
@@ -213,32 +217,44 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (this.state.solrResponse) {
       this.markers = new L.markerClusterGroup();
       this.markersList = [];
-      const showCluster = this.state.solrResponse.response.numFound > this.maxNumMarkers 
-         && this.state.solrResponse.response.numFound < this.config.mapOptions.docsForCluster 
-         && this.map.getZoom() < this.markerZoomLevel;
-     const showMarkers = this.state.solrResponse.response.numFound < this.maxNumMarkers;
-      if (showCluster) {
-        this.state.loading = true;
-        const p = Object.assign({}, this.route.snapshot.queryParams);
-        p.rows = this.state.solrResponse.response.numFound;
-        this.service.getPians(p as HttpParams).subscribe((res: any) => {
-          if (this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez') {
-            this.setClusterDataByLoc(res.response.docs);
-          } else {
-            this.setClusterDataByPian(res.response.docs);
-          }
-          this.state.loading = false;
-        });
-      } else if(showMarkers) {
-        this.setMarkersData();
-        this.markersList.forEach(m => {
-          if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
-            this.addShape(m.pianId, m.pianPresnost, m.docId.length);
-          }
-        });
-        this.state.loading = false;
-      } 
+      if (this.state.solrResponse.response.numFound > this.config.mapOptions.docsForCluster) {
+        this.showType = 'heat';
+      } else if (this.state.solrResponse.response.numFound > this.maxNumMarkers) {
+        this.showType = 'cluster';
+      } else {
+        this.showType = 'marker';
+      }
 
+      //   const showCluster = this.state.solrResponse.response.numFound > this.maxNumMarkers 
+      //      && this.state.solrResponse.response.numFound < this.config.mapOptions.docsForCluster 
+      //      && this.map.getZoom() < this.markerZoomLevel;
+      //  const showMarkers = this.state.solrResponse.response.numFound < this.maxNumMarkers;
+      switch (this.showType) {
+        case 'cluster': {
+          this.state.loading = true;
+          const p = Object.assign({}, this.route.snapshot.queryParams);
+          p.rows = this.state.solrResponse.response.numFound;
+          this.service.getPians(p as HttpParams).subscribe((res: any) => {
+            if (this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez') {
+              this.setClusterDataByLoc(res.response.docs);
+            } else {
+              this.setClusterDataByPian(res.response.docs);
+            }
+            this.state.loading = false;
+          });
+          break;
+        }
+        case 'marker': {
+          this.setMarkersData();
+          this.markersList.forEach(m => {
+            if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
+              this.addShape(m.pianId, m.pianPresnost, m.docId.length);
+            }
+          });
+          this.state.loading = false;
+          break;
+        }
+      }
 
       if (this.state.locationFilterEnabled) {
         this.locationFilter.enable();
@@ -525,7 +541,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
 
     map.on('zoomend', (e) => {
-      if (!this.zoomingOnMarker) {
+      console.log(e)
+      if (!this.zoomingOnMarker && this.showType !== 'marker') {
         this.updateBounds(map.getBounds());
       }
       this.zoomingOnMarker = false;
@@ -608,8 +625,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
 
-    this.showHeat = this.state.solrResponse.response.numFound > this.config.mapOptions.docsForCluster 
-        && this.map.getZoom() < this.markerZoomLevel;
+    this.showHeat = this.state.solrResponse.response.numFound > this.config.mapOptions.docsForCluster
+      && this.map.getZoom() < this.markerZoomLevel;
     // this.showHeat = false;
     if (!this.showHeat) {
       return;
@@ -690,7 +707,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         });
         // layer.pianId = ident_cely;
         layer.on('click', (e) => {
-            this.setPianId(ident_cely);
+          this.setPianId(ident_cely);
         });
         layer.bindTooltip(this.popUpHtml(ident_cely, presnost, pocet)).openTooltip();
         // layer.addTo(this.overlays);

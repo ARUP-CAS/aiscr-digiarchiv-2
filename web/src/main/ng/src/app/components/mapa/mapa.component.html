@@ -4,8 +4,8 @@
 	 [leafletLayersControl]="layersControl"
 	 [leafletLayersControlOptions]="{position: 'topleft'}">
 		<!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
+		
 		<div [leafletLayer]="markers"></div>
-		<div [leafletLayer]="overlays"></div>
 	</div> 
 
 	<mat-card class="app-active-pian-facet" *ngIf="state.pianId" [class.app-map-is-collapsed]="!showResults">
