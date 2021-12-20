@@ -22,7 +22,6 @@
     <textarea matInput [placeholder]="'Napište komentář' | translate" rows="4" [(ngModel)]="text"></textarea>
   </mat-form-field>
 </div>
-<div>{{ uname.errors }}</div>
 <div mat-dialog-actions>
   <button mat-flat-button color="primary" [disabled]="(uname.errors || email.errors)" (click)="sendFeedback()">{{ 'Odeslat' | translate }}</button>
   <button mat-button mat-dialog-close cdkFocusInitial>{{ 'Zavřít' | translate }}</button>

@@ -64,6 +64,13 @@ export class MapaComponent implements OnInit, OnDestroy {
     shadowUrl: 'assets/img/marker-shadow.png'
   });
 
+  iconPoint = L.icon({
+    iconSize: [25, 41],
+    iconAnchor: [13, 41],
+    iconUrl: 'assets/img/marker-point.png',
+    shadowUrl: 'assets/img/marker-shadow.png'
+  });
+
   hitIcon = L.icon({
     iconSize: [25, 41],
     iconAnchor: [13, 41],
@@ -286,7 +293,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             const presnost = pian.presnost;
             let mrk = this.markerExists(pianId);
             if (!mrk) {
-              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: this.icon, docId: [], riseOnHover: true });
+              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.type === 'POINT' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
               this.markersList.push(mrk);
               mrk.pianId = pianId;
               mrk.pianPresnost = presnost;
@@ -346,7 +353,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             const presnost = pian.presnost;
             let mrk = this.markerExists(pianId);
             if (!mrk) {
-              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: this.icon, docId: [], riseOnHover: true });
+              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.type === 'POINT' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
               this.markersList.push(mrk);
               mrk.pianId = pianId;
               mrk.pianPresnost = presnost;
