@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MapaShimComponent implements OnInit {
   @Input() isResults = true;
+  @Input() showResults = false;
 
   constructor() { }
 

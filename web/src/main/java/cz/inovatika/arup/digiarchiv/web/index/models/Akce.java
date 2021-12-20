@@ -349,6 +349,7 @@ public class Akce implements Entity {
                 SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pians.getJSONObject(pian).optString("typ"));
                 SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pians.getJSONObject(pian).optString("presnost"));
                 SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pians.getJSONObject(pian).optString("zm10"));
+                SolrSearcher.addFieldNonRepeat(idoc, "pian", pians.getJSONObject(pian).toString());
               }
 
             } else {
@@ -357,6 +358,7 @@ public class Akce implements Entity {
               SolrSearcher.addFieldNonRepeat(idoc, "pian_typ", pianDoc.optString("typ"));
               SolrSearcher.addFieldNonRepeat(idoc, "pian_presnost", pianDoc.optString("presnost"));
               SolrSearcher.addFieldNonRepeat(idoc, "pian_zm10", pianDoc.optString("zm10"));
+              SolrSearcher.addFieldNonRepeat(idoc, "pian", pianDoc.toString());
             }
 
             if (pianDoc.has("centroid_n")) {
@@ -366,7 +368,6 @@ public class Akce implements Entity {
               SolrSearcher.addFieldNonRepeat(idoc, "lng", pianDoc.optString("centroid_e"));
               SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
             }
-            SolrSearcher.addFieldNonRepeat(idoc, "pian", pianDoc.toString());
 
           }
         }

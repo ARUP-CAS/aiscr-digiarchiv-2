@@ -75,6 +75,12 @@ public class Pian implements Entity {
       this.loc = this.centroid_n + "," + this.centroid_e;
       this.loc_rpt = this.loc;
     }
+    
+    if (idoc.containsKey("geom_wkt")) {
+      String type = (String) idoc.getFieldValue("geom_wkt");
+      type = type.substring(0, type.indexOf("("));
+      idoc.addField("type", type);
+    }
   }
   
   @Override
