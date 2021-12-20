@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import static cz.inovatika.arup.digiarchiv.web.index.LokalitaSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +52,17 @@ public class LetSearcher implements EntitySearcher{
       json.put("error", ex);
     }
     return json;
+  }
+  @Override
+  public String export(HttpServletRequest request) {
+    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery();
+      setQuery(request, query);
+      return SearchUtils.csv(query, client, "entities");
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

@@ -41,6 +41,18 @@ public class DokumentSearcher implements EntitySearcher {
     }
     return json;
   }
+
+  @Override
+  public String export(HttpServletRequest request) {
+    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery();
+      setQuery(request, query);
+      return SearchUtils.csv(query, client, "entities");
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
   
   @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {

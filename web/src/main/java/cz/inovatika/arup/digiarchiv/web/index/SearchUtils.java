@@ -113,6 +113,26 @@ public class SearchUtils {
     }
   }
 
+  public static String csv(SolrQuery query, HttpSolrClient client, String core) {
+    query.set("wt", "csv");
+    String qt = query.get("qt");
+    String jsonResponse;
+    try {
+      QueryRequest qreq = new QueryRequest(query);
+      if (qt != null) {
+        qreq.setPath(qt);
+      }
+      NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
+      dontMessWithSolr.setWriterType("csv");
+      client.setParser(dontMessWithSolr);
+      NamedList<Object> qresp = client.request(qreq, core);
+      return (String) qresp.get("response");
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
+
   public static JSONObject clean(Instant date, String entity) {
     JSONObject ret = new JSONObject();
     

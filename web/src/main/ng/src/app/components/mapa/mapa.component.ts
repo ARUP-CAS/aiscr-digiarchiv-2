@@ -557,7 +557,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
 
     map.on('zoomend', (e) => {
-      console.log(e)
       if (!this.zoomingOnMarker) {
         this.updateBounds(map.getBounds());
       }

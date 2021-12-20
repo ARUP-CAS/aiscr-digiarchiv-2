@@ -24,7 +24,7 @@
           <span class="fxHide_sm fxHide_xs">{{ 'Export' | translate }}</span>
         </button>
         <mat-menu #exports="matMenu">
-          <a mat-menu-item *ngFor="let format of formats" (click)="exportMapa(format)">
+          <a mat-menu-item *ngFor="let format of formats" [href]="exportUrl + format" [download]="format" > 
             {{ format | translate }}
           </a>
         </mat-menu>

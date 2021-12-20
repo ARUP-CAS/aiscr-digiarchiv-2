@@ -197,6 +197,18 @@ public class SearchServlet extends HttpServlet {
         return jo.toString();
       }
     },
+    EXPORT_MAPA {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String entity = "" + request.getParameter("entity");
+        EntitySearcher searcher = SearchUtils.getSearcher(entity);
+        if (searcher == null) {
+          searcher = new DokumentSearcher();
+        }
+        return searcher.export(request);
+      }
+    },
     PIANS {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
