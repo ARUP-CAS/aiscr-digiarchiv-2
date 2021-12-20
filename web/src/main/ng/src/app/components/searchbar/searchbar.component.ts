@@ -6,6 +6,7 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { AppHeslarService } from 'src/app/app.heslar.service';
 import { DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
+import { AppService } from 'src/app/app.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -17,17 +18,30 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
   formats = ['XML/GML', 'CSV/WKT', 'GeoJSON'];
+  exportUrl: string;
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
+    private route: ActivatedRoute,
     public state: AppState,
     public config: AppConfiguration,
+    private service: AppService,
     public heslarService: AppHeslarService,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
   ngOnInit(): void {
+    this.service.currentLang.subscribe(res => {
+      const parts = this.router.url.split('?');
+      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
+      this.exportUrl = 'api/export?' + str;
+    });
+    this.route.queryParams.subscribe(val => {
+      const parts = this.router.url.split('?');
+      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
+      this.exportUrl = 'api/search/export_mapa?' + str;
+    });
   }
 
   ngAfterViewInit() {

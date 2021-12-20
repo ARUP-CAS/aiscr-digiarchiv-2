@@ -53,6 +53,18 @@ public class AkceSearcher implements EntitySearcher{
     return json;
   }
 
+  @Override
+  public String export(HttpServletRequest request) {
+    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery();
+      setQuery(request, query);
+      return SearchUtils.csv(query, client, "entities");
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
+
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);
     String pristupnost = LoginServlet.pristupnost(request.getSession());
