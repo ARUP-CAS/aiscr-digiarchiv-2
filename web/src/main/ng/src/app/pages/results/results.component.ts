@@ -64,7 +64,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.push(this.state.mapResultChanged.subscribe(res => {
-      console.log(window.innerWidth)
       if (window.innerWidth < this.config.hideMenuWidth) {
         this.opened = false;
       }
