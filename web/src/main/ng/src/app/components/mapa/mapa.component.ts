@@ -472,6 +472,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       m.setZIndexOffset(100);
       if (this.showType === 'heat') {
         m.addTo(this.markers);
+        if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
+          this.addShape(m.pianId, m.pianPresnost, m.docId.length);
+        }
       }
     });
     if (changed && ms.length > 0) {

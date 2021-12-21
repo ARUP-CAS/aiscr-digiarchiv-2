@@ -83,7 +83,10 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields("*,soubor:[json]", "katastr", "f_katastr:f_katastr_" + pristupnost, "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost);
+    query.setFields("*,soubor:[json]", "katastr", 
+            "f_katastr:f_katastr_" + pristupnost, 
+            "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost, 
+            "lat:lat_" + pristupnost, "lng:lng_" + pristupnost);
 
     SolrSearcher.addFilters(request, query, pristupnost);
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {

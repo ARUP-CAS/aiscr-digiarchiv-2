@@ -18,6 +18,7 @@ export class ExportMapaComponent implements OnInit {
 
   docs: any[] = [];
   format: string | undefined;
+  hasPian = true;
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -52,27 +53,34 @@ export class ExportMapaComponent implements OnInit {
     p.rows = this.config.exportRowsLimit;
     p.mapa = true;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
-      this.docs = [];
-      resp.response.docs.forEach(doc => {
-        doc.pian.forEach(p => {
-          const d = JSON.parse(JSON.stringify(doc));
-          d.pian = p;
-          this.service.getGeometrie(p.ident_cely, this.format).subscribe((resp: any) => {
-            if (this.format === 'GeoJSON') {
-            // console.log(ident_cely, resp.geom_wkt_c);
-            const wkt = new Wkt.Wkt();
-            wkt.read(resp.geometrie);
-            d.geometrie = JSON.stringify(wkt.toJson());
-
-            } else {
-              d.geometrie = resp.geometrie;
-            }
-            
-            this.docs.push(d);
+      if (this.state.entity === 'samostatny_nalez' || this.state.entity === 'knihovna_3d') {
+        this.docs = resp.response.docs;
+        this.hasPian = false;
+      } else {
+        this.hasPian = true;
+        this.docs = [];
+        resp.response.docs.forEach(doc => {
+          doc.pian.forEach(p => {
+            const d = JSON.parse(JSON.stringify(doc));
+            d.pian = p;
+            this.service.getGeometrie(p.ident_cely, this.format).subscribe((resp: any) => {
+              if (this.format === 'GeoJSON') {
+                // console.log(ident_cely, resp.geom_wkt_c);
+                const wkt = new Wkt.Wkt();
+                wkt.read(resp.geometrie);
+                d.geometrie = JSON.stringify(wkt.toJson());
+              } else {
+                d.geometrie = resp.geometrie;
+              }
+              d.lat = p.centroid_n;
+              d.lng = p.centroid_e;
+              this.docs.push(d);
+            });
           });
+
         });
-        
-      });
+      }
+
     });
   }
 

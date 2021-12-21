@@ -96,6 +96,8 @@ public class Library3DSearcher implements EntitySearcher {
     
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
+    } 
+    if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
       query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres");
     } else {
       query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
