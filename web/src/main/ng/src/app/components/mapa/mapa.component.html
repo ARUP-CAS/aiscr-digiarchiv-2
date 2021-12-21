@@ -7,7 +7,7 @@
 		<div [leafletLayer]="markers"></div>
 	</div> 
 
-	<mat-card class="app-active-pian-facet" *ngIf="state.pianId" [class.app-map-is-collapsed]="!showResults">
+	<mat-card class="app-active-pian-facet" *ngIf="state.pianId">
 		<mat-card-content>
 			<a [matTooltip]="'Odstranit tento filtr' | translate" (click)="clearPian()"><mat-icon>clear</mat-icon>{{ state.pianId }}</a>&#160;
 		</mat-card-content>

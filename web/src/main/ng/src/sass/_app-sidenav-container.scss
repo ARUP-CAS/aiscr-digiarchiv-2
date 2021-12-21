@@ -134,26 +134,20 @@
   }
 
   .app-active-pian-facet {
+    @extend .app-clean-shadow;
     position: absolute;
     // top: $app-gap;
-    top: $app-gap-map;
-    left: 400px;
+    top: calc(#{$app-gap-map} - 2px);
+    right: 170px;
     z-index: 1002;
     padding: 0 $app-gap-icon;
-    min-height: 28px;
-    background-color: rgba($app-color-lightnes, .8);
-
-    &.app-map-is-collapsed {
-      left: 48px;
-
-      -webkit-transition: all .4s cubic-bezier(0.25, .8, .25, 1) !important;
-      transition: all .4s cubic-bezier(0.25, .8, .25, 1) !important;
-    }
+    min-height: 30px;
+    line-height: 30px;
+    border: 2px solid #ccc;
 
     a {
-      vertical-align: sub;
-
       .mat-icon {
+        @extend .app-mr-1;
         color: $app-color-warning;
         @include setIcon($size: 18, $position: middle);
       }
