@@ -24,6 +24,7 @@
     <servlet-mapping>
         <servlet-name>StaticServlet</servlet-name>
         <url-pattern>/export/*</url-pattern>
+        <url-pattern>/export-mapa/*</url-pattern>
         <url-pattern>/home</url-pattern>
         <url-pattern>/id_old</url-pattern>
         <url-pattern>/registrace</url-pattern>
