@@ -99,13 +99,15 @@
 
     .app-btn-text {
       @extend .app-pr-2;
+
+      @media (max-width: 360px) {
+        display: none;
+      } 
     }
   }
 
   .app-view-card-info {
     position: absolute;
-    /* top: $app-gap-map;
-    right: 70px; */
     top: $app-gap-top-card-info;
     right: $app-gap-map;
     z-index: 1002;
@@ -114,23 +116,9 @@
     max-height: calc(100% - #{$app-gap-top-card-info});
     overflow-y: auto;
 
-   /*  @media (max-width: 1465px) {
-      &.app-pian-visible {
-        width: calc(100% - 608px);
-      }
-    } */
-
     .mat-card-title {
       max-width: calc(100% - 35px);
     }
-
-    /* @media #{$lt-lg} {
-      width: calc(100% - 130px);
-      
-      &.app-pian-visible-sidenav-closed {
-        width: calc(100% - 255px);
-      }
-    } */
 
     @media #{$lt-md} {
       width: calc(100% - (16px + #{$app-gap-map}));
@@ -140,7 +128,6 @@
   .app-active-pian-facet {
     @extend .app-clean-shadow;
     position: absolute;
-    // top: $app-gap;
     top: calc(#{$app-gap-map} - 2px);
     right: 170px;
     z-index: 1002;
