@@ -130,7 +130,7 @@
     
       <mat-sidenav-content style="margin-left: 0 !important;">
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
-          <mat-icon>last_page</mat-icon><!-- <span>{{ 'Filtrace / Výsledky' | translate }}</span> -->
+          <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'Filtrace / Výsledky' | translate }}</span>
         </button>
         <app-mapa [showResults]="opened"></app-mapa>
       </mat-sidenav-content>

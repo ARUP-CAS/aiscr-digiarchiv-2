@@ -18,7 +18,7 @@
       }
     }
 
-    @media #{$lt-md} { 
+    @media #{$lt-sm} { 
       width: 100%;
 
       .mat-drawer-inner-container {
@@ -96,6 +96,10 @@
     min-width: 0;
     line-height: 28px;
     padding: 0 1px;
+
+    .app-btn-text {
+      @extend .app-pr-2;
+    }
   }
 
   .app-view-card-info {
