@@ -442,6 +442,9 @@ export class AppService {
   }
 
   showInMap(result: any, isPian = false) {
+    // const top = window.document.getElementsByTagName('header')[0].clientHeight;
+    window.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0,0);
+
     this.state.isMapaCollapsed = false;
     const p: any = {};
     p.mapa = true;
@@ -460,6 +463,9 @@ export class AppService {
     }
     
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
+
+    setTimeout(() => {
+    }, 10);
   }
 
   /**
