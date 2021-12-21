@@ -104,6 +104,9 @@ public class PIANSearcher implements EntitySearcher{
     try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery(); 
       String entity = "" + request.getParameter("entity");
+      if (entity == null || "null".equals(entity)) {
+        entity = "dokument";
+      }
       SolrSearcher.addCommonParams(request, query, entity);
       String pristupnost = LoginServlet.pristupnost(request.getSession());
       if ("E".equals(pristupnost)) {
