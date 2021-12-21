@@ -51,6 +51,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.mapOptions;
     }
 
+    public get hideMenuWidth() {
+        return this.config.hideMenuWidth;
+    }
+
     public get home() {
         return this.config.home;
     }

@@ -54,6 +54,7 @@ export class Configuration {
       fillOpacity: number
     }
   };
+  hideMenuWidth: number;
 
   sorts: Sort[];
   currentSort: Sort;

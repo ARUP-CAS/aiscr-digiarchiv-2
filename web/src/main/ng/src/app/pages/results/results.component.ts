@@ -40,6 +40,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   inFav: boolean;
   hasResultsInOther: boolean;
   math = Math;
+  subs: any[] = [];
 
   constructor(
     private titleService: Title,
@@ -55,18 +56,25 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.service.currentLang.subscribe(res => {
+    this.subs.push(this.service.currentLang.subscribe(res => {
       this.setTitle();
       const parts = this.router.url.split('?');
       const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
       this.exportUrl = 'export?' + str;
-    });
-    this.route.queryParams.subscribe(val => {
+    }));
+
+    this.subs.push(this.state.mapResultChanged.subscribe(res => {
+      console.log(window.innerWidth)
+      if (window.innerWidth < this.config.hideMenuWidth) {
+        this.opened = false;
+      }
+    }));
+    this.subs.push(this.route.queryParams.subscribe(val => {
       this.search(val);
       const parts = this.router.url.split('?');
       const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
       this.exportUrl = 'export?' + str;
-    });
+    }));
 
     // this.state.loggedChanged.subscribe(val => {
     //   this.search(this.route.snapshot.queryParams);
@@ -84,6 +92,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.matcher.removeEventListener('change', (e) => {
       this.myListener(e);
     });
+    
+    this.subs.forEach(s => s.unsubscribe());
   }
 
   // set opened for sidenav
