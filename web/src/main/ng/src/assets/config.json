@@ -37,7 +37,7 @@
       "fillOpacity": 0.3
     }
   },
-  "hideMenuWidth": 900,
+  "hideMenuWidth": 600,
 
   "sorts": [
     { "label": "rok_vzniku", "field": "rok_vzniku", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
