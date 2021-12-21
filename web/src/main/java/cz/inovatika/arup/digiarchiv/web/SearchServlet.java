@@ -184,6 +184,38 @@ public class SearchServlet extends HttpServlet {
         return json.toString();
       }
     },
+    GEOMETRIE {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        JSONObject json = new JSONObject();
+        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+                  .setFacet(false);
+          query.setRequestHandler("/search");
+          String format = request.getParameter("format");
+          switch(format) {
+            case "GML":
+              query.setFields("geometrie:geom_gml");
+              break;
+            default:
+              query.setFields("geometrie:geom_wkt");
+          }
+          
+          JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+          
+          if ("GeoJSON".equals(format)) {
+            jo.put("geometrie", GPSconvertor.convertGeojson(jo.getString("geometrie")));
+          }
+          return jo.toString();
+
+        } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, null, ex);
+          json.put("error", ex);
+        }
+        return json.toString();
+      }
+    },
     QUERY {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -213,7 +245,7 @@ public class SearchServlet extends HttpServlet {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        String entity = "" + request.getParameter("entity");
+        
         PIANSearcher searcher = new PIANSearcher();
         JSONObject jo = searcher.getMapPians(request);
         return jo.toString();

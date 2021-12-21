@@ -74,6 +74,7 @@ import { FacetsDynamicComponent } from './components/facets-dynamic/facets-dynam
 import { BibtextDialogComponent } from './components/bibtext-dialog/bibtext-dialog.component';
 import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-dialog.component';
 import { KomponentaDokumentComponent } from './components/komponenta-dokument/komponenta-dokument.component';
+import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -125,6 +126,7 @@ const providers: any[] = [
     HomeComponent,
     DocumentComponent,
     ExportComponent,
+    ExportMapaComponent,
     NavbarComponent,
     FooterComponent,
     FreeTextComponent,

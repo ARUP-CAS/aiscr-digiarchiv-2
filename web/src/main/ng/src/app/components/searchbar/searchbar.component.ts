@@ -17,7 +17,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
 
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
-  formats = ['XML/GML', 'CSV/WKT', 'GeoJSON'];
+  formats = ['GML', 'WKT', 'GeoJSON'];
   exportUrl: string;
 
   constructor(
@@ -35,12 +35,12 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     this.service.currentLang.subscribe(res => {
       const parts = this.router.url.split('?');
       const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'api/export?' + str;
+      this.exportUrl = 'export-mapa?' + str;
     });
     this.route.queryParams.subscribe(val => {
       const parts = this.router.url.split('?');
       const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'api/search/export_mapa?' + str;
+      this.exportUrl = 'export-mapa?' + str;
     });
   }
 

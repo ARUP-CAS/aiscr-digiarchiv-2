@@ -7,6 +7,7 @@ import { ExportComponent } from 'src/app/pages/export/export.component';
 import { ResultsComponent } from 'src/app/pages/results/results.component';
 import { NapovedaComponent } from 'src/app/pages/napoveda/napoveda.component';
 import { FavoritesComponent } from './pages/favorites/favorites.component';
+import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'id/:id', component: DocumentComponent},
   {path: 'print/:id', component: DocumentComponent},
   {path: 'export', component: ExportComponent},
+  {path: 'export-mapa', component: ExportMapaComponent},
   {path: 'results', component: ResultsComponent},
   {path: 'favorites', component: FavoritesComponent},
   {path: 'napoveda', component: NapovedaComponent},

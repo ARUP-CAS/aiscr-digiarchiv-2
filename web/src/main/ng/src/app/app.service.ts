@@ -160,6 +160,11 @@ export class AppService {
     return this.get(`/search/wkt`, params);
   }
 
+  getGeometrie(id: string, format: string) {
+    const params: HttpParams = new HttpParams().set('id', id).set('format', format);
+    return this.get(`/search/geometrie`, params);
+  }
+
   searchMapa(params: HttpParams) {
     return this.get('/search/mapa', params);
   }
@@ -443,7 +448,7 @@ export class AppService {
 
   showInMap(result: any, isPian = false) {
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;
-    window.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0,0);
+    this.windowRef.nativeWindow.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0,0);
 
     this.state.isMapaCollapsed = false;
     const p: any = {};

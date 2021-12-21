@@ -23,6 +23,7 @@ import { AppState } from 'src/app/app.state';
 import { HomeComponent } from 'src/app/pages/home/home.component';
 import { DocumentComponent } from 'src/app/pages/document/document.component';
 import { ExportComponent } from 'src/app/pages/export/export.component';
+import { ExportMapaComponent } from 'src/app/pages/export-mapa/export-mapa.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FreeTextComponent } from './components/free-text/free-text.component';
@@ -132,6 +133,7 @@ const providers: any[] =[
     HomeComponent,
     DocumentComponent,
     ExportComponent,
+    ExportMapaComponent,
     ResultsComponent,
     NavbarComponent,
     FooterComponent,

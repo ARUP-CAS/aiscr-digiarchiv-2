@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
 
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
-        this.isExport = this.router.isActive('export', false);
+        this.isExport = this.router.isActive('export', false) || this.router.isActive('export-mapa', false);
         this.isResults = this.router.isActive('results', false);
         const params = this.route.snapshot.queryParamMap;
         if (params.has('lang')) {

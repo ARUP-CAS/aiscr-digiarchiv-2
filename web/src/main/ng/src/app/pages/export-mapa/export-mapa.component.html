@@ -1,0 +1,45 @@
+<div *ngIf="docs.length > 0">
+  <table *ngIf="docs.length > 0">
+    <thead>
+      <tr>
+        <th>#</th>
+        <ng-container *ngIf="format">
+          <th>{{'PIAN'| translate}}</th>
+          <th>{{'přesnost'| translate}}</th>
+          <th>{{'field.f_pian_typ'| translate}}</th>
+          <th>{{'field.f_pian_zm10'| translate}}</th>
+          <th>{{'Definiční bod (WGS-84)' | translate}}</th>
+          <th>{{'geom.' + format | translate}}</th>
+        </ng-container>
+        <th *ngFor="let field of config.exportFields[state.entity]">{{'field.' + field.name | translate}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of docs; let idx = index">
+        <td>{{idx + 1}}</td>
+        <ng-container *ngIf="format">
+          <td>{{r.pian.ident_cely}}</td>
+          <td>{{r.pian.presnost | translateHeslar : 'presnost'}}</td>
+          <td>{{r.pian.typ | translateHeslar : 'typ_pian'}}</td>
+          <td>{{r.pian.zm10}}</td>
+          <td>{{ r.pian.centroid_n }} : {{ r.pian.centroid_e }}</td>
+          <td>{{r.geometrie}}</td>
+        </ng-container>
+        <td *ngFor="let field of config.exportFields[state.entity]">
+          <ng-container *ngIf="!field.secured || hasRights(r)">
+            <ng-container *ngIf="field.heslar">
+              {{r[field.name] | translateHeslar : field.heslar}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type === 'date'">
+              {{r[field.name] | date : 'yyyy-MM-dd'}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type !== 'date'">
+              {{r[field.name]}}
+            </ng-container>
+          </ng-container>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
