@@ -52,6 +52,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     layers: [],
     zoom: 4,
     zoomControl: false,
+    wheelDebounceTime: 200,
     zoomSnap: 0,
     center: L.latLng(49.803, 15.496),
     preferCanvas: true
@@ -90,7 +91,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   maxNumMarkers = 0;
   markerZoomLevel = 16;
   currentZoom: number;
-  zoomingOnMarker = true;
+  zoomingOnMarker = false;
   showType = 'marker'; // 'heat', 'cluster', 'marker'
 
   map;
@@ -103,6 +104,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   showHeat: boolean;
   mapReady = false;
   subs: any[] = [];
+  isInit = true;
 
   layersControl = {};
 
@@ -278,9 +280,10 @@ export class MapaComponent implements OnInit, OnDestroy {
 
       }, 100);
 
-      if (this.showDetail && this.state.solrResponse.response.docs.length === 1) {
+      if ((this.showDetail || this.isInit) && this.state.solrResponse.response.docs.length === 1) {
         this.state.setMapResult(this.state.solrResponse.response.docs[0], false);
       }
+      this.isInit = false;
       this.showDetail = false;
     }
   }
@@ -558,7 +561,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     map.on('zoomend', (e) => {
       if (!this.zoomingOnMarker) {
-        this.updateBounds(map.getBounds());
+        this.debounce(this.updateBounds(map.getBounds()), 200, false);
       }
       this.zoomingOnMarker = false;
     });
