@@ -448,14 +448,15 @@ export class MapaComponent implements OnInit, OnDestroy {
       m.setZIndexOffset(0);
     });
     this.selectedMarker = [];
-    if (this.showType === 'heat') {
-      this.markers = new L.featureGroup();
-    }
   }
 
   hitMarker(res) {
     if (!res) {
       this.clearSelectedMarker();
+      if (this.showType === 'heat') {
+        // this.markers = new L.featureGroup();
+        this.updateBounds(this.map.getBounds());
+      }
       return;
     }
     const docId = res.ident_cely;

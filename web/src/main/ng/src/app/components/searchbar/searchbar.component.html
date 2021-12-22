@@ -18,7 +18,15 @@
         </span>
       </div>
       <div class="app-fx-right fxHide_xs">
-        <button mat-flat-button color="primary" [matMenuTriggerFor]="exports" *ngIf="!state.isMapaCollapsed">
+        <button mat-flat-button color="primary" 
+           *ngIf="!state.isMapaCollapsed && (state.entity === 'samostatny_nalez' || state.entity === 'knihovna_3d')"
+           (click)="openExport()">
+          <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
+          <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
+          <span class="fxHide_sm fxHide_xs">{{ 'Export' | translate }}</span>
+        </button>
+        <button mat-flat-button color="primary" [matMenuTriggerFor]="exports" 
+          *ngIf="!state.isMapaCollapsed && state.entity !== 'samostatny_nalez' && state.entity !== 'knihovna_3d'">
           <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
           <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
           <span class="fxHide_sm fxHide_xs">{{ 'Export' | translate }}</span>

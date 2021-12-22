@@ -89,7 +89,6 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   }
 
   viewFiles() {
-    // const canView = this.state.hasRights(this.result.pristupnost, this.result.organizace); 
     const canView = true;
     if (canView) {
       this.state.dialogRef = this.dialog.open(FileViewerComponent, {

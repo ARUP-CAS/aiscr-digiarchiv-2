@@ -7,6 +7,7 @@ import { AppHeslarService } from 'src/app/app.heslar.service';
 import { DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/app.service';
+import { AppWindowRef } from 'src/app/app.window-ref';
 
 @Component({
   selector: 'app-searchbar',
@@ -21,7 +22,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   exportUrl: string;
 
   constructor(
-    private dialog: MatDialog,
+    private windowRef: AppWindowRef,
     private router: Router,
     private route: ActivatedRoute,
     public state: AppState,
@@ -45,6 +46,10 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+  }
+
+  openExport() {
+    const link = this.windowRef.nativeWindow.open(this.exportUrl + '&format=raw');
   }
 
   search() {
