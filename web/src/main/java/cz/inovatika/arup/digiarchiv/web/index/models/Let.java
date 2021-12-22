@@ -5,6 +5,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web.index.models;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ public class Let implements Entity {
   @Field
   public String ident_cely;
 
+  // @JSONField(format = "yyyy-MM-dd")  
   @Field
   public Date datum;
   
