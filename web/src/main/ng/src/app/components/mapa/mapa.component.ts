@@ -224,6 +224,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setData() {
     if (this.state.solrResponse) {
+      const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
       this.markers = new L.markerClusterGroup();
       this.markersList = [];
       if (this.state.solrResponse.response.numFound > this.config.mapOptions.docsForCluster) {
@@ -240,7 +241,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           const p = Object.assign({}, this.route.snapshot.queryParams);
           p.rows = this.state.solrResponse.response.numFound;
           this.service.getPians(p as HttpParams).subscribe((res: any) => {
-            if (this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez') {
+            if (byLoc) {
               this.setClusterDataByLoc(res.response.docs);
             } else {
               this.setClusterDataByPian(res.response.docs);
@@ -251,11 +252,13 @@ export class MapaComponent implements OnInit, OnDestroy {
         }
         case 'marker': {
           this.setMarkersData();
-          this.markersList.forEach(m => {
-            if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
-              this.addShape(m.pianId, m.pianPresnost, m.docId.length);
-            }
-          });
+          if (!byLoc) {
+            this.markersList.forEach(m => {
+              if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
+                this.addShape(m.pianId, m.pianPresnost, m.docId.length);
+              }
+            });
+          }
           this.state.loading = false;
           break;
         }
@@ -310,31 +313,41 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
   }
 
+  addMarker(id: string, isPian: boolean, lat: string, lng: string, presnost: string, typ: string, doc: any) {
+    let mrk = this.markerExists(id);
+    if (!mrk) {
+      mrk = L.marker([lat, lng], { pianId: id, icon: typ === 'bod' ? this.iconPoint : this.icon, docId: [], doc, riseOnHover: true });
+      this.markersList.push(mrk);
+      mrk.pianId = id;
+      mrk.pianPresnost = presnost;
+      mrk.pianTyp = typ;
+      mrk.docId = [doc.ident_cely];
+      mrk.doc = doc;
+      if(isPian) {
+        mrk.on('click', (e) => {
+            this.setPianId(e.target.pianId);
+        });
+        mrk.bindTooltip(this.popUpHtml(id, presnost, mrk.docId)).openTooltip();
+      } else {
+        mrk.on('click', (e) => {
+          this.setMarker(e.target.doc);
+        });
+        mrk.bindTooltip(doc.ident_cely).openTooltip();
+      }
+      // mrk.addTo(this.markers);
+    } else if (isPian) {
+      mrk.docId.push(doc.ident_cely);
+      mrk.bindTooltip(this.popUpHtml(id, presnost, mrk.docId)).openTooltip();
+    }
+  }
+
   setClusterDataByPian(docs: any[]) {
     this.markers = new L.markerClusterGroup();
     docs.forEach(doc => {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
           if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
-            const pianId = pian.ident_cely;
-            const presnost = pian.presnost;
-            let mrk = this.markerExists(pianId);
-            if (!mrk) {
-              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.typ === 'bod' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
-              this.markersList.push(mrk);
-              mrk.pianId = pianId;
-              mrk.pianPresnost = presnost;
-              mrk.pianTyp = pian.typ;
-              mrk.docId = [doc.ident_cely];
-              mrk.on('click', (e) => {
-                this.setPianId(e.target.pianId);
-              });
-              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
-              // mrk.addTo(this.markers);
-            } else {
-              mrk.docId.push(doc.ident_cely);
-              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId)).openTooltip();
-            }
+            this.addMarker(pian.ident_cely, true, pian.centroid_n, pian.centroid_e, pian.presnost, pian.typ, doc);
           }
         });
       }
@@ -349,19 +362,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     docs.forEach(doc => {
       if (doc.loc_rpt) {
         if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
-          let mrk = this.markerExists(doc.ident_cely);
-          if (!mrk) {
-            const coords = doc.loc_rpt[0].split(',');
-            mrk = L.marker([coords[0], coords[1]], { icon: this.icon, docId: '', doc, riseOnHover: true });
-            this.markersList.push(mrk);
-            mrk.docId = doc.ident_cely;
-            mrk.doc = doc;
-            mrk.on('click', (e) => {
-              this.setMarker(e.target.doc);
-            });
-            mrk.bindTooltip(doc.ident_cely).openTooltip();
-            // mrk.addTo(this.markers);
-          }
+          const coords = doc.loc_rpt[0].split(',');
+          this.addMarker(doc.ident_cely, false, coords[0], coords[1], '', '', doc);
         }
       }
     });
@@ -377,50 +379,22 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
           if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
-            const pianId = pian.ident_cely;
-            const presnost = pian.presnost;
-            let mrk = this.markerExists(pianId);
-            if (!mrk) {
-              mrk = L.marker([pian.centroid_n, pian.centroid_e], { pianId, icon: pian.typ === 'bod' ? this.iconPoint : this.icon, docId: [], riseOnHover: true });
-              this.markersList.push(mrk);
-              mrk.pianId = pianId;
-              mrk.pianPresnost = presnost;
-              mrk.pianTyp = pian.typ;
-              mrk.docId = [doc.ident_cely];
-              mrk.on('click', (e) => {
-                this.setPianId(e.target.pianId);
-              });
-              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId.length)).openTooltip();
-              if (this.showType !== 'heat') {
-                mrk.addTo(this.markers);
-              }
-            } else {
-              mrk.docId.push(doc.ident_cely);
-              mrk.bindTooltip(this.popUpHtml(pianId, presnost, mrk.docId.length)).openTooltip();
-            }
+            this.addMarker(pian.ident_cely, true, pian.centroid_n, pian.centroid_e, pian.presnost, pian.typ, doc);
           }
         });
       } else if (doc.loc_rpt) {
         if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
-          let mrk = this.markerExists(doc.ident_cely);
-          if (!mrk) {
-            const coords = doc.loc_rpt[0].split(',');
-            mrk = L.marker([coords[0], coords[1]], { icon: this.icon, docId: '', doc, riseOnHover: true });
-            this.markersList.push(mrk);
-            mrk.docId = doc.ident_cely;
-            mrk.doc = doc;
-            mrk.on('click', (e) => {
-              this.setMarker(e.target.doc);
-            });
-            mrk.bindTooltip(doc.ident_cely).openTooltip();
-            if (this.showType !== 'heat') {
-              mrk.addTo(this.markers);
-            }
-          }
+          const coords = doc.loc_rpt[0].split(',');
+          this.addMarker(doc.ident_cely, false, coords[0], coords[1], '', '', doc);
         }
       }
 
     });
+    if (this.showType !== 'heat') {
+      this.markersList.forEach(mrk => {
+        mrk.addTo(this.markers);
+      });
+    }
     this.currentZoom = this.map.getZoom();
   }
 
@@ -453,10 +427,10 @@ export class MapaComponent implements OnInit, OnDestroy {
   hitMarker(res) {
     if (!res) {
       this.clearSelectedMarker();
-      if (this.showType === 'heat') {
+      //if (this.showType === 'heat') {
         // this.markers = new L.featureGroup();
         this.updateBounds(this.map.getBounds());
-      }
+      //}
       return;
     }
     const docId = res.ident_cely;
@@ -468,7 +442,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     const ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
     this.clearSelectedMarker();
     ms.forEach(m => {
-      // m.fire('click');
       m.setIcon(m.pianTyp === 'bod' ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
       if (this.showType === 'heat') {
@@ -556,9 +529,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       bounds = L.latLngBounds(southWest, northEast);
       this.map.fitBounds(bounds.pad(.03));
       this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
-
-      // } else if(!this.isResults) {
-      //   this.locationFilter.setBounds(bounds.pad(-0.95));
     } else {
       this.locationFilter.setBounds(bounds.pad(-0.95));
     }
@@ -702,8 +672,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   addShapes() {
-    // const z = "LINESTRING(50.61908,15.90431 50.61912,15.90433 50.61930,15.90411)";
-    // wkt.read(z);
     this.state.solrResponse.response.docs.forEach(doc => {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach((pian: any) => {
@@ -715,7 +683,6 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   addShape(ident_cely: string, presnost: string, pocet: number) {
     this.service.getWKT(ident_cely).subscribe((resp: any) => {
-      // console.log(ident_cely, resp.geom_wkt_c);
       const wkt = new Wkt.Wkt();
       wkt.read(resp.geom_wkt_c);
       if (wkt.toJson().type !== 'Point') {
