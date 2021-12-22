@@ -157,7 +157,7 @@
                 <th class="app-label">{{ 'field.f_poznamka' | translate }}:</th>
                 <td>{{ result.poznamka }}</td>
               </tr>
-              <tr *ngIf="result.centroid_e">
+              <tr *ngIf="result.loc_rpt">
                 <th class="app-label">{{ 'Definiční bod (WGS-84)' | translate }}:</th>
                 <td>{{ result.centroid_e }} : {{ result.centroid_n }}</td>
               </tr>

@@ -43,6 +43,11 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
       //this.imgSrc = this.config.server + '/api/img?id=' + this.result.soubor_filepath[0];
       this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
     }
+    if (this.result.loc_rpt) {
+      const coords = this.result.loc_rpt[0].split(',');
+      this.result.centroid_e = coords[0];
+      this.result.centroid_n = coords[1];
+    }
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex = 
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},

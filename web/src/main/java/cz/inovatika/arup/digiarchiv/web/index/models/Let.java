@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cz.inovatika.arup.digiarchiv.web.index.models;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -24,7 +19,6 @@ public class Let implements Entity {
   @Field
   public String ident_cely;
 
-  // @JSONField(format = "yyyy-MM-dd")  
   @Field
   public Date datum;
   

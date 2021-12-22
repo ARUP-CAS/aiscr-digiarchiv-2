@@ -83,7 +83,11 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields("*,soubor:[json]", "katastr", 
+    query.setFields(
+            "ident_cely, stav, typ, inv_cislo, projekt_id, okres, lokalizace, hloubka, nalezove_okolnosti, pristupnost",
+            "obdobi, presna_datace, druh, pecifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace",
+            "odpovedny_pracovnik_vlozeni, datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor",
+            "soubor:[json]", "katastr", 
             "f_katastr:f_katastr_" + pristupnost, 
             "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost, 
             "lat:lat_" + pristupnost, "lng:lng_" + pristupnost);
