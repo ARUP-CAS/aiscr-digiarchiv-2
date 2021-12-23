@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
@@ -75,6 +71,17 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
       return ex.toString();
     }
   }
+  
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    return new String[]{"ident_cely, stav, typ, inv_cislo, projekt_id, okres, lokalizace, hloubka, nalezove_okolnosti, pristupnost",
+            "obdobi, presna_datace, druh, pecifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace",
+            "odpovedny_pracovnik_vlozeni, datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor",
+            "soubor:[json]", "katastr", 
+            "f_katastr:f_katastr_" + pristupnost, 
+            "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost, 
+            "lat:lat_" + pristupnost, "lng:lng_" + pristupnost};
+  } 
 
   private void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);
@@ -83,14 +90,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields(
-            "ident_cely, stav, typ, inv_cislo, projekt_id, okres, lokalizace, hloubka, nalezove_okolnosti, pristupnost",
-            "obdobi, presna_datace, druh, pecifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace",
-            "odpovedny_pracovnik_vlozeni, datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor",
-            "soubor:[json]", "katastr", 
-            "f_katastr:f_katastr_" + pristupnost, 
-            "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost, 
-            "lat:lat_" + pristupnost, "lng:lng_" + pristupnost);
+    query.setFields(getSearchFields(pristupnost));
 
     SolrSearcher.addFilters(request, query, pristupnost);
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {

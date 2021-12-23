@@ -73,6 +73,12 @@ public class DokumentSearcher implements EntitySearcher {
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
   }
+  
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
+              "okres","f_okres"};
+  }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);

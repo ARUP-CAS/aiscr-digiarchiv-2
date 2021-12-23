@@ -74,6 +74,11 @@ public class ADBSearcher implements EntitySearcher {
       return ex.toString();
     }
   }
+  
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    return new String[]{"*"};
+  }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);

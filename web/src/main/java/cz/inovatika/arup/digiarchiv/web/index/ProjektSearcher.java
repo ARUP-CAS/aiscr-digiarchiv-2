@@ -72,6 +72,11 @@ public class ProjektSearcher implements EntitySearcher {
       return ex.toString();
     }
   }
+  
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    return new String[]{"*,akce:[json],pian:[json]","katastr","okres","f_katastr:katastr","f_okres:okres"};
+  }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);

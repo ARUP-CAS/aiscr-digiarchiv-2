@@ -112,14 +112,27 @@ public class SearchServlet extends HttpServlet {
         try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
+          String entity = request.getParameter("entity");
           query.setRequestHandler("/search");
-          query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
+          if (entity == null) {
+            query.setFields("entity");
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+          }
+          String pristupnost = LoginServlet.pristupnost(request.getSession());
+          if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+          }
+          EntitySearcher searcher = SearchUtils.getSearcher(entity);
+          if (searcher != null) {
+            query.setFields(searcher.getSearchFields(pristupnost));
+          } else {
+            query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
                   + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
                   + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
+          }
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
-            String entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
-            EntitySearcher searcher = SearchUtils.getSearcher(entity);
             if (searcher != null) {
               searcher.getChilds(jo, client, request);
             }
@@ -169,11 +182,9 @@ public class SearchServlet extends HttpServlet {
                   .setFacet(false);
           query.setRequestHandler("/search");
           query.setFields("geom_wkt");
-          
-                  
-                  
+
           JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-          
+
           jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
           return jo.toString();
 
@@ -194,16 +205,16 @@ public class SearchServlet extends HttpServlet {
                   .setFacet(false);
           query.setRequestHandler("/search");
           String format = request.getParameter("format");
-          switch(format) {
+          switch (format) {
             case "GML":
               query.setFields("geometrie:geom_gml");
               break;
             default:
               query.setFields("geometrie:geom_wkt");
           }
-          
+
           JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-          
+
           if ("GeoJSON".equals(format)) {
             jo.put("geometrie", GPSconvertor.convertGeojson(jo.getString("geometrie")));
           }
@@ -245,11 +256,10 @@ public class SearchServlet extends HttpServlet {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        
         PIANSearcher searcher = new PIANSearcher();
         JSONObject jo = searcher.getMapPians(request);
         return jo.toString();
-        
+
 //        PIANSearcher searcher = new PIANSearcher();
 //        JSONObject ret = new JSONObject();
 //        JSONArray docs = searcher.getMapPians(request).getJSONObject("response").getJSONArray("docs");
@@ -263,8 +273,6 @@ public class SearchServlet extends HttpServlet {
 //          ret.put(pianId, pian);
 //        }
 //        return ret.toString();
-        
-        
       }
     },
     GETHESLAR {
@@ -310,7 +318,7 @@ public class SearchServlet extends HttpServlet {
           req.setResponseParser(rawJsonResponseParser);
 
           NamedList<Object> resp = client.request(req, "translations");
-          JSONArray docs = new JSONObject((String)resp.get("response"))
+          JSONArray docs = new JSONObject((String) resp.get("response"))
                   .getJSONObject("response").getJSONArray("docs");
           // return (String) resp.get("response");
 
@@ -334,7 +342,7 @@ public class SearchServlet extends HttpServlet {
                 ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
               }
             }
-          } 
+          }
         } catch (Exception ex) {
           LOGGER.log(Level.SEVERE, null, ex);
           ret.put("error", ex);

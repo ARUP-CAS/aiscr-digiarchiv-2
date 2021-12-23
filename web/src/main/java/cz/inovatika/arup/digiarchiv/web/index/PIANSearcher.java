@@ -82,6 +82,11 @@ public class PIANSearcher implements EntitySearcher{
     }
     return json;
   }
+  
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    return new String[]{"*"};
+  }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);

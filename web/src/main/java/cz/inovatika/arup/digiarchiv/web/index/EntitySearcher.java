@@ -16,5 +16,6 @@ import org.json.JSONObject;
 public interface EntitySearcher {
   public JSONObject search(HttpServletRequest request);
   public String export(HttpServletRequest request);
+  public String[] getSearchFields(String pristupnost);
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request);
 }

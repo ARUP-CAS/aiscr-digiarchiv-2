@@ -76,6 +76,11 @@ public class LokalitaSearcher implements EntitySearcher {
       return ex.toString();
     }
   }
+  
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    return new String[]{"*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument:[json]","katastr", "f_katastr:katastr"};
+  }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);

@@ -64,6 +64,17 @@ public class AkceSearcher implements EntitySearcher{
       return ex.toString();
     }
   }
+  
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    return new String[]{"ident_cely","katastr","f_katastr:katastr","okres","f_okres:okres","vedouci_akce", "loc","entity","datestamp",
+      "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,
+      "organizace","f_organizace:organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
+      "hlavni_typ","f_hlavni_typ:hlavni_typ","vedlejsi_typ","f_vedlejsi_typ:vedlejsi_typ", 
+      "vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
+      "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
+      "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]"};
+  }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
     SolrSearcher.addCommonParams(request, query, ENTITY);

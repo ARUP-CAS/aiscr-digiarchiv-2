@@ -77,9 +77,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
 
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-        this.getFullId();
-      });
+      this.getFullId();
     }
     this.detailExpanded = !this.detailExpanded;
   }
