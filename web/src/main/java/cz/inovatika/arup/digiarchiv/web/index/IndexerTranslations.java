@@ -49,7 +49,7 @@ public class IndexerTranslations {
       File dir = new File(thesauriDir);
       LOGGER.log(Level.INFO, "indexing from {0}", thesauriDir);
       for (File file : dir.listFiles()) {
-        if (!dir.isDirectory()) {
+        if (!file.isDirectory()) {
           LOGGER.log(Level.INFO, "indexing from {0}", file.getName());
           // Reader in = new FileReader(file);
           Reader in = new FileReader(file, Charset.forName("UTF-8"));

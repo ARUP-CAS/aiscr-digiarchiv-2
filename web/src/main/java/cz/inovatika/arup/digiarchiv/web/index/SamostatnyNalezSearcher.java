@@ -74,8 +74,8 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"ident_cely, stav, typ, inv_cislo, projekt_id, okres, lokalizace, hloubka, nalezove_okolnosti, pristupnost",
-            "obdobi, presna_datace, druh, pecifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace",
+    return new String[]{"ident_cely, entity, stav, typ, inv_cislo, projekt_id, okres, lokalizace, hloubka, nalezove_okolnosti, pristupnost",
+            "obdobi, presna_datace, druh, specifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace", "predmet_kategorie", 
             "odpovedny_pracovnik_vlozeni, datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor",
             "soubor:[json]", "katastr", 
             "f_katastr:f_katastr_" + pristupnost, 
