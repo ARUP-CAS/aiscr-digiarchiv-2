@@ -271,9 +271,9 @@ export class AppService {
 
   
 
-  feedback(name: string, mail: string, text: string) {
+  feedback(name: string, mail: string, text: string, ident_cely: string) {
     const url = '/feedback';
-    return this.post(url, { name, mail, text });
+    return this.post(url, { name, mail, text, ident_cely });
   }
 
   addFav(identCely: string) {
