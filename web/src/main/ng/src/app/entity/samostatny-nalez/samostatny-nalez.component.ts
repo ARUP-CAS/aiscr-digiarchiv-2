@@ -129,6 +129,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   openFeedback() {
     this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
       width: '900px',
+      data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
   } 

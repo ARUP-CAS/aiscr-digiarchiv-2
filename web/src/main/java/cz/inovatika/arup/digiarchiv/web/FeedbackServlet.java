@@ -41,11 +41,11 @@ public class FeedbackServlet extends HttpServlet {
           throws ServletException, IOException {
       response.setContentType("application/json;charset=UTF-8");
       JSONObject js = new JSONObject(IOUtils.toString(request.getInputStream(), "UTF-8"));
-      sendMail(js.getString("name"), js.getString("mail"), js.getString("text"));
-      response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text")).toString());
+      // sendMail(js.getString("name"), js.getString("mail"), js.getString("text"));
+      response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text"), js.getString("ident_cely")).toString());
   }
 
-  private JSONObject sendMail(String fromName, String fromMail, String text) {
+  private JSONObject sendMail(String fromName, String fromMail, String text, String ident_cely) {
     JSONObject ret = new JSONObject();
     try {
       SimpleEmail email = new SimpleEmail();
@@ -60,8 +60,8 @@ public class FeedbackServlet extends HttpServlet {
 
       email.addTo(mail.getString("destMail"));
       email.setFrom(fromMail, fromName);
-      email.setSubject(mail.getString("subject"));
-      email.setMsg(text);
+      email.setSubject(mail.getString("subject") + ident_cely);
+      email.setMsg("Komentář k záznamu https://digiarchiv.aiscr.cz/id/"+ident_cely+":\n\n" + text);
       email.send();
       ret.put("hasError", false);
     } catch (Exception ex) {

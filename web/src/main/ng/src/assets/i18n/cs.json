@@ -484,5 +484,7 @@
   "Napište komentář": "Napište komentář",
   "Prosím zadejte platnou emailovou adresu": "Prosím zadejte platnou emailovou adresu",
   "E-mail je povinný": "E-mail je povinný",
-  "Filtrace / Výsledky": "Filtrace / Výsledky"
+  "Filtrace / Výsledky": "Filtrace / Výsledky",
+  "feedback_success": "Komentář úspěšně odeslán",
+  "feedback_failed": "Nepodařilo se odeslat komentář"
 }
