@@ -75,6 +75,7 @@ import { BibtextDialogComponent } from './components/bibtext-dialog/bibtext-dial
 import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-dialog.component';
 import { KomponentaDokumentComponent } from './components/komponenta-dokument/komponenta-dokument.component';
 import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
+import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -117,6 +118,10 @@ const providers: any[] = [
   { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   AppState, AppConfiguration, HttpClient,
   { provide: APP_INITIALIZER, useFactory: (config: AppConfiguration) => () => config.load(), deps: [AppConfiguration], multi: true },
+  {
+    provide: RECAPTCHA_SETTINGS,
+    useValue: { siteKey: environment.recaptcha.siteKey } as RecaptchaSettings,
+  },
   DatePipe, DecimalPipe, AppService, AppHeslarService
 ];
 
@@ -190,7 +195,9 @@ const providers: any[] = [
     OverlayModule,
     NguCarouselModule,
     AppMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   entryComponents: [
     FileViewerComponent

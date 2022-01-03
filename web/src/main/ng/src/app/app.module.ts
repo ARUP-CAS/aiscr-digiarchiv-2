@@ -78,6 +78,7 @@ import { BibtextDialogComponent } from './components/bibtext-dialog/bibtext-dial
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-dialog.component';
 import { KomponentaDokumentComponent } from './components/komponenta-dokument/komponenta-dokument.component';
+import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -122,6 +123,10 @@ const providers: any[] =[
   {
     provide: MatPaginatorIntl, deps: [TranslateService],
     useFactory: createCustomMatPaginatorIntl
+  },
+  {
+    provide: RECAPTCHA_SETTINGS,
+    useValue: { siteKey: environment.recaptcha.siteKey } as RecaptchaSettings,
   },
   DatePipe, DecimalPipe, AppService, AppHeslarService
 ];
@@ -198,7 +203,9 @@ const providers: any[] =[
     OverlayModule,
     NguCarouselModule,
     AppMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   entryComponents: [
     FileViewerComponent
