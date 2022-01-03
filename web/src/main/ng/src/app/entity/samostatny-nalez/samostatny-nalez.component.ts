@@ -72,6 +72,11 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       this.hasDetail = true;
+      if (this.result.loc_rpt) {
+        const coords = this.result.loc_rpt[0].split(',');
+        this.result.centroid_e = coords[0];
+        this.result.centroid_n = coords[1];
+      }
     });
   }
 
