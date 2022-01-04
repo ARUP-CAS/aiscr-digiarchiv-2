@@ -18,7 +18,6 @@
               {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'organizace' }}. 
               {{ 'Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
             </ng-container>
-  
             <ng-container *ngIf="result.entity !== 'dokument' && result.entity !== 'knihovna_3d'">
               <br/>
               <strong>{{'citation.intro' | translate}}:</strong>
@@ -28,7 +27,6 @@
               {{ 'citation.work' | translate }}.
               {{ 'Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
             </ng-container>
-  
           </ng-container>
           <ng-container *ngIf="isResultEmpty(result)">
             {{ 'idnotfound' | translate }}

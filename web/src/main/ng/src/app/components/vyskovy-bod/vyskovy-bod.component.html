@@ -1,6 +1,12 @@
-<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
-(<app-inline-filter [field]="'typ'" [value]="result.typ"></app-inline-filter>) – {{result.niveleta}} m n. m. ({{result.easting}} : {{result.northing}})
 
+<mat-card class="app-clean-shadow app-pt-0 app-pb-0">
+  <mat-card-header>
+    <mat-card-title>
+      <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+      (<app-inline-filter [field]="'typ'" [value]="result.typ"></app-inline-filter>) – {{result.niveleta}} m n. m. ({{result.easting}} : {{result.northing}})
+    </mat-card-title>
+  </mat-card-header>
+</mat-card>
 
 <mat-expansion-panel *ngIf="result.parent && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
   <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
