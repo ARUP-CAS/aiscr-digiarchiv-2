@@ -23,8 +23,16 @@ public class KomponentaDokumentSearcher implements ComponentSearcher {
     String fields = "*";
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
+      /**
+       Nechame nejvisi zaznam
+       * C-LD-000012218-K01 
+       * parent je C-LD-000012218-D01 
+       * ale nechame dokument  C-LD-000012218
+        * 
+       */
       if (doc.has("parent")) {
         String p = doc.getString("parent");
+         p = p.substring(0, p.length() - 4);
         JSONObject sub = SolrSearcher.getById(client, p, fields);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);

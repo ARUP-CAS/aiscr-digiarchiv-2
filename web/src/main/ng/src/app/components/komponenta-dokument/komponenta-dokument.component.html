@@ -43,6 +43,5 @@
       {{ 'Související záznamy' | translate }}:
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [isChild]="true" class="app-related-item"></app-dok-jednotka> -->
-  <app-jednotka-dokumentu [result]="result.jednotka_dokumentu[0]" [isChild]="true" class="app-related-item"></app-jednotka-dokumentu>
+  <app-dokument *ngIf="result.dokument" [result]="result.dokument[0]" [isChild]="true" class="app-related-item"></app-dokument>
 </mat-expansion-panel> 
