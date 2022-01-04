@@ -32,7 +32,7 @@ public class KomponentaDokumentSearcher implements ComponentSearcher {
        */
       if (doc.has("parent")) {
         String p = doc.getString("parent");
-         p = p.substring(0, p.length() - 4);
+        p = p.substring(0, p.length() - 4);
         JSONObject sub = SolrSearcher.getById(client, p, fields);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);

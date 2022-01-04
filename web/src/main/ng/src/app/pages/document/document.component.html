@@ -15,7 +15,7 @@
               <br/>
               <strong>{{'citation.intro' | translate}}:</strong>
               {{ result.autor }} {{result.rok_vzniku}}: {{'citation.dokument' | translate}}
-              {{ result.ident_cely }}. {{ result.organizace }}. 
+              {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'organizace' }}. 
               {{ 'Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
             </ng-container>
   
