@@ -42,13 +42,21 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
       this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
     }
 
-    const autor = this.result.autor.join(' and ');
+    this.setBibTex();
+    this.service.currentLang.subscribe(l => {
+      this.setBibTex();
+    });
+  }
+
+  setBibTex() {
+    const organizace = this.service.getHeslarTranslation(this.result.organizace, 'organizace');
+    const autor = this.result.autor ? this.result.autor.join(' and ') : '';
     this.bibTex = `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
       author = {${autor}}, 
       title = {Dokument ${this.result.ident_cely}},
       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-      year = {${this.result.rok_vzniku}}, 
-      note = {${this.result.organizace}}
+      year = {${this.result.rok_vzniku}},
+      note = {${organizace}}
     }`;
   }
 

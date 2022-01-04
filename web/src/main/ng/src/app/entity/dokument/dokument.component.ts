@@ -17,7 +17,6 @@ import { config } from 'process';
 })
 export class DokumentComponent implements OnInit, OnChanges {
 
-
   private _result: any;
 
   @Input() set result(value: any) {
@@ -73,14 +72,21 @@ export class DokumentComponent implements OnInit, OnChanges {
     if (this.result.soubor_filepath?.length > 0) {
       this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
     }
+    this.setBibTex();
+    this.service.currentLang.subscribe(l => {
+      this.setBibTex();
+    });
+  }
 
+  setBibTex() {
+    const organizace = this.service.getHeslarTranslation(this.result.organizace, 'organizace');
     const autor = this.result.autor ? this.result.autor.join(' and ') : '';
     this.bibTex = `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
       author = {${autor}}, 
       title = {Dokument ${this.result.ident_cely}},
       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
       year = {${this.result.rok_vzniku}},
-      note = {${this.result.organizace}}
+      note = {${organizace}}
     }`;
   }
 

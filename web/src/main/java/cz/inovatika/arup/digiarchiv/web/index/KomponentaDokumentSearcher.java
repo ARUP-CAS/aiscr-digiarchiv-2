@@ -24,7 +24,7 @@ public class KomponentaDokumentSearcher implements ComponentSearcher {
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
       /**
-       Nechame nejvisi zaznam
+       Nechame nejvissi zaznam
        * C-LD-000012218-K01 
        * parent je C-LD-000012218-D01 
        * ale nechame dokument  C-LD-000012218
