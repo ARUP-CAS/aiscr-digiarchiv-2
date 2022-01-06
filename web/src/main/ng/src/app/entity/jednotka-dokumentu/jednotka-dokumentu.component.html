@@ -126,17 +126,26 @@
   <mat-card-actions fxLayout="row" fxLayoutAlign="start end" *ngIf="!isChild">
     <div fxFlex></div>
     <div>
-      <button mat-flat-button>
-        <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
-          <mat-icon>link</mat-icon>
-        </a>
+      <button mat-flat-button [matTooltip]="'Odkazy' | translate" [matMenuTriggerFor]="links">
+        <mat-icon>link</mat-icon>
       </button>
+      <mat-menu #links="matMenu">
+        <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
+          {{ 'Persistentní odkaz' | translate }}
+        </a>
+        <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
+          AIS CR API - {{ item.label }}
+        </a>
+      </mat-menu>
       <button *ngIf="inDocument" mat-flat-button (click)="service.print()">
         <mat-icon>print</mat-icon>
       </button>
       <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" >
         <mat-icon>print</mat-icon>
       </a>
+      <button *ngIf="inDocument" mat-flat-button (click)="openFeedback()" [matTooltip]="'Odeslat komentář' | translate">
+        <mat-icon>feedback</mat-icon>
+      </button>
       <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
         <mat-icon>grade</mat-icon>
       </button>

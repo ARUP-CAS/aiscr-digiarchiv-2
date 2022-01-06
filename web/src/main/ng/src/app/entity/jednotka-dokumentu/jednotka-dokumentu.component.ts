@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
+import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-jednotka-dokumentu',
@@ -24,7 +26,8 @@ export class JednotkaDokumentuComponent implements OnInit {
     private router: Router,
     public service: AppService,
     public state: AppState,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public config: AppConfiguration
   ) { }
   
   ngOnInit(): void {
@@ -85,4 +88,11 @@ export class JednotkaDokumentuComponent implements OnInit {
     }
   }
 
+  openFeedback() {
+    this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
+      width: '900px',
+      data: this.result.ident_cely,
+      panelClass: 'app-feedback-dialog'
+    });
+  }
 }
