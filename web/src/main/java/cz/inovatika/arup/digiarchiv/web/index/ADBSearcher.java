@@ -77,7 +77,7 @@ public class ADBSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*"};
+    return new String[]{"*,vyskovy_bod:[json]"};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
