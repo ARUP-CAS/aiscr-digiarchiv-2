@@ -486,5 +486,24 @@
   "E-mail je povinný": "E-mail je povinný",
   "Filtrace / Výsledky": "Filtrace / Výsledky",
   "feedback_success": "Komentář byl úspěšně odeslán",
-  "feedback_failed": "Chyba při odeslání komentáře"
+  "feedback_failed": "Chyba při odeslání komentáře",
+
+  
+  "facets": {
+    "title": {
+      "Typy záznamů": "Typy záznamů"
+    },
+    "button": {
+      "Aplikovat filtr": "Aplikovat filtr"
+    },
+    "input": {
+
+    },
+    "tooltip": {
+
+    },
+    "field": {
+      
+    }
+  }
 }

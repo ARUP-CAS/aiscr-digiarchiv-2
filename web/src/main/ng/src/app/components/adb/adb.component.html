@@ -1,82 +1,79 @@
-
-  <ng-container *ngIf="!onlyHead">
-  <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
-  <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
-    <mat-panel-title>
-      <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-      {{ 'Archeologický dokumentační bod' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
-      <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-  <div *ngIf="result.typ_sondy">
-    <label class="app-label">{{ 'Typ sondy' | translate }}:</label>&#160;
-    <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result.typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
-  </div>
-  <div *ngIf="result.uzivatelske_oznaceni_sondy">
-    <label class="app-label">{{ 'Uživatelské označení' | translate }}:</label>&#160;{{ result.uzivatelske_oznaceni_sondy }}
-  </div>
-  <div *ngIf="result.trat">
-    <label class="app-label">{{ 'Ulice/trať' | translate }}:</label>&#160;{{ result.trat }}
-  </div>
-  <div *ngIf="result.cislo_popisne">
-    <label class="app-label">{{ 'Číslo popisné' | translate }}:</label>&#160;{{ result.cislo_popisne }}
-  </div>
-  <div *ngIf="result.parcelni_cislo">
-    <label class="app-label">{{ 'Parcelní číslo' | translate }}:</label>&#160;{{ result.parcelni_cislo }}
-  </div>
-  <div *ngIf="result.podnet">
-    <label class="app-label">{{ 'field.podnet' | translate }}:</label>&#160;
-    <app-inline-filter [field]="'f_adb_podnet'" [value]="result.podnet" [heslar]="'podnet'"></app-inline-filter>
-  </div>
-  <div *ngIf="result.stratigraficke_jednotky">
-    <label class="app-label">{{ 'Počet SJ' | translate }}:</label>&#160;{{ result.stratigraficke_jednotky }}
-  </div>
-  <div *ngIf="result.autor_popisu">
-    <label class="app-label">{{ 'Autor popisu' | translate }}:</label>&#160;{{ result.autor_popisu }}
-  </div>
-  <div *ngIf="result.rok_popisu">
-    <label class="app-label">{{ 'Rok popisu' | translate }}:</label>&#160;{{ result.rok_popisu }}
-  </div>
-  <div *ngIf="result.autor_revize">
-    <label class="app-label">{{ 'Autor revize' | translate }}:</label>&#160;{{ result.autor_revize }}
-  </div>
-  <div *ngIf="result.rok_revize">
-    <label class="app-label">{{ 'Rok revize' | translate }}:</label>&#160;{{ result.rok_revize }}
-  </div>
-  <div *ngIf="result.poznamka">
-    <label class="app-label">{{ 'field.f_poznamka' | translate }}:</label>&#160;{{ result.poznamka }}
-  </div>
-  <mat-accordion *ngIf="result.vyskovy_bod" multi="true">
-    <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
-      <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
-        <mat-panel-title>
-          <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-          {{ 'Výškové body' | translate }}:
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <ul class="app-list-inside">
-        <li *ngFor="let vb of result.vyskovy_bod">
-          <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
-          (<app-inline-filter [field]="'typ'" [value]="vb.typ"></app-inline-filter>) – {{vb.niveleta}} m n. m. ({{vb.easting}} : {{vb.northing}})
-        </li>
-      </ul>
-    </mat-expansion-panel>
-  </mat-accordion>
-</mat-expansion-panel>
-
-<mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-  <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
-    <mat-panel-title>
-      {{ 'Související záznamy' | translate }}:
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-  <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-  <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
-</mat-expansion-panel> 
+<ng-container *ngIf="!onlyHead">
+  <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner app-mb-4">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+      <mat-panel-title>
+        <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+        {{ 'Archeologický dokumentační bod' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div *ngIf="result.typ_sondy">
+      <label class="app-label">{{ 'Typ sondy' | translate }}:</label>&#160;
+      <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result.typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
+    </div>
+    <div *ngIf="result.uzivatelske_oznaceni_sondy">
+      <label class="app-label">{{ 'Uživatelské označení' | translate }}:</label>&#160;{{ result.uzivatelske_oznaceni_sondy }}
+    </div>
+    <div *ngIf="result.trat">
+      <label class="app-label">{{ 'Ulice/trať' | translate }}:</label>&#160;{{ result.trat }}
+    </div>
+    <div *ngIf="result.cislo_popisne">
+      <label class="app-label">{{ 'Číslo popisné' | translate }}:</label>&#160;{{ result.cislo_popisne }}
+    </div>
+    <div *ngIf="result.parcelni_cislo">
+      <label class="app-label">{{ 'Parcelní číslo' | translate }}:</label>&#160;{{ result.parcelni_cislo }}
+    </div>
+    <div *ngIf="result.podnet">
+      <label class="app-label">{{ 'field.podnet' | translate }}:</label>&#160;
+      <app-inline-filter [field]="'f_adb_podnet'" [value]="result.podnet" [heslar]="'podnet'"></app-inline-filter>
+    </div>
+    <div *ngIf="result.stratigraficke_jednotky">
+      <label class="app-label">{{ 'Počet SJ' | translate }}:</label>&#160;{{ result.stratigraficke_jednotky }}
+    </div>
+    <div *ngIf="result.autor_popisu">
+      <label class="app-label">{{ 'Autor popisu' | translate }}:</label>&#160;{{ result.autor_popisu }}
+    </div>
+    <div *ngIf="result.rok_popisu">
+      <label class="app-label">{{ 'Rok popisu' | translate }}:</label>&#160;{{ result.rok_popisu }}
+    </div>
+    <div *ngIf="result.autor_revize">
+      <label class="app-label">{{ 'Autor revize' | translate }}:</label>&#160;{{ result.autor_revize }}
+    </div>
+    <div *ngIf="result.rok_revize">
+      <label class="app-label">{{ 'Rok revize' | translate }}:</label>&#160;{{ result.rok_revize }}
+    </div>
+    <div *ngIf="result.poznamka">
+      <label class="app-label">{{ 'field.f_poznamka' | translate }}:</label>&#160;{{ result.poznamka }}
+    </div>
+    <mat-accordion *ngIf="result.vyskovy_bod" multi="true">
+      <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+        <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+          <mat-panel-title>
+            <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+            {{ 'Výškové body' | translate }}:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul class="app-list-inside">
+          <li *ngFor="let vb of result.vyskovy_bod">
+            <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
+            (<app-inline-filter [field]="'typ'" [value]="vb.typ"></app-inline-filter>) – {{vb.niveleta}} m n. m. ({{vb.easting}} : {{vb.northing}})
+          </li>
+        </ul>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-expansion-panel>
+  <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+    <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
+      <mat-panel-title>
+        {{ 'Související záznamy' | translate }}:
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+    <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+  </mat-expansion-panel> 
 </ng-container>
 
 <ng-container *ngIf="onlyHead">
-
   <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" >
     <mat-card-header>
       <mat-card-title fxLayout="row" fxLayoutGap="16px">
@@ -126,6 +123,5 @@
         <label class="app-label">{{ 'field.f_poznamka' | translate }}:</label>&#160;{{ result.poznamka }}
       </div>
     </mat-card-content>
-
   </mat-card> 
 </ng-container>
