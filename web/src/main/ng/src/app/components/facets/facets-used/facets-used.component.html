@@ -1,8 +1,8 @@
 <mat-list role="list" class="app-list-used-facet">
   <h3 mat-subheader fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="app-primary">
-    <div fxFlex>Aktivní filtry</div>
+    <div fxFlex>{{ 'facet.title.Aktivní filtry' | translate }}</div>
     <div>
-      <a [matTooltip]="'Odstranit všechny filtry' | translate" matTooltipPosition="above" (click)="clean()">
+      <a [matTooltip]="'facet.tooltip.Odstranit všechny filtry' | translate" matTooltipPosition="above" (click)="clean()">
         <mat-icon>close</mat-icon>
       </a>
     </div>
@@ -12,14 +12,14 @@
   <span>-- AND --</span>
   </div>
   <div *ngIf="facet.field !== 'separator'" class="app-display-table">
-    <a [matTooltip]="'Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
+    <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
       <mat-icon>close</mat-icon>
     </a>
     <span class="app-facet-name">
       <span *ngIf="facet.operator && facet.operator !== 'or'" [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">
-        <mat-icon class="app-icon-op">{{ 'operator.' + facet.operator | translate }}</mat-icon>
+        <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>
       </span>
-      <ng-container *ngIf="facet.field !== 'q'">{{ 'field.' + facet.field | translate}}:&#160;</ng-container>
+      <ng-container *ngIf="facet.field !== 'q'">{{ 'facet.field.' + facet.field | translate}}:&#160;</ng-container>
       <span class="app-font-bold">{{ facet.display }}</span> 
     </span> 
   </div>
