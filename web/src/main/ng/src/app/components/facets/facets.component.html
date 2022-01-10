@@ -23,7 +23,7 @@
   <app-facets-dynamic></app-facets-dynamic>
   <app-facets-search></app-facets-search>
 
-  <ng-container *ngFor="let facetPivot of state.facetPivots">
+  <!-- <ng-container *ngFor="let facetPivot of state.facetPivots">
     <mat-expansion-panel *ngIf="treeData.length > 0" [expanded]="true">
       <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight">
         <mat-panel-title>
@@ -49,7 +49,7 @@
         </mat-tree-node>
       </mat-tree>
     </mat-expansion-panel>
-  </ng-container>
+  </ng-container> -->
 
   <ng-container *ngFor="let facetField of facetsSorted">
     <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered || expandedFacets[facetField.field]">
