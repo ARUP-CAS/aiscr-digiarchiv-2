@@ -330,7 +330,7 @@ export class AppService {
     params.keys.forEach(field => {
       if (field.startsWith('f_') || 
       this.config.urlFields.includes(field) ||
-      this.config.dateFacets.includes(field) ||
+      // this.config.dateFacets.includes(field) ||
       this.config.numberFacets.includes(field) ||
       this.config.filterFields.find(ff => ff.field === field)) {
         let display = '';

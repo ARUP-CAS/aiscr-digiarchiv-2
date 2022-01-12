@@ -29,7 +29,9 @@ export class InlineFilterComponent implements OnInit {
 
   addFilter() {
     let v = this.value + '';
-    if (this.config.dateFacets.includes(this.field)) {
+    const filter = this.config.filterFields.find(ff => ff.field === this.field);
+    if (filter && filter.type === 'date') {
+    // if (this.config.dateFacets.includes(this.field)) {
       v += ',' + v;
     }
     this.service.addFilter(this.field, v, 'and');

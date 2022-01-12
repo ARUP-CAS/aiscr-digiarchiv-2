@@ -56,7 +56,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-  }
+  } 
 
   ngOnChanges(c) {
     if (c.result) {

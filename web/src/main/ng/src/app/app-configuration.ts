@@ -39,9 +39,9 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.facets;
     }
 
-    public get dateFacets() {
-        return this.config.dateFacets;
-    }
+    // public get dateFacets() {
+    //     return this.config.dateFacets;
+    // }
 
     public get numberFacets() {
         return this.config.numberFacets;

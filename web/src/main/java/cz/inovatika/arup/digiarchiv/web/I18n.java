@@ -81,8 +81,7 @@ public class I18n {
       String heslar = docs.getJSONObject(i).getString("heslar");
       LOGGER.log(Level.FINE, heslar);
       String pole = heslar;
-      def.put(pole + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getString(locale));
-      
+      def.put(pole + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getString(locale)); 
 
       if (opts.getClientConf().getJSONObject("heslarToPole").has(heslar)) {
         Object obj = opts.getClientConf().getJSONObject("heslarToPole").get(heslar);

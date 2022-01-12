@@ -8,7 +8,7 @@ export class Configuration {
   isIndexing: boolean;
   defaultLang: string;
   facets: string[];
-  dateFacets: string[];
+  // dateFacets: string[];
   numberFacets: string[];
 
   entities: string[];

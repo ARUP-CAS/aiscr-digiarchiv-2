@@ -260,7 +260,6 @@
     "f_let_letiste_cil" 
   ],
   
-  "dateFacets": ["datum_zverejneni", "datum_provedeni", "extra_data_datum_vzniku", "let_datum", "datum_nalezu"],
   "numberFacets": ["hloubka"],
   
   "heslarToPole": {
