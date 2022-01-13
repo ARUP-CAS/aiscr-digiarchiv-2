@@ -4,3 +4,5 @@ ThumbnailsGenerator/nbactions.xml
 
 # system files
 .DS_Store
+web/src/.DS_Store
+web/.DS_Store
