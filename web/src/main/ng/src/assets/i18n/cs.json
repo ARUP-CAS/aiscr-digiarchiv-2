@@ -28,7 +28,6 @@
   "geom.GML": "Geometrie GML",
   "geom.WKT": "Geometrie WKT",
   "geom.GeoJSON": "GeoJSON",
-  "Definiční bod (WGS-84)": "Definiční bod (WGS-84)",
   "Popis akce": "Popis akce",
   "Archeologický dokumentační bod": "Archeologický dokumentační bod",
   "Typ sondy": "Typ sondy",
@@ -80,8 +79,6 @@
   "tvar": "Tvary (příznaky) na letecké fotografii",
   "Akce dokumentu": "Dokumentovaná akce",
   "Rok výzkumu": "Rok výzkumu",
-  "Popis nálezu": "Popis nálezu",
-  "Nález": "Nález",
   "Popis letu": "Popis letu",
   "Pilot": "Pilot",
   "Trasa": "Trasa",
@@ -130,7 +127,6 @@
     "rada": "Řada dokumentu",
     "loc_rpt": "Výběr mapy",
     "filtruj_dle_pole": "Filtrovat podle pole",
-    "nalezove_okolnosti": "Nálezové okolnosti",
     "typ_dokumentu": "Typ dokumentu",
     "material_originalu": "Materiál originálu",
     "files": "Soubory", 
@@ -139,7 +135,6 @@
     "datum_ukonceni": "Projekt - datum ukončení",
     "organizace_prihlaseni": "Odpovědná organizace",
     "specifikace_data": "Specifikace data",
-    "predano_organizace": "Předáno organizaci",
     "adb_stratigraficke_jednotky": "ADB - stratigrafické jednotky",
     "f_osoby": "Dokument - dokumentovaná osoba",
     "f_nalezce": "Sam. nález - nálezce",
@@ -490,7 +485,13 @@
       "druh": "Druh lokality",
       "dalsi_katastry": "Další katastry",
       "f_typ_projektu": "Projekt - typ",
-      "podnet": "Projekt - podnět"
+      "podnet": "Projekt - podnět",
+      "predano_organizace": "Předáno organizaci",
+      "inv_cislo": "Sam. nález - evidenční č.",
+      "f_okres": "Okres",
+      "pocet": "Sam. nález - počet",
+      "nalezove_okolnosti": "Nálezové okolnosti",
+      "hloubka": "Sam. nález - hloubka (cm)"
     },
     "tooltip": {
       "Zavřít": "Zavřít",
@@ -569,7 +570,15 @@
       "Plánované zahájení": "Plánované zahájení",
       "Památková ochrana": "Památková ochrana",
       "Rejstříkové číslo ÚSKP": "Rejstříkové číslo ÚSKP",
-      "Název památky": "Název památky"
+      "Název památky": "Název památky",
+      "Předáno organizaci": "Předáno organizaci",
+      "Sam. nález - evidenční č.": "Sam. nález - evidenční č.",
+      "Nález": "Nález",
+      "Okres": "Okres",
+      "Sam. nález - počet": "Sam. nález - počet",
+      "Nálezové okolnosti": "Nálezové okolnosti",
+      "Sam. nález - hloubka (cm)": "Sam. nález - hloubka (cm)",
+      "Definiční bod (WGS-84)": "Definiční bod (WGS-84)"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -585,7 +594,8 @@
       "Související záznamy": "Související záznamy",
       "Popis lokality": "Popis lokality",
       "Externí zdroje": "Externí zdroje",
-      "Popis projektu": "Popis projektu"
+      "Popis projektu": "Popis projektu",
+      "Popis nálezu": "Popis nálezu"
     },
     "title": {
       "Část dokumentu": "Obsahová část"
