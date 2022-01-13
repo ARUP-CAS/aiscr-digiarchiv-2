@@ -29,14 +29,7 @@
   "geom.WKT": "Geometry WKT",
   "geom.GeoJSON": "GeoJSON",
   "Definiční bod (WGS-84)": "Definition point (WGS-84)",
-  "Parcelní číslo": "Parcel number",
-  "Plánované zahájení": "Scheduled launch",
-  "Památková ochrana": "Heritage protection",
   "Popis akce": "Fieldwork description",
-  "Popis projektu": "Project description",
-  "Rejstříkové číslo ÚSKP": "Monument Register number",
-  "Název památky": "Monument label",
-  "Počet samostatných nálezů": "Number of individual finds",
   "Archeologický dokumentační bod": "Archaeological Documentation Point",
   "Typ sondy": "Trench type",
   "Ulice/trať": "Street/track",
@@ -156,7 +149,6 @@
     "f_datum_ukonceni": "Fieldwork/Project - ending date",
     "f_druh_lokality": "Site - class",
     "f_kulturni_pamatka": "Project - heritage protection",
-    "f_typ_projektu": "Project - type",
     "f_typ_lokality": "Site - type",
     "f_adb_typ_sondy": "ADP – trench type",
     "f_adb_podnet": "ADP – motivation",
@@ -495,7 +487,10 @@
       "datum_provedeni": "Date of fieldwork event",
       "f_areal": "Component - activity area",
       "obdobi": "Period",
-      "druh": "Site class"
+      "druh": "Site class",
+      "dalsi_katastry": "Other cadastres",
+      "f_typ_projektu": "Project - type",
+      "podnet": "Project - motivation"
     },
     "tooltip": {
       "Zavřít": "Close",
@@ -506,8 +501,7 @@
       "Odebrat z oblíbených": "Remove from favorites",
       "Uložit do oblíbených": "Add to favorites",
       "Odeslat komentář": "Send comment",
-      "Vytisknout": "Print",
-      "dalsi_katastry": "Other cadastres"
+      "Vytisknout": "Print"
     },
     "menu": {
       "Persistentní odkaz": "Persistent link"
@@ -551,6 +545,7 @@
       "Dokumentovaná akce/lokalita": "Documented event/site",
       "Vedoucí akce": "Principal researcher",
       "Akce - lokalizace": "Fieldwork - location",
+      "Akce - lokalizace/okolnosti": "Action - location / circumstances",
       "Pian": "PIAN",
       "Nahrazuje NZ": "Replaces ER",
       "Lokalizace/okolnosti": "Location/circumstances",
@@ -566,7 +561,15 @@
       "Komponenta - areál": "Component - activity area",
       "Období": "Period",
       "Druh lokality": "Site class",
-      "Další katastry": "Other cadastres"
+      "Další katastry": "Other cadastres",
+      "Projekt - typ": "Project - type",
+      "Projekt - podnět": "Project - motivation",
+      "Počet samostatných nálezů": "Number of individual finds",
+      "Parcelní číslo": "Parcel number",
+      "Plánované zahájení": "Scheduled launch",
+      "Památková ochrana": "Heritage protection",
+      "Rejstříkové číslo ÚSKP": "Monument Register number",
+      "Název památky": "Monument label"
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -581,7 +584,8 @@
       "Neidentifikovaná akce": "Unidentified fieldwork",
       "Související záznamy": "Related records",
       "Popis lokality": "Site description",
-      "Externí zdroje": "External sources"
+      "Externí zdroje": "External sources",
+      "Popis projektu": "Project description"
     },
     "title": {
       "Část dokumentu": "Content part"

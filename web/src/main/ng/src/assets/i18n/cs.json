@@ -29,14 +29,7 @@
   "geom.WKT": "Geometrie WKT",
   "geom.GeoJSON": "GeoJSON",
   "Definiční bod (WGS-84)": "Definiční bod (WGS-84)",
-  "Parcelní číslo": "Parcelní číslo",
-  "Plánované zahájení": "Plánované zahájení",
-  "Památková ochrana": "Památková ochrana",
   "Popis akce": "Popis akce",
-  "Popis projektu": "Popis projektu",
-  "Rejstříkové číslo ÚSKP": "Rejstříkové číslo ÚSKP",
-  "Název památky": "Název památky",
-  "Počet samostatných nálezů": "Počet samostatných nálezů",
   "Archeologický dokumentační bod": "Archeologický dokumentační bod",
   "Typ sondy": "Typ sondy",
   "Ulice/trať": "Ulice/trať",
@@ -155,7 +148,6 @@
     "f_datum_ukonceni": "Akce/projekt - datum ukončení",
     "f_druh_lokality": "Lokalita - druh",
     "f_kulturni_pamatka": "Projekt - památková ochrana",
-    "f_typ_projektu": "Projekt - typ",
     "f_typ_lokality": "Lokalita - typ",
     "f_adb_typ_sondy": "ADB – typ sondy",
     "f_adb_podnet": "ADB – podnět",
@@ -496,7 +488,9 @@
       "f_areal": "Komponenta - areál",
       "obdobi": "Období",
       "druh": "Druh lokality",
-      "dalsi_katastry": "Další katastry"
+      "dalsi_katastry": "Další katastry",
+      "f_typ_projektu": "Projekt - typ",
+      "podnet": "Projekt - podnět"
     },
     "tooltip": {
       "Zavřít": "Zavřít",
@@ -551,6 +545,7 @@
       "Dokumentovaná akce/lokalita": "Dokumentovaná akce/lokalita",
       "Vedoucí akce": "Vedoucí akce",
       "Akce - lokalizace": "Akce - lokalizace",
+      "Akce - lokalizace/okolnosti": "Akce - lokalizace/okolnosti",
       "Pian": "PIAN",
       "Nahrazuje NZ": "Nahrazuje NZ",
       "Lokalizace/okolnosti": "Lokalizace/okolnosti",
@@ -567,6 +562,14 @@
       "Období": "Období",
       "Druh lokality": "Druh lokality",
       "Další katastry": "Další katastry",
+      "Projekt - typ": "Projekt - typ",
+      "Projekt - podnět": "Projekt - podnět",
+      "Počet samostatných nálezů": "Počet samostatných nálezů",
+      "Parcelní číslo": "Parcelní číslo",
+      "Plánované zahájení": "Plánované zahájení",
+      "Památková ochrana": "Památková ochrana",
+      "Rejstříkové číslo ÚSKP": "Rejstříkové číslo ÚSKP",
+      "Název památky": "Název památky"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -581,7 +584,8 @@
       "Neidentifikovaná akce": "Neidentifikovaná akce",
       "Související záznamy": "Související záznamy",
       "Popis lokality": "Popis lokality",
-      "Externí zdroje": "Externí zdroje"
+      "Externí zdroje": "Externí zdroje",
+      "Popis projektu": "Popis projektu"
     },
     "title": {
       "Část dokumentu": "Obsahová část"
