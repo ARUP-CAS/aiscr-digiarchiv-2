@@ -21,7 +21,7 @@
     </div>
     <div class="app-metadata app-row-gap-16">  
       <ng-container *ngIf="result.vazba_akce || result.vazba_lokalita">
-        <label class="app-label">{{ 'card.metadata.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
         <ng-container *ngIf="result.vazba_akce">
           <a [routerLink]="'/id/' + result.vazba_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.vazba_akce }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
         </ng-container>
@@ -86,7 +86,7 @@
           </mat-expansion-panel-header>
           <table>
             <tr *ngIf="neident_akce.katastr || neident_akce.okres">
-              <th class="app-label">{{ 'card.metadata.Katastr (okres)' | translate }}:</th>
+              <th class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</th>
               <td>
                 <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="neident_akce.katastr"></app-inline-filter>
                 <ng-container *ngIf="neident_akce.okres">
@@ -94,27 +94,27 @@
                 </ng-container></td>
             </tr>
             <tr *ngIf="neident_akce.vedouci">
-              <th class="app-label">{{ 'card.metadata.vedouci_akce' | translate }}:</th>
+              <th class="app-label">{{ 'card.desc.Vedoucí akce' | translate }}:</th>
               <td>{{ neident_akce.vedouci }}</td>
             </tr>
             <tr *ngIf="neident_akce.rok_zahajeni || neident_akce.rok_ukonceni">
-              <th class="app-label">{{ 'card.metadata.Rok od-do' | translate }}:</th>
+              <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
               <td>{{ neident_akce.rok_zahajeni }}<ng-container *ngIf="neident_akce.rok_ukonceni">-{{ neident_akce.rok_ukonceni }}</ng-container></td>
             </tr>
             <tr *ngIf="neident_akce.lokalizace">
-              <th class="app-label">{{ 'card.metadata.lokalizace' | translate }}:</th>
+              <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
               <td>{{ neident_akce.lokalizace }}</td>
             </tr>
             <tr *ngIf="neident_akce.popis">
-              <th class="app-label">{{ 'card.metadata.f_popis' | translate }}:</th>
+              <th class="app-label">{{ 'card.desc.Popis' | translate }}:</th>
               <td>{{ neident_akce.popis }}</td>
             </tr>
             <tr *ngIf="neident_akce.poznamka">
-              <th class="app-label">{{ 'card.metadata.f_poznamka' | translate }}:</th>
+              <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
               <td>{{ neident_akce.poznamka }}</td>
             </tr>
             <tr *ngIf="neident_akce.pian">
-              <th class="app-label">{{ 'card.metadata.pian' | translate }}:</th>
+              <th class="app-label">{{ 'card.desc.Pian' | translate }}:</th>
               <td>{{ neident_akce.pian }}</td>
             </tr>
           </table> 

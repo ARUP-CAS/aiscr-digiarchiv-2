@@ -27,7 +27,7 @@
     </div>
     <div class="app-metadata app-row-gap-16" >
       <div>
-        <label class="app-label">{{ 'card.metadata.datum_provedeni' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.Datum výzkumu' | translate }}:</label>&#160;
         {{ result.specifikace_data }} 
         <ng-container *ngIf="result.specifikace_data === 'přesně'">
           {{ result.datum_zahajeni | date : 'dd.MM.yyyy' }}
@@ -42,38 +42,38 @@
         </ng-container>
         <span class="app-pipe"></span>
         <ng-container><!-- *ngIf="result.je_nz"-->
-          <label class="app-label">{{ 'card.metadata.Nahrazuje NZ' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.Nahrazuje NZ' | translate }}:</label>&#160;
           {{ result.je_nz ? 'Ano' : 'Ne' }}<span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.pristupnost">
-          <label class="app-label">{{ 'card.metadata.pristupnost' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
         </ng-container>
       </div>
       <div *ngIf="result.organizace">
-        <label class="app-label">{{ 'card.metadata.f_organizace' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
         <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
       <div *ngIf="result.dalsi_katastry && hasRights">
-        <label class="app-label">{{ 'card.metadata.dalsi_katastry' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.dalsi_katastry' | translate }}:</label>&#160;
         <ng-container *ngFor="let k of result.dalsi_katastry; let last = last">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
       <div *ngIf="result.lokalizace && hasRights" class="app-truncate-text">
-        <label class="app-label">{{ 'card.metadata.Lokalizace/okolnosti' | translate }}:</label>&#160;{{ cropped(result.lokalizace) }}
+        <label class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</label>&#160;{{ cropped(result.lokalizace) }}
       </div>
     </div>
   </mat-card-content>
   <mat-card-actions fxLayout="row" fxLayoutAlign="start end" *ngIf="!isChild">
     <div fxFlex class="app-metadata">
       <ng-container *ngIf="result.child_dokument?.length > 0">
-        {{'card.metadata.Počet dokumentů' | translate}}: <strong>{{result.child_dokument.length}}</strong>
+        {{'card.desc.Počet dokumentů' | translate}}: <strong>{{result.child_dokument.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container>
       <ng-container *ngIf="result.vazba_projekt">
-        {{'card.metadata.Počet projektů' | translate}}: <strong>1</strong>
+        {{'card.desc.Počet projektů' | translate}}: <strong>1</strong>
         <span class="app-pipe"></span>
       </ng-container>
     </div>
@@ -130,35 +130,35 @@
           <table>
             <tbody>
               <tr *ngIf="result.hlavni_typ">
-                <th class="app-label">{{ 'card.metadata.f_hlavni_typ' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Hlavní typ' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.hlavni_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
               </tr>
               <tr *ngIf="result.vedlejsi_typ">
-                <th class="app-label">{{ 'card.metadata.f_vedlejsi_typ' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Vedlejší typ' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.vedlejsi_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
               </tr>
               <tr *ngIf="result.vedouci_akce_ostatni">
-                <th class="app-label">{{ 'card.metadata.Ostatní vedoucí' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Ostatní vedoucí' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.vedouci_akce_ostatni"></app-inline-filter></td>
               </tr>
               <tr *ngIf="result.organizace_ostatni">
-                <th class="app-label">{{ 'card.metadata.Ostatní organizace' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Ostatní organizace' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace_ostatni" [heslar]="'organizace'"></app-inline-filter></td>
               </tr>
               <tr *ngIf="result.uzivatelske_oznaceni">
-                <th class="app-label">{{ 'card.metadata.Uživatelské označení' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
                 <td>{{ result.uzivatelske_oznaceni }}</td>
               </tr>
               <tr *ngIf="result.ulozeni_nalezu">
-                <th class="app-label">{{ 'card.metadata.Uložení nálezů' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Uložení nálezů' | translate }}:</th>
                 <td>{{ result.ulozeni_nalezu }}</td>
               </tr>
               <tr *ngIf="result.lokalizace">
-                <th class="app-label">{{ 'card.metadata.Lokalizace/okolnosti' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</th>
                 <td>{{ result.lokalizace }}</td>
               </tr>
               <tr *ngIf="result.poznamka">
-                <th class="app-label">{{ 'card.metadata.f_poznamka' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
                 <td>{{ result.poznamka }}</td>
               </tr>
             </tbody>
