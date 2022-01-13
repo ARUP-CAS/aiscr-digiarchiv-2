@@ -528,6 +528,9 @@
       "Nálezy": "Finds",
       "Neidentifikovaná akce": "Unidentified fieldwork",
       "Související záznamy": "Related records"
+    },
+    "title": {
+      "Část dokumentu": "Content part"
     }
   }
 }

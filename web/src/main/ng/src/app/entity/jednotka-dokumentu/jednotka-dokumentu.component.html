@@ -1,5 +1,5 @@
 <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
-  <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
+  <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   <mat-card-header>
@@ -7,32 +7,32 @@
       <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
       <mat-icon *ngIf="isChild" class="app-entity-akce" [matTooltip]="'entities.akce.title' | translate">turned_in</mat-icon>
       <ng-container [ngSwitch]="isChild">
-        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
         <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
       </ng-container><span class="app-pipe"></span>
-      {{ 'Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+      {{ 'card.title.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
       <ng-container *ngIf="result.poznamka"> ({{ result.poznamka }})</ng-container> 
       <span class="app-pipe"></span>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div *ngIf="state.itemView === 'col' && !isDocumentDialogOpen && !isChild" class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'Obrázek není k dispozici' | translate">
+    <div *ngIf="state.itemView === 'col' && !isDocumentDialogOpen && !isChild" class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
       <mat-icon>image_not_supported</mat-icon>
     </div>
     <div class="app-metadata app-row-gap-16">  
       <ng-container *ngIf="result.vazba_akce || result.vazba_lokalita">
-        <label class="app-label">{{ 'Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.metadata.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
         <ng-container *ngIf="result.vazba_akce">
-          <a [routerLink]="'/id/' + result.vazba_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_akce }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
+          <a [routerLink]="'/id/' + result.vazba_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.vazba_akce }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
         </ng-container>
         <ng-container *ngIf="result.vazba_druha_akce">
-          <a [routerLink]="'/id/' + result.vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + result.vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
         </ng-container>
         <ng-container *ngIf="result.vazba_lokalita">
-          <a [routerLink]="'/id/' + result.vazba_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_lokalita }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + result.vazba_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.vazba_lokalita }} <mat-icon>link</mat-icon></a>
         </ng-container>
         <ng-container *ngIf="result.vazba_druha_lokalita">
-          <a [routerLink]="'/id/' + result.vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'Persistentní odkaz' | translate">{{ result.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + result.vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
         </ng-container>
       </ng-container>
       <mat-accordion multi="true">
@@ -42,7 +42,7 @@
             <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
               <mat-panel-title>
                 <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                {{ 'Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
+                {{ 'card.panelTitle.Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
                 <ng-container *ngIf="kd.obdobi">
                   <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
                 </ng-container>
@@ -59,7 +59,7 @@
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                 <mat-panel-title>
                   <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                  {{ 'Nálezy' | translate }}:
+                  {{ 'card.panelTitle.Nálezy' | translate }}:
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="app-list-inside">
@@ -81,12 +81,12 @@
           <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
             <mat-panel-title>
               <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-              {{ 'Neidentifikovaná akce' | translate }}:
+              {{ 'card.panelTitle.Neidentifikovaná akce' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           <table>
             <tr *ngIf="neident_akce.katastr || neident_akce.okres">
-              <th class="app-label">{{ 'Katastr (okres)' | translate }}:</th>
+              <th class="app-label">{{ 'card.metadata.Katastr (okres)' | translate }}:</th>
               <td>
                 <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="neident_akce.katastr"></app-inline-filter>
                 <ng-container *ngIf="neident_akce.okres">
@@ -94,27 +94,27 @@
                 </ng-container></td>
             </tr>
             <tr *ngIf="neident_akce.vedouci">
-              <th class="app-label">{{ 'field.vedouci_akce' | translate }}:</th>
+              <th class="app-label">{{ 'card.metadata.vedouci_akce' | translate }}:</th>
               <td>{{ neident_akce.vedouci }}</td>
             </tr>
             <tr *ngIf="neident_akce.rok_zahajeni || neident_akce.rok_ukonceni">
-              <th class="app-label">{{ 'Rok od-do' | translate }}:</th>
+              <th class="app-label">{{ 'card.metadata.Rok od-do' | translate }}:</th>
               <td>{{ neident_akce.rok_zahajeni }}<ng-container *ngIf="neident_akce.rok_ukonceni">-{{ neident_akce.rok_ukonceni }}</ng-container></td>
             </tr>
             <tr *ngIf="neident_akce.lokalizace">
-              <th class="app-label">{{ 'field.lokalizace' | translate }}:</th>
+              <th class="app-label">{{ 'card.metadata.lokalizace' | translate }}:</th>
               <td>{{ neident_akce.lokalizace }}</td>
             </tr>
             <tr *ngIf="neident_akce.popis">
-              <th class="app-label">{{ 'field.f_popis' | translate }}:</th>
+              <th class="app-label">{{ 'card.metadata.f_popis' | translate }}:</th>
               <td>{{ neident_akce.popis }}</td>
             </tr>
             <tr *ngIf="neident_akce.poznamka">
-              <th class="app-label">{{ 'field.f_poznamka' | translate }}:</th>
+              <th class="app-label">{{ 'card.metadata.f_poznamka' | translate }}:</th>
               <td>{{ neident_akce.poznamka }}</td>
             </tr>
             <tr *ngIf="neident_akce.pian">
-              <th class="app-label">{{ 'PIAN' | translate }}:</th>
+              <th class="app-label">{{ 'card.metadata.pian' | translate }}:</th>
               <td>{{ neident_akce.pian }}</td>
             </tr>
           </table> 
@@ -126,7 +126,7 @@
   <mat-card-actions fxLayout="row" fxLayoutAlign="start end" *ngIf="!isChild">
     <div fxFlex></div>
     <div>
-      <button mat-flat-button [matTooltip]="'Odkazy' | translate" [matMenuTriggerFor]="links">
+      <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
         <mat-icon>link</mat-icon>
       </button>
       <mat-menu #links="matMenu">
@@ -137,26 +137,26 @@
           AIS CR API - {{ item.label }}
         </a>
       </mat-menu>
-      <button *ngIf="inDocument" mat-flat-button (click)="service.print()">
+      <button *ngIf="inDocument" mat-flat-button (click)="service.print()" [matTooltip]="'card.tooltip.Vytisknout' | translate">
         <mat-icon>print</mat-icon>
       </button>
-      <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" >
+      <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
         <mat-icon>print</mat-icon>
       </a>
-      <button *ngIf="inDocument" mat-flat-button (click)="openFeedback()" [matTooltip]="'Odeslat komentář' | translate">
+      <button *ngIf="inDocument" mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
         <mat-icon>feedback</mat-icon>
       </button>
-      <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
+      <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
         <mat-icon>grade</mat-icon>
       </button>
       <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
-        {{(detailExpanded ? 'Skrýt detail' : 'Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+        {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
       </button>
       <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">
-        {{ 'Zobrazit detail' | translate }}
+        {{ 'card.button.Zobrazit detail' | translate }}
       </button>
       <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false" *ngIf="state.itemView === 'col' && isDocumentDialogOpen">
-        {{ 'Skrýt detail' | translate }}
+        {{ 'card.button.Skrýt detail' | translate }}
       </button>
     </div>
   </mat-card-actions>
@@ -166,7 +166,7 @@
       <mat-expansion-panel *ngIf="result.dokument && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
         <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
           <mat-panel-title>
-            {{ 'Související záznamy' | translate }}:
+            {{ 'card.panelTitle.Související záznamy' | translate }}:
           </mat-panel-title>
         </mat-expansion-panel-header>
         <app-dokument *ngFor="let dokument of result.dokumenty" [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
