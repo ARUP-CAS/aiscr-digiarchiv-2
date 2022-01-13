@@ -143,7 +143,6 @@
     "nalezove_okolnosti": "Nálezové okolnosti",
     "typ_dokumentu": "Typ dokumentu",
     "druh": "Druh lokality",
-    "obdobi": "Období",
     "material_originalu": "Materiál originálu",
     "files": "Soubory", 
     "vedouci_projektu": "Vedoucí projektu",
@@ -497,7 +496,9 @@
       "Ostatní organizace": "Ostatní organizace",
       "Uživatelské označení": "Uživatelské označení",
       "Uložení nálezů": "Uložení nálezů",
-      "datum_provedeni": "Datum výzkumu"
+      "datum_provedeni": "Datum výzkumu",
+      "f_areal": "Komponenta - areál",
+      "obdobi": "Období"
     },
     "tooltip": {
       "Zavřít": "Zavřít",

@@ -143,7 +143,6 @@
     "nalezove_okolnosti": "Finding context",
     "typ_dokumentu": "Document type",
     "druh": "Site class",
-    "obdobi": "Period",
     "material_originalu": "Original material",
     "files": "Files",
     "vedouci_projektu": "Project manager",
@@ -497,7 +496,9 @@
       "Ostatní organizace": "Other organisations",
       "Uživatelské označení": "User label",
       "Uložení nálezů": "Finds repository",
-      "datum_provedeni": "Date of fieldwork event"
+      "datum_provedeni": "Date of fieldwork event",
+      "f_areal": "Component - activity area",
+      "obdobi": "Period"
     },
     "tooltip": {
       "Zavřít": "Close",

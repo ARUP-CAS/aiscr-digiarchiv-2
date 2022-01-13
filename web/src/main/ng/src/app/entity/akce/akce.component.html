@@ -86,7 +86,7 @@
       </button>
       <mat-menu #links="matMenu">
         <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
-          {{ 'card.tooltip.Persistentní odkaz' | translate }}
+          {{ 'card.menu.Persistentní odkaz' | translate }}
         </a>
         <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
           AIS CR API - {{ item.label }}
