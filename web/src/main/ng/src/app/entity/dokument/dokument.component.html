@@ -122,10 +122,10 @@
       <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
         <mat-icon>menu_book</mat-icon>
       </button>
-      <button *ngIf="inDocument" mat-flat-button (click)="service.print()">
+      <button *ngIf="inDocument" mat-flat-button (click)="service.print()" [matTooltip]="'card.tooltip.Vytisknout' | translate">
         <mat-icon>print</mat-icon>
       </button>
-      <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" >
+      <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
         <mat-icon>print</mat-icon>
       </a>
       <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">

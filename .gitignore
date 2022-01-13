@@ -1,3 +1,6 @@
 web/src/main/webapp/index.ssr.html
 ThumbnailsGenerator/target/
 ThumbnailsGenerator/nbactions.xml
+
+# system files
+.DS_Store

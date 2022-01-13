@@ -29,18 +29,11 @@
   "geom.WKT": "Geometrie WKT",
   "geom.GeoJSON": "GeoJSON",
   "Definiční bod (WGS-84)": "Definiční bod (WGS-84)",
-  "Lokalizace/okolnosti": "Lokalizace/okolnosti",
   "Parcelní číslo": "Parcelní číslo",
   "Plánované zahájení": "Plánované zahájení",
-  "Uživatelské označení": "Uživatelské označení",
   "Památková ochrana": "Památková ochrana",
-  "Nahrazuje NZ": "Nahrazuje NZ",
-  "Ostatní vedoucí": "Ostatní vedoucí",
-  "Ostatní organizace": "Ostatní organizace",
   "Popis akce": "Popis akce",
   "Externí zdroje": "Externí zdroje",
-  "Počet dokumentů": "Počet dokumentů",
-  "Počet projektů": "Počet projektů",
   "Popis lokality": "Popis lokality",
   "Popis projektu": "Popis projektu",
   "Rejstříkové číslo ÚSKP": "Rejstříkové číslo ÚSKP",
@@ -70,7 +63,6 @@
   "Operátor delete": "Zvolit operátor pro filtraci",
   "Vedoucí výzkumu": "Vedoucí výzkumu",
   "Datum výzkumu": "Datum výzkumu",
-  "Uložení nálezů": "Uložení nálezů",
   "výsledků": "výsledků",
   "Export": "Exportovat seznam",
   "Řazení": "Řadit podle",
@@ -170,8 +162,6 @@
     "f_kulturni_pamatka": "Projekt - památková ochrana",
     "f_typ_projektu": "Projekt - typ",
     "f_typ_lokality": "Lokalita - typ",
-    "f_hlavni_typ": "Hlavní typ",
-    "f_vedlejsi_typ": "Vedlejší typ",
     "f_adb_typ_sondy": "ADB – typ sondy",
     "f_adb_podnet": "ADB – podnět",
     "f_dok_jednotka_typ": "Akce/lokalita - typ dokumentační jednotky",
@@ -322,7 +312,7 @@
       "Operátor and": "Záznam MUSÍ obsahovat",
       "Operátor not": "Záznam NESMÍ obsahovat",
       "Odstranit tento filtr": "Zrušit tento filtr",
-      "Odstranit všechny filtry": "Zrušit všechny filtry",
+      "Odstranit všechny filtry": "Zrušit všechny filtry"
     },
     "icon": {
       "or": "check",
@@ -496,7 +486,18 @@
       "Dokumentovaná akce/lokalita": "Dokumentovaná akce/lokalita",
       "vedouci_akce": "Vedoucí akce",
       "lokalizace": "Akce - lokalizace",
-      "pian": "PIAN"
+      "pian": "PIAN",
+      "Nahrazuje NZ": "Nahrazuje NZ",
+      "Lokalizace/okolnosti": "Lokalizace/okolnosti",
+      "Počet dokumentů": "Počet dokumentů",
+      "Počet projektů": "Počet projektů",
+      "f_hlavni_typ": "Hlavní typ",
+      "f_vedlejsi_typ": "Vedlejší typ",
+      "Ostatní vedoucí": "Ostatní vedoucí",
+      "Ostatní organizace": "Ostatní organizace",
+      "Uživatelské označení": "Uživatelské označení",
+      "Uložení nálezů": "Uložení nálezů",
+      "datum_provedeni": "Datum výzkumu"
     },
     "tooltip": {
       "Zavřít": "Zavřít",
@@ -506,7 +507,8 @@
       "Odkazy": "Odkazy",
       "Odebrat z oblíbených": "Odebrat z oblíbených",
       "Uložit do oblíbených": "Uložit do oblíbených",
-      "Odeslat komentář": "Odeslat komentář"
+      "Odeslat komentář": "Odeslat komentář",
+      "Vytisknout": "Vytisknout"
     },
     "menu": {
       "Persistentní odkaz": "Persistentní odkaz"

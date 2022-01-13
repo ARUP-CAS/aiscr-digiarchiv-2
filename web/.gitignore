@@ -2,3 +2,6 @@ nb-configuration.xml
 nbactions.xml
 target/
 src/main/ng9/
+
+# system files
+.DS_Store
