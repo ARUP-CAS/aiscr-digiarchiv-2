@@ -33,8 +33,6 @@
   "Plánované zahájení": "Plánované zahájení",
   "Památková ochrana": "Památková ochrana",
   "Popis akce": "Popis akce",
-  "Externí zdroje": "Externí zdroje",
-  "Popis lokality": "Popis lokality",
   "Popis projektu": "Popis projektu",
   "Rejstříkové číslo ÚSKP": "Rejstříkové číslo ÚSKP",
   "Název památky": "Název památky",
@@ -139,10 +137,8 @@
     "rada": "Řada dokumentu",
     "loc_rpt": "Výběr mapy",
     "filtruj_dle_pole": "Filtrovat podle pole",
-    "dalsi_katastry": "Další katastry",
     "nalezove_okolnosti": "Nálezové okolnosti",
     "typ_dokumentu": "Typ dokumentu",
-    "druh": "Druh lokality",
     "material_originalu": "Materiál originálu",
     "files": "Soubory", 
     "vedouci_projektu": "Vedoucí projektu",
@@ -447,7 +443,7 @@
   },
 
   "card": {
-    "field": {
+    "metadata": {
       "f_typ_dokumentu": "Dokument - typ",
       "Materiál": "Materiál",
       "f_rada": "Dokument - řada",
@@ -498,7 +494,9 @@
       "Uložení nálezů": "Uložení nálezů",
       "datum_provedeni": "Datum výzkumu",
       "f_areal": "Komponenta - areál",
-      "obdobi": "Období"
+      "obdobi": "Období",
+      "druh": "Druh lokality",
+      "dalsi_katastry": "Další katastry"
     },
     "tooltip": {
       "Zavřít": "Zavřít",
@@ -566,7 +564,9 @@
       "Uložení nálezů": "Uložení nálezů",
       "Datum výzkumu": "Datum výzkumu",
       "Komponenta - areál": "Komponenta - areál",
-      "Období": "Období"
+      "Období": "Období",
+      "Druh lokality": "Druh lokality",
+      "Další katastry": "Další katastry",
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -579,7 +579,9 @@
       "Komponenta": "Komponenta",
       "Nálezy": "Nálezy",
       "Neidentifikovaná akce": "Neidentifikovaná akce",
-      "Související záznamy": "Související záznamy"
+      "Související záznamy": "Související záznamy",
+      "Popis lokality": "Popis lokality",
+      "Externí zdroje": "Externí zdroje"
     },
     "title": {
       "Část dokumentu": "Obsahová část"

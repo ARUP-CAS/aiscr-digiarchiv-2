@@ -125,5 +125,6 @@ export class LokalitaComponent implements OnInit, OnChanges {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
-  } 
+  }
+  
 }

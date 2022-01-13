@@ -33,8 +33,6 @@
   "Plánované zahájení": "Scheduled launch",
   "Památková ochrana": "Heritage protection",
   "Popis akce": "Fieldwork description",
-  "Externí zdroje": "External sources",
-  "Popis lokality": "Site description",
   "Popis projektu": "Project description",
   "Rejstříkové číslo ÚSKP": "Monument Register number",
   "Název památky": "Monument label",
@@ -139,10 +137,8 @@
     "rada": "Document series",
     "loc_rpt": "Map selection",
     "filtruj_dle_pole": "Filter by field",
-    "dalsi_katastry": "Other cadastres",
     "nalezove_okolnosti": "Finding context",
     "typ_dokumentu": "Document type",
-    "druh": "Site class",
     "material_originalu": "Original material",
     "files": "Files",
     "vedouci_projektu": "Project manager",
@@ -447,7 +443,7 @@
   },
 
   "card": {
-    "field": {
+    "metadata": {
       "f_typ_dokumentu": "Document - type",
       "Materiál": "Material",
       "f_rada": "Document - series",
@@ -498,7 +494,8 @@
       "Uložení nálezů": "Finds repository",
       "datum_provedeni": "Date of fieldwork event",
       "f_areal": "Component - activity area",
-      "obdobi": "Period"
+      "obdobi": "Period",
+      "druh": "Site class"
     },
     "tooltip": {
       "Zavřít": "Close",
@@ -509,7 +506,8 @@
       "Odebrat z oblíbených": "Remove from favorites",
       "Uložit do oblíbených": "Add to favorites",
       "Odeslat komentář": "Send comment",
-      "Vytisknout": "Print"
+      "Vytisknout": "Print",
+      "dalsi_katastry": "Other cadastres"
     },
     "menu": {
       "Persistentní odkaz": "Persistent link"
@@ -566,7 +564,9 @@
       "Uložení nálezů": "Finds repository",
       "Datum výzkumu": "Date of fieldwork event",
       "Komponenta - areál": "Component - activity area",
-      "Období": "Period"
+      "Období": "Period",
+      "Druh lokality": "Site class",
+      "Další katastry": "Other cadastres"
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -579,7 +579,9 @@
       "Komponenta": "Component",
       "Nálezy": "Finds",
       "Neidentifikovaná akce": "Unidentified fieldwork",
-      "Související záznamy": "Related records"
+      "Související záznamy": "Related records",
+      "Popis lokality": "Site description",
+      "Externí zdroje": "External sources"
     },
     "title": {
       "Část dokumentu": "Content part"
