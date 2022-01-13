@@ -126,5 +126,4 @@ export class LokalitaComponent implements OnInit, OnChanges {
       panelClass: 'app-feedback-dialog'
     });
   }
-  
 }
