@@ -187,7 +187,8 @@ public class SolrSearcher {
   public static void addFilters(HttpServletRequest request, SolrQuery query, String pristupnost) throws IOException {
     List<Object> fields = Options.getInstance().getClientConf().getJSONArray("urlFields").toList();
     JSONArray filterFieldsObj = Options.getInstance().getClientConf().getJSONArray("filterFields");
-    List<Object> dateFacets = Options.getInstance().getClientConf().getJSONArray("dateFacets").toList();
+    // List<Object> dateFacets = Options.getInstance().getClientConf().getJSONArray("dateFacets").toList();
+    List<Object> dateFacets = new ArrayList<>();
     List<Object> numberFacets = Options.getInstance().getClientConf().getJSONArray("numberFacets").toList();
     List<String> filterFields = new ArrayList<>();
     for (int i = 0; i < filterFieldsObj.length(); i++) {
