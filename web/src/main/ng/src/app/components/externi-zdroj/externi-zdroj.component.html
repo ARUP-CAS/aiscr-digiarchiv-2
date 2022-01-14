@@ -1,5 +1,5 @@
 <ng-container [ngSwitch]="inDocument">
-
+	<h1>Externi zdroj</h1>
 	<li *ngSwitchCase="false">
 		<ng-container *ngIf="result.typ === 'kniha'">
 			<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
