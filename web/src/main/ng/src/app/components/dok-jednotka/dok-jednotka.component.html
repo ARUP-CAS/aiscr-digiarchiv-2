@@ -1,4 +1,4 @@
-<mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+<mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument">
   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
