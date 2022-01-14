@@ -1,7 +1,7 @@
 {
   "Ano": "Ano",
   "Ne": "Ne",
-  
+
   "help": "Nápověda",
   "q.placeholder": "Zadejte vyhledávací dotaz",
   "q.tooltip": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky).",
@@ -31,9 +31,7 @@
   "geom.GML": "Geometrie GML",
   "geom.WKT": "Geometrie WKT",
   "geom.GeoJSON": "GeoJSON",
-  "Popis akce": "Popis akce",
   "přesnost": "přesnost",
-  "Dostupné z": "Dostupné z",
   "Datum a čas": "Datum a čas",
   "Účel letu": "Účel letu",
   "Typ letounu": "Typ letounu",
@@ -581,6 +579,7 @@
       "Autor revize": "Autor revize",
       "Rok revize": "Rok revize",
       "Dok. jednotka - negativní zjištění": "Dok. jednotka - negativní zjištění",
+      "Dostupné z": "Dostupné z",
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -600,7 +599,8 @@
       "Popis nálezu": "Popis nálezu",
       "Archeologický dokumentační bod": "Archeologický dokumentační bod",
       "Výškové body": "Výškové body",
-      "Dokumentační jednotka": "Dokumentační jednotka"
+      "Dokumentační jednotka": "Dokumentační jednotka",
+      "Popis akce": "Popis akce"
     },
     "title": {
       "Část dokumentu": "Obsahová část",

@@ -31,9 +31,7 @@
   "geom.GML": "Geometry GML",
   "geom.WKT": "Geometry WKT",
   "geom.GeoJSON": "GeoJSON",
-  "Popis akce": "Fieldwork description",
   "přesnost": "accuracy",
-  "Dostupné z": "Available at",
   "Datum a čas": "Date and time",
   "Účel letu": "Flight purpose",
   "Typ letounu": "Aircraft type",
@@ -581,6 +579,7 @@
       "Autor revize": "Revision author",
       "Rok revize": "Year of revision",
       "Dok. jednotka - negativní zjištění": "Doc. unit - negative evidence",
+      "Dostupné z": "Available at",
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -600,7 +599,8 @@
       "Popis nálezu": "Find description",
       "Archeologický dokumentační bod": "Archaeological Documentation Point",
       "Výškové body": "Elevation points",
-      "Dokumentační jednotka": "Documentation unit"
+      "Dokumentační jednotka": "Documentation unit",
+      "Popis akce": "Fieldwork description"
     },
     "title": {
       "Část dokumentu": "Content part",
