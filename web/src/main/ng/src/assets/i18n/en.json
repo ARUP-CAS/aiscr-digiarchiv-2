@@ -29,16 +29,6 @@
   "geom.WKT": "Geometry WKT",
   "geom.GeoJSON": "GeoJSON",
   "Popis akce": "Fieldwork description",
-  "Archeologický dokumentační bod": "Archaeological Documentation Point",
-  "Typ sondy": "Trench type",
-  "Ulice/trať": "Street/track",
-  "Číslo popisné": "House number",
-  "Počet SJ": "Number of strat. units",
-  "Autor popisu": "Description author",
-  "Rok popisu": "Year of description",
-  "Autor revize": "Revision author",
-  "Rok revize": "Year of revision",
-  "Výškové body": "Elevation points",
   "Dokumentační jednotka": "Documentation unit",
   "přesnost": "accuracy",
   "Dostupné z": "Available at",
@@ -49,7 +39,6 @@
   "Dohlednost": "Visibility",
   "Verze": "Version",
   "Popis PIAN": "PIAN description",
-  "Externí odkaz na Prahu archeologickou u ADB": "Go to Prague Archaeological portal",
   "Operátor delete": "Select filter operator",
   "Vedoucí výzkumu": "Principal researcher",
   "Datum výzkumu": "Fieldwork date",
@@ -502,7 +491,8 @@
       "Odebrat z oblíbených": "Remove from favorites",
       "Uložit do oblíbených": "Add to favorites",
       "Odeslat komentář": "Send comment",
-      "Vytisknout": "Print"
+      "Vytisknout": "Print",
+      "Externí odkaz na Prahu archeologickou u ADB": "Go to Prague Archaeological portal"
     },
     "menu": {
       "Persistentní odkaz": "Persistent link"
@@ -578,7 +568,15 @@
       "Sam. nález - počet": "Ind. find - count",
       "Nálezové okolnosti": "Finding context",
       "Sam. nález - hloubka (cm)": "Ind. find - depth (cm)",
-      "Definiční bod (WGS-84)": "Definition point (WGS-84)"
+      "Definiční bod (WGS-84)": "Definition point (WGS-84)",
+      "Typ sondy": "Trench type",
+      "Ulice/trať": "Street/track",
+      "Číslo popisné": "House number",
+      "Počet SJ": "Number of strat. units",
+      "Autor popisu": "Description author",
+      "Rok popisu": "Year of description",
+      "Autor revize": "Revision author",
+      "Rok revize": "Year of revision",
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -595,10 +593,13 @@
       "Popis lokality": "Site description",
       "Externí zdroje": "External sources",
       "Popis projektu": "Project description",
-      "Popis nálezu": "Find description"
+      "Popis nálezu": "Find description",
+      "Archeologický dokumentační bod": "Archaeological Documentation Point",
+      "Výškové body": "Elevation points"
     },
     "title": {
-      "Část dokumentu": "Content part"
+      "Část dokumentu": "Content part",
+      "Archeologický dokumentační bod": "Archaeological Documentation Point"
     }
   }
 }

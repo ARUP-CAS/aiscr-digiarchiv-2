@@ -29,16 +29,6 @@
   "geom.WKT": "Geometrie WKT",
   "geom.GeoJSON": "GeoJSON",
   "Popis akce": "Popis akce",
-  "Archeologický dokumentační bod": "Archeologický dokumentační bod",
-  "Typ sondy": "Typ sondy",
-  "Ulice/trať": "Ulice/trať",
-  "Číslo popisné": "Číslo popisné",
-  "Počet SJ": "Počet strat. jednotek:",
-  "Autor popisu": "Autor popisu",
-  "Rok popisu": "Rok popisu",
-  "Autor revize": "Autor revize",
-  "Rok revize": "Rok revize",
-  "Výškové body": "Výškové body",
   "Dokumentační jednotka": "Dokumentační jednotka",
   "přesnost": "přesnost",
   "Dostupné z": "Dostupné z",
@@ -49,7 +39,6 @@
   "Dohlednost": "Dohlednost",
   "Verze": "Verze",
   "Popis PIAN": "Popis PIAN",
-  "Externí odkaz na Prahu archeologickou u ADB": "Přejít na portál Praha archeologická",
   "Operátor delete": "Zvolit operátor pro filtraci",
   "Vedoucí výzkumu": "Vedoucí výzkumu",
   "Datum výzkumu": "Datum výzkumu",
@@ -502,7 +491,8 @@
       "Odebrat z oblíbených": "Odebrat z oblíbených",
       "Uložit do oblíbených": "Uložit do oblíbených",
       "Odeslat komentář": "Odeslat komentář",
-      "Vytisknout": "Vytisknout"
+      "Vytisknout": "Vytisknout",
+      "Externí odkaz na Prahu archeologickou u ADB": "Přejít na portál Praha archeologická"
     },
     "menu": {
       "Persistentní odkaz": "Persistentní odkaz"
@@ -578,7 +568,15 @@
       "Sam. nález - počet": "Sam. nález - počet",
       "Nálezové okolnosti": "Nálezové okolnosti",
       "Sam. nález - hloubka (cm)": "Sam. nález - hloubka (cm)",
-      "Definiční bod (WGS-84)": "Definiční bod (WGS-84)"
+      "Definiční bod (WGS-84)": "Definiční bod (WGS-84)",
+      "Typ sondy": "Typ sondy",
+      "Ulice/trať": "Ulice/trať",
+      "Číslo popisné": "Číslo popisné",
+      "Počet SJ": "Počet strat. jednotek",
+      "Autor popisu": "Autor popisu",
+      "Rok popisu": "Rok popisu",
+      "Autor revize": "Autor revize",
+      "Rok revize": "Rok revize",
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -595,10 +593,13 @@
       "Popis lokality": "Popis lokality",
       "Externí zdroje": "Externí zdroje",
       "Popis projektu": "Popis projektu",
-      "Popis nálezu": "Popis nálezu"
+      "Popis nálezu": "Popis nálezu",
+      "Archeologický dokumentační bod": "Archeologický dokumentační bod",
+      "Výškové body": "Výškové body"
     },
     "title": {
-      "Část dokumentu": "Obsahová část"
+      "Část dokumentu": "Obsahová část",
+      "Archeologický dokumentační bod": "Archeologický dokumentační bod"
     }
   }
 }
