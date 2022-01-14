@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
+import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
 
@@ -20,7 +21,8 @@ export class LetComponent implements OnInit {
   constructor(
     private datePipe: DatePipe,
     public state: AppState,
-    public service: AppService
+    public service: AppService,
+    public config: AppConfiguration
   ) { }
 
   ngOnInit(): void {

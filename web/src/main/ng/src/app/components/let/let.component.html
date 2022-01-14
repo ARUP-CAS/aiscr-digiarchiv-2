@@ -3,68 +3,68 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-        {{ 'citation.let' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        {{ 'card.panelTitle.Let' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <table>
       <tbody>
         <tr *ngIf="result.datum || result.hodina_zacatek || result.hodina_konec">
-          <th class="app-label">{{ 'Datum a čas' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Datum a čas' | translate }}:</th>
           <td>{{ result.datum | date : 'yyyy-MM-dd' }} {{ result.hodina_zacatek }} - {{ result.hodina_konec }}</td>
         </tr>
         <tr *ngIf="result.letiste_start || result.letiste_cil">
-          <th class="app-label">{{ 'Trasa' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Trasa' | translate }}:</th>
           <td>
             <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.letiste_start"></app-inline-filter>&#160;-&#160; 
             <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.letiste_cil"></app-inline-filter>
           </td>
         </tr>
         <tr *ngIf="result.ucel_letu">
-          <th class="app-label">{{ 'Účel letu' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Účel letu' | translate }}:</th>
           <td>{{ result.ucel_letu }}</td>
         </tr>
         <tr *ngIf="result.pozorovatel">
-          <th class="app-label">{{ 'field.f_pozorovatel' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Let - pozorovatel' | translate }}:</th>
           <td><app-inline-filter [field]="'f_let_pozorovatel'" [value]="result.pozorovatel"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.pilot">
-          <th class="app-label">{{ 'Pilot' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Pilot' | translate }}:</th>
           <td><app-inline-filter [field]="'f_let_pilot'" [value]="result.pilot"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.organizace">
-          <th class="app-label">{{ 'field.f_organizace' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Organizace' | translate }}:</th>
           <td><app-inline-filter [field]="'f_let_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.uzivatelske_oznaceni">
-          <th class="app-label">{{ 'Uživatelské označení' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
           <td>{{ result.uzivatelske_oznaceni }}</td>
         </tr>
         <tr *ngIf="result.fotoaparat">
-          <th class="app-label">{{ 'Fotoaparát' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Fotoaparát' | translate }}:</th>
           <td>{{ result.fotoaparat }}</td>
         </tr>
         <tr *ngIf="result.typ_letounu">
-          <th class="app-label">{{ 'Typ letounu' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Typ letounu' | translate }}:</th>
           <td>{{ result.typ_letounu}}</td>
         </tr>
         <tr *ngIf="result.pocasi">
-          <th class="app-label">{{ 'Počasí' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Počasí' | translate }}:</th>
           <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.dohlednost">
-          <th class="app-label">{{ 'Dohlednost' | translate }}:</th>
+          <th class="app-label">{{ 'card.desc.Dohlednost' | translate }}:</th>
           <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
         </tr>
       </tbody>
     </table>
   </mat-expansion-panel>
   <mat-card *ngSwitchCase="true" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
-    <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'Zavřít' | translate">
+    <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
     </a>
     <mat-card-header>
       <mat-card-title>
-        {{ 'citation.let' | translate }}&#160;{{ result.ident_cely }}
+        {{ 'card.title.Let' | translate }}&#160;{{ result.ident_cely }}
         <span class="app-pipe"></span>{{ result.pozorovatel }}
         <span class="app-pipe"></span>{{ result.datum | date : 'dd.MM.yyyy' }}
         <span class="app-pipe"></span>
@@ -74,22 +74,22 @@
       <div class="app-metadata app-row-gap-16">
         <div *ngIf="result.hodina_zacatek || result.hodina_konec || result.letiste_start || result.letiste_cil">
           <ng-container *ngIf="result.hodina_zacatek || result.hodina_konec">
-            <label class="app-label">{{ 'Čas' | translate }}:</label>&#160;
+            <label class="app-label">{{ 'card.desc.Čas' | translate }}:</label>&#160;
             {{ result.hodina_zacatek }}-{{ result.hodina_konec }}
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.letiste_start || result.letiste_cil">
-            <label class="app-label">{{ 'Trasa' | translate }}:</label>&#160;
+            <label class="app-label">{{ 'card.desc.Trasa' | translate }}:</label>&#160;
             {{ result.letiste_start }}&#160;-&#160; {{ result.letiste_cil }}
             <span class="app-pipe"></span>
           </ng-container>
         </div>
         <div *ngIf="result.organizace">
-          <label class="app-label">{{ 'field.f_organizace' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
           <app-inline-filter [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
         </div>
         <div *ngIf="result.ucel_letu" class="app-truncate-text">
-          <label class="app-label">{{ 'Účel letu' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.Účel letu' | translate }}:</label>&#160;
           {{ result.ucel_letu }}
         </div>
       </div>
@@ -97,7 +97,7 @@
     <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
       <div fxFlex class="app-metadata">
         <ng-container *ngIf="result.dokument?.length > 0">
-          {{'Počet dokumentů' | translate}}: <strong>{{result.dokument?.length}}</strong>
+          {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.dokument?.length}}</strong>
           <span class="app-pipe"></span>
         </ng-container>
       </div>
@@ -105,17 +105,17 @@
         <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
           <mat-icon>menu_book</mat-icon>
         </button>
-        <button *ngIf="inDocument" mat-flat-button (click)="service.print()">
+        <button *ngIf="inDocument" mat-flat-button (click)="service.print()" [matTooltip]="'card.tooltip.Vytisknout' | translate">
           <mat-icon>print</mat-icon>
         </button>
-        <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" >
+        <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
           <mat-icon>print</mat-icon>
         </a>
-        <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('Odebrat z oblíbených' | translate)  : ('Uložit do oblíbených' | translate)">
+        <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
           <mat-icon>grade</mat-icon>
         </button>
         <button mat-flat-button (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'" *ngIf="!isDocumentDialogOpen">
-          {{(detailExpanded ? 'Skrýt detail' : 'Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+          {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
         </button>
       </div>
     </mat-card-actions>
@@ -123,44 +123,44 @@
       <div class="app-card-detail">
         <mat-accordion multi="true">
           <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
               <mat-panel-title>
-                {{ 'Popis letu' | translate }}:
+                {{ 'card.panelTitle.Popis letu' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
             <table>
               <tbody>
                 <tr *ngIf="result.pilot">
-                  <th class="app-label">{{ 'Pilot' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Pilot' | translate }}:</th>
                   <td>{{ result.pilot }}</td>
                 </tr>
                 <tr *ngIf="result.uzivatelske_oznaceni">
-                  <th class="app-label">{{ 'Uživatelské označení' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
                   <td>{{ result.uzivatelske_oznaceni }}</td>
                 </tr>
                 <tr *ngIf="result.fotoaparat">
-                  <th class="app-label">{{ 'Fotoaparát' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Fotoaparát' | translate }}:</th>
                   <td>{{ result.fotoaparat }}</td>
                 </tr>
                 <tr *ngIf="result.typ_letounu">
-                  <th class="app-label">{{ 'Typ letounu' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Typ letounu' | translate }}:</th>
                   <td>{{ result.typ_letounu}}</td>
                 </tr>
                 <tr *ngIf="result.pocasi">
-                  <th class="app-label">{{ 'Počasí' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Počasí' | translate }}:</th>
                   <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
                 </tr>
                 <tr *ngIf="result.dohlednost">
-                  <th class="app-label">{{ 'Dohlednost' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Dohlednost' | translate }}:</th>
                   <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
                 </tr>
               </tbody>
             </table>
           </mat-expansion-panel>
           <mat-expansion-panel *ngIf="result.dokument?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-            <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
               <mat-panel-title>
-                {{ 'Související záznamy' | translate }}:
+                {{ 'card.panelTitle.Související záznamy' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
             <app-dokument *ngFor="let dok of result.dokument" [result]="dok" [isChild]="true" class="app-related-item"></app-dokument>

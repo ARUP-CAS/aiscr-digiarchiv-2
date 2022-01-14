@@ -32,11 +32,6 @@
   "geom.WKT": "Geometrie WKT",
   "geom.GeoJSON": "GeoJSON",
   "přesnost": "přesnost",
-  "Datum a čas": "Datum a čas",
-  "Účel letu": "Účel letu",
-  "Typ letounu": "Typ letounu",
-  "Počasí": "Počasí",
-  "Dohlednost": "Dohlednost",
   "Verze": "Verze",
   "Popis PIAN": "Popis PIAN",
   "Operátor delete": "Zvolit operátor pro filtraci",
@@ -68,10 +63,6 @@
   "tvar": "Tvary (příznaky) na letecké fotografii",
   "Akce dokumentu": "Dokumentovaná akce",
   "Rok výzkumu": "Rok výzkumu",
-  "Popis letu": "Popis letu",
-  "Pilot": "Pilot",
-  "Trasa": "Trasa",
-  "Fotoaparát": "Fotoaparát",
   "Správa dat, uživatelů a podpora pro oblast Čech": "Správa dat, uživatelů a podpora pro oblast Čech",
   "Archeologický ústav AV ČR, Praha, v. v. i.": "Archeologický ústav AV ČR, Praha, v. v. i.",
   "Napište nám": "Napište nám",
@@ -481,7 +472,8 @@
       "pocet": "Sam. nález - počet",
       "nalezove_okolnosti": "Nálezové okolnosti",
       "hloubka": "Sam. nález - hloubka (cm)",
-      "dok_jednotka_negativni_jednotka": "Dok. jednotka - negativní zjištění"
+      "dok_jednotka_negativni_jednotka": "Dok. jednotka - negativní zjištění",
+      "f_pozorovatel": "Let - pozorovatel"
     },
     "tooltip": {
       "Zavřít": "Zavřít",
@@ -580,6 +572,16 @@
       "Rok revize": "Rok revize",
       "Dok. jednotka - negativní zjištění": "Dok. jednotka - negativní zjištění",
       "Dostupné z": "Dostupné z",
+      "Datum a čas": "Datum a čas",
+      "Trasa": "Trasa",
+      "Účel letu": "Účel letu",
+      "Let - pozorovatel": "Let - pozorovatel",
+      "Pilot": "Pilot",
+      "Fotoaparát": "Fotoaparát",
+      "Typ letounu": "Typ letounu",
+      "Počasí": "Počasí",
+      "Dohlednost": "Dohlednost",
+      "Čas": "Čas",
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -600,11 +602,14 @@
       "Archeologický dokumentační bod": "Archeologický dokumentační bod",
       "Výškové body": "Výškové body",
       "Dokumentační jednotka": "Dokumentační jednotka",
-      "Popis akce": "Popis akce"
+      "Popis akce": "Popis akce",
+      "Let": "Let",
+      "Popis letu": "Popis letu",
     },
     "title": {
       "Část dokumentu": "Obsahová část",
-      "Archeologický dokumentační bod": "Archeologický dokumentační bod"
+      "Archeologický dokumentační bod": "Archeologický dokumentační bod",
+      "Let": "Let"
     }
   }
 }

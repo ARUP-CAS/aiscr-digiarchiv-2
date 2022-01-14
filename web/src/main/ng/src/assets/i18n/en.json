@@ -32,11 +32,6 @@
   "geom.WKT": "Geometry WKT",
   "geom.GeoJSON": "GeoJSON",
   "přesnost": "accuracy",
-  "Datum a čas": "Date and time",
-  "Účel letu": "Flight purpose",
-  "Typ letounu": "Aircraft type",
-  "Počasí": "Weather",
-  "Dohlednost": "Visibility",
   "Verze": "Version",
   "Popis PIAN": "PIAN description",
   "Operátor delete": "Select filter operator",
@@ -68,10 +63,6 @@
   "tvar": "Shapes (marks) in the aerial image",
   "Akce dokumentu": "Documented fieldwork",
   "Rok výzkumu": "Year of fieldwork",
-  "Popis letu": "Flight description",
-  "Pilot": "Pilot",
-  "Trasa": "Route",
-  "Fotoaparát": "Camera",
   "Správa dat, uživatelů a podpora pro oblast Čech": "Data management and user support for Bohemia",
   "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
   "Napište nám": "Send us a message",
@@ -482,6 +473,7 @@
       "nalezove_okolnosti": "Finding context",
       "hloubka": "Ind. find - depth (cm)",
       "dok_jednotka_negativni_jednotka": "Doc. unit - negative evidence",
+      "f_pozorovatel": "Flight - observer",
     },
     "tooltip": {
       "Zavřít": "Close",
@@ -580,6 +572,16 @@
       "Rok revize": "Year of revision",
       "Dok. jednotka - negativní zjištění": "Doc. unit - negative evidence",
       "Dostupné z": "Available at",
+      "Datum a čas": "Date and time",
+      "Trasa": "Route",
+      "Účel letu": "Flight purpose",
+      "Let - pozorovatel": "Flight - observer",
+      "Pilot": "Pilot",
+      "Fotoaparát": "Camera",
+      "Typ letounu": "Aircraft type",
+      "Počasí": "Weather",
+      "Dohlednost": "Visibility",
+      "Čas": "Time",
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -600,11 +602,14 @@
       "Archeologický dokumentační bod": "Archaeological Documentation Point",
       "Výškové body": "Elevation points",
       "Dokumentační jednotka": "Documentation unit",
-      "Popis akce": "Fieldwork description"
+      "Popis akce": "Fieldwork description",
+      "Let": "Flight",
+      "Popis letu": "Flight description",
     },
     "title": {
       "Část dokumentu": "Content part",
-      "Archeologický dokumentační bod": "Archaeological Documentation Point"
+      "Archeologický dokumentační bod": "Archaeological Documentation Point",
+      "Let": "Flight"
     }
   }
 }
