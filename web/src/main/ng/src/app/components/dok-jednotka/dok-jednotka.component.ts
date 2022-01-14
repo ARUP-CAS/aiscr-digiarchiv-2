@@ -31,5 +31,4 @@ export class DokJednotkaComponent implements OnInit {
       return [];
     }
   }
-
 }

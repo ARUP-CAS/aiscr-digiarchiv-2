@@ -1,4 +1,7 @@
 {
+  "Ano": "Yes",
+  "Ne": "No",
+
   "help": "Help",
   "q.placeholder": "Enter search query",
   "q.tooltip": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
@@ -29,7 +32,6 @@
   "geom.WKT": "Geometry WKT",
   "geom.GeoJSON": "GeoJSON",
   "Popis akce": "Fieldwork description",
-  "Dokumentační jednotka": "Documentation unit",
   "přesnost": "accuracy",
   "Dostupné z": "Available at",
   "Datum a čas": "Date and time",
@@ -480,7 +482,8 @@
       "f_okres": "District",
       "pocet": "Ind. find - count",
       "nalezove_okolnosti": "Finding context",
-      "hloubka": "Ind. find - depth (cm)"
+      "hloubka": "Ind. find - depth (cm)",
+      "dok_jednotka_negativni_jednotka": "Doc. unit - negative evidence",
     },
     "tooltip": {
       "Zavřít": "Close",
@@ -577,6 +580,7 @@
       "Rok popisu": "Year of description",
       "Autor revize": "Revision author",
       "Rok revize": "Year of revision",
+      "Dok. jednotka - negativní zjištění": "Doc. unit - negative evidence",
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -595,7 +599,8 @@
       "Popis projektu": "Project description",
       "Popis nálezu": "Find description",
       "Archeologický dokumentační bod": "Archaeological Documentation Point",
-      "Výškové body": "Elevation points"
+      "Výškové body": "Elevation points",
+      "Dokumentační jednotka": "Documentation unit"
     },
     "title": {
       "Část dokumentu": "Content part",

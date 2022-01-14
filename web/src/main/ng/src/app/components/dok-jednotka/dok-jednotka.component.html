@@ -2,14 +2,14 @@
   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-      {{ 'Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+      {{ 'card.panelTitle.Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
       <app-inline-filter [field]="'f_dok_jednotka_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
       <ng-container *ngIf="result.nazev">&#160;({{result.nazev}})</ng-container>
     </mat-panel-title>
   </mat-expansion-panel-header>
   <ng-container><!--*ngIf="result.negativni_jednotka"-->
-    <label class="app-label">{{ 'field.dok_jednotka_negativni_jednotka' | translate }}:</label>&#160;
-    {{ result.negativni_jednotka === '1'  ? 'Ano' : 'Ne' }}
+    <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
+    {{ result.negativni_jednotka === '1'  ? ('Ano' | translate) : ('Ne' | translate) }}
   </ng-container>
   <mat-accordion multi="true">
     <app-pian *ngFor="let pian of result.pian" [result]="pian"></app-pian>
@@ -21,7 +21,7 @@
 <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
   <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
     <mat-panel-title>
-      {{ 'Související záznamy' | translate }}:
+      {{ 'card.panelTitle.Související záznamy' | translate }}:
     </mat-panel-title>
   </mat-expansion-panel-header>
   <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>

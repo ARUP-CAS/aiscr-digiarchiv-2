@@ -1,4 +1,7 @@
 {
+  "Ano": "Ano",
+  "Ne": "Ne",
+  
   "help": "Nápověda",
   "q.placeholder": "Zadejte vyhledávací dotaz",
   "q.tooltip": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky).",
@@ -29,7 +32,6 @@
   "geom.WKT": "Geometrie WKT",
   "geom.GeoJSON": "GeoJSON",
   "Popis akce": "Popis akce",
-  "Dokumentační jednotka": "Dokumentační jednotka",
   "přesnost": "přesnost",
   "Dostupné z": "Dostupné z",
   "Datum a čas": "Datum a čas",
@@ -480,7 +482,8 @@
       "f_okres": "Okres",
       "pocet": "Sam. nález - počet",
       "nalezove_okolnosti": "Nálezové okolnosti",
-      "hloubka": "Sam. nález - hloubka (cm)"
+      "hloubka": "Sam. nález - hloubka (cm)",
+      "dok_jednotka_negativni_jednotka": "Dok. jednotka - negativní zjištění"
     },
     "tooltip": {
       "Zavřít": "Zavřít",
@@ -577,6 +580,7 @@
       "Rok popisu": "Rok popisu",
       "Autor revize": "Autor revize",
       "Rok revize": "Rok revize",
+      "Dok. jednotka - negativní zjištění": "Dok. jednotka - negativní zjištění",
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -595,7 +599,8 @@
       "Popis projektu": "Popis projektu",
       "Popis nálezu": "Popis nálezu",
       "Archeologický dokumentační bod": "Archeologický dokumentační bod",
-      "Výškové body": "Výškové body"
+      "Výškové body": "Výškové body",
+      "Dokumentační jednotka": "Dokumentační jednotka"
     },
     "title": {
       "Část dokumentu": "Obsahová část",
