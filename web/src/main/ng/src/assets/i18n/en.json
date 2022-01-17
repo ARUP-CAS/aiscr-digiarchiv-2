@@ -12,7 +12,17 @@
   },
 
   "searchbar": {
-
+    "input": {
+      "Zadejte vyhledávací dotaz": "Enter search query"
+    },
+    "tooltip": {
+      "q": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
+    },
+    "button": {
+      "Exportovat seznam": "Export the list",
+      "Otevřít mapu": "Open map",
+      "Zavřít mapu": "Close map"
+    }
   },
 
   "dialog": {
@@ -24,7 +34,7 @@
       "Heslo": "Password",
       "Přihlášený uživatel": "Logged user",
       "Uživatelská role role": "User role",
-      "Organizace": "Organisation",
+      "Organizace": "Organisation"
     },
     "button": {
       "Přihlásit": "Log in",
@@ -42,10 +52,6 @@
   },
 
 
-  "q.placeholder": "Enter search query",
-  "q.tooltip": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
-  "open map": "Open map",
-  "close map": "Close map",
   "from": "from",
   "to": "to",
   "undefined": "unlimited",
@@ -67,7 +73,6 @@
   "Vedoucí výzkumu": "Principal researcher",
   "Datum výzkumu": "Fieldwork date",
   "výsledků": "results",
-  "Export": "Export the list",
   "Řazení": "Order by",
   "itemsPerPageLabel" : "Records per page",
   "nextPageLabel" : "Next page",

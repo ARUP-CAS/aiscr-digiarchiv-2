@@ -12,7 +12,17 @@
   },
 
   "searchbar": {
-
+    "input": {
+      "Zadejte vyhledávací dotaz": "Zadejte vyhledávací dotaz"
+    },
+    "tooltip": {
+      "q": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky).",
+    },
+    "button": {
+      "Exportovat seznam": "Exportovat seznam",
+      "Otevřít mapu": "Otevřít mapu",
+      "Zavřít mapu": "Zavřít mapu"
+    }
   },
 
   "dialog": {
@@ -24,7 +34,7 @@
       "Heslo": "Heslo",
       "Přihlášený uživatel": "Přihlášený uživatel",
       "Uživatelská role": "Uživatelská role",
-      "Organizace": "Organizace",
+      "Organizace": "Organizace"
     },
     "button": {
       "Přihlásit": "Přihlásit",
@@ -42,10 +52,6 @@
   },
 
 
-  "q.placeholder": "Zadejte vyhledávací dotaz",
-  "q.tooltip": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky).",
-  "open map": "Otevřít mapu",
-  "close map": "Zavřít mapu",
   "from": "od",
   "to": "do",
   "undefined": "neomezeno",
@@ -67,7 +73,6 @@
   "Vedoucí výzkumu": "Vedoucí výzkumu",
   "Datum výzkumu": "Datum výzkumu",
   "výsledků": "výsledků",
-  "Export": "Exportovat seznam",
   "Řazení": "Řadit podle",
   "itemsPerPageLabel" : "Počet záznamů na stránce",
   "nextPageLabel" : "Následující stránka",

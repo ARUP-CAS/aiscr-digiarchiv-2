@@ -2,7 +2,7 @@
   <div class="app-container">
     <div fxLayout="row" fxLayoutGap="32px" class="app-search-form" fxLayoutAlign="start center">
       <div fxFlex class="app-fx-left">
-        <input type="text" [placeholder]="'q.placeholder' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'q.tooltip' | translate" matTooltipPosition="above" />
+        <input type="text" [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above" />
         <span fxFlex class="app-controls">
           <span class="app-mobile-controls fxHide_gt-xs">
             <a (click)="exportMapa('')">
@@ -23,13 +23,13 @@
            (click)="openExport()">
           <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
           <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
-          <span class="fxHide_sm fxHide_xs">{{ 'Export' | translate }}</span>
+          <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>
         </button>
         <button mat-flat-button color="primary" [matMenuTriggerFor]="exports" 
           *ngIf="!state.isMapaCollapsed && state.entity !== 'samostatny_nalez' && state.entity !== 'knihovna_3d'">
           <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
           <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
-          <span class="fxHide_sm fxHide_xs">{{ 'Export' | translate }}</span>
+          <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>
         </button>
         <mat-menu #exports="matMenu">
           <a mat-menu-item *ngFor="let format of formats" [href]="exportUrl + '&format=' + format" target="_blank" > 
@@ -39,7 +39,7 @@
         <button mat-flat-button color="primary" (click)="toggleMapa()" [class.app-active]="!state.isMapaCollapsed">
           <mat-icon *ngIf="state.isMapaCollapsed" class="fxHide_sm fxHide_xs app-gap-icon-right">map</mat-icon>
           <mat-icon *ngIf="!state.isMapaCollapsed" class="fxHide_sm fxHide_xs">clear</mat-icon>
-          <span class="fxHide_sm fxHide_xs"><ng-container *ngIf="!state.isMapaCollapsed">&#160;</ng-container>{{ state.isMapaCollapsed ? ('open map' | translate) : ('close map' | translate) }}</span>
+          <span class="fxHide_sm fxHide_xs"><ng-container *ngIf="!state.isMapaCollapsed">&#160;</ng-container>{{ state.isMapaCollapsed ? ('searchbar.button.Otevřít mapu' | translate) : ('searchbar.button.Zavřít mapu' | translate) }}</span>
           <mat-icon class="fxHide_gt-sm">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
         </button>
         <!-- temporary commented based David agreement
