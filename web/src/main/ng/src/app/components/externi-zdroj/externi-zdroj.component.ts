@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { AppService } from 'src/app/app.service';
+import { AppConfiguration } from 'src/app/app-configuration';
 
 @Component({
   selector: 'app-externi-zdroj',
@@ -17,7 +18,8 @@ export class ExterniZdrojComponent implements OnInit {
 
   constructor(
     public state: AppState,
-    public service: AppService
+    public service: AppService,
+    public config: AppConfiguration
   ) { }
 
   ngOnInit(): void {

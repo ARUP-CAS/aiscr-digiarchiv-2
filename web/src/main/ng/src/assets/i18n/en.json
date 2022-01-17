@@ -581,7 +581,6 @@
       "Čas": "Time",
       "přesnost": "accuracy",
       "PIAN - Základní mapa 1:10 000": "PIAN - Base Map 1:10 000",
-      "Popis PIAN": "PIAN description",
       "Geometrie GML": "Geometry GML",
       "Geometrie WKT": "Geometry WKT",
     },
@@ -608,6 +607,7 @@
       "Let": "Flight",
       "Popis letu": "Flight description",
       "Pian": "PIAN",
+      "Popis PIAN": "PIAN description",
     },
     "title": {
       "Část dokumentu": "Content part",

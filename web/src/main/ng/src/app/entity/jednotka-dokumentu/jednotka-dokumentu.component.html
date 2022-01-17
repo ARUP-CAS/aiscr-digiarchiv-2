@@ -164,7 +164,7 @@
   <mat-card-content *ngIf="detailExpanded && !isChild">
     <div class="app-card-detail">
       <mat-expansion-panel *ngIf="result.dokument && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-        <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+        <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
           <mat-panel-title>
             {{ 'card.panelTitle.Související záznamy' | translate }}:
           </mat-panel-title>

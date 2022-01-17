@@ -581,7 +581,6 @@
       "Čas": "Čas",
       "přesnost": "přesnost",
       "PIAN - Základní mapa 1:10 000": "PIAN - Základní mapa 1:10 000",
-      "Popis PIAN": "Popis PIAN",
       "Geometrie GML": "Geometrie GML",
       "Geometrie WKT": "Geometrie WKT",
     },
@@ -608,6 +607,7 @@
       "Let": "Let",
       "Popis letu": "Popis letu",
       "Pian": "PIAN",
+      "Popis PIAN": "Popis PIAN",
     },
     "title": {
       "Část dokumentu": "Obsahová část",

@@ -1,6 +1,7 @@
 import { AppService } from 'src/app/app.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { AppState } from 'src/app/app.state';
+import { AppConfiguration } from 'src/app/app-configuration';
 
 @Component({
   selector: 'app-dok-jednotka',
@@ -18,7 +19,8 @@ export class DokJednotkaComponent implements OnInit {
 
   constructor(
     private service: AppService,
-    public state: AppState
+    public state: AppState,
+    public config: AppConfiguration
   ) {}
 
   ngOnInit(): void { 

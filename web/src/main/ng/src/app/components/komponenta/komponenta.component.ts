@@ -4,6 +4,7 @@ import { Nalez } from 'src/app/shared/nalez';
 import { AppService } from 'src/app/app.service';
 import { Utils } from 'src/app/shared/utils';
 import { AppState } from 'src/app/app.state';
+import { AppConfiguration } from 'src/app/app-configuration';
 
 @Component({
   selector: 'app-komponenta',
@@ -25,7 +26,8 @@ export class KomponentaComponent implements OnInit {
 
   constructor(
     private service: AppService,
-    public state: AppState
+    public state: AppState,
+    public config: AppConfiguration
   ) { }
 
   ngOnInit(): void {
