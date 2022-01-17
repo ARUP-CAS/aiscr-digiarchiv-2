@@ -2,7 +2,46 @@
   "Ano": "Ano",
   "Ne": "Ne",
 
-  "help": "Nápověda",
+  "navbar": {
+    "desc": {
+      "logo_desc": "Digitální archiv AMČR",
+      "Nápověda": "Nápověda",
+      "Přihlásit uživatele": "Přihlásit uživatele",
+      "Registrovat uživatele": "Registrovat uživatele"
+    }
+  },
+
+  "searchbar": {
+
+  },
+
+  "dialog": {
+    "title": {
+      "Přihlášení uživatele": "Přihlášení uživatele"
+    },
+    "desc": {
+      "Přihlašovací jméno": "Přihlašovací jméno (email)",
+      "Heslo": "Heslo",
+      "Přihlášený uživatel": "Přihlášený uživatel",
+      "Uživatelská role": "Uživatelská role",
+      "Organizace": "Organizace",
+    },
+    "button": {
+      "Přihlásit": "Přihlásit",
+      "Odhlásit": "Odhlásit",
+      "Zavřít": "Zavřít",
+      "Obnovit heslo": "Obnovit heslo"
+    },
+    "alert": {
+      "Špatné přihlašovací údaje": "Neplatné přihlašovací údaje"
+    }
+  },
+
+  "footer": {
+
+  },
+
+
   "q.placeholder": "Zadejte vyhledávací dotaz",
   "q.tooltip": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky).",
   "open map": "Otevřít mapu",
@@ -10,7 +49,6 @@
   "from": "od",
   "to": "do",
   "undefined": "neomezeno",
-  "logo_desc": "Digitální archiv AMČR",
   "select area": "Vybrat oblast",
   "remove selection": "Zrušit výběr",
   "zoom in": "Přiblížit",
@@ -19,11 +57,6 @@
   "idnotfound": "Odkazovaný záznam se nepodařilo nalézt. Záznam mohl být odstraněn. V případě přetrvávajících problémů nás kontaktujte.",
   "nebo": "nebo",
   "zrušit volbu": "zrušit volbu",
-  "Přihlášení uživatele": "Přihlášení uživatele",
-  "Přihlášený uživatel": "Přihlášený uživatel",
-  "Role": "Uživatelská role",
-  "Přihlašovací jméno": "Přihlašovací jméno (email)",
-  "Heslo": "Heslo",
   "Filtry": "Filtry",
   "Výsledky": "Výsledky",
   "Kontakt": "Kontakt",
@@ -69,13 +102,7 @@
   "Archeologický informační systém České republiky": "Archeologický informační systém České republiky",
   "Programy strategie AV21": "Strategie AV21: Špičkový výzkum ve veřejném zájmu",
   "Digitální archiv archeologické mapy České republiky": "Digitální archiv archeologické mapy České republiky",
-  "Přihlásit": "Přihlásit uživatele",
-  "Přihlásit uživatele": "Přihlásit",
-  "Registrovat uživatele": "Registrovat uživatele",
-  "Zapomněli jste heslo": "Obnovit heslo",
-  "Špatné přihlašovací údaje": "Neplatné přihlašovací údaje",
   "Favorites": "Oblíbené",
-  "Odhlásit": "Odhlásit",
   "záznamů": "záznamů",
   "O projektu": "Vítejte v Digitálním archivu AMČR!",
   "Novinky": "Aktuality",

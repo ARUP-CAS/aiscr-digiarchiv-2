@@ -2,7 +2,46 @@
   "Ano": "Yes",
   "Ne": "No",
 
-  "help": "Help",
+  "navbar": {
+    "desc": {
+      "logo_desc": "AMCR Digital Archive",
+      "Nápověda": "Help",
+      "Přihlásit uživatele": "Log in user",
+      "Registrovat uživatele":"User registration"
+    }
+  },
+
+  "searchbar": {
+
+  },
+
+  "dialog": {
+    "title": {
+      "Přihlášení uživatele": "User login"
+    },
+    "desc": {
+      "Přihlašovací jméno": "Username (email)",
+      "Heslo": "Password",
+      "Přihlášený uživatel": "Logged user",
+      "Uživatelská role role": "User role",
+      "Organizace": "Organisation",
+    },
+    "button": {
+      "Přihlásit": "Log in",
+      "Odhlásit": "Log out",
+      "Zavřít": "Close",
+      "Obnovit heslo": "Renew password"
+    },
+    "alert": {
+      "Špatné přihlašovací údaje": "Invalid credentials"
+    }
+  },
+
+  "footer": {
+
+  },
+
+
   "q.placeholder": "Enter search query",
   "q.tooltip": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
   "open map": "Open map",
@@ -10,7 +49,6 @@
   "from": "from",
   "to": "to",
   "undefined": "unlimited",
-  "logo_desc": "AMCR Digital Archive",
   "select area": "Select area",
   "remove selection": "Remove selection",
   "zoom in": "Zoom in",
@@ -19,11 +57,6 @@
   "idnotfound": "The referenced record could not be found. The record may have been deleted. If there are any remaining issues, please contact us.",
   "nebo":"or",
   "zrušit volbu": "cancel selection",
-  "Přihlášení uživatele": "User login",
-  "Přihlášený uživatel": "Logged user",
-  "Role": "User role",
-  "Přihlašovací jméno": "Username (email)",
-  "Heslo": "Password",
   "Filtry": "Filters",
   "Výsledky": "Results",
   "Kontakt": "Contact",
@@ -69,13 +102,7 @@
   "Archeologický informační systém České republiky": "Archaeological Information System of the Czech Republic",
   "Programy strategie AV21": "Strategy AV21: Top research in the public interest",
   "Digitální archiv archeologické mapy České republiky": "Digital archive of the archaeological map of the Czech Republic",
-  "Přihlásit": "Log in",
-  "Přihlásit uživatele": "Log in",
-  "Registrovat uživatele":"User registration",
-  "Zapomněli jste heslo": "Renew password",
-  "Špatné přihlašovací údaje": "Invalid credentials",
   "Favorites": "Favorites",
-  "Odhlásit": "Log out",
   "záznamů": "records",
   "O projektu": "Welcome to the AMCR Digital Archive!",
   "Novinky": "News",
