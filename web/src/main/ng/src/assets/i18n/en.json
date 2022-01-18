@@ -44,6 +44,9 @@
       "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Data management and user support for Moravia and Czech Silesia (incl. the Vysočina Region)",
       "Archeologický ústav AV ČR, Brno, v. v. i.": "Institute of Archaeology CAS, Brno",
       "Databáze Archeologická mapa České republiky": "Archaeological Map of the Czech Republic database",
+      "Přejděte číslo stránky": "Go to page",
+      "Velikost souboru": "File size",
+      "Typ souboru": "File type",
     },
     "button": {
       "Přihlásit": "Log in",
@@ -67,7 +70,11 @@
       "Dokument": "Document",
       "Dostupné z": "Available at",
       "AMČR: Záznam": "AMCR: Record",
-      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic"
+      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic",
+      "stránka z": "page from"
+    },
+    "tooltip": {
+      "Stáhněte soubor": "Download file"
     }
   },
 
@@ -138,12 +145,8 @@
   "itemView.default": "Full view (caption, thumbnail, description)",
   "Zobrazit časovou osu":  "Display time chart",
   "Skrýt časovou osu": "Hide time chart",
-  "Přejděte číslo stránky": "Go to page",
   "Číslo stránky": "Page number",
   "stránka ze": "page from",
-  "Velikost souboru": "File size",
-  "Typ souboru": "File type",
-  "Stáhněte soubor": "Download file",
   "Komponenta dokumentu": "Document component",
   "tvar": "Shapes (marks) in the aerial image",
   "Akce dokumentu": "Documented fieldwork",

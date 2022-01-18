@@ -44,6 +44,9 @@
       "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)",
       "Archeologický ústav AV ČR, Brno, v. v. i.": "Archeologický ústav AV ČR, Brno, v. v. i.",
       "Databáze Archeologická mapa České republiky": "Databáze Archeologická mapa České republiky",
+      "Přejděte číslo stránky": "Přejít na stránku",
+      "Velikost souboru": "Velikost souboru",
+      "Typ souboru": "Typ souboru",
     },
     "button": {
       "Přihlásit": "Přihlásit",
@@ -68,6 +71,10 @@
       "Dostupné z": "Dostupné z",
       "AMČR: Záznam" : "AMČR: Záznam",
       "Archeologická mapa České republiky": "Archeologická mapa České republiky",
+      "stránka z": "stránka z"
+    },
+    "tooltip": {
+      "Stáhněte soubor": "Stáhnout soubor"
     }
   },
 
@@ -138,12 +145,8 @@
   "itemView.default": "Plné zobrazení (titulek, náhled, popis)",
   "Zobrazit časovou osu": "Zobrazit časovou osu",
   "Skrýt časovou osu": "Skrýt časovou osu",
-  "Přejděte číslo stránky": "Přejít na stránku",
   "Číslo stránky": "Číslo stránky",
   "stránka ze": "stránka z",
-  "Velikost souboru": "Velikost souboru",
-  "Typ souboru": "Typ souboru",
-  "Stáhněte soubor": "Stáhnout soubor",
   "Komponenta dokumentu": "Komponenta dokumentu",
   "tvar": "Tvary (příznaky) na letecké fotografii",
   "Akce dokumentu": "Dokumentovaná akce",
