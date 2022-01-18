@@ -88,6 +88,23 @@
     }
   },
 
+  "export": {
+    "field": {
+      "ident_cely": "Identifikátor",
+      "f_autor": "Dokument - autor",
+      "rok_vzniku": "Dokument - rok vzniku",
+      "f_organizace": "Organizace",
+      "typ_dokumentu": "Typ dokumentu",
+      "material_originalu": "Materiál originálu",
+      "popis": "Popis",
+      "poznamka": "Poznámka",
+      "oznaceni_originalu": "Dokument - označení originálu",
+      "f_okres": "Okres",
+      "f_katastr": "Katastr",
+      "pristupnost": "Přístupnost"
+    }
+  },
+
 
   "from": "od",
   "to": "do",
@@ -159,8 +176,6 @@
     "rada": "Řada dokumentu",
     "loc_rpt": "Výběr mapy",
     "filtruj_dle_pole": "Filtrovat podle pole",
-    "typ_dokumentu": "Typ dokumentu",
-    "material_originalu": "Materiál originálu",
     "files": "Soubory", 
     "vedouci_projektu": "Vedoucí projektu",
     "datum_zahajeni": "Projekt - datum zahájeni",

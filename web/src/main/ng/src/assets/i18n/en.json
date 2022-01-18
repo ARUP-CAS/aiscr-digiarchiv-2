@@ -88,6 +88,23 @@
     }
   },
 
+  "export": {
+    "field": {
+      "ident_cely": "Identifier",
+      "f_autor": "Document - author",
+      "rok_vzniku": "Document - year of creation",
+      "f_organizace": "Organisation",
+      "typ_dokumentu": "Document type",
+      "material_originalu": "Original material",
+      "popis": "Description",
+      "poznamka": "Note",
+      "oznaceni_originalu": "Document - original label",
+      "f_okres": "District",
+      "f_katastr": "Cadastre",
+      "pristupnost": "Acessibility"
+    }
+  },
+
 
   "from": "from",
   "to": "to",
@@ -159,8 +176,6 @@
     "rada": "Document series",
     "loc_rpt": "Map selection",
     "filtruj_dle_pole": "Filter by field",
-    "typ_dokumentu": "Document type",
-    "material_originalu": "Original material",
     "files": "Files",
     "vedouci_projektu": "Project manager",
     "datum_zahajeni": "Project - starting date",

@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th>#</th>
-        <th *ngFor="let field of config.exportFields[state.entity]">{{'field.' + field.name | translate}}</th>
+        <th *ngFor="let field of config.exportFields[state.entity]">{{ 'export.field.' + field.name | translate }}</th>
       </tr>
     </thead>
     <tbody>
