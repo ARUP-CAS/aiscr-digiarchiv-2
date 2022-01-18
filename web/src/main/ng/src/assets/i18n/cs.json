@@ -1,6 +1,7 @@
 {
   "Ano": "Ano",
   "Ne": "Ne",
+  "a": "a",
 
   "navbar": {
     "desc": {
@@ -27,14 +28,23 @@
 
   "dialog": {
     "title": {
-      "Přihlášení uživatele": "Přihlášení uživatele"
+      "Přihlášení uživatele": "Přihlášení uživatele",
+      "Kontakt": "Kontakt",
+      "Licence": "Licence"
     },
     "desc": {
       "Přihlašovací jméno": "Přihlašovací jméno (email)",
       "Heslo": "Heslo",
       "Přihlášený uživatel": "Přihlášený uživatel",
       "Uživatelská role": "Uživatelská role",
-      "Organizace": "Organizace"
+      "Organizace": "Organizace",
+      "Správa dat, uživatelů a podpora pro oblast Čech": "Správa dat, uživatelů a podpora pro oblast Čech",
+      "Archeologický ústav AV ČR, Praha, v. v. i.": "Archeologický ústav AV ČR, Praha, v. v. i.",
+      "Napište nám": "Napište nám",
+      "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)",
+      "Archeologický ústav AV ČR, Brno, v. v. i.": "Archeologický ústav AV ČR, Brno, v. v. i.",
+      "Databáze Archeologická mapa České republiky": "Databáze Archeologická mapa České republiky",
+      "jejímž autorem je": "jejímž autorem je",
     },
     "button": {
       "Přihlásit": "Přihlásit",
@@ -44,11 +54,29 @@
     },
     "alert": {
       "Špatné přihlašovací údaje": "Neplatné přihlašovací údaje"
+    },
+    "license": {
+      "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
+      "data_and_metadata_usage": "Užití dat i metadat podléhá této licenci, pokud není explicitně stanoveno jinak.",
+      "licenced_under": "podléhá licenci"
     }
   },
 
   "footer": {
-
+    "desc": {
+      "Archeologický ústav AV ČR, Praha, v. v. i.": "Archeologický ústav AV ČR, Praha, v. v. i.",
+      "Kontakt": "Kontakt",
+      "Verze": "Verze",
+      "Operační program Výzkum, vývoj a vzdělávání": "Operační program Výzkum, vývoj a vzdělávání",
+      "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministerstvo školství, mládeže a tělovýchovy České republiky",
+      "Archeologický informační systém České republiky": "Archeologický informační systém České republiky",
+      "Programy strategie AV21": "Strategie AV21: Špičkový výzkum ve veřejném zájmu",
+      "Digitální archiv archeologické mapy České republiky": "Digitální archiv archeologické mapy České republiky",
+      "Ariadne": "Ariadne"
+    },
+    "license": {
+      "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
+    }
   },
 
 
@@ -65,10 +93,7 @@
   "zrušit volbu": "zrušit volbu",
   "Filtry": "Filtry",
   "Výsledky": "Výsledky",
-  "Kontakt": "Kontakt",
-  "Licence": "Licence",
   "geom.GeoJSON": "GeoJSON",
-  "Verze": "Verze",
   "Operátor delete": "Zvolit operátor pro filtraci",
   "Vedoucí výzkumu": "Vedoucí výzkumu",
   "Datum výzkumu": "Datum výzkumu",
@@ -97,16 +122,6 @@
   "tvar": "Tvary (příznaky) na letecké fotografii",
   "Akce dokumentu": "Dokumentovaná akce",
   "Rok výzkumu": "Rok výzkumu",
-  "Správa dat, uživatelů a podpora pro oblast Čech": "Správa dat, uživatelů a podpora pro oblast Čech",
-  "Archeologický ústav AV ČR, Praha, v. v. i.": "Archeologický ústav AV ČR, Praha, v. v. i.",
-  "Napište nám": "Napište nám",
-  "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)",
-  "Operační program Výzkum, vývoj a vzdělávání": "Operační program Výzkum, vývoj a vzdělávání",
-  "Archeologický ústav AV ČR, Brno, v. v. i.": "Archeologický ústav AV ČR, Brno, v. v. i.",
-  "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministerstvo školství, mládeže a tělovýchovy České republiky",
-  "Archeologický informační systém České republiky": "Archeologický informační systém České republiky",
-  "Programy strategie AV21": "Strategie AV21: Špičkový výzkum ve veřejném zájmu",
-  "Digitální archiv archeologické mapy České republiky": "Digitální archiv archeologické mapy České republiky",
   "Favorites": "Oblíbené",
   "záznamů": "záznamů",
   "O projektu": "Vítejte v Digitálním archivu AMČR!",
@@ -236,12 +251,6 @@
   },
 
   "licence": {
-    "work": "Databáze Archeologická mapa České republiky",
-    "authored_by": "jejímž autorem je",
-    "and": "a",
-    "licenced_under": "podléhá licenci",
-    "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
-    "data_and_metadata_usage": "Užití dat i metadat podléhá této licenci, pokud není explicitně stanoveno jinak.",
     "record" : "AMČR: Záznam"
   },
 	

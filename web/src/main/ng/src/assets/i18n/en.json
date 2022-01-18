@@ -1,6 +1,7 @@
 {
   "Ano": "Yes",
   "Ne": "No",
+  "a": "and",
 
   "navbar": {
     "desc": {
@@ -27,14 +28,23 @@
 
   "dialog": {
     "title": {
-      "Přihlášení uživatele": "User login"
+      "Přihlášení uživatele": "User login",
+      "Kontakt": "Contact",
+      "Licence": "License"
     },
     "desc": {
       "Přihlašovací jméno": "Username (email)",
       "Heslo": "Password",
       "Přihlášený uživatel": "Logged user",
       "Uživatelská role role": "User role",
-      "Organizace": "Organisation"
+      "Organizace": "Organisation",
+      "Správa dat, uživatelů a podpora pro oblast Čech": "Data management and user support for Bohemia",
+      "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
+      "Napište nám": "Send us a message",
+      "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Data management and user support for Moravia and Czech Silesia (incl. the Vysočina Region)",
+      "Archeologický ústav AV ČR, Brno, v. v. i.": "Institute of Archaeology CAS, Brno",
+      "Databáze Archeologická mapa České republiky": "Archaeological Map of the Czech Republic database",
+      "jejímž autorem je": "operated by",
     },
     "button": {
       "Přihlásit": "Log in",
@@ -44,11 +54,29 @@
     },
     "alert": {
       "Špatné přihlašovací údaje": "Invalid credentials"
+    },
+    "license": {
+      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
+      "data_and_metadata_usage": "The use of both data and metadata is subject to this license, unless explicitly stated otherwise.",
+      "licenced_under": "is licensed under"
     }
   },
 
   "footer": {
-
+    "desc": {
+      "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
+      "Kontakt": "Contact",
+      "Verze": "Version",
+      "Operační program Výzkum, vývoj a vzdělávání": "Operational Programme Research, Development and Education",
+      "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministry of Education, Youth and Sports of the Czech Republic",
+      "Archeologický informační systém České republiky": "Archaeological Information System of the Czech Republic",
+      "Programy strategie AV21": "Strategy AV21: Top research in the public interest",
+      "Digitální archiv archeologické mapy České republiky": "Digital archive of the archaeological map of the Czech Republic",
+      "Ariadne": "Ariadne"
+    },
+    "license": {
+      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
+    }
   },
 
 
@@ -65,10 +93,7 @@
   "zrušit volbu": "cancel selection",
   "Filtry": "Filters",
   "Výsledky": "Results",
-  "Kontakt": "Contact",
-  "Licence": "License", 
   "geom.GeoJSON": "GeoJSON",
-  "Verze": "Version",
   "Operátor delete": "Select filter operator",
   "Vedoucí výzkumu": "Principal researcher",
   "Datum výzkumu": "Fieldwork date",
@@ -97,16 +122,6 @@
   "tvar": "Shapes (marks) in the aerial image",
   "Akce dokumentu": "Documented fieldwork",
   "Rok výzkumu": "Year of fieldwork",
-  "Správa dat, uživatelů a podpora pro oblast Čech": "Data management and user support for Bohemia",
-  "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
-  "Napište nám": "Send us a message",
-  "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Data management and user support for Moravia and Czech Silesia (incl. the Vysočina Region)",
-  "Operační program Výzkum, vývoj a vzdělávání": "Operational Programme Research, Development and Education",
-  "Archeologický ústav AV ČR, Brno, v. v. i.": "Institute of Archaeology CAS, Brno",
-  "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministry of Education, Youth and Sports of the Czech Republic",
-  "Archeologický informační systém České republiky": "Archaeological Information System of the Czech Republic",
-  "Programy strategie AV21": "Strategy AV21: Top research in the public interest",
-  "Digitální archiv archeologické mapy České republiky": "Digital archive of the archaeological map of the Czech Republic",
   "Favorites": "Favorites",
   "záznamů": "records",
   "O projektu": "Welcome to the AMCR Digital Archive!",
@@ -237,12 +252,6 @@
   },
 
   "licence": {
-    "work": "Archaeological Map of the Czech Republic database",
-    "authored_by": "operated by",
-    "and": "and",
-    "licenced_under": "is licensed under",
-    "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
-    "data_and_metadata_usage": "The use of both data and metadata is subject to this license, unless explicitly stated otherwise.",
     "record": "AMCR: Record"
   },
   
