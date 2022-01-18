@@ -1,30 +1,30 @@
 <div mat-dialog-content>
   <p>
-    {{ 'citation.start' | translate}}
+    {{ 'dialog.citation.Data podléhají licenci' | translate }}
     <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">
-      {{ 'licence.cc_by_nc' | translate}}
+      {{ 'dialog.license.cc_by_nc' | translate }}
     </a>
   </p>
   <div *ngIf="result.doctype !== 'samostatny_nalez'">
   <p>
-    <strong>{{'citation.intro' | translate}}:</strong>
-    {{result.autor}} {{result.rok_vzniku}}: {{'citation.dokument' | translate}}
+    <strong>{{ 'dialog.citation.Citujte jako' | translate }}:</strong>
+    {{result.autor}} {{result.rok_vzniku}}: {{ 'dialog.citation.Dokument' | translate }}
     {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'organizace' }}. 
-    {{ 'Dostupné z' | translate }}: <a [href]="'https://digiarchiv.aiscr.cz/id/'+ result.ident_cely">https://digiarchiv.aiscr.cz/id/{{ result.ident_cely }}</a>.
+    {{ 'dialog.citation.Dostupné z' | translate }}: <a [href]="'https://digiarchiv.aiscr.cz/id/'+ result.ident_cely">https://digiarchiv.aiscr.cz/id/{{ result.ident_cely }}</a>.
   </p>
   </div>
   <div *ngIf="result.doctype === 'samostatny_nalez'">
     <p>
-    <strong>{{'citation.intro' | translate}}:</strong>
-    {{'licence.record' | translate}}
+    <strong>{{ 'dialog.citation.Citujte jako' | translate }}:</strong>
+    {{ 'dialog.citation.AMČR: Záznam' | translate }}
     {{ result.ident_cely }}
-    [cit. {{now | date : 'yyyy-MM-dd'}}].
-    {{ 'citation.work' | translate }}.
-    {{ 'Dostupné z' | translate }}: <a [href]="'https://digiarchiv.aiscr.cz/id/'+ result.ident_cely">https://digiarchiv.aiscr.cz/id/{{ result.ident_cely }}</a>.
+    [cit. {{ now | date : 'yyyy-MM-dd' }}].
+    {{ 'dialog.citation.Archeologická mapa České republiky' | translate }}.
+    {{ 'dialog.citation.Dostupné z' | translate }}: <a [href]="'https://digiarchiv.aiscr.cz/id/'+ result.ident_cely">https://digiarchiv.aiscr.cz/id/{{ result.ident_cely }}</a>.
     </p>
   </div>
 </div>
 <div mat-dialog-actions>
-    <button mat-button cdkFocusInitial (click)="ok()">{{'Ok' | translate}}</button>
-  <button mat-button [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
+    <button mat-button cdkFocusInitial (click)="ok()">{{'dialog.button.Souhlasím' | translate}}</button>
+  <button mat-button [mat-dialog-close]="false">{{ 'dialog.button.Zavřít' | translate }}</button>
 </div>

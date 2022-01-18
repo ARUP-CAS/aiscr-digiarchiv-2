@@ -44,13 +44,13 @@
       "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Data management and user support for Moravia and Czech Silesia (incl. the Vysočina Region)",
       "Archeologický ústav AV ČR, Brno, v. v. i.": "Institute of Archaeology CAS, Brno",
       "Databáze Archeologická mapa České republiky": "Archaeological Map of the Czech Republic database",
-      "jejímž autorem je": "operated by",
     },
     "button": {
       "Přihlásit": "Log in",
       "Odhlásit": "Log out",
       "Zavřít": "Close",
-      "Obnovit heslo": "Renew password"
+      "Obnovit heslo": "Renew password",
+      "Souhlasím": "I agree"
     },
     "alert": {
       "Špatné přihlašovací údaje": "Invalid credentials"
@@ -58,7 +58,16 @@
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
       "data_and_metadata_usage": "The use of both data and metadata is subject to this license, unless explicitly stated otherwise.",
-      "licenced_under": "is licensed under"
+    },
+    "citation": {
+      "jejímž autorem je": "operated by",
+      "podléhá licenci": "is licensed under",
+      "Data podléhají licenci": "Data is licensed under",
+      "Citujte jako": "Cite as",
+      "Dokument": "Document",
+      "Dostupné z": "Available at",
+      "AMČR: Záznam": "AMCR: Record",
+      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic"
     }
   },
 
@@ -236,7 +245,6 @@
   },
 
   "citation" : {
-    "dokument": "Document", 
     "projekt": "Project",
     "akce": "Event",
     "lokalita": "Site",
@@ -246,13 +254,6 @@
     "let": "Flight",
     "ext_zdroj": "External Source",
     "dok_jednotka": "Documentation Unit",
-    "work": "Archaeological Map of the Czech Republic",
-    "start": "Data is licensed under",
-    "intro": "Cite as"
-  },
-
-  "licence": {
-    "record": "AMCR: Record"
   },
   
   "f_aktivita_sidlistni": "residential",

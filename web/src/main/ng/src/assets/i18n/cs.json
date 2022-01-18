@@ -44,21 +44,30 @@
       "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)",
       "Archeologický ústav AV ČR, Brno, v. v. i.": "Archeologický ústav AV ČR, Brno, v. v. i.",
       "Databáze Archeologická mapa České republiky": "Databáze Archeologická mapa České republiky",
-      "jejímž autorem je": "jejímž autorem je",
     },
     "button": {
       "Přihlásit": "Přihlásit",
       "Odhlásit": "Odhlásit",
       "Zavřít": "Zavřít",
-      "Obnovit heslo": "Obnovit heslo"
+      "Obnovit heslo": "Obnovit heslo",
+      "Souhlasím": "Souhlasím"
     },
     "alert": {
       "Špatné přihlašovací údaje": "Neplatné přihlašovací údaje"
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
-      "data_and_metadata_usage": "Užití dat i metadat podléhá této licenci, pokud není explicitně stanoveno jinak.",
-      "licenced_under": "podléhá licenci"
+      "data_and_metadata_usage": "Užití dat i metadat podléhá této licenci, pokud není explicitně stanoveno jinak."
+    },
+    "citation": {
+      "jejímž autorem je": "jejímž autorem je",
+      "podléhá licenci": "podléhá licenci",
+      "Data podléhají licenci": "Data podléhají licenci",
+      "Citujte jako": "Citujte jako",
+      "Dokument": "Dokument", 
+      "Dostupné z": "Dostupné z",
+      "AMČR: Záznam" : "AMČR: Záznam",
+      "Archeologická mapa České republiky": "Archeologická mapa České republiky",
     }
   },
 
@@ -235,7 +244,6 @@
   },
 	
   "citation" : {
-    "dokument": "Dokument", 
     "projekt": "Projekt",
     "akce": "Akce",
     "lokalita": "Lokalita",
@@ -245,13 +253,6 @@
     "let": "Let",
     "ext_zdroj": "Externí zdroj",
     "dok_jednotka": "Dokumentační jednotka",	
-    "work": "Archeologická mapa České republiky",
-    "start": "Data podléhají licenci",
-    "intro": "Citujte jako"
-  },
-
-  "licence": {
-    "record" : "AMČR: Záznam"
   },
 	
   "f_aktivita_sidlistni": "sídlištní",
