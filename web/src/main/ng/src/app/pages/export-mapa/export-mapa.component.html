@@ -4,14 +4,14 @@
       <tr>
         <th>#</th>
         <ng-container *ngIf="format">
-          <th *ngIf="hasPian">{{'PIAN'| translate}}</th>
-          <th *ngIf="hasPian">{{'přesnost'| translate}}</th>
-          <th *ngIf="hasPian">{{'field.f_pian_typ'| translate}}</th>
-          <th *ngIf="hasPian">{{'field.f_pian_zm10'| translate}}</th>
-          <th>{{'Definiční bod (WGS-84)' | translate}}</th>
-          <th *ngIf="hasPian">{{'geom.' + format | translate}}</th>
+          <th *ngIf="hasPian">{{'export.desc.Pian'| translate}}</th>
+          <th *ngIf="hasPian">{{'export.desc.Přesnost'| translate}}</th>
+          <th *ngIf="hasPian">{{'export.desc.PIAN - typ'| translate}}</th>
+          <th *ngIf="hasPian">{{'export.desc.PIAN - Základní mapa 1:10 000'| translate}}</th>
+          <th>{{'export.desc.Definiční bod (WGS-84)' | translate}}</th>
+          <th *ngIf="hasPian">{{'export.desc.' + format | translate}}</th>
         </ng-container>
-        <th *ngFor="let field of config.exportFields[state.entity]">{{'field.' + field.name | translate}}</th>
+        <th *ngFor="let field of config.exportFields[state.entity]">{{ 'export.field.' + field.name | translate }}</th>
       </tr>
     </thead>
     <tbody>

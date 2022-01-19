@@ -180,6 +180,16 @@
       "f_okres": "District",
       "f_katastr": "Cadastre",
       "pristupnost": "Acessibility"
+    },
+    "desc": {
+      "Pian": "Pian",
+      "Přesnost": "Accuracy",
+      "PIAN - typ": "PIAN - type",
+      "PIAN - Základní mapa 1:10 000": "PIAN - Base Map 1:10 000",
+      "Definiční bod (WGS-84)": "Definition point (WGS-84)",
+      "GeoJSON": "GeoJSON",
+      "GML": "GML",
+      "WKT": "WKT"
     }
   },
 
@@ -192,7 +202,6 @@
   "zoom in": "Zoom in",
   "zoom out": "Zoom out",
   "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed.",
-  "geom.GeoJSON": "GeoJSON",
   "Operátor delete": "Select filter operator",
   "Vedoucí výzkumu": "Principal researcher",
   "Datum výzkumu": "Fieldwork date",
@@ -222,7 +231,6 @@
     "datum_ukonceni": "Project - ending date",
     "organizace_prihlaseni": "Responsible organisation",
     "specifikace_data": "Date specification",
-    "ulozeni_nalezu": "Fieldwork - finds repository",
     "adb_stratigraficke_jednotky": "ADP - number of strat. units",
     "f_osoby": "Document - documented person",
     "f_nalezce": "Ind. find - finder",
@@ -297,18 +305,6 @@
       "title": "External Sources",
       "desc": "External Sources lorem ipsum dolor sit amet, consectetuer adipiscing elit."
     } 
-  },
-
-  "citation" : {
-    "projekt": "Project",
-    "akce": "Event",
-    "lokalita": "Site",
-    "samostatny_nalez": "Individual Find",
-    "pian": "Spatial Unit",
-    "knihovna_3d": "3D Library",  
-    "let": "Flight",
-    "ext_zdroj": "External Source",
-    "dok_jednotka": "Documentation Unit",
   },
   
   "f_aktivita_sidlistni": "residential",
@@ -464,6 +460,7 @@
       "child_samostatny_nalez": "Project - related ind. find",
       "child_dokument": "Fieldwork/site - related document",
       "child_ext_zdroj": "Fieldwork/site - related source",
+      "ulozeni_nalezu": "Fieldwork - finds repository",
       "lokalizace": "Fieldwork - location",
       "je_nz": "Fieldwork - substitutes ER",
       "vazba_projekt": "Fieldwork - related project",
