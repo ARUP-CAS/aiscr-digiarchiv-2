@@ -23,6 +23,35 @@
     }
   },
 
+  "paginator": {
+    "desc": {
+      "Číslo stránky": "Page number",
+      "Řazení": "Order by",
+      "itemsPerPageLabel" : "Records per page",
+      "nextPageLabel" : "Next page",
+      "previousPageLabel" : "Previous page",
+      "firstPageLabel": "First page",
+      "lastPageLabel": "Last page",
+    },
+    "tooltip": {
+      "Přejděte číslo stránky": "Go to page",
+    },
+    "sortBy": {
+      "ident_cely": "Identifier",
+      "okres": "District, cadastre",
+      "katastr": "Cadastre",
+      "autor": "Author",
+      "nalezce": "Finder",
+      "datum_nalezu": "Finding date",
+      "vedouci_akce": "Principal researcher",
+      "datum_ukonceni": "Ending date",
+      "vedouci_projektu": "Project manager",
+      "rok_vzniku": "Year of creation",
+      "nazev": "Name",
+      "organizace": "Organisation"
+    }
+  },
+
   "searchbar": {
     "input": {
       "Zadejte vyhledávací dotaz": "Enter search query"
@@ -153,18 +182,11 @@
   "Vedoucí výzkumu": "Principal researcher",
   "Datum výzkumu": "Fieldwork date",
   "výsledků": "results",
-  "Řazení": "Order by",
-  "itemsPerPageLabel" : "Records per page",
-  "nextPageLabel" : "Next page",
-  "previousPageLabel" : "Previous page",
-  "firstPageLabel": "First page",
-  "lastPageLabel": "Last page",
   "rangeLabel1": "0 of {{length}}",
   "rangeLabel2": "{{startIndex}} - {{endIndex}} of {{length}}",
   "Zobrazení výsledků": "Results view type",
   "Zobrazit časovou osu":  "Display time chart",
   "Skrýt časovou osu": "Hide time chart",
-  "Číslo stránky": "Page number",
   "stránka ze": "page from",
   "Komponenta dokumentu": "Document component",
   "tvar": "Shapes (marks) in the aerial image",
@@ -174,21 +196,6 @@
   "O projektu": "Welcome to the AMCR Digital Archive!",
   "Novinky": "News",
   "sessionTimeout": "You have been automatically logged off due to inactivity.",
-
-  "sortBy": {
-    "ident_cely": "Identifier",
-    "okres": "District, cadastre",
-    "katastr": "Cadastre",
-    "autor": "Author",
-    "nalezce": "Finder",
-    "datum_nalezu": "Finding date",
-    "vedouci_akce": "Principal researcher",
-    "datum_ukonceni": "Ending date",
-    "vedouci_projektu": "Project manager",
-    "rok_vzniku": "Year of creation",
-    "nazev": "Name",
-    "organizace": "Organisation"
-  },
 
   "field": {
     "rada": "Document series",

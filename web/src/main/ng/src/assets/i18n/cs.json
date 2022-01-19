@@ -23,6 +23,35 @@
     }
   },
 
+  "paginator": {
+    "desc": {
+      "Číslo stránky": "Číslo stránky",
+      "Řazení": "Řadit podle",
+      "itemsPerPageLabel" : "Počet záznamů na stránce",
+      "nextPageLabel" : "Následující stránka",
+      "previousPageLabel" : "Předchozí stránka",
+      "firstPageLabel": "První stránka",
+      "lastPageLabel": "Poslední stránka",
+    },
+    "tooltip": {
+      "Přejděte číslo stránky": "Přejít na stránku",
+    },
+    "sortBy": {
+      "ident_cely": "Idetifikátor",
+      "okres": "Okres, katastr",
+      "katastr": "Katastr",
+      "autor": "Autor",
+      "nalezce": "Nálezce",
+      "datum_nalezu": "Datum nálezu",
+      "vedouci_akce": "Vedoucí akce",
+      "datum_ukonceni": "Datum ukončení",
+      "vedouci_projektu": "Vedoucí projektu",
+      "rok_vzniku": "Rok vzniku",
+      "nazev": "Název",
+      "organizace": "Organizace"
+    }
+  },
+
   "searchbar": {
     "input": {
       "Zadejte vyhledávací dotaz": "Zadejte vyhledávací dotaz"
@@ -153,18 +182,11 @@
   "Vedoucí výzkumu": "Vedoucí výzkumu",
   "Datum výzkumu": "Datum výzkumu",
   "výsledků": "výsledků",
-  "Řazení": "Řadit podle",
-  "itemsPerPageLabel" : "Počet záznamů na stránce",
-  "nextPageLabel" : "Následující stránka",
-  "previousPageLabel" : "Předchozí stránka",
-  "firstPageLabel": "První stránka",
-  "lastPageLabel": "Poslední stránka",
   "rangeLabel1": "0 z {{length}}",
   "rangeLabel2": "{{startIndex}} - {{endIndex}} z {{length}}",
   "Zobrazení výsledků": "Způsob zobrazení výsledků",
   "Zobrazit časovou osu": "Zobrazit časovou osu",
   "Skrýt časovou osu": "Skrýt časovou osu",
-  "Číslo stránky": "Číslo stránky",
   "stránka ze": "stránka z",
   "Komponenta dokumentu": "Komponenta dokumentu",
   "tvar": "Tvary (příznaky) na letecké fotografii",
@@ -174,21 +196,6 @@
   "O projektu": "Vítejte v Digitálním archivu AMČR!",
   "Novinky": "Aktuality",
   "sessionTimeout": "Z důvodu nečinnosti jste byli automaticky odhlášeni.",
-
-  "sortBy": {
-    "ident_cely": "Idetifikátor",
-    "okres": "Okres, katastr",
-    "katastr": "Katastr",
-    "autor": "Autor",
-    "nalezce": "Nálezce",
-    "datum_nalezu": "Datum nálezu",
-    "vedouci_akce": "Vedoucí akce",
-    "datum_ukonceni": "Datum ukončení",
-    "vedouci_projektu": "Vedoucí projektu",
-    "rok_vzniku": "Rok vzniku",
-    "nazev": "Název",
-    "organizace": "Organizace"
-  },
 
   "field": {
     "rada": "Řada dokumentu",

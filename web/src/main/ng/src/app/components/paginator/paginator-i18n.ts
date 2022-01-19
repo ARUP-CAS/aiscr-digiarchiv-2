@@ -24,18 +24,18 @@ export class PaginatorI18n extends MatPaginatorIntl {
 
   getTranslations() {
     this.translate.get([
-      'itemsPerPageLabel',
-      'nextPageLabel',
-      'previousPageLabel',
-      'firstPageLabel',
-      'lastPageLabel'
+      'paginator.desc.itemsPerPageLabel',
+      'paginator.desc.nextPageLabel',
+      'paginator.desc.previousPageLabel',
+      'paginator.desc.firstPageLabel',
+      'paginator.desc.lastPageLabel'
     ])
       .subscribe(translation => {
-        this.itemsPerPageLabel = translation['itemsPerPageLabel'];
-        this.nextPageLabel = translation['nextPageLabel'];
-        this.previousPageLabel = translation['previousPageLabel'];
-        this.firstPageLabel = translation['firstPageLabel'];
-        this.lastPageLabel = translation['lastPageLabel'];
+        this.itemsPerPageLabel = translation['paginator.desc.itemsPerPageLabel'];
+        this.nextPageLabel = translation['paginator.desc.nextPageLabel'];
+        this.previousPageLabel = translation['paginator.desc.previousPageLabel'];
+        this.firstPageLabel = translation['paginator.desc.firstPageLabel'];
+        this.lastPageLabel = translation['paginator.desc.lastPageLabel'];
         this.getRangeLabel = this.getRangeLabel.bind(this);
         this.changes.next();
       });
