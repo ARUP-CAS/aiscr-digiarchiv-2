@@ -192,7 +192,6 @@
   "zoom in": "Přiblížit",
   "zoom out": "Oddálit",
   "insuficient rights": "Zobrazení tohoto dokumentu je možné až po přihlášení uživatelským jménem a heslem. Účet lze snadno zaregistrovat pomocí webového formuláře dostupného přes horní menu -> Registrovat uživatele.\nPokud jste přihlášeni ke svému účtu AMČR a dokument přesto není přístupný, značí to jednu z těchto variant:\n\n1) Dokument obsahuje citlivé údaje a jeho zveřejnění je omezeno.\n2) Držitel autorských práv nedal souhlas se zveřejněním dokumentu.\n3) Neuplynula ochranná lhůta 3 let od archivace dokumentu.\n\nV takovém případě se prosím obraťte na správce AMČR nebo na příslušnou organizaci s žádostí o zpřístupnění. Vaše žádost bude individuálně posouzena a vyřízena.",
-  "idnotfound": "Odkazovaný záznam se nepodařilo nalézt. Záznam mohl být odstraněn. V případě přetrvávajících problémů nás kontaktujte.",
   "geom.GeoJSON": "GeoJSON",
   "Operátor delete": "Zvolit operátor pro filtraci",
   "Vedoucí výzkumu": "Vedoucí výzkumu",
@@ -646,7 +645,8 @@
       "PIAN - Základní mapa 1:10 000": "PIAN - Základní mapa 1:10 000",
       "Geometrie GML": "Geometrie GML",
       "Geometrie WKT": "Geometrie WKT",
-      "Favorites": "Oblíbené"
+      "Favorites": "Oblíbené",
+      "Persistentní odkaz": "Persistentní odkaz",
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -683,7 +683,15 @@
       "nalezených výsledků v entitě": "nalezených výsledků pro tento typ záznamu",
       "Zkuste zadat jiný dotaz": "Zkuste zadat jiný dotaz",
       "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "nebo se přepněte na jiný typ záznamu, kde jsme nalezli tyto výsledky",
-      "zrušit volbu": "zrušit volbu"
+      "zrušit volbu": "zrušit volbu",
+      "Citujte jako": "Citujte jako",
+      "Dokument": "Dokument", 
+      "Dostupné z": "Dostupné z",
+      "AMČR: Záznam" : "AMČR: Záznam",
+      "Archeologická mapa České republiky": "Archeologická mapa České republiky",
+    },
+    "note": {
+      "idnotfound": "Odkazovaný záznam se nepodařilo nalézt. Záznam mohl být odstraněn. V případě přetrvávajících problémů nás kontaktujte.",
     }
   }
 }

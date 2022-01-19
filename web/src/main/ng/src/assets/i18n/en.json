@@ -192,7 +192,6 @@
   "zoom in": "Zoom in",
   "zoom out": "Zoom out",
   "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed.",
-  "idnotfound": "The referenced record could not be found. The record may have been deleted. If there are any remaining issues, please contact us.",
   "geom.GeoJSON": "GeoJSON",
   "Operátor delete": "Select filter operator",
   "Vedoucí výzkumu": "Principal researcher",
@@ -646,7 +645,8 @@
       "PIAN - Základní mapa 1:10 000": "PIAN - Base Map 1:10 000",
       "Geometrie GML": "Geometry GML",
       "Geometrie WKT": "Geometry WKT",
-      "Favorites": "Favorites"
+      "Favorites": "Favorites",
+      "Persistentní odkaz": "Persistent link",
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -683,7 +683,15 @@
       "nalezených výsledků v entitě": "results found for this record type",
       "Zkuste zadat jiný dotaz": "Try another query",
       "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "or switch to another record type where we found these results",
-      "zrušit volbu": "cancel selection"
+      "zrušit volbu": "cancel selection",
+      "Citujte jako": "Cite as",
+      "Dokument": "Document",
+      "Dostupné z": "Available at",
+      "AMČR: Záznam": "AMCR: Record",
+      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic",
+    },
+    "note": {
+      "idnotfound": "The referenced record could not be found. The record may have been deleted. If there are any remaining issues, please contact us.",
     }
   }
 }

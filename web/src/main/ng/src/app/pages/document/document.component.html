@@ -10,26 +10,26 @@
       <mat-card class="app-card-info app-row-gap-16">
         <mat-card-content>
           <ng-container *ngIf="!isResultEmpty(result)">
-            <strong>{{ 'Persistentní odkaz' | translate }}: </strong> {{link}}
+            <strong>{{ 'card.desc.Persistentní odkaz' | translate }}: </strong> {{link}}
             <ng-container *ngIf="result.entity === 'dokument' || result.entity === 'knihovna_3d'">
               <br/>
-              <strong>{{'citation.intro' | translate}}:</strong>
-              {{ result.autor }} {{result.rok_vzniku}}: {{'citation.dokument' | translate}}
+              <strong>{{'card.citation.Citujte jako' | translate}}:</strong>
+              {{ result.autor }} {{result.rok_vzniku}}: {{'card.citation.dokument' | translate}}
               {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'organizace' }}. 
-              {{ 'Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
+              {{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
             </ng-container>
             <ng-container *ngIf="result.entity !== 'dokument' && result.entity !== 'knihovna_3d'">
               <br/>
-              <strong>{{'citation.intro' | translate}}:</strong>
-              {{'licence.record' | translate}}
+              <strong>{{'card.citation.Citujte jako' | translate}}:</strong>
+              {{'card.citation.AMČR: Záznam' | translate}}
               {{ result.ident_cely }}
               [cit. {{now | date : 'yyyy-MM-dd'}}].
-              {{ 'citation.work' | translate }}.
-              {{ 'Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
+              {{ 'card.citation.Archeologická mapa České republiky' | translate }}.
+              {{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
             </ng-container>
           </ng-container>
           <ng-container *ngIf="isResultEmpty(result)">
-            {{ 'idnotfound' | translate }}
+            {{ 'card.note.idnotfound' | translate }}
           </ng-container>
         </mat-card-content>
       </mat-card>
