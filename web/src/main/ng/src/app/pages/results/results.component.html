@@ -18,13 +18,13 @@
       <mat-card *ngIf="state.numFound === 0" class="app-card-info">
         <mat-card-content>
           <strong>{{ state.numFound }}</strong>
-          {{ 'nalezených výsledků v entitě' | translate }}&#160;
+          {{ 'card.citation.nalezených výsledků v entitě' | translate }}&#160;
           <span class="app-info-badge" [ngClass]="'app-entity-' + state.entity">
             <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity] }}</mat-icon><strong>{{ 'entities.' + state.entity + '.title' | translate }}</strong>
           </span><br />
-          {{ 'Zkuste zadat jiný dotaz' | translate }}<ng-container *ngIf="hasResultsInOther || inFav">,</ng-container>
+          {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }}<ng-container *ngIf="hasResultsInOther || inFav">,</ng-container>
           <ng-container *ngIf="hasResultsInOther">
-            {{ 'nebo se přepněte do jiné entity, kde jsme nalezli výsledky' | translate }}:
+            {{ 'card.citation.nebo se přepněte do jiné entity, kde jsme nalezli výsledky' | translate }}:
             <p></p>
             <ng-container *ngFor="let entity of config.entities">
               <div *ngIf="state.totals[entity] > 0" class="app-info-badge app-cursor-pointer" [ngClass]="'app-entity-' + entity" (click)="setEntity(entity)">
@@ -35,8 +35,8 @@
             </ng-container>
           </ng-container>
           <ng-container *ngIf="inFav">
-            {{ 'nebo' | translate }} {{ 'zrušit volbu' | translate }} "{{ 'Favorites' | translate }}".
-            <a  *ngIf="state.inFavorites" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'Favorites' | translate">
+            {{ 'nebo' | translate }} {{ 'card.citation.zrušit volbu' | translate }} "{{ 'card.desc.Favorites' | translate }}".
+            <a  *ngIf="state.inFavorites" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'card.tooltip.Favorites' | translate">
               <mat-icon>grade</mat-icon>
             </a>
           </ng-container> 
@@ -47,7 +47,7 @@
           <!-- <a (click)="showChartBar()"
           [matTooltip]="isChartBarCollapsed ? ('Zobrazit časovou osu' | translate) : ('Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
           <span class="app-pipe"></span> -->
-          <a [matMenuTriggerFor]="menuView" [matTooltip]="'itemView.' + state.itemView | translate">
+          <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate">
             <mat-icon [ngSwitch]="state.itemView">
               <ng-container *ngSwitchCase="'row'">reorder</ng-container>
               <ng-container *ngSwitchCase="'col'">apps</ng-container>
@@ -56,18 +56,18 @@
           </a><span class="app-pipe"></span>
           <mat-menu #menuView="matMenu">
             <button mat-menu-item (click)="setItemView('row')">
-              <mat-icon>reorder</mat-icon>{{ 'itemView.row' | translate }}
+              <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
             </button>
             <button mat-menu-item (click)="setItemView('col')">
-              <mat-icon>apps</mat-icon>{{ 'itemView.col' | translate }}
+              <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
             </button>
             <button mat-menu-item (click)="setItemView('default')">
-              <mat-icon>tv</mat-icon>{{ 'itemView.default' | translate }}
+              <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
             </button>
           </mat-menu>
-          <a [href]="exportUrl" [matTooltip]="'Export' | translate" target="_blank"><mat-icon>get_app</mat-icon></a>
+          <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank"><mat-icon>get_app</mat-icon></a>
           <span class="app-pipe"></span>
-          <a  *ngIf="state.logged" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'Favorites' | translate">
+          <a  *ngIf="state.logged" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'toolbar.tooltip.Favorites' | translate">
             <mat-icon>grade</mat-icon>
           </a>
         </div>
@@ -104,13 +104,13 @@
           <mat-icon>last_page</mat-icon>
         </button>
         <mat-tab-group [selectedIndex]="1" *ngIf="!loading">
-          <mat-tab [label]="'Filtry' | translate">
+          <mat-tab [label]="'sidenav.tab.Filtry' | translate">
             <div class="app-facets">
               <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
               <app-facets></app-facets>
             </div>
           </mat-tab>
-          <mat-tab [label]="'Výsledky' | translate">
+          <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
             <app-paginator></app-paginator>
             <cdk-virtual-scroll-viewport itemSize="64" [style.height.px]="math.min(9*64, docs.length * 64)">
               <ng-container *cdkVirtualFor="let result of docs">
@@ -130,7 +130,7 @@
     
       <mat-sidenav-content style="margin-left: 0 !important;">
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
-          <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'Filtrace / Výsledky' | translate }}</span>
+          <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
         </button>
         <app-mapa [showResults]="opened"></app-mapa>
       </mat-sidenav-content>

@@ -2,6 +2,7 @@
   "Ano": "Ano",
   "Ne": "Ne",
   "a": "a",
+  "nebo": "nebo",
 
   "navbar": {
     "desc": {
@@ -9,6 +10,16 @@
       "Nápověda": "Nápověda",
       "Přihlásit uživatele": "Přihlásit uživatele",
       "Registrovat uživatele": "Registrovat uživatele"
+    }
+  },
+
+  "sidenav": {
+    "tab": {
+      "Filtry": "Filtry",
+      "Výsledky": "Výsledky",
+    },
+    "button": {
+      "Filtrace / Výsledky": "Filtrace / Výsledky",
     }
   },
 
@@ -23,6 +34,38 @@
       "Exportovat seznam": "Exportovat seznam",
       "Otevřít mapu": "Otevřít mapu",
       "Zavřít mapu": "Zavřít mapu"
+    }
+  },
+
+  "toolbar": {
+    "menu": {
+      "row": "Řádkové zobrazení (pouze titulek)",
+      "col": "Galerie (pouze náhledy)",
+      "default": "Plné zobrazení (titulek, náhled, popis)"
+    },
+    "tooltip": {
+      "row": "Řádkové zobrazení (pouze titulek)",
+      "col": "Galerie (pouze náhledy)",
+      "default": "Plné zobrazení (titulek, náhled, popis)",
+      "Export": "Export",
+      "Favorites": "Oblíbené"
+    }
+  },
+
+  "footer": {
+    "desc": {
+      "Archeologický ústav AV ČR, Praha, v. v. i.": "Archeologický ústav AV ČR, Praha, v. v. i.",
+      "Kontakt": "Kontakt",
+      "Verze": "Verze",
+      "Operační program Výzkum, vývoj a vzdělávání": "Operační program Výzkum, vývoj a vzdělávání",
+      "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministerstvo školství, mládeže a tělovýchovy České republiky",
+      "Archeologický informační systém České republiky": "Archeologický informační systém České republiky",
+      "Programy strategie AV21": "Strategie AV21: Špičkový výzkum ve veřejném zájmu",
+      "Digitální archiv archeologické mapy České republiky": "Digitální archiv archeologické mapy České republiky",
+      "Ariadne": "Ariadne"
+    },
+    "license": {
+      "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
     }
   },
 
@@ -78,23 +121,6 @@
     }
   },
 
-  "footer": {
-    "desc": {
-      "Archeologický ústav AV ČR, Praha, v. v. i.": "Archeologický ústav AV ČR, Praha, v. v. i.",
-      "Kontakt": "Kontakt",
-      "Verze": "Verze",
-      "Operační program Výzkum, vývoj a vzdělávání": "Operační program Výzkum, vývoj a vzdělávání",
-      "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministerstvo školství, mládeže a tělovýchovy České republiky",
-      "Archeologický informační systém České republiky": "Archeologický informační systém České republiky",
-      "Programy strategie AV21": "Strategie AV21: Špičkový výzkum ve veřejném zájmu",
-      "Digitální archiv archeologické mapy České republiky": "Digitální archiv archeologické mapy České republiky",
-      "Ariadne": "Ariadne"
-    },
-    "license": {
-      "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
-    }
-  },
-
   "export": {
     "field": {
       "ident_cely": "Identifikátor",
@@ -122,10 +148,6 @@
   "zoom out": "Oddálit",
   "insuficient rights": "Zobrazení tohoto dokumentu je možné až po přihlášení uživatelským jménem a heslem. Účet lze snadno zaregistrovat pomocí webového formuláře dostupného přes horní menu -> Registrovat uživatele.\nPokud jste přihlášeni ke svému účtu AMČR a dokument přesto není přístupný, značí to jednu z těchto variant:\n\n1) Dokument obsahuje citlivé údaje a jeho zveřejnění je omezeno.\n2) Držitel autorských práv nedal souhlas se zveřejněním dokumentu.\n3) Neuplynula ochranná lhůta 3 let od archivace dokumentu.\n\nV takovém případě se prosím obraťte na správce AMČR nebo na příslušnou organizaci s žádostí o zpřístupnění. Vaše žádost bude individuálně posouzena a vyřízena.",
   "idnotfound": "Odkazovaný záznam se nepodařilo nalézt. Záznam mohl být odstraněn. V případě přetrvávajících problémů nás kontaktujte.",
-  "nebo": "nebo",
-  "zrušit volbu": "zrušit volbu",
-  "Filtry": "Filtry",
-  "Výsledky": "Výsledky",
   "geom.GeoJSON": "GeoJSON",
   "Operátor delete": "Zvolit operátor pro filtraci",
   "Vedoucí výzkumu": "Vedoucí výzkumu",
@@ -140,9 +162,6 @@
   "rangeLabel1": "0 z {{length}}",
   "rangeLabel2": "{{startIndex}} - {{endIndex}} z {{length}}",
   "Zobrazení výsledků": "Způsob zobrazení výsledků",
-  "itemView.row": "Řádkové zobrazení (pouze titulek)",
-  "itemView.col": "Galerie (pouze náhledy)",
-  "itemView.default": "Plné zobrazení (titulek, náhled, popis)",
   "Zobrazit časovou osu": "Zobrazit časovou osu",
   "Skrýt časovou osu": "Skrýt časovou osu",
   "Číslo stránky": "Číslo stránky",
@@ -151,13 +170,9 @@
   "tvar": "Tvary (příznaky) na letecké fotografii",
   "Akce dokumentu": "Dokumentovaná akce",
   "Rok výzkumu": "Rok výzkumu",
-  "Favorites": "Oblíbené",
   "záznamů": "záznamů",
   "O projektu": "Vítejte v Digitálním archivu AMČR!",
   "Novinky": "Aktuality",
-  "Zkuste zadat jiný dotaz": "Zkuste zadat jiný dotaz",
-  "nalezených výsledků v entitě": "nalezených výsledků pro tento typ záznamu",
-  "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "nebo se přepněte na jiný typ záznamu, kde jsme nalezli tyto výsledky",
   "sessionTimeout": "Z důvodu nečinnosti jste byli automaticky odhlášeni.",
 
   "sortBy": {
@@ -290,7 +305,6 @@
   "Napište komentář": "Napište komentář",
   "Prosím zadejte platnou emailovou adresu": "Prosím zadejte platnou emailovou adresu",
   "E-mail je povinný": "E-mail je povinný",
-  "Filtrace / Výsledky": "Filtrace / Výsledky",
   "feedback_success": "Komentář byl úspěšně odeslán",
   "feedback_failed": "Chyba při odeslání komentáře",
 
@@ -511,7 +525,8 @@
       "Uložit do oblíbených": "Uložit do oblíbených",
       "Odeslat komentář": "Odeslat komentář",
       "Vytisknout": "Vytisknout",
-      "Externí odkaz na Prahu archeologickou u ADB": "Přejít na portál Praha archeologická"
+      "Externí odkaz na Prahu archeologickou u ADB": "Přejít na portál Praha archeologická",
+      "Favorites": "Oblíbené"
     },
     "menu": {
       "Persistentní odkaz": "Persistentní odkaz"
@@ -612,6 +627,7 @@
       "PIAN - Základní mapa 1:10 000": "PIAN - Základní mapa 1:10 000",
       "Geometrie GML": "Geometrie GML",
       "Geometrie WKT": "Geometrie WKT",
+      "Favorites": "Oblíbené"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -643,6 +659,12 @@
       "Archeologický dokumentační bod": "Archeologický dokumentační bod",
       "Let": "Let",
       "Pian": "PIAN",
+    },
+    "citation": {
+      "nalezených výsledků v entitě": "nalezených výsledků pro tento typ záznamu",
+      "Zkuste zadat jiný dotaz": "Zkuste zadat jiný dotaz",
+      "nebo se přepněte do jiné entity, kde jsme nalezli výsledky": "nebo se přepněte na jiný typ záznamu, kde jsme nalezli tyto výsledky",
+      "zrušit volbu": "zrušit volbu"
     }
   }
 }
