@@ -52,6 +52,12 @@
     }
   },
 
+  "map": {
+    "tooltip": {
+      "Odstranit tento filtr": "Remove this filter",
+    }
+  },
+
   "searchbar": {
     "input": {
       "Zadejte vyhledávací dotaz": "Enter search query"
@@ -102,7 +108,8 @@
     "title": {
       "Přihlášení uživatele": "User login",
       "Kontakt": "Contact",
-      "Licence": "License"
+      "Licence": "License",
+      "Odeslat komentář": "Send comment",
     },
     "desc": {
       "Přihlašovací jméno": "Username (email)",
@@ -119,16 +126,25 @@
       "Přejděte číslo stránky": "Go to page",
       "Velikost souboru": "File size",
       "Typ souboru": "File type",
+      "Jméno": "Name",
+      "Komentář": "Comment"
+    },
+    "input": {
+      "Jméno": "Name",
+      "Napište komentář": "Write a comment"
     },
     "button": {
       "Přihlásit": "Log in",
       "Odhlásit": "Log out",
       "Zavřít": "Close",
       "Obnovit heslo": "Renew password",
-      "Souhlasím": "I agree"
+      "Souhlasím": "I agree",
+      "Odeslat": "Send"
     },
     "alert": {
-      "Špatné přihlašovací údaje": "Invalid credentials"
+      "Špatné přihlašovací údaje": "Invalid credentials",
+      "Prosím zadejte jmeno": "Please enter a name",
+      "Prosím zadejte platnou emailovou adresu": " Please enter a valid email address"
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
@@ -308,10 +324,6 @@
   "f_aktivita_intruze": "find intrusion",
 
   "Přechod na API": "Transition to API",
-  "Odeslat": "Send",
-  "Komentář": "Comment",
-  "Napište komentář": "Write a comment",
-  "Prosím zadejte platnou emailovou adresu": " Please enter a valid email address",
   "E-mail je povinný": "Email is required",
   "feedback_success": "Comment has been successfully submitted",
   "feedback_failed": "Error submitting comment",

@@ -52,6 +52,12 @@
     }
   },
 
+  "map": {
+    "tooltip": {
+      "Odstranit tento filtr": "Zrušit tento filtr",
+    }
+  },
+
   "searchbar": {
     "input": {
       "Zadejte vyhledávací dotaz": "Zadejte vyhledávací dotaz"
@@ -102,7 +108,8 @@
     "title": {
       "Přihlášení uživatele": "Přihlášení uživatele",
       "Kontakt": "Kontakt",
-      "Licence": "Licence"
+      "Licence": "Licence",
+      "Odeslat komentář": "Odeslat komentář",
     },
     "desc": {
       "Přihlašovací jméno": "Přihlašovací jméno (email)",
@@ -119,16 +126,25 @@
       "Přejděte číslo stránky": "Přejít na stránku",
       "Velikost souboru": "Velikost souboru",
       "Typ souboru": "Typ souboru",
+      "Jméno": "Jméno",
+      "Komentář": "Komentář"
+    },
+    "input": {
+      "Jméno": "Jméno",
+      "Napište komentář": "Napište komentář"
     },
     "button": {
       "Přihlásit": "Přihlásit",
       "Odhlásit": "Odhlásit",
       "Zavřít": "Zavřít",
       "Obnovit heslo": "Obnovit heslo",
-      "Souhlasím": "Souhlasím"
+      "Souhlasím": "Souhlasím",
+      "Odeslat": "Odeslat"
     },
     "alert": {
-      "Špatné přihlašovací údaje": "Neplatné přihlašovací údaje"
+      "Špatné přihlašovací údaje": "Neplatné přihlašovací údaje",
+      "Prosím zadejte jmeno": "Prosím zadejte jmeno",
+      "Prosím zadejte platnou emailovou adresu": "Prosím zadejte platnou emailovou adresu"
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
@@ -307,10 +323,6 @@
   "f_aktivita_intruze": "intruze",
 
   "Přechod na API": "Přechod na API",
-  "Odeslat": "Odeslat",
-  "Komentář": "Komentář",
-  "Napište komentář": "Napište komentář",
-  "Prosím zadejte platnou emailovou adresu": "Prosím zadejte platnou emailovou adresu",
   "E-mail je povinný": "E-mail je povinný",
   "feedback_success": "Komentář byl úspěšně odeslán",
   "feedback_failed": "Chyba při odeslání komentáře",
