@@ -41,7 +41,7 @@ export class ExportComponent implements OnInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('logo_desc') + ' | Export');
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Export');
   }
 
   search(params: Params) {

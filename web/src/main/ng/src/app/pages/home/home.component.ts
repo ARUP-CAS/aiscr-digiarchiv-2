@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('logo_desc') + ' | Home');
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Home');
   }
 
   showPop(box: Box, relative: any, template: TemplateRef<any>) {

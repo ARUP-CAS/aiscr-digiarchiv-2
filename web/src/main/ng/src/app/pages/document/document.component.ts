@@ -49,7 +49,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('logo_desc') + ' | ' + this.service.getTranslation('card.citation.Dokument'));
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | ' + this.service.getTranslation('card.citation.Dokument'));
   }
 
   search(id: string) {

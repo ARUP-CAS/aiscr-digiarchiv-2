@@ -103,7 +103,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('logo_desc') + ' | Results');
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Results');
   }
 
   toggleFavorites() {
