@@ -45,9 +45,9 @@ export class FeedbackDialogComponent implements OnInit {
   sendFeedback() {
       this.service.feedback(this.name, this.mail, this.text, this.ident_cely).subscribe((res: any)=>{
         if(res.hasError) {
-          alert(this.service.getTranslation('feedback_failed') + ": " + res.error);
+          alert(this.service.getTranslation('dialog.alert.feedback_failed') + ": " + res.error);
         } else {
-          alert(this.service.getTranslation('feedback_success'));
+          alert(this.service.getTranslation('dialog.alert.feedback_success'));
           this.dialogRef.close();
         }
       });

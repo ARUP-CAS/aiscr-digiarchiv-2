@@ -44,8 +44,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   locationFilter;
 
   zoomOptions = {
-    zoomInTitle: this.service.getTranslation('zoom in'),
-    zoomOutTitle: this.service.getTranslation('zoom out'),
+    zoomInTitle: this.service.getTranslation('map.desc.zoom in'),
+    zoomOutTitle: this.service.getTranslation('map.desc.zoom out'),
   };
 
   options = {
@@ -493,8 +493,8 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     L.setOptions(this.locationFilter, {
       enableButton: {
-        enableText: this.service.getTranslation('select area'),
-        disableText: this.service.getTranslation('remove selection')
+        enableText: this.service.getTranslation('map.desc.select area'),
+        disableText: this.service.getTranslation('map.desc.remove selection')
       }
     });
 

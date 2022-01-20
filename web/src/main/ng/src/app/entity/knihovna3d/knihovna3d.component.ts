@@ -194,7 +194,7 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
         data: this.result
       });
     } else {
-      const msg = this.service.getTranslation('insuficient rights');
+      const msg = this.service.getTranslation('alert.insuficient rights');
       alert(msg);
     }
   }

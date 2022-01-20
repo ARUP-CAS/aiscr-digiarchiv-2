@@ -4,6 +4,28 @@
   "a": "and",
   "nebo":"or",
 
+  "from": "from",
+  "to": "to",
+  "Operátor delete": "Select filter operator",
+  "Vedoucí výzkumu": "Principal researcher",
+  "Datum výzkumu": "Fieldwork date",
+  "výsledků": "results",
+  "rangeLabel1": "0 of {{length}}",
+  "rangeLabel2": "{{startIndex}} - {{endIndex}} of {{length}}",
+  "Zobrazení výsledků": "Results view type",
+  "Zobrazit časovou osu":  "Display time chart",
+  "Skrýt časovou osu": "Hide time chart",
+  "stránka ze": "page from",
+  "Komponenta dokumentu": "Document component",
+  "tvar": "Shapes (marks) in the aerial image",
+  "Akce dokumentu": "Documented fieldwork",
+  "Rok výzkumu": "Year of fieldwork",
+  "záznamů": "records",
+  "O projektu": "Welcome to the AMCR Digital Archive!",
+  "Novinky": "News",
+  "sessionTimeout": "You have been automatically logged off due to inactivity.",
+
+
   "navbar": {
     "desc": {
       "logo_desc": "AMCR Digital Archive",
@@ -13,15 +35,37 @@
     }
   },
 
-  "sidenav": {
-    "tab": {
-      "Filtry": "Filters",
-      "Výsledky": "Results",
+
+  "searchbar": {
+    "input": {
+      "Zadejte vyhledávací dotaz": "Enter search query"
+    },
+    "tooltip": {
+      "q": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
     },
     "button": {
-      "Filtrace / Výsledky": "Filtration / Results",
+      "Exportovat seznam": "Export the list",
+      "Otevřít mapu": "Open map",
+      "Zavřít mapu": "Close map"
     }
   },
+
+
+  "toolbar": {
+    "menu": {
+      "row": "Line view (caption only)",
+      "col": "Gallery (thumbnail only)",
+      "default": "Full view (caption, thumbnail, description)"
+    },
+    "tooltip": {
+      "row": "Line view (caption only)",
+      "col": "Gallery (thumbnail only)",
+      "default": "Full view (caption, thumbnail, description)",
+      "Export": "Export",
+      "Favorites": "Favorites"
+    }
+  },
+
 
   "paginator": {
     "desc": {
@@ -51,241 +95,6 @@
       "organizace": "Organisation"
     }
   },
-
-  "map": {
-    "tooltip": {
-      "Odstranit tento filtr": "Remove this filter",
-    }
-  },
-
-  "searchbar": {
-    "input": {
-      "Zadejte vyhledávací dotaz": "Enter search query"
-    },
-    "tooltip": {
-      "q": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
-    },
-    "button": {
-      "Exportovat seznam": "Export the list",
-      "Otevřít mapu": "Open map",
-      "Zavřít mapu": "Close map"
-    }
-  },
-
-  "toolbar": {
-    "menu": {
-      "row": "Line view (caption only)",
-      "col": "Gallery (thumbnail only)",
-      "default": "Full view (caption, thumbnail, description)"
-    },
-    "tooltip": {
-      "row": "Line view (caption only)",
-      "col": "Gallery (thumbnail only)",
-      "default": "Full view (caption, thumbnail, description)",
-      "Export": "Export",
-      "Favorites": "Favorites"
-    }
-  },
-
-  "footer": {
-    "desc": {
-      "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
-      "Kontakt": "Contact",
-      "Verze": "Version",
-      "Operační program Výzkum, vývoj a vzdělávání": "Operational Programme Research, Development and Education",
-      "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministry of Education, Youth and Sports of the Czech Republic",
-      "Archeologický informační systém České republiky": "Archaeological Information System of the Czech Republic",
-      "Programy strategie AV21": "Strategy AV21: Top research in the public interest",
-      "Digitální archiv archeologické mapy České republiky": "Digital archive of the archaeological map of the Czech Republic",
-      "Ariadne": "Ariadne"
-    },
-    "license": {
-      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
-    }
-  },
-
-  "dialog": {
-    "title": {
-      "Přihlášení uživatele": "User login",
-      "Kontakt": "Contact",
-      "Licence": "License",
-      "Odeslat komentář": "Send comment",
-    },
-    "desc": {
-      "Přihlašovací jméno": "Username (email)",
-      "Heslo": "Password",
-      "Přihlášený uživatel": "Logged user",
-      "Uživatelská role role": "User role",
-      "Organizace": "Organisation",
-      "Správa dat, uživatelů a podpora pro oblast Čech": "Data management and user support for Bohemia",
-      "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
-      "Napište nám": "Send us a message",
-      "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Data management and user support for Moravia and Czech Silesia (incl. the Vysočina Region)",
-      "Archeologický ústav AV ČR, Brno, v. v. i.": "Institute of Archaeology CAS, Brno",
-      "Databáze Archeologická mapa České republiky": "Archaeological Map of the Czech Republic database",
-      "Přejděte číslo stránky": "Go to page",
-      "Velikost souboru": "File size",
-      "Typ souboru": "File type",
-      "Jméno": "Name",
-      "Komentář": "Comment"
-    },
-    "input": {
-      "Jméno": "Name",
-      "Napište komentář": "Write a comment"
-    },
-    "button": {
-      "Přihlásit": "Log in",
-      "Odhlásit": "Log out",
-      "Zavřít": "Close",
-      "Obnovit heslo": "Renew password",
-      "Souhlasím": "I agree",
-      "Odeslat": "Send"
-    },
-    "alert": {
-      "Špatné přihlašovací údaje": "Invalid credentials",
-      "Prosím zadejte jmeno": "Please enter a name",
-      "Prosím zadejte platnou emailovou adresu": " Please enter a valid email address"
-    },
-    "license": {
-      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
-      "data_and_metadata_usage": "The use of both data and metadata is subject to this license, unless explicitly stated otherwise.",
-    },
-    "citation": {
-      "jejímž autorem je": "operated by",
-      "podléhá licenci": "is licensed under",
-      "Data podléhají licenci": "Data is licensed under",
-      "Citujte jako": "Cite as",
-      "Dokument": "Document",
-      "Dostupné z": "Available at",
-      "AMČR: Záznam": "AMCR: Record",
-      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic",
-      "stránka z": "page from"
-    },
-    "tooltip": {
-      "Stáhněte soubor": "Download file"
-    }
-  },
-
-  "export": {
-    "field": {
-      "ident_cely": "Identifier",
-      "f_autor": "Document - author",
-      "rok_vzniku": "Document - year of creation",
-      "f_organizace": "Organisation",
-      "typ_dokumentu": "Document type",
-      "material_originalu": "Original material",
-      "popis": "Description",
-      "poznamka": "Note",
-      "oznaceni_originalu": "Document - original label",
-      "f_okres": "District",
-      "f_katastr": "Cadastre",
-      "pristupnost": "Acessibility"
-    },
-    "desc": {
-      "Pian": "Pian",
-      "Přesnost": "Accuracy",
-      "PIAN - typ": "PIAN - type",
-      "PIAN - Základní mapa 1:10 000": "PIAN - Base Map 1:10 000",
-      "Definiční bod (WGS-84)": "Definition point (WGS-84)",
-      "GeoJSON": "GeoJSON",
-      "GML": "GML",
-      "WKT": "WKT"
-    }
-  },
-
-
-  "from": "from",
-  "to": "to",
-  "undefined": "unlimited",
-  "select area": "Select area",
-  "remove selection": "Remove selection",
-  "zoom in": "Zoom in",
-  "zoom out": "Zoom out",
-  "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed.",
-  "Operátor delete": "Select filter operator",
-  "Vedoucí výzkumu": "Principal researcher",
-  "Datum výzkumu": "Fieldwork date",
-  "výsledků": "results",
-  "rangeLabel1": "0 of {{length}}",
-  "rangeLabel2": "{{startIndex}} - {{endIndex}} of {{length}}",
-  "Zobrazení výsledků": "Results view type",
-  "Zobrazit časovou osu":  "Display time chart",
-  "Skrýt časovou osu": "Hide time chart",
-  "stránka ze": "page from",
-  "Komponenta dokumentu": "Document component",
-  "tvar": "Shapes (marks) in the aerial image",
-  "Akce dokumentu": "Documented fieldwork",
-  "Rok výzkumu": "Year of fieldwork",
-  "záznamů": "records",
-  "O projektu": "Welcome to the AMCR Digital Archive!",
-  "Novinky": "News",
-  "sessionTimeout": "You have been automatically logged off due to inactivity.",
-
-  "kategorie_dokumentu": {
-    "texty": "Texts",
-    "foto": "Photographs",
-    "lfoto": "Aerial images",
-    "ddata": "Digital data",
-    "mplany": "Plans and maps",
-    "neuvedeno": "Unspecified",
-    "pas": "Individual finds",
-    "ddata3d": "3D models"
-  },
-
-  "entities": {
-    "dokument": {
-      "title": "Documents",
-      "desc": "Documents lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    }, 
-    "projekt": {
-      "title": "Projects",
-      "desc": "Projects lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    },
-    "akce": {
-      "title": "Fieldwork Events",
-      "desc": "Fieldwork Events lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    },
-    "lokalita": {
-      "title": "Sites",
-      "desc": "Sites lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    },
-    "samostatny_nalez": {
-      "title": "Individual Finds",
-      "desc": "Individual Finds lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    },
-    "pian": {
-      "title": "Spatial Units",
-      "desc": "Spatial Units lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    },
-    "knihovna_3d": {
-      "title": "3D Library",
-      "desc": "3D Library lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    },
-    "let": {
-      "title": "Flights",
-      "desc": "Flights lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    },
-    "ext_zdroj": {
-      "title": "External Sources",
-      "desc": "External Sources lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-    } 
-  },
-  
-  "f_aktivita_sidlistni": "residential",
-  "f_aktivita_pohrebni": "burial",
-  "f_aktivita_vyrobni": "production",
-  "f_aktivita_tezebni": "mining",
-  "f_aktivita_kultovni": "ritual",
-  "f_aktivita_komunikace": "transportation",
-  "f_aktivita_deponovani": "deposition",
-  "f_aktivita_boj": "fighting",
-  "f_aktivita_jina": "other activity",
-  "f_aktivita_intruze": "find intrusion",
-
-  "Přechod na API": "Transition to API",
-  "E-mail je povinný": "Email is required",
-  "feedback_success": "Comment has been successfully submitted",
-  "feedback_failed": "Error submitting comment",
 
 
   "facet": {
@@ -457,6 +266,7 @@
       "nalez_poznamka": "Find - note"
     }
   },
+
 
   "card": {
     "field": {
@@ -654,5 +464,209 @@
     "note": {
       "idnotfound": "The referenced record could not be found. The record may have been deleted. If there are any remaining issues, please contact us.",
     }
-  }
+  },
+
+
+  "sidenav": {
+    "tab": {
+      "Filtry": "Filters",
+      "Výsledky": "Results",
+    },
+    "button": {
+      "Filtrace / Výsledky": "Filtration / Results",
+    }
+  },
+
+
+  "map": {
+    "desc": {
+      "select area": "Select area",
+      "remove selection": "Remove selection",
+      "zoom in": "Zoom in",
+      "zoom out": "Zoom out"
+    },
+    "tooltip": {
+      "Odstranit tento filtr": "Remove this filter"
+    }
+  },
+
+
+  "footer": {
+    "desc": {
+      "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
+      "Kontakt": "Contact",
+      "Verze": "Version",
+      "Operační program Výzkum, vývoj a vzdělávání": "Operational Programme Research, Development and Education",
+      "Ministerstvo školství, mládeže a tělovýchovy České republiky": "Ministry of Education, Youth and Sports of the Czech Republic",
+      "Archeologický informační systém České republiky": "Archaeological Information System of the Czech Republic",
+      "Programy strategie AV21": "Strategy AV21: Top research in the public interest",
+      "Digitální archiv archeologické mapy České republiky": "Digital archive of the archaeological map of the Czech Republic",
+      "Ariadne": "Ariadne"
+    },
+    "license": {
+      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
+    }
+  },
+
+
+  "dialog": {
+    "title": {
+      "Přihlášení uživatele": "User login",
+      "Kontakt": "Contact",
+      "Licence": "License",
+      "Odeslat komentář": "Send comment",
+    },
+    "desc": {
+      "Přihlašovací jméno": "Username (email)",
+      "Heslo": "Password",
+      "Přihlášený uživatel": "Logged user",
+      "Uživatelská role role": "User role",
+      "Organizace": "Organisation",
+      "Správa dat, uživatelů a podpora pro oblast Čech": "Data management and user support for Bohemia",
+      "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
+      "Napište nám": "Send us a message",
+      "Správa dat, uživatelů a podpora pro oblast Moravy a Slezska (vč. kraje Vysočina)": "Data management and user support for Moravia and Czech Silesia (incl. the Vysočina Region)",
+      "Archeologický ústav AV ČR, Brno, v. v. i.": "Institute of Archaeology CAS, Brno",
+      "Databáze Archeologická mapa České republiky": "Archaeological Map of the Czech Republic database",
+      "Přejděte číslo stránky": "Go to page",
+      "Velikost souboru": "File size",
+      "Typ souboru": "File type",
+      "Jméno": "Name",
+      "Komentář": "Comment"
+    },
+    "input": {
+      "Jméno": "Name",
+      "Napište komentář": "Write a comment"
+    },
+    "button": {
+      "Přihlásit": "Log in",
+      "Odhlásit": "Log out",
+      "Zavřít": "Close",
+      "Obnovit heslo": "Renew password",
+      "Souhlasím": "I agree",
+      "Odeslat": "Send"
+    },
+    "alert": {
+      "Špatné přihlašovací údaje": "Invalid credentials",
+      "Prosím zadejte jmeno": "Please enter a name",
+      "Prosím zadejte platnou emailovou adresu": " Please enter a valid email address",
+      "feedback_success": "Comment has been successfully submitted",
+      "feedback_failed": "Error submitting comment"
+    },
+    "license": {
+      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
+      "data_and_metadata_usage": "The use of both data and metadata is subject to this license, unless explicitly stated otherwise.",
+    },
+    "citation": {
+      "jejímž autorem je": "operated by",
+      "podléhá licenci": "is licensed under",
+      "Data podléhají licenci": "Data is licensed under",
+      "Citujte jako": "Cite as",
+      "Dokument": "Document",
+      "Dostupné z": "Available at",
+      "AMČR: Záznam": "AMCR: Record",
+      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic",
+      "stránka z": "page from"
+    },
+    "tooltip": {
+      "Stáhněte soubor": "Download file"
+    }
+  },
+
+
+  "export": {
+    "field": {
+      "ident_cely": "Identifier",
+      "f_autor": "Document - author",
+      "rok_vzniku": "Document - year of creation",
+      "f_organizace": "Organisation",
+      "typ_dokumentu": "Document type",
+      "material_originalu": "Original material",
+      "popis": "Description",
+      "poznamka": "Note",
+      "oznaceni_originalu": "Document - original label",
+      "f_okres": "District",
+      "f_katastr": "Cadastre",
+      "pristupnost": "Acessibility"
+    },
+    "desc": {
+      "Pian": "Pian",
+      "Přesnost": "Accuracy",
+      "PIAN - typ": "PIAN - type",
+      "PIAN - Základní mapa 1:10 000": "PIAN - Base Map 1:10 000",
+      "Definiční bod (WGS-84)": "Definition point (WGS-84)",
+      "GeoJSON": "GeoJSON",
+      "GML": "GML",
+      "WKT": "WKT"
+    }
+  },
+
+
+  "entities": {
+    "dokument": {
+      "title": "Documents",
+      "desc": "Documents lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    }, 
+    "projekt": {
+      "title": "Projects",
+      "desc": "Projects lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "akce": {
+      "title": "Fieldwork Events",
+      "desc": "Fieldwork Events lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "lokalita": {
+      "title": "Sites",
+      "desc": "Sites lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "samostatny_nalez": {
+      "title": "Individual Finds",
+      "desc": "Individual Finds lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "pian": {
+      "title": "Spatial Units",
+      "desc": "Spatial Units lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "knihovna_3d": {
+      "title": "3D Library",
+      "desc": "3D Library lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "let": {
+      "title": "Flights",
+      "desc": "Flights lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    },
+    "ext_zdroj": {
+      "title": "External Sources",
+      "desc": "External Sources lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+    } 
+  },
+
+
+  "kategorie_dokumentu": {
+    "texty": "Texts",
+    "foto": "Photographs",
+    "lfoto": "Aerial images",
+    "ddata": "Digital data",
+    "mplany": "Plans and maps",
+    "neuvedeno": "Unspecified",
+    "pas": "Individual finds",
+    "ddata3d": "3D models"
+  },
+
+
+  "alert": {
+    "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed."
+  },
+
+  
+  "f_aktivita_sidlistni": "residential",
+  "f_aktivita_pohrebni": "burial",
+  "f_aktivita_vyrobni": "production",
+  "f_aktivita_tezebni": "mining",
+  "f_aktivita_kultovni": "ritual",
+  "f_aktivita_komunikace": "transportation",
+  "f_aktivita_deponovani": "deposition",
+  "f_aktivita_boj": "fighting",
+  "f_aktivita_jina": "other activity",
+  "f_aktivita_intruze": "find intrusion"
 }
