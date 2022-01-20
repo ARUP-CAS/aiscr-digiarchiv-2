@@ -6,10 +6,6 @@
 
   "from": "od",
   "to": "do",
-  "Operátor delete": "Zvolit operátor pro filtraci",
-  "Vedoucí výzkumu": "Vedoucí výzkumu",
-  "Datum výzkumu": "Datum výzkumu",
-  "výsledků": "výsledků",
   "rangeLabel1": "0 z {{length}}",
   "rangeLabel2": "{{startIndex}} - {{endIndex}} z {{length}}",
   "Zobrazení výsledků": "Způsob zobrazení výsledků",

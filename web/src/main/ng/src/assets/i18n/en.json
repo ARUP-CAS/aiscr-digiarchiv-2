@@ -6,10 +6,6 @@
 
   "from": "from",
   "to": "to",
-  "Operátor delete": "Select filter operator",
-  "Vedoucí výzkumu": "Principal researcher",
-  "Datum výzkumu": "Fieldwork date",
-  "výsledků": "results",
   "rangeLabel1": "0 of {{length}}",
   "rangeLabel2": "{{startIndex}} - {{endIndex}} of {{length}}",
   "Zobrazení výsledků": "Results view type",

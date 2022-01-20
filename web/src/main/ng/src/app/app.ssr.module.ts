@@ -58,7 +58,6 @@ import { LetComponent } from './components/let/let.component';
 import { SidenavListComponent } from './components/sidenav-list/sidenav-list.component';
 import { KontaktDialogComponent } from './components/footer/kontakt-dialog/kontakt-dialog.component';
 import { LicenceDialogComponent } from './components/footer/licence-dialog/licence-dialog.component';
-import { FavoritesComponent } from './pages/favorites/favorites.component';
 import { LicenseDialogComponent } from './components/license-dialog/license-dialog.component';
 import { DocumentDialogComponent } from './components/document-dialog/document-dialog.component';
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -163,7 +162,6 @@ const providers: any[] = [
     SidenavListComponent,
     KontaktDialogComponent,
     LicenceDialogComponent,
-    FavoritesComponent,
     LicenseDialogComponent,
     DocumentDialogComponent,
     InlineFilterComponent,
