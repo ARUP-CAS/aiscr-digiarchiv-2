@@ -45,7 +45,7 @@
       <div *ngIf="state.numFound > 0" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center" class="app-toolbar">
         <div fxFlex="0 0 150px" class="app-action-links">
           <!-- <a (click)="showChartBar()"
-          [matTooltip]="isChartBarCollapsed ? ('Zobrazit časovou osu' | translate) : ('Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
+          [matTooltip]="isChartBarCollapsed ? ('toolbar.tooltip.Zobrazit časovou osu' | translate) : ('toolbar.tooltip.Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
           <span class="app-pipe"></span> -->
           <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate">
             <mat-icon [ngSwitch]="state.itemView">

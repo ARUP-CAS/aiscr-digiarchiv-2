@@ -3,23 +3,8 @@
   "Ne": "Ne",
   "a": "a",
   "nebo": "nebo",
-
   "from": "od",
   "to": "do",
-  "rangeLabel1": "0 z {{length}}",
-  "rangeLabel2": "{{startIndex}} - {{endIndex}} z {{length}}",
-  "Zobrazení výsledků": "Způsob zobrazení výsledků",
-  "Zobrazit časovou osu": "Zobrazit časovou osu",
-  "Skrýt časovou osu": "Skrýt časovou osu",
-  "stránka ze": "stránka z",
-  "Komponenta dokumentu": "Komponenta dokumentu",
-  "tvar": "Tvary (příznaky) na letecké fotografii",
-  "Akce dokumentu": "Dokumentovaná akce",
-  "Rok výzkumu": "Rok výzkumu",
-  "záznamů": "záznamů",
-  "O projektu": "Vítejte v Digitálním archivu AMČR!",
-  "Novinky": "Aktuality",
-  "sessionTimeout": "Z důvodu nečinnosti jste byli automaticky odhlášeni.",
 
 
   "navbar": {
@@ -58,7 +43,9 @@
       "col": "Galerie (pouze náhledy)",
       "default": "Plné zobrazení (titulek, náhled, popis)",
       "Export": "Export",
-      "Favorites": "Oblíbené"
+      "Favorites": "Oblíbené",
+      "Zobrazit časovou osu": "Zobrazit časovou osu",
+      "Skrýt časovou osu": "Skrýt časovou osu"
     }
   },
 
@@ -72,6 +59,8 @@
       "previousPageLabel" : "Předchozí stránka",
       "firstPageLabel": "První stránka",
       "lastPageLabel": "Poslední stránka",
+      "rangeLabel1": "0 z {{length}}",
+      "rangeLabel2": "{{startIndex}} - {{endIndex}} z {{length}}"
     },
     "tooltip": {
       "Přejděte číslo stránky": "Přejít na stránku",
@@ -414,6 +403,7 @@
       "Geometrie WKT": "Geometrie WKT",
       "Favorites": "Oblíbené",
       "Persistentní odkaz": "Persistentní odkaz",
+      "záznamů": "záznamů"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -445,6 +435,8 @@
       "Archeologický dokumentační bod": "Archeologický dokumentační bod",
       "Let": "Let",
       "Pian": "PIAN",
+      "O projektu": "Vítejte v Digitálním archivu AMČR!",
+      "Aktuality": "Aktuality"
     },
     "citation": {
       "nalezených výsledků v entitě": "nalezených výsledků pro tento typ záznamu",
@@ -651,7 +643,8 @@
 
 
   "alert": {
-    "insuficient rights": "Zobrazení tohoto dokumentu je možné až po přihlášení uživatelským jménem a heslem. Účet lze snadno zaregistrovat pomocí webového formuláře dostupného přes horní menu -> Registrovat uživatele.\nPokud jste přihlášeni ke svému účtu AMČR a dokument přesto není přístupný, značí to jednu z těchto variant:\n\n1) Dokument obsahuje citlivé údaje a jeho zveřejnění je omezeno.\n2) Držitel autorských práv nedal souhlas se zveřejněním dokumentu.\n3) Neuplynula ochranná lhůta 3 let od archivace dokumentu.\n\nV takovém případě se prosím obraťte na správce AMČR nebo na příslušnou organizaci s žádostí o zpřístupnění. Vaše žádost bude individuálně posouzena a vyřízena."
+    "insuficient rights": "Zobrazení tohoto dokumentu je možné až po přihlášení uživatelským jménem a heslem. Účet lze snadno zaregistrovat pomocí webového formuláře dostupného přes horní menu -> Registrovat uživatele.\nPokud jste přihlášeni ke svému účtu AMČR a dokument přesto není přístupný, značí to jednu z těchto variant:\n\n1) Dokument obsahuje citlivé údaje a jeho zveřejnění je omezeno.\n2) Držitel autorských práv nedal souhlas se zveřejněním dokumentu.\n3) Neuplynula ochranná lhůta 3 let od archivace dokumentu.\n\nV takovém případě se prosím obraťte na správce AMČR nebo na příslušnou organizaci s žádostí o zpřístupnění. Vaše žádost bude individuálně posouzena a vyřízena.",
+    "sessionTimeout": "Z důvodu nečinnosti jste byli automaticky odhlášeni."
   },
 
 	

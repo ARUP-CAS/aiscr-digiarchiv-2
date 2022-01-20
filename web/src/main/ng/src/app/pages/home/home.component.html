@@ -18,7 +18,7 @@
               </mat-card-title>
             </mat-card-header>
             <mat-card-actions>
-              <span>{{ totals[entity] }}</span> {{'záznamů' | translate}}
+              <span>{{ totals[entity] }}</span> {{'card.desc.záznamů' | translate}}
               <a *ngIf="entity === 'dokument'" (click)="showingCat = !showingCat" [class]="'app-icon-inside app-entity-' + entity" [ngClass]="showingCat ? 'app-rotate-up' : 'app-rotate-down'" [matTooltip]="showingCat ? 'Sbalit kategorie' : 'Rozbalit kategorie'">
                 <mat-icon>
                   expand_more
@@ -47,7 +47,7 @@
       <div fxLayout="row" class="app-desc-wrapper">
         <mat-card fxFlex class="app-fx-left">
           <mat-card-header>
-            <mat-card-title>{{ 'O projektu' | translate }}</mat-card-title>
+            <mat-card-title>{{ 'card.title.O projektu' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <app-free-text [id]="'about'" ></app-free-text>
@@ -56,7 +56,7 @@
         <div fxFlex class="app-fx-right">
           <mat-card>
             <mat-card-header>
-              <mat-card-title>{{ 'Novinky' | translate }}</mat-card-title>
+              <mat-card-title>{{ 'card.title.Aktuality' | translate }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
               <app-free-text [id]="'news'" ></app-free-text>

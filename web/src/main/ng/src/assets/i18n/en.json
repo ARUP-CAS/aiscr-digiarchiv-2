@@ -3,23 +3,8 @@
   "Ne": "No",
   "a": "and",
   "nebo":"or",
-
   "from": "from",
   "to": "to",
-  "rangeLabel1": "0 of {{length}}",
-  "rangeLabel2": "{{startIndex}} - {{endIndex}} of {{length}}",
-  "Zobrazení výsledků": "Results view type",
-  "Zobrazit časovou osu":  "Display time chart",
-  "Skrýt časovou osu": "Hide time chart",
-  "stránka ze": "page from",
-  "Komponenta dokumentu": "Document component",
-  "tvar": "Shapes (marks) in the aerial image",
-  "Akce dokumentu": "Documented fieldwork",
-  "Rok výzkumu": "Year of fieldwork",
-  "záznamů": "records",
-  "O projektu": "Welcome to the AMCR Digital Archive!",
-  "Novinky": "News",
-  "sessionTimeout": "You have been automatically logged off due to inactivity.",
 
 
   "navbar": {
@@ -58,7 +43,9 @@
       "col": "Gallery (thumbnail only)",
       "default": "Full view (caption, thumbnail, description)",
       "Export": "Export",
-      "Favorites": "Favorites"
+      "Favorites": "Favorites",
+      "Zobrazit časovou osu":  "Display time chart",
+      "Skrýt časovou osu": "Hide time chart"
     }
   },
 
@@ -72,6 +59,8 @@
       "previousPageLabel" : "Previous page",
       "firstPageLabel": "First page",
       "lastPageLabel": "Last page",
+      "rangeLabel1": "0 of {{length}}",
+      "rangeLabel2": "{{startIndex}} - {{endIndex}} of {{length}}"
     },
     "tooltip": {
       "Přejděte číslo stránky": "Go to page",
@@ -414,6 +403,7 @@
       "Geometrie WKT": "Geometry WKT",
       "Favorites": "Favorites",
       "Persistentní odkaz": "Persistent link",
+      "záznamů": "records"
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -445,6 +435,8 @@
       "Archeologický dokumentační bod": "Archaeological Documentation Point",
       "Let": "Flight",
       "Pian": "PIAN",
+      "O projektu": "Welcome to the AMCR Digital Archive!",
+      "Aktuality": "News"
     },
     "citation": {
       "nalezených výsledků v entitě": "results found for this record type",
@@ -651,7 +643,8 @@
 
 
   "alert": {
-    "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed."
+    "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed.",
+    "sessionTimeout": "You have been automatically logged off due to inactivity."
   },
 
   

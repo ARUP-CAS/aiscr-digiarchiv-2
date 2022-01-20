@@ -7,13 +7,13 @@ export class PaginatorI18n extends MatPaginatorIntl {
 
   getRangeLabel = (page, pageSize, length) => {
       if (length === 0 || pageSize === 0) {
-        return this.translate.instant('rangeLabel1', { length });
+        return this.translate.instant('paginator.desc.rangeLabel1', { length });
       }
       length = Math.max(length, 0);
       const startIndex = page * pageSize;
       // If the start index exceeds the list length, do not try and fix the end index to the end.
       const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
-      return this.translate.instant('rangeLabel2', { startIndex: startIndex + 1, endIndex, length });
+      return this.translate.instant('paginator.desc.rangeLabel2', { startIndex: startIndex + 1, endIndex, length });
   };
 
   constructor(private readonly translate: TranslateService) {
