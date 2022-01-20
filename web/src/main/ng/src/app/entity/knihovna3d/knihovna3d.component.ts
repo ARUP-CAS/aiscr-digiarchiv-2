@@ -132,7 +132,7 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
           org = org.trim();
         }
 
-        const o = org ? this.service.getHeslarTranslation(org, 'field.f_organizace') : '';
+        const o = org ? this.service.getHeslarTranslation(org, 'card.field.f_organizace') : '';
         if ((o !== '') && (os.indexOf(o) < 0)) {
           os.push(o);
 

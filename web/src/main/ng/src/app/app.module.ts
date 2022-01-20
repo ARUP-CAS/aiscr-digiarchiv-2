@@ -35,7 +35,6 @@ import { FileViewerComponent } from './components/file-viewer/file-viewer.compon
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { LokalitaComponent } from './entity/lokalita/lokalita.component';
 import { TvarComponent } from './components/tvar/tvar.component';
-import { NeidentAkceComponent } from './components/neident-akce/neident-akce.component';
 import { DokJednotkaComponent } from './components/dok-jednotka/dok-jednotka.component';
 import { KomponentaComponent } from './components/komponenta/komponenta.component';
 import { ExterniZdrojComponent } from './components/externi-zdroj/externi-zdroj.component';
@@ -156,7 +155,6 @@ const providers: any[] =[
     SamostatnyNalezComponent,
     DokJednotkaComponent,
     TvarComponent,
-    NeidentAkceComponent,
     KomponentaComponent,
     ExterniZdrojComponent,
     SearchbarComponent,

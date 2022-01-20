@@ -221,33 +221,6 @@
   "Novinky": "News",
   "sessionTimeout": "You have been automatically logged off due to inactivity.",
 
-  "field": {
-    "rada": "Document series",
-    "loc_rpt": "Map selection",
-    "filtruj_dle_pole": "Filter by field",
-    "files": "Files",
-    "vedouci_projektu": "Project manager",
-    "datum_zahajeni": "Project - starting date",
-    "datum_ukonceni": "Project - ending date",
-    "organizace_prihlaseni": "Responsible organisation",
-    "specifikace_data": "Date specification",
-    "adb_stratigraficke_jednotky": "ADP - number of strat. units",
-    "f_osoby": "Document - documented person",
-    "f_nalezce": "Ind. find - finder",
-    "f_rok_vzniku": "Document - year of creation",
-    "f_datum_zahajeni": "Fieldwork/Project - starting date",
-    "f_datum_ukonceni": "Fieldwork/Project - ending date",
-    "f_druh_lokality": "Site - class",
-    "f_kulturni_pamatka": "Project - heritage protection",
-    "f_typ_lokality": "Site - type",
-    "f_adb_typ_sondy": "ADP – trench type",
-    "f_adb_podnet": "ADP – motivation",
-    "f_dok_jednotka_typ": "Fieldwork/Site - documentation unit type",
-    "f_podnazev": "Subtitle",
-    "f_nalezove_okolnosti": "Ind. find - context",
-    "predmet_kategorie": "Object category"
-  },
-
   "kategorie_dokumentu": {
     "texty": "Texts",
     "foto": "Photographs",
@@ -258,15 +231,6 @@
     "pas": "Individual finds",
     "ddata3d": "3D models"
   },
-
-  "kategorie_dokumentu_texty": "Texts",
-  "kategorie_dokumentu_foto": "Photographs",
-  "kategorie_dokumentu_lfoto": "Aerial images",
-  "kategorie_dokumentu_ddata": "Digital data",
-  "kategorie_dokumentu_mplany": "Plans and maps",
-  "kategorie_dokumentu_neuvedeno": "Unspecified",
-  "kategorie_dokumentu_pas": "Individual finds",
-  "kategorie_dokumentu_ddata3d": "3D models",
 
   "entities": {
     "dokument": {

@@ -220,33 +220,6 @@
   "O projektu": "Vítejte v Digitálním archivu AMČR!",
   "Novinky": "Aktuality",
   "sessionTimeout": "Z důvodu nečinnosti jste byli automaticky odhlášeni.",
-
-  "field": {
-    "rada": "Řada dokumentu",
-    "loc_rpt": "Výběr mapy",
-    "filtruj_dle_pole": "Filtrovat podle pole",
-    "files": "Soubory", 
-    "vedouci_projektu": "Vedoucí projektu",
-    "datum_zahajeni": "Projekt - datum zahájeni",
-    "datum_ukonceni": "Projekt - datum ukončení",
-    "organizace_prihlaseni": "Odpovědná organizace",
-    "specifikace_data": "Specifikace data",
-    "adb_stratigraficke_jednotky": "ADB - stratigrafické jednotky",
-    "f_osoby": "Dokument - dokumentovaná osoba",
-    "f_nalezce": "Sam. nález - nálezce",
-    "f_rok_vzniku": "Dokument - rok vzniku",
-    "f_datum_zahajeni": "Akce/projekt - datum zahájeni",
-    "f_datum_ukonceni": "Akce/projekt - datum ukončení",
-    "f_druh_lokality": "Lokalita - druh",
-    "f_kulturni_pamatka": "Projekt - památková ochrana",
-    "f_typ_lokality": "Lokalita - typ",
-    "f_adb_typ_sondy": "ADB – typ sondy",
-    "f_adb_podnet": "ADB – podnět",
-    "f_dok_jednotka_typ": "Akce/lokalita - typ dokumentační jednotky",
-    "f_podnazev": "Podnázev",
-    "f_nalezove_okolnosti": "Sam. nález - okolnosti",
-    "predmet_kategorie": "Kategorie předmětu"
-  },
   
   "kategorie_dokumentu": {
     "texty": "Texty",
@@ -258,15 +231,6 @@
     "pas": "Samostatné nálezy",
     "ddata3d": "3D modely"
   },
-  
-  "kategorie_dokumentu_texty": "Texty",
-  "kategorie_dokumentu_foto": "Fotografie",
-  "kategorie_dokumentu_lfoto": "Letecké fotografie",
-  "kategorie_dokumentu_ddata": "Digitální data",
-  "kategorie_dokumentu_mplany": "Plány a mapy",
-  "kategorie_dokumentu_neuvedeno": "Neuvedeno",
-  "kategorie_dokumentu_pas": "Samostatné nálezy",
-  "kategorie_dokumentu_ddata3d": "3D modely",
 	
   "entities": {
     "dokument": {
