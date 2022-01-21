@@ -22,7 +22,7 @@
       "Zadejte vyhledávací dotaz": "Zadejte vyhledávací dotaz"
     },
     "tooltip": {
-      "q": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky).",
+      "q": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky)."
     },
     "button": {
       "Exportovat seznam": "Exportovat seznam",
@@ -63,9 +63,10 @@
       "rangeLabel2": "{{startIndex}} - {{endIndex}} z {{length}}"
     },
     "tooltip": {
-      "Přejděte číslo stránky": "Přejít na stránku",
+      "Přejděte číslo stránky": "Přejít na stránku"
     },
     "sortBy": {
+      "datestamp": "Poslední změna",
       "ident_cely": "Idetifikátor",
       "okres": "Okres, katastr",
       "katastr": "Katastr",
@@ -287,7 +288,7 @@
       "hloubka": "Sam. nález - hloubka (cm)",
       "dok_jednotka_negativni_jednotka": "Dok. jednotka - negativní zjištění",
       "f_pozorovatel": "Let - pozorovatel",
-      "f_pian_zm10": "PIAN - Základní mapa 1:10 000",
+      "f_pian_zm10": "PIAN - Základní mapa 1:10 000"
     },
     "tooltip": {
       "Zavřít": "Zavřít",
@@ -428,7 +429,7 @@
       "Let": "Let",
       "Popis letu": "Popis letu",
       "Pian": "PIAN",
-      "Popis PIAN": "Popis PIAN",
+      "Popis PIAN": "Popis PIAN"
     },
     "title": {
       "Část dokumentu": "Obsahová část",
@@ -447,10 +448,10 @@
       "Dokument": "Dokument", 
       "Dostupné z": "Dostupné z",
       "AMČR: Záznam" : "AMČR: Záznam",
-      "Archeologická mapa České republiky": "Archeologická mapa České republiky",
+      "Archeologická mapa České republiky": "Archeologická mapa České republiky"
     },
     "note": {
-      "idnotfound": "Odkazovaný záznam se nepodařilo nalézt. Záznam mohl být odstraněn. V případě přetrvávajících problémů nás kontaktujte.",
+      "idnotfound": "Odkazovaný záznam se nepodařilo nalézt. Záznam mohl být odstraněn, je dočasně nedostupný, nebo dosud nebyl archivován. V případě přetrvávajících problémů nás kontaktujte."
     }
   },
 
@@ -458,10 +459,10 @@
   "sidenav": {
     "tab": {
       "Filtry": "Filtry",
-      "Výsledky": "Výsledky",
+      "Výsledky": "Výsledky"
     },
     "button": {
-      "Filtrace / Výsledky": "Filtrace / Výsledky",
+      "Filtrace / Výsledky": "Filtrace / Výsledky"
     }
   },
 
@@ -492,7 +493,7 @@
       "Ariadne": "Ariadne"
     },
     "license": {
-      "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
+      "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)"
     }
   },
 
@@ -502,7 +503,7 @@
       "Přihlášení uživatele": "Přihlášení uživatele",
       "Kontakt": "Kontakt",
       "Licence": "Licence",
-      "Odeslat komentář": "Odeslat komentář",
+      "Odeslat komentář": "Odeslat komentář"
     },
     "desc": {
       "Přihlašovací jméno": "Přihlašovací jméno (email)",
