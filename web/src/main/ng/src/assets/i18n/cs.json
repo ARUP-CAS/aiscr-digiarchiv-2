@@ -594,39 +594,39 @@
   "entities": {
     "dokument": {
       "title": "Dokumenty",
-      "desc": "Dokumenty lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Digitální či digitalizovaná dokumentace terénních archeologických výzkumů (texty, fotografie, plány apod.), vč. souvisejícího základního popisu."
     }, 
     "projekt": {
       "title": "Projekty",
-      "desc": "Projekty lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Administrativní záznamy o archeologické terénní činnosti, evidované již ve fázi přípravy."
     },
     "akce": {
       "title": "Akce",
-      "desc": "Akce lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Záznamy o archeologických nálezech a pozorováních odpovídajících určitému místu (prostorovému vymezení), původci (osobě, organizaci), době provedení a použité metodě výzkumu."
     },
     "lokalita": {
       "title": "Lokality",
-      "desc": "Lokality lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Záznamy o archeologických nálezech a pozorováních odpovídajících určitému místu (prostorovému vymezení), charakteristickému archeologickému projevu a předpokládané funkční souvislosti v minulosti."
     },
     "samostatny_nalez": {
       "title": "Samostatné nálezy",
-      "desc": "Samostatné nálezy lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Záznamy o jednotlivých movitých nálezech pocházejících z archeologických průzkumů a evidovaných prostřednictvím AMČR-PAS."
     },
     "pian": {
       "title": "PIAN",
-      "desc": "PIAN lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Geoprostorové jednotky sloužící pro \"prostorovou identifikaci archeologických nálezů\" (zkráceně PIAN)."
     },
     "knihovna_3d": {
       "title": "Knihovna 3D",
-      "desc": "Knihovna 3D lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Knihovna archeologicky relevantních trojrozměrných modelů a textur."
     },
     "let": {
       "title": "Lety",
-      "desc": "Lety lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Záznamy o průzkumných letech, při kterých byly pořízeny letecké fotografie pro archeologické účely."
     },
     "ext_zdroj": {
       "title": "Externí zdroje",
-      "desc": "Externí zdroje lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Bibliografické odkazy na externí zdroje informací o evidovaných archeologických akcích a lokalitách."
     }
   },
 
