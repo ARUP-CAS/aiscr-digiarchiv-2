@@ -22,7 +22,7 @@
       "Zadejte vyhledávací dotaz": "Enter search query"
     },
     "tooltip": {
-      "q": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky).",
+      "q": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky)."
     },
     "button": {
       "Exportovat seznam": "Export the list",
@@ -63,9 +63,10 @@
       "rangeLabel2": "{{startIndex}} - {{endIndex}} of {{length}}"
     },
     "tooltip": {
-      "Přejděte číslo stránky": "Go to page",
+      "Přejděte číslo stránky": "Go to page"
     },
     "sortBy": {
+      "datestamp": "Last change",
       "ident_cely": "Identifier",
       "okres": "District, cadastre",
       "katastr": "Cadastre",
@@ -117,7 +118,7 @@
       "Operátor and": "Record MUST contain",
       "Operátor not": "Record must NOT contain",
       "Odstranit tento filtr": "Remove this filter",
-      "Odstranit všechny filtry": "Remove all filters",
+      "Odstranit všechny filtry": "Remove all filters"
     },
     "icon": {
       "or": "check",
@@ -287,7 +288,7 @@
       "hloubka": "Ind. find - depth (cm)",
       "dok_jednotka_negativni_jednotka": "Doc. unit - negative evidence",
       "f_pozorovatel": "Flight - observer",
-      "f_pian_zm10": "PIAN - Base Map 1:10 000",
+      "f_pian_zm10": "PIAN - Base Map 1:10 000"
     },
     "tooltip": {
       "Zavřít": "Close",
@@ -428,7 +429,7 @@
       "Let": "Flight",
       "Popis letu": "Flight description",
       "Pian": "PIAN",
-      "Popis PIAN": "PIAN description",
+      "Popis PIAN": "PIAN description"
     },
     "title": {
       "Část dokumentu": "Content part",
@@ -447,10 +448,10 @@
       "Dokument": "Document",
       "Dostupné z": "Available at",
       "AMČR: Záznam": "AMCR: Record",
-      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic",
+      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic"
     },
     "note": {
-      "idnotfound": "The referenced record could not be found. The record may have been deleted. If there are any remaining issues, please contact us.",
+      "idnotfound": "The referenced record could not be found. The record may have been deleted, is temporarily unavailable, or has not yet been archived. If there are any remaining issues, please contact us."
     }
   },
 
@@ -458,10 +459,10 @@
   "sidenav": {
     "tab": {
       "Filtry": "Filters",
-      "Výsledky": "Results",
+      "Výsledky": "Results"
     },
     "button": {
-      "Filtrace / Výsledky": "Filtration / Results",
+      "Filtrace / Výsledky": "Filtration / Results"
     }
   },
 
@@ -492,7 +493,7 @@
       "Ariadne": "Ariadne"
     },
     "license": {
-      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
+      "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
     }
   },
 
@@ -502,7 +503,7 @@
       "Přihlášení uživatele": "User login",
       "Kontakt": "Contact",
       "Licence": "License",
-      "Odeslat komentář": "Send comment",
+      "Odeslat komentář": "Send comment"
     },
     "desc": {
       "Přihlašovací jméno": "Username (email)",
@@ -543,7 +544,7 @@
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
-      "data_and_metadata_usage": "The use of both data and metadata is subject to this license, unless explicitly stated otherwise.",
+      "data_and_metadata_usage": "The use of both data and metadata is subject to this license, unless explicitly stated otherwise."
     },
     "citation": {
       "jejímž autorem je": "operated by",
