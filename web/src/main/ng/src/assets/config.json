@@ -211,8 +211,6 @@
   ],
   
   "facets": [
-    "kategorie_dokumentu",
-    "f_typ_dokumentu",
     "pristupnost",
     
     "f_organizace",
