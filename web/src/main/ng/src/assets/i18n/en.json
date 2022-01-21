@@ -594,39 +594,39 @@
   "entities": {
     "dokument": {
       "title": "Documents",
-      "desc": "Documents lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Digital or digitized documentation of archaeological fieldwork (texts, photographs, plans, etc.), including related basic descriptions."
     }, 
     "projekt": {
       "title": "Projects",
-      "desc": "Projects lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Administrative records of archaeological fieldwork, recorded during the preparation phase."
     },
     "akce": {
       "title": "Fieldwork Events",
-      "desc": "Fieldwork Events lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Records of archaeological finds and observations corresponding to a specific place (spatial delineation), responsible body (person, organization), time of execution and method of research used."
     },
     "lokalita": {
       "title": "Sites",
-      "desc": "Sites lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Records of archaeological finds and observations corresponding to a specific site (spatial delineation), characteristic archaeological manifestation, and presumed past functional context."
     },
     "samostatny_nalez": {
       "title": "Individual Finds",
-      "desc": "Individual Finds lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Records of individual movable finds originating from archaeological surveys and recorded through the AMCR-PAS."
     },
     "pian": {
       "title": "Spatial Units",
-      "desc": "Spatial Units lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Geospatial units used for \"spatial identification of archaeological finds\" (abbreviated as PIAN in Czech)."
     },
     "knihovna_3d": {
       "title": "3D Library",
-      "desc": "3D Library lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "A library of archaeologically relevant three-dimensional models and textures."
     },
     "let": {
       "title": "Flights",
-      "desc": "Flights lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Records of survey flights during which aerial photographs were taken for archaeological purposes."
     },
     "ext_zdroj": {
       "title": "External Sources",
-      "desc": "External Sources lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+      "desc": "Bibliographic references to external sources of information on recorded archaeological fieldwork events and sites."
     } 
   },
 
