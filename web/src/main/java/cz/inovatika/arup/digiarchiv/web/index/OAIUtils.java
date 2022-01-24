@@ -101,7 +101,7 @@ public class OAIUtils {
       String xml = RESTHelper.toString(url, user, pwd);
       // String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
       JSONObject json = XML.toJSONObject(xml, XMLParserConfiguration.ORIGINAL);
-      indexed += processResponse(json, ret, entity, clazz, solrRels, addRelations, second);
+      indexed += processResponse("ListRecords", json, ret, entity, clazz, solrRels, addRelations, second);
       boolean hasResumption = json.getJSONObject("OAI-PMH").getJSONObject("ListRecords").optJSONObject("resumptionToken") != null;
       while (hasResumption) {
         url = Options.getInstance().getJSONObject("OAI").getString("url")
@@ -111,7 +111,7 @@ public class OAIUtils {
         LOGGER.log(Level.FINE, "Retreiving {0}", url);
         xml = RESTHelper.toString(url, user, pwd);
         json = XML.toJSONObject(xml, XMLParserConfiguration.ORIGINAL);
-        indexed += processResponse(json, ret, entity, clazz, solrRels, addRelations, second);
+        indexed += processResponse("ListRecords", json, ret, entity, clazz, solrRels, addRelations, second);
         ret.put(entity, indexed);
         LOGGER.log(Level.INFO, "Indexing {0}. Current {1}", new Object[]{entity, indexed});
         hasResumption = json.getJSONObject("OAI-PMH").getJSONObject("ListRecords").optJSONObject("resumptionToken") != null;
@@ -126,6 +126,46 @@ public class OAIUtils {
     String ellapsed = FormatUtils.formatInterval(end.getTime() - start.getTime());
     ret.put("ellapsed time", ellapsed);
     LOGGER.log(Level.INFO, "Indexing {0} FINISHED. indexed {1}. Time: {2}", new Object[]{entity, indexed, ellapsed});
+    return ret;
+  }
+  
+  public static <T extends Entity> JSONObject indexId(String id) {
+    JSONObject ret = new JSONObject();
+    Date start = new Date();
+    int indexed = 0;
+    String rels = Options.getInstance().getString("solrRels");
+    try (HttpSolrClient solrRels = new HttpSolrClient.Builder(rels).build()) {
+      String user = Options.getInstance().getJSONObject("amcrapi").getString("user");
+      String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
+      String login = user + ":" + pwd;
+
+      String url = Options.getInstance().getJSONObject("OAI").getString("url")
+              + "?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api.aiscr.cz/id/" + id;
+      LOGGER.log(Level.INFO, "Retreiving {0}", url);
+      String xml = RESTHelper.toString(url, user, pwd);
+      // String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
+      JSONObject json = XML.toJSONObject(xml, XMLParserConfiguration.ORIGINAL);
+      
+      JSONObject rec = json.getJSONObject("OAI-PMH")
+              .getJSONObject("GetRecord")
+              .getJSONObject("record")
+              .getJSONObject("metadata")
+              .getJSONObject("oai_amcr:amcr");
+      
+      String entity = rec.names().getString(0);
+      
+      indexed += processResponse("GetRecord", json, ret, entity, getEntityClass(entity), solrRels, true, false);
+      
+      ret.put(entity, indexed);
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "error indexing {0}: {1}", new Object[]{id, ex});
+      LOGGER.log(Level.SEVERE, null, ex);
+      ret.put("error", ex);
+    }
+    Date end = new Date();
+    String ellapsed = FormatUtils.formatInterval(end.getTime() - start.getTime());
+    ret.put("ellapsed time", ellapsed);
+    LOGGER.log(Level.INFO, "Indexing {0} FINISHED. Time: {1}", new Object[]{id, ellapsed});
     return ret;
   }
 
@@ -149,7 +189,7 @@ public class OAIUtils {
     }
   }
 
-  public static <T extends Entity> SolrInputDocument processRecord(HttpSolrClient solr, String record, String entity, Class<T> clazz, HttpSolrClient solrRels)
+  private static <T extends Entity> SolrInputDocument processRecord(HttpSolrClient solr, String record, String entity, Class<T> clazz, HttpSolrClient solrRels)
           throws Exception {
     try {
 
@@ -170,16 +210,21 @@ public class OAIUtils {
       return idoc;
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
-      throw new Exception(ex);
+      throw new Exception(ex); 
     }
   }
 
-  public static <T extends Entity> int processResponse(JSONObject json, JSONObject ret, String entity, Class<T> clazz, HttpSolrClient solrRels, boolean addRelations, boolean second)
+  public static <T extends Entity> int processResponse(String verb, JSONObject json, JSONObject ret, String entity, Class<T> clazz, HttpSolrClient solrRels, boolean addRelations, boolean second)
           throws Exception {
-
-    JSONArray records = json.getJSONObject("OAI-PMH").getJSONObject("ListRecords").getJSONArray("record");
+    JSONArray records;
+    if ("ListRecords".equals(verb)) {
+      records = json.getJSONObject("OAI-PMH").getJSONObject(verb).getJSONArray("record");
+    } else {
+      records = new JSONArray();
+      records.put(json.getJSONObject("OAI-PMH").getJSONObject(verb).getJSONObject("record"));
+    }
     // List<T> docs = new ArrayList<>();
-    List<SolrInputDocument> docs = new ArrayList<>();
+    List<SolrInputDocument> docs = new ArrayList<>(); 
 
     String solrhost = Options.getInstance().getString("solrhost");
     String collection = entity;

@@ -170,7 +170,7 @@
               </tr>
               <tr *ngIf="result.typ_dokumentu_posudek">
                 <th class="app-label">{{ 'card.desc.Zahrnuje posudky' | translate }}:</th>
-                <td>{{ result.typ_dokumentu_posudek }}</td>
+                <td>{{ result.typ_dokumentu_posudek.join(', ') }}</td>
               </tr>
               <tr *ngIf="result.ulozeni_originalu">
                 <th class="app-label">{{ 'card.desc.Dokument - uložení originálu' | translate }}:</th>

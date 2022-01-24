@@ -118,14 +118,12 @@ public class IndexerServlet extends HttpServlet {
         return json;
       }
     },
-    BYID {
+    BYID { 
       @Override
       JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         JSONObject json = new JSONObject();
         try {
-          JSONObject rec = OAIUtils.getMetadataId(req.getParameter("id"));
-          String entity = rec.names().getString(0);
-          json = OAIUtils.indexRecord(rec.getJSONObject(entity), entity);
+          json = OAIUtils.indexId(req.getParameter("id"));
 
         } catch (Exception ex) {
           json.put("error", ex.toString());

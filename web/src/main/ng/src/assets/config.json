@@ -71,7 +71,7 @@
 		{ "label": "nazev", "field": "nazev_sort", "dir": "desc", "entity": ["lokalita"] },
 		{ "label": "organizace", "field": "organizace_sort", "dir": "asc", "entity": ["dokument", "projekt", "akce", "knihovna_3d"] },
 		{ "label": "organizace", "field": "organizace_sort", "dir": "desc", "entity": ["dokument", "projekt","akce", "knihovna_3d"] }
-	]
+	],
 
   "selRows": [10, 20, 50, 100],
   "defaultRows": 50,
@@ -212,7 +212,6 @@
   
   "facets": [
     "pristupnost",
-    
     "f_organizace",
     
     "f_zeme",
@@ -286,11 +285,11 @@
     "podnet": "f_adb_podnet",
     "posudek": "f_typ_dokumentu_posudek",
     "predmet_druh":"f_druh_nalezu",
-    "predmet_kategorie": "nalez_kategorie",
+    "predmet_kategorie": ["f_kategorie", "nalez_kategorie"],
     "presnost": "f_pian_presnost",
     "pristupnost": "pristupnost",
     "rada": "f_rada",
-    "specifikace_objektu_druha": "nalez_kategorie",
+    "specifikace_objektu_druha": "f_specifikace",
     "specifikace_predmetu": "f_specifikace",
     "tvar": "f_tvar",
     "typ_akce_druha": ["f_hlavni_typ", "f_vedlejsi_typ"],

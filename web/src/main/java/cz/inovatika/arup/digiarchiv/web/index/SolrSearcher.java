@@ -72,6 +72,10 @@ public class SolrSearcher {
     String q = "*:*";
     if (request.getParameter("q") != null) {
       q = request.getParameter("q");
+      if (!q.trim().contains(" ")) {
+        // jenom jedno slovo, pridame " abychom zpracovali ident_cely
+        q = "\"" + q + "\"";
+      }
     }
     query.setRequestHandler("/search");
 
