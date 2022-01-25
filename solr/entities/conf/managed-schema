@@ -298,9 +298,72 @@
    <dynamicField name="*" type="lowercase_cs" multiValued="false"/>
    
    <!-- Field for free text filtering -->
-   <field name="f_popis" type="text_general" indexed="true" stored="false" multiValued="true" />
-   <field name="f_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
-   <field name="f_podnazev" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <!-- <field name="ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" /> -->
+   <field name="popis" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="podnazev" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="uzivatelske_oznaceni" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="oznaceni_originalu" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="extra_data_cislo_objektu" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="extra_data_meritko" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="extra_data_odkaz" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="extra_data_udalost" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="extra_data_region" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="let_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="let_fotoaparat" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="let_typ_letounu" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="let_ucel_letu" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="let_uzivatelske_oznaceni" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="tvar_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="jednotka_dokumentu_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="jednotka_dokumentu_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="jednotka_dokumentu_vazba_akce" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="jednotka_dokumentu_vazba_lokalita" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_dokument_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_dokument_jistota" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_dokument_presna_datace" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_dokument_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="nalez_dokumentu_pocet" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="nalez_dokumentu_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="neident_akce_lokalizace" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="neident_akce_popis" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="neident_akce_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="neident_akce_pian" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="podnet" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="lokalita" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="parcelni_cislo" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="planovane_zahajeni" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="nkp_cislo" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="nkp_popis" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <!-- <field name="child_akce" type="text_general" indexed="true" stored="false" multiValued="true" /> -->
+   <!-- <field name="child_samostatny_nalez" type="text_general" indexed="true" stored="false" multiValued="true" /> -->
+   <field name="lokalizace" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <!-- <field name="child_dokument" type="text_general" indexed="true" stored="false" multiValued="true" /> -->
+   <!-- <field name="child_ext_zdroj" type="text_general" indexed="true" stored="false" multiValued="true" /> -->
+   <field name="ulozeni_nalezu" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="vazba_projekt" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="inv_cislo" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="presna_datace" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="pocet" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="projekt_id" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="nazev" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="dok_jednotka_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="dok_jednotka_nazev" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <!-- <field name="pian_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" /> -->
+   <field name="adb_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="adb_uzivatelske_oznaceni_sondy" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="adb_trat" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="adb_cislo_popisne" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="adb_parcelni_cislo" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="adb_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="vyskovy_bod_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_ident_cely" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_jistota" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_presna_datace" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="komponenta_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="nalez_pocet" type="text_general" indexed="true" stored="false" multiValued="true" />
+   <field name="nalez_poznamka" type="text_general" indexed="true" stored="false" multiValued="true" />
+   
    
    <!-- Fulltext fields by pristupnosti -->
    <field name="text_all_A" type="text_general" indexed="true" stored="false" multiValued="true" /> 
@@ -308,6 +371,8 @@
    <field name="text_all_C" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    <field name="text_all_D" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    <field name="text_all_E" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   
+   
    
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
@@ -415,11 +480,11 @@
 <copyField source="pian_presnost" dest="f_pian_presnost" />
 <copyField source="pian_zm10" dest="f_pian_zm10" />
 
-
+<!--
 <copyField source="popis" dest="f_popis" />
 <copyField source="poznamka" dest="f_poznamka" />
 <copyField source="podnazev" dest="f_podnazev" />
-
+-->
 
 <!--
 <copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
