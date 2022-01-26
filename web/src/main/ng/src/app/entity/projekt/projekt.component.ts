@@ -110,4 +110,5 @@ export class ProjektComponent implements OnInit, OnChanges {
       panelClass: 'app-feedback-dialog'
     });
   } 
+  
 }
