@@ -249,7 +249,12 @@
       "komponenta_presna_datace": "Component - precise dating",
       "komponenta_poznamka": "Component - note",
       "nalez_pocet": "Find - count",
-      "nalez_poznamka": "Find - note"
+      "nalez_poznamka": "Find - note",
+      "f_typ_projektu": "Project - type",
+      "f_kulturni_pamatka": "Project - heritage protection",
+      "f_adb_typ_sondy": "ADP – trench type",
+      "f_adb_podnet": "ADP – motivation",
+      "f_dok_jednotka_typ": "Fieldwork/Site - documentation unit type"
     }
   },
 
