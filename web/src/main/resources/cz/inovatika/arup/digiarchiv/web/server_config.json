@@ -157,7 +157,10 @@
       "neident_akce_lokalizace",
       "neident_akce_popis",
       "neident_akce_poznamka",
-      "neident_akce_pian"      
+      "neident_akce_pian",
+      
+      "parent_akce_okres",
+      "parent_akce_katastr"
     ],
 
     "akce": [
