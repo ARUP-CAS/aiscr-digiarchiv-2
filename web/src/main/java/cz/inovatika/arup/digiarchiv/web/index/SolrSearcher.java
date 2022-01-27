@@ -62,6 +62,16 @@ public class SolrSearcher {
               .addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]")
               .setParam("facet.heatmap.distErr", "0.04");
     }
+    
+    if (request.getParameter("vyber") != null) {
+      String[] coords = request.getParameter("vyber").split(",");
+      String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+
+      double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
+      query.addFilterQuery(fq);
+    }
+    
+    
     query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
             .setParam("facet.heatmap.maxCells", "400000");
   }

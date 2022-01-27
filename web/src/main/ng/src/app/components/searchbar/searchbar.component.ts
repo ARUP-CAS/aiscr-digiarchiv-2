@@ -81,12 +81,14 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
       p.mapa = null;
       if (!this.state.locationFilterEnabled) {
         p.loc_rpt = null;
+        p.vyber = null;
       }
     }
     let url = '/results';
     if (this.router.isActive('/id', false)) {
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;
+      p.vyber = null;
     }
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
   }

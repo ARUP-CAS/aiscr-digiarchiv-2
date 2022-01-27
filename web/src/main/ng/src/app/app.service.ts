@@ -13,7 +13,7 @@ import { Condition } from 'src/app/shared/condition';
 import { ParamMap, Router } from '@angular/router';
 import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
-import { BibtextDialogComponent } from './components/bibtext-dialog/bibtext-dialog.component';
+declare var L;
 
 @Injectable({
   providedIn: 'root'
@@ -315,14 +315,25 @@ export class AppService {
       this.state.breadcrumbs.push(new Crumb('separator', '', ''));
     }
 
-    if (params.has('loc_rpt')) {
-      if (this.state.locationFilterEnabled) {
-        const value = params.get('loc_rpt');
-        this.state.breadcrumbs.push(new Crumb('loc_rpt', value, this.formatLocation(value)));
+    if (params.has('vyber')) {
+
+      // if (this.state.locationFilterEnabled) {
+        this.state.locationFilterEnabled = true;
+        const value = params.get('vyber');
+
+
+        this.state.breadcrumbs.push(new Crumb('vyber', value, this.formatLocation(value)));
         this.state.breadcrumbs.push(new Crumb('separator', '', ''));
-      }
+
+        const loc_rpt = value.split(',');
+        const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+        const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+        this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
+
+      // }
     } else {
       this.state.locationFilterEnabled = false;
+      this.state.locationFilterBounds = null;
     }
 
     // this.config.urlFields.forEach(field => {
@@ -357,6 +368,9 @@ export class AppService {
             break;
           }
           case 'loc_rpt': {
+            break;
+          }
+          case 'vyber': {
             break;
           }
           default: {
@@ -463,6 +477,7 @@ export class AppService {
       this.state.setMapResult(result, false);
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;
+      p.vyber = null;
     } else {
       this.state.mapResult = result;
       // this.state.setMapResult(result, false);

@@ -271,6 +271,8 @@ export class MapaComponent implements OnInit, OnDestroy {
 
       if (this.state.locationFilterEnabled) {
         this.locationFilter.enable();
+        this.locationFilter.setBounds(this.state.locationFilterBounds);
+
       } else {
         this.locationFilter.disable();
       }
@@ -308,7 +310,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       const bounds = L.latLngBounds(southWest, northEast);
       console.log(bounds);
       this.map.fitBounds(bounds.pad(.03));
-      this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
+      // this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
 
     }
   }
@@ -512,8 +514,10 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
-
-      this.locationFilter.setBounds(bounds);
+      // if (this.state.locationFilterEnabled) {
+      //   this.locationFilter.setBounds(bounds);
+      // }
+      
       this.map.fitBounds(bounds);
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
@@ -528,9 +532,13 @@ export class MapaComponent implements OnInit, OnDestroy {
       const northEast = L.latLng(lat.max, lng.max);
       bounds = L.latLngBounds(southWest, northEast);
       this.map.fitBounds(bounds.pad(.03));
-      this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
+      if (this.state.locationFilterEnabled) {
+        this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
+      }
     } else {
-      this.locationFilter.setBounds(bounds.pad(-0.95));
+      if (this.state.locationFilterEnabled) {
+        this.locationFilter.setBounds(bounds.pad(-0.95));
+      }
     }
 
     map.on('zoomend', (e) => {
@@ -555,11 +563,13 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     this.locationFilter.on('enabled', () => {
       this.state.locationFilterEnabled = true;
+      this.state.locationFilterBounds = map.getBounds().pad(-0.95);
       // this.updateBounds(bounds);
     });
 
     this.locationFilter.on('disabled', () => {
       this.state.locationFilterEnabled = false;
+      this.state.locationFilterBounds = null;
       this.updateBounds(null);
     });
 
@@ -595,6 +605,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     if (this.locationFilter.isEnabled()) {
       bounds = this.locationFilter.getBounds();
+      this.state.locationFilterBounds = bounds;
     } else {
       this.locationFilter.setBounds(bounds.pad(-0.95));
     }
@@ -602,8 +613,16 @@ export class MapaComponent implements OnInit, OnDestroy {
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
 
+    const queryParams: any =  { loc_rpt: value, page: 0 };
+    if (this.state.locationFilterEnabled) {
+      queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' + 
+                          this.state.locationFilterBounds.getSouthWest().lng + ',' + 
+                          this.state.locationFilterBounds.getNorthEast().lat + ',' + 
+                          this.state.locationFilterBounds.getNorthEast().lng;
+    }
+
     this.zone.run(() => {
-      this.router.navigate([], { queryParams: { loc_rpt: value, page: 0 }, queryParamsHandling: 'merge' });
+      this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
     });
 
   }

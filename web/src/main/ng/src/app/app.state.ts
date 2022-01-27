@@ -51,6 +51,7 @@ export class AppState {
   mapResult: any; // Select entity in map view
   pianId: string; // Selected pian in map
   locationFilterEnabled: boolean; // Vyber na mape
+  locationFilterBounds: any; // Vyber na mape
 
 
   // public loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
