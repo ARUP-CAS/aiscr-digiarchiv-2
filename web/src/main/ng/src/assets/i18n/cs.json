@@ -254,7 +254,11 @@
       "f_kulturni_pamatka": "Projekt - památková ochrana",
       "f_adb_typ_sondy": "ADB – typ sondy",
       "f_adb_podnet": "ADB – podnět",
-      "f_dok_jednotka_typ": "Akce/lokalita - typ dokumentační jednotky"
+      "f_dok_jednotka_typ": "Akce/lokalita - typ dokumentační jednotky",
+      "f_typ_lokality": "Lokalita - typ",
+      "f_druh_lokality": "Lokalita - druh",
+      "f_nalezce": "Sam. nález - nálezce",
+      "f_nalezove_okolnosti": "Sam. nález - okolnosti"
     }
   },
 

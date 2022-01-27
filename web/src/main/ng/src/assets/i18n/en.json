@@ -254,7 +254,11 @@
       "f_kulturni_pamatka": "Project - heritage protection",
       "f_adb_typ_sondy": "ADP – trench type",
       "f_adb_podnet": "ADP – motivation",
-      "f_dok_jednotka_typ": "Fieldwork/Site - documentation unit type"
+      "f_dok_jednotka_typ": "Fieldwork/Site - documentation unit type",
+      "f_typ_lokality": "Site - type",
+      "f_druh_lokality": "Site - class",
+      "f_nalezce": "Ind. find - finder",
+      "f_nalezove_okolnosti": "Ind. find - context"
     }
   },
 
