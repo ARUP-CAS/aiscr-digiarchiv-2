@@ -1,7 +1,7 @@
 import { SolrDocument } from './../../shared/solr-document';
 import { HttpParams } from '@angular/common/http';
 import { SolrResponse } from './../../shared/solr-response';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
@@ -30,6 +30,9 @@ import { NgZone } from '@angular/core';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit, OnDestroy {
+
+  @ViewChild('leftElement') leftElement;
+
   opened = false;
   matcher: MediaQueryList;
   sideNavMapBreakPoint: string = "(min-width: 1280px)";
@@ -41,6 +44,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   hasResultsInOther: boolean;
   math = Math;
   subs: any[] = [];
+
+  itemSize = 70;
+  vsSize = 0;
 
   constructor(
     private titleService: Title,
@@ -78,7 +84,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     // this.state.loggedChanged.subscribe(val => {
     //   this.search(this.route.snapshot.queryParams);
     // });
-
 
     // set side nav map breakpoint
     this.matcher = this.mediaMatcher.matchMedia(this.sideNavMapBreakPoint);
@@ -131,6 +136,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       this.loading = false;
       this.hasResultsInOther = this.config.entities.findIndex(e => this.state.totals[e] > 0) > -1;
+      this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      // Math.min(9*itemSize, docs.length * itemSize)
     });
 
   }
