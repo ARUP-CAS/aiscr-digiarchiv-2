@@ -1,8 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
+import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-let',
@@ -22,7 +24,8 @@ export class LetComponent implements OnInit {
     private datePipe: DatePipe,
     public state: AppState,
     public service: AppService,
-    public config: AppConfiguration
+    public config: AppConfiguration,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -47,5 +50,13 @@ export class LetComponent implements OnInit {
       });
     }
   }
+
+  openFeedback() {
+    this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
+      width: '900px',
+      data: this.result.ident_cely,
+      panelClass: 'app-feedback-dialog'
+    });
+  } 
 
 }
