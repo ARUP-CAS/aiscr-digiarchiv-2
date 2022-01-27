@@ -107,6 +107,12 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.choiceApi;
     }
 
+    public get feedBackMaxLength() {
+        return this.config.feedBackMaxLength;
+    }
+
+    
+
     /**
      * List the files holding section configuration in assets/configs folder
      * ['search'] will look for /assets/configs/search.json

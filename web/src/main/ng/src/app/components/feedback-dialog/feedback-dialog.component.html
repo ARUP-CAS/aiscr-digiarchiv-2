@@ -17,7 +17,7 @@
     </mat-form-field>
     <mat-form-field class="app-w-100" appearance="fill">
       <mat-label>{{ 'dialog.desc.Komentář' | translate }}</mat-label>
-      <textarea matInput [placeholder]="'dialog.input.Napište komentář' | translate" rows="4" [(ngModel)]="text" maxlength="1000"></textarea>
+      <textarea matInput [placeholder]="'dialog.input.Napište komentář' | translate" rows="4" [(ngModel)]="text" [maxlength]="config.feedBackMaxLength"></textarea>
     </mat-form-field>
 </div>
 <div mat-dialog-actions>

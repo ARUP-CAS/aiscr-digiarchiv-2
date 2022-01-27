@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class FeedbackDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<FeedbackDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
+    public config: AppConfiguration,
     private service: AppService
     ) { }
 

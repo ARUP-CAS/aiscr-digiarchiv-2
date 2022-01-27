@@ -68,4 +68,5 @@ export class Configuration {
   entityIcons: {[entity: string]: string};
 
   choiceApi: {label: string, metadataPrefix: string}[];
+  feedBackMaxLength: number;
 }
