@@ -259,7 +259,8 @@
       "f_druh_lokality": "Site - class",
       "f_nalezce": "Ind. find - finder",
       "f_nalezove_okolnosti": "Ind. find - context",
-      "loc_rpt": "Map selection"
+      "loc_rpt": "Map selection",
+      "vyber": "Map selection"
     }
   },
 
@@ -616,7 +617,8 @@
       "inv_cislo": "Ind. find - registering no.",
       "f_obdobi": "Component - period",
       "f_areal": "Component - activity area",
-      "extra_data_odkaz": "Document - link"
+      "extra_data_odkaz": "Document - link",
+      "je_nz": "Fieldwork - substitutes ER"
     },
     "desc": {
       "Pian": "Pian",
