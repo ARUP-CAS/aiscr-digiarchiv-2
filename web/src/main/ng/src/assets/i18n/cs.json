@@ -258,7 +258,8 @@
       "f_typ_lokality": "Lokalita - typ",
       "f_druh_lokality": "Lokalita - druh",
       "f_nalezce": "Sam. nález - nálezce",
-      "f_nalezove_okolnosti": "Sam. nález - okolnosti"
+      "f_nalezove_okolnosti": "Sam. nález - okolnosti",
+      "loc_rpt": "Mapový výběr"
     }
   },
 
@@ -585,7 +586,37 @@
       "oznaceni_originalu": "Dokument - označení originálu",
       "f_okres": "Okres",
       "f_katastr": "Katastr",
-      "pristupnost": "Přístupnost"
+      "pristupnost": "Přístupnost",
+      "dalsi_katastry": "Další katastry",
+      "f_typ_projektu": "Projekt - typ",
+      "datum_zahajeni": "Projekt - datum zahájeni",
+      "datum_ukonceni": "Projekt - datum ukončení",
+      "podnet": "Projekt - podnět",
+      "vedouci_projektu": "Vedoucí projektu",
+      "organizace_prihlaseni": "Odpovědná organizace",
+      "f_kulturni_pamatka": "Projekt - památková ochrana",
+      "vedouci_akce": "Vedoucí akce",
+      "specifikace_data": "Specifikace data",
+      "f_hlavni_typ": "Hlavní typ",
+      "f_vedlejsi_typ": "Vedlejší typ",
+      "lokalizace": "Akce - lokalizace",
+      "nazev": "Lokalita - název",
+      "f_typ_lokality": "Lokalita - typ",
+      "f_druh_lokality": "Lokalita - druh",
+      "f_nalezce": "Sam. nález - nálezce",
+      "datum_nalezu": "Sam. nález - datum nálezu",
+      "nalezove_okolnosti": "Nálezové okolnosti",
+      "hloubka": "Sam. nález - hloubka (cm)",
+      "obdobi": "Období",
+      "druh": "Druh lokality",
+      "predmet_kategorie": "Předmět kategprie",
+      "specifikace": "Specifikace",
+      "pocet": "Sam. nález - počet",
+      "predano_organizace": "Předáno organizaci",
+      "inv_cislo": "Sam. nález - evidenční č.",
+      "f_obdobi": "Komponenta - období",
+      "f_areal": "Komponenta - areál",
+      "extra_data_odkaz": "Dokument - odkaz"
     },
     "desc": {
       "Pian": "Pian",
