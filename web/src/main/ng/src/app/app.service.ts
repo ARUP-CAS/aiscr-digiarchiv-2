@@ -444,6 +444,7 @@ export class AppService {
       }
     });
     this.state.areFacetsFiltered = true;
+    this.state.setFacetChanged();
   }
 
   showInMap(result: any, isPian = false) {

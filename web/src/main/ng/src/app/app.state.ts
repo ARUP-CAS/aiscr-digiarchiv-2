@@ -191,6 +191,10 @@ export class AppState {
     this.facetsSubject.next('facets');
   }
 
+  setFacetChanged() {
+    this.facetsSubject.next('facets');
+  }
+
   setFacetPivots(resp: SolrResponse) {
 
     this.facetPivots = [];
