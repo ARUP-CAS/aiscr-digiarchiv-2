@@ -431,7 +431,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.clearSelectedMarker();
       //if (this.showType === 'heat') {
         // this.markers = new L.featureGroup();
-        this.updateBounds(this.map.getBounds());
+        this.updateBounds(this.map.getBounds(), false);
       //}
       return;
     }
@@ -543,34 +543,34 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     map.on('zoomend', (e) => {
       if (!this.zoomingOnMarker) {
-        this.debounce(this.updateBounds(map.getBounds()), 200, false);
+        this.debounce(this.updateBounds(map.getBounds(), false), 200, false);
       }
       this.zoomingOnMarker = false;
     });
     map.on('dragend', () => {
-      this.updateBounds(map.getBounds());
+      this.updateBounds(map.getBounds(), false);
     });
     map.on('fullscreenchange', () => {
-      this.updateBounds(map.getBounds());
+      this.updateBounds(map.getBounds(), false);
     });
     map.on('resize', () => {
-      this.updateBounds(map.getBounds());
+      this.updateBounds(map.getBounds(), false);
     });
 
     this.locationFilter.on('change', (e) => {
-      this.updateBounds(null);
+      this.updateBounds(null, true);
     });
 
     this.locationFilter.on('enabled', () => {
       this.state.locationFilterEnabled = true;
-      this.state.locationFilterBounds = map.getBounds().pad(-0.95);
-      // this.updateBounds(bounds);
+      this.state.locationFilterBounds = this.map.getBounds().pad(-0.95);
+      this.updateBounds(null, true);
     });
 
     this.locationFilter.on('disabled', () => {
       this.state.locationFilterEnabled = false;
       this.state.locationFilterBounds = null;
-      this.updateBounds(null);
+      this.updateBounds(null, false);
     });
 
     if (!this.isResults) {
@@ -593,7 +593,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     };
   }
 
-  updateBounds(mapBounds) {
+  updateBounds(mapBounds: any, isLocation: boolean) {
     if (!this.isResults) {
       // Jsme v documentu, nepotrebujeme znovu nacist data
       return;
@@ -603,11 +603,11 @@ export class MapaComponent implements OnInit, OnDestroy {
       bounds = mapBounds;
     }
 
-    if (this.locationFilter.isEnabled()) {
-      bounds = this.locationFilter.getBounds();
-      this.state.locationFilterBounds = bounds;
+    if (this.locationFilter.isEnabled() && isLocation) {
+      // bounds = this.locationFilter.getBounds();
+      this.state.locationFilterBounds = this.locationFilter.getBounds();
     } else {
-      this.locationFilter.setBounds(bounds.pad(-0.95));
+      //this.locationFilter.setBounds(bounds.pad(-0.95));
     }
 
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
@@ -619,6 +619,8 @@ export class MapaComponent implements OnInit, OnDestroy {
                           this.state.locationFilterBounds.getSouthWest().lng + ',' + 
                           this.state.locationFilterBounds.getNorthEast().lat + ',' + 
                           this.state.locationFilterBounds.getNorthEast().lng;
+    } else {
+      queryParams.vyber = null;
     }
 
     this.zone.run(() => {
