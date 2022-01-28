@@ -259,7 +259,8 @@
       "f_druh_lokality": "Lokalita - druh",
       "f_nalezce": "Sam. nález - nálezce",
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
-      "loc_rpt": "Mapový výběr"
+      "loc_rpt": "Mapový výběr",
+      "vyber": "Mapový výběr"
     }
   },
 
@@ -616,7 +617,8 @@
       "inv_cislo": "Sam. nález - evidenční č.",
       "f_obdobi": "Komponenta - období",
       "f_areal": "Komponenta - areál",
-      "extra_data_odkaz": "Dokument - odkaz"
+      "extra_data_odkaz": "Dokument - odkaz",
+      "je_nz": "Akce - nahrazuje NZ"
     },
     "desc": {
       "Pian": "Pian",

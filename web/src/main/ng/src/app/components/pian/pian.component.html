@@ -57,6 +57,17 @@
         <button *ngIf="!mapDetail" mat-flat-button (click)="service.showInMap(result, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
           <mat-icon>map</mat-icon>
         </button>
+        <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
+          <mat-icon>link</mat-icon>
+        </button>
+        <mat-menu #links="matMenu">
+          <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
+            {{ 'card.menu.Persistentní odkaz' | translate }}
+          </a>
+          <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
+            AIS CR API - {{ item.label }}
+          </a>
+        </mat-menu>
         <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
           <mat-icon>menu_book</mat-icon>
         </button>
@@ -68,6 +79,9 @@
         </a>
         <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
           <mat-icon>grade</mat-icon>
+        </button>
+        <button mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
+          <mat-icon>feedback</mat-icon>
         </button>
         <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
           {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
