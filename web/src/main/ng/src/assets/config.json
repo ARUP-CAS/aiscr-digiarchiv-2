@@ -417,5 +417,5 @@
     {"label": "CIDOC-CRM", "metadataPrefix": "oai_rdf"}
   ],
 
-  "feedBackMaxLength": 1000
+  "feedBackMaxLength": 4000
 }
