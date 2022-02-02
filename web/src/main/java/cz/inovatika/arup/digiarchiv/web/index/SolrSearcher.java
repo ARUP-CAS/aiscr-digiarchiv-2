@@ -288,15 +288,18 @@ public class SolrSearcher {
       }
     }
 
+    String locField = "loc_rpt_" + pristupnost;
     if (request.getParameter("loc_rpt") != null) {
-      String locField = "loc_rpt_" + pristupnost;
       String[] coords = request.getParameter("loc_rpt").split(",");
       // String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
       String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
-      double dist = Math.max((Float.parseFloat(coords[1]) - Float.parseFloat(coords[3])) * .005, .02);
-      query.addFilterQuery(fq) //        .setParam("facet.heatmap.distErr", dist + "")
-              //        .setParam("facet.heatmap.geom", geom)
-              ;
+      query.addFilterQuery(fq);
+    }
+    
+    if (request.getParameter("vyber") != null) {
+      String[] coords = request.getParameter("vyber").split(",");
+      String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+      query.addFilterQuery(fq);
     }
   }
 
