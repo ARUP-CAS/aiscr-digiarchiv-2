@@ -24,6 +24,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -82,10 +83,10 @@ public class SolrSearcher {
     String q = "*:*";
     if (request.getParameter("q") != null) {
       q = request.getParameter("q");
-      if (!q.trim().contains(" ") && !q.trim().contains("*") && !q.trim().contains("?")) {
-        // jenom jedno slovo, bez wildcards, pridame " abychom zpracovali ident_cely
-        q = "\"" + q + "\"";
-      }
+//      if (!q.trim().contains(" ") && !q.trim().contains("*") && !q.trim().contains("?") && !q.trim().contains("\"")) {
+//        // jenom jedno slovo, bez wildcards, pridame " abychom zpracovali ident_cely
+//        q = "\"" + q + "\"";
+//      }
     }
     query.setRequestHandler("/search");
 
