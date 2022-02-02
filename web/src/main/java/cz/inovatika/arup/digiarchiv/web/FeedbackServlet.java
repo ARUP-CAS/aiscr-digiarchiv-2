@@ -6,7 +6,6 @@
 package cz.inovatika.arup.digiarchiv.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.mail.SimpleEmail;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.DefaultAuthenticator;
 import org.json.JSONObject;
 
 /**
@@ -41,24 +40,28 @@ public class FeedbackServlet extends HttpServlet {
           throws ServletException, IOException {
       response.setContentType("application/json;charset=UTF-8");
       JSONObject js = new JSONObject(IOUtils.toString(request.getInputStream(), "UTF-8"));
-      // sendMail(js.getString("name"), js.getString("mail"), js.getString("text"));
-      response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text"), js.getString("ident_cely")).toString());
+      String systemMail = Options.getInstance().getJSONObject("mail").getString("destMail");
+      sendMail(js.getString("name"), systemMail, js.getString("text"), js.getString("ident_cely"), js.getString("mail")).toString();
+      response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text"), js.getString("ident_cely"), systemMail).toString());
   }
 
-  private JSONObject sendMail(String fromName, String fromMail, String text, String ident_cely) {
+  private JSONObject sendMail(String fromName, String fromMail, String text, String ident_cely, String toMail) {
     JSONObject ret = new JSONObject();
     try {
       SimpleEmail email = new SimpleEmail();
       JSONObject mail = Options.getInstance().getJSONObject("mail");
-      email.setHostName(mail.getString("smtp.host"));
+      email.setHostName(mail.getString("smtp.host")); 
       email.setSmtpPort(mail.getInt("smtp.port"));
       email.setCharset("utf-8");
+      // email.setAuthentication(mail.getString("smtp.user"), mail.getString("smtp.pwd"));
+      // email.setAuthenticator(new DefaultAuthenticator(mail.getString("smtp.user"), mail.getString("smtp.pwd")));
+      // email.setSSLOnConnect(true);
 
       if (mail.has("smtp.starttls.enable")) {
         email.setSSLOnConnect(mail.getBoolean("smtp.starttls.enable"));
       }
 
-      email.addTo(mail.getString("destMail"));
+      email.addTo(toMail);
       email.setFrom(fromMail, fromName);
       email.setSubject(mail.getString("subject") + ident_cely);
       email.setMsg("Komentář k záznamu https://digiarchiv.aiscr.cz/id/"+ident_cely+":\n\n" + text);

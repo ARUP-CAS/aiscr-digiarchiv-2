@@ -11,7 +11,9 @@
     "smtp.host": "mail.arup.cas.cz",
     "smtp.port": 25,
     "destMail": "info@amapa.cz",
-    "subject": "Digitální archiv AMČR - komentář k záznamu "
+    "subject": "Digitální archiv AMČR - komentář k záznamu ",
+    "smtp.user":"user",
+    "smtp.pwd":"heslo"
   },
   
   "imagesDir": "/home/alberto/Projects/ARUP/data/",

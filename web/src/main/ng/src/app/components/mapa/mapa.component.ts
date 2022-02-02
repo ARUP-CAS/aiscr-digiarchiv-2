@@ -562,9 +562,11 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     this.locationFilter.on('enabled', () => {
-      this.state.locationFilterEnabled = true;
-      this.state.locationFilterBounds = this.map.getBounds().pad(-0.95);
-      this.updateBounds(null, true);
+      if (!this.state.locationFilterEnabled) {
+        this.state.locationFilterEnabled = true;
+        this.state.locationFilterBounds = this.map.getBounds().pad(-0.95);
+        this.updateBounds(null, true);
+      }
     });
 
     this.locationFilter.on('disabled', () => {

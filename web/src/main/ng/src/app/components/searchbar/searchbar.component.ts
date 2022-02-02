@@ -66,6 +66,8 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   }
 
   toggleMapa() {
+    // this.state.locationFilterEnabled = false;
+    // this.state.locationFilterBounds = null;
     this.state.isMapaCollapsed = !this.state.isMapaCollapsed;
     this.state.setMapResult(null, false);
     if (!this.state.isMapaCollapsed) {
@@ -75,6 +77,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     }
     const p: any = {};
     p.mapa = !this.state.isMapaCollapsed;
+    p.loc_rpt = null;
     if (!p.mapa) {
       // p.loc_rpt = null;
       p.pian_id = null;
