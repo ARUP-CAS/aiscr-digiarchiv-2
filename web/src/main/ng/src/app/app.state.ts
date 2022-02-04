@@ -14,8 +14,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class AppState {
 
   // Observe state
-  private resultsSubject: Subject<string> = new Subject();
-  public resultsChanged: Observable<string> = this.resultsSubject.asObservable();
+  private resultsSubject: Subject<{typ: string, pageChanged: boolean}> = new Subject();
+  public resultsChanged: Observable<{typ: string, pageChanged: boolean}> = this.resultsSubject.asObservable();
 
   private routeSubject: ReplaySubject<Params> = new ReplaySubject(0);
   public routeChanged: Observable<Params> = this.routeSubject.asObservable();
@@ -90,6 +90,7 @@ export class AppState {
   q: string;
   rows: number;
   page = 0;
+  pageChanged = false;
   totalPages: number;
   sorts: Sort[];
   sort: Sort;
@@ -140,7 +141,8 @@ export class AppState {
     }
     
 
-    this.resultsSubject.next('results');
+    this.resultsSubject.next({typ: 'results', pageChanged: this.pageChanged});
+    this.pageChanged = false;
     setTimeout(() => {
       this.setFacets(resp);
     }, 100);

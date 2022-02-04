@@ -29,6 +29,7 @@ export class PaginatorComponent implements OnInit {
     params.rows = e.pageSize;
     params.page = e.pageIndex;
     this.pageIndex = e.pageIndex + 1;
+    this.state.pageChanged = true;
     // document.getElementById('scroll-wrapper').scrollTop = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
@@ -37,6 +38,7 @@ export class PaginatorComponent implements OnInit {
     const params: any = {};
     params.page = this.pageIndex - 1;
     this.state.page = this.pageIndex - 1;
+    this.state.pageChanged = true;
     // document.getElementById('scroll-wrapper').scrollTop = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }

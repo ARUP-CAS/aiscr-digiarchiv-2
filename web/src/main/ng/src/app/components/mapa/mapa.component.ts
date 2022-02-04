@@ -178,7 +178,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     this.subs.push(this.state.resultsChanged.subscribe(res => {
       if (this.mapReady) {
-        this.setData();
+        this.setData(res.pageChanged);
       }
     }));
 
@@ -198,7 +198,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }));
 
     if (!this.isResults && this.mapReady) {
-      this.setData();
+      this.setData(false);
     }
   }
 
@@ -222,18 +222,23 @@ export class MapaComponent implements OnInit, OnDestroy {
     return count;
   }
 
-  setData() {
+  setData(pageChanged: boolean) {
     if (this.state.solrResponse) {
       const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
-      this.markers = new L.markerClusterGroup();
-      this.markersList = [];
       if (this.state.solrResponse.response.numFound > this.config.mapOptions.docsForCluster) {
         this.showType = 'heat';
       } else if (this.state.solrResponse.response.numFound > this.maxNumMarkers) {
         this.showType = 'cluster';
+        if (pageChanged) {
+          this.state.loading = false;
+          return;
+        }
       } else {
         this.showType = 'marker';
       }
+
+      this.markers = new L.markerClusterGroup();
+      this.markersList = [];
       
       switch (this.showType) {
         case 'cluster': {
@@ -576,7 +581,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     if (!this.isResults) {
-      this.setData();
+      this.setData(false);
     }
     this.setHeatData();
     this.mapReady = true;
