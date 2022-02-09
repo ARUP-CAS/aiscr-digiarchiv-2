@@ -97,7 +97,7 @@ public class SolrSearcher {
 
     int rows = Options.getInstance().getClientConf().getInt("defaultRows");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-      rows = 200;
+      rows = Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200);
     } else if (request.getParameter("rows") != null) {
       rows = Integer.parseInt(request.getParameter("rows"));
     }

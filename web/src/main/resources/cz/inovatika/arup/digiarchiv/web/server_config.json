@@ -27,7 +27,6 @@
   "watermark.alpha": 0,
   "sessionTimeout": 1800,
   "indexSecLevel": "E",
-  "maxDocsForCluster": 10000,
   
   "translations": {
     "jazyk_dokumentu": {
