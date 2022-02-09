@@ -259,7 +259,7 @@ export class AppState {
     if (this.isMapaCollapsed) {
       this.rows = params.has('rows') ? +params.get('rows') : this.config.defaultRows;
     } else {
-      this.rows = 200;
+      this.rows = this.config.mapOptions.docsForMarker;
     }
     this.pianId = params.has('pian_id') ? params.get('pian_id') : null;
 
