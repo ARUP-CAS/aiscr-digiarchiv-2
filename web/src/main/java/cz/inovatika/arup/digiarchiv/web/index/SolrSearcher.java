@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
@@ -10,7 +6,6 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +19,6 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -204,7 +198,8 @@ public class SolrSearcher {
     JSONArray filterFieldsObj = Options.getInstance().getClientConf().getJSONArray("filterFields");
     // List<Object> dateFacets = Options.getInstance().getClientConf().getJSONArray("dateFacets").toList();
     List<Object> dateFacets = new ArrayList<>();
-    List<Object> numberFacets = Options.getInstance().getClientConf().getJSONArray("numberFacets").toList();
+    //List<Object> numberFacets = Options.getInstance().getClientConf().getJSONArray("numberFacets").toList();
+    List<Object> numberFacets = new ArrayList<>();
     List<String> filterFields = new ArrayList<>();
     for (int i = 0; i < filterFieldsObj.length(); i++) {
       String type = filterFieldsObj.getJSONObject(i).getString("type");

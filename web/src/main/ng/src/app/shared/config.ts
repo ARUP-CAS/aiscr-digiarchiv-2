@@ -9,7 +9,7 @@ export class Configuration {
   defaultLang: string;
   facets: string[];
   // dateFacets: string[];
-  numberFacets: string[];
+  // numberFacets: string[];
 
   entities: string[];
 

@@ -375,7 +375,6 @@
     "pocasi",
     "podnet",
     "posudek",
-    "povrch", 
     "predmet_druh",
     "predmet_kategorie",
     "presnost",
@@ -406,8 +405,5 @@
     "zeme",
     "zm10",
     "zm50"
-  ],
-
-  
-  "pasSecuredFields": ["lokalizace", "katastr"] 
+  ]
 }

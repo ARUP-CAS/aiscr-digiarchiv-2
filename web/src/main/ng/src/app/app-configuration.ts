@@ -43,9 +43,9 @@ import { isPlatformBrowser } from '@angular/common';
     //     return this.config.dateFacets;
     // }
 
-    public get numberFacets() {
-        return this.config.numberFacets;
-    }
+    // public get numberFacets() {
+    //     return this.config.numberFacets;
+    // }
 
     public get mapOptions() {
         return this.config.mapOptions;

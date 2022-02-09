@@ -264,8 +264,6 @@
     "f_let_letiste_cil" 
   ],
   
-  "numberFacets": ["hloubka"],
-  
   "heslarToPole": {
     "aktivity" : "f_aktivita",
     "areal_druha": "f_areal",

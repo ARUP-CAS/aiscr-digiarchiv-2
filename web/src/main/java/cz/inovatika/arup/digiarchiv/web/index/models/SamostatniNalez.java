@@ -201,7 +201,6 @@ public class SamostatniNalez implements Entity {
   @Override
   public void setFullText(SolrInputDocument idoc) {
     List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("samostatny_nalez").toList();
-    // List<String> excludePas = Arrays.asList(Options.getInstance().getStrings("pasSecuredFields"));
 
     String pristupnost = (String) idoc.getFieldValue("pristupnost");
     List<String> prSufix = new ArrayList<>();
