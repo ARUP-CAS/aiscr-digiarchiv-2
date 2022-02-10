@@ -39,7 +39,8 @@
       "fillColor": "#00f",
       "weight": 2,
       "fillOpacity": 0.3
-    }
+    },
+    "selectionInitPad": -0.90
   },
   "hideMenuWidth": 600,
 

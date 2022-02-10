@@ -52,7 +52,8 @@ export class Configuration {
       fillColor: string,
       weight: number,
       fillOpacity: number
-    }
+    },
+    selectionInitPad: number;
   };
   hideMenuWidth: number;
 

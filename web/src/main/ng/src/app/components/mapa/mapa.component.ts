@@ -317,7 +317,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       const northEast = L.latLng(lat.max, lng.max);
       const bounds = L.latLngBounds(southWest, northEast);
       this.map.fitBounds(bounds.pad(.03));
-      // this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
 
     }
   }
@@ -539,11 +538,11 @@ export class MapaComponent implements OnInit, OnDestroy {
       bounds = L.latLngBounds(southWest, northEast);
       this.map.fitBounds(bounds.pad(.03));
       if (this.state.locationFilterEnabled) {
-        this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
+        this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
       }
     } else {
       if (this.state.locationFilterEnabled) {
-        this.locationFilter.setBounds(bounds.pad(-0.95));
+        this.locationFilter.setBounds(bounds.pad(this.config.mapOptions.selectionInitPad));
       }
     }
 
@@ -575,7 +574,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.locationFilter.on('enabled', () => {
       if (!this.state.locationFilterEnabled) {
         this.state.locationFilterEnabled = true;
-        this.state.locationFilterBounds = this.map.getBounds().pad(-0.95);
+        this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
+        // this.state.locationFilterBounds = this.map.getBounds().pad(this.config.mapOptions.selectionInitPad);
         this.updateBounds(null, true, 'locEnabled');
       }
     });
@@ -619,9 +619,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (this.locationFilter.isEnabled() && isLocation) {
       // bounds = this.locationFilter.getBounds();
       this.state.locationFilterBounds = this.locationFilter.getBounds();
-    } else {
-      //this.locationFilter.setBounds(bounds.pad(-0.95));
-    }
+    } 
 
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
