@@ -81,6 +81,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.exportUrl = 'export?' + str;
     }));
 
+    // this.subs.push(this.state.resultsChanged.subscribe(val => {
+    //   console.log(val)
+    // }));
+
     // this.state.loggedChanged.subscribe(val => {
     //   this.search(this.route.snapshot.queryParams);
     // });
@@ -128,6 +132,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.loading = true;
     const p = Object.assign({}, params);
     // p.mapa = !this.state.isMapaCollapsed;
+    this.docs = [];
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       this.state.setSearchResponse(resp);
       this.docs = resp.response.docs;

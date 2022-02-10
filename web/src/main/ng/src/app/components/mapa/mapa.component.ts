@@ -105,6 +105,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   mapReady = false;
   subs: any[] = [];
   isInit = true;
+  firstChange = true;
+  firstZoom = true;
 
   layersControl = {};
 
@@ -132,6 +134,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     "ČÚZK - Katastrální území": this.cuzkWMS2,
   };
   showDetail = false;
+  currentLocBounds: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -313,7 +316,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(lat.min, lng.min);
       const northEast = L.latLng(lat.max, lng.max);
       const bounds = L.latLngBounds(southWest, northEast);
-      console.log(bounds);
       this.map.fitBounds(bounds.pad(.03));
       // this.locationFilter.setBounds(this.map.getBounds().pad(-0.95));
 
@@ -436,7 +438,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.clearSelectedMarker();
       //if (this.showType === 'heat') {
         // this.markers = new L.featureGroup();
-        this.updateBounds(this.map.getBounds(), false);
+        this.updateBounds(this.map.getBounds(), false, 'hitMarker');
       //}
       return;
     }
@@ -478,7 +480,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setPianFilter(pianId: string) {
-    console.log('setPianFilter');
     this.zone.run(() => {
       this.router.navigate([], { queryParams: { pian_ident_cely: pianId, page: 0 }, queryParamsHandling: 'merge' });
     });
@@ -547,37 +548,42 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
 
     map.on('zoomend', (e) => {
-      if (!this.zoomingOnMarker) {
-        this.debounce(this.updateBounds(map.getBounds(), false), 200, false);
+      if (!this.zoomingOnMarker && !this.firstZoom) {
+        this.debounce(this.updateBounds(map.getBounds(), false, 'mapZoomEnd'), 200, false);
       }
+      this.firstZoom = false;
       this.zoomingOnMarker = false;
     });
     map.on('dragend', () => {
-      this.updateBounds(map.getBounds(), false);
+      this.updateBounds(map.getBounds(), false, 'mapDragEnd');
     });
     map.on('fullscreenchange', () => {
-      this.updateBounds(map.getBounds(), false);
+      this.updateBounds(map.getBounds(), false, 'mapFull');
     });
     map.on('resize', () => {
-      this.updateBounds(map.getBounds(), false);
+      this.updateBounds(map.getBounds(), false, 'mapResize');
     });
 
     this.locationFilter.on('change', (e) => {
-      this.updateBounds(null, true);
+      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds())  && !this.firstChange) {
+        this.updateBounds(null, true, 'locChange');
+      }
+      this.firstChange = false;
+      
     });
 
     this.locationFilter.on('enabled', () => {
       if (!this.state.locationFilterEnabled) {
         this.state.locationFilterEnabled = true;
         this.state.locationFilterBounds = this.map.getBounds().pad(-0.95);
-        this.updateBounds(null, true);
+        this.updateBounds(null, true, 'locEnabled');
       }
     });
 
     this.locationFilter.on('disabled', () => {
       this.state.locationFilterEnabled = false;
       this.state.locationFilterBounds = null;
-      this.updateBounds(null, false);
+      this.updateBounds(null, false, 'locDisabled');
     });
 
     if (!this.isResults) {
@@ -600,7 +606,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     };
   }
 
-  updateBounds(mapBounds: any, isLocation: boolean) {
+  updateBounds(mapBounds: any, isLocation: boolean, caller: string) {
     if (!this.isResults) {
       // Jsme v documentu, nepotrebujeme znovu nacist data
       return;
