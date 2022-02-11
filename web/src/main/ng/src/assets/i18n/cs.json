@@ -93,7 +93,10 @@
       "Aplikovat filtr": "Aplikovat filtr",
       "Řadit dle": "Řadit dle",
       "Ano": "Anp",
-      "Ne": "Ne"
+      "Ne": "Ne",
+      "count": "počtu",
+      "name": "jména",
+      "poradi": "pořadí"
     },
     "menu": {
       "name": "jména",
@@ -315,7 +318,8 @@
       "Favorites": "Oblíbené"
     },
     "menu": {
-      "Persistentní odkaz": "Persistentní odkaz"
+      "Persistentní odkaz": "Persistentní odkaz",
+      "api_prefix": "AIS CR API"
     },
     "desc": {
       "Poslední změna": "Poslední změna",

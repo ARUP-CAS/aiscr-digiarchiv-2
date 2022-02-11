@@ -99,7 +99,7 @@
           </button>
           <button mat-flat-button color="primary" class="app-apply-filter" [matMenuTriggerFor]="sortBy">
             <mat-icon mat-flat-button>sort</mat-icon>
-            {{ 'facet.button.Řadit dle' | translate }} {{  state.facetSort[facetField.field] | translate }}
+            {{ 'facet.button.Řadit dle' | translate }} <ng-container *ngIf="state.facetSort[facetField.field]">{{ 'facet.button.' + state.facetSort[facetField.field] | translate }}</ng-container>
           </button>
           <mat-menu #sortBy="matMenu">
             <button mat-menu-item (click)="setFacetSort(facetField.field, 'count')" [class.active]="state.facetSort[facetField.field] === 'count'">{{ 'facet.menu.count' | translate }}</button>

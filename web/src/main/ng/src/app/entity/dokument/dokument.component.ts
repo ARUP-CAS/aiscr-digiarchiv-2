@@ -246,4 +246,5 @@ export class DokumentComponent implements OnInit, OnChanges {
       panelClass: 'app-feedback-dialog'
     });
   } 
+  
 }

@@ -116,7 +116,7 @@
           {{ 'card.menu.Persistentní odkaz' | translate }}
         </a>
         <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
-          AIS CR API - {{ item.label }}
+          {{ 'card.menu.api_prefix' | translate }} - {{ item.label }}
         </a>
       </mat-menu>
       <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
