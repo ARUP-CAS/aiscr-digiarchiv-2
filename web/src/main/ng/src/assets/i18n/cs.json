@@ -95,13 +95,13 @@
       "Ano": "Anp",
       "Ne": "Ne",
       "count": "počtu",
-      "name": "jména",
+      "name": "textu",
       "poradi": "pořadí"
     },
     "menu": {
-      "name": "jména",
-      "count": "počtu",
-      "poradi": "pořadí",
+      "name": "textu hesla",
+      "count": "počtu záznamů",
+      "poradi": "pořadí v hesláři",
       "Operátor OR": "Záznam MŮŽE obsahovat",
       "Operátor AND": "Záznam MUSÍ obsahovat",
       "Operátor NOT": "Záznam NESMÍ obsahovat"
@@ -319,7 +319,7 @@
     },
     "menu": {
       "Persistentní odkaz": "Persistentní odkaz",
-      "api_prefix": "AIS CR API"
+      "api_prefix": "OAI-PMH API"
     },
     "desc": {
       "Poslední změna": "Poslední změna",
