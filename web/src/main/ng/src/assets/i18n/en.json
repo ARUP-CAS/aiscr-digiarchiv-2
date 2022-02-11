@@ -95,13 +95,13 @@
       "Ano": "Yes",
       "Ne": "No",
       "count": "count",
-      "name": "name",
+      "name": "title",
       "poradi": "order"
     },
     "menu": {
-      "name": "name",
-      "count": "count",
-      "poradi": "order",
+      "name": "title of term",
+      "count": "count of records",
+      "poradi": "order in vocabulary",
       "Operátor OR": "Record MAY contain",
       "Operátor AND": "Record MUST contain",
       "Operátor NOT": "Record must NOT contain"
@@ -319,7 +319,7 @@
     },
     "menu": {
       "Persistentní odkaz": "Persistent link",
-      "api_prefix": "AIS CR API"
+      "api_prefix": "OAI-PMH API"
     },
     "desc": {
       "Poslední změna": "Last change",
