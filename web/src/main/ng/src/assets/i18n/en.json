@@ -22,7 +22,7 @@
       "Zadejte vyhledávací dotaz": "Enter search query"
     },
     "tooltip": {
-      "q": "The query searches for the exact occurrence of individual words. Use quotation marks to search for multi-word terms, including ones with hyphens (e.g. \"Palackého náměstí\" or \"C-TX-192901179\"). An asterisk can be used as a wildcard (e.g.: Roz*ky)."
+      "q": "The query in this field searches for the occurrence of individual words (tokens). Only a space character is always considered to be the word separator. To search for multi-word expressions, use quotation marks (e.g. "Palackého náměstí"). You can use an asterisk as a placeholder for any string (e.g. Roz*ky) and a question mark as a placeholder for just one other character (e.g. Roz??ky)."
     },
     "button": {
       "Exportovat seznam": "Export the list",
