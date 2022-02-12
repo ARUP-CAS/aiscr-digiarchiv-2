@@ -22,7 +22,7 @@
       "Zadejte vyhledávací dotaz": "Zadejte vyhledávací dotaz"
     },
     "tooltip": {
-      "q": "Dotaz hledá přesný výskyt jednotlivých slov. Pro vyhledání víceslovných výrazů, včetně těch s pomlčkami, použijte uvozovky (např. \"Palackého náměstí\" či \"C-TX-192901179\"). Lze využít hvězdičku jako zástupný znak/řetězec (např.: Roz*ky)."
+      "q": "Dotaz v tomto poli hledá výskyt jednotlivých slov (tokenů). Za oddělovač slov je považována vždy pouze mezera. Pro vyhledávání víceslovných výrazů, použijte uvozovky (např. „Palackého náměstí“). Lze využít hvězdičku jako zástupný znak pro libovolný řetězec (např. Roz*ky) a otazník pro jako zástupný znak pro právě jeden jiný znak (např. Roz??ky)."
     },
     "button": {
       "Exportovat seznam": "Exportovat seznam",
