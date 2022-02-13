@@ -117,6 +117,9 @@ public class SearchServlet extends HttpServlet {
           if (entity == null) {
             query.setFields("entity");
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
+              return jo.toString();
+            }
             entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
           }
           String pristupnost = LoginServlet.pristupnost(request.getSession());
