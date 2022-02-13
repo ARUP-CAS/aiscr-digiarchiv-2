@@ -312,7 +312,7 @@
       "Odkazy": "Links",
       "Odebrat z oblíbených": "Remove from favorites",
       "Uložit do oblíbených": "Add to favorites",
-      "Odeslat komentář": "Send comment",
+      "Odeslat komentář": "Send feedback",
       "Vytisknout": "Print",
       "Externí odkaz na Prahu archeologickou u ADB": "Go to Prague Archaeological portal",
       "Favorites": "Favorites"
@@ -518,7 +518,7 @@
       "Přihlášení uživatele": "User login",
       "Kontakt": "Contact",
       "Licence": "License",
-      "Odeslat komentář": "Send comment"
+      "Odeslat komentář": "Send feedback on the record to system administrators"
     },
     "desc": {
       "Přihlašovací jméno": "Username (email)",
