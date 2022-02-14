@@ -58,6 +58,13 @@ public class ImageServlet extends HttpServlet {
       if (full) {
         String imagesDir = opts.getString("imagesDir");
         File f = new File(imagesDir + id);
+        String mime = getServletContext().getMimeType(f.getName());
+        if ( mime != null) {
+          response.setContentType(mime);
+        } else {
+          response.setContentType("image/jpeg"); 
+        }
+        response.setHeader("Content-Disposition", "filename=" + f.getName());
         IOUtils.copy(new FileInputStream(f), response.getOutputStream());
         return;
       }
@@ -88,6 +95,7 @@ public class ImageServlet extends HttpServlet {
             } else {
               response.setContentType("image/jpeg"); 
             }
+            response.setHeader("Content-Disposition", "filename=" + f.getName());
             
             BufferedImage bi = ImageIO.read(f);
             ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream()), (float) opts.getDouble("watermark.alpha", 0.2f));

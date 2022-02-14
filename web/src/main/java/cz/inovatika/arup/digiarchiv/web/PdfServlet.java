@@ -61,6 +61,13 @@ public class PdfServlet extends HttpServlet {
           if (full) {
             String imagesDir = opts.getString("imagesDir");
             File f = new File(imagesDir + id);
+            String mime = getServletContext().getMimeType(f.getName());
+            if ( mime != null) {
+              response.setContentType(mime);
+            } else {
+              response.setContentType("image/jpeg"); 
+            }
+            response.setHeader("Content-Disposition", "filename=" + f.getName());
             IOUtils.copy(new FileInputStream(f), out);
           } else {
             String size = request.getParameter("size");
@@ -73,6 +80,7 @@ public class PdfServlet extends HttpServlet {
             File f = new File(fname);
             if (f.exists()) {
               response.setContentType("image/jpeg");
+              response.setHeader("Content-Disposition", "filename=" + id + "_" + f.getName());
               BufferedImage bi = ImageIO.read(f);
               ImageSupport.addWatermark(bi, logoImg(response, out), (float) opts.getDouble("watermark.alpha", 0.2f));
               ImageIO.write(bi, "jpg", out);
@@ -97,7 +105,7 @@ public class PdfServlet extends HttpServlet {
 
   private BufferedImage logoImg(HttpServletResponse response, OutputStream out) throws IOException {
     String empty = getServletContext().getRealPath(File.separator) + "/assets/img/logo-watermark-white.png";
-    response.setContentType("image/gif");
+    // response.setContentType("image/gif");
     return ImageIO.read(new File(empty));
 
   }
