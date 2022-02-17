@@ -22,7 +22,7 @@
       "Zadejte vyhledávací dotaz": "Enter search query"
     },
     "tooltip": {
-      "q": "The query in this field searches for the occurrence of individual words (tokens). Only a space character is always considered to be the word separator. To search for multi-word expressions, use quotation marks (e.g. \"Palackého náměstí\"). You can use an asterisk as a placeholder for any string (e.g. Roz*ky) and a question mark as a placeholder for just one other character (e.g. Roz??ky)."
+      "q": "The query in this field searches for the occurrence of individual words (tokens). A space, punctuation marks, and special characters except the hyphen (-) and underscore (_) are considered word separators. To search for multi-word expressions, use quotation marks (e.g. \"Palackého náměstí\"). You can use an asterisk as a placeholder for any string (e.g. Roz*ky) and a question mark as a placeholder for just one other character (e.g. Roz??ky)."
     },
     "button": {
       "Exportovat seznam": "Export the list",
