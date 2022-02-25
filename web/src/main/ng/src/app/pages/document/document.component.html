@@ -14,7 +14,7 @@
             <ng-container *ngIf="result.entity === 'dokument' || result.entity === 'knihovna_3d'">
               <br/>
               <strong>{{'card.citation.Citujte jako' | translate}}:</strong>
-              {{ result.autor }} {{result.rok_vzniku}}: {{'card.citation.Dokument' | translate}}
+              {{ result.autorFormatted }} {{result.rok_vzniku}}: {{'card.citation.Dokument' | translate}}
               {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'organizace' }}. 
               {{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
             </ng-container>

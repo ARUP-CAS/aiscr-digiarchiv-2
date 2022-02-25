@@ -58,6 +58,10 @@ export class DocumentComponent implements OnInit, AfterViewInit {
       this.state.setSearchResponse(resp);
       if (resp.response.numFound > 0) {
         this.result = resp.response.docs[0];
+        if (this.result.autor) {
+          this.result.autorFormatted = this.result.autor.join(' - ');
+        }
+        
         this.state.setMapResult(this.result, false);
       }
       this.link = this.config.serverUrl + 'id/' + id;
