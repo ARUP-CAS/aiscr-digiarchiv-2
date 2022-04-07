@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -371,8 +372,7 @@ public class Indexer {
       LOGGER.log(Level.SEVERE, null, ex);
     }
   }
-  
-  
+
   public boolean existsInIndex(String filepath) {
     boolean exists = true;
     try {
@@ -394,11 +394,12 @@ public class Indexer {
       relationsClient = getClient("soubor/");
       Options opts = Options.getInstance();
       String thumbsDir = opts.getString("thumbsDir");
-      File file = new File(thumbsDir + File.separator + "toberemoved." + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)+ ".txt");
+      File file = new File(thumbsDir + File.separator + "toberemoved." + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".txt");
       Path path = Paths.get(thumbsDir);
+      
       List<Path> paths = listFiles(path);
       int total = 0;
-      for (Path x: paths) {
+      for (Path x : paths) {
         String fileName = x.getFileName().toString().replace("_thumb.jpg", "");
         boolean exists = existsInIndex(fileName);
         // System.out.println(x.toString().replace("_thumb.jpg", "") + " -> " + exists);
@@ -423,7 +424,10 @@ public class Indexer {
             LOGGER.log(Level.SEVERE, null, ex);
           }
         }
-        
+
+      }
+      if (remove) {
+        deleteEmptyDirs(path);
       }
       System.out.println("Total files found: " + paths.size());
       System.out.println("Total dirs to remove: " + total);
@@ -443,6 +447,24 @@ public class Indexer {
               .collect(Collectors.toList());
     }
     return result;
+
+  }
+
+  private void deleteEmptyDirs(Path path) throws IOException {
+    
+    Files.walk(path)
+      .sorted(Comparator.reverseOrder())
+      .map(Path::toFile)
+      .filter(File::isDirectory)
+      .filter(p -> {
+          try {
+            return FileUtils.isEmptyDirectory(new File(p.toString()));
+          } catch (IOException ex) {
+            Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+          }
+        })
+      .forEach(File::delete);
 
   }
 
