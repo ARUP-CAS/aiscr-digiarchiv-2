@@ -53,6 +53,12 @@ public class ThumbsGenerator {
           pg.processFile(new File(file), true, false);
           return;
         }
+        case "-checkDirs": {
+          String remove = args[1];
+          Indexer indexer = new Indexer(true);
+          indexer.checkDirs("remove".equals(remove));
+          return;
+        }
         case "-f": {
           String file = args[1];
           System.out.println("File: " + file);
