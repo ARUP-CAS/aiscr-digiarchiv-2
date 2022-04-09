@@ -50,7 +50,7 @@
     "leaflet.fullscreen": "^1.6.0",
     "leaflet.locationfilter": "^0.1.0",
     "leaflet.markercluster": "^1.5.3",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "ng-recaptcha": "^8.0.0",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
