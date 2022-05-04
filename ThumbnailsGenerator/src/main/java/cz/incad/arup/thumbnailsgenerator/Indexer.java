@@ -6,6 +6,7 @@
 package cz.incad.arup.thumbnailsgenerator;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -396,8 +398,16 @@ public class Indexer {
       String thumbsDir = opts.getString("thumbsDir");
       File file = new File(thumbsDir + File.separator + "toberemoved." + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".txt");
       Path path = Paths.get(thumbsDir);
+
       
+      //File file2 = new File(thumbsDir + File.separator + "toberemoved2." + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".txt");
+      List<Path> pdfs = listNonEmptyDirectories(path);
       List<Path> paths = listFiles(path);
+      paths.addAll(pdfs);
+//      for (Path x : paths) {
+//        FileUtils.writeStringToFile(file2, x.toString() + System.getProperty("line.separator"), "UTF-8", true);
+//      }
+      
       int total = 0;
       for (Path x : paths) {
         String fileName = x.getFileName().toString().replace("_thumb.jpg", "");
@@ -408,17 +418,19 @@ public class Indexer {
             // System.out.println(x.getParent());
             // String dirName = x.getParent().toString();
             if (remove) {
-              FileUtils.delete(x.toFile());
-              FileUtils.deleteQuietly(new File(x.toString().replace("_thumb.jpg", "_medium.jpg")));
               if (fileName.endsWith(".pdf")) {
-                FileUtils.deleteDirectory(new File(x.toString().replace("_thumb.jpg", "")));
+                FileUtils.deleteDirectory(x.toFile());
+              } else {
+                FileUtils.delete(x.toFile());
+                FileUtils.deleteQuietly(new File(x.toString().replace("_thumb.jpg", "_medium.jpg")));
               }
             }
             total++;
-            FileUtils.writeStringToFile(file, x.toString() + System.getProperty("line.separator"), "UTF-8", true);
-            FileUtils.writeStringToFile(file, x.toString().replace("_thumb.jpg", "_medium.jpg") + System.getProperty("line.separator"), "UTF-8", true);
             if (fileName.endsWith(".pdf")) {
               FileUtils.writeStringToFile(file, x.toString().replace("_thumb.jpg", "") + System.getProperty("line.separator"), "UTF-8", true);
+            } else {
+              FileUtils.writeStringToFile(file, x.toString() + System.getProperty("line.separator"), "UTF-8", true);
+              FileUtils.writeStringToFile(file, x.toString().replace("_thumb.jpg", "_medium.jpg") + System.getProperty("line.separator"), "UTF-8", true);
             }
           } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -429,6 +441,7 @@ public class Indexer {
       if (remove) {
         deleteEmptyDirs(path);
       }
+      
       System.out.println("Total files found: " + paths.size());
       System.out.println("Total dirs to remove: " + total);
       System.out.println("Files to be removed in " + file.getAbsolutePath());
@@ -439,10 +452,10 @@ public class Indexer {
   }
 
   private List<Path> listFiles(Path path) throws IOException {
-
     List<Path> result;
     try (Stream<Path> walk = Files.walk(path)) {
-      result = walk.filter(Files::isRegularFile)
+      result = walk
+              .filter(Files::isRegularFile)
               .filter(p -> p.getFileName().toString().endsWith("_thumb.jpg"))
               .collect(Collectors.toList());
     }
@@ -450,21 +463,51 @@ public class Indexer {
 
   }
 
-  private void deleteEmptyDirs(Path path) throws IOException {
+  private List<Path> listFiles2(Path path) throws IOException {
+    List<Path> result;
     
+    try (Stream<Path> walk = Files.walk(path)) {
+      result = walk
+              //.filter(Files::isDirectory)
+              .filter(p -> (p.toFile().isDirectory() &&
+                           (!FileUtils.listFiles(p.toFile(), new String[] { "jpg" }, false).isEmpty()) && 
+                           (p.toFile().listFiles((FileFilter) FileFilterUtils.directoryFileFilter()).length == 0)) ||
+                            p.getFileName().toString().endsWith("_thumb.jpg")
+              )
+              .collect(Collectors.toList());
+    }
+    return result;
+
+  }
+
+  private List<Path> listNonEmptyDirectories(Path path) throws IOException {
+    List<Path> result;
+    
+    try (Stream<Path> walk = Files.walk(path)) {
+      result = walk.filter(Files::isDirectory)
+              .filter(p -> (!FileUtils.listFiles(p.toFile(), new String[] { "jpg" }, false).isEmpty()) && 
+                           p.getFileName().toString().endsWith(".pdf"))
+              .collect(Collectors.toList());
+    }
+    return result;
+
+  }
+
+  private void deleteEmptyDirs(Path path) throws IOException {
+
     Files.walk(path)
-      .sorted(Comparator.reverseOrder())
-      .map(Path::toFile)
-      .filter(File::isDirectory)
-      .filter(p -> {
-          try {
-            return FileUtils.isEmptyDirectory(new File(p.toString()));
-          } catch (IOException ex) {
-            Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-          }
-        })
-      .forEach(File::delete);
+            .sorted(Comparator.reverseOrder())
+            .map(Path::toFile)
+            .filter(File::isDirectory)
+            .filter(p -> {
+              try {
+                return FileUtils.isEmptyDirectory(new File(p.toString()));
+              } catch (IOException ex) {
+                Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+              }
+            })
+            .forEach(File::delete);
 
   }
 
