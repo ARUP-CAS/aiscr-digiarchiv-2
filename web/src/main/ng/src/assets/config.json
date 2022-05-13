@@ -236,7 +236,6 @@
     "f_typ_lokality",    
     "f_druh_lokality",
     "f_typ_projektu",
-    "f_kulturni_pamatka",
     
     "f_autor",
     "kategorie_dokumentu",
@@ -387,7 +386,6 @@
         {"name": "podnet"},
         {"name": "vedouci_projektu"},
         {"name": "organizace_prihlaseni", "heslar": "organizace"},
-        {"name": "f_kulturni_pamatka", "heslar": "kulturni_pamatka"}
       ],
       "samostatny_nalez": [
         {"name": "ident_cely"},
