@@ -11,6 +11,7 @@
     <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
     {{ result.negativni_jednotka === '1'  ? ('Ano' | translate) : ('Ne' | translate) }}
   </ng-container>
+  
   <mat-accordion multi="true">
     <app-pian *ngFor="let pian of result.pian" [result]="pian"></app-pian>
     <app-adb *ngFor="let adb of result.adb" [result]="adb"></app-adb>

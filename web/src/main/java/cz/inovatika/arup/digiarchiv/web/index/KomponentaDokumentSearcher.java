@@ -15,6 +15,7 @@ public class KomponentaDokumentSearcher implements ComponentSearcher {
   public static final Logger LOGGER = Logger.getLogger(KomponentaDokumentSearcher.class.getName());
 
   final String ENTITY = "komponenta_dokument";
+  private boolean parentSearchable;
 
   @Override
   public void getRelated(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
@@ -36,10 +37,16 @@ public class KomponentaDokumentSearcher implements ComponentSearcher {
         JSONObject sub = SolrSearcher.getById(client, p, fields);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);
+          parentSearchable = true;
         }
 
       }
     }
+  }
+
+  @Override
+  public boolean isRelatedSearchable() {
+    return parentSearchable;
   }
 
 }

@@ -142,6 +142,9 @@ public class SearchServlet extends HttpServlet {
             ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
             if (cs != null) {
               cs.getRelated(jo, client, request);
+              if (!cs.isRelatedSearchable()) {
+                jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
+              }
             }
             // json = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 

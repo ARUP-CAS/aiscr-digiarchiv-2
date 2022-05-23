@@ -20,6 +20,7 @@ public class DokJednotkaSearcher implements ComponentSearcher {
   public static final Logger LOGGER = Logger.getLogger(DokJednotkaSearcher.class.getName());
 
   final String ENTITY = "dok_jednotka";
+  private boolean parentSearchable;
 
   @Override
   public void getRelated(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
@@ -33,15 +34,22 @@ public class DokJednotkaSearcher implements ComponentSearcher {
         JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_akce"), fields);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);
+          parentSearchable = true;
         }
       }
       if (doc.has("parent_lokalita")) {
         JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_lokalita"), fields);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);
+          parentSearchable = true;
         }
       }
     }
+  }
+
+  @Override
+  public boolean isRelatedSearchable() {
+    return parentSearchable;
   }
 
 }
