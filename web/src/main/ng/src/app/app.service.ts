@@ -443,6 +443,7 @@ export class AppService {
       this.state.facetsFiltered = Object.assign([], this.state.facets);
       this.state.facetFilterValue = '';
       this.state.areFacetsFiltered = false;
+      this.state.setFacetChanged();
       return;
     }
 
