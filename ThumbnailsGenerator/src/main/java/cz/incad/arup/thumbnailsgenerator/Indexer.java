@@ -418,8 +418,9 @@ public class Indexer {
             // System.out.println(x.getParent());
             // String dirName = x.getParent().toString();
             if (remove) {
-              if (fileName.endsWith(".pdf")) {
-                FileUtils.deleteDirectory(x.toFile());
+              File dir = new File(fileName);
+              if (fileName.endsWith(".pdf") && dir.isDirectory()) {
+                FileUtils.deleteDirectory(dir);
               } else {
                 FileUtils.delete(x.toFile());
                 FileUtils.deleteQuietly(new File(x.toString().replace("_thumb.jpg", "_medium.jpg")));
