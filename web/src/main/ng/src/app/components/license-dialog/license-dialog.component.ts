@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AppConfiguration } from 'src/app/app-configuration';
 
 @Component({
   selector: 'app-license-dialog',
@@ -9,14 +10,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class LicenseDialogComponent implements OnInit {
 
   result: any;
+  link: string;
   now = new Date();
 
   constructor(
+    private config: AppConfiguration,
     public dialogRef: MatDialogRef<LicenseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.result = this.data.result;
+    this.link = this.config.serverUrl + 'id/' + this.result.ident_cely;
   }
 
   ok(){

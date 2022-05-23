@@ -10,23 +10,7 @@
       <mat-card class="app-card-info app-row-gap-16">
         <mat-card-content>
           <ng-container *ngIf="!isResultEmpty(result)">
-            <strong>{{ 'card.desc.Persistentní odkaz' | translate }}: </strong> {{link}}
-            <ng-container *ngIf="result.entity === 'dokument' || result.entity === 'knihovna_3d'">
-              <br/>
-              <strong>{{'card.citation.Citujte jako' | translate}}:</strong>
-              {{ result.autorFormatted }} {{result.rok_vzniku}}: {{'card.citation.Dokument' | translate}}
-              {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'organizace' }}. 
-              {{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
-            </ng-container>
-            <ng-container *ngIf="result.entity !== 'dokument' && result.entity !== 'knihovna_3d'">
-              <br/>
-              <strong>{{'card.citation.Citujte jako' | translate}}:</strong>
-              {{'card.citation.AMČR: Záznam' | translate}}
-              {{ result.ident_cely }}
-              [cit. {{now | date : 'yyyy-MM-dd'}}].
-              {{ 'card.citation.Archeologická mapa České republiky' | translate }}.
-              {{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a>.
-            </ng-container>
+            <app-citation [result]="result" [link]="link"></app-citation>
           </ng-container>
           <ng-container *ngIf="isResultEmpty(result)">
             {{ 'card.note.idnotfound' | translate }}

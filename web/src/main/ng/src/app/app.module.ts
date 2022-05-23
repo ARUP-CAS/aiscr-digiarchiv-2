@@ -77,6 +77,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-dialog.component';
 import { KomponentaDokumentComponent } from './components/komponenta-dokument/komponenta-dokument.component';
 import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
+import { CitationComponent } from './components/citation/citation.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -178,7 +179,8 @@ const providers: any[] =[
     FacetsDynamicComponent,
     BibtextDialogComponent,
     FeedbackDialogComponent,
-    KomponentaDokumentComponent
+    KomponentaDokumentComponent,
+    CitationComponent
   ],
   imports: [
     CommonModule,

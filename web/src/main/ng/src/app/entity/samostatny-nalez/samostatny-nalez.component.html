@@ -1,12 +1,12 @@
 <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-samostatny_nalez]="!isChild && !isDocumentDialogOpen" (click)="state.setMapResult(result, mapDetail)">
   <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
-  </a>
+  </a> 
   <mat-card-header>
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
       <div fxFlex>
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
-        <mat-icon class="app-entity-samostatny_nalez" [matTooltip]="'entities.samostatny_nalez' | translate">{{ config.entityIcons["samostatny_nalez"] }}</mat-icon>
+        <mat-icon class="app-entity-samostatny_nalez" [matTooltip]="'entities.samostatny_nalez.title' | translate">{{ config.entityIcons["samostatny_nalez"] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
