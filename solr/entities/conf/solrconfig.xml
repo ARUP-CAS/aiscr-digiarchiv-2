@@ -803,7 +803,6 @@
        <str name="facet.field">f_pozorovatel</str>
 	   
        <str name="facet.field">f_typ_projektu</str>
-       <str name="facet.field">f_kulturni_pamatka</str>
 	   
        <str name="facet.field">f_organizace</str>
 	   

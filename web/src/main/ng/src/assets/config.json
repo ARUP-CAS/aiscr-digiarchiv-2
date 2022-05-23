@@ -262,7 +262,7 @@
     "f_let_dohlednost",
     "f_let_letiste_start",
     "f_let_letiste_cil" 
-  ],
+  ], 
   
   "heslarToPole": {
     "aktivity" : "f_aktivita",
@@ -385,7 +385,7 @@
         {"name": "datum_ukonceni", "type": "date"},
         {"name": "podnet"},
         {"name": "vedouci_projektu"},
-        {"name": "organizace_prihlaseni", "heslar": "organizace"},
+        {"name": "organizace_prihlaseni", "heslar": "organizace"}
       ],
       "samostatny_nalez": [
         {"name": "ident_cely"},
