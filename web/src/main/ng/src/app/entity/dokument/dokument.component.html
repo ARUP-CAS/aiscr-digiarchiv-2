@@ -170,7 +170,10 @@
               </tr>
               <tr *ngIf="result.typ_dokumentu_posudek">
                 <th class="app-label">{{ 'card.desc.Zahrnuje posudky' | translate }}:</th>
-                <td>{{ result.typ_dokumentu_posudek.join(', ') }}</td>
+                <td><ng-container *ngFor="let p of result.typ_dokumentu_posudek; let last = last;">
+                  <app-inline-filter [isChild]="isChild" [field]="'f_typ_dokumentu_posudek'" [value]="p" [heslar]="'posudek'"></app-inline-filter>
+                  <span *ngIf="!last">, </span>
+                </ng-container></td>
               </tr>
               <tr *ngIf="result.ulozeni_originalu">
                 <th class="app-label">{{ 'card.desc.Dokument - uložení originálu' | translate }}:</th>
