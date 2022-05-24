@@ -59,7 +59,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
       if (resp.response.numFound > 0) {
         this.result = resp.response.docs[0];
         if (this.result.autor) {
-          this.result.autorFormatted = this.result.autor.join(' - ');
+          this.result.autorFormatted = this.result.autor.join(' – ');
         }
         
         this.state.setMapResult(this.result, false);

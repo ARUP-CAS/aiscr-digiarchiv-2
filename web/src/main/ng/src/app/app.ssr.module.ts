@@ -74,6 +74,7 @@ import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-d
 import { KomponentaDokumentComponent } from './components/komponenta-dokument/komponenta-dokument.component';
 import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
 import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
+import { CitationComponent } from './components/citation/citation.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -172,7 +173,8 @@ const providers: any[] = [
     VyskovyBodComponent,
     BibtextDialogComponent,
     FeedbackDialogComponent,
-    KomponentaDokumentComponent
+    KomponentaDokumentComponent,
+    CitationComponent
   ],
   imports: [
     CommonModule,

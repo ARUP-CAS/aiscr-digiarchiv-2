@@ -20,6 +20,9 @@ export class LicenseDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.result = this.data.result;
+    if (this.result.autor) {
+      this.result.autorFormatted = this.result.autor.join(' - ');
+    }
     this.link = this.config.serverUrl + 'id/' + this.result.ident_cely;
   }
 
