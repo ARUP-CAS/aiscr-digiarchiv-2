@@ -111,10 +111,15 @@ public class PdfServlet extends HttpServlet {
   }
 
   private void emptyImg(HttpServletResponse response, OutputStream out) throws IOException {
-    String empty = getServletContext().getRealPath(File.separator) + "/assets/img/empty.gif";
-    response.setContentType("image/gif");
+//    String empty = getServletContext().getRealPath(File.separator) + "/assets/img/empty.gif";
+//    response.setContentType("image/gif");
+//    BufferedImage bi = ImageIO.read(new File(empty));
+//    ImageIO.write(bi, "gif", out);
+    
+    String empty = getServletContext().getRealPath(File.separator) + "/assets/img/empty_big.png";
+    response.setContentType("image/png");
     BufferedImage bi = ImageIO.read(new File(empty));
-    ImageIO.write(bi, "gif", out);
+    ImageIO.write(bi, "png", out);
 
   }
 
