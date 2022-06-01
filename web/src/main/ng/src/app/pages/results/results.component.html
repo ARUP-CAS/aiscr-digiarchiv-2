@@ -4,9 +4,9 @@
   </div>
 </div>
 
-<div #leftElement class="app-display-table app-container">
+<div #leftElement class="app-display-table app-container" *ngIf="!loading || !state.isMapaCollapsed">
 
-  <ng-container *ngIf="state.isMapaCollapsed && !loading">
+  <ng-container *ngIf="state.isMapaCollapsed">
     <div class="app-table-cell app-left">
       <div fxLayout="row" fxFlexFill>
         <div fxFlex class="app-facets">
@@ -98,7 +98,7 @@
       </div>
     </div> 
   </ng-container>
-  <div class="app-table-cell" *ngIf="!state.isMapaCollapsed && !loading">
+  <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
     <mat-sidenav-container class="app-sidenav-container">
       <mat-sidenav #sidenav mode="side" [(opened)]="opened"><!--[(opened)]="opened"-->
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">

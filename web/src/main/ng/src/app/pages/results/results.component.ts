@@ -141,7 +141,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       this.loading = false;
       this.hasResultsInOther = this.config.entities.findIndex(e => this.state.totals[e] > 0) > -1;
-      this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      setTimeout(() => {
+        this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      }, 100);
+      
       // Math.min(9*itemSize, docs.length * itemSize)
     });
 
