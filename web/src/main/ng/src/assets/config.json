@@ -6,7 +6,7 @@
   "amcr": "http://localhost:8080/amcr/",
 
   "mapOptions": {
-    "docsForMarker": 200,
+    "docsForMarker": 500,
     "docsForCluster": 10000,
     "maxZoom": 24,
     "zoom": 8,
@@ -40,7 +40,7 @@
       "weight": 2,
       "fillOpacity": 0.3
     },
-    "selectionInitPad": -0.90
+    "selectionInitPad": -0.95
   },
   "hideMenuWidth": 600,
 
@@ -410,8 +410,6 @@
 
   "choiceApi": [
     {"label": "AMČR", "metadataPrefix": "oai_amcr"},
-    {"label": "Dublin Core", "metadataPrefix": "oai_dc"},
-    {"label": "CIDOC-CRM", "metadataPrefix": "oai_rdf"}
   ],
 
   "feedBackMaxLength": 4000
