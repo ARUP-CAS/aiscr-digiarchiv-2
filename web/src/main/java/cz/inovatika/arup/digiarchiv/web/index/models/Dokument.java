@@ -427,9 +427,11 @@ public class Dokument implements Entity {
                     ukonceni = c2.toInstant().toString();
                   }
                 }
-                SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
+                idoc.setField("datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
+                // SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
               }
               break;
+
             case "komponenta_dokument":
               Object obj = doc.get("komponenta_dokument");
               if (obj instanceof JSONArray) {
