@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Comparator;
@@ -397,50 +398,58 @@ public class Indexer {
       Options opts = Options.getInstance();
       String thumbsDir = opts.getString("thumbsDir");
       File file = new File(thumbsDir + File.separator + "toberemoved." + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".txt");
+      FileUtils.writeStringToFile(file, "Report: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) 
+              + System.getProperty("line.separator") + System.getProperty("line.separator"), "UTF-8", false);
       Path path = Paths.get(thumbsDir);
 
       
-      //File file2 = new File(thumbsDir + File.separator + "toberemoved2." + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".txt");
-      List<Path> pdfs = listNonEmptyDirectories(path);
-      List<Path> paths = listFiles(path);
-      paths.addAll(pdfs);
-//      for (Path x : paths) {
-//        FileUtils.writeStringToFile(file2, x.toString() + System.getProperty("line.separator"), "UTF-8", true);
-//      }
-      
       int total = 0;
+      //File file2 = new File(thumbsDir + File.separator + "toberemoved2." + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + ".txt");
+      
+      List<Path> paths = listFiles(path);
+      
       for (Path x : paths) {
         String fileName = x.getFileName().toString().replace("_thumb.jpg", "");
         boolean exists = existsInIndex(fileName);
         // System.out.println(x.toString().replace("_thumb.jpg", "") + " -> " + exists);
         if (!exists) {
           try {
-            // System.out.println(x.getParent());
-            // String dirName = x.getParent().toString();
+            File medium = new File(x.toString().replace("_thumb.jpg", "_medium.jpg"));
             if (remove) {
-              File dir = new File(fileName);
-              if (fileName.endsWith(".pdf")) {
-                if (dir.isDirectory()) {
-                  FileUtils.deleteDirectory(dir);
-                }
-              } else {
-                FileUtils.delete(x.toFile());
-                FileUtils.deleteQuietly(new File(x.toString().replace("_thumb.jpg", "_medium.jpg")));
+              FileUtils.delete(x.toFile());
+              if (medium.exists()) {
+                FileUtils.delete(medium);
               }
             }
+            FileUtils.writeStringToFile(file, x.toString() + System.getProperty("line.separator"), "UTF-8", true);
+            FileUtils.writeStringToFile(file, medium.getName() + System.getProperty("line.separator"), "UTF-8", true);
             total++;
-            if (fileName.endsWith(".pdf")) {
-              FileUtils.writeStringToFile(file, x.toString().replace("_thumb.jpg", "") + System.getProperty("line.separator"), "UTF-8", true);
-            } else {
-              FileUtils.writeStringToFile(file, x.toString() + System.getProperty("line.separator"), "UTF-8", true);
-              FileUtils.writeStringToFile(file, x.toString().replace("_thumb.jpg", "_medium.jpg") + System.getProperty("line.separator"), "UTF-8", true);
-            }
           } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
           }
         }
 
       }
+      
+      
+      List<Path> pdfs = listPdfFiles(path);
+      for (Path x : pdfs) {
+        String fileName = x.getFileName().toString();
+        boolean exists = existsInIndex(fileName);
+        if (!exists) {
+          try {
+            if (remove) {
+              FileUtils.deleteQuietly(x.toFile());
+            }
+            total++;
+            FileUtils.writeStringToFile(file, fileName + System.getProperty("line.separator"), "UTF-8", true);
+          } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+          }
+        }
+      }
+      
+      
       if (remove) {
         deleteEmptyDirs(path);
       }
@@ -466,17 +475,12 @@ public class Indexer {
 
   }
 
-  private List<Path> listFiles2(Path path) throws IOException {
+  private List<Path> listPdfFiles(Path path) throws IOException {
     List<Path> result;
-    
     try (Stream<Path> walk = Files.walk(path)) {
       result = walk
-              //.filter(Files::isDirectory)
-              .filter(p -> (p.toFile().isDirectory() &&
-                           (!FileUtils.listFiles(p.toFile(), new String[] { "jpg" }, false).isEmpty()) && 
-                           (p.toFile().listFiles((FileFilter) FileFilterUtils.directoryFileFilter()).length == 0)) ||
-                            p.getFileName().toString().endsWith("_thumb.jpg")
-              )
+              .filter(Files::isDirectory)
+              .filter(p -> p.getFileName().toString().endsWith(".pdf"))
               .collect(Collectors.toList());
     }
     return result;
@@ -504,7 +508,7 @@ public class Indexer {
             .filter(File::isDirectory)
             .filter(p -> {
               try {
-                return FileUtils.isEmptyDirectory(new File(p.toString()));
+                return FileUtils.isEmptyDirectory(p);
               } catch (IOException ex) {
                 Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
                 return false;

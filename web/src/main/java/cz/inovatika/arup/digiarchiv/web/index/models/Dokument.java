@@ -120,6 +120,9 @@ public class Dokument implements Entity {
   int numAkce;
   int numLokalita;
   int numNeidentAkce;
+  
+  int datum_provedeni_od = 10000;
+  int datum_provedeni_do = 0;
 
   @Override
   public void fillFields(SolrInputDocument idoc) {
@@ -409,14 +412,16 @@ public class Dokument implements Entity {
 
               int start = naDoc.optInt("rok_zahajeni", 0);
               if (start != 0) {
+                datum_provedeni_od = Math.min(datum_provedeni_od, start);
                 int end = naDoc.optInt("rok_ukonceni", 0);
                 String ukonceni = "*";
                 Calendar c1 = Calendar.getInstance();
-                c1.set(start, 0, 1);
+                c1.set(datum_provedeni_od, 0, 1);
                 SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", c1.toInstant().toString());
                 if (end != 0) {
+                  datum_provedeni_do = Math.max(datum_provedeni_do, end);
                   Calendar c2 = Calendar.getInstance();
-                  c2.set(end, 11, 31);
+                  c2.set(datum_provedeni_do, 11, 31);
                   SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", c2.toInstant().toString());
                   if (!c2.before(c1)) {
                     ukonceni = c2.toInstant().toString();
@@ -425,7 +430,6 @@ public class Dokument implements Entity {
                 SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
               }
               break;
-
             case "komponenta_dokument":
               Object obj = doc.get("komponenta_dokument");
               if (obj instanceof JSONArray) {
