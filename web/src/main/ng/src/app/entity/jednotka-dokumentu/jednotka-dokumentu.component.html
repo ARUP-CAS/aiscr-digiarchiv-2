@@ -38,10 +38,10 @@
       <mat-accordion multi="true">
         <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka> -->
         <ng-container *ngIf="result.komponenta_dokument">
-          <mat-expansion-panel #panel *ngFor="let kd of result.komponenta_dokument[0]" [expanded]="true" hideToggle class="app-panel-inner">
+          <mat-expansion-panel #panel1 *ngFor="let kd of result.komponenta_dokument" [expanded]="true" hideToggle class="app-panel-inner">
             <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
               <mat-panel-title>
-                <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+                <mat-icon (click)="panelHeader._toggle()">{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>
                 {{ 'card.panelTitle.Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
                 <ng-container *ngIf="kd.obdobi">
                   <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>

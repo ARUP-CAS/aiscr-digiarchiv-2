@@ -44,4 +44,5 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
   <app-dokument *ngIf="result.dokument" [result]="result.dokument[0]" [isChild]="true" class="app-related-item"></app-dokument>
+  <app-knihovna3d *ngIf="result.knihovna_3d" [result]="result.knihovna_3d[0]" [isChild]="true" class="app-related-item"></app-knihovna3d>
 </mat-expansion-panel> 
