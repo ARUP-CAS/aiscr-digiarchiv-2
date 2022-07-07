@@ -228,7 +228,8 @@ public class SamostatniNalez implements Entity {
       }
 
       if (indexFields.contains(s)) {
-        for (String sufix : prSufix) {
+        for (String sufix : prSufixAll) {
+        //for (String sufix : prSufix) {
           SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       }

@@ -409,7 +409,7 @@
     },
 
   "choiceApi": [
-    {"label": "AMČR", "metadataPrefix": "oai_amcr"},
+    {"label": "AMČR", "metadataPrefix": "oai_amcr"}
   ],
 
   "feedBackMaxLength": 4000

@@ -145,10 +145,15 @@ public class Projekt implements Entity {
   public String pristupnost;
   
   String[] facetFields = new String[]{"komponenta_areal","komponenta_obdobi","f_aktivita","nalez_kategorie","nalez_druh_nalezu","nalez_specifikace","f_typ_vyzkumu"};
+  List<String> prSufixAll = new ArrayList<>();
 
   @Override
   public void fillFields(SolrInputDocument idoc) {
 
+    prSufixAll.add("A");
+    prSufixAll.add("B");
+    prSufixAll.add("C");
+    prSufixAll.add("D");
     if (this.geometry_n != null) {
       this.loc = this.geometry_n + "," + this.geometry_e;
               SolrSearcher.addFieldNonRepeat(idoc, "lat", this.geometry_n);
@@ -322,7 +327,7 @@ public class Projekt implements Entity {
       SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
       
       if (indexFields.contains(s)) {
-        for (String sufix : prSufix) {
+        for (String sufix : prSufixAll) {
           SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
       } 
