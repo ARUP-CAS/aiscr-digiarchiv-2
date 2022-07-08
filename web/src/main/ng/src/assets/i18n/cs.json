@@ -491,6 +491,14 @@
     },
     "tooltip": {
       "Odstranit tento filtr": "Zrušit tento filtr"
+    },
+    "layer": {
+      "cuzk_zakladni": "ČÚZK - Základní mapy ČR",
+      "cuzk_orto": "ČÚZK - Ortofotomapa",
+      "cuzk_stin": "ČÚZK - Stínovaný reliéf 5G",
+      "openstreet": "OpenStreetMap",
+      "cuzk_katastr_mapa": "ČÚZK - Katastrální mapa",
+      "cuzk_katastr_uzemi": "ČÚZK - Katastrální území"
     }
   },
 

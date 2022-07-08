@@ -123,13 +123,13 @@ export class MapaComponent implements OnInit, OnDestroy {
   cuzkEL = L.tileLayer.wms('http://ags.cuzk.cz/arcgis2/services/dmr5g/ImageServer/WMSServer?', { layers: 'dmr5g:GrayscaleHillshade', maxZoom: 25, maxNativeZoom: 20, minZoom: 6 });
   cuzkZM = L.tileLayer('http://ags.cuzk.cz/arcgis/rest/services/zmwm/MapServer/tile/{z}/{y}/{x}?blankTile=false', { layers: 'zmwm', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
 
-  baseLayers = {
+  baseLayers: any = {
     "ČÚZK - Základní mapy ČR": this.cuzkZM,
     "ČÚZK - Ortofotomapa": this.cuzkOrt,
     "ČÚZK - Stínovaný reliéf 5G": this.cuzkEL,
     "OpenStreetMap": this.osm,
   };
-  overlays = {
+  overlays: any = {
     "ČÚZK - Katastrální mapa": this.cuzkWMS,
     "ČÚZK - Katastrální území": this.cuzkWMS2,
   };
@@ -153,14 +153,9 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initLayers();
     this.showDetail = false;
     this.maxNumMarkers = this.config.mapOptions.docsForMarker;
-    this.options.layers = [this.osm];
-
-    this.layersControl = {
-      baseLayers: this.baseLayers,
-      overlays: this.overlays
-    }
 
 
     this.options.zoom = this.config.mapOptions.zoom;
@@ -200,8 +195,35 @@ export class MapaComponent implements OnInit, OnDestroy {
       }
     }));
 
+    this.subs.push(this.service.currentLang.subscribe(res => {
+      if (this.mapReady) {
+        setTimeout(() => {
+          this.initLayers();
+          this.map.invalidateSize({ pan: false });
+        }, 500);
+      }
+    }));
+
     if (!this.isResults && this.mapReady) {
       this.setData(false);
+    }
+  }
+
+  initLayers() {
+    this.baseLayers = {};
+    this.baseLayers[this.service.getTranslation('map.layer.cuzk_zakladni')]= this.cuzkZM,
+    this.baseLayers[this.service.getTranslation('map.layer.cuzk_orto')]= this.cuzkOrt,
+    this.baseLayers[this.service.getTranslation('map.layer.cuzk_stin')]= this.cuzkEL,
+    this.baseLayers[this.service.getTranslation('map.layer.openstreet')]= this.osm;
+    this.overlays = {};
+    this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_mapa')] = this.cuzkWMS;
+    this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_uzemi')] = this.cuzkWMS2;
+    
+    this.options.layers = [this.osm];
+
+    this.layersControl = {
+      baseLayers: this.baseLayers,
+      overlays: this.overlays
     }
   }
 
