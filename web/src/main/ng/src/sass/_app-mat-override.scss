@@ -8,7 +8,7 @@
 // card
 .mat-card {
   @include setEntityColor(card);
-  
+
   .app-link-close {
     position: absolute;
     top: $app-gap;
@@ -56,8 +56,8 @@
     .app-card-detail {
       margin-top: $app-gap-half;
 
-      & > .mat-accordion {
-        & > :not(.mat-expansion-panel-spacing) {
+      &>.mat-accordion {
+        &> :not(.mat-expansion-panel-spacing) {
           &:not(:last-child) {
             margin-bottom: 2px;
           }
@@ -73,7 +73,7 @@
         .mat-expansion-panel-content {
           max-height: 635px;
           overflow-y: auto;
-          
+
           .mat-expansion-panel-body {
             $val: calc(2 * #{$app-gap});
 
@@ -90,7 +90,17 @@
           }
         }
       }
-      
+
+      &.virtual {
+        .mat-expansion-panel-content {
+          .mat-expansion-panel-body {
+            padding: 16px 0;
+          }
+        }
+      }
+
+
+
       &.mat-expansion-panel-spacing {
         @extend .app-clean-mg;
       }
@@ -107,7 +117,7 @@
             .mat-icon {
               @include setIcon($size: 20);
             }
-          } 
+          }
         }
 
         .mat-expansion-panel-content {
@@ -115,12 +125,12 @@
             /* padding-top: 2px;
             padding-bottom: 0; */
             padding: 2px 20px 0px 20px; // issue #44
-          }  
+          }
         }
       }
-    
+
       .mat-expansion-panel-header {
-        background-color: $app-gray-1 !important;
+        background-color: $app-gray-1  !important;
         flex-direction: row-reverse;
 
         .mat-expansion-indicator {
@@ -139,7 +149,8 @@
           table {
             border-spacing: 0;
 
-            th, td {
+            th,
+            td {
               vertical-align: top;
             }
 
@@ -161,12 +172,12 @@
 
     .mat-button-base {
       &:not(:first-child) {
-        margin: 0 0 0 $app-gap-button;  
+        margin: 0 0 0 $app-gap-button;
       }
-      
+
       &.mat-flat-button {
-        background-color: $app-gray-1; 
-        
+        background-color: $app-gray-1;
+
         a {
           display: inline-flex;
           color: currentColor;
@@ -189,7 +200,7 @@
         margin-bottom: 8px;
       }
 
-      & > div {
+      &>div {
         flex: 0 0 100%;
       }
     }
@@ -243,7 +254,7 @@
         @include setIcon(18, $position: bottom);
         color: $app-primary-color-darker;
       }
-    } 
+    }
   }
 
   .mat-expansion-panel-header,
@@ -265,8 +276,8 @@
   .mat-list-item {
     .mat-icon {
       &:not(.app-icon-op) {
-        margin-right: $app-gap-icon !important;
-      }   
+        margin-right: $app-gap-icon  !important;
+      }
     }
   }
 
@@ -284,7 +295,7 @@
       a {
         &:hover {
           color: $app-primary-color-darker;
-        }  
+        }
       }
     }
   }
@@ -339,7 +350,7 @@
     .mat-checkbox {
       margin-right: $app-gap-icon;
     }
-  }  
+  }
 }
 
 
@@ -387,7 +398,7 @@
 // filter badge
 .app-filter-badge {
   color: currentColor;
-  
+
   .mat-icon {
     $size: 18;
     font-size: #{$size}px !important;

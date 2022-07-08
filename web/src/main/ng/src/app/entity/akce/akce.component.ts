@@ -25,6 +25,12 @@ export class AkceComponent implements OnInit, OnChanges {
   hasDetail: boolean;
   bibTex: string;
 
+  math = Math;
+
+  itemSize = 133;
+  vsSize = 0;
+  numChildren = 0;
+
   constructor(
     private datePipe: DatePipe,
     public state: AppState,
@@ -46,6 +52,13 @@ export class AkceComponent implements OnInit, OnChanges {
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
      if (this.inDocument) {
+      if (this.result.child_dokument) {
+        this.numChildren += this.result.child_dokument.length;
+      }
+      if (this.result.vazba_projekt) {
+        this.numChildren += this.result.vazba_projekt.length;
+      }
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
       this.getDokuments();
       this.getProjekts();
      }
@@ -86,6 +99,13 @@ export class AkceComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
+      if (this.result.child_dokument) {
+        this.numChildren += this.result.child_dokument.length;
+      }
+      if (this.result.vazba_projekt) {
+        this.numChildren += this.result.vazba_projekt.length;
+      }
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
       this.getDokuments();
       this.getProjekts();
       // this.result.akce = res.response.docs[0].akce;
