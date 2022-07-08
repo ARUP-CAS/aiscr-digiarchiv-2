@@ -23,6 +23,11 @@ public class ExtZdrojSearcher implements EntitySearcher{
   final String ENTITY = "ext_zdroj";
   
   @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return this.getSearchFields(pristupnost);
+  }
+  
+  @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {

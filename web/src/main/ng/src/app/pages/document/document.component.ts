@@ -18,6 +18,9 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   link: string;
   now = new Date();
 
+  children_start = 0;
+  children_rows = 20;
+
   constructor(
     private titleService: Title,
     private route: ActivatedRoute,

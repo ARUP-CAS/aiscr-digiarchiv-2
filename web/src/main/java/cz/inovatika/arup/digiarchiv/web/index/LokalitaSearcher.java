@@ -27,6 +27,11 @@ public class LokalitaSearcher implements EntitySearcher {
   final String ENTITY = "lokalita";
   
   @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return this.getSearchFields(pristupnost);
+  }
+  
+  @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     if (jo.has("response")) {
       JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");

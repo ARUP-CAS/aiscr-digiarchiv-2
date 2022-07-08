@@ -21,6 +21,11 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
 
   public static final Logger LOGGER = Logger.getLogger(SamostatnyNalezSearcher.class.getName());
   final String ENTITY = "samostatny_nalez";
+  
+  @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return this.getSearchFields(pristupnost);
+  }
 
   @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {

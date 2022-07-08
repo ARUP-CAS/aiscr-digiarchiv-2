@@ -45,6 +45,10 @@ export class AkceComponent implements OnInit, OnChanges {
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+     if (this.inDocument) {
+      this.getDokuments();
+      this.getProjekts();
+     }
   }
 
   ngOnChanges(c) {
@@ -57,9 +61,33 @@ export class AkceComponent implements OnInit, OnChanges {
     }
   }
 
+  getDokuments() {
+    if (this.result.child_dokument) {
+      this.result.dokument = [];
+      this.result.child_dokument.forEach(id => {
+        this.service.getIdAsChild(id, "dokument").subscribe((res: any) => {
+          this.result.dokument.push(res.response.docs[0]);
+        });
+      });
+    }
+  }
+
+  getProjekts() {
+    if (this.result.vazba_projekt) {
+      this.result.projekt = [];
+      this.result.vazba_projekt.forEach(id => {
+        this.service.getIdAsChild(id, "projekt").subscribe((res: any) => {
+          this.result.projekt.push(res.response.docs[0]);
+        });
+      });
+    }
+  }
+
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
+      this.getDokuments();
+      this.getProjekts();
       // this.result.akce = res.response.docs[0].akce;
       // this.result.lokalita = res.response.docs[0].lokalita;
       this.hasDetail = true;

@@ -34,6 +34,11 @@ public class Library3DSearcher implements EntitySearcher {
   final String ENTITY = "knihovna_3d";
   
   @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return this.getSearchFields(pristupnost);
+  }
+  
+  @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";

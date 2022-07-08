@@ -55,6 +55,11 @@ public class DokumentSearcher implements EntitySearcher {
   }
   
   @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return new String[]{"ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath"};
+  }
+  
+  @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";

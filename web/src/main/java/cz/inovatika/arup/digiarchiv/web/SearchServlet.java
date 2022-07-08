@@ -137,7 +137,7 @@ public class SearchServlet extends HttpServlet {
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             if (searcher != null) {
-              searcher.getChilds(jo, client, request);
+              // searcher.getChilds(jo, client, request);
             }
             ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
             if (cs != null) {
@@ -148,6 +148,55 @@ public class SearchServlet extends HttpServlet {
             }
             // json = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 
+          }
+          return jo.toString();
+
+        } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, null, ex);
+          json.put("error", ex);
+        }
+        return json.toString();
+      }
+    },
+    ID_AS_CHILD {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        JSONObject json = new JSONObject();
+        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+                  .setFacet(false);
+          String entity = request.getParameter("entity");
+          query.setRequestHandler("/search");
+          if (entity == null) {
+            query.setFields("entity");
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
+              return jo.toString();
+            }
+            entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+          }
+          String pristupnost = LoginServlet.pristupnost(request.getSession());
+          if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+          }
+          EntitySearcher searcher = SearchUtils.getSearcher(entity);
+          if (searcher != null) {
+            query.setFields(searcher.getChildSearchFields(pristupnost));
+          } else {
+            query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
+                  + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
+                  + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
+          }
+          JSONObject jo = SearchUtils.json(query, client, "entities");
+          if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+            ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
+            if (cs != null) {
+              cs.getRelated(jo, client, request);
+              if (!cs.isRelatedSearchable()) {
+                jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
+              }
+            }
           }
           return jo.toString();
 

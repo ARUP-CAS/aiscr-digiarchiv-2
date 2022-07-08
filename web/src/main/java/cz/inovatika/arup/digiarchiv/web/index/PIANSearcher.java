@@ -24,6 +24,11 @@ public class PIANSearcher implements EntitySearcher{
   final String ENTITY = "pian";
   
   @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return this.getSearchFields(pristupnost);
+  }
+  
+  @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
           String fields = "ident_cely,entity,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"

@@ -146,8 +146,15 @@ export class AppService {
   }
 
   getId(id: string) {
-    const params: HttpParams = new HttpParams().set('id', id);
+    const params: HttpParams = new HttpParams()
+      .set('id', id);
     return this.get(`/search/id`, params);
+  }
+
+  getIdAsChild(id: string, entity: string) {
+    const params: HttpParams = new HttpParams()
+    .set('id', id).set('entity', entity);
+    return this.get(`/search/id_as_child`, params);
   }
 
   getGML(id: string) {
