@@ -52,13 +52,7 @@ export class AkceComponent implements OnInit, OnChanges {
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
      if (this.inDocument) {
-      if (this.result.child_dokument) {
-        this.numChildren += this.result.child_dokument.length;
-      }
-      if (this.result.vazba_projekt) {
-        this.numChildren += this.result.vazba_projekt.length;
-      }
-      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+      this.setVsize();
       this.getDokuments();
       this.getProjekts();
      }
@@ -72,6 +66,16 @@ export class AkceComponent implements OnInit, OnChanges {
     if (this.mapDetail) {
       this.getFullId();
     }
+  }
+
+  setVsize() {
+      if (this.result.child_dokument) {
+        this.numChildren += this.result.child_dokument.length;
+      }
+      if (this.result.vazba_projekt) {
+        this.numChildren += this.result.vazba_projekt.length;
+      }
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getDokuments() {
@@ -99,13 +103,7 @@ export class AkceComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      if (this.result.child_dokument) {
-        this.numChildren += this.result.child_dokument.length;
-      }
-      if (this.result.vazba_projekt) {
-        this.numChildren += this.result.vazba_projekt.length;
-      }
-      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+      this.setVsize();
       this.getDokuments();
       this.getProjekts();
       // this.result.akce = res.response.docs[0].akce;

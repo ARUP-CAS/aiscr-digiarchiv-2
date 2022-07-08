@@ -30,7 +30,7 @@ public class ProjektSearcher implements EntitySearcher {
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return this.getSearchFields(pristupnost);
+    return new String[]{"ident_cely,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet"};
   }
   
   @Override

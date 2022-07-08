@@ -23,7 +23,7 @@ public class AkceSearcher implements EntitySearcher{
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return this.getSearchFields(pristupnost);
+    return new String[]{"ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"};
   }
   
   @Override

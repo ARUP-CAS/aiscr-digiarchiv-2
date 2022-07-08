@@ -29,7 +29,7 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   // @Input() result;
-  
+
   @Input() inDocument = false;
   @Input() detailExpanded: boolean;
   @Input() isChild: boolean;
@@ -42,6 +42,13 @@ export class DokumentComponent implements OnInit, OnChanges {
   imgSrc: string;
 
   bibTex: string;
+
+  itemSize = 133;
+  vsSize = 0;
+  numChildren = 0;
+  math = Math;
+
+  cadastr: { katastr: string, okres: string }[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -76,6 +83,96 @@ export class DokumentComponent implements OnInit, OnChanges {
     this.service.currentLang.subscribe(l => {
       this.setBibTex();
     });
+    this.setVsize();
+    if (this.inDocument) {
+      this.getAkce();
+      this.getLokalita();
+    }
+    this.setCadastr();
+  }
+
+  setCadastr() {
+    const c: string[] = [];
+    if (this.result.akce) {
+      this.result.akce.forEach(a => {
+        if (!c.includes(a.katastr + '-' + a.okres)) {
+          this.cadastr.push({ katastr: a.katastr, okres: a.okres });
+          c.push(a.katastr + '-' + a.okres)
+        }
+        
+      });
+    }
+    if (this.result.lokalita) {
+      this.result.lokalita.forEach(a => {
+        if (!c.includes(a.katastr + '-' + a.okres)) {
+          this.cadastr.push({ katastr: a.katastr, okres: a.okres });
+          c.push(a.katastr + '-' + a.okres)
+        }
+      });
+    }
+
+    if (this.result.neident_akce) {
+      this.result.neident_akce.forEach(a => {
+        if (!c.includes(a.katastr + '-' + a.okres)) {
+          this.cadastr.push({ katastr: a.katastr, okres: a.okres });
+          c.push(a.katastr + '-' + a.okres)
+        }
+      });
+    }
+
+  }
+
+  setVsize() {
+
+    if (this.result.jednotka_dokumentu_vazba_akce) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_akce.length;
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_akce) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_druha_akce.length;
+    }
+    if (this.result.jednotka_dokumentu_vazba_lokalita) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_lokalita.length;
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_lokalita) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_druha_lokalita.length;
+    }
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  }
+
+  getAkce() {
+    this.result.akce = [];
+    if (this.result.jednotka_dokumentu_vazba_akce) {
+      this.result.jednotka_dokumentu_vazba_akce.forEach(id => {
+        this.service.getIdAsChild(id, "akce").subscribe((res: any) => {
+          this.result.akce.push(res.response.docs[0]);
+        });
+      });
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_akce) {
+      this.result.jednotka_dokumentu_vazba_druha_akce.forEach(id => {
+        this.service.getIdAsChild(id, "akce").subscribe((res: any) => {
+          this.result.akce.push(res.response.docs[0]);
+        });
+      });
+    }
+  }
+
+  getLokalita() {
+    this.result.lokalita = [];
+    if (this.result.jednotka_dokumentu_vazba_lokalita) {
+      this.result.jednotka_dokumentu_vazba_lokalita.forEach(id => {
+        this.service.getIdAsChild(id, "lokalita").subscribe((res: any) => {
+          this.result.lokalita.push(res.response.docs[0]);
+        });
+      });
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_lokalita) {
+      this.result.jednotka_dokumentu_vazba_druha_lokalita.forEach(id => {
+        this.service.getIdAsChild(id, "lokalita").subscribe((res: any) => {
+          this.result.lokalita.push(res.response.docs[0]);
+        });
+      });
+    }
   }
 
   setBibTex() {
@@ -100,8 +197,10 @@ export class DokumentComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      // this.result.akce = res.response.docs[0].akce;
-      // this.result.lokalita = res.response.docs[0].lokalita;
+      // this.setVsize();
+      this.getAkce();
+      this.getLokalita();
+
       this.hasDetail = true;
     });
   }
@@ -245,6 +344,6 @@ export class DokumentComponent implements OnInit, OnChanges {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
-  } 
-  
+  }
+
 }
