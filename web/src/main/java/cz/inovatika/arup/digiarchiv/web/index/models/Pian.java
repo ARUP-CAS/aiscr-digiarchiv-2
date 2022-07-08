@@ -70,7 +70,7 @@ public class Pian implements Entity {
 
   @Override
   public void fillFields(SolrInputDocument idoc) {
-    idoc.setField("searchable", true);
+    idoc.setField("searchable", !this.ident_cely.startsWith("N"));
     if (this.centroid_n != null) {
       this.loc = this.centroid_n + "," + this.centroid_e;
       this.loc_rpt = this.loc;
