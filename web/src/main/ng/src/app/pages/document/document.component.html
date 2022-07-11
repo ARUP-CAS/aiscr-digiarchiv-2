@@ -1,8 +1,9 @@
-<div class="app-display-table app-loading" *ngIf="loading">
+<div class="app-display-table app-loading" *ngIf="state.loading">
   <div class="app-table-cell app-clean-pd">
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <mat-progress-bar mode="determinate" [value]="state.documentProgress"></mat-progress-bar>
   </div>
 </div>
+<div *ngIf="state.loading" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 
 <div class="app-display-table app-container" *ngIf="!loading">
   <ng-container *ngIf="state.isMapaCollapsed">

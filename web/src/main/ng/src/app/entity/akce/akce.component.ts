@@ -26,7 +26,6 @@ export class AkceComponent implements OnInit, OnChanges {
   bibTex: string;
 
   math = Math;
-
   itemSize = 133;
   vsSize = 0;
   numChildren = 0;
@@ -53,6 +52,8 @@ export class AkceComponent implements OnInit, OnChanges {
      }`;
      if (this.inDocument) {
       this.setVsize();
+      this.state.documentProgress = 0;
+      this.state.loading = true;
       this.getDokuments();
       this.getProjekts();
      }
@@ -81,22 +82,28 @@ export class AkceComponent implements OnInit, OnChanges {
   getDokuments() {
     if (this.result.child_dokument) {
       this.result.dokument = [];
-      this.result.child_dokument.forEach(id => {
-        this.service.getIdAsChild(id, "dokument").subscribe((res: any) => {
-          this.result.dokument.push(res.response.docs[0]);
+      for (let i = 0; i < this.result.child_dokument.length; i=i+10) {
+        const ids = this.result.child_dokument.slice(i, i+10);
+        this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
+          this.result.dokument = this.result.dokument.concat(res.response.docs);
+          this.state.documentProgress = this.result.dokument.length / this.numChildren *100;
+          this.state.loading = (this.result.dokument.length + this.result.projekt.length) < this.numChildren;
         });
-      });
+      }
     }
+    this.state.loading = false;
   }
 
   getProjekts() {
     if (this.result.vazba_projekt) {
       this.result.projekt = [];
-      this.result.vazba_projekt.forEach(id => {
-        this.service.getIdAsChild(id, "projekt").subscribe((res: any) => {
-          this.result.projekt.push(res.response.docs[0]);
+      
+      for (let i = 0; i < this.result.vazba_projekt.length; i=i+10) {
+        const ids = this.result.vazba_projekt.slice(i, i+10);
+        this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
+          this.result.projekt = this.result.projekt.concat(res.response.docs);
         });
-      });
+      }
     }
   }
 
@@ -114,9 +121,7 @@ export class AkceComponent implements OnInit, OnChanges {
 
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-        this.getFullId();
-      });
+      this.getFullId();
     }
     this.detailExpanded = !this.detailExpanded;
   }

@@ -29,6 +29,11 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
   imgSrc: string;
   bibTex: string;
 
+  itemSize = 133;
+  vsSize = 0;
+  numChildren = 0;
+  math = Math;
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
@@ -46,6 +51,78 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
     this.service.currentLang.subscribe(l => {
       this.setBibTex();
     });
+    this.setVsize();
+    if (this.inDocument) {
+      this.state.loading = true;
+      this.state.documentProgress = 0;
+      this.getAkce();
+      this.getLokalita();
+    }
+  }
+
+  setVsize() {
+
+    if (this.result.jednotka_dokumentu_vazba_akce) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_akce.length;
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_akce) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_druha_akce.length;
+    }
+    if (this.result.jednotka_dokumentu_vazba_lokalita) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_lokalita.length;
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_lokalita) {
+      this.numChildren += this.result.jednotka_dokumentu_vazba_druha_lokalita.length;
+    }
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  }
+
+  getAkce() {
+    this.result.akce = [];
+    if (this.result.jednotka_dokumentu_vazba_akce) {
+      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_akce.length; i=i+10) {
+        const ids = this.result.jednotka_dokumentu_vazba_akce.slice(i, i+10);
+        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+          this.result.akce = this.result.akce.concat(res.response.docs);
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_akce) {
+      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_druha_akce.length; i=i+10) {
+        const ids = this.result.jednotka_dokumentu_vazba_druha_akce.slice(i, i+10);
+        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+          this.result.akce = this.result.akce.concat(res.response.docs);
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
+    }
+  }
+
+  getLokalita() {
+    this.result.lokalita = [];
+    if (this.result.jednotka_dokumentu_vazba_lokalita) {
+      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_lokalita.length; i=i+10) {
+        const ids = this.result.jednotka_dokumentu_vazba_lokalita.slice(i, i+10);
+        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
+          this.result.lokalita = this.result.lokalita.concat(res.response.docs);
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
+    }
+    if (this.result.jednotka_dokumentu_vazba_druha_lokalita) {
+      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_druha_lokalita.length; i=i+10) {
+        const ids = this.result.jednotka_dokumentu_vazba_druha_lokalita.slice(i, i+10);
+        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
+          this.result.lokalita = this.result.lokalita.concat(res.response.docs);
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
+    }
   }
 
   setBibTex() {
@@ -81,8 +158,8 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      // this.result.akce = res.response.docs[0].akce;
-      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.getAkce();
+      this.getLokalita();
       this.hasDetail = true;
     });
   }

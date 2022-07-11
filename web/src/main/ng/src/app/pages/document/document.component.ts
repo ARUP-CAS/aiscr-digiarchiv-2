@@ -28,7 +28,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     private config: AppConfiguration,
     public state: AppState,
     private service: AppService
-    ) {
+  ) {
     this.state.bodyClass = 'app-page-results';
   }
 
@@ -36,6 +36,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });
+    this.state.printing = this.state.printing || this.router.isActive('print', false);
     this.route.queryParams.subscribe(val => {
       this.search(this.route.snapshot.params.id);
       this.state.documentId = this.route.snapshot.params.id;
@@ -44,11 +45,19 @@ export class DocumentComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (this.state.printing || this.router.isActive('print', false)) {
-      this.state.printing = false;
-      setTimeout(() => {
-        this.service.print();
-      }, 2000);
+      // this.state.printing = false;
+      this.tryPrint();
     }
+  }
+
+  tryPrint() {
+    setTimeout(() => {
+      if (this.state.loading) {
+        this.tryPrint();
+      } else {
+        this.service.print();
+      }
+    }, 1000);
   }
 
   setTitle() {
@@ -64,7 +73,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         if (this.result.autor) {
           this.result.autorFormatted = this.result.autor.join(' – ');
         }
-        
+
         this.state.setMapResult(this.result, false);
       }
       this.link = this.config.serverUrl + 'id/' + id;
@@ -72,7 +81,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     });
   }
 
-  isResultEmpty (obj) {
+  isResultEmpty(obj) {
     return (!obj || (Object.keys(obj).length === 0));
   }
 

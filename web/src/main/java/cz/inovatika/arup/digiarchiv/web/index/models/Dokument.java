@@ -113,6 +113,9 @@ public class Dokument implements Entity {
 
   @Field
   public List<String> odkaz;
+
+  @Field
+  public List<String> location_info = new ArrayList();
   
   List<String> prSufix = new ArrayList<>();
   // String[] sufixes = new String[]{"A", "B", "C", "D"};
@@ -218,6 +221,10 @@ public class Dokument implements Entity {
       if (doc.has("katastr")) {
         SolrSearcher.addFieldNonRepeat(idoc, field + "_katastr", doc.getString("katastr"));
         SolrSearcher.addFieldNonRepeat(idoc, field + "_okres", doc.getString("okres"));
+        JSONObject li = new JSONObject().put("katastr", doc.getString("katastr")).put("okres", doc.getString("okres"));
+        if (!location_info.contains(li.toString())){
+          location_info.add(li.toString());
+        }
       }
     }
   }
@@ -234,8 +241,11 @@ public class Dokument implements Entity {
 
       if (doc.has("katastr")) {
         SolrSearcher.addFieldNonRepeat(idoc, field + "_katastr", doc.getString("katastr"));
-        // SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), prSufix);
         SolrSearcher.addFieldNonRepeat(idoc, field + "_okres", doc.getString("okres"));
+//        JSONObject li = new JSONObject().put("katastr", doc.getString("katastr")).put("okres", doc.getString("okres"));
+//        if (!location_info.contains(li.toString())){
+//          location_info.add(li.toString());
+//        }
       }
       if (doc.has("komponenta")) {
         JSONArray ja = doc.getJSONArray("komponenta");

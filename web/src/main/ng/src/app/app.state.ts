@@ -105,6 +105,8 @@ export class AppState {
   breadcrumbs: Crumb[];
   conditions: Condition[];
 
+  documentProgress: number;
+
   setConfig(cfg: AppConfiguration) {
     this.config = cfg;
     this.currentLang = cfg.defaultLang;

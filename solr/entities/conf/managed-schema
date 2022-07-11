@@ -66,8 +66,6 @@
    
    <field name="extra_data" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    
-  
-   
    <field name="tvar" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="jednotka_dokumentu" type="string" indexed="false" stored="true" multiValued="true" docValues="false" />   
    <field name="pian" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
@@ -83,6 +81,7 @@
    <field name="parent_akce_okres" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="parent_lokalita_katastr" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="parent_lokalita_okres" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="location_info" type="string" indexed="false" stored="true" multiValued="true" /> 
    
   
    <!-- Akce and lokalita fields -->

@@ -165,13 +165,20 @@
             </table>
         </mat-expansion-panel>
     
-        <mat-expansion-panel *ngIf="result.projekt?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+        <mat-expansion-panel *ngIf="result.projekt?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-projekt *ngFor="let projekt of result.projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
+          
+          <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
+            [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
+            <app-projekt *ngFor="let projekt of result.projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
+          </cdk-virtual-scroll-viewport>
+          <ng-container *ngIf="state.printing">
+            <app-projekt *ngFor="let projekt of result.projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
+          </ng-container>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

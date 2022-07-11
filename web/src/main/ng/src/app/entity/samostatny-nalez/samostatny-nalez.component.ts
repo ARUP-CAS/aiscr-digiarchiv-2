@@ -26,6 +26,11 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   hasDetail: boolean;
   imgSrc: string;
   bibTex: string;
+
+  math = Math;
+  itemSize = 133;
+  vsSize = 0;
+  numChildren = 0;
   
 
   constructor(
@@ -56,7 +61,34 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+     if (this.inDocument) {
+      this.setVsize();
+      this.state.documentProgress = 0;
+      this.state.loading = true;
+      this.getProjekts();
+     }
   }  
+
+  setVsize() {
+      if (this.result.projekt_id) {
+        this.numChildren += this.result.projekt_id.length;
+      }
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  }
+
+  getProjekts() {
+    if (this.result.projekt_id) {
+      this.result.projekt = [];
+      
+      for (let i = 0; i < this.result.projekt_id.length; i=i+10) {
+        const ids = this.result.projekt_id.slice(i, i+10);
+        this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
+          this.result.projekt = this.result.projekt.concat(res.response.docs);
+          this.state.loading = false;
+        });
+      }
+    }
+  }
 
   ngOnChanges(c) {
     if (c.result) {
@@ -71,6 +103,10 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
+      this.setVsize();
+      this.state.documentProgress = 0;
+      this.state.loading = true;
+      this.getProjekts();
       this.hasDetail = true;
       if (this.result.loc_rpt) {
         const coords = this.result.loc_rpt[0].split(',');

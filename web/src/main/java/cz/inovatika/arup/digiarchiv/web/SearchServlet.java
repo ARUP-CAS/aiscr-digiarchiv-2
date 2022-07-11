@@ -5,7 +5,6 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
-import static cz.inovatika.arup.digiarchiv.web.I18n.LOGGER;
 import cz.inovatika.arup.digiarchiv.web.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
@@ -14,7 +13,6 @@ import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -164,18 +162,18 @@ public class SearchServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
         try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-          SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+          SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
                   .setFacet(false);
           String entity = request.getParameter("entity");
           query.setRequestHandler("/search");
-          if (entity == null) {
-            query.setFields("entity");
-            JSONObject jo = SearchUtils.json(query, client, "entities");
-            if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
-              return jo.toString();
-            }
-            entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
-          }
+//          if (entity == null) {
+//            query.setFields("entity");
+//            JSONObject jo = SearchUtils.json(query, client, "entities");
+//            if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
+//              return jo.toString();
+//            }
+//            entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+//          }
           String pristupnost = LoginServlet.pristupnost(request.getSession());
           if ("E".equals(pristupnost)) {
             pristupnost = "D";

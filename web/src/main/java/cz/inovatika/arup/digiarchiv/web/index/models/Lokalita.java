@@ -4,6 +4,7 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -322,23 +323,18 @@ public class Lokalita implements Entity {
         for (String sufix : prSufix) {
           SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
-      } 
-      
-//      if (indexFields.contains(s)) {
-//        for (String sufix : prSufix) {
-//          idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
-//        }
-//      } 
+      }
     }
 
     // Fields allways searchable
     String[] defFields = new String[]{"ident_cely", "okres",
       "typ_lokality", "druh"};
     for (String field : defFields) {
-      Object[] vals = idoc.getFieldValues(field).toArray();
+      Object vals = idoc.getFieldValues(field);
       idoc.addField("text_all_A", vals);
       idoc.addField("text_all_B", vals);
       idoc.addField("text_all_C", vals);
+      idoc.addField("text_all_D", vals);
     }
   } 
 

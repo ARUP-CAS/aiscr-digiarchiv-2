@@ -25,6 +25,12 @@ export class LokalitaComponent implements OnInit, OnChanges {
   hasDetail: boolean;
   bibTex: string;
 
+  math = Math;
+
+  itemSize = 133;
+  vsSize = 0;
+  numChildren = 0;
+
   constructor(
     private datePipe: DatePipe,
     public service: AppService,
@@ -44,6 +50,12 @@ export class LokalitaComponent implements OnInit, OnChanges {
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+     if (this.inDocument) {
+      this.setVsize();
+      this.state.documentProgress = 0;
+      this.state.loading = true;
+      this.getDokuments();
+     }
   }
 
   ngOnChanges(c) {
@@ -56,20 +68,40 @@ export class LokalitaComponent implements OnInit, OnChanges {
     }
   }
 
+  setVsize() {
+      if (this.result.child_dokument) {
+        this.numChildren += this.result.child_dokument.length;
+      }
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  }
+
+  getDokuments() {
+    if (this.result.child_dokument) {
+      this.result.dokument = [];
+      for (let i = 0; i < this.result.child_dokument.length; i=i+10) {
+        const ids = this.result.child_dokument.slice(i, i+10);
+        this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
+          this.result.dokument = this.result.dokument.concat(res.response.docs);
+          this.state.documentProgress = this.result.dokument.length / this.numChildren *100;
+          this.state.loading = (this.result.dokument.length) < this.numChildren;
+        });
+      }
+    }
+    this.state.loading = false;
+  }
+
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      // this.result.akce = res.response.docs[0].akce;
-      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.setVsize();
+      this.getDokuments();
       this.hasDetail = true;
     });
   }
 
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-        this.getFullId();
-      });
+      this.getFullId();
     }
     this.detailExpanded = !this.detailExpanded;
   }

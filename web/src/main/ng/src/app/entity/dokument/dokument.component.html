@@ -61,10 +61,10 @@
             <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
           </ng-container>
         </div>
-        <div *ngIf="result.akce || result.lokalita || result.neident_akce">
+        <div *ngIf="result.location_info">
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
-          <ng-container *ngFor="let item of cadastr">
+          <ng-container *ngFor="let item of result.location_info">
             <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
           </ng-container>
@@ -394,19 +394,23 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.jednotka_dokumentu_vazba_akce?.length > 0 || result.lokalita?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+        <mat-expansion-panel *ngIf="result.jednotka_dokumentu_vazba_akce?.length > 0 || result.lokalita?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           
-          <cdk-virtual-scroll-viewport *ngIf="vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
+          <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
             [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
             <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
           </cdk-virtual-scroll-viewport>
-
+          
+          <ng-container *ngIf="vsSize > 0 && state.printing" >
+            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
+          </ng-container>
           
         </mat-expansion-panel>
       </mat-accordion>

@@ -25,6 +25,11 @@ export class ProjektComponent implements OnInit, OnChanges {
   hasRights: boolean;
   bibTex: string;
 
+  itemSize = 133;
+  vsSize = 0;
+  numChildren = 0;
+  math = Math;
+
   constructor(
     private datePipe: DatePipe,
     public state: AppState,
@@ -44,7 +49,54 @@ export class ProjektComponent implements OnInit, OnChanges {
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+     this.setVsize();
+     if (this.inDocument) {
+       this.state.loading = true;
+       this.state.documentProgress = 0;
+       this.getAkce();
+       this.getSamostatnyNalez();
+     }
   }
+
+  setVsize() {
+
+    if (this.result.child_akce) {
+      this.numChildren += this.result.child_akce.length;
+    }
+    if (this.result.child_samostatny_nalez) {
+      this.numChildren += this.result.child_samostatny_nalez.length;
+    }
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  }
+
+  getAkce() {
+    this.result.akce = [];
+    if (this.result.child_akce) {
+      for (let i = 0; i < this.result.child_akce.length; i=i+10) {
+        const ids = this.result.child_akce.slice(i, i+10);
+        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+          this.result.akce = this.result.akce.concat(res.response.docs);
+          this.state.documentProgress = (this.result.akce.length + this.result.samostatny_nalez.length) / this.numChildren *100;
+          this.state.loading = (this.result.akce.length + this.result.samostatny_nalez.length) < this.numChildren;
+        });
+      }
+    }
+  }
+
+  getSamostatnyNalez() {
+    this.result.samostatny_nalez = [];
+    if (this.result.samostatny_nalez) {
+      for (let i = 0; i < this.result.samostatny_nalez.length; i=i+10) {
+        const ids = this.result.samostatny_nalez.slice(i, i+10);
+        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+          this.result.samostatny_nalez = this.result.samostatny_nalez.concat(res.response.docs);
+          this.state.documentProgress = (this.result.akce.length + this.result.samostatny_nalez.length) / this.numChildren *100;
+          this.state.loading = (this.result.akce.length + this.result.samostatny_nalez.length) < this.numChildren;
+        });
+      }
+    }
+  }
+
 
   ngOnChanges(c) {
     if (c.result) {
@@ -59,17 +111,17 @@ export class ProjektComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      // this.result.akce = res.response.docs[0].akce;
-      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.state.loading = true;
+      this.state.documentProgress = 0;
+      this.getAkce();
+      this.getSamostatnyNalez();
       this.hasDetail = true;
     });
   }
 
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-        this.getFullId();
-      });
+      this.getFullId();
     }
     this.detailExpanded = !this.detailExpanded;
   }

@@ -233,3 +233,10 @@ a {
 .grecaptcha-badge { 
   visibility: hidden !important; 
 }
+
+.app-loading-progress {
+  width: 100%;
+  text-align: center;
+  margin: 5px;
+  font-weight: bold;
+}

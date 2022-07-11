@@ -151,9 +151,13 @@ export class AppService {
     return this.get(`/search/id`, params);
   }
 
-  getIdAsChild(id: string, entity: string) {
-    const params: HttpParams = new HttpParams()
-    .set('id', id).set('entity', entity);
+  getIdAsChild(ids: string[], entity: string) {
+    let params: HttpParams = new HttpParams()
+    .set('entity', entity);
+    ids.forEach(id => {
+      params = params.append('id', id);
+    });
+    
     return this.get(`/search/id_as_child`, params);
   }
 

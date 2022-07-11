@@ -37,11 +37,6 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
       }
       String fields = "ident_cely,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet,pian_id,pian:[json]";
       SolrSearcher.addChildField(client, doc, "projekt_id", "projekt", fields);
-//      if (doc.has("projekt")) {
-//        JSONObject obj = doc.getJSONArray("projekt").getJSONObject(0);
-//        doc.put("pian", obj.opt("pian"));
-//        doc.put("pian_id", obj.opt("pian_id"));
-//      }
     }
   }
 
