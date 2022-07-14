@@ -179,7 +179,7 @@
           </ul>
         </mat-expansion-panel> 
         
-        <mat-expansion-panel *ngIf="result.child_dokument?.length > 0 || result.projekt?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="(result.child_dokument?.length > 0 || result.projekt?.length > 0)" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:

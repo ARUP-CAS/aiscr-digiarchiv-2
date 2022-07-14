@@ -32,8 +32,8 @@ public class DokumentSearcher implements EntitySearcher {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
-      SolrSearcher.addFavorites(jo, client, request);
-      getChilds(jo, client, request);
+      SolrSearcher.addFavorites(jo, client, request); 
+      // getChilds(jo, client, request);
       return jo;
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);

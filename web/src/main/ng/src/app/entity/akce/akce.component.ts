@@ -1,11 +1,11 @@
 import { AppService } from 'src/app/app.service';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppConfiguration } from 'src/app/app-configuration';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 
 @Component({
@@ -31,32 +31,37 @@ export class AkceComponent implements OnInit, OnChanges {
   numChildren = 0;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private datePipe: DatePipe,
     public state: AppState,
     public service: AppService,
     private dialog: MatDialog,
     private router: Router,
     public config: AppConfiguration
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const sd = new Date(this.result.specifikace_data);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-     `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR},
        title = {Záznam ${this.result.ident_cely}},
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-     if (this.inDocument) {
+    if (this.inDocument) {
       this.setVsize();
       this.state.documentProgress = 0;
-      this.state.loading = true;
-      this.getDokuments();
-      this.getProjekts();
-     }
+      if (isPlatformBrowser(this.platformId)) {
+        setTimeout(() => {
+          this.state.loading = true;
+          this.getDokuments();
+          this.getProjekts();
+        }, 100);
+      }
+    }
   }
 
   ngOnChanges(c) {
@@ -70,23 +75,23 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   setVsize() {
-      if (this.result.child_dokument) {
-        this.numChildren += this.result.child_dokument.length;
-      }
-      if (this.result.vazba_projekt) {
-        this.numChildren += this.result.vazba_projekt.length;
-      }
-      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+    if (this.result.child_dokument) {
+      this.numChildren += this.result.child_dokument.length;
+    }
+    if (this.result.vazba_projekt) {
+      this.numChildren += this.result.vazba_projekt.length;
+    }
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getDokuments() {
     if (this.result.child_dokument) {
       this.result.dokument = [];
-      for (let i = 0; i < this.result.child_dokument.length; i=i+10) {
-        const ids = this.result.child_dokument.slice(i, i+10);
+      for (let i = 0; i < this.result.child_dokument.length; i = i + 20) {
+        const ids = this.result.child_dokument.slice(i, i + 20);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
           this.result.dokument = this.result.dokument.concat(res.response.docs);
-          this.state.documentProgress = this.result.dokument.length / this.numChildren *100;
+          this.state.documentProgress = this.result.dokument.length / this.numChildren * 100;
           this.state.loading = (this.result.dokument.length + this.result.projekt.length) < this.numChildren;
         });
       }
@@ -97,11 +102,12 @@ export class AkceComponent implements OnInit, OnChanges {
   getProjekts() {
     if (this.result.vazba_projekt) {
       this.result.projekt = [];
-      
-      for (let i = 0; i < this.result.vazba_projekt.length; i=i+10) {
-        const ids = this.result.vazba_projekt.slice(i, i+10);
+
+      for (let i = 0; i < this.result.vazba_projekt.length; i = i + 10) {
+        const ids = this.result.vazba_projekt.slice(i, i + 10);
         this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
           this.result.projekt = this.result.projekt.concat(res.response.docs);
+          this.state.loading = (this.result.dokument.length + this.result.projekt.length) < this.numChildren;
         });
       }
     }
@@ -177,5 +183,5 @@ export class AkceComponent implements OnInit, OnChanges {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
-  } 
+  }
 }
