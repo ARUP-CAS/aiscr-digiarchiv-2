@@ -39,6 +39,8 @@ export class AppService {
   print() {
     if (isPlatformBrowser(this.platformId)) {
       if (this.windowRef.nativeWindow.print) {
+        this.state.printing = false;
+        this.state.loading = false;
         this.windowRef.nativeWindow.print();
       }
     }
