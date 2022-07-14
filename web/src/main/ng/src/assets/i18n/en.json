@@ -493,12 +493,12 @@
       "Odstranit tento filtr": "Remove this filter"
     },
     "layer": {
-      "cuzk_zakladni": "ČÚZK - Base map ČR",
+      "cuzk_zakladni": "ČÚZK - Basic Map",
       "cuzk_orto": "ČÚZK - Orthophotomap",
-      "cuzk_stin": "ČÚZK - Shaded relief 5G",
+      "cuzk_stin": "ČÚZK - DMR 5G Hillshade",
       "openstreet": "OpenStreetMap",
-      "cuzk_katastr_mapa": "ČÚZK - Cadastral  map",
-      "cuzk_katastr_uzemi": "ČÚZK - Cadastral territory"
+      "cuzk_katastr_mapa": "ČÚZK - Cadastral  Map",
+      "cuzk_katastr_uzemi": "ČÚZK - Cadastral Territory"
     }
   },
 
