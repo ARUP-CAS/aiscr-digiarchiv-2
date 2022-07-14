@@ -165,6 +165,7 @@
       "f_let_letiste_cil": "Let - letiště cíl",
       "f_let_pozorovatel": "Let - pozorovatel",
       "f_pozorovatel": "Let - pozorovatel",
+      "f_rok_vzniku": "Dokument - rok vzniku",
       "ident_cely": "Identifikátor",
       "popis": "Popis",
       "poznamka": "Poznámka",
@@ -263,6 +264,9 @@
       "f_nalezce": "Sam. nález - nálezce",
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
       "loc_rpt": "Mapový výběr",
+      "rada": "Dokument - řada",
+      "predano_organizace": "Předáno organizaci",
+      "predmet_kategorie": "Předmět kategprie",
       "vyber": "Mapový výběr"
     }
   },

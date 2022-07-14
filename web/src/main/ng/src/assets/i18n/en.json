@@ -165,6 +165,7 @@
       "f_let_letiste_cil": "Flight - landing airport",
       "f_let_pozorovatel": "Flight - observer",
       "f_pozorovatel": "Flight - observer",
+      "f_rok_vzniku": "Document - year of creation",
       "ident_cely": "Identifier",
       "popis": "Description",
       "poznamka": "Note",
@@ -263,6 +264,9 @@
       "f_nalezce": "Ind. find - finder",
       "f_nalezove_okolnosti": "Ind. find - context",
       "loc_rpt": "Map selection",
+      "rada": "Series",
+      "predano_organizace": "Transferred to organisation",
+      "predmet_kategorie": "Subject of category",
       "vyber": "Map selection"
     }
   },
