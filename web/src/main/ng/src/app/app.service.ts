@@ -40,6 +40,8 @@ export class AppService {
     if (isPlatformBrowser(this.platformId)) {
       if (this.windowRef.nativeWindow.print) {
         this.windowRef.nativeWindow.print();
+        this.state.printing = false;
+        this.state.loading = false;
       }
     }
   }
@@ -132,7 +134,7 @@ export class AppService {
    * Fired for main search in results page
    * @param params the params
    */
-  search(params: HttpParams) {
+  search(params: HttpParams): Observable<SolrResponse> {
     return this.get(`/search/query`, params);
   }
 
@@ -145,7 +147,7 @@ export class AppService {
     return this.get(`/search/dokument`, params);
   }
 
-  getId(id: string) {
+  getId(id: string): Observable<SolrResponse> {
     const params: HttpParams = new HttpParams()
       .set('id', id);
     return this.get(`/search/id`, params);

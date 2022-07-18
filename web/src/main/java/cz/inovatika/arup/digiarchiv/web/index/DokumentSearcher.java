@@ -56,8 +56,8 @@ public class DokumentSearcher implements EntitySearcher {
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath,location_info"};
-  }
+    return new String[]{"ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath,location_info:[json]"};
+  } 
   
   @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
@@ -68,7 +68,7 @@ public class DokumentSearcher implements EntitySearcher {
       JSONObject doc = ja.getJSONObject(i);
 //      if (LoginServlet.userId(request) != null) {
 //        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
-//      }
+//      } 
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_akce", "akce", fieldsAkce);
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_akce", "akce", fieldsAkce);
       
@@ -81,7 +81,7 @@ public class DokumentSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
+    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json],location_info:[json]",
               "okres","f_okres"};
   }
 
@@ -98,7 +98,7 @@ public class DokumentSearcher implements EntitySearcher {
       SolrSearcher.addLocationParams(request, query);
     } 
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-      query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres,location_info");
+      query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres,location_info:[json]");
     } else {
       query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
               "okres","f_okres","location_info:[json]");

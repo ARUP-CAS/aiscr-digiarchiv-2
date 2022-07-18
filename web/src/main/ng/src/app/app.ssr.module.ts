@@ -46,8 +46,6 @@ import { NapovedaComponent } from './pages/napoveda/napoveda.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { FacetsUsedComponent } from './components/facets/facets-used/facets-used.component';
 import { FacetsSearchComponent } from './components/facets/facets-search/facets-search.component';
-import { FlotComponent } from './components/flot/flot.component';
-import { ChartBarComponent } from './components/chart-bar/chart-bar.component';
 import { ProjektComponent } from './entity/projekt/projekt.component';
 import { AkceComponent } from './entity/akce/akce.component';
 import { SamostatnyNalezComponent } from './entity/samostatny-nalez/samostatny-nalez.component';
@@ -151,8 +149,6 @@ const providers: any[] = [
     FacetsUsedComponent,
     FacetsSearchComponent,
     FacetsDynamicComponent,
-    FlotComponent,
-    ChartBarComponent,
     ProjektComponent,
     AkceComponent,
     SamostatnyNalezComponent,

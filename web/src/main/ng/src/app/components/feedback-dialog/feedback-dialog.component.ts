@@ -39,7 +39,7 @@ export class FeedbackDialogComponent implements OnInit {
     // console.log(captchaResponse);
   }
 
-  errored(captchaResponse: string): void {
+  errored(captchaResponse: any): void {
     this.reCaptchaValid = false;
     // console.log(captchaResponse);
   }

@@ -283,6 +283,7 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
         return true;
       }
     }
+    return false;
   }
 
   openDocument() {

@@ -4,6 +4,7 @@
   </div>
 </div>
 <div *ngIf="state.loading" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
+<div *ngIf="!state.loading && state.printing" class="app-loading-progress noprint">{{ 'printing' | translate }}</div>
 
 <div class="app-display-table app-container" *ngIf="!loading">
   <ng-container *ngIf="state.isMapaCollapsed">

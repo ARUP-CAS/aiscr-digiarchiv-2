@@ -3,6 +3,7 @@
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 </div>
+<div *ngIf="state.loading && state.documentProgress" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 
 <div #leftElement class="app-display-table app-container" *ngIf="!loading || !state.isMapaCollapsed">
 
@@ -78,7 +79,6 @@
       </div>
       <div *ngIf="state.numFound > 0" fxLayout="row" [class]="'app-view-' + state.itemView">
         <div fxFlex>
-          <app-chart-bar *ngIf="state.numFound > 0 && state.facetRanges?.obdobi_poradi && !isChartBarCollapsed" [@enterAnimation] [height]="'120px'" [width]="'100%'"></app-chart-bar>
           <ng-container *ngFor="let result of docs">
             <ng-container [ngSwitch]="state.entity">
               <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>

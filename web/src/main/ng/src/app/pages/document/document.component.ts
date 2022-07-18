@@ -55,6 +55,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
       if (this.state.loading) {
         this.tryPrint();
       } else {
+        this.state.loading = true;
         this.service.print();
       }
     }, 1000);

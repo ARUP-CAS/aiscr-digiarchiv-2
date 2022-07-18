@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
-import { config } from 'process';
 
 @Component({
   selector: 'app-dokument',
@@ -307,6 +306,7 @@ export class DokumentComponent implements OnInit, OnChanges {
         return true;
       }
     }
+    return false;
   }
 
   openDocument() {
