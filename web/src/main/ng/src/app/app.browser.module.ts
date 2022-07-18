@@ -20,7 +20,7 @@ import { AppComponent } from './app.component';
   imports: [
     CommonModule,
     AppModule,
-    LeafletModule.forRoot(),
+    LeafletModule,
     
   ],
   bootstrap: [AppComponent]

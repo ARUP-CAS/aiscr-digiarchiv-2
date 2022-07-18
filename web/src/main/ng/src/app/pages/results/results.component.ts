@@ -31,7 +31,7 @@ import { NgZone } from '@angular/core';
 })
 export class ResultsComponent implements OnInit, OnDestroy {
 
-  @ViewChild('leftElement') leftElement;
+  @ViewChild('leftElement') leftElement: any;
 
   opened = false;
   matcher: MediaQueryList;
@@ -105,7 +105,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   // set opened for sidenav
-  myListener(event) {
+  myListener(event: any) {
     this.zone.run(() => {
       this.opened = event.matches;
     });
@@ -118,7 +118,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   toggleFavorites() {
     this.inFav = !this.inFav;
     const params: Params = this.route.snapshot.queryParams;
-    const p = Object.assign({}, params);
+    const p: any = Object.assign({}, params);
     if (this.inFav) {
       p.inFavorites = this.inFav;
     } else {

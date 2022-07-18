@@ -86,6 +86,7 @@ export class JednotkaDokumentuComponent implements OnInit {
         return true;
       }
     }
+    return false;
   }
 
   openFeedback() {

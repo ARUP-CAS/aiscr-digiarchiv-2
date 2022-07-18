@@ -19,8 +19,8 @@ export class FacetsDynamicComponent implements OnInit {
   rokod: number;
   rokdodate = new FormControl(new Date());
   rokdo: number;
-  datumod = Date;
-  datumdo = Date;
+  datumod: Date;
+  datumdo: Date;
   numberod: number;
   numberdo: number;
   filterField: { type: string, field: string };

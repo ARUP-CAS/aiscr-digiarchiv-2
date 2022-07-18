@@ -128,7 +128,7 @@ L.LocationFilter = L.Layer.extend({
   onRemove: function(map) {
       this.disable();
       if (this._buttonContainer) {
-          this._buttonContainer.removeFrom(map);
+          this._buttonContainer.remove(map);
       }
   },
 

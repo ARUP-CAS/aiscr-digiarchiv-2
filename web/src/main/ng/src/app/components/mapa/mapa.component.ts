@@ -108,7 +108,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   firstChange = true;
   firstZoom = true;
 
-  layersControl = {};
+  layersControl = {baseLayers:{}, overlays:{}};
 
   osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: this.config.mapOptions.maxZoom,
@@ -268,7 +268,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       switch (this.showType) {
         case 'cluster': {
           this.state.loading = true;
-          const p = Object.assign({}, this.route.snapshot.queryParams);
+          const p: any = Object.assign({}, this.route.snapshot.queryParams);
           p.rows = this.state.solrResponse.response.numFound;
           this.service.getPians(p as HttpParams).subscribe((res: any) => {
             if (byLoc) {
@@ -617,7 +617,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   debounce(func, wait, immediate) {
     var timeout;
-    return function () {
+    return  () => {
       var context = this, args = arguments;
       clearTimeout(timeout);
       timeout = setTimeout(function () {

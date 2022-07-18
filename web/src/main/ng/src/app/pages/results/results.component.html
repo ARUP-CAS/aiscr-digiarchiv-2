@@ -79,7 +79,6 @@
       </div>
       <div *ngIf="state.numFound > 0" fxLayout="row" [class]="'app-view-' + state.itemView">
         <div fxFlex>
-          <app-chart-bar *ngIf="state.numFound > 0 && state.facetRanges?.obdobi_poradi && !isChartBarCollapsed" [@enterAnimation] [height]="'120px'" [width]="'100%'"></app-chart-bar>
           <ng-container *ngFor="let result of docs">
             <ng-container [ngSwitch]="state.entity">
               <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
