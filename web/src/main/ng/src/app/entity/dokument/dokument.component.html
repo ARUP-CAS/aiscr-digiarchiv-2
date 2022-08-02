@@ -24,7 +24,7 @@
     <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16" fxFlexFill>
       <div *ngIf="imgSrc" class="app-thumb">
         <a *ngIf="isChild" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
-          <img [src]="imgSrc" />
+          <img [src]="imgSrc" (load)="imageLoaded()" />
         </a>
         <a *ngIf="!isChild" (click)="viewFiles()">
           <img [src]="imgSrc" />
@@ -68,25 +68,6 @@
             <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
           </ng-container>
-
-          <!-- <ng-container *ngIf="result.akce">
-            <ng-container *ngFor="let item of result.akce">
-              <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
-             (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
-            </ng-container>
-          </ng-container>
-          <ng-container *ngIf="result.lokalita">
-            <ng-container *ngFor="let item of result.lokalita">
-              <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
-             (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
-            </ng-container>
-          </ng-container>
-          <ng-container *ngIf="result.neident_akce">
-            <ng-container *ngFor="let item of result.neident_akce">
-              <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
-             (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
-            </ng-container>
-          </ng-container> -->
         </div>
         <div *ngIf="result.popis" class="app-truncate-text">
           <ng-container>

@@ -57,6 +57,9 @@ export class AkceComponent implements OnInit, OnChanges {
       if (isPlatformBrowser(this.platformId)) {
         setTimeout(() => {
           this.state.loading = true;
+          this.state.imagesLoading = true;
+          this.result.dokument = [];
+          this.result.projekt = [];
           this.getDokuments();
           this.getProjekts();
         }, 100);
@@ -81,18 +84,29 @@ export class AkceComponent implements OnInit, OnChanges {
     if (this.result.vazba_projekt) {
       this.numChildren += this.result.vazba_projekt.length;
     }
+    this.state.numChildren = this.numChildren;
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
+  imageLoaded() {
+    this.state.imagesLoaded++;
+  }
+
+  checkLoading() {
+    this.state.loading = (this.result.dokument.length + this.result.projekt.length) < this.numChildren;
+  }
+
+
   getDokuments() {
     if (this.result.child_dokument) {
-      this.result.dokument = [];
+      
       for (let i = 0; i < this.result.child_dokument.length; i = i + 20) {
         const ids = this.result.child_dokument.slice(i, i + 20);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
           this.result.dokument = this.result.dokument.concat(res.response.docs);
           this.state.documentProgress = this.result.dokument.length / this.numChildren * 100;
-          this.state.loading = (this.result.dokument.length + this.result.projekt.length) < this.numChildren;
+          this.checkLoading();
+          
         });
       }
     }
@@ -101,13 +115,11 @@ export class AkceComponent implements OnInit, OnChanges {
 
   getProjekts() {
     if (this.result.vazba_projekt) {
-      this.result.projekt = [];
-
       for (let i = 0; i < this.result.vazba_projekt.length; i = i + 10) {
         const ids = this.result.vazba_projekt.slice(i, i + 10);
         this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
           this.result.projekt = this.result.projekt.concat(res.response.docs);
-          this.state.loading = (this.result.dokument.length + this.result.projekt.length) < this.numChildren;
+          this.checkLoading();
         });
       }
     }
@@ -117,6 +129,8 @@ export class AkceComponent implements OnInit, OnChanges {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       this.setVsize();
+      this.result.dokument = [];
+      this.result.projekt = [];
       this.getDokuments();
       this.getProjekts();
       // this.result.akce = res.response.docs[0].akce;

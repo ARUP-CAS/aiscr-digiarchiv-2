@@ -52,7 +52,8 @@ export class DocumentComponent implements OnInit, AfterViewInit {
 
   tryPrint() {
     setTimeout(() => {
-      if (this.state.loading) {
+      if (this.state.loading || this.state.imagesLoading) {
+        this.state.imagesLoading =  this.state.imagesLoaded < this.state.numChildren;
         this.tryPrint();
       } else {
         this.state.loading = true;
@@ -67,6 +68,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
 
   search(id: string) {
     this.loading = true;
+    this.state.imagesLoaded = 0;
     this.service.getId(id).subscribe((resp: SolrResponse) => {
       this.state.setSearchResponse(resp);
       if (resp.response.numFound > 0) {

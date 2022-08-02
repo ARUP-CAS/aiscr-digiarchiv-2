@@ -60,7 +60,10 @@ export class AppState {
 
   solrResponse: SolrResponse;
   loading: boolean;
+  imagesLoading: boolean;
+  imagesLoaded = 0;
   numFound: number;
+  numChildren = 0;
   facets: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[] = [];
   facetsFiltered: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[];
   facetFilterValue: string;

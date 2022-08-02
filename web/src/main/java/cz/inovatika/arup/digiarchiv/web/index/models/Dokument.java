@@ -116,14 +116,14 @@ public class Dokument implements Entity {
 
   @Field
   public List<String> location_info = new ArrayList();
-  
+
   List<String> prSufix = new ArrayList<>();
   // String[] sufixes = new String[]{"A", "B", "C", "D"};
-  
+
   int numAkce;
   int numLokalita;
   int numNeidentAkce;
-  
+
   int datum_provedeni_od = 10000;
   int datum_provedeni_do = 0;
 
@@ -132,9 +132,9 @@ public class Dokument implements Entity {
 
     boolean searchable = stav == 3 && !"zl".equals(rada.toLowerCase()) && !"za".equals(rada.toLowerCase());
     idoc.setField("searchable", searchable);
-    
+
     String pr = (String) idoc.getFieldValue("pristupnost");
-      // Pro dokument do full text pridame vsechny
+    // Pro dokument do full text pridame vsechny
     pr = "A";
 
     if ("A".compareTo(pr) >= 0) {
@@ -156,12 +156,12 @@ public class Dokument implements Entity {
     if (extra_data != null) {
       for (String extra : extra_data) {
         JSONObject doc = new JSONObject(extra);
-        if (doc.has("northing")) { 
+        if (doc.has("northing")) {
           String loc = doc.optString("northing") + "," + doc.optString("easting");
           SolrSearcher.addFieldNonRepeat(idoc, "lat", doc.optString("northing"));
           SolrSearcher.addFieldNonRepeat(idoc, "lng", doc.optString("easting"));
           SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
-          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc); 
+          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
         }
         for (String s : doc.keySet()) {
           SolrSearcher.addFieldNonRepeat(idoc, "extra_data_" + s, doc.optString(s));
@@ -203,9 +203,10 @@ public class Dokument implements Entity {
     }
   }
 
-  private void processAkce(HttpSolrClient client, SolrInputDocument idoc, String field, String id) {
+  private boolean processAkce(HttpSolrClient client, SolrInputDocument idoc, String field, String id) {
 
     SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
+            .addFilterQuery("searchable:true")
             .setFields("katastr,okres");
     for (String f : facetFields) {
       query.addField(f);
@@ -222,10 +223,13 @@ public class Dokument implements Entity {
         SolrSearcher.addFieldNonRepeat(idoc, field + "_katastr", doc.getString("katastr"));
         SolrSearcher.addFieldNonRepeat(idoc, field + "_okres", doc.getString("okres"));
         JSONObject li = new JSONObject().put("katastr", doc.getString("katastr")).put("okres", doc.getString("okres"));
-        if (!location_info.contains(li.toString())){
+        if (!location_info.contains(li.toString())) {
           location_info.add(li.toString());
         }
       }
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -340,7 +344,7 @@ public class Dokument implements Entity {
           } else if (obj instanceof JSONObject) {
             addJSONFields((JSONObject) obj, "nalez_dokumentu", idoc);
             SolrSearcher.addFieldNonRepeat(idoc, "nalez_dokumentu", ((JSONObject) obj).toString());
-            
+
           }
           break;
         default:
@@ -428,18 +432,18 @@ public class Dokument implements Entity {
                 Calendar c1 = Calendar.getInstance();
                 c1.set(datum_provedeni_od, 0, 1);
                 SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", c1.toInstant().toString());
-                idoc.setField("datum_provedeni_od", c1.toInstant().toString()); 
+                idoc.setField("datum_provedeni_od", c1.toInstant().toString());
                 if (end != 0) {
                   datum_provedeni_do = Math.max(datum_provedeni_do, end);
                   Calendar c2 = Calendar.getInstance();
                   c2.set(datum_provedeni_do, 11, 31);
                   SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", c2.toInstant().toString());
-                  idoc.setField("datum_provedeni_do", c2.toInstant().toString()); 
+                  idoc.setField("datum_provedeni_do", c2.toInstant().toString());
                   if (!c2.before(c1)) {
                     ukonceni = c2.toInstant().toString();
                   }
                 }
-                idoc.setField("datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]"); 
+                idoc.setField("datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
                 // SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
               }
               break;
@@ -460,16 +464,17 @@ public class Dokument implements Entity {
               numAkce++;
               // Chceme pian
               //String vazba_akce = (String) doc.get("vazba_akce");
-              SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_akce", doc.optString(s));
-              dok_jednotka = addDokJednotka(client, idoc, "parent_akce", doc.optString(s));
-              processAkce(client, idoc, "parent_akce", doc.optString(s));
+              if (processAkce(client, idoc, "parent_akce", doc.optString(s))) {
+                SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_akce", doc.optString(s));
+                dok_jednotka = addDokJednotka(client, idoc, "parent_akce", doc.optString(s));
+              }
               break;
             case "vazba_lokalita":
               numLokalita++;
-              // Chceme pian
-              SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_lokalita", doc.optString(s));
-              dok_jednotka = addDokJednotka(client, idoc, "parent_lokalita", (String) doc.get("vazba_lokalita"));
-              processAkce(client, idoc, "parent_lokalita", doc.optString(s));
+              if (processAkce(client, idoc, "parent_lokalita", doc.optString(s))) {
+                SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_lokalita", doc.optString(s));
+                dok_jednotka = addDokJednotka(client, idoc, "parent_lokalita", (String) doc.get("vazba_lokalita"));
+              }
               break;
             default:
               SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_" + s, doc.optString(s));
@@ -523,21 +528,21 @@ public class Dokument implements Entity {
   public void setFullText(SolrInputDocument idoc) {
     idoc.setField("numAkce", numAkce);
     idoc.setField("numLokalita", numLokalita);
-    idoc.setField("numNeidentAkce", numNeidentAkce); 
+    idoc.setField("numNeidentAkce", numNeidentAkce);
     Object[] fields = idoc.getFieldNames().toArray();
     List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("dokument").toList();
-    
+
     for (Object f : fields) {
       String s = (String) f;
-      
+
       SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
-      
+
       if (indexFields.contains(s)) {
         for (String sufix : prSufix) {
           SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
         }
-      } 
-      
+      }
+
     }
   }
 
@@ -545,7 +550,7 @@ public class Dokument implements Entity {
   public boolean isEntity() {
     return true;
   }
-  
+
   @Override
   public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
   }
