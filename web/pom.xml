@@ -236,6 +236,10 @@
                   <value>&lt;%@page contentType="text/html" pageEncoding="UTF-8"%&gt;&lt;!doctype html&gt;</value> 
                 </replacement> 
                 <replacement> 
+                  <token>&lt;!DOCTYPE html&gt;</token> 
+                  <value>&lt;%@page contentType="text/html" pageEncoding="UTF-8"%&gt;&lt;!doctype html&gt;</value> 
+                </replacement> 
+                <replacement> 
                   <token>base href="/"</token> 
                   <value>base href="${context.name}/"</value> 
                 </replacement> 
@@ -271,6 +275,10 @@
               <replacements> 
                 <replacement> 
                   <token>&lt;!doctype html&gt;</token> 
+                  <value>&lt;%@page contentType="text/html" pageEncoding="UTF-8"%&gt;&lt;!doctype html&gt;</value> 
+                </replacement> 
+                <replacement> 
+                  <token>&lt;!DOCTYPE html&gt;</token> 
                   <value>&lt;%@page contentType="text/html" pageEncoding="UTF-8"%&gt;&lt;!doctype html&gt;</value> 
                 </replacement> 
                 <replacement> 
