@@ -53,7 +53,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   tryPrint() {
     setTimeout(() => {
       if (this.state.loading || this.state.imagesLoading) {
-        this.state.imagesLoading =  this.state.imagesLoaded < this.state.numChildren;
+        this.state.imagesLoading =  this.state.imagesLoaded < this.state.numImages;
         this.tryPrint();
       } else {
         this.state.loading = true;

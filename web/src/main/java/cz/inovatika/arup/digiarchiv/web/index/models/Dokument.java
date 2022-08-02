@@ -237,6 +237,7 @@ public class Dokument implements Entity {
 
     SolrQuery query = new SolrQuery(field + ":\"" + id + "\"")
             .setFields("*,komponenta:[json],pian:[json],adb:[json]")
+            .addFilterQuery("searchable:true")
             .addFilterQuery("entity:dok_jednotka");
     JSONObject json = SearchUtils.json(query, client, "entities");
     if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -463,7 +464,6 @@ public class Dokument implements Entity {
             case "vazba_akce":
               numAkce++;
               // Chceme pian
-              //String vazba_akce = (String) doc.get("vazba_akce");
               if (processAkce(client, idoc, "parent_akce", doc.optString(s))) {
                 SolrSearcher.addFieldNonRepeat(idoc, "jednotka_dokumentu_vazba_akce", doc.optString(s));
                 dok_jednotka = addDokJednotka(client, idoc, "parent_akce", doc.optString(s));
@@ -512,8 +512,8 @@ public class Dokument implements Entity {
   }
 
   private void addLet(HttpSolrClient client, SolrInputDocument idoc) {
-    SolrQuery query = new SolrQuery("child_dokument:\"" + ident_cely + "\"");
-    query.addFilterQuery("entity:let");
+    SolrQuery query = new SolrQuery("child_dokument:\"" + ident_cely + "\"")
+            .addFilterQuery("searchable:true").addFilterQuery("entity:let");
     // JSONObject json = SearchUtils.json(query, client, "let");
     JSONObject json = SearchUtils.json(query, client, "entities");
     JSONArray docs = json.getJSONObject("response").getJSONArray("docs");

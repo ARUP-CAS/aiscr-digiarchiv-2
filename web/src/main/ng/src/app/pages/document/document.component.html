@@ -3,11 +3,17 @@
     <mat-progress-bar mode="determinate" [value]="state.documentProgress"></mat-progress-bar>
   </div>
 </div>
-<div *ngIf="state.loading" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
-<div *ngIf="!state.loading && state.printing" class="app-loading-progress noprint">{{ 'printing' | translate }}</div>
+<div class="app-display-table app-loading" *ngIf="!state.loading && state.printing">
+  <div class="app-table-cell app-clean-pd">
+    <mat-progress-bar mode="determinate" [value]="(this.state.imagesLoaded * 100.0 / this.state.numImages)"></mat-progress-bar>
+  </div>
+</div>
+<div *ngIf="state.loading" class="app-loading-progress">{{ 'loading' | translate }} {{ state.documentProgress | number : '1.0-0' }}% ... </div>
+<!-- <div *ngIf="!state.loading && state.printing" class="app-loading-progress">{{ 'printing' | translate }}</div> -->
+<div *ngIf="!state.loading && state.imagesLoading" class="app-loading-progress">{{ 'loading images' | translate }}: {{ (this.state.imagesLoaded * 100.0 / this.state.numImages) | number : '1.0-0' }}% ...</div>
 
 <div class="app-display-table app-container" *ngIf="!loading">
-  <ng-container *ngIf="state.isMapaCollapsed">
+  <ng-container *ngIf="state.isMapaCollapsed"> 
     <div class="app-table-cell">
       <mat-card class="app-card-info app-row-gap-16">
         <mat-card-content>

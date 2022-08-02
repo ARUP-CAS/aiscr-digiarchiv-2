@@ -132,6 +132,7 @@ export class DokumentComponent implements OnInit, OnChanges {
 
   getLokalita() {
     this.result.lokalita = [];
+    this.checkLoading();
     if (this.result.jednotka_dokumentu_vazba_lokalita) {
       for (let i = 0; i < this.result.jednotka_dokumentu_vazba_lokalita.length; i = i + 10) {
         const ids = this.result.jednotka_dokumentu_vazba_lokalita.slice(i, i + 10);
@@ -139,6 +140,7 @@ export class DokumentComponent implements OnInit, OnChanges {
           this.result.lokalita = this.result.lokalita.concat(res.response.docs);
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+          this.checkLoading();
         });
       }
     }

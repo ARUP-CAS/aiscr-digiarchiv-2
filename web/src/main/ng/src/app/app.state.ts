@@ -64,6 +64,7 @@ export class AppState {
   imagesLoaded = 0;
   numFound: number;
   numChildren = 0;
+  numImages = 0;
   facets: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[] = [];
   facetsFiltered: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[];
   facetFilterValue: string;
