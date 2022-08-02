@@ -59,6 +59,13 @@ public class ThumbsGenerator {
           indexer.checkDirs("remove".equals(remove));
           return;
         }
+        case "-checkFolder": {
+          String folder = args[1];
+          String remove = args[2];
+          Indexer indexer = new Indexer(true);
+          indexer.checkFolder(folder, "remove".equals(remove));
+          return;
+        }
         case "-f": {
           String file = args[1];
           System.out.println("File: " + file);

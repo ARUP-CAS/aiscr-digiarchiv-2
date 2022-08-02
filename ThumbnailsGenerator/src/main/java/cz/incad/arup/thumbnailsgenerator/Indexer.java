@@ -391,6 +391,24 @@ public class Indexer {
     }
     return exists;
   }
+  
+  public void checkFolder(String folder, boolean remove) {
+    try {
+      relationsClient = getClient("soubor/");
+      Options opts = Options.getInstance();
+      //String thumbsDir = opts.getString("thumbsDir");
+      
+      boolean existsInIndex = existsInIndex(folder);
+      boolean existsInDisk = new File(ImageSupport.getDestDir(folder)).exists();
+      
+      System.out.println("Folder exists: " + existsInDisk);
+      System.out.println("Exists in index: " + existsInIndex);
+      relationsClient.close();
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    }
+    
+  }
 
   public void checkDirs(boolean remove) {
     try {
