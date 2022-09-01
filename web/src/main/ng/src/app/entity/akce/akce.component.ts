@@ -29,6 +29,7 @@ export class AkceComponent implements OnInit, OnChanges {
   itemSize = 133;
   vsSize = 0;
   numChildren = 0;
+  dokLoaded = 0;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -51,6 +52,7 @@ export class AkceComponent implements OnInit, OnChanges {
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+    this.result.dokumentTemp = [];
     if (this.inDocument) {
       this.setVsize();
       this.state.documentProgress = 0;
@@ -70,6 +72,7 @@ export class AkceComponent implements OnInit, OnChanges {
   ngOnChanges(c) {
     if (c.result) {
       this.hasDetail = false;
+      this.result.dokumentTemp = [];
       this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
@@ -90,18 +93,33 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   checkLoading() {
-    this.state.loading = (this.result.dokument.length + this.result.projekt.length) < this.numChildren;
+    this.state.loading = (this.dokLoaded + this.result.projekt.length) < this.numChildren;
+    if (!this.state.loading) {
+      this.result.dokument = this.result.dokumentTemp.concat([]);
+    }
   }
 
 
   getDokuments() {
     if (this.result.child_dokument) {
-      
+      for (let i = 0; i < this.result.child_dokument.length; i++) {
+        this.result.dokumentTemp.push({});
+      }
       for (let i = 0; i < this.result.child_dokument.length; i = i + 20) {
         const ids = this.result.child_dokument.slice(i, i + 20);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
-          this.result.dokument = this.result.dokument.concat(res.response.docs);
-          this.state.documentProgress = this.result.dokument.length / this.numChildren * 100;
+          // Odpoved ma jine serazeni.
+          const sorted: any[] = [];
+          ids.forEach(id => {
+            const doc = res.response.docs.find(d => d.ident_cely === id);
+            // sorted.push(doc);
+            const idx = this.result.child_dokument.findIndex(d => d === id);
+            this.result.dokumentTemp[idx] = doc;
+            this.dokLoaded++;
+          });
+          // this.result.dokument = this.result.dokument.concat(res.response.docs);
+          // this.result.dokument = this.result.dokument.concat(sorted);
+          this.state.documentProgress = this.dokLoaded / this.numChildren * 100;
           this.checkLoading();
           
         });
@@ -127,6 +145,7 @@ export class AkceComponent implements OnInit, OnChanges {
       this.result = res.response.docs[0];
       this.setVsize();
       this.result.dokument = [];
+      this.result.dokumentTemp = [];
       this.result.projekt = [];
       this.getDokuments();
       this.getProjekts();
