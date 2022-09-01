@@ -137,10 +137,7 @@
           {{ 'card.menu.api_prefix' | translate }} {{ item.label }}
         </a>
       </mat-menu>
-      <button *ngIf="inDocument" mat-flat-button (click)="service.print()" [matTooltip]="'card.tooltip.Vytisknout' | translate">
-        <mat-icon>print</mat-icon>
-      </button>
-      <a *ngIf="!inDocument" mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
+      <a mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
         <mat-icon>print</mat-icon>
       </a>
       <button *ngIf="inDocument" mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">

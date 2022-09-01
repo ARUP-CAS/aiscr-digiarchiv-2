@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-dokument',
@@ -158,6 +159,7 @@ export class DokumentComponent implements OnInit, OnChanges {
 
   imageLoaded() {
     this.state.imagesLoaded++;
+    this.state.imagesLoading =  this.state.imagesLoaded < this.state.numImages;
   }
 
   checkLoading() {

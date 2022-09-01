@@ -10,7 +10,7 @@
 </div>
 <div *ngIf="state.loading" class="app-loading-progress">{{ 'loading' | translate }} {{ state.documentProgress | number : '1.0-0' }}% ... </div>
 <!-- <div *ngIf="!state.loading && state.printing" class="app-loading-progress">{{ 'printing' | translate }}</div> -->
-<div *ngIf="!state.loading && state.imagesLoading" class="app-loading-progress">{{ 'loading images' | translate }}: {{ (this.state.imagesLoaded * 100.0 / this.state.numImages) | number : '1.0-0' }}% ...</div>
+<div *ngIf="!state.loading && state.imagesLoading && state.printing" class="app-loading-progress">{{ 'loading images' | translate }}: {{ (this.state.imagesLoaded * 100.0 / this.state.numImages) | number : '1.0-0' }}% ...</div>
 
 <div class="app-display-table app-container" *ngIf="!loading">
   <ng-container *ngIf="state.isMapaCollapsed"> 
