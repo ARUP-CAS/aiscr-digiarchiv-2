@@ -207,7 +207,7 @@ public class Dokument implements Entity {
 
     SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
             .addFilterQuery("searchable:true")
-            .setFields("katastr,okres");
+            .setFields("katastr,okres,pristupnost");
     for (String f : facetFields) {
       query.addField(f);
     }
@@ -222,11 +222,14 @@ public class Dokument implements Entity {
       if (doc.has("katastr")) {
         SolrSearcher.addFieldNonRepeat(idoc, field + "_katastr", doc.getString("katastr"));
         SolrSearcher.addFieldNonRepeat(idoc, field + "_okres", doc.getString("okres"));
-        JSONObject li = new JSONObject().put("katastr", doc.getString("katastr")).put("okres", doc.getString("okres"));
+        JSONObject li = new JSONObject()
+                .put("pristupnost", doc.getString("pristupnost"))
+                .put("katastr", doc.getString("katastr"))
+                .put("okres", doc.getString("okres"));
         if (!location_info.contains(li.toString())) {
           location_info.add(li.toString());
         }
-      }
+      } 
       return true;
     } else {
       return false;

@@ -61,7 +61,7 @@
             <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
           </ng-container>
         </div>
-        <div *ngIf="result.location_info">
+        <div *ngIf="result.location_info && result.location_info.length > 0">
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
           <ng-container *ngFor="let item of result.location_info">
