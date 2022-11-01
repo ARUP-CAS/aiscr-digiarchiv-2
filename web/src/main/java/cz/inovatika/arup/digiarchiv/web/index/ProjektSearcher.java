@@ -29,6 +29,11 @@ public class ProjektSearcher implements EntitySearcher {
   final String ENTITY = "projekt";
   
   @Override
+  public void filter(JSONObject jo, String pristupnost, String org) {
+    
+  }
+  
+  @Override
   public String[] getChildSearchFields(String pristupnost) {
     return new String[]{"ident_cely,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet"};
   }

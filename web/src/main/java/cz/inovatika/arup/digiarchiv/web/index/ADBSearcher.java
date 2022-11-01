@@ -23,6 +23,11 @@ public class ADBSearcher implements EntitySearcher {
   final String ENTITY = "adb";
   
   @Override
+  public void filter(JSONObject jo, String pristupnost, String org) {
+    
+  }
+  
+  @Override
   public String[] getChildSearchFields(String pristupnost) {
     return this.getSearchFields(pristupnost);
   }

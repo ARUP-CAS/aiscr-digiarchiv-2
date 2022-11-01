@@ -24,6 +24,11 @@ public class PIANSearcher implements EntitySearcher{
   final String ENTITY = "pian";
   
   @Override
+  public void filter(JSONObject jo, String pristupnost, String org) {
+    
+  }
+  
+  @Override
   public String[] getChildSearchFields(String pristupnost) {
     return this.getSearchFields(pristupnost);
   }

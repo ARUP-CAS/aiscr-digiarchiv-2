@@ -17,6 +17,7 @@ public interface EntitySearcher {
   public JSONObject search(HttpServletRequest request);
   public String export(HttpServletRequest request);
   public String[] getSearchFields(String pristupnost);
+  public void filter(JSONObject jo, String pristupnost, String org);
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request);
   public String[] getChildSearchFields(String pristupnost);
 }

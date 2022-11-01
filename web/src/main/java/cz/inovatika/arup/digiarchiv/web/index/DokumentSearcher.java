@@ -121,7 +121,8 @@ public class DokumentSearcher implements EntitySearcher {
    * @param jo
    * @param pristupnost
    */
-  private void filter(JSONObject jo, String pristupnost, String org) {
+  @Override
+  public void filter(JSONObject jo, String pristupnost, String org) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);

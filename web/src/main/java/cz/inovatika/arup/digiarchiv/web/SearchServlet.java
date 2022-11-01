@@ -136,6 +136,7 @@ public class SearchServlet extends HttpServlet {
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             if (searcher != null) {
               // searcher.getChilds(jo, client, request);
+              searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             }
             ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
             if (cs != null) {

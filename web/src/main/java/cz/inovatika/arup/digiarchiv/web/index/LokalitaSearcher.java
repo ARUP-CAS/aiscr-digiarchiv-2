@@ -27,6 +27,11 @@ public class LokalitaSearcher implements EntitySearcher {
   final String ENTITY = "lokalita";
   
   @Override
+  public void filter(JSONObject jo, String pristupnost, String org) {
+    
+  }
+  
+  @Override
   public String[] getChildSearchFields(String pristupnost) {
     return new String[]{"ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis"};
   }
