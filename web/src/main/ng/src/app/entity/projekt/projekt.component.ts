@@ -51,7 +51,7 @@ export class ProjektComponent implements OnInit, OnChanges {
      }`;
      this.setVsize();
      if (this.inDocument) {
-       this.state.loading = true;
+       this.state.loading = false;
        this.state.documentProgress = 0;
        this.getAkce();
        this.getSamostatnyNalez();
@@ -78,6 +78,7 @@ export class ProjektComponent implements OnInit, OnChanges {
           this.result.akce = this.result.akce.concat(res.response.docs);
           this.state.documentProgress = (this.result.akce.length + this.result.samostatny_nalez.length) / this.numChildren *100;
           this.state.loading = (this.result.akce.length + this.result.samostatny_nalez.length) < this.numChildren;
+
         });
       }
     }
@@ -85,11 +86,16 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   getSamostatnyNalez() {
     this.result.samostatny_nalez = [];
-    if (this.result.samostatny_nalez) {
-      for (let i = 0; i < this.result.samostatny_nalez.length; i=i+10) {
-        const ids = this.result.samostatny_nalez.slice(i, i+10);
+    if (this.result.child_samostatny_nalez) {
+      for (let i = 0; i < this.result.child_samostatny_nalez.length; i=i+10) {
+        const ids = this.result.child_samostatny_nalez.slice(i, i+10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
           this.result.samostatny_nalez = this.result.samostatny_nalez.concat(res.response.docs);
+          if (res.response.docs.length < 10) {
+            // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
+            this.numChildren = this.numChildren - 10 + res.response.docs.length; 
+            this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+          }
           this.state.documentProgress = (this.result.akce.length + this.result.samostatny_nalez.length) / this.numChildren *100;
           this.state.loading = (this.result.akce.length + this.result.samostatny_nalez.length) < this.numChildren;
         });

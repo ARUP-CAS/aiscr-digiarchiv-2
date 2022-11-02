@@ -427,6 +427,14 @@ public class Dokument implements Entity {
               JSONObject naDoc = doc.getJSONObject("neident_akce");
               SolrSearcher.addFieldNonRepeat(idoc, "neident_akce", naDoc.toString());
               addJSONFields(naDoc, "neident_akce", idoc);
+              
+              JSONObject li = new JSONObject()
+                .put("pristupnost", "A")
+                .put("katastr", naDoc.getString("katastr"))
+                .put("okres", naDoc.getString("okres"));
+              if (!location_info.contains(li.toString())) {
+                location_info.add(li.toString());
+              }
 
               int start = naDoc.optInt("rok_zahajeni", 0);
               if (start != 0) {

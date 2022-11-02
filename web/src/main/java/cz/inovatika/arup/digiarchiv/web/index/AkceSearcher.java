@@ -28,7 +28,7 @@ public class AkceSearcher implements EntitySearcher{
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"};
+    return new String[]{"ident_cely,pristupnost,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"};
   }
   
   @Override
@@ -39,10 +39,11 @@ public class AkceSearcher implements EntitySearcher{
       if (LoginServlet.userId(request) != null) {
         SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
       }
-      String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
+      String fields = "ident_cely,pristupnost,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
       SolrSearcher.addChildField(client, doc, "child_dokument", "dokument", fields);
       
-      fields = "ident_cely,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet";
+      fields = "ident_cely,pristupnost,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet";
+      
       SolrSearcher.addChildField(client, doc, "vazba_projekt", "projekt", fields);
     }
   }

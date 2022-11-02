@@ -33,7 +33,7 @@ public class LokalitaSearcher implements EntitySearcher {
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis"};
+    return new String[]{"ident_cely,pristupnost,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis"};
   }
   
   @Override
