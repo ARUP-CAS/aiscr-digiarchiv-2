@@ -63,6 +63,9 @@ public class SamostatniNalez implements Entity {
   public int hloubka;
 
   @Field
+  public String poznamka;
+
+  @Field
   public String nalezove_okolnosti;
 
   @Field

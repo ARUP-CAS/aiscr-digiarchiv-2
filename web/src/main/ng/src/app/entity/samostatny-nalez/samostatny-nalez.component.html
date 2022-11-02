@@ -146,7 +146,7 @@
                 <th class="app-label">{{ 'card.desc.Nálezové okolnosti' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.nalezove_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
               </tr>
-              <tr *ngIf="result.hloubka">
+              <tr *ngIf="result.hasOwnProperty('hloubka')">
                 <th class="app-label">{{ 'card.desc.Sam. nález - hloubka (cm)' | translate }}:</th>
                 <td>{{ result.hloubka }} cm</td>
               </tr>
