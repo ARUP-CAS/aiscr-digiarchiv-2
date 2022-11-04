@@ -121,7 +121,7 @@ public class AmcrAPI {
         LOGGER.log(Level.INFO, "login success");
         return getUserInfo();
       } else {
-        LOGGER.log(Level.WARNING, "login fail for {0}", user);
+        LOGGER.log(Level.WARNING, "login fail for {0} with resp {1}", new Object[]{user, resp});
         return new JSONObject().put("error", "login fail");
       }
     } else {

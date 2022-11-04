@@ -98,6 +98,9 @@ export class ProjektComponent implements OnInit, OnChanges {
           }
           this.state.documentProgress = (this.result.akce.length + this.result.samostatny_nalez.length) / this.numChildren *100;
           this.state.loading = (this.result.akce.length + this.result.samostatny_nalez.length) < this.numChildren;
+          if (!this.state.loading) {
+            this.result.samostatny_nalez.sort((a:any, b:any) => a.ident_cely.localeCompare(b.ident_cely))
+          }
         });
       }
     }
