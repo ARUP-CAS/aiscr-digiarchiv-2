@@ -14,7 +14,7 @@
         <ng-container *ngFor="let a of result.autor; let last = last;">
           <app-inline-filter [isChild]="isChild" [field]="'f_autor'" [value]="a"></app-inline-filter><span *ngIf="!last">; </span>
         </ng-container><span class="app-pipe"></span>
-        <app-inline-filter [isChild]="isChild" [field]="'f_rok_vzniku'" [value]="result.rok_vzniku" [isYear]="true"></app-inline-filter>
+        <app-inline-filter [isChild]="isChild" [field]="'f_rok_vzniku'" [value]="result.rok_vzniku[0]" [isYear]="true"></app-inline-filter>
         <span class="app-pipe"></span>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 

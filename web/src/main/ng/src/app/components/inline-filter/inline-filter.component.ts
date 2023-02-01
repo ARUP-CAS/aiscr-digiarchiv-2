@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class InlineFilterComponent implements OnInit {
 
   @Input() field: string;
-  @Input() value: string;
+  @Input() value: any;
   @Input() heslar: string;
   @Input() isChild: boolean;
   @Input() isDate = false;
