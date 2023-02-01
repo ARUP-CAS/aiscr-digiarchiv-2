@@ -114,6 +114,7 @@ export class DokumentComponent implements OnInit, OnChanges {
         const ids = this.result.jednotka_dokumentu_vazba_akce.slice(i, i + 10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs);
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
         });
@@ -124,6 +125,7 @@ export class DokumentComponent implements OnInit, OnChanges {
         const ids = this.result.jednotka_dokumentu_vazba_druha_akce.slice(i, i + 10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs);
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
         });
@@ -139,6 +141,7 @@ export class DokumentComponent implements OnInit, OnChanges {
         const ids = this.result.jednotka_dokumentu_vazba_lokalita.slice(i, i + 10);
         this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
           this.result.lokalita = this.result.lokalita.concat(res.response.docs);
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
           this.checkLoading();
@@ -150,6 +153,7 @@ export class DokumentComponent implements OnInit, OnChanges {
         const ids = this.result.jednotka_dokumentu_vazba_druha_lokalita.slice(i, i + 10);
         this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
           this.result.lokalita = this.result.lokalita.concat(res.response.docs);
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.checkLoading();
         });

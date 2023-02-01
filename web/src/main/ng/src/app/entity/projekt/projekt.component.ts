@@ -76,6 +76,7 @@ export class ProjektComponent implements OnInit, OnChanges {
         const ids = this.result.child_akce.slice(i, i+10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs);
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.samostatny_nalez.length) / this.numChildren *100;
           this.state.loading = (this.result.akce.length + this.result.samostatny_nalez.length) < this.numChildren;
 
