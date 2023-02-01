@@ -109,7 +109,7 @@ public class Library3DSearcher implements EntitySearcher {
       SolrSearcher.addLocationParams(request, query);
     } 
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-      query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres");
+      query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres,jednotka_dokumentu_vazba_akce,jednotka_dokumentu_vazba_druha_akce,jednotka_dokumentu_vazba_lokalita,jednotka_dokumentu_vazba_druha_lokalita");
     } else {
       query.setFields(getSearchFields(pristupnost));
     }

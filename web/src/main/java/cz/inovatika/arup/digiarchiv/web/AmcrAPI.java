@@ -125,7 +125,7 @@ public class AmcrAPI {
         return new JSONObject().put("error", "login fail");
       }
     } else {
-      return new JSONObject().put("error", "login fail");
+      return new JSONObject().put("error", "login fail."); 
     }
   }
   

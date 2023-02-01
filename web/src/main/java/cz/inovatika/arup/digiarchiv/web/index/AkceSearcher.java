@@ -102,7 +102,7 @@ public class AkceSearcher implements EntitySearcher{
     
     
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-      query.setFields("ident_cely,entity,vedouci_akce,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres");
+      query.setFields("ident_cely,entity,vedouci_akce,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres,child_dokument,vazba_projekt");
     } else{
       query.setFields("ident_cely","katastr","f_katastr:katastr","okres","f_okres:okres","vedouci_akce", "loc","entity","datestamp",
       "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,

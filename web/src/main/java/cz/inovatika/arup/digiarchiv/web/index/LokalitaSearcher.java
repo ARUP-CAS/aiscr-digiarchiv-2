@@ -108,7 +108,7 @@ public class LokalitaSearcher implements EntitySearcher {
     } 
     
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-      query.setFields("ident_cely,entity,nazev,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres");
+      query.setFields("ident_cely,entity,nazev,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres,child_dokument");
     } else {
       query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument:[json]","katastr", "f_katastr:katastr");
      }

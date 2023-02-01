@@ -185,8 +185,8 @@ public class LoginServlet extends HttpServlet {
         } catch (Exception ex) {
           req.getSession().setAttribute("user", null);
           req.getSession().setAttribute("userid", null);
-          // LOGGER.log(Level.SEVERE, null, ex);
           jo.put("error", ex.toString());
+          LOGGER.log(Level.SEVERE, null, ex); 
         }
 
         return jo;
