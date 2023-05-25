@@ -61,8 +61,8 @@
           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
-      <div *ngIf="result.lokalizace && hasRights" class="app-truncate-text">
-        <label class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</label>&#160;{{ cropped(result.lokalizace) }}
+      <div *ngIf="result.lokalizace && hasRights" class="app-w-max-1 app-w-min-100 app-d-inline-flex">
+        <label class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</label>&#160;<span class="app-truncate-text">{{ cropped(result.lokalizace) }}</span>
       </div>
     </div>
   </mat-card-content>
@@ -155,7 +155,11 @@
               </tr>
               <tr *ngIf="result.lokalizace">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</th>
-                <td>{{ result.lokalizace }}</td>
+                <td class="app-split-text">
+                  <div class="app-text-content">
+                    {{ result.lokalizace }}
+                  </div>
+                </td>
               </tr>
               <tr *ngIf="result.poznamka">
                 <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>

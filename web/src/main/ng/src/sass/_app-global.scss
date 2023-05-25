@@ -102,6 +102,10 @@ a {
   width: 100% !important;
 }
 
+.app-d-inline-flex {
+  display: inline-flex;
+}
+
 .app-font-bold {
   font-weight: 700;
 }
@@ -157,6 +161,15 @@ a {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
+}
+
+.app-split-text {
+  max-width: 1px;
+
+  .app-text-content {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
 }
 
 .app-icon-ap {
