@@ -6,7 +6,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-list role="list">
-      <mat-list-item *ngFor="let entity of config.entities" [ngClass]="'app-facet-entity ' + entity" [class.active]="state.entity === entity" (click)="setEntity(entity)" [matTooltip]="'entities.' + entity + '.desc' | translate">
+      <mat-list-item *ngFor="let entity of config.entities" [ngClass]="'app-facet-entity ' + entity" [class.active]="state.entity === entity" (click)="setEntity(entity)" [matTooltip]="'entities.' + entity + '.desc' | translate" [matTooltipPosition]="'right'">
         <div fxLayout="row" fxFlexFill class="app-fx-wrapper" >
           <div fxFlex="50px" class="app-fx-left">
             <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
