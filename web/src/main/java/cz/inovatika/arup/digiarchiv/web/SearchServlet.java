@@ -135,7 +135,7 @@ public class SearchServlet extends HttpServlet {
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             if (searcher != null) {
-              if ("pian".equals(entity)) {
+              if ("pian".equals(entity) || "adb".equals(entity)) {
                 searcher.getChilds(jo, client, request); 
               }
               // searcher.getChilds(jo, client, request);

@@ -82,7 +82,7 @@
                   <span>{{ 'facet.menu.Operátor NOT' | translate }}</span>
                 </button>
               </mat-menu>
-              <div class="app-list-content" [matTooltip]="(facet.name | translateHeslar : facetField.field) + ' (' + facet.value + ')'">
+              <div class="app-list-content" [matTooltipPosition]="'right'" [matTooltip]="(facet.name | translateHeslar : facetField.field) + ' (' + facet.value + ')'">
                 <a (click)="clickFacet(facetField.field, facet)"> 
                   <ng-container [ngSwitch]="facetField.field">
                     <ng-container *ngSwitchCase="'kategorie_dokumentu'">{{ 'kategorie_dokumentu.' + facet.name | translate }}</ng-container>

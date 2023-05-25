@@ -76,6 +76,7 @@ import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-d
 import { KomponentaDokumentComponent } from './components/komponenta-dokument/komponenta-dokument.component';
 import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 import { CitationComponent } from './components/citation/citation.component';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -108,6 +109,15 @@ export function createCustomMatPaginatorIntl(
   translateService: TranslateService
   ) {return new PaginatorI18n(translateService);}
 
+  
+
+export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
+  showDelay: 300,
+  hideDelay: 10,
+  touchendHideDelay: 10,
+  disableTooltipInteractivity: true
+};
+
 const providers: any[] =[
   { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
   { provide: MAT_DATE_LOCALE, useValue: 'cs-CZ' },
@@ -125,6 +135,7 @@ const providers: any[] =[
     provide: RECAPTCHA_SETTINGS,
     useValue: { siteKey: environment.recaptcha.siteKey } as RecaptchaSettings,
   },
+  { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults },
   DatePipe, DecimalPipe, AppService, AppHeslarService
 ];
 
