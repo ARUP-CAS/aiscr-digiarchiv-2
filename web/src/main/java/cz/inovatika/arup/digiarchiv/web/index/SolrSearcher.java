@@ -526,6 +526,12 @@ public class SolrSearcher {
       }
     }
 
+    if (field.equals("lokalizace")) {
+      for (String sufix : prSufix) {
+        idoc.addField("f_lokalizace_" + sufix, idoc.getFieldValues(field));
+      }
+    }
+
     if (field.equals("okres")) {
       for (String sufix : prSufix) {
         idoc.addField("f_okres_" + sufix, idoc.getFieldValues(field));

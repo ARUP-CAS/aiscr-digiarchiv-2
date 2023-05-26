@@ -166,9 +166,10 @@ public class SearchServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
         try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-          SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
-                  .setFacet(false);
           String entity = request.getParameter("entity");
+          SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
+                  .addFilterQuery("entity:"+entity)
+                  .setFacet(false);
           query.setRequestHandler("/search");
 //          if (entity == null) {
 //            query.setFields("entity");
@@ -191,7 +192,12 @@ public class SearchServlet extends HttpServlet {
                   + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
           }
           JSONObject jo = SearchUtils.json(query, client, "entities");
-          if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+          if (jo.getJSONObject("response").optInt("numFound", 0) > 0) { 
+//            String entityById = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+//            if (!entityById.equals(entity)) {
+//              return new JSONObject().put("error", "invalid request").toString();
+//            }
+
             ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
             if (cs != null) {
               cs.getRelated(jo, client, request);

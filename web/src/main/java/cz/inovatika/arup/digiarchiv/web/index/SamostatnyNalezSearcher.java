@@ -74,13 +74,15 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"ident_cely, datestamp, entity, stav, typ, inv_cislo, projekt_id, okres, lokalizace, hloubka, poznamka, nalezove_okolnosti, pristupnost",
+    String[] ret = new String[]{"ident_cely, datestamp, entity, stav, typ, inv_cislo, projekt_id, okres, hloubka, poznamka, nalezove_okolnosti, pristupnost",
             "obdobi, presna_datace, druh, specifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace", "predmet_kategorie", 
             "odpovedny_pracovnik_vlozeni, datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor, soubor_filepath",
-            "soubor:[json]", "katastr",  
+            "soubor:[json]", "katastr:f_katastr_" + pristupnost,  
+            "lokalizace:f_lokalizace_" + pristupnost, 
             "f_katastr:f_katastr_" + pristupnost, 
             "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost, 
             "lat:lat_" + pristupnost, "lng:lng_" + pristupnost};
+    return ret;
   } 
 
   private void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

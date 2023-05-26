@@ -226,6 +226,8 @@ public class SamostatniNalez implements Entity {
 
       if (s.equals("katastr")) {
         SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
+      } else if (s.equals("lokalizace")) {
+        SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
       } else {
         SolrSearcher.addSecuredFieldFacets(s, idoc, prSufixAll);
       }
