@@ -28,7 +28,9 @@ public class AkceSearcher implements EntitySearcher{
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,pristupnost,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"};
+    return new String[]{"ident_cely,pristupnost,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
+            "lokalizace:f_lokalizace_" + pristupnost, 
+            "dalsi_katastry:f_dalsi_katastry_" + pristupnost };
   }
   
   @Override
@@ -80,11 +82,13 @@ public class AkceSearcher implements EntitySearcher{
   public String[] getSearchFields(String pristupnost) {
     return new String[]{"ident_cely","katastr","f_katastr:katastr","okres","f_okres:okres","vedouci_akce", "loc","entity","datestamp",
       "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,
-      "organizace","f_organizace:organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
+      "organizace","f_organizace:organizace","vazba_projekt","child_dokument",
       "hlavni_typ","f_hlavni_typ:hlavni_typ","vedlejsi_typ","f_vedlejsi_typ:vedlejsi_typ", 
       "vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
       "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
-      "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]"};
+      "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]",
+            "lokalizace:f_lokalizace_" + pristupnost, 
+            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -109,6 +113,7 @@ public class AkceSearcher implements EntitySearcher{
       "organizace","f_organizace:organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
       "hlavni_typ","f_hlavni_typ:hlavni_typ","vedlejsi_typ","f_vedlejsi_typ:vedlejsi_typ", "vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
       "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]");
+      query.setFields(getSearchFields(pristupnost));
      }
   }
   

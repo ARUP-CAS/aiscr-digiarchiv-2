@@ -117,6 +117,7 @@
    <field name="dalsi_katastry" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
    <field name="dalsi_katastr" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
    <field name="dalsi_okres" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="f_dalsi_katastry_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    
    <!-- Projekt fields -->
    <field name="child_akce" type="string" indexed="true" stored="true" multiValued="true" /> 
@@ -299,6 +300,7 @@
    <!-- Field for free text filtering -->
    <!-- <field name="ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" /> -->
    <field name="popis" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="f_popis_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    <field name="poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="podnazev" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="true" />
@@ -346,6 +348,7 @@
    <field name="pocet" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="projekt_id" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="nazev" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="f_nazev_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    <field name="dok_jednotka_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dok_jednotka_nazev" type="text_general" indexed="true" stored="true" multiValued="true" />
    <!-- <field name="pian_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" /> -->

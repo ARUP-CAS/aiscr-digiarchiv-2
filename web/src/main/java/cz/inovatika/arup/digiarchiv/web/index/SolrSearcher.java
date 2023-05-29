@@ -532,6 +532,18 @@ public class SolrSearcher {
       }
     }
 
+    if (field.equals("nazev")) {
+      for (String sufix : prSufix) {
+        idoc.addField("f_nazev_" + sufix, idoc.getFieldValues(field));
+      }
+    }
+
+    if (field.equals("popis")) {
+      for (String sufix : prSufix) {
+        idoc.addField("f_popis_" + sufix, idoc.getFieldValues(field));
+      }
+    }
+
     if (field.equals("okres")) {
       for (String sufix : prSufix) {
         idoc.addField("f_okres_" + sufix, idoc.getFieldValues(field));
@@ -540,6 +552,11 @@ public class SolrSearcher {
     if (field.contains("katastr") && !field.equals("dalsi_katastry") && !field.contains("sort")) {
       for (String sufix : prSufix) {
         idoc.addField("f_katastr_" + sufix, idoc.getFieldValues(field));
+      }
+    }
+    if (field.contains("dalsi_katastry")) {
+      for (String sufix : prSufix) {
+        idoc.addField("f_dalsi_katastry_" + sufix, idoc.getFieldValues(field));
       }
     }
     if (field.equals("f_typ_vyzkumu")) {

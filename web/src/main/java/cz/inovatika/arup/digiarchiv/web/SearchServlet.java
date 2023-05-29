@@ -192,6 +192,9 @@ public class SearchServlet extends HttpServlet {
                   + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
           }
           JSONObject jo = SearchUtils.json(query, client, "entities");
+          if (searcher != null) {
+            searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+          }
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) { 
 //            String entityById = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
 //            if (!entityById.equals(entity)) {

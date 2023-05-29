@@ -33,7 +33,11 @@ public class LokalitaSearcher implements EntitySearcher {
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,pristupnost,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis"};
+    return new String[]{"ident_cely,entity,pristupnost,okres,typ_lokality,druh,pristupnost",
+            "nazev:f_nazev_" + pristupnost, 
+            "popis:f_popis_" + pristupnost, 
+            "katastr:f_katastr_" + pristupnost,  
+            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
   }
   
   @Override
@@ -45,7 +49,7 @@ public class LokalitaSearcher implements EntitySearcher {
         if (LoginServlet.userId(request) != null) {
           SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
         }
-        String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
+        String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
         SolrSearcher.addChildField(client, doc, "child_dokument", "dokument", fields);
       }
     } else {
@@ -89,7 +93,11 @@ public class LokalitaSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument:[json]","katastr", "f_katastr:katastr"};
+    return new String[]{"*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument:[json]", "f_katastr:katastr",
+            "nazev:f_nazev_" + pristupnost, 
+            "popis:f_popis_" + pristupnost, 
+            "katastr:f_katastr_" + pristupnost,  
+            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -110,7 +118,7 @@ public class LokalitaSearcher implements EntitySearcher {
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
       query.setFields("ident_cely,entity,nazev,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres,child_dokument");
     } else {
-      query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument:[json]","katastr", "f_katastr:katastr");
+      query.setFields(getSearchFields(pristupnost));
      }
     
   }

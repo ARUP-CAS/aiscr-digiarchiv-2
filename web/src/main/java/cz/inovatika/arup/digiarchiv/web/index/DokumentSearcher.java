@@ -137,6 +137,7 @@ public class DokumentSearcher implements EntitySearcher {
           if (lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
             // removeVal(doc, "lokalita", j);
             lp.getJSONObject(j).remove("katastr");
+            lp.getJSONObject(j).remove("dalsi_katastry");
           } else {
             doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
           }
@@ -149,6 +150,7 @@ public class DokumentSearcher implements EntitySearcher {
           if (lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
             // removeVal(doc, "akce", j);
             lp.getJSONObject(j).remove("katastr");
+            lp.getJSONObject(j).remove("dalsi_katastry");
           } else {
             doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
           }

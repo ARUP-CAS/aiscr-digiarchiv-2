@@ -35,7 +35,9 @@ public class ProjektSearcher implements EntitySearcher {
   
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,pristupnost,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet"};
+    return new String[]{"ident_cely,pristupnost,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,podnet", 
+            "katastr:f_katastr_" + pristupnost,  
+            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
   }
   
   @Override
@@ -46,7 +48,10 @@ public class ProjektSearcher implements EntitySearcher {
       if (LoginServlet.userId(request) != null) {
         SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
       }
-      String fields = "ident_cely,pristupnost,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace.dalsi_katastry,lokalizace,pian:[json]";
+      String fields = "ident_cely,pristupnost,"
+              + "katastr,"
+              + "okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,"
+              + "organizace.dalsi_katastry,lokalizace,pian:[json]";
       SolrSearcher.addChildField(client, doc, "child_akce", "akce", fields);
 
       fields = "ident_cely,pristupnost,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
