@@ -83,12 +83,12 @@ export class AkceComponent implements OnInit, OnChanges {
   setVsize() {
     if (this.result.child_dokument) {
       this.numChildren += this.result.child_dokument.length;
+      this.state.numImages = this.result.child_dokument.length;
     }
     if (this.result.vazba_projekt) {
       this.numChildren += this.result.vazba_projekt.length;
     }
     this.state.numChildren = this.numChildren;
-    this.state.numImages = this.result.child_dokument.length;
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
