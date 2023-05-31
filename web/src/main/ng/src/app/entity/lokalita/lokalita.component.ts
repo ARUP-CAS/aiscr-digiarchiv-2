@@ -76,7 +76,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
   }
 
   getDokuments() {
-    if (this.result.child_dokument) {
+    if (this.result.child_dokument && this.hasRights) {
       this.result.dokument = [];
       for (let i = 0; i < this.result.child_dokument.length; i=i+10) {
         const ids = this.result.child_dokument.slice(i, i+10);

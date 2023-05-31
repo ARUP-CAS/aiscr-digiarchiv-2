@@ -8,6 +8,8 @@ package cz.inovatika.arup.digiarchiv.web.index;
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +28,24 @@ public class LokalitaSearcher implements EntitySearcher {
 
   final String ENTITY = "lokalita";
   
+  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "okres","typ_lokality",
+    "druh", "datum_zahajeni", "datum_ukonceni", "child_dokument", "organizace", "datestamp"});
+  
   @Override
   public void filter(JSONObject jo, String pristupnost, String org) {
-    
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+        Object[] keys =  doc.keySet().toArray();
+        for (Object key : keys) {
+          if (!allowedFields.contains((String)key)) {
+            doc.remove((String)key);
+          }
+          
+        }
+      }
+    }
   }
   
   @Override

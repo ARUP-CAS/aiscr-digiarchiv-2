@@ -23,7 +23,7 @@ public class AkceSearcher implements EntitySearcher {
 
   final String ENTITY = "akce";
 
-  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "okres,vedouci_akce",
+  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost",
     "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz,pristupnost", "organizace", "vedouci_akce", "okres", "datestamp"});
 
   @Override

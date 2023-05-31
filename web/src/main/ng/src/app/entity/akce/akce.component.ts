@@ -101,7 +101,7 @@ export class AkceComponent implements OnInit, OnChanges {
 
 
   getDokuments() {
-    if (this.result.child_dokument) {
+    if (this.result.child_dokument && this.hasRights) {
       for (let i = 0; i < this.result.child_dokument.length; i++) {
         this.result.dokumentTemp.push({});
       }
