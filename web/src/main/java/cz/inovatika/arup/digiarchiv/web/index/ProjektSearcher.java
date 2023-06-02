@@ -11,6 +11,8 @@ import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +30,63 @@ public class ProjektSearcher implements EntitySearcher {
   public static final Logger LOGGER = Logger.getLogger(ProjektSearcher.class.getName());
   final String ENTITY = "projekt";
   
+  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
+    "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
+  
   @Override
   public void filter(JSONObject jo, String pristupnost, String org) {
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      String docPr = doc.getString("pristupnost");
+      
+      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+        Object[] keys =  doc.keySet().toArray();
+        for (Object key : keys) {
+          if (!allowedFields.contains((String)key)) {
+            doc.remove((String)key);
+          }
+          
+        }
+      }
+
+      if (docPr.compareTo(pristupnost) > 0) {
+        doc.remove("katastr");
+        doc.remove("dalsi_katastry");
+        doc.remove("loc");
+        doc.remove("lat");
+        doc.remove("lng");
+        doc.remove("pian");
+        doc.remove("parent_akce_katastr");
+        doc.remove("dok_jednotka");
+        
+        Object[] keys = doc.keySet().toArray();
+        for (Object okey : keys) {
+          String key = (String) okey;
+          if (key.endsWith("_D") && "D".compareTo(pristupnost) > 0) {
+            doc.remove((String) key);
+          }
+          if (key.endsWith("_C") && "C".compareTo(pristupnost) > 0) {
+            doc.remove((String) key);
+          }
+          if (key.endsWith("_B") && "B".compareTo(pristupnost) > 0) {
+            doc.remove((String) key);
+          }
+
+        }
+
+      }
+      
+      if (doc.has("location_info")) {
+        JSONArray lp = doc.getJSONArray("location_info");
+        for (int j = lp.length() - 1; j > -1; j--) {
+          if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0) {
+            lp.remove(j);// .getJSONObject(j).remove("location_info");
+          }
+        }
+      }
+
+    }
     
   }
   

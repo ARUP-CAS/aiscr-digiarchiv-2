@@ -23,8 +23,8 @@ public class AkceSearcher implements EntitySearcher {
 
   final String ENTITY = "akce";
 
-  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost",
-    "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz,pristupnost", "organizace", "vedouci_akce", "okres", "datestamp"});
+  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "child_dokument",
+    "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "organizace", "vedouci_akce", "okres", "datestamp"});
 
   @Override
   public void filter(JSONObject jo, String pristupnost, String org) {
@@ -45,7 +45,7 @@ public class AkceSearcher implements EntitySearcher {
 
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,pristupnost,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
+    return new String[]{"ident_cely,entity,pristupnost,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
       "katastr:f_katastr_" + pristupnost,
       "lokalizace:f_lokalizace_" + pristupnost,
       "dalsi_katastry:f_dalsi_katastry_" + pristupnost};

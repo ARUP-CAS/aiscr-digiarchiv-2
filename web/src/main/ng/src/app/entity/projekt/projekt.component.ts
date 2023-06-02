@@ -71,7 +71,7 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   getAkce() {
     this.result.akce = [];
-    if (this.result.child_akce) {
+    if (this.result.child_akce && this.hasRights) {
       for (let i = 0; i < this.result.child_akce.length; i=i+10) {
         const ids = this.result.child_akce.slice(i, i+10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
@@ -87,7 +87,7 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   getSamostatnyNalez() {
     this.result.samostatny_nalez = [];
-    if (this.result.child_samostatny_nalez) {
+    if (this.result.child_samostatny_nalez && this.hasRights) {
       for (let i = 0; i < this.result.child_samostatny_nalez.length; i=i+10) {
         const ids = this.result.child_samostatny_nalez.slice(i, i+10);
         this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {

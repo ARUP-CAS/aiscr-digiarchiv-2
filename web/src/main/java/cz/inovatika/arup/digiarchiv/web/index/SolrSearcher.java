@@ -33,6 +33,23 @@ import org.json.JSONObject;
 public class SolrSearcher {
 
   public static final Logger LOGGER = Logger.getLogger(SolrSearcher.class.getName());
+  
+  public static List<String> getSufixesByLevel(String pr) {
+    List<String> prSufix = new ArrayList<>();
+    if ("A".compareTo(pr) >= 0) {
+      prSufix.add("A");
+    }
+    if ("B".compareTo(pr) >= 0) {
+      prSufix.add("B");
+    }
+    if ("C".compareTo(pr) >= 0) {
+      prSufix.add("C");
+    }
+    if ("D".compareTo(pr) >= 0) {
+      prSufix.add("D");
+    }
+    return prSufix;
+  }
 
   public static void addLocationParams(HttpServletRequest request, SolrQuery query) {
     // query.setRows(200);

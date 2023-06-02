@@ -108,9 +108,9 @@ public class SearchServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
         try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          String entity = request.getParameter("entity");
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
-          String entity = request.getParameter("entity");
           query.setRequestHandler("/search");
           if (entity == null) {
             query.setFields("entity");
@@ -129,14 +129,14 @@ public class SearchServlet extends HttpServlet {
             query.setFields(searcher.getSearchFields(pristupnost));
           } else {
             query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
-                  + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
-                  + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
+                    + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
+                    + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
           }
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             if (searcher != null) {
               if ("pian".equals(entity) || "adb".equals(entity)) {
-                searcher.getChilds(jo, client, request); 
+                searcher.getChilds(jo, client, request);
               }
               // searcher.getChilds(jo, client, request);
               searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
@@ -151,6 +151,9 @@ public class SearchServlet extends HttpServlet {
             // json = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 
           }
+          // Remove stats
+          jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
+          jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
           return jo.toString();
 
         } catch (Exception ex) {
@@ -168,7 +171,7 @@ public class SearchServlet extends HttpServlet {
         try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           String entity = request.getParameter("entity");
           SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
-                  .addFilterQuery("entity:"+entity)
+                  .addFilterQuery("entity:" + entity)
                   .setFacet(false);
           query.setRequestHandler("/search");
 //          if (entity == null) {
@@ -188,14 +191,14 @@ public class SearchServlet extends HttpServlet {
             query.setFields(searcher.getChildSearchFields(pristupnost));
           } else {
             query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
-                  + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
-                  + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
+                    + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
+                    + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
           }
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (searcher != null) {
             searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
           }
-          if (jo.getJSONObject("response").optInt("numFound", 0) > 0) { 
+          if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
 //            String entityById = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
 //            if (!entityById.equals(entity)) {
 //              return new JSONObject().put("error", "invalid request").toString();
@@ -209,6 +212,8 @@ public class SearchServlet extends HttpServlet {
               }
             }
           }
+          jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
+          jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
           return jo.toString();
 
         } catch (Exception ex) {
@@ -303,6 +308,18 @@ public class SearchServlet extends HttpServlet {
           searcher = new DokumentSearcher();
         }
         JSONObject jo = searcher.search(request);
+
+        // Remove stats in case of one result, without access
+        int numFound = jo.getJSONObject("response").getInt("numFound");
+        if (numFound == 1) {
+          String docPr = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("pristupnost");
+          String pristupnost = LoginServlet.pristupnost(request.getSession());
+          if (docPr.compareTo(pristupnost) > 0) {
+            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
+            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+          }
+        }
+
         return jo.toString();
       }
     },

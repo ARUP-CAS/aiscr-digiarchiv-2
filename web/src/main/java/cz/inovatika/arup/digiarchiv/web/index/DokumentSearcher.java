@@ -1,4 +1,3 @@
-
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
@@ -22,7 +21,7 @@ import org.json.JSONObject;
 public class DokumentSearcher implements EntitySearcher {
 
   public static final Logger LOGGER = Logger.getLogger(DokumentSearcher.class.getName());
-  
+
   final String ENTITY = "dokument";
 
   @Override
@@ -32,7 +31,7 @@ public class DokumentSearcher implements EntitySearcher {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
-      SolrSearcher.addFavorites(jo, client, request); 
+      SolrSearcher.addFavorites(jo, client, request);
       // getChilds(jo, client, request);
       String pristupnost = LoginServlet.pristupnost(request.getSession());
       filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
@@ -55,19 +54,19 @@ public class DokumentSearcher implements EntitySearcher {
       return ex.toString();
     }
   }
-  
+
   @Override
   public String[] getChildSearchFields(String pristupnost) {
     String[] f = new String[]{"ident_cely,pristupnost,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath,location_info:[json]"};
     //if (pristupnost)
     return f;
-  } 
-  
+  }
+
   @Override
   public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";
-    String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";  
+    String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
 //      if (LoginServlet.userId(request) != null) {
@@ -75,22 +74,24 @@ public class DokumentSearcher implements EntitySearcher {
 //      } 
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_akce", "akce", fieldsAkce);
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_akce", "akce", fieldsAkce);
-      
+
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_lokalita", "lokalita", fieldsLok);
       SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_lokalita", "lokalita", fieldsLok);
     }
-    
-    
+
   }
-  
+
   @Override
   public String[] getSearchFields(String pristupnost) {
 //    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json],location_info:[json]",
 //              "okres","f_okres"};
-    
+
     String[] f = new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json],location_info:[json]",
-              "okres","f_okres"};
-    // if (pristupnost)
+      "okres", "f_okres",
+      "katastr:f_katastr_" + pristupnost,
+      "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
+      "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
+      "lokalizace:f_lokalizace_" + pristupnost};
     return f;
   }
 
@@ -102,24 +103,26 @@ public class DokumentSearcher implements EntitySearcher {
     }
     SolrSearcher.addFilters(request, query, pristupnost);
     query.set("df", "text_all_A");
-    
+
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
-    } 
+    }
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
       query.setFields("ident_cely,entity,autor,rok_vzniku,organizace,pristupnost,loc_rpt,pian:[json],f_katastr,f_okres,location_info:[json],jednotka_dokumentu_vazba_akce,jednotka_dokumentu_vazba_druha_akce,jednotka_dokumentu_vazba_lokalita,jednotka_dokumentu_vazba_druha_lokalita");
     } else {
-      query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
-              "okres","f_okres","location_info:[json]");
+      query.setFields(getSearchFields(pristupnost));
+//      query.setFields("*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
+//              "okres","f_okres","location_info:[json]");
     }
-    
+
   }
-  
+
   /**
-   * Odstrani akce a lokalit z vysledku podle pristupnosti
+   * Odstrani zabezpecene pole, akce a lokalit z vysledku podle pristupnosti a organizace
    *
    * @param jo
    * @param pristupnost
+   * @param org
    */
   @Override
   public void filter(JSONObject jo, String pristupnost, String org) {
@@ -127,7 +130,35 @@ public class DokumentSearcher implements EntitySearcher {
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
       String organizace = doc.getString("organizace");
+      String docPr = doc.getString("pristupnost");
+
       boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
+      if (docPr.compareTo(pristupnost) > 0 && !sameOrg) {
+        doc.remove("katastr");
+        doc.remove("dalsi_katastry");
+        doc.remove("loc");
+        doc.remove("lat");
+        doc.remove("lng");
+        doc.remove("pian");
+        doc.remove("parent_akce_katastr");
+        doc.remove("dok_jednotka");
+
+        Object[] keys = doc.keySet().toArray();
+        for (Object okey : keys) {
+          String key = (String) okey;
+          if (key.endsWith("_D") && "D".compareTo(pristupnost) > 0) {
+            doc.remove((String) key);
+          }
+          if (key.endsWith("_C") && "C".compareTo(pristupnost) > 0) {
+            doc.remove((String) key);
+          }
+          if (key.endsWith("_B") && "B".compareTo(pristupnost) > 0) {
+            doc.remove((String) key);
+          }
+
+        }
+
+      }
       if (doc.has("neident_akce")) {
         doc.put("f_katastr", doc.getJSONArray("neident_akce_katastr").toList());
       }
@@ -161,11 +192,10 @@ public class DokumentSearcher implements EntitySearcher {
         for (int j = lp.length() - 1; j > -1; j--) {
           if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
             lp.remove(j);// .getJSONObject(j).remove("location_info");
-          } 
+          }
         }
       }
-      
- 
+
     }
   }
 

@@ -161,7 +161,7 @@ public class Dokument implements Entity {
           SolrSearcher.addFieldNonRepeat(idoc, "lat", doc.optString("northing"));
           SolrSearcher.addFieldNonRepeat(idoc, "lng", doc.optString("easting"));
           SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
-          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
+          SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc_rpt", loc, SolrSearcher.getSufixesByLevel(idoc.getFieldValue("pristupnost").toString()));
         }
         for (String s : doc.keySet()) {
           SolrSearcher.addFieldNonRepeat(idoc, "extra_data_" + s, doc.optString(s));
@@ -297,7 +297,7 @@ public class Dokument implements Entity {
           SolrSearcher.addFieldNonRepeat(idoc, "lat", pianDoc.optString("centroid_n"));
           SolrSearcher.addFieldNonRepeat(idoc, "lng", pianDoc.optString("centroid_e"));
           SolrSearcher.addFieldNonRepeat(idoc, "loc", loc);
-          SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", loc);
+          SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc_rpt", loc, SolrSearcher.getSufixesByLevel(pianDoc.getString("pristupnost")));
         }
         SolrSearcher.addFieldNonRepeat(idoc, "pian", pianDoc.toString());
       }

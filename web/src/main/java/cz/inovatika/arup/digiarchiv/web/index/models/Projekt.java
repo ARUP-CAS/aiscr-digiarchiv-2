@@ -154,11 +154,14 @@ public class Projekt implements Entity {
     prSufixAll.add("B");
     prSufixAll.add("C");
     prSufixAll.add("D");
+    
     if (this.geometry_n != null) {
       this.loc = this.geometry_n + "," + this.geometry_e;
               SolrSearcher.addFieldNonRepeat(idoc, "lat", this.geometry_n);
               SolrSearcher.addFieldNonRepeat(idoc, "lng", this.geometry_e);
       SolrSearcher.addFieldNonRepeat(idoc, "loc", this.loc);
+      System.out.println(idoc.getFieldValue("pristupnost").toString());
+      SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc_rpt", loc, SolrSearcher.getSufixesByLevel(idoc.getFieldValue("pristupnost").toString()));
       SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", this.loc);
     }
 
