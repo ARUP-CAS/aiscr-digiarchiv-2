@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -251,7 +251,7 @@ public class Akce implements Entity {
   }
 
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     if (this.child_dok_jednotka != null) {
       addDokJednotka(client, idoc);
     }
@@ -261,7 +261,7 @@ public class Akce implements Entity {
     }
   }
 
-  private void addExterniZdroj(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addExterniZdroj(Http2SolrClient client, SolrInputDocument idoc) {
     for (String dok : this.child_ext_zdroj) {
 
       SolrQuery query = new SolrQuery("ident_cely:\"" + dok + "\"")
@@ -302,7 +302,7 @@ public class Akce implements Entity {
     }
   } 
 
-  private void addDokJednotka(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addDokJednotka(Http2SolrClient client, SolrInputDocument idoc) {
     this.dok_jednotka = new ArrayList<>();
     for (String dok : this.child_dok_jednotka) {
 
@@ -375,7 +375,7 @@ public class Akce implements Entity {
     }
   }
 
-  private void addADB(HttpSolrClient client, SolrInputDocument idoc, String child_adb) {
+  private void addADB(Http2SolrClient client, SolrInputDocument idoc, String child_adb) {
     SolrQuery query = new SolrQuery("ident_cely:\"" + child_adb + "\"")
             .setFields(ADB_FIELDS).addField("vyskovy_bod:[json]");
     JSONObject json = SearchUtils.json(query, client, "entities");
@@ -454,7 +454,7 @@ public class Akce implements Entity {
   }
   
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
   }
   
 

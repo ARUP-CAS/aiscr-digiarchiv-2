@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -209,7 +209,7 @@ public class Projekt implements Entity {
   }
 
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     idoc.setField("searchable", false);
     boolean searchable = false;
     pristupnost = "A";
@@ -223,7 +223,7 @@ public class Projekt implements Entity {
     idoc.setField("searchable", searchable);
   }
   
-  private boolean samostatnyNalez(HttpSolrClient client) {
+  private boolean samostatnyNalez(Http2SolrClient client) {
     for (String sn : this.child_samostatny_nalez) {
       SolrQuery query = new SolrQuery("ident_cely:\"" + sn + "\"")
               .setRequestHandler("/search");
@@ -239,7 +239,7 @@ public class Projekt implements Entity {
     return false;
   }
 
-  private boolean addAkce(HttpSolrClient client, SolrInputDocument idoc) {
+  private boolean addAkce(Http2SolrClient client, SolrInputDocument idoc) {
     boolean searchable = false;
      
     for (String akce : this.child_akce) {
@@ -343,6 +343,6 @@ public class Projekt implements Entity {
   }
   
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
   }
 }

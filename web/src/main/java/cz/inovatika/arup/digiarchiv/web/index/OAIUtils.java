@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -90,7 +90,7 @@ public class OAIUtils {
     int indexed = 0;
     String rels = Options.getInstance().getString("solrRels");
     String url = "";
-    try (HttpSolrClient solrRels = new HttpSolrClient.Builder(rels).build()) {
+    try (Http2SolrClient solrRels = new Http2SolrClient.Builder(rels).build()) {
       String user = Options.getInstance().getJSONObject("amcrapi").getString("user");
       String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
       String login = user + ":" + pwd;
@@ -134,7 +134,7 @@ public class OAIUtils {
     Date start = new Date();
     int indexed = 0;
     String rels = Options.getInstance().getString("solrRels");
-    try (HttpSolrClient solrRels = new HttpSolrClient.Builder(rels).build()) {
+    try (Http2SolrClient solrRels = new Http2SolrClient.Builder(rels).build()) {
       String user = Options.getInstance().getJSONObject("amcrapi").getString("user");
       String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
       String login = user + ":" + pwd;
@@ -174,8 +174,8 @@ public class OAIUtils {
     String rels = Options.getInstance().getString("solrRels");
     String collection = "entities";
 
-    try (HttpSolrClient solrRels = new HttpSolrClient.Builder(rels).build()) {
-      try (HttpSolrClient solr = new HttpSolrClient.Builder(solrhost).build()) {
+    try (Http2SolrClient solrRels = new Http2SolrClient.Builder(rels).build()) {
+      try (Http2SolrClient solr = new Http2SolrClient.Builder(solrhost).build()) {
         SolrInputDocument idoc = processRecord(solr, record.toString(), entity, getEntityClass(entity), solrRels);
         solr.add(collection, idoc, 1);
         return new JSONObject().put(entity, record);
@@ -189,7 +189,7 @@ public class OAIUtils {
     }
   }
 
-  private static <T extends Entity> SolrInputDocument processRecord(HttpSolrClient solr, String record, String entity, Class<T> clazz, HttpSolrClient solrRels)
+  private static <T extends Entity> SolrInputDocument processRecord(Http2SolrClient solr, String record, String entity, Class<T> clazz, Http2SolrClient solrRels)
           throws Exception {
     try {
 
@@ -214,7 +214,7 @@ public class OAIUtils {
     }
   }
 
-  public static <T extends Entity> int processResponse(String verb, JSONObject json, JSONObject ret, String entity, Class<T> clazz, HttpSolrClient solrRels, boolean addRelations, boolean second)
+  public static <T extends Entity> int processResponse(String verb, JSONObject json, JSONObject ret, String entity, Class<T> clazz, Http2SolrClient solrRels, boolean addRelations, boolean second)
           throws Exception {
     JSONArray records;
     if ("ListRecords".equals(verb)) {
@@ -229,7 +229,7 @@ public class OAIUtils {
     String solrhost = Options.getInstance().getString("solrhost");
     String collection = entity;
     int indexed = 0;
-    try (HttpSolrClient solr = new HttpSolrClient.Builder(solrhost).build()) {
+    try (Http2SolrClient solr = new Http2SolrClient.Builder(solrhost).build()) {
       for (int i = 0; i < records.length(); i++) {
         String datestamp = records.getJSONObject(i).getJSONObject("header").getString("datestamp");
         String record = records.getJSONObject(i).getJSONObject("metadata").getJSONObject("oai_amcr:amcr").getJSONObject(entity).toString();

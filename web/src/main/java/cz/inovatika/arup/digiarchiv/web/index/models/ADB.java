@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONObject;
 
@@ -84,7 +84,7 @@ public class ADB implements Entity {
   }
 
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     if (vyskovy_bod != null) {
       try {
         // Musime indexovat jako entita
@@ -129,7 +129,7 @@ public class ADB implements Entity {
   }
   
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
   }
 
 }

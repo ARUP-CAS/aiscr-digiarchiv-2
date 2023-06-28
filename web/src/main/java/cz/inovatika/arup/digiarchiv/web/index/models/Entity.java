@@ -7,7 +7,7 @@ package cz.inovatika.arup.digiarchiv.web.index.models;
 
 import com.alibaba.fastjson.JSON;
 import java.util.TimeZone;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -21,9 +21,9 @@ public interface Entity {
   };
   
   public void fillFields(SolrInputDocument idoc);
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc);
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc);
   public void setFullText(SolrInputDocument idoc);
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc);
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc);
   public boolean isEntity();
   
 }

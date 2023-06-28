@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -203,7 +203,7 @@ public class Dokument implements Entity {
     }
   }
 
-  private boolean processAkce(HttpSolrClient client, SolrInputDocument idoc, String field, String id) {
+  private boolean processAkce(Http2SolrClient client, SolrInputDocument idoc, String field, String id) {
 
     SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
             .addFilterQuery("searchable:true")
@@ -236,7 +236,7 @@ public class Dokument implements Entity {
     }
   }
 
-  private JSONObject addDokJednotka(HttpSolrClient client, SolrInputDocument idoc, String field, String id) {
+  private JSONObject addDokJednotka(Http2SolrClient client, SolrInputDocument idoc, String field, String id) {
 
     SolrQuery query = new SolrQuery(field + ":\"" + id + "\"")
             .setFields("*,komponenta:[json],pian:[json],adb:[json]")
@@ -324,7 +324,7 @@ public class Dokument implements Entity {
     }
   }
 
-  private void addKomponentaDokument(HttpSolrClient client, JSONObject doc, SolrInputDocument idoc) {
+  private void addKomponentaDokument(Http2SolrClient client, JSONObject doc, SolrInputDocument idoc) {
 
     JSONArray aks = new JSONArray();
     for (String s : doc.keySet()) {
@@ -395,7 +395,7 @@ public class Dokument implements Entity {
     }
   }
 
-  private void addAsEntity(HttpSolrClient client, JSONObject doc, String entity) {
+  private void addAsEntity(Http2SolrClient client, JSONObject doc, String entity) {
     try {
       SolrInputDocument idoc = new SolrInputDocument();
       idoc.setField("entity", entity);
@@ -408,7 +408,7 @@ public class Dokument implements Entity {
   }
 
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     if (this.child_soubor != null) {
       addSoubor(client, idoc);
     } else {
@@ -498,7 +498,7 @@ public class Dokument implements Entity {
     }
   }
 
-  private void addSoubor(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addSoubor(Http2SolrClient client, SolrInputDocument idoc) {
 
     for (int i = 0; i < child_soubor.size(); i++) {
       String soubor = this.child_soubor.get(i);
@@ -522,7 +522,7 @@ public class Dokument implements Entity {
 
   }
 
-  private void addLet(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addLet(Http2SolrClient client, SolrInputDocument idoc) {
     SolrQuery query = new SolrQuery("child_dokument:\"" + ident_cely + "\"")
             .addFilterQuery("searchable:true").addFilterQuery("entity:let");
     // JSONObject json = SearchUtils.json(query, client, "let");
@@ -563,6 +563,6 @@ public class Dokument implements Entity {
   }
 
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
   }
 }

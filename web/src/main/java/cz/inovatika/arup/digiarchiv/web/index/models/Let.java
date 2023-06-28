@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -70,7 +70,7 @@ public class Let implements Entity {
   }
   
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     
   }
 
@@ -84,7 +84,7 @@ public class Let implements Entity {
   }
   
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
   }
 
 }

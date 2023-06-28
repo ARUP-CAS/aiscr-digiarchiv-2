@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONObject;
 
@@ -144,7 +144,7 @@ public class SamostatniNalez implements Entity {
   }
 
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     if (this.child_soubor != null) {
       addSoubor(client, idoc);
     }
@@ -158,7 +158,7 @@ public class SamostatniNalez implements Entity {
     // addPian(client, idoc);
   }
 
-  private void addKategorie(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addKategorie(Http2SolrClient client, SolrInputDocument idoc) {
       SolrQuery query = new SolrQuery("heslo:\"" + druh + "\"")
               .addFilterQuery("heslar:predmet_druh")
               .setFields("predmet_kategorie");
@@ -169,7 +169,7 @@ public class SamostatniNalez implements Entity {
       }
   }
 
-  private void addSoubor(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addSoubor(Http2SolrClient client, SolrInputDocument idoc) {
     for (int i = 0; i < child_soubor.size(); i++) {
       String soubor = this.child_soubor.get(i);
 //      SolrQuery query = new SolrQuery("samostatny_nalez:\"" + this.ident_cely + "\"")
@@ -256,6 +256,6 @@ public class SamostatniNalez implements Entity {
   }
 
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
   }
 }

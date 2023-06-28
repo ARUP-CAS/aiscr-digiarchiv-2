@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -39,7 +39,7 @@ public class Library3DSearcher implements EntitySearcher {
   }
   
   @Override
-  public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
+  public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";
     String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";  
@@ -59,7 +59,7 @@ public class Library3DSearcher implements EntitySearcher {
   @Override
   public JSONObject search(HttpServletRequest request) {
     JSONObject json = new JSONObject();
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*");
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -77,7 +77,7 @@ public class Library3DSearcher implements EntitySearcher {
 
   @Override
   public String export(HttpServletRequest request) {
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       return SearchUtils.csv(query, client, "entities");
@@ -184,7 +184,7 @@ public class Library3DSearcher implements EntitySearcher {
   }
 
   public String getPristupnostBySoubor(String id, String field) {
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
       SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
       QueryResponse rsp = client.query("relations", query);

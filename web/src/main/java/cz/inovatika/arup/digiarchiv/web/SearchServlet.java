@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.util.NamedList;
@@ -86,7 +86,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrQuery query = new SolrQuery("*")
                   .setRequestHandler("/search")
                   .setRows(0)
@@ -107,7 +107,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           String entity = request.getParameter("entity");
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
@@ -168,7 +168,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           String entity = request.getParameter("entity");
           SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
                   .addFilterQuery("entity:" + entity)
@@ -228,7 +228,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
@@ -248,7 +248,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
@@ -271,7 +271,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
@@ -363,7 +363,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           String pristupnost = LoginServlet.pristupnost(request.getSession());
           SolrQuery query = new SolrQuery("heslar:\"" + request.getParameter("id") + "\"")
                   .setRows(1000);
@@ -388,7 +388,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject ret = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           String pristupnost = LoginServlet.pristupnost(request.getSession());
           SolrQuery query = new SolrQuery("*")
                   .setFields("id,heslar,pole,heslo,poradi")
@@ -437,7 +437,7 @@ public class SearchServlet extends HttpServlet {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrQuery query = new SolrQuery("*").setFilterQueries("heslar_name:obdobi_prvni")
                   .setRows(1000)
                   .setSort("poradi", SolrQuery.ORDER.asc)
@@ -461,7 +461,7 @@ public class SearchServlet extends HttpServlet {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject json = new JSONObject();
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           String entity = request.getParameter("entity");
           if (entity == null) {
             entity = "dokument";

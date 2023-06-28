@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -131,7 +131,7 @@ public class Lokalita implements Entity {
   }
 
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     if (this.child_dok_jednotka != null) {
       addDokJednotka(client, idoc);
     }
@@ -152,7 +152,7 @@ public class Lokalita implements Entity {
   }
   
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
     
     if (child_dokument != null) {
       // Tady dohledame pres dokument udaje pro sdilene facety
@@ -167,7 +167,7 @@ public class Lokalita implements Entity {
   }
 
   
-  private void processDokument(HttpSolrClient client, SolrInputDocument idoc) {
+  private void processDokument(Http2SolrClient client, SolrInputDocument idoc) {
            
     for (String dok : this.child_dokument) {
       SolrQuery query = new SolrQuery("ident_cely:\"" + dok + "\"")
@@ -188,7 +188,7 @@ public class Lokalita implements Entity {
     }
   }
 
-  private void addExterniZdroj(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addExterniZdroj(Http2SolrClient client, SolrInputDocument idoc) {
     for (String dok : this.child_ext_zdroj) {
 
       SolrQuery query = new SolrQuery("ident_cely:\"" + dok + "\"")
@@ -228,7 +228,7 @@ public class Lokalita implements Entity {
     }
   } 
 
-  private void addDokJednotka(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addDokJednotka(Http2SolrClient client, SolrInputDocument idoc) {
     this.dok_jednotka = new ArrayList<>();
     for (String dok : this.child_dok_jednotka) {
 

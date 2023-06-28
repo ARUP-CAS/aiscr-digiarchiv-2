@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.SolrInputDocument;
@@ -80,7 +80,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
 
@@ -120,7 +120,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
           if (ses == null) {
@@ -153,7 +153,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
           if (ses == null) {
@@ -189,7 +189,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
           if (ses == null) {

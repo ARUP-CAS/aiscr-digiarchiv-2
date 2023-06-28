@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -45,7 +45,7 @@ public class SearchUtils {
   }
 
   private static void initObdobiPoradi() {
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       obdobi_poradi = new HashMap<>();
 
       SolrQuery query = new SolrQuery()
@@ -66,7 +66,7 @@ public class SearchUtils {
   public static JSONObject json(SolrQuery query, String coreUrl) {
     query.set("wt", "json");
     String jsonResponse;
-    try (HttpSolrClient client = new HttpSolrClient.Builder(coreUrl).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(coreUrl).build()) {
       QueryRequest qreq = new QueryRequest(query);
       // qreq.setPath();
       NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
@@ -84,7 +84,7 @@ public class SearchUtils {
 
   public static SolrDocumentList docs(SolrQuery query, String coreUrl) {
     query.set("wt", "json");
-    try (HttpSolrClient client = new HttpSolrClient.Builder(coreUrl).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(coreUrl).build()) {
       return client.query(query).getResults();
     } catch (SolrServerException | IOException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
@@ -92,7 +92,7 @@ public class SearchUtils {
     }
   }
 
-  public static JSONObject json(SolrQuery query, HttpSolrClient client, String core) {
+  public static JSONObject json(SolrQuery query, Http2SolrClient client, String core) {
     query.set("wt", "json");
     String qt = query.get("qt");
     String jsonResponse;
@@ -113,7 +113,7 @@ public class SearchUtils {
     }
   }
 
-  public static String csv(SolrQuery query, HttpSolrClient client, String core) {
+  public static String csv(SolrQuery query, Http2SolrClient client, String core) {
     query.set("wt", "csv");
     String qt = query.get("qt");
     String jsonResponse;
@@ -143,7 +143,7 @@ public class SearchUtils {
       collection = "entities";
     }
     
-    try (SolrClient solr = new HttpSolrClient.Builder(solrhost).build()) {
+    try (SolrClient solr = new Http2SolrClient.Builder(solrhost).build()) {
       String query = "indextime:[* TO " + date.toString() + "]";
       if (searchable) {
         query += " AND entity:" + entity;

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -382,7 +382,7 @@ public class SolrSearcher {
   }
 
   public static String getPristupnostBySoubor(String id, String field) {
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
       SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
       QueryResponse rsp = client.query("soubor", query);
@@ -409,7 +409,7 @@ public class SolrSearcher {
   }
 
   public static JSONObject getDokBySoubor(String id) {
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
       SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
       QueryResponse rsp = client.query("soubor", query);
@@ -446,7 +446,7 @@ public class SolrSearcher {
     return new JSONObject((String) resp.get("response"));
   }
 
-  public static JSONObject getById(HttpSolrClient client, String id, String fields) {
+  public static JSONObject getById(Http2SolrClient client, String id, String fields) {
     try {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");
       query.setFields(fields).setRequestHandler("/search");
@@ -461,7 +461,7 @@ public class SolrSearcher {
     return null;
   }
 
-  public static void addChildField(HttpSolrClient client, JSONObject doc, String idField, String newField, String queryFields) {
+  public static void addChildField(Http2SolrClient client, JSONObject doc, String idField, String newField, String queryFields) {
     if (doc.has(idField)) {
       Object obj = doc.get(idField);
       if (obj instanceof JSONArray) {
@@ -482,7 +482,7 @@ public class SolrSearcher {
     }
   }
 
-  public static void addFavorites(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
+  public static void addFavorites(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
@@ -492,7 +492,7 @@ public class SolrSearcher {
     }
   }
 
-  public static void addIsFavorite(HttpSolrClient client, JSONObject doc, String username) {
+  public static void addIsFavorite(Http2SolrClient client, JSONObject doc, String username) {
     String ident_cely = doc.getString("ident_cely");
     SolrQuery query = new SolrQuery("uniqueid:" + username + "_" + ident_cely).setRows(1);
     JSONObject jo = SearchUtils.json(query, client, "favorites");

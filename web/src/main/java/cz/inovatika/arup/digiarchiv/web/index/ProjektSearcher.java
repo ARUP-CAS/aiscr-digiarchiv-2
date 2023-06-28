@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -98,7 +98,7 @@ public class ProjektSearcher implements EntitySearcher {
   }
   
   @Override
-  public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
+  public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
@@ -119,7 +119,7 @@ public class ProjektSearcher implements EntitySearcher {
   @Override
   public JSONObject search(HttpServletRequest request) {
     JSONObject json = new JSONObject();
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -135,7 +135,7 @@ public class ProjektSearcher implements EntitySearcher {
 
   @Override
   public String export(HttpServletRequest request) {
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       return SearchUtils.csv(query, client, "entities");

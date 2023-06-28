@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.util.NamedList;
@@ -50,7 +50,7 @@ public class HeatImageServlet extends HttpServlet {
     try (OutputStream out = response.getOutputStream()) {
       response.setContentType("image/png");
 
-      try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("akceCore")).build()) {
+      try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("akceCore")).build()) {
         SolrQuery query = new SolrQuery("*:*")
                 .setFacet(true)
                 .setParam("facet.heatmap", "loc_rpt")

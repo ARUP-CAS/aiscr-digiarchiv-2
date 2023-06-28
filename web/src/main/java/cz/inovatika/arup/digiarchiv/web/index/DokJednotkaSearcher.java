@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +23,7 @@ public class DokJednotkaSearcher implements ComponentSearcher {
   private boolean parentSearchable;
 
   @Override
-  public void getRelated(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
+  public void getRelated(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
 
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fields = "ident_cely,entity,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"

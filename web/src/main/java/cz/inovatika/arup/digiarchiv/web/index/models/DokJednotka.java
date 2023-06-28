@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONObject;
 
@@ -67,7 +67,7 @@ public class DokJednotka implements Entity {
   }
   
   @Override
-  public void addRelations(HttpSolrClient client, SolrInputDocument idoc) {
+  public void addRelations(Http2SolrClient client, SolrInputDocument idoc) {
     if (komponenta != null) {
       try {
         // Musime indexovat jako entita
@@ -94,7 +94,7 @@ public class DokJednotka implements Entity {
     }
   }
   
-  private void addADB(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addADB(Http2SolrClient client, SolrInputDocument idoc) {
     SolrQuery query = new SolrQuery("ident_cely:\"" + child_adb + "\"")
             .setFields("*,vyskovy_bod:[json]");
     JSONObject json = SearchUtils.json(query, client, "entities");
@@ -103,7 +103,7 @@ public class DokJednotka implements Entity {
     }
   }
   
-  private void addPian(HttpSolrClient client, SolrInputDocument idoc) {
+  private void addPian(Http2SolrClient client, SolrInputDocument idoc) {
     SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
             .setFields("ident_cely,centroid_n,centroid_e,typ,presnost,zm10,pristupnost")
             .addFilterQuery("entity:pian");
@@ -144,7 +144,7 @@ public class DokJednotka implements Entity {
   }
   
   @Override
-  public void secondRound(HttpSolrClient client, SolrInputDocument idoc) {
+  public void secondRound(Http2SolrClient client, SolrInputDocument idoc) {
   }
   
 }
