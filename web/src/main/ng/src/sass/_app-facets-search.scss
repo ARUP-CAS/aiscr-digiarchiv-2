@@ -1,16 +1,20 @@
 // --- FACETS SEARCH  ---
 
 app-facets-search {
-  .mat-card {
+  .mat-mdc-card {
     @extend .app-clean-bg;
     @include set-border(bottom, 1, solid, #{$app-gray-3});
 
-    .mat-card-content {
-      .mat-form-field {
+    .mat-mdc-card-content {
+      .mat-mdc-form-field {
         &.mat-form-field-appearance-fill {
+          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
           .mat-form-field-wrapper {
             margin-bottom: -1.3437em;
-  
+            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
             .mat-form-field-flex {
               @extend .app-clean-pd;
               border-radius: $app-border-radius;
@@ -18,7 +22,7 @@ app-facets-search {
               border: 1px solid $app-gray-4;
               padding-left: $app-gap !important;
               align-items: center;
-
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
               .mat-form-field-suffix {
                 margin-right: $app-gap-icon;
                 
@@ -27,12 +31,13 @@ app-facets-search {
                 }
               }
             }
-  
+            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
             .mat-form-field-underline {
               &:before {
                 background-color: transparent;
               }
-  
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
               .mat-form-field-ripple {
                 background-color: transparent;
               } 
@@ -42,7 +47,7 @@ app-facets-search {
 
         &.mat-focused {
           box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
-
+          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
           .mat-form-field-ripple {
             background-color: transparent;
           }

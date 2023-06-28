@@ -1,10 +1,10 @@
 // --- DOCUMENT DIALOG ---
 
 .app-document-dialog {
-  .mat-dialog-container {
+  .mat-mdc-dialog-container {
     @extend .app-clean-pd;
 
-    .mat-dialog-content {
+    .mat-mdc-dialog-content {
       @extend .app-clean-pd, .app-clean-mg;
     }
 
@@ -12,7 +12,7 @@
       @extend .app-clean-pd;
 
       .app-entity-first-child {
-        & > .mat-card {
+        & > .mat-mdc-card {
           @extend .app-clean-shadow;
           padding-left: 0;
           padding-right: 0;

@@ -1,7 +1,7 @@
 // --- APP RESULT ITEM ---
 
 .app-result-item {
-  .mat-card-title {
+  .mat-mdc-card-title {
     @media #{$lt-sm} {
       flex-wrap: wrap !important;
 

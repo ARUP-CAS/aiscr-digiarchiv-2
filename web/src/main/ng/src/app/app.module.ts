@@ -38,7 +38,7 @@ import { TvarComponent } from './components/tvar/tvar.component';
 import { DokJednotkaComponent } from './components/dok-jednotka/dok-jednotka.component';
 import { KomponentaComponent } from './components/komponenta/komponenta.component';
 import { ExterniZdrojComponent } from './components/externi-zdroj/externi-zdroj.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
 
 import { environment } from 'src/environments/environment';
 import { DokumentComponent } from './entity/dokument/dokument.component';
@@ -212,9 +212,9 @@ const providers: any[] =[
     RecaptchaModule,
     RecaptchaFormsModule
   ],
-  entryComponents: [
-    FileViewerComponent
-  ],
+  // entryComponents: [
+  //   FileViewerComponent
+  // ],
   providers
 })
 export class AppModule { }

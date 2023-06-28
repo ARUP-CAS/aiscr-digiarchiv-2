@@ -38,15 +38,19 @@
     &.app-panel-date-range,
     &.app-panel-year-range,
     &.app-panel-filter-by-field {
-      .mat-card {
+      .mat-mdc-card {
         @extend .app-clean-bg, .app-clean-pd;
     
-        .mat-card-content {
-          .mat-form-field {
+        .mat-mdc-card-content {
+          .mat-mdc-form-field {
             &.mat-form-field-appearance-fill {
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
               .mat-form-field-wrapper {
                 margin-bottom: -1.3437em;
-      
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
                 .mat-form-field-flex {
                   @extend .app-clean-pd;
                   border-radius: $app-border-radius;
@@ -54,19 +58,20 @@
                   border: 1px solid $app-gray-4;
                   padding-left: $app-gap !important;
                   align-items: center;
-    
+                  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
                   .mat-form-field-suffix {
                     .mat-icon {
                       margin-top: 3px;
                     }
                   }
                 }
-      
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
                 .mat-form-field-underline {
                   &:before {
                     background-color: transparent;
                   }
-      
+                  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
                   .mat-form-field-ripple {
                     background-color: transparent;
                   } 
@@ -76,7 +81,7 @@
     
             &.mat-focused {
               box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
-    
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
               .mat-form-field-ripple {
                 background-color: transparent;
               }
@@ -94,17 +99,20 @@
 
     &.app-panel-year-range,
     &.app-panel-filter-by-field {
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-form-field-infix {
         width: auto;
       }
     }
 
     &.app-panel-filter-by-field {
-      .mat-form-field {
-        .mat-select {
+      .mat-mdc-form-field {
+        .mat-mdc-select {
+          /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
+          /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
           .mat-select-arrow-wrapper {
             transform: none;
-
+            /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
             .mat-select-arrow {
               margin-right: 10px;
             }
@@ -122,7 +130,7 @@
     }
   }
 
-  .mat-list {
+  .mat-mdc-list {
     @extend .app-clean-pd;
 
     a {
@@ -130,7 +138,7 @@
     }
 
     &:not(.app-list-used-facet) {
-      .mat-list-item {
+      .mat-mdc-list-item {
         &.app-facet-entity {
           @include setEntityColor(facet);
           @extend .app-font-family-rc;
@@ -177,8 +185,7 @@
             }
           }
         }
-
-    
+        /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
         .mat-list-item-content {
           @extend .app-clean-pd;
 
@@ -193,11 +200,12 @@
           // height: auto;
           // min-height: 22px;
           overflow: hidden;
-          
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
           .mat-list-item-content {
             display: table;
 
-            .mat-checkbox,
+            .mat-mdc-checkbox,
             .app-list-content {
               display: table-cell;
               overflow: hidden;

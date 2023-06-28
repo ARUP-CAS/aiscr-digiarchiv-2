@@ -1,7 +1,7 @@
 // --- FILE VIEWER ---
 
 app-file-viewer {
-  .mat-dialog-title {
+  .mat-mdc-dialog-title {
     position: relative;
 
     .app-list-files-wrapper {
@@ -27,7 +27,7 @@ app-file-viewer {
     }
   }
 
-  .mat-dialog-content {
+  .mat-mdc-dialog-content {
     overflow: unset;
 
     .app-toolbar-wrapper {
@@ -36,7 +36,7 @@ app-file-viewer {
         @include setIcon($position: middle);  
         }
        
-        .mat-form-field {
+        .mat-mdc-form-field {
           width: 30px;
           font-weight: bold;
         }

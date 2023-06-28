@@ -26,7 +26,8 @@
       }
     }
 
-    .mat-tab-group {
+    .mat-mdc-tab-group {
+      /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
       .mat-tab-label {
         min-width: 50%;
       }
@@ -46,8 +47,8 @@
         @extend .app-clean-mg;
       }
 
-      .mat-card-header {
-        .mat-card-title {
+      .mat-mdc-card-header {
+        .mat-mdc-card-title {
           @extend .app-clean-mg;
           font-size: 14px;
          
@@ -58,8 +59,8 @@
           }
         }
       }
-      .mat-card-content,
-      .mat-card-actions {
+      .mat-mdc-card-content,
+      .mat-mdc-card-actions {
         display: none !important;
       }
     }
@@ -69,10 +70,10 @@
         border-bottom: 1px solid $app-gray-3;
       }
 
-      .mat-paginator-container {
+      .mat-mdc-paginator-container {
         width: auto;
       }
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-paginator-page-size,
       .app-sorting,
       .mat-form-field-label {
@@ -116,7 +117,7 @@
     max-height: calc(100% - #{$app-gap-top-card-info});
     overflow-y: auto;
 
-    .mat-card-title {
+    .mat-mdc-card-title {
       max-width: calc(100% - 35px);
     }
 

@@ -2,7 +2,7 @@
 
 app-home {
   .app-entities-wrapper {
-    .mat-card {
+    .mat-mdc-card {
       @extend .app-row-gap-32, .app-font-family-rc;
     
       &.app-card-entity {
@@ -49,7 +49,7 @@ app-home {
           @include setLinkColor($app-color-lightnes);
         }
   
-        .mat-card-title {
+        .mat-mdc-card-title {
           min-height: 48px;
 
           span {
@@ -57,17 +57,17 @@ app-home {
           }
         }
   
-        .mat-card-subtitle {
+        .mat-mdc-card-subtitle {
           @extend .app-clean-mg;
         }
   
-        .mat-card-title {
+        .mat-mdc-card-title {
           .mat-icon {
             @include setIcon(28);
           }
         }
   
-        .mat-card-actions {
+        .mat-mdc-card-actions {
           position: relative;
   
           span {
@@ -133,13 +133,13 @@ app-home {
           min-width: calc(#{$flex-width} - #{$app-gap});
         }
 
-        .mat-card-title {
+        .mat-mdc-card-title {
           a {
             @include setLinkColor($app-color-darknes);
           }
         }
         
-        .mat-card-subtitle {
+        .mat-mdc-card-subtitle {
           @extend .app-clean-mg;
 
           span {
@@ -186,7 +186,7 @@ app-home {
     .app-fx-right {
       position: relative;
 
-      .mat-card {
+      .mat-mdc-card {
         position: unset;
         height: calc(100% - #{$app-gap-double});
         overflow: hidden;
@@ -195,7 +195,7 @@ app-home {
           position: absolute;
         }
 
-        .mat-card-content {
+        .mat-mdc-card-content {
           height: 87%;
           overflow: auto;
         }

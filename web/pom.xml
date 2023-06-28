@@ -20,7 +20,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.11.0</version>
+      <version>2.13.0</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -37,13 +37,13 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.14</version>
+      <version>1.16.0</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
-      <version>8.5.0</version>
+      <version>9.2.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -54,24 +54,24 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.13</version>
+      <version>4.5.14</version>
     </dependency>
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>2.0.24</version>
+      <version>2.0.28</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-csv</artifactId>
-      <version>1.8</version>
+      <version>1.10.0</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.10</version>
+      <version>3.12.0</version>
       <type>jar</type>
     </dependency>
     
@@ -164,7 +164,7 @@
               <outputDirectory>${project.basedir}/src/main/webapp</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/main/ng/dist/ngClient/browser</directory>
+                  <directory>src/main/ng/dist/ng/browser</directory>
                   <includes>
                     <include>*/**</include>
                   </includes>
@@ -183,7 +183,7 @@
               <outputDirectory>${project.basedir}/src/main/webapp/server</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/main/ng/dist/ngClient/server</directory>
+                  <directory>src/main/ng/dist/ng/server</directory>
                   <includes>
                     <include>*/**</include>
                   </includes>
@@ -209,7 +209,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <sourceFile>src/main/ng/dist/ngClient/browser/index.html</sourceFile>
+              <sourceFile>src/main/ng/dist/ng/browser/index.html</sourceFile>
               <destinationFile>${project.basedir}/src/main/webapp/index.ssr.html</destinationFile>
             </configuration>
           </execution>

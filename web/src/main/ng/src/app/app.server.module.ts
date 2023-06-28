@@ -3,7 +3,7 @@ import { ServerModule } from '@angular/platform-server';
 
 import { AppSsrModule } from './app.ssr.module';
 import { AppComponent } from './app.component';
-import {FlexLayoutServerModule} from '@angular/flex-layout/server';
+import {FlexLayoutServerModule} from 'ngx-flexible-layout/server';
 @NgModule({
   imports: [
     AppSsrModule,

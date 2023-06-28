@@ -19,7 +19,7 @@
     display: none !important;  
   }  
 
-  .mat-card {
+  .mat-mdc-card {
     box-shadow: none !important;
 
     &.app-entity-dokument,
@@ -35,7 +35,7 @@
       padding: 0 !important;
     }
 
-    .mat-card-content {
+    .mat-mdc-card-content {
       .mat-expansion-panel {
         .mat-expansion-panel-header {
           border: 1px solid $app-gray-4;
@@ -48,7 +48,7 @@
         }
   
         .mat-expansion-panel-body {
-          .mat-card-header {
+          .mat-mdc-card-header {
             width: 100%;
           }
         }
@@ -68,7 +68,7 @@
       }  
     }
 
-    .mat-card-actions {
+    .mat-mdc-card-actions {
       display: none !important;
     }
 
@@ -77,7 +77,7 @@
       margin-bottom: $app-gap;
       background-color: transparent !important;
 
-      .mat-card-content {
+      .mat-mdc-card-content {
         color: $app-gray-6 !important;
 
         a {

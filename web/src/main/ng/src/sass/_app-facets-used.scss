@@ -2,12 +2,12 @@
 
 app-facets-used,
 .app-facets-used {
-  .mat-list {
+  .mat-mdc-list {
     @include set-border(bottom, 1, solid, #{$app-gray-3});
     padding: 10px 0 $app-gap 0 !important;
     margin-top: $app-gap;
     
-    .mat-subheader {
+    .mat-mdc-subheader {
       @extend .app-font-bold;
       color: $app-primary-color;
       height: 0;
@@ -19,7 +19,7 @@ app-facets-used,
       }
     }
 
-    .mat-list-item {
+    .mat-mdc-list-item {
       height: auto;
 
       .app-display-table {

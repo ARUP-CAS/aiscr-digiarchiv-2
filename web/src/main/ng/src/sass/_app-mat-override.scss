@@ -6,7 +6,7 @@
 }
 
 // card
-.mat-card {
+.mat-mdc-card {
   @include setEntityColor(card);
 
   .app-link-close {
@@ -17,13 +17,14 @@
     @include setLinkColor($app-color-darknes);
   }
 
-  .mat-card-header {
+  .mat-mdc-card-header {
     .app-last-change {
       font-size: 12px;
       color: $app-gray-6;
       font-weight: normal;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     .mat-card-header-text {
       @extend .app-clean-mg, .app-w-100;
 
@@ -32,7 +33,7 @@
         vertical-align: bottom;
       }
 
-      .mat-card-title {
+      .mat-mdc-card-title {
         font-size: $app-card-title-font-size;
         font-weight: 700;
 
@@ -44,7 +45,7 @@
     }
   }
 
-  .mat-card-content {
+  .mat-mdc-card-content {
     .app-metadata {
       .mat-icon {
         @include setIcon(18);
@@ -166,16 +167,16 @@
     }
   }
 
-  .mat-card-actions {
+  .mat-mdc-card-actions {
     @extend .app-clean-mg;
     padding-top: 0;
 
-    .mat-button-base {
+    .mat-mdc-button-base {
       &:not(:first-child) {
         margin: 0 0 0 $app-gap-button;
       }
 
-      &.mat-flat-button {
+      &.mat-mdc-unelevated-button {
         background-color: $app-gray-1;
 
         a {
@@ -209,7 +210,7 @@
   &.app-card-info {
     background-color: $app-card-info-bg;
 
-    .mat-card-content {
+    .mat-mdc-card-content {
       color: $app-color-info;
 
       .app-text {
@@ -237,7 +238,7 @@
 }
 
 // table
-.mat-table {
+.mat-mdc-table {
   width: 100%;
 }
 
@@ -247,7 +248,7 @@
   .mat-expansion-panel-header {
     font-weight: 700;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
   .mat-list-item-content {
     .mat-icon {
       &:not(.app-icon-op) {
@@ -268,12 +269,12 @@
 
 
 // mat list
-.mat-list {
-  .mat-subheader {
+.mat-mdc-list {
+  .mat-mdc-subheader {
     font-size: 15px;
   }
 
-  .mat-list-item {
+  .mat-mdc-list-item {
     .mat-icon {
       &:not(.app-icon-op) {
         margin-right: $app-gap-icon  !important;
@@ -288,7 +289,7 @@
   }
 
   &.app-list-view-facet {
-    .mat-list-item {
+    .mat-mdc-list-item {
       height: $app-list-view-facet-item-height;
       color: $app-list-view-facet-item-color;
 
@@ -303,9 +304,9 @@
   &.app-list-view-admin {
     @extend .app-clean-pd;
 
-    .mat-list-item {
+    .mat-mdc-list-item {
       height: $app-list-view-facet-item-height;
-
+      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
       .mat-list-item-content {
         @extend .app-clean-pd;
 
@@ -340,14 +341,14 @@
       }
     }
 
-    .mat-icon-button {
+    .mat-mdc-icon-button {
       width: $app-list-view-facet-item-height;
       height: $app-list-view-facet-item-height;
       line-height: $app-list-view-facet-item-height;
       margin-right: $app-gap-icon;
     }
 
-    .mat-checkbox {
+    .mat-mdc-checkbox {
       margin-right: $app-gap-icon;
     }
   }
@@ -373,7 +374,7 @@
     vertical-align: sub !important;
     color: $app-badge-color;
 
-    .mat-card-title & {
+    .mat-mdc-card-title & {
       @extend .app-clean-mg;
     }
   }
@@ -407,7 +408,7 @@
     vertical-align: sub !important;
     color: $app-badge-color;
 
-    .mat-card-title & {
+    .mat-mdc-card-title & {
       @extend .app-clean-mg;
     }
   }
@@ -428,13 +429,14 @@
 }
 
 // mat-menu-panel
-.mat-menu-panel {
+.mat-mdc-menu-panel {
   max-width: 320px !important;
 }
 
 // mat form field
-.mat-form-field {
+.mat-mdc-form-field {
   &.mat-form-field-appearance-fill {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-infix {
       padding: 0.25em 0 0.75em 0;
       padding: 0.1em 0 0.65em 0;
@@ -443,6 +445,6 @@
 }
 
 // tooltip
-.mat-tooltip {
+.mat-mdc-tooltip {
   font-size: 14px !important;
 }

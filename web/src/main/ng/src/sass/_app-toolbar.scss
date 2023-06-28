@@ -22,7 +22,7 @@
       min-width: 100% !important;
     }
 
-    .mat-paginator-container {
+    .mat-mdc-paginator-container {
       justify-content: start;
     }
   }
@@ -32,11 +32,11 @@
     .app-paginator-wrapper {
       flex-wrap: wrap;
 
-      .mat-paginator {
+      .mat-mdc-paginator {
         flex: 0 0 100% !important;
       }
 
-      .mat-form-field {
+      .mat-mdc-form-field {
         &.app-page-num {
           margin-left: $app-gap ;
         }
