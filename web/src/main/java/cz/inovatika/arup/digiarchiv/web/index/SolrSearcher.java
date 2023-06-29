@@ -629,6 +629,16 @@ public class SolrSearcher {
     }
   }
 
+  public static void addSecuredFieldNonRepeat(SolrInputDocument idoc, String field, Object value, String level) {
+    List<String> prSufix = getSufixesByLevel(level);
+    for (String sufix : prSufix) {
+      String f = field + "_" + sufix;
+      if (idoc.getFieldValues(f) == null || !idoc.getFieldValues(f).contains(value)) {
+        idoc.addField(f, value);
+      }
+    }
+  }
+
   public static void addSecuredFieldNonRepeat(SolrInputDocument idoc, String field, Object value, List<String> prSufix) {
     for (String sufix : prSufix) {
       String f = field + "_" + sufix;

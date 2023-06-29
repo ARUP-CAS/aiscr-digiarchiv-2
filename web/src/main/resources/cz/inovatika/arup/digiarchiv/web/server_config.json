@@ -7,6 +7,12 @@
     "sets": ["soubor", "adb", "dok_jednotka", "ext_zdroj", "pian", "let", "projekt", "akce", "lokalita", "samostatny_nalez", "dokument"]
   },
   
+  "fedora": {
+    "api.point": "http://192.168.8.33:8080/rest/AMCR-test",
+    "user": "",
+    "pwd": ""
+  },
+  
   "mail": {
     "smtp.host": "mail.arup.cas.cz",
     "smtp.port": 25,
