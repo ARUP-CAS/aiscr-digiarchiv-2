@@ -174,12 +174,12 @@ public class IndexerServlet extends HttpServlet {
           } else {
             JSONArray ja = new JSONArray();
             Options.resetInstance();
-            HeslarIndexer h = new HeslarIndexer();
-            boolean clean = req.getParameter("clean") == null || Boolean.parseBoolean(req.getParameter("clean"));
-            if (clean) {
-              h.clean();
-            }
-            ja.put(h.indexHeslare());
+//            HeslarIndexer h = new HeslarIndexer();
+//            boolean clean = req.getParameter("clean") == null || Boolean.parseBoolean(req.getParameter("clean"));
+//            if (clean) {
+//              h.clean();
+//            }
+//            ja.put(h.indexHeslare());
 
             ja.put(IndexerTranslations.fromCSV());
 
