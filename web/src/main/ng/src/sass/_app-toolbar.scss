@@ -2,7 +2,7 @@
 
 .app-toolbar {
   .app-action-links {
-    .mat-icon {
+    .mat-mdc-icon {
       @include setIcon($position: bottom);
     }
   }

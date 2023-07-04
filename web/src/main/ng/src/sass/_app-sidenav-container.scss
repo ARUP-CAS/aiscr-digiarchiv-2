@@ -3,11 +3,11 @@
 .app-sidenav-container {
   height: calc(100vh - 217px);
 
-  .mat-sidenav {
+  .mat-mdc-sidenav {
     @extend .app-clean-bg, .app-clean-border;
     width: calc(#{$app-table-cell-left-width} + 40px);
 
-    .mat-drawer-inner-container {
+    .mat-mdc-drawer-inner-container {
       background-color: $app-color-lightnes;
       width: $app-table-cell-left-width;
       box-shadow: 0 -1px 24px rgb(0 0 0 / 40%);
@@ -21,14 +21,14 @@
     @media #{$lt-sm} { 
       width: 100%;
 
-      .mat-drawer-inner-container {
+      .mat-mdc-drawer-inner-container {
         width: 100%;
       }
     }
 
     .mat-mdc-tab-group {
       /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-      .mat-tab-label {
+      .mat-mdc-tab-label {
         min-width: 50%;
       }
     }
@@ -53,7 +53,7 @@
           font-size: 14px;
          
           a {
-            .mat-icon {
+            .mat-mdc-icon {
               @include setIcon(20);
             }
           }
@@ -74,9 +74,9 @@
         width: auto;
       }
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      .mat-paginator-page-size,
+      .mat-mdc-paginator-page-size,
       .app-sorting,
-      .mat-form-field-label {
+      .mat-mdc-form-field-label {
         display: none !important;
       }
 
@@ -138,7 +138,7 @@
     border: 2px solid #ccc;
 
     a {
-      .mat-icon {
+      .mat-mdc-icon {
         @extend .app-mr-1;
         color: $app-color-warning;
         @include setIcon($size: 18, $position: middle);

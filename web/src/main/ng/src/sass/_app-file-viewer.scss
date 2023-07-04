@@ -32,7 +32,7 @@ app-file-viewer {
 
     .app-toolbar-wrapper {
       .app-controls {
-        .mat-icon {
+        .mat-mdc-icon {
         @include setIcon($position: middle);  
         }
        
@@ -43,7 +43,7 @@ app-file-viewer {
       }
   
       .app-metadata {
-        .mat-icon {
+        .mat-mdc-icon {
           @include setIcon($position: middle);
         }
       }

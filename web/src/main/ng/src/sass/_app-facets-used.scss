@@ -13,7 +13,7 @@ app-facets-used,
       height: 0;
       padding-right: 8px;
 
-      .mat-icon {
+      .mat-mdc-icon {
         color: $app-color-warning;
         margin-left: $app-gap-icon;
       }
@@ -38,7 +38,7 @@ app-facets-used,
       }
       
 
-      .mat-icon {
+      .mat-mdc-icon {
         &:hover {
           color: $app-color-warning;
         }

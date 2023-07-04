@@ -1,7 +1,7 @@
 // --- MAT OVERRIDE ---
 
 // toolbar
-.mat-toolbar {
+.mat-mdc-toolbar {
   font-size: inherit;
 }
 
@@ -25,10 +25,10 @@
     }
     /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-    .mat-card-header-text {
+    .mat-mdc-card-header-text {
       @extend .app-clean-mg, .app-w-100;
 
-      .mat-icon {
+      .mat-mdc-icon {
         margin-right: $app-gap-icon;
         vertical-align: bottom;
       }
@@ -47,7 +47,7 @@
 
   .mat-mdc-card-content {
     .app-metadata {
-      .mat-icon {
+      .mat-mdc-icon {
         @include setIcon(18);
         @extend .app-clean-mg;
       }
@@ -57,8 +57,8 @@
     .app-card-detail {
       margin-top: $app-gap-half;
 
-      &>.mat-accordion {
-        &> :not(.mat-expansion-panel-spacing) {
+      &>.mat-mdc-accordion {
+        &> :not(.mat-mdc-expansion-panel-spacing) {
           &:not(:last-child) {
             margin-bottom: 2px;
           }
@@ -67,15 +67,15 @@
     }
 
     // general expansion panel behavior of card
-    .mat-expansion-panel {
-      @extend .mat-elevation-z0;
+    .mat-mdc-expansion-panel {
+      @extend .mat-mdc-elevation-z0 !optional;
 
       &.app-panel-souvisejici-zaznamy {
-        .mat-expansion-panel-content {
+        .mat-mdc-expansion-panel-content {
           max-height: 635px;
           overflow-y: auto;
 
-          .mat-expansion-panel-body {
+          .mat-mdc-expansion-panel-body {
             $val: calc(2 * #{$app-gap});
 
             .app-related-item {
@@ -93,8 +93,8 @@
       }
 
       &.virtual {
-        .mat-expansion-panel-content {
-          .mat-expansion-panel-body {
+        .mat-mdc-expansion-panel-content {
+          .mat-mdc-expansion-panel-body {
             padding: 16px 0;
           }
         }
@@ -102,27 +102,27 @@
 
 
 
-      &.mat-expansion-panel-spacing {
+      &.mat-mdc-expansion-panel-spacing {
         @extend .app-clean-mg;
       }
 
       &.app-panel-inner {
-        .mat-expansion-panel-header {
+        .mat-mdc-expansion-panel-header {
           @extend .app-clean-bg, .app-clean-pd;
           margin-top: 4px;
 
-          .mat-expansion-panel-header-title {
+          .mat-mdc-expansion-panel-header-title {
             color: $app-gray-9;
             flex-wrap: wrap;
 
-            .mat-icon {
+            .mat-mdc-icon {
               @include setIcon($size: 20);
             }
           }
         }
 
-        .mat-expansion-panel-content {
-          .mat-expansion-panel-body {
+        .mat-mdc-expansion-panel-content {
+          .mat-mdc-expansion-panel-body {
             /* padding-top: 2px;
             padding-bottom: 0; */
             padding: 2px 20px 0px 20px; // issue #44
@@ -130,20 +130,20 @@
         }
       }
 
-      .mat-expansion-panel-header {
+      .mat-mdc-expansion-panel-header {
         background-color: $app-gray-1  !important;
         flex-direction: row-reverse;
 
-        .mat-expansion-indicator {
+        .mat-mdc-expansion-indicator {
           margin-right: $app-gap;
         }
       }
 
-      .mat-expansion-panel-content {
-        .mat-expansion-panel-body {
+      .mat-mdc-expansion-panel-content {
+        .mat-mdc-expansion-panel-body {
           padding-top: $app-gap;
 
-          .mat-icon {
+          .mat-mdc-icon {
             @include setIcon($size: 20, $position: text-bottom);
           }
 
@@ -221,7 +221,7 @@
       .app-info-badge {
         @include setEntityColor(cardInfoBadge);
 
-        .mat-icon {
+        .mat-mdc-icon {
           margin-right: $app-gap-icon;
           @include setIcon(18, inherit, bottom);
         }
@@ -244,13 +244,13 @@
 
 
 // expansion panel
-.mat-expansion-panel {
-  .mat-expansion-panel-header {
+.mat-mdc-expansion-panel {
+  .mat-mdc-expansion-panel-header {
     font-weight: 700;
   }
   /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-  .mat-list-item-content {
-    .mat-icon {
+  .mat-mdc-list-item-content {
+    .mat-mdc-icon {
       &:not(.app-icon-op) {
         @include setIcon(18, $position: bottom);
         color: $app-primary-color-darker;
@@ -258,8 +258,8 @@
     }
   }
 
-  .mat-expansion-panel-header,
-  .mat-expansion-panel-body {
+  .mat-mdc-expansion-panel-header,
+  .mat-mdc-expansion-panel-body {
     .app-facets & {
       padding-left: $app-gap;
       padding-right: $app-gap;
@@ -275,14 +275,14 @@
   }
 
   .mat-mdc-list-item {
-    .mat-icon {
+    .mat-mdc-icon {
       &:not(.app-icon-op) {
         margin-right: $app-gap-icon  !important;
       }
     }
   }
 
-  .mat-icon {
+  .mat-mdc-icon {
     &:not(.app-icon-op) {
       @include setIcon(18, $position: text-top);
     }
@@ -307,10 +307,10 @@
     .mat-mdc-list-item {
       height: $app-list-view-facet-item-height;
       /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-      .mat-list-item-content {
+      .mat-mdc-list-item-content {
         @extend .app-clean-pd;
 
-        .mat-icon {
+        .mat-mdc-icon {
           color: $app-color-warning;
         }
       }
@@ -324,11 +324,11 @@
 
 
 // mat tree
-.mat-tree {
+.mat-mdc-tree {
   @extend .app-clean-bg;
   margin-left: -5px;
 
-  .mat-tree-node {
+  .mat-mdc-tree-node {
     min-height: $app-list-view-facet-item-height;
     color: $app-list-view-facet-item-color;
     font-size: initial;
@@ -366,7 +366,7 @@
   margin-right: 2px;
   color: $app-gray-9;
 
-  .mat-icon {
+  .mat-mdc-icon {
     $size: 18;
     font-size: #{$size}px !important;
     height: #{$size}px !important;
@@ -400,7 +400,7 @@
 .app-filter-badge {
   color: currentColor;
 
-  .mat-icon {
+  .mat-mdc-icon {
     $size: 18;
     font-size: #{$size}px !important;
     height: #{$size}px !important;
@@ -435,9 +435,9 @@
 
 // mat form field
 .mat-mdc-form-field {
-  &.mat-form-field-appearance-fill {
+  &.mat-mdc-form-field-appearance-fill {
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-infix {
+    .mat-mdc-form-field-infix {
       padding: 0.25em 0 0.75em 0;
       padding: 0.1em 0 0.65em 0;
     }

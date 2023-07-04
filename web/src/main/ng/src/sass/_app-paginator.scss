@@ -11,11 +11,11 @@ app-paginator {
     font-size: 12px;
     margin-right: $app-gap;
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-suffix {
+    .mat-mdc-form-field-suffix {
       a {
         color: $app-gray-6;
 
-        .mat-icon {
+        .mat-mdc-icon {
           @include setIcon($size: 14, $position: bottom)
         }   
       }  
