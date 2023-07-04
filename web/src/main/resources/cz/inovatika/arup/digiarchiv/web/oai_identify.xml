@@ -1,0 +1,37 @@
+<OAI-PMH xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.openarchives.org/OAI/2.0/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2023-07-04T06:37:33Z</responseDate>
+  <request verb="Identify">https://api.aiscr.cz/dapro/oai</request>
+  <Identify>
+    <repositoryName>AIS CR - Archaeological Map of the Czech Republic</repositoryName>
+    <baseURL>https://api.aiscr.cz/dapro/oai</baseURL>
+    <protocolVersion>2.0</protocolVersion>
+    <adminEmail>info@amapa.cz</adminEmail>
+    <earliestDatestamp>1990-01-01</earliestDatestamp>
+    <deletedRecord>no</deletedRecord>
+    <granularity>YYYY-MM-DD</granularity>
+    <description>
+      <rightsManifest xmlns="http://www.openarchives.org/OAI/2.0/rights/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/rights/ http://www.openarchives.org/OAI/2.0/rightsManifest.xsd" appliesTo="http://www.openarchives.org/OAI/2.0/entity#metadata">
+        <rights>
+          <rightsReference ref="http://creativecommons.org/licenses/by-nc/4.0/rdf"/>
+        </rights>
+      </rightsManifest>
+    </description>
+    <description> 
+      <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+        <dc:title>Archeologická mapa České Republiky (AMČR)</dc:title>
+        <dc:creator>Archeologický ústav AV ČR, Praha, v.v.i.</dc:creator>
+        <dc:creator>Archeologický ústav AV ČR, Brno, v.v.i.</dc:creator>
+        <dc:identifier>https://api.aiscr.cz/</dc:identifier>
+        <dc:identifier>version 1.2.0</dc:identifier>
+        <dc:source>http://www.archeologickamapa.cz/</dc:source>
+        <dc:relation>http://www.aiscr.cz/</dc:relation>
+        <dc:language>cs</dc:language>
+        <dc:language>en</dc:language>
+        <dc:description>Archeologická mapa České republiky (AMČR) je informační systém pro sběr, správu a prezentaci dat o archeologických výzkumech na území ČR a pro poznání minulosti Čech, Moravy a Slezska. Obsažená data popisují desetitisíce archeologických výzkumů a jejich konkrétních poznatků. Zahrnují informace o vedoucích výzkumu, o tom, kdy výzkum probíhal, o jeho lokalizaci i to, jaké nálezy a z jakého období výzkum zjistil. Zvláštním typem záznamů jsou údaje o archeologických lokalitách, zjištěných povrchovým i dálkovým průzkumem. Většina záznamů je napojena na úložiště digitálních dokumentů a bibliografický katalog. AMČR je určena profesionálním archeologům, odborníkům z blízkých oborů, studentům i zájemcům z širší veřejnosti, jimž nabízí možnost efektivně pracovat s poznatky získanými generacemi archeologů v naší zemi. Je provozována Archeologickými ústavy AV ČR v Praze a Brně. AMČR je od počátku zamýšlena jako páteřní informační systém české archeologie, a proto již v současné době vznikají její účelová rozšíření pro archeologii pražské památkové rezervace, ale i další moduly. AMČR je tak nejdůležitější součástí širší infrastruktury Archeologický informační systém České republiky (AIS CR), která je zapsána na Cestovní mapě velkých infrastruktur pro výzkum, experimentální vývoj a innovace, schválené Vládou ČR.</dc:description>
+        <dc:description>Pro jednoznačné označení záznamů jsou užívány identifikátory obsažené v polích "ident_cely" společně se základní doménou "https://api.aiscr.cz/id/". Identifikátor je tak v argumentech vždy předáván v podobě "https://api.aiscr.cz/id/[ident_cely]" (např. "https://api.aiscr.cz/id/C-201912345").</dc:description>
+        <dc:description>http://www.archeologickamapa.cz/help/</dc:description>
+        <dc:description>https://api.aiscr.cz/media/API_UserGuide.pdf</dc:description>
+      </oai_dc:dc>
+    </description>
+  </Identify>
+</OAI-PMH>

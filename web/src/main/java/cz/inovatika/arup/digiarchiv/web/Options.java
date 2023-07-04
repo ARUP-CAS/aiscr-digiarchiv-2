@@ -21,22 +21,20 @@ public class Options {
   private static Options _sharedInstance = null;
 
   private static boolean _indexingFlag = false; // survives option reset
-  
+
   private final JSONObject client_conf;
   private final JSONObject server_conf;
 
   public synchronized static Options getInstance() {
     try {
-    if (_sharedInstance == null) {
-      _sharedInstance = new Options();
-    }
+      if (_sharedInstance == null) {
+        _sharedInstance = new Options();
+      }
     } catch (IOException | JSONException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
     }
     return _sharedInstance;
   }
-  
-  
 
   public synchronized static void resetInstance() {
     _sharedInstance = null;
@@ -53,7 +51,7 @@ public class Options {
 
     return old;
   }
-  
+
   public Options() throws IOException, JSONException {
 
     File fdef = new File(InitServlet.DEFAULT_CONFIG_FILE);
@@ -61,18 +59,16 @@ public class Options {
     String json = FileUtils.readFileToString(fdef, "UTF-8");
     client_conf = new JSONObject(json);
 
-    
     String path = InitServlet.CONFIG_DIR + File.separator + "config.json";
-    
+
     //Get server options
     File fserver = FileUtils.toFile(Options.class.getResource("server_config.json"));
     String sjson = FileUtils.readFileToString(fserver, "UTF-8");
     server_conf = new JSONObject(sjson);
-    
 
     //Merge options defined in custom dir
     File f = new File(path);
-    
+
     if (f.exists() && f.canRead()) {
       json = FileUtils.readFileToString(f, "UTF-8");
       JSONObject customClientConf = new JSONObject(json).getJSONObject("client");
@@ -160,5 +156,21 @@ public class Options {
 
   private void ensureIndexingFlag() {
     client_conf.put("indexing", _indexingFlag);
+  }
+
+  public String getOAIIdentify() {
+    try {
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_identify.xml";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+        return FileUtils.readFileToString(f, "UTF-8");
+      } else {
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_identify.xml"));
+        return FileUtils.readFileToString(fdef, "UTF-8");
+      }
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
   }
 }

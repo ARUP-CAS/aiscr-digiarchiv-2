@@ -35,12 +35,12 @@ import org.json.XMLParserConfiguration;
  * @author alberto
  */
 public class OAIUtils {
-
+ 
   static final Logger LOGGER = Logger.getLogger(OAIUtils.class.getName());
 
   public static JSONObject getId(String id) {
     try {
-      String url = Options.getInstance().getJSONObject("OAI").getString("url")
+      String url = Options.getInstance().getJSONObject("OAIHarvester").getString("url")
               + "?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api.aiscr.cz/id/" + id;
       // LOGGER.log(Level.INFO, "Retreiving {0}", url);
       // String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
@@ -56,7 +56,7 @@ public class OAIUtils {
 
   public static JSONObject getMetadataId(String id) {
     try {
-      String url = Options.getInstance().getJSONObject("OAI").getString("url")
+      String url = Options.getInstance().getJSONObject("OAIHarvester").getString("url")
               + "?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api.aiscr.cz/id/" + id;
       LOGGER.log(Level.INFO, "Retreiving {0}", url);
       // String xml = IOUtils.toString(new URL(url), Charset.forName("UTF-8"));
@@ -95,7 +95,7 @@ public class OAIUtils {
       String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
       String login = user + ":" + pwd;
 
-      url = Options.getInstance().getJSONObject("OAI").getString("url")
+      url = Options.getInstance().getJSONObject("OAIHarvester").getString("url")
               + "?verb=ListRecords&metadataPrefix=oai_amcr&set=" + entity;
       LOGGER.log(Level.INFO, "Retreiving {0}", url);
       String xml = RESTHelper.toString(url, user, pwd);
@@ -104,7 +104,7 @@ public class OAIUtils {
       indexed += processResponse("ListRecords", json, ret, entity, clazz, solrRels, addRelations, second);
       boolean hasResumption = json.getJSONObject("OAI-PMH").getJSONObject("ListRecords").optJSONObject("resumptionToken") != null;
       while (hasResumption) {
-        url = Options.getInstance().getJSONObject("OAI").getString("url")
+        url = Options.getInstance().getJSONObject("OAIHarvester").getString("url")
                 + "?verb=ListRecords&resumptionToken="
                 + json.getJSONObject("OAI-PMH").getJSONObject("ListRecords").getJSONObject("resumptionToken").getString("content");
 
@@ -139,7 +139,7 @@ public class OAIUtils {
       String pwd = Options.getInstance().getJSONObject("amcrapi").getString("pwd");
       String login = user + ":" + pwd;
 
-      String url = Options.getInstance().getJSONObject("OAI").getString("url")
+      String url = Options.getInstance().getJSONObject("OAIHarvester").getString("url")
               + "?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api.aiscr.cz/id/" + id;
       LOGGER.log(Level.INFO, "Retreiving {0}", url);
       String xml = RESTHelper.toString(url, user, pwd);

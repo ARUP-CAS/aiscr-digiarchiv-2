@@ -2,13 +2,25 @@
   "solrhost": "http://localhost:8983/solr/",
   "solrRels" : "http://localhost:8983/solr/",
   
-  "OAI": {
+  "OAIHarvester": {
     "url": "https://api.aiscr.cz/dapro/oai",
     "sets": ["soubor", "adb", "dok_jednotka", "ext_zdroj", "pian", "let", "projekt", "akce", "lokalita", "samostatny_nalez", "dokument"]
   },
   
+  "OAI": {
+    "repositoryName": "repositoryName",
+    "adminEmail": "mail@oai",
+    "sets": [
+      {
+        "spec": "projekt",
+        "name": "Projekty / Projects",
+        "description": ["Evidenční jednotky terénní činnosti badatelského nebo záchranného rázu evidované již ve fázi přípravy. Pro vymezení projektu je rozhodující podnět k výzkumu a provádějící subjekt (oprávněná organizace), lokalizace a příp. projektová dokumentace. Na projekt zpravidla navazuje jedna či (méně často) více terénních akcí."]
+      }
+    ]
+  },
+  
   "fedora": {
-    "api.point": "http://192.168.8.33:8080/rest/AMCR-test",
+    "api.point": "http://192.168.8.33:8080/rest/AMCR-test/",
     "user": "",
     "pwd": ""
   },
