@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -63,11 +64,16 @@ import org.apache.solr.common.SolrInputDocument;
 public class Projekt implements FedoraModel {
 
   @JacksonXmlProperty(localName = "ident_cely")
+  @Field
   public String ident_cely;
+  
   @JacksonXmlProperty(localName = "stav")
+  @Field
   public long stav;
+  
   @JacksonXmlProperty(localName = "pristupnost_pom")
-  public String pristupnost;
+  public Vocab pristupnost;
+  
   
 
 //  public static Projekt parse(String xml) throws Exception {
@@ -89,16 +95,14 @@ public class Projekt implements FedoraModel {
     SolrInputDocument idoc = new SolrInputDocument();
     idoc.setField("ident_cely", ident_cely);
     idoc.setField("model", "projekt");
+    idoc.setField("pristupnost", pristupnost.getId());
     idoc.setField("xml", xml);
     return idoc;
   }
 
   @Override
-  public SolrInputDocument createEntityDocument() {
-    SolrInputDocument idoc = new SolrInputDocument();
-    idoc.setField("ident_cely", ident_cely);
-    idoc.setField("model", "projekt");
-    idoc.setField("pristupnost", pristupnost);
-    return idoc;
+  public void fillEntityDocument(SolrInputDocument idoc) {
+    idoc.setField("pristupnost", pristupnost.getId());
+    
   }
 }

@@ -20,7 +20,7 @@ import org.apache.solr.common.SolrInputDocument;
 public interface FedoraModel {
   
   public SolrInputDocument createOAIDocument(String xml);
-  public SolrInputDocument createEntityDocument();
+  public void fillEntityDocument(SolrInputDocument idoc); 
   
   public static <T> FedoraModel parseXml(String xml, Class<T> clazz) throws XMLStreamException, IOException{
     XMLInputFactory f = XMLInputFactory.newFactory();

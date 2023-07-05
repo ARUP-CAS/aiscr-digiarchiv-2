@@ -6,6 +6,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.index.models.Entity;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
@@ -35,8 +37,6 @@ public class FedoraHarvester {
 
   private static final String CONTAINS = "http://www.w3.org/ns/ldp#contains";
 
-  private String api_point;
-  private String auth_header;
   JSONObject ret = new JSONObject();
   SolrClient solr;
   
@@ -47,6 +47,34 @@ public class FedoraHarvester {
       solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
       getModels();
       solr.commit("oai");
+      solr.commit("entities");
+      solr.close();
+      Instant end = Instant.now();
+      String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
+      ret.put("ellapsed time", interval);
+      LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      ret.put("error", ex);
+      if (solr != null) {
+        solr.close();
+      }
+    } finally {
+      
+      if (solr != null) {
+        solr.close();
+      }
+    }
+    return ret;
+  }
+  
+  public JSONObject indexId(String id, String model) throws IOException {
+    try {
+      Instant start = Instant.now();
+      solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+      processRecord(id, model);
+      solr.commit("oai");
+      solr.commit("entities");
       solr.close();
       Instant end = Instant.now();
       String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -84,7 +112,8 @@ public class FedoraHarvester {
 
   private void processModel(String model) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
     LOGGER.log(Level.INFO, "Processing model {0}", model);
-    ret.append("models", model);
+    ret.put(model, 0);
+    int indexed = 0;
     //http://192.168.8.33:8080/rest/AMCR-test/model/projekt/member
     // returns list of records in CONTAINS
 //    [{
@@ -97,6 +126,7 @@ public class FedoraHarvester {
         String id = records.getJSONObject(i).getString("@id");
         id = id.substring(id.lastIndexOf("/") + 1);
         processRecord(id, model);
+        ret.put(model, indexed++);
       }
     }
   }
@@ -109,8 +139,14 @@ public class FedoraHarvester {
     Class clazz = FedoraModel.getModelClass(model);
     if (clazz != null) {
       FedoraModel fm = FedoraModel.parseXml(xml, clazz);
-      SolrInputDocument idoc = fm.createOAIDocument(xml);
-      solr.add("oai", idoc);
+      SolrInputDocument oaidoc = fm.createOAIDocument(xml);
+      solr.add("oai", oaidoc);
+      
+      DocumentObjectBinder dob = new DocumentObjectBinder();
+      SolrInputDocument idoc = dob.toSolrInputDocument(fm);
+      fm.fillEntityDocument(idoc);
+      solr.add("entities", idoc);
+      
     }
     return xml;
   }

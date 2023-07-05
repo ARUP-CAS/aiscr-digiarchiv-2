@@ -397,7 +397,8 @@ public class IndexerServlet extends HttpServlet {
       JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         JSONObject json = new JSONObject();
         try {
-          json = FedoraUtils.getById(req.getParameter("id"));
+          FedoraHarvester fh = new FedoraHarvester();
+          json = fh.indexId(req.getParameter("id"), req.getParameter("model"));
         } catch (JSONException ex) {
           json.put("error", ex.toString());
         }
