@@ -6,6 +6,7 @@
 package cz.inovatika.arup.digiarchiv.web;
 
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraHarvester;
+import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web.index.HeslarIndexer;
 import cz.inovatika.arup.digiarchiv.web.index.IndexerTranslations;
 import cz.inovatika.arup.digiarchiv.web.index.OAIIndexer;
@@ -385,6 +386,18 @@ public class IndexerServlet extends HttpServlet {
         try {
           FedoraHarvester fh = new FedoraHarvester();
           json = fh.harvest();
+        } catch (JSONException ex) {
+          json.put("error", ex.toString());
+        }
+        return json; 
+      }
+    },
+    FEDORA_ID { 
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        JSONObject json = new JSONObject();
+        try {
+          json = FedoraUtils.getById(req.getParameter("id"));
         } catch (JSONException ex) {
           json.put("error", ex.toString());
         }
