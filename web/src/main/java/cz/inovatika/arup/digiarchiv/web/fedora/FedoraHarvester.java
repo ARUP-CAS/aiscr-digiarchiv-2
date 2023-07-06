@@ -6,16 +6,9 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.Options;
-import cz.inovatika.arup.digiarchiv.web.index.models.Entity;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Instant;
-import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
@@ -39,8 +32,13 @@ public class FedoraHarvester {
 
   JSONObject ret = new JSONObject();
   SolrClient solr;
-  
-  
+
+  /**
+   * Full fedora harvest and index
+   *
+   * @return
+   * @throws IOException
+   */
   public JSONObject harvest() throws IOException {
     try {
       Instant start = Instant.now();
@@ -60,26 +58,33 @@ public class FedoraHarvester {
         solr.close();
       }
     } finally {
-      
+
       if (solr != null) {
         solr.close();
       }
     }
     return ret;
   }
-  
-  public JSONObject indexId(String id, String model) throws IOException {
+
+  /**
+   * Index one record from Fedora
+   *
+   * @param id
+   * @return
+   * @throws IOException
+   */
+  public JSONObject indexId(String id) throws IOException {
     try {
       Instant start = Instant.now();
       solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
-      processRecord(id, model);
+      processRecord(id);
       solr.commit("oai");
       solr.commit("entities");
       solr.close();
       Instant end = Instant.now();
       String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
       ret.put("ellapsed time", interval);
-      LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
+      LOGGER.log(Level.INFO, "Index by ID finished in {0}", interval);
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
       ret.put("error", ex);
@@ -87,12 +92,31 @@ public class FedoraHarvester {
         solr.close();
       }
     } finally {
-      
+
       if (solr != null) {
         solr.close();
       }
     }
     return ret;
+  }
+
+  public String getId(String id) throws IOException {
+    try {
+
+      LOGGER.log(Level.INFO, "Processing record {0}", id);
+      String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+      String model = FedoraModel.getModel(xml);
+      Class clazz = FedoraModel.getModelClass(model);
+      if (clazz != null) {
+        FedoraModel fm = FedoraModel.parseXml(xml, clazz);
+
+      }
+      return xml;
+
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
   }
 
   private void getModels() throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
@@ -131,24 +155,44 @@ public class FedoraHarvester {
     }
   }
 
-  private String processRecord(String id, String model) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
+  private void processRecord(String id) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
     // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
     // returns xml
-    LOGGER.log(Level.INFO, "Processing record {0}", id);
+    LOGGER.log(Level.FINE, "Processing record {0}", id);
     String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+    String model = FedoraModel.getModel(xml);
+    indexXml(xml, model);
+  }
+
+  private void processRecord(String id, String model) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
+    // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
+    // returns xml
+    LOGGER.log(Level.FINE, "Processing record {0}", id);
+    String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+    indexXml(xml, model);
+  }
+
+  private void indexXml(String xml, String model) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
+
     Class clazz = FedoraModel.getModelClass(model);
     if (clazz != null) {
       FedoraModel fm = FedoraModel.parseXml(xml, clazz);
-      SolrInputDocument oaidoc = fm.createOAIDocument(xml);
-      solr.add("oai", oaidoc);
-      
+      if (fm.isOAI()) {
+        SolrInputDocument oaidoc = fm.createOAIDocument(xml);
+        solr.add("oai", oaidoc);
+      }
+
       DocumentObjectBinder dob = new DocumentObjectBinder();
       SolrInputDocument idoc = dob.toSolrInputDocument(fm);
-      fm.fillEntityDocument(idoc);
-      solr.add("entities", idoc);
-      
-    }
-    return xml;
-  }
+      fm.fillSolrFields(idoc);
+      if (fm.isEntity()) {
+        solr.add("entities", idoc);
+      }
+      if (fm.isHeslo()) {
+        solr.add("heslar", idoc);
+      }
 
+    }
+
+  }
 }

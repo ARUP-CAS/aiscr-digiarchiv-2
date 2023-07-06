@@ -1,7 +1,9 @@
-package cz.inovatika.arup.digiarchiv.web.fedora;
+package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -101,8 +103,23 @@ public class Projekt implements FedoraModel {
   }
 
   @Override
-  public void fillEntityDocument(SolrInputDocument idoc) {
+  public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("pristupnost", pristupnost.getId());
     
+  }
+
+  @Override
+  public boolean isOAI() {
+    return true;
+  }
+
+  @Override
+  public boolean isEntity() {
+    return true;
+  }
+
+  @Override
+  public boolean isHeslo() {
+    return false;
   }
 }

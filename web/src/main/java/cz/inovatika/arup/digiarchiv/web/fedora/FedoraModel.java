@@ -4,8 +4,11 @@
  */
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Projekt;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
 import java.io.IOException;
 import java.io.StringReader;
 import javax.xml.stream.XMLInputFactory;
@@ -19,29 +22,94 @@ import org.apache.solr.common.SolrInputDocument;
  */
 public interface FedoraModel {
   
-  public SolrInputDocument createOAIDocument(String xml);
-  public void fillEntityDocument(SolrInputDocument idoc); 
+  /**
+   * 
+   * @return true for models that should expose in OAI 
+   */
+  public boolean isOAI();
   
+  /**
+   * 
+   * @return true for models that should index in entities 
+   */
+  public boolean isEntity();
+  
+  /**
+   * 
+   * @return true for Heslo
+   */
+  public boolean isHeslo();
+  
+  /**
+   * Creates SolrInputDocument tfor index in oai core
+   * @param xml Full xml string
+   * @return Document created
+   */
+  public SolrInputDocument createOAIDocument(String xml);
+  
+  /**
+   * Set all fields for entities core
+   * @param idoc 
+   */
+  public void fillSolrFields(SolrInputDocument idoc); 
+  
+  
+  /**
+   * Find Fedora model name in xml
+   * @param xml Full xml string
+   * @return FedoraModel name
+   * @throws XMLStreamException
+   * @throws IOException 
+   */
+  public static String getModel(String xml) throws XMLStreamException, IOException{
+    XMLInputFactory f = XMLInputFactory.newFactory();
+    XMLStreamReader sr = f.createXMLStreamReader(new StringReader(xml));
+//    XmlMapper xmlMapper = new XmlMapper();
+//    xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    sr.nextTag();
+    sr.nextTag();
+    return sr.getLocalName();
+//    while (!sr.getLocalName().equals("projekt")) {
+//      sr.nextTag();
+//    }
+//    return (FedoraModel) xmlMapper.readValue(sr, clazz);
+  }
+  
+  
+  /**
+   * Deserialize amcr xml document to java class
+   * @param <T>
+   * @param xml Full xml string
+   * @param clazz The class to map to
+   * @return Object implementing FedoraModel
+   * @throws XMLStreamException
+   * @throws IOException 
+   */
   public static <T> FedoraModel parseXml(String xml, Class<T> clazz) throws XMLStreamException, IOException{
     XMLInputFactory f = XMLInputFactory.newFactory();
-    // XMLInputFactory f = new WstxInputFactory();
-    //f.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
     XMLStreamReader sr = f.createXMLStreamReader(new StringReader(xml));
-    XmlMapper xmlMapper = new XmlMapper();
+    JacksonXmlModule module = new JacksonXmlModule();
+    module.setDefaultUseWrapper(false);
+    XmlMapper xmlMapper = new XmlMapper(module);
     xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
     sr.nextTag();
-    while (!sr.getLocalName().equals("projekt")) {
-      sr.nextTag();
-    }
+    sr.nextTag();
     return (FedoraModel) xmlMapper.readValue(sr, clazz);
   }
   
+  /**
+   * Finds FedoraModel class by model name
+   * @param model
+   * @return 
+   */
   public static Class getModelClass(String model) {
     switch (model) {
       case "projekt":
         return Projekt.class;
-//      case "samostatny_nalez":
-//        return SamostatniNalez.class;
+      case "heslo":
+        return Heslo.class;
 //      case "knihovna_3d":
 //        return Dokument.class;
       default:

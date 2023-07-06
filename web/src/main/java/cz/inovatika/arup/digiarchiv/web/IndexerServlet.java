@@ -378,32 +378,6 @@ public class IndexerServlet extends HttpServlet {
         }
         return json;
       }
-    },
-    FEDORA { 
-      @Override
-      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        JSONObject json = new JSONObject();
-        try {
-          FedoraHarvester fh = new FedoraHarvester();
-          json = fh.harvest();
-        } catch (JSONException ex) {
-          json.put("error", ex.toString());
-        }
-        return json; 
-      }
-    },
-    FEDORA_ID { 
-      @Override
-      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        JSONObject json = new JSONObject();
-        try {
-          FedoraHarvester fh = new FedoraHarvester();
-          json = fh.indexId(req.getParameter("id"), req.getParameter("model"));
-        } catch (JSONException ex) {
-          json.put("error", ex.toString());
-        }
-        return json; 
-      }
     };
 
     abstract JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception;
