@@ -67,6 +67,40 @@ public class FedoraHarvester {
   }
 
   /**
+   * Index all records in one model from Fedora
+   *
+   * @param model
+   * @return
+   * @throws IOException
+   */
+  public JSONObject indexModel(String model) throws IOException {
+    try {
+      Instant start = Instant.now();
+      solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+      processModel(model);
+      solr.commit("oai");
+      solr.commit("entities");
+      solr.close();
+      Instant end = Instant.now();
+      String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
+      ret.put("ellapsed time", interval);
+      LOGGER.log(Level.INFO, "Index by ID finished in {0}", interval);
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      ret.put("error", ex);
+      if (solr != null) {
+        solr.close();
+      }
+    } finally {
+
+      if (solr != null) {
+        solr.close();
+      }
+    }
+    return ret;
+  }
+
+  /**
    * Index one record from Fedora
    *
    * @param id

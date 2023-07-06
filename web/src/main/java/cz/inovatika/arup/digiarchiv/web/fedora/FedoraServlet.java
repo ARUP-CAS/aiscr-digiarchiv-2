@@ -102,6 +102,19 @@ public class FedoraServlet extends HttpServlet {
         return json; 
       }
     },
+    INDEX_MODEL { 
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        JSONObject json = new JSONObject();
+        try {
+          FedoraHarvester fh = new FedoraHarvester();
+          json = fh.indexModel(req.getParameter("model"));
+        } catch (JSONException ex) {
+          json.put("error", ex.toString());
+        }
+        return json; 
+      }
+    },
     INDEX_ID { 
       @Override
       JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
