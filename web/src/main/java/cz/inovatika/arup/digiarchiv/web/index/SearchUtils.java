@@ -36,6 +36,8 @@ public class SearchUtils {
   static final Logger LOGGER = Logger.getLogger(SearchUtils.class.getName());
 
   static Map<String, String> obdobi_poradi;
+  
+  static Map<String, String> pristupnostMap;
 
   public static String getObdobiPoradi(String obdobi) {
     if (obdobi_poradi == null) {
@@ -56,6 +58,31 @@ public class SearchUtils {
       for (SolrDocument doc : resp.getResults()) {
         obdobi_poradi.put(((String) doc.getFieldValue("zkratka")).toLowerCase(), "" + doc.getFieldValue("poradi"));
         obdobi_poradi.put(((String) doc.getFieldValue("nazev")).toLowerCase(), "" + doc.getFieldValue("poradi"));
+      }
+      // LOGGER.log(Level.INFO, "obdobi: {0}", obdobi_poradi.size());
+    } catch (SolrServerException | IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    }
+  }
+  
+  public static Map getPristupnostMap() {
+    if (pristupnostMap == null) {
+      initPristupnostMap();
+    }
+    return pristupnostMap;
+  }
+
+  private static void initPristupnostMap() {
+    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      pristupnostMap = new HashMap<>();
+
+      SolrQuery query = new SolrQuery()
+              .setQuery("nazev_heslare:pristupnost")
+              .setRows(1000)
+              .setFields("ident_cely,zkratka");
+      QueryResponse resp = client.query("heslar", query);
+      for (SolrDocument doc : resp.getResults()) {
+        pristupnostMap.put(((String) doc.getFieldValue("ident_cely")), "" + doc.getFieldValue("zkratka"));
       }
       // LOGGER.log(Level.INFO, "obdobi: {0}", obdobi_poradi.size());
     } catch (SolrServerException | IOException ex) {

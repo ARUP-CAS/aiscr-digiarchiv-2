@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -655,6 +656,13 @@ public class SolrSearcher {
     } catch (NumberFormatException ex) {
       return false;
     }
+  }
+  
+  public static void addVocabField(SolrInputDocument idoc, String field, Vocab v) {
+    if(v != null) {
+      idoc.setField(field, v.getValue());
+    }
+    
   }
 
 //  public static void cleanRepeated(SolrInputDocument idoc) {

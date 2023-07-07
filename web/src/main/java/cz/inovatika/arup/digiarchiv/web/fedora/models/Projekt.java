@@ -1,9 +1,10 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
-import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
+import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,9 @@ import org.apache.solr.common.SolrInputDocument;
 
 @JacksonXmlRootElement(localName = "projekt")
 public class Projekt implements FedoraModel {
+  
+  @Field
+  public String entity = "projekt";
 
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
   @JacksonXmlProperty(localName = "ident_cely")
@@ -100,15 +104,15 @@ public class Projekt implements FedoraModel {
 //<xs:element name="soubor" minOccurs="0" maxOccurs="unbounded" type="amcr:souborType"/>  <!-- {soubory.soubory} -->
 //<xs:element name="archeologicky_zaznam" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{akce_set.archeologicky_zaznam.ident_cely}" | "{akce_set.archeologicky_zaznam.ident_cely}" -->
   @JacksonXmlProperty(localName = "archeologicky_zaznam")
-  public List<Vocab> archeologicky_zaznam;
+  public List<Vocab> archeologicky_zaznam = new ArrayList();
   
 //<xs:element name="samostatny_nalez" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{samostatne_nalezy.ident_cely}" | "{samostatne_nalezy.ident_cely}" -->
   @JacksonXmlProperty(localName = "samostatny_nalez")
-  public List<Vocab> samostatny_nalez;
+  public List<Vocab> samostatny_nalez = new ArrayList();
   
 //<xs:element name="dokument" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{casti_dokumentu.dokument.ident_cely}" | "{casti_dokumentu.dokument.ident_cely}" -->
   @JacksonXmlProperty(localName = "dokument")
-  public List<Vocab> dokument;
+  public List<Vocab> dokument = new ArrayList();
   
 
   @Override
@@ -116,16 +120,37 @@ public class Projekt implements FedoraModel {
     SolrInputDocument idoc = new SolrInputDocument();
     idoc.setField("ident_cely", ident_cely);
     idoc.setField("model", "projekt");
-    idoc.setField("pristupnost", pristupnost.getId());
+    idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
     idoc.setField("xml", xml);
     return idoc;
   }
 
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
-    idoc.setField("pristupnost", pristupnost.getId());
+    idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
+    idoc.setField("searchable", true);
+    
+    SolrSearcher.addVocabField(idoc, "okres", okres);
+    idoc.setField("typ_projektu", typ_projektu.getId());
+    SolrSearcher.addVocabField(idoc, "vedouci_projektu", vedouci_projektu);
+    SolrSearcher.addVocabField(idoc, "organizace", organizace);
+    SolrSearcher.addVocabField(idoc, "kulturni_pamatka", kulturni_pamatka);
+    
+    
+    for(Vocab v : archeologicky_zaznam) {
+      idoc.setField("archeologicky_zaznam", v.getValue());
+    }
+    
+    for(Vocab v : samostatny_nalez) {
+      idoc.setField("samostatny_nalez", v.getValue());
+    }
+    
+    for(Vocab v : dokument) {
+      idoc.setField("dokument", v.getValue());
+    }
+    
     if (chranene_udaje != null) {
-      chranene_udaje.fillSolrFields(idoc);
+      chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
     }
   }
 
@@ -176,16 +201,28 @@ class ProjektChraneneUdaje {
   @JacksonXmlProperty(localName = "kulturni_pamatka_popis")
   public String kulturni_pamatka_popis;
   
-  public void fillSolrFields(SolrInputDocument idoc) {
+  public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
     idoc.setField("sec_hlavni_katastr", hlavni_katastr.getValue());
+    
+    SolrSearcher.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
+    
     for (Vocab v: dalsi_katastr) {
+      SolrSearcher.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
       idoc.addField("sec_dalsi_katastr", v.getValue());
     }
-    idoc.setField("sec_geom_wkt", geom_wkt.getValue());
     
-    idoc.setField("sec_lokalizace", lokalizace);
-    idoc.setField("sec_parcelni_cislo", parcelni_cislo);
-    idoc.setField("sec_kulturni_pamatka_cislo", kulturni_pamatka_cislo);
-    idoc.setField("sec_kulturni_pamatka_popis", kulturni_pamatka_popis);
+    if (geom_wkt != null) {
+      idoc.setField("sec_geom_wkt", geom_wkt.getValue());
+    }
+    
+//    
+    SolrSearcher.addSecuredFieldNonRepeat(idoc, "lokalizace", lokalizace, pristupnost);
+    //idoc.setField("lokalizace", lokalizace);
+    SolrSearcher.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
+    //idoc.setField("parcelni_cislo", parcelni_cislo);
+    SolrSearcher.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
+    //idoc.setField("kulturni_pamatka_cislo", kulturni_pamatka_cislo);
+    SolrSearcher.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
+    //idoc.setField("kulturni_pamatka_popis", kulturni_pamatka_popis);
   }
 }

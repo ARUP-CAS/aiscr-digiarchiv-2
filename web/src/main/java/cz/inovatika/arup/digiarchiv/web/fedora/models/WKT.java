@@ -22,7 +22,7 @@ public class WKT {
     return epsg;
   }
 
-  public void setKey(String epsg) {
+  public void setEpsg(long epsg) {
     this.epsg = epsg;
   }
 
@@ -33,5 +33,4 @@ public class WKT {
   public void setValue(String value) {
     this.value = value;
   }
-
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
 import java.io.IOException;
 import java.io.StringReader;
 import javax.xml.stream.XMLInputFactory;
@@ -108,6 +109,8 @@ public interface FedoraModel {
     switch (model) {
       case "projekt":
         return Projekt.class;
+      case "samostatny_nalez":
+        return SamostatnyNalez.class;
       case "heslo":
         return Heslo.class;
 //      case "knihovna_3d":

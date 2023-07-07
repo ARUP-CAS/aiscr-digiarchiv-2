@@ -26,17 +26,14 @@ public class Heslo implements FedoraModel {
   
 //      <xs:element name="nazev_heslare" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev_heslare.nazev}" -->
   @JacksonXmlProperty(localName = "nazev_heslare")
-  @Field
   public Lang nazev_heslare;
   
 //      <xs:element name="heslo" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{heslo}" -->
   @JacksonXmlProperty(localName = "heslo")
-  @Field
   public Lang heslo;
   
 //      <xs:element name="heslo_en" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{heslo_en}" -->
   @JacksonXmlProperty(localName = "heslo_en")
-  @Field
   public Lang heslo_en;
   
 //      <xs:element name="popis" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{popis}" -->
@@ -51,12 +48,10 @@ public class Heslo implements FedoraModel {
   
 //      <xs:element name="zkratka" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{zkratka}" -->
   @JacksonXmlProperty(localName = "zkratka")
-  @Field
   public Lang zkratka;
   
 //      <xs:element name="zkratka_en" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{zkratka_en}" -->
   @JacksonXmlProperty(localName = "zkratka_en")
-  @Field
   public Lang zkratka_en;
   
   
@@ -67,7 +62,6 @@ public class Heslo implements FedoraModel {
   
 //      <xs:element name="hierarchie_vyse" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_vyseType"/> <!-- "{nadrazena_hesla}" -->
   @JacksonXmlProperty(localName = "hierarchie_vyse")
-  @Field
   private List<HierarchieVyse> hierarchie_vyse;
   public List<HierarchieVyse> getHierarchieVyse() {
       return hierarchie_vyse;
@@ -75,7 +69,6 @@ public class Heslo implements FedoraModel {
   
 //      <xs:element name="hierarchie_nize" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_nizeType"/> <!-- "{podrazena_hesla}" -->
   @JacksonXmlProperty(localName = "hierarchie_nize")
-  @Field
   private List<HierarchieNize> hierarchie_nize;
   public List<HierarchieNize> getHierarchieNize() {
       return hierarchie_nize;
@@ -92,8 +85,27 @@ public class Heslo implements FedoraModel {
 
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
-    idoc.setField("cs", heslo.getValue());
-    idoc.setField("en", heslo_en.getValue());
+    if (heslo != null) {
+      idoc.setField("cs", heslo.getValue());
+    }
+    if (heslo_en != null) {
+      idoc.setField("en", heslo_en.getValue());
+    }
+    if (nazev_heslare != null) {
+      idoc.setField("nazev_heslare", nazev_heslare.getValue());
+    }
+    if (zkratka != null) {
+      idoc.setField("zkratka", zkratka.getValue());
+    }
+    if (zkratka_en != null) {
+      idoc.setField("zkratka_en", zkratka_en.getValue());
+    }
+    
+//    if(hierarchie_nize != null) {
+//      for(HierarchieNize hz: hierarchie_nize) {
+//        idoc.setField("en", hz.);
+//      }
+//    }
   }
 
   @Override

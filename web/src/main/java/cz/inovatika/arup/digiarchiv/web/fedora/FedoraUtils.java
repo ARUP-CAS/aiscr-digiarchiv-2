@@ -21,6 +21,8 @@ import org.json.JSONObject;
 public class FedoraUtils {
   
   private static final String API_POINT = Options.getInstance().getJSONObject("fedora").getString("api.point");
+  private static final HttpClient client = HttpClient.newHttpClient();
+  
   
   public static final String auth_header() {
     
@@ -32,7 +34,7 @@ public class FedoraUtils {
   }
 
   public static String request(String url) throws URISyntaxException, IOException, InterruptedException {
-    HttpClient client = HttpClient.newHttpClient();
+    
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))
@@ -46,7 +48,6 @@ public class FedoraUtils {
   }
   
   public static String requestXml(String url) throws URISyntaxException, IOException, InterruptedException {
-    HttpClient client = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))

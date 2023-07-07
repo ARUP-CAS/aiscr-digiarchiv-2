@@ -9,6 +9,8 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
@@ -33,6 +35,10 @@ public class FedoraHarvester {
   JSONObject ret = new JSONObject();
   SolrClient solr;
 
+  List<SolrInputDocument> idocsEntities = new ArrayList();
+  List<SolrInputDocument> idocsHeslar = new ArrayList();
+  List<SolrInputDocument> idocsOAI = new ArrayList();
+
   /**
    * Full fedora harvest and index
    *
@@ -46,6 +52,7 @@ public class FedoraHarvester {
       getModels();
       solr.commit("oai");
       solr.commit("entities");
+      solr.commit("heslar");
       solr.close();
       Instant end = Instant.now();
       String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -69,22 +76,25 @@ public class FedoraHarvester {
   /**
    * Index all records in one model from Fedora
    *
-   * @param model
+   * @param models List of models to process
    * @return
    * @throws IOException
    */
-  public JSONObject indexModel(String model) throws IOException {
+  public JSONObject indexModels(String[] models) throws IOException {
     try {
       Instant start = Instant.now();
       solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
-      processModel(model);
+      for(String model: models) {
+         processModel(model);
+      }
       solr.commit("oai");
       solr.commit("entities");
+      solr.commit("heslar");
       solr.close();
       Instant end = Instant.now();
       String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
       ret.put("ellapsed time", interval);
-      LOGGER.log(Level.INFO, "Index by ID finished in {0}", interval);
+      LOGGER.log(Level.INFO, "Index models finished in {0}", interval);
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, null, ex);
       ret.put("error", ex);
@@ -112,8 +122,19 @@ public class FedoraHarvester {
       Instant start = Instant.now();
       solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
       processRecord(id);
-      solr.commit("oai");
-      solr.commit("entities");
+      if (!idocsEntities.isEmpty()) {
+        solr.add("entities", idocsEntities);
+        solr.commit("entities");
+
+        solr.add("oai", idocsOAI);
+        solr.commit("oai");
+        idocsEntities.clear();
+        idocsOAI.clear();
+      }
+      if (!idocsHeslar.isEmpty()) {
+        solr.add("heslar", idocsHeslar);
+        idocsHeslar.clear();
+      }
       solr.close();
       Instant end = Instant.now();
       String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -172,6 +193,7 @@ public class FedoraHarvester {
     LOGGER.log(Level.INFO, "Processing model {0}", model);
     ret.put(model, 0);
     int indexed = 0;
+    int batchSize = 500;
     //http://192.168.8.33:8080/rest/AMCR-test/model/projekt/member
     // returns list of records in CONTAINS
 //    [{
@@ -185,6 +207,36 @@ public class FedoraHarvester {
         id = id.substring(id.lastIndexOf("/") + 1);
         processRecord(id, model);
         ret.put(model, indexed++);
+
+        if (idocsEntities.size() > batchSize) {
+          solr.add("entities", idocsEntities);
+          solr.commit("entities");
+
+          solr.add("oai", idocsOAI);
+          solr.commit("oai");
+          idocsEntities.clear();
+          idocsOAI.clear();
+          LOGGER.log(Level.INFO, "Indexed {0}", indexed);
+        }
+        if (idocsHeslar.size() > batchSize) {
+          solr.add("heslar", idocsHeslar);
+          idocsHeslar.clear();
+          LOGGER.log(Level.INFO, "Indexed {0}", indexed);
+        }
+      }
+
+      if (!idocsEntities.isEmpty()) {
+        solr.add("entities", idocsEntities);
+        solr.commit("entities");
+
+        solr.add("oai", idocsOAI);
+        solr.commit("oai");
+        idocsEntities.clear();
+        idocsOAI.clear();
+      }
+      if (!idocsHeslar.isEmpty()) {
+        solr.add("heslar", idocsHeslar);
+        idocsHeslar.clear();
       }
     }
   }
@@ -213,17 +265,17 @@ public class FedoraHarvester {
       FedoraModel fm = FedoraModel.parseXml(xml, clazz);
       if (fm.isOAI()) {
         SolrInputDocument oaidoc = fm.createOAIDocument(xml);
-        solr.add("oai", oaidoc);
+        idocsOAI.add(oaidoc);
       }
 
       DocumentObjectBinder dob = new DocumentObjectBinder();
       SolrInputDocument idoc = dob.toSolrInputDocument(fm);
       fm.fillSolrFields(idoc);
       if (fm.isEntity()) {
-        solr.add("entities", idoc);
+        idocsEntities.add(idoc);
       }
       if (fm.isHeslo()) {
-        solr.add("heslar", idoc);
+        idocsHeslar.add(idoc);
       }
 
     }

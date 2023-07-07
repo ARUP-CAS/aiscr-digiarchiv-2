@@ -147,7 +147,7 @@ public class ProjektSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*,akce:[json],pian:[json]","katastr","okres","f_katastr:katastr","f_okres:okres"};
+    return new String[]{"*,akce:[json],pian:[json]","katastr","okres","hlavni_katastr_A:katastr","okres"};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -157,7 +157,7 @@ public class ProjektSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields("*,akce:[json],pian:[json]","katastr","okres","f_katastr:katastr","f_okres:okres");
+    query.setFields("*,akce:[json],pian:[json]","hlavni_katastr_A:katastr","okres","hlavni_katastr_A:f_katastr","okres");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
     }
