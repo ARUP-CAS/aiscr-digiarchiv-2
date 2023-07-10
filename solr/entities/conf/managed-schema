@@ -117,6 +117,7 @@
    <field name="dalsi_katastry" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
    <field name="dalsi_katastr" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
    <field name="dalsi_okres" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="dalsi_katastr_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    <dynamicField name="f_dalsi_katastry_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    
    <!-- Projekt fields -->
@@ -151,7 +152,7 @@
    <field name="geom_wkt" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
    <!-- Externi zdroj -->
-   <field name="datum_rd" type="pdate" indexed="true" stored="true"  /> 
+   <field name="datum_rd" type="string" indexed="true" stored="true"  /> 
    <field name="ext_odkaz" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    
@@ -293,6 +294,9 @@
    <field name="organizace_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    <field name="okres_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    <field name="katastr_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
+   
+   <!-- secured fields -->
+   <dynamicField name="sec_*" type="lowercase_cs" multiValued="true"/>
    
    <!-- For all other fields -->
    <dynamicField name="*" type="lowercase_cs" multiValued="false"/>
