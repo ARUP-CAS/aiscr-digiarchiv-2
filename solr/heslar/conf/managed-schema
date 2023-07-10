@@ -117,12 +117,13 @@
    
    <field name="indextime" type="pdate" indexed="true" stored="true" default="NOW" /> 
    
-   <field name="uniqueid" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ident_cely" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    
-   <field name="id" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="nazev_heslare" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="razeni" type="pint" indexed="true" stored="true" multiValued="false" /> 
    
-   <field name="heslar_name" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="poradi" type="pint" indexed="true" stored="true" multiValued="false" /> 
+   <field name="hierarchie_vyse" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="hierarchie_nize" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <field name="text_all" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    
@@ -132,7 +133,7 @@
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
    -->
- <uniqueKey>uniqueid</uniqueKey>
+ <uniqueKey>ident_cely</uniqueKey>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
