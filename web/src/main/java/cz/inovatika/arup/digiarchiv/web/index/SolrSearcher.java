@@ -1,6 +1,8 @@
 
 package cz.inovatika.arup.digiarchiv.web.index;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
@@ -662,7 +664,23 @@ public class SolrSearcher {
     if(v != null) {
       idoc.setField(field, v.getValue());
     }
-    
+  }
+  
+  public static void addSecuredVocabField(SolrInputDocument idoc, String field, Vocab v, String pristupnost) {
+    if(v != null) {
+      addSecuredFieldNonRepeat(idoc, field, v.getValue(), pristupnost);
+    }
+  }
+  
+  public static void addSecuredJSONField(SolrInputDocument idoc, String field, Object o) {
+    if (o != null) {
+      try {
+        ObjectMapper objectMapper = new ObjectMapper();
+        idoc.addField("sec_" + field, objectMapper.writeValueAsString(o));
+      } catch (JsonProcessingException ex) {
+        LOGGER.log(Level.SEVERE, null, ex);
+      }
+    }
   }
 
 //  public static void cleanRepeated(SolrInputDocument idoc) {

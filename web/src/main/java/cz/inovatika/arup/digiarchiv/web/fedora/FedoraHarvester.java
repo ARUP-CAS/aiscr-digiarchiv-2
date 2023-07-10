@@ -84,8 +84,8 @@ public class FedoraHarvester {
     try {
       Instant start = Instant.now();
       solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
-      for(String model: models) {
-         processModel(model);
+      for (String model : models) {
+        processModel(model);
       }
       solr.commit("oai");
       solr.commit("entities");
@@ -229,6 +229,8 @@ public class FedoraHarvester {
         solr.add("entities", idocsEntities);
         solr.commit("entities");
 
+      }
+      if (!idocsOAI.isEmpty()) {
         solr.add("oai", idocsOAI);
         solr.commit("oai");
         idocsEntities.clear();

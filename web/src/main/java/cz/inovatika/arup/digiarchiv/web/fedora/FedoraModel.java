@@ -8,7 +8,11 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.Projekt;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.ADB;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.ArcheologickyZaznam;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
 import java.io.IOException;
 import java.io.StringReader;
@@ -107,6 +111,14 @@ public interface FedoraModel {
    */
   public static Class getModelClass(String model) {
     switch (model) {
+      case "adb":
+        return ADB.class; 
+      case "ext_zdroj":
+        return ExtZdroj.class;
+      case "pian":
+        return PIAN.class; 
+      case "archeologicky_zaznam":
+        return ArcheologickyZaznam.class; 
       case "projekt":
         return Projekt.class;
       case "samostatny_nalez":

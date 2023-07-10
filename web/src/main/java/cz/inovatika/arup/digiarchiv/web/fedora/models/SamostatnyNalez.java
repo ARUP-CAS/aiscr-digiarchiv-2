@@ -1,5 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
@@ -8,6 +10,8 @@ import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -183,6 +187,9 @@ public class SamostatnyNalez implements FedoraModel {
     public String lokalizace;
 
 //<xs:element name="geom_gml" minOccurs="0" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{geom}") -->
+    @JacksonXmlProperty(localName = "geom_gml")
+    public Object geom_gml;
+    
 //<xs:element name="geom_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom}") | ST_AsText("{geom}") -->
     @JacksonXmlProperty(localName = "geom_wkt")
     public WKT geom_wkt;
@@ -199,9 +206,19 @@ public class SamostatnyNalez implements FedoraModel {
         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_lokalizace", lokalizace, pristupnost);
       }
 
+      if (geom_gml != null) {
+        try {
+          ObjectMapper objectMapper = new ObjectMapper();
+          idoc.addField("sec_geom_gml", objectMapper.writeValueAsString(geom_gml));
+        } catch (JsonProcessingException ex) {
+          Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
+
       if (geom_wkt != null) {
         idoc.setField("sec_geom_wkt", geom_wkt.getValue());
       }
+      
 
     }
   }
