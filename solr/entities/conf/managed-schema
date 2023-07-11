@@ -85,7 +85,7 @@
    
   
    <!-- Akce and lokalita fields -->
-   <field name="je_nz" type="pint" indexed="true" stored="true" multiValued="false" /> 
+   <field name="je_nz" type="boolean" indexed="true" stored="true" multiValued="false" /> 
    
    <field name="datum_zahajeni_v" type="pdate" indexed="true" stored="true" />
    <field name="datum_ukonceni_v" type="pdate" indexed="true" stored="true" />
@@ -295,12 +295,6 @@
    <field name="okres_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    <field name="katastr_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    
-   <!-- secured fields -->
-   <dynamicField name="sec_*" type="lowercase_cs" multiValued="true"/>
-   
-   <!-- For all other fields -->
-   <dynamicField name="*" type="lowercase_cs" multiValued="false"/>
-   
    <!-- Field for free text filtering -->
    <!-- <field name="ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" /> -->
    <field name="popis" type="text_general" indexed="true" stored="true" multiValued="true" />
@@ -379,6 +373,12 @@
    <field name="text_all_E" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    
    
+   
+   <!-- secured fields -->
+   <field name="chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="true"/>
+   
+   <!-- For all other fields -->
+   <dynamicField name="*" type="lowercase_cs" multiValued="false"/>
    
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
