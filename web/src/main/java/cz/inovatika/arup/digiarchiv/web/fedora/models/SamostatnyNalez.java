@@ -195,30 +195,24 @@ public class SamostatnyNalez implements FedoraModel {
     public WKT geom_wkt;
 
 //<xs:element name="geom_sjtsk_gml" minOccurs="0" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{geom_sjtsk}") -->
+    @JacksonXmlProperty(localName = "geom_sjtsk_gml")
+    public Object geom_sjtsk_gml;
+    
 //<xs:element name="geom_sjtsk_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom_sjtsk}") | ST_AsText("{geom_sjtsk}") -->
+    @JacksonXmlProperty(localName = "geom_sjtsk_wkt")
+    public WKT geom_sjtsk_wkt;
+
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+      
+      SolrSearcher.addSecuredJSONField(idoc, this);
+      
       if (katastr != null) {
-        idoc.setField("sec_katastr", katastr.getValue());
         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
       }
 
       if (lokalizace != null) {
         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_lokalizace", lokalizace, pristupnost);
       }
-
-      if (geom_gml != null) {
-        try {
-          ObjectMapper objectMapper = new ObjectMapper();
-          idoc.addField("sec_geom_gml", objectMapper.writeValueAsString(geom_gml));
-        } catch (JsonProcessingException ex) {
-          Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      }
-
-      if (geom_wkt != null) {
-        idoc.setField("sec_geom_wkt", geom_wkt.getValue());
-      }
-      
 
     }
   }

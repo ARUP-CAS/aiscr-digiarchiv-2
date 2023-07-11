@@ -174,7 +174,7 @@ public class FedoraHarvester {
     }
   }
 
-  private void getModels() throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
+  private void getModels() throws Exception {
 
     JSONObject json = new JSONArray(FedoraUtils.request("model")).getJSONObject(0);
     // returns list of models (entities) in CONTAINS 
@@ -189,7 +189,7 @@ public class FedoraHarvester {
     }
   }
 
-  private void processModel(String model) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
+  private void processModel(String model) throws Exception {
     LOGGER.log(Level.INFO, "Processing model {0}", model);
     ret.put(model, 0);
     int indexed = 0;
@@ -243,7 +243,7 @@ public class FedoraHarvester {
     }
   }
 
-  private void processRecord(String id) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
+  private void processRecord(String id) throws Exception {
     // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
     // returns xml
     LOGGER.log(Level.FINE, "Processing record {0}", id);
@@ -252,15 +252,21 @@ public class FedoraHarvester {
     indexXml(xml, model);
   }
 
-  private void processRecord(String id, String model) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
-    // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
-    // returns xml
-    LOGGER.log(Level.FINE, "Processing record {0}", id);
-    String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
-    indexXml(xml, model);
+  private void processRecord(String id, String model) throws Exception {
+    try {
+      // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
+      // returns xml
+      LOGGER.log(Level.FINE, "Processing record {0}", id);
+      String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+      indexXml(xml, model);
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
+      LOGGER.log(Level.SEVERE, null, ex);
+      throw new Exception(ex);
+    }
   }
 
-  private void indexXml(String xml, String model) throws URISyntaxException, IOException, InterruptedException, SolrServerException, XMLStreamException {
+  private void indexXml(String xml, String model) throws Exception {
 
     Class clazz = FedoraModel.getModelClass(model);
     if (clazz != null) {

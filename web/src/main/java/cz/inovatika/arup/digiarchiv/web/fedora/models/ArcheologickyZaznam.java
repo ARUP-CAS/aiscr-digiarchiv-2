@@ -47,16 +47,16 @@ public class ArcheologickyZaznam implements FedoraModel {
 //<xs:choice minOccurs="1" maxOccurs="1">
 //  <xs:element name="akce" type="amcr:akceType"/> <!-- "{akce}" -->
   @JacksonXmlProperty(localName = "akce")
-  public Object akce;
+  public Akce akce;
 //  <xs:element name="lokalita" type="amcr:lokalitaType"/> <!-- "{lokalita}" -->
   @JacksonXmlProperty(localName = "lokalita")
-  public Object lokalita;
+  public Lokalita lokalita;
 //</xs:choice>
 
 //<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
 //<xs:element name="dokumentacni_jednotka" minOccurs="0" maxOccurs="unbounded" type="amcr:dokumentacni_jednotkaType"/> <!-- "{dokumentacni_jednotky_akce}" -->
   @JacksonXmlProperty(localName = "dokumentacni_jednotka")
-  public List<Object> dokumentacni_jednotka = new ArrayList();
+  public List<DokumentacniJednotka> dokumentacni_jednotka = new ArrayList();
   
 //<xs:element name="ext_odkaz" minOccurs="0" maxOccurs="unbounded" type="amcr:az-ext_odkazType"/> <!-- "{externi_odkazy}" -->
 //<xs:element name="dokument" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{casti_dokumentu.dokument.ident_cely}" | "{casti_dokumentu.dokument.ident_cely}" -->
@@ -114,12 +114,18 @@ public class ArcheologickyZaznam implements FedoraModel {
       SolrSearcher.addVocabField(idoc, "dokument", v);
     }
     
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      idoc.addField("dokumentacni_jednotka", objectMapper.writeValueAsString(dokumentacni_jednotka));
-    } catch (JsonProcessingException ex) {
-      Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);
+    for (DokumentacniJednotka dj : dokumentacni_jednotka) {
+      dj.fillSolrFields(idoc);
     }
+    
+    if (akce != null) {
+      akce.fillSolrFields(idoc);
+    }    
+    
+    if (lokalita != null) {
+      lokalita.fillSolrFields(idoc);
+    } 
+   
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
     }
@@ -142,6 +148,7 @@ class AZChraneneUdaje {
   public String uzivatelske_oznaceni;
 
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+    SolrSearcher.addSecuredJSONField(idoc, this);
     SolrSearcher.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
 
     for (Vocab v : dalsi_katastr) {

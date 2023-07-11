@@ -87,6 +87,7 @@ public class SearchUtils {
       // LOGGER.log(Level.INFO, "obdobi: {0}", obdobi_poradi.size());
     } catch (SolrServerException | IOException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
+      pristupnostMap = null;
     }
   }
 

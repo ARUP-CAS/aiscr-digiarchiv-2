@@ -672,11 +672,11 @@ public class SolrSearcher {
     }
   }
   
-  public static void addSecuredJSONField(SolrInputDocument idoc, String field, Object o) {
+  public static void addSecuredJSONField(SolrInputDocument idoc, Object o) {
     if (o != null) {
       try {
         ObjectMapper objectMapper = new ObjectMapper();
-        idoc.addField("sec_" + field, objectMapper.writeValueAsString(o));
+        idoc.addField("chranene_udaje", objectMapper.writeValueAsString(o));
       } catch (JsonProcessingException ex) {
         LOGGER.log(Level.SEVERE, null, ex);
       }

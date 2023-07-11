@@ -202,19 +202,13 @@ class ProjektChraneneUdaje {
   public String kulturni_pamatka_popis;
   
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    idoc.setField("sec_hlavni_katastr", hlavni_katastr.getValue());
+    SolrSearcher.addSecuredJSONField(idoc, this);
     
     SolrSearcher.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
     
     for (Vocab v: dalsi_katastr) {
       SolrSearcher.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
-      idoc.addField("sec_dalsi_katastr", v.getValue());
     }
-    
-    if (geom_wkt != null) {
-      idoc.setField("sec_geom_wkt", geom_wkt.getValue());
-    }
-    
 //    
     SolrSearcher.addSecuredFieldNonRepeat(idoc, "lokalizace", lokalizace, pristupnost);
     //idoc.setField("lokalizace", lokalizace);

@@ -16,6 +16,8 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -90,18 +92,24 @@ public interface FedoraModel {
    * @throws XMLStreamException
    * @throws IOException 
    */
-  public static <T> FedoraModel parseXml(String xml, Class<T> clazz) throws XMLStreamException, IOException{
-    XMLInputFactory f = XMLInputFactory.newFactory();
-    XMLStreamReader sr = f.createXMLStreamReader(new StringReader(xml));
-    JacksonXmlModule module = new JacksonXmlModule();
-    module.setDefaultUseWrapper(false);
-    XmlMapper xmlMapper = new XmlMapper(module);
-    xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-
-    sr.nextTag();
-    sr.nextTag();
-    return (FedoraModel) xmlMapper.readValue(sr, clazz);
+  public static <T> FedoraModel parseXml(String xml, Class<T> clazz) throws Exception{
+    try {
+      XMLInputFactory f = XMLInputFactory.newFactory();
+      XMLStreamReader sr = f.createXMLStreamReader(new StringReader(xml));
+      JacksonXmlModule module = new JacksonXmlModule();
+      module.setDefaultUseWrapper(false);
+      XmlMapper xmlMapper = new XmlMapper(module);
+      xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+      xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+      
+      sr.nextTag();
+      sr.nextTag();
+      return (FedoraModel) xmlMapper.readValue(sr, clazz);
+    } catch (XMLStreamException | IOException ex) {
+      Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, "Error parsing {0}", xml);
+      Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
+      throw new Exception(ex);
+    }
   }
   
   /**

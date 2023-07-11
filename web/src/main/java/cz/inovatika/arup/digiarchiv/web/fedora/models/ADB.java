@@ -1,17 +1,11 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -115,8 +109,8 @@ public class ADB implements FedoraModel {
     idoc.setField("searchable", true);
     
     SolrSearcher.addVocabField(idoc, "dokumentacni_jednotka", dokumentacni_jednotka);
-    SolrSearcher.addVocabField(idoc, "typ_sondy", typ_sondy);
-    SolrSearcher.addVocabField(idoc, "podnet", podnet);
+    SolrSearcher.addVocabField(idoc, "adb_typ_sondy", typ_sondy);
+    SolrSearcher.addVocabField(idoc, "adb_podnet", podnet);
     SolrSearcher.addVocabField(idoc, "autor_popisu", autor_popisu);
     SolrSearcher.addVocabField(idoc, "autor_revize", autor_revize);
   
@@ -162,14 +156,17 @@ public class ADB implements FedoraModel {
       SolrSearcher.addSecuredFieldNonRepeat(idoc, "cislo_popisne", cislo_popisne, pristupnost);
       SolrSearcher.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
       SolrSearcher.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
-      for (VyskovyBod v: vyskovy_bod) {
-        try {
-          ObjectMapper objectMapper = new ObjectMapper();
-          idoc.addField("sec_vyskovy_bod", objectMapper.writeValueAsString(v));
-        } catch (JsonProcessingException ex) {
-          Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      }
+      
+      SolrSearcher.addSecuredJSONField(idoc, this);
+      
+//      for (VyskovyBod v: vyskovy_bod) {
+//        try {
+//          ObjectMapper objectMapper = new ObjectMapper();
+//          idoc.addField("sec_vyskovy_bod", objectMapper.writeValueAsString(v));
+//        } catch (JsonProcessingException ex) {
+//          Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//      }
 
     }
   }
