@@ -1,7 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.Map.Entry;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
@@ -35,10 +35,10 @@ public class Lokalita {
   private LokalitaChraneneUdaje chranene_udaje;
 
   public void fillSolrFields(SolrInputDocument idoc) {
-    SolrSearcher.addVocabField(idoc, "typ_lokality", typ_lokality);
-    SolrSearcher.addVocabField(idoc, "druh", druh);
-    SolrSearcher.addVocabField(idoc, "zachovalost", zachovalost);
-    SolrSearcher.addVocabField(idoc, "jistota", jistota);
+    IndexUtils.addVocabField(idoc, "typ_lokality", typ_lokality);
+    IndexUtils.addVocabField(idoc, "druh", druh);
+    IndexUtils.addVocabField(idoc, "zachovalost", zachovalost);
+    IndexUtils.addVocabField(idoc, "jistota", jistota);
     
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -63,9 +63,9 @@ class LokalitaChraneneUdaje {
   public String poznamka;
   
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "nazev", nazev, pristupnost);
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "popis", popis, pristupnost);
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "nazev", nazev, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "popis", popis, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
   }
 
 }

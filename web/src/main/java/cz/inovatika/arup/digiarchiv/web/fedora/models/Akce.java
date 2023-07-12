@@ -1,7 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -94,12 +94,12 @@ public class Akce {
     SolrInputDocument akceDoc = dob.toSolrInputDocument(this);
     //akceDoc.setField("entity", "akce");
     //akceDoc.setField("pristupnost", pristupnost);
-    SolrSearcher.addVocabField(akceDoc, "projekt", projekt);
-    SolrSearcher.addVocabField(akceDoc, "hlavni_vedouci", hlavni_vedouci);
-    SolrSearcher.addVocabField(akceDoc, "organizace", organizace);
-    SolrSearcher.addVocabField(akceDoc, "specifikace_data", specifikace_data);
-    SolrSearcher.addVocabField(akceDoc, "hlavni_typ", hlavni_typ);
-    SolrSearcher.addVocabField(akceDoc, "vedlejsi_typ", vedlejsi_typ);
+    IndexUtils.addVocabField(akceDoc, "projekt", projekt);
+    IndexUtils.addVocabField(akceDoc, "hlavni_vedouci", hlavni_vedouci);
+    IndexUtils.addVocabField(akceDoc, "organizace", organizace);
+    IndexUtils.addVocabField(akceDoc, "specifikace_data", specifikace_data);
+    IndexUtils.addVocabField(akceDoc, "hlavni_typ", hlavni_typ);
+    IndexUtils.addVocabField(akceDoc, "vedlejsi_typ", vedlejsi_typ);
     
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(akceDoc, pristupnost);
@@ -123,8 +123,8 @@ class AkceChraneneUdaje {
   public String souhrn_upresneni;
   
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "lokalizace_okolnosti", lokalizace_okolnosti, pristupnost);
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "souhrn_upresneni", souhrn_upresneni, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalizace_okolnosti", lokalizace_okolnosti, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "souhrn_upresneni", souhrn_upresneni, pristupnost);
   }
 
 }

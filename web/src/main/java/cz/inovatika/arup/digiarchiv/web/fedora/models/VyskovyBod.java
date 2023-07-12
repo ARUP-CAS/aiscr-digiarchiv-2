@@ -12,6 +12,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public class VyskovyBod {
   
+//<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
+  @JacksonXmlProperty(localName = "ident_cely")
+  public String ident_cely;
+  
 //<xs:element name="typ" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ.ident_cely}" | "{typ.heslo}" -->
     @JacksonXmlProperty(localName = "typ")
     public String typ;

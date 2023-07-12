@@ -24,7 +24,13 @@ public class ADBSearcher implements EntitySearcher {
   
   @Override
   public void filter(JSONObject jo, String pristupnost, String org) {
-    
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+        doc.remove("chranene_udaje");
+      }
+    }
   }
   
   @Override
@@ -87,7 +93,7 @@ public class ADBSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*,vyskovy_bod:[json]"};
+    return new String[]{"*,vyskovy_bod:[json],chranene_udaje:[json]"};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

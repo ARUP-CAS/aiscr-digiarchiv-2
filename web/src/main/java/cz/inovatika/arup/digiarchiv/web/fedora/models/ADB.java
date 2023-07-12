@@ -3,7 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.solr.client.solrj.beans.Field;
@@ -108,17 +108,16 @@ public class ADB implements FedoraModel {
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
     idoc.setField("searchable", true);
     
-    SolrSearcher.addVocabField(idoc, "dokumentacni_jednotka", dokumentacni_jednotka);
-    SolrSearcher.addVocabField(idoc, "adb_typ_sondy", typ_sondy);
-    SolrSearcher.addVocabField(idoc, "adb_podnet", podnet);
-    SolrSearcher.addVocabField(idoc, "autor_popisu", autor_popisu);
-    SolrSearcher.addVocabField(idoc, "autor_revize", autor_revize);
+    IndexUtils.addVocabField(idoc, "dokumentacni_jednotka", dokumentacni_jednotka);
+    IndexUtils.addVocabField(idoc, "typ_sondy", typ_sondy);
+    IndexUtils.addVocabField(idoc, "podnet", podnet);
+    IndexUtils.addVocabField(idoc, "autor_popisu", autor_popisu);
+    IndexUtils.addVocabField(idoc, "autor_revize", autor_revize);
   
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
     }
   }
-  
   
 }
 
@@ -151,13 +150,13 @@ public class ADB implements FedoraModel {
 
     
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni_sondy", uzivatelske_oznaceni_sondy, pristupnost);
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "trat", trat, pristupnost);
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "cislo_popisne", cislo_popisne, pristupnost);
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni_sondy", uzivatelske_oznaceni_sondy, pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "trat", trat, pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "cislo_popisne", cislo_popisne, pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
       
-      SolrSearcher.addSecuredJSONField(idoc, this);
+      IndexUtils.addSecuredJSONField(idoc, this);
       
 //      for (VyskovyBod v: vyskovy_bod) {
 //        try {

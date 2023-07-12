@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -161,16 +161,16 @@ public class ExtZdroj implements FedoraModel {
   public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("searchable", true);
 
-    SolrSearcher.addVocabField(idoc, "typ", typ);
+    IndexUtils.addVocabField(idoc, "typ", typ);
     for (Vocab v : autor) {
-      SolrSearcher.addVocabField(idoc, "autor", v);
+      IndexUtils.addVocabField(idoc, "autor", v);
     }
     for (Vocab v : editor) {
-      SolrSearcher.addVocabField(idoc, "editor", v);
+      IndexUtils.addVocabField(idoc, "editor", v);
     }
-    SolrSearcher.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
-    SolrSearcher.addVocabField(idoc, "organizace", organizace);
-    SolrSearcher.addVocabField(idoc, "typ", typ);
+    IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
+    IndexUtils.addVocabField(idoc, "organizace", organizace);
+    IndexUtils.addVocabField(idoc, "typ", typ);
     //idoc.addField("ext_odkaz", objectMapper.writeValueAsString(ext_odkaz));
         try {
           ObjectMapper objectMapper = new ObjectMapper();

@@ -7,7 +7,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -51,8 +51,8 @@ public class DokumentacniJednotka {
   public void fillSolrFields(SolrInputDocument idoc) {
     try {
       ObjectMapper objectMapper = new ObjectMapper();
-      // idoc.addField("dokumentacni_jednotka", objectMapper.writeValueAsString(this));
-      SolrSearcher.addFieldNonRepeat(idoc, "dok_jednotka", objectMapper.writeValueAsString(this));
+      idoc.addField("dok_jednotka", objectMapper.writeValueAsString(this));
+      // IndexUtils.addFieldNonRepeat(idoc, "dok_jednotka", objectMapper.writeValueAsString(this));
     } catch (JsonProcessingException ex) {
       Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
     }

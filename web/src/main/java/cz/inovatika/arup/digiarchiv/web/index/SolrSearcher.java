@@ -659,29 +659,6 @@ public class SolrSearcher {
       return false;
     }
   }
-  
-  public static void addVocabField(SolrInputDocument idoc, String field, Vocab v) {
-    if(v != null) {
-      idoc.setField(field, v.getValue());
-    }
-  }
-  
-  public static void addSecuredVocabField(SolrInputDocument idoc, String field, Vocab v, String pristupnost) {
-    if(v != null) {
-      addSecuredFieldNonRepeat(idoc, field, v.getValue(), pristupnost);
-    }
-  }
-  
-  public static void addSecuredJSONField(SolrInputDocument idoc, Object o) {
-    if (o != null) {
-      try {
-        ObjectMapper objectMapper = new ObjectMapper();
-        idoc.addField("chranene_udaje", objectMapper.writeValueAsString(o));
-      } catch (JsonProcessingException ex) {
-        LOGGER.log(Level.SEVERE, null, ex);
-      }
-    }
-  }
 
 //  public static void cleanRepeated(SolrInputDocument idoc) {
 //    for (String field : idoc.getFieldNames()) {

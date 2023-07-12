@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -130,11 +130,11 @@ public class Projekt implements FedoraModel {
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
     idoc.setField("searchable", true);
     
-    SolrSearcher.addVocabField(idoc, "okres", okres);
+    IndexUtils.addVocabField(idoc, "okres", okres);
     idoc.setField("typ_projektu", typ_projektu.getId());
-    SolrSearcher.addVocabField(idoc, "vedouci_projektu", vedouci_projektu);
-    SolrSearcher.addVocabField(idoc, "organizace", organizace);
-    SolrSearcher.addVocabField(idoc, "kulturni_pamatka", kulturni_pamatka);
+    IndexUtils.addVocabField(idoc, "vedouci_projektu", vedouci_projektu);
+    IndexUtils.addVocabField(idoc, "organizace", organizace);
+    IndexUtils.addVocabField(idoc, "kulturni_pamatka", kulturni_pamatka);
     
     
     for(Vocab v : archeologicky_zaznam) {
@@ -202,21 +202,21 @@ class ProjektChraneneUdaje {
   public String kulturni_pamatka_popis;
   
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    SolrSearcher.addSecuredJSONField(idoc, this);
+    IndexUtils.addSecuredJSONField(idoc, this);
     
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
     
     for (Vocab v: dalsi_katastr) {
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
     }
 //    
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "lokalizace", lokalizace, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalizace", lokalizace, pristupnost);
     //idoc.setField("lokalizace", lokalizace);
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
     //idoc.setField("parcelni_cislo", parcelni_cislo);
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
     //idoc.setField("kulturni_pamatka_cislo", kulturni_pamatka_cislo);
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
     //idoc.setField("kulturni_pamatka_popis", kulturni_pamatka_popis);
   }
 }

@@ -2,8 +2,9 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.Date;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
@@ -92,8 +93,8 @@ public class PIAN implements FedoraModel {
     idoc.setField("searchable", !this.ident_cely.startsWith("N"));
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
 
-    SolrSearcher.addVocabField(idoc, "pian_typ", typ);
-    SolrSearcher.addVocabField(idoc, "pian_presnost", presnost);
+    IndexUtils.addVocabField(idoc, "typ", typ);
+    IndexUtils.addVocabField(idoc, "presnost", presnost);
 
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -125,12 +126,12 @@ class PIANChraneneUdaje {
   public WKT geom_sjtsk_wkt;
 
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
-    SolrSearcher.addSecuredJSONField(idoc, this);
-//    SolrSearcher.addSecuredJSONField(idoc, "geom_gml", geom_gml);
-//    SolrSearcher.addSecuredJSONField(idoc, "geom_wkt", geom_wkt);
-//    SolrSearcher.addSecuredJSONField(idoc, "geom_sjtsk_gml", geom_sjtsk_gml);
-//    SolrSearcher.addSecuredJSONField(idoc, "geom_sjtsk_wkt", geom_sjtsk_wkt);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
+    IndexUtils.addSecuredJSONField(idoc, this);
+//    IndexUtils.addSecuredJSONField(idoc, "geom_gml", geom_gml);
+//    IndexUtils.addSecuredJSONField(idoc, "geom_wkt", geom_wkt);
+//    IndexUtils.addSecuredJSONField(idoc, "geom_sjtsk_gml", geom_sjtsk_gml);
+//    IndexUtils.addSecuredJSONField(idoc, "geom_sjtsk_wkt", geom_sjtsk_wkt);
 
     if (geom_wkt != null) {
 
@@ -139,10 +140,10 @@ class PIANChraneneUdaje {
       try {
         Geometry geometry = reader.read(wktStr);
         Point p = geometry.getCentroid();
-        SolrSearcher.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
-        SolrSearcher.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
-        SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
-        SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
       } catch (Exception e) {
         throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
       }

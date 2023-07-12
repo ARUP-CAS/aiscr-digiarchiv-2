@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -159,13 +159,13 @@ public class SamostatnyNalez implements FedoraModel {
     boolean searchable = stav == 4;
     idoc.setField("searchable", searchable);
     
-    SolrSearcher.addVocabField(idoc, "okres", okres);
-    SolrSearcher.addVocabField(idoc, "projekt", projekt);
-    SolrSearcher.addVocabField(idoc, "okolnosti", okolnosti);
-    SolrSearcher.addVocabField(idoc, "obdobi", obdobi);
-    SolrSearcher.addVocabField(idoc, "druh_nalezu", druh_nalezu);
-    SolrSearcher.addVocabField(idoc, "specifikace", specifikace);
-    SolrSearcher.addVocabField(idoc, "nalezce", nalezce);
+    IndexUtils.addVocabField(idoc, "okres", okres);
+    IndexUtils.addVocabField(idoc, "projekt", projekt);
+    IndexUtils.addVocabField(idoc, "okolnosti", okolnosti);
+    IndexUtils.addVocabField(idoc, "obdobi", obdobi);
+    IndexUtils.addVocabField(idoc, "druh_nalezu", druh_nalezu);
+    IndexUtils.addVocabField(idoc, "specifikace", specifikace);
+    IndexUtils.addVocabField(idoc, "nalezce", nalezce);
   
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -204,14 +204,14 @@ public class SamostatnyNalez implements FedoraModel {
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
       
-      SolrSearcher.addSecuredJSONField(idoc, this);
+      IndexUtils.addSecuredJSONField(idoc, this);
       
       if (katastr != null) {
-        SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
       }
 
       if (lokalizace != null) {
-        SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_lokalizace", lokalizace, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_lokalizace", lokalizace, pristupnost);
       }
 
     }

@@ -12,6 +12,7 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.ADB;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.ArcheologickyZaznam;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Let;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
 import java.io.IOException;
@@ -121,6 +122,8 @@ public interface FedoraModel {
     switch (model) {
       case "adb":
         return ADB.class; 
+      case "let":
+        return Let.class; 
       case "ext_zdroj":
         return ExtZdroj.class;
       case "pian":

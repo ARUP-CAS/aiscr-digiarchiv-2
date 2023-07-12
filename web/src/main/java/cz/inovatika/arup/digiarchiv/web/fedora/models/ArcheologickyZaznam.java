@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -108,10 +108,10 @@ public class ArcheologickyZaznam implements FedoraModel {
     }
     idoc.setField("searchable", searchable);
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-    SolrSearcher.addVocabField(idoc, "okres", okres);
+    IndexUtils.addVocabField(idoc, "okres", okres);
     
     for (Vocab v : dokument) {
-      SolrSearcher.addVocabField(idoc, "dokument", v);
+      IndexUtils.addVocabField(idoc, "dokument", v);
     }
     
     for (DokumentacniJednotka dj : dokumentacni_jednotka) {
@@ -148,13 +148,13 @@ class AZChraneneUdaje {
   public String uzivatelske_oznaceni;
 
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    SolrSearcher.addSecuredJSONField(idoc, this);
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
+    IndexUtils.addSecuredJSONField(idoc, this);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
 
     for (Vocab v : dalsi_katastr) {
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
     }
-    SolrSearcher.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
 
   }
 }
