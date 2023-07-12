@@ -1,13 +1,20 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONObject;
 
 /**
  *
@@ -76,7 +83,6 @@ public class ADB implements FedoraModel {
   @JacksonXmlProperty(localName = "chranene_udaje")
   private ADBChraneneUdaje chranene_udaje;
 
-      
   @Override
   public boolean isOAI() {
     return true;
@@ -107,57 +113,79 @@ public class ADB implements FedoraModel {
   public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
     idoc.setField("searchable", true);
-    
+
     IndexUtils.addVocabField(idoc, "dokumentacni_jednotka", dokumentacni_jednotka);
     IndexUtils.addVocabField(idoc, "typ_sondy", typ_sondy);
     IndexUtils.addVocabField(idoc, "podnet", podnet);
     IndexUtils.addVocabField(idoc, "autor_popisu", autor_popisu);
     IndexUtils.addVocabField(idoc, "autor_revize", autor_revize);
-  
+
     if (chranene_udaje != null) {
-      chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+      chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"), ident_cely);
     }
   }
-  
+
 }
 
+class ADBChraneneUdaje {
 
-  class ADBChraneneUdaje {
-    
 //<xs:element name="uzivatelske_oznaceni_sondy" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{uzivatelske_oznaceni_sondy}" -->
-    @JacksonXmlProperty(localName = "uzivatelske_oznaceni_sondy")
-    public String uzivatelske_oznaceni_sondy;
+  @JacksonXmlProperty(localName = "uzivatelske_oznaceni_sondy")
+  public String uzivatelske_oznaceni_sondy;
 
 //<xs:element name="trat" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{trat}" -->
-    @JacksonXmlProperty(localName = "trat")
-    public String trat;
+  @JacksonXmlProperty(localName = "trat")
+  public String trat;
 
 //<xs:element name="cislo_popisne" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{cislo_popisne}" -->
-    @JacksonXmlProperty(localName = "cislo_popisne")
-    public String cislo_popisne;
+  @JacksonXmlProperty(localName = "cislo_popisne")
+  public String cislo_popisne;
 
 //<xs:element name="parcelni_cislo" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{parcelni_cislo}" -->
-    @JacksonXmlProperty(localName = "parcelni_cislo")
-    public String parcelni_cislo;
+  @JacksonXmlProperty(localName = "parcelni_cislo")
+  public String parcelni_cislo;
 
 //<xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
-    @JacksonXmlProperty(localName = "poznamka")
-    public String poznamka;
+  @JacksonXmlProperty(localName = "poznamka")
+  public String poznamka;
 
 //<xs:element name="vyskovy_bod" minOccurs="0" maxOccurs="unbounded" type="amcr:vyskovy_bodType"/> <!-- "{vyskove_body}" -->
-    @JacksonXmlProperty(localName = "vyskovy_bod")
-    public List<VyskovyBod> vyskovy_bod = new ArrayList();
+  @JacksonXmlProperty(localName = "vyskovy_bod")
+  public List<VyskovyBod> vyskovy_bod = new ArrayList();
 
-    
-    public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-      IndexUtils.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni_sondy", uzivatelske_oznaceni_sondy, pristupnost);
-      IndexUtils.addSecuredFieldNonRepeat(idoc, "trat", trat, pristupnost);
-      IndexUtils.addSecuredFieldNonRepeat(idoc, "cislo_popisne", cislo_popisne, pristupnost);
-      IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
-      IndexUtils.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
-      
-      IndexUtils.addSecuredJSONField(idoc, this);
-      
+  public void fillSolrFields(SolrInputDocument idoc, String pristupnost, String ident_cely) {
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni_sondy", uzivatelske_oznaceni_sondy, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "trat", trat, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "cislo_popisne", cislo_popisne, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
+
+    IndexUtils.addSecuredJSONField(idoc, this);
+
+    // VyskovyBod as solr document
+    List<SolrInputDocument> idocs = new ArrayList<>();
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      for (VyskovyBod vb : vyskovy_bod) {
+        SolrInputDocument vbdoc = new SolrInputDocument();
+        vbdoc.setField("entity", "vyskovy_bod");
+        vbdoc.setField("searchable", true);
+        vbdoc.setField("ident_cely", vb.ident_cely);
+        vbdoc.setField("parent", ident_cely);
+        vbdoc.setField("typ", vb.typ);
+        vbdoc.setField("geom_gml", objectMapper.writeValueAsString(vb.geom_gml));
+        vbdoc.setField("geom_wkt", objectMapper.writeValueAsString(vb.geom_wkt));
+
+        idocs.add(vbdoc);
+        // addAsEntity(client, vbdoc, "vyskovy_bod");
+      }
+      if (!idocs.isEmpty()) {
+        IndexUtils.getClient().add("entities", idocs, 10);
+      }
+    } catch (SolrServerException | IOException ex) {
+      Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
 //      for (VyskovyBod v: vyskovy_bod) {
 //        try {
 //          ObjectMapper objectMapper = new ObjectMapper();
@@ -166,6 +194,5 @@ public class ADB implements FedoraModel {
 //          Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //      }
-
-    }
   }
+}

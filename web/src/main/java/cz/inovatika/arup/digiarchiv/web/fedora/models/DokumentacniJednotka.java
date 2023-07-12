@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -20,8 +21,12 @@ import org.apache.solr.common.SolrInputDocument;
  */
 public class DokumentacniJednotka {
 
+  @Field
+  public String entity = "dok_jednotka";
+
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
   @JacksonXmlProperty(localName = "ident_cely")
+  @Field
   public String ident_cely;
 
 //<xs:element name="pian" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{pian.ident_cely}" | "{pian.ident_cely}" -->
@@ -34,10 +39,12 @@ public class DokumentacniJednotka {
 
 //<xs:element name="negativni_jednotka" minOccurs="1" maxOccurs="1" type="xs:boolean"/> <!-- "{negativni_jednotka}" -->
   @JacksonXmlProperty(localName = "negativni_jednotka")
+  @Field
   public boolean negativni_jednotka;
 
 //<xs:element name="nazev" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{nazev}" -->
   @JacksonXmlProperty(localName = "nazev")
+  @Field
   public String nazev;
 
 //<xs:element name="adb" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{Adb.ident_cely}" | "{Adb.ident_cely}" -->
@@ -49,6 +56,9 @@ public class DokumentacniJednotka {
   public List<Komponenta> komponenta = new ArrayList();
 
   public void fillSolrFields(SolrInputDocument idoc) {
+    
+    // IndexUtils.addVocabField(idoc, "typ", typ);
+    
     try {
       ObjectMapper objectMapper = new ObjectMapper();
       idoc.addField("dok_jednotka", objectMapper.writeValueAsString(this));
