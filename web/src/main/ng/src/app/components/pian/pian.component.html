@@ -10,9 +10,9 @@
           )</ng-container>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <div *ngIf="result.zm10">
+    <div *ngIf="result.chranene_udaje?.zm10">
       <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
-      <app-inline-filter [field]="'f_pian_zm10'" [value]="result.zm10"></app-inline-filter>
+      <app-inline-filter [field]="'f_pian_zm10'" [value]="result.chranene_udaje.zm10"></app-inline-filter>
     </div>
     <div *ngIf="result.centroid_n">
       <label class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ result.centroid_n }} : {{ result.centroid_e }}
@@ -38,9 +38,9 @@
             <app-inline-filter [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
-          <ng-container *ngIf="result.zm10">
+          <ng-container *ngIf="result.chranene_udaje?.zm10">
             <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'zm10'" [value]="result.zm10" [heslar]="'zm10'"></app-inline-filter>
+            <app-inline-filter [field]="'zm10'" [value]="result.chranene_udaje.zm10" [heslar]="'zm10'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
         </div>
@@ -100,13 +100,19 @@
                   <th class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</th>
                   <td><ng-container *ngIf="result.centroid_n">{{ result.centroid_n }}</ng-container><ng-container *ngIf="result.centroid_e">&#160;:&#160;{{ result.centroid_e }}</ng-container></td>
                 </tr>
-                <tr *ngIf="result.geom_gml">
-                  <th class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</th>
-                  <td>{{ result.geom_gml }}</td>
+                <tr *ngIf="result.geom_system">
+                  <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                  <td>{{ result.geom_system }}</td>
                 </tr>
-                <tr *ngIf="result.geom_wkt">
+                <tr *ngIf="result.chranene_udaje?.geom_gml">
+                  <th class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</th>
+                  <td>{{ result.chranene_udaje.geom_gml | json }} 
+                    <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_gml"><br/> {{ result.chranene_udaje.geom_sjtsk_gml | json }}</ng-container> </td>
+                </tr>
+                <tr *ngIf="result.chranene_udaje?.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Geometrie WKT' | translate }}:</th>
-                  <td>{{ result.geom_wkt }}</td>
+                  <td>{{ result.chranene_udaje.geom_wkt | json }}
+                    <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_wkt"><br/> {{ result.chranene_udaje.geom_sjtsk_wkt | json }}</ng-container> </td>
                 </tr>
               </tbody>
             </table>

@@ -768,6 +768,10 @@
        <str name="facet.limit">10000</str>
        <str name="stats">true</str>
 	   
+       
+     </lst>
+     <lst name="appends">
+       
        <str name="stats.field">datum_zverejneni</str>
        <str name="stats.field">extra_data_datum_vzniku</str>
        <str name="stats.field">let_datum</str>
@@ -776,11 +780,7 @@
        <str name="stats.field">rok_vydani</str>
        <str name="stats.field">datum_provedeni_od</str>
        <str name="stats.field">datum_provedeni_do</str>
-       <str name="stats.field">lat</str>
-       <str name="stats.field">lng</str>
        
-     </lst>
-     <lst name="appends">
        <str name="fq">searchable:true</str>
 	   
        <str name="facet.field">{!ex=entityF}entity</str>
@@ -790,6 +790,10 @@
        <str name="facet.pivot">{!ex=f_typ_dokumentuF}kategorie_dokumentu,f_typ_dokumentu</str>
 	   -->
 	   
+       <str name="facet.field">f_areal</str>
+       <str name="facet.field">f_obdobi</str>
+       <str name="facet.field">f_aktivita</str>
+       
        <str name="facet.field">kategorie_dokumentu</str>
        <str name="facet.field">f_typ_dokumentu</str>
 	   

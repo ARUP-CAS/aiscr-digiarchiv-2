@@ -11,17 +11,17 @@
       <label class="app-label">{{ 'card.desc.Typ sondy' | translate }}:</label>&#160;
       <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result.typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
     </div>
-    <div *ngIf="result.uzivatelske_oznaceni_sondy">
-      <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result.uzivatelske_oznaceni_sondy }}
+    <div *ngIf="result.chranene_udaje?.uzivatelske_oznaceni_sondy">
+      <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result.chranene_udaje.uzivatelske_oznaceni_sondy }}
     </div>
-    <div *ngIf="result.trat">
-      <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result.trat }}
+    <div *ngIf="result.chranene_udaje?.trat">
+      <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result.chranene_udaje.trat }}
     </div>
-    <div *ngIf="result.cislo_popisne">
-      <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result.cislo_popisne }}
+    <div *ngIf="result.chranene_udaje?.cislo_popisne">
+      <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result.chranene_udaje.cislo_popisne }}
     </div>
-    <div *ngIf="result.parcelni_cislo">
-      <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.parcelni_cislo }}
+    <div *ngIf="result.chranene_udaje?.parcelni_cislo">
+      <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.chranene_udaje.parcelni_cislo }}
     </div>
     <div *ngIf="result.podnet">
       <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;
@@ -42,10 +42,10 @@
     <div *ngIf="result.rok_revize">
       <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result.rok_revize }}
     </div>
-    <div *ngIf="result.poznamka">
-      <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.poznamka }}
+    <div *ngIf="result.chranene_udaje?.poznamka">
+      <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.chranene_udaje.poznamka }}
     </div>
-    <mat-accordion *ngIf="result.vyskovy_bod" multi="true">
+    <mat-accordion *ngIf="result.chranene_udaje?.vyskovy_bod && result.chranene_udaje?.vyskovy_bod.length > 0" multi="true">
       <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
         <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
           <mat-panel-title>
@@ -54,9 +54,12 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul class="app-list-inside">
-          <li *ngFor="let vb of result.vyskovy_bod">
+          <li *ngFor="let vb of result.chranene_udaje.vyskovy_bod">
             <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
-            (<app-inline-filter [field]="'typ'" [value]="vb.typ"></app-inline-filter>) – {{vb.niveleta}} m n. m. ({{vb.easting}} : {{vb.northing}})
+            (<app-inline-filter [field]="'typ'" [value]="vb.typ"></app-inline-filter>) – 
+            <!-- {{vb.niveleta}} m n. m. ({{vb.easting}} : {{vb.northing}}) -->
+            <div *ngIf="vb.geom_gml"><label class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</label>{{ vb.geom_gml | json }}</div>
+            <div *ngIf="vb.geom_wkt"><label class="app-label">{{ 'card.desc.Geometrie WKT' | translate }}:</label>{{ vb.geom_wkt | json }}</div>
           </li>
         </ul>
       </mat-expansion-panel>

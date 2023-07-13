@@ -35,8 +35,14 @@
    <field name="loc_rpt_B" type="location_rpt" indexed="true" stored="true" multiValued="true" />
    <field name="loc_rpt_C" type="location_rpt" indexed="true" stored="true" multiValued="true" />
    <field name="loc_rpt_D" type="location_rpt" indexed="true" stored="true" multiValued="true" />
-   <field name="lng" type="pfloat" indexed="true" stored="true" multiValued="true" />
-   <field name="lat" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lng_A" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lat_A" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lng_B" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lat_B" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lng_C" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lat_C" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lng_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
+   <field name="lat_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="pian_id" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="pian_ident_cely" type="string" indexed="true" stored="true" multiValued="true" /> 
    
@@ -103,7 +109,7 @@
    <field name="datum_provedeni_od" type="pdate" indexed="true" stored="true" />
    <field name="datum_provedeni_do" type="pdate" indexed="true" stored="true" />
    
-   <field name="dok_jednotka" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="dokumentacni_jednotka" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
    <field name="adb" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="ext_zdroj" type="string" indexed="false" stored="true" multiValued="true" /> 
@@ -157,7 +163,7 @@
    
    
    <!-- Dynamic fields for multivalued children -->
-   <dynamicField name="dok_jednotka_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
+   <dynamicField name="dokumentacni_jednotka_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    <dynamicField name="komponenta_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    <dynamicField name="extra_data_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    <dynamicField name="odkaz_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
@@ -281,11 +287,7 @@
    <field name="f_typ_projektu" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_kulturni_pamatka" type="string" indexed="true" stored="true" multiValued="true" />
    
-   <field name="f_dok_jednotka_typ" type="string" indexed="false" stored="false" multiValued="true" />
-   <field name="f_dok_jednotka_typ_A" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="f_dok_jednotka_typ_B" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="f_dok_jednotka_typ_C" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="f_dok_jednotka_typ_D" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_dokumentacni_jednotka_typ" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_nalezove_okolnosti" type="string" indexed="true" stored="true" multiValued="true" />
 
    
@@ -375,7 +377,7 @@
    
    
    <!-- secured fields -->
-   <field name="chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="true"/>
+   <field name="chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false"/>
    
    <!-- For all other fields -->
    <dynamicField name="*" type="lowercase_cs" multiValued="false"/>
@@ -394,10 +396,8 @@
 <copyField source="dalsi_katastry" dest="f_katastr" />
 
 <copyField source="obdobi" dest="f_obdobi" />
-<copyField source="*_obdobi" dest="f_obdobi" />
 
 <copyField source="areal" dest="f_areal" />
-<copyField source="*_areal" dest="f_areal" />
 
 <copyField source="*typ_nalezu" dest="f_typ_nalezu" />
 
@@ -410,6 +410,10 @@
 <copyField source="okres" dest="f_okres" />
 <copyField source="*_okres" dest="f_okres" />
 -->
+
+<copyField source="*_aktivita" dest="f_aktivita" />
+<copyField source="*_obdobi" dest="f_obdobi" />
+<copyField source="*_areal" dest="f_areal" />
 
 <copyField source="okres" dest="f_okres" />
 <copyField source="*_okres" dest="f_okres" />
@@ -480,11 +484,11 @@
 <copyField source="druh" dest="f_druh_lokality" />
 -->
 
-<copyField source="adb_typ_sondy" dest="f_adb_typ_sondy" />
-<copyField source="adb_podnet" dest="f_adb_podnet" />
-<copyField source="pian_typ" dest="f_pian_typ" />
-<copyField source="pian_presnost" dest="f_pian_presnost" />
-<copyField source="pian_zm10" dest="f_pian_zm10" />
+<copyField source="*_adb_typ_sondy" dest="f_adb_typ_sondy" />
+<copyField source="*_adb_podnet" dest="f_adb_podnet" />
+<copyField source="*_pian_typ" dest="f_pian_typ" />
+<copyField source="*_pian_presnost" dest="f_pian_presnost" />
+<copyField source="*_pian_zm10" dest="f_pian_zm10" />
 
 <!--
 <copyField source="popis" dest="f_popis" />

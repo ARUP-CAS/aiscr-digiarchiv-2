@@ -127,7 +127,7 @@ class PIANChraneneUdaje {
 
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
     IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
-    IndexUtils.addSecuredJSONField(idoc, this);
+    IndexUtils.setSecuredJSONField(idoc, this);
 //    IndexUtils.addSecuredJSONField(idoc, "geom_gml", geom_gml);
 //    IndexUtils.addSecuredJSONField(idoc, "geom_wkt", geom_wkt);
 //    IndexUtils.addSecuredJSONField(idoc, "geom_sjtsk_gml", geom_sjtsk_gml);
@@ -142,6 +142,8 @@ class PIANChraneneUdaje {
         Point p = geometry.getCentroid();
         IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
       } catch (Exception e) {

@@ -140,7 +140,11 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <table>
-              <tbody>
+              <tbody>                
+                <tr *ngIf="result.ucel_letu">
+                  <th class="app-label">{{ 'card.desc.Účel letu' | translate }}:</th>
+                  <td>{{ result.ucel_letu }}</td>
+                </tr>
                 <tr *ngIf="result.pilot">
                   <th class="app-label">{{ 'card.desc.Pilot' | translate }}:</th>
                   <td>{{ result.pilot }}</td>

@@ -23,4 +23,6 @@ export class AdbComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  
+
 }

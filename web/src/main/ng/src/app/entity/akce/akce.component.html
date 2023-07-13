@@ -14,7 +14,7 @@
         <ng-container *ngIf="hasRights">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
         </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
-        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.vedouci_akce"></app-inline-filter><span class="app-pipe"></span>
+        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.hlavni_vedouci"></app-inline-filter><span class="app-pipe"></span>
         <!-- <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
         <span class="app-pipe"></span> -->
       </div>

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
@@ -123,8 +122,9 @@ class AkceChraneneUdaje {
   public String souhrn_upresneni;
   
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalizace_okolnosti", lokalizace_okolnosti, pristupnost);
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "souhrn_upresneni", souhrn_upresneni, pristupnost);
+    IndexUtils.setSecuredJSONField(idoc, this);
+    IndexUtils.setSecuredField(idoc, "lokalizace_okolnosti", lokalizace_okolnosti, pristupnost);
+    IndexUtils.setSecuredField(idoc, "souhrn_upresneni", souhrn_upresneni, pristupnost);
   }
 
 }

@@ -1,17 +1,11 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -204,7 +198,7 @@ public class SamostatnyNalez implements FedoraModel {
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
       
-      IndexUtils.addSecuredJSONField(idoc, this);
+      IndexUtils.setSecuredJSONField(idoc, this);
       
       if (katastr != null) {
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);

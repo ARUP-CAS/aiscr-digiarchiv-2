@@ -202,6 +202,7 @@ public class FedoraHarvester {
     JSONObject json = new JSONArray(FedoraUtils.request("model/" + model + "/member")).getJSONObject(0);
     if (json.has(CONTAINS)) {
       JSONArray records = json.getJSONArray(CONTAINS);
+      
       for (int i = 0; i < records.length(); i++) {
         String id = records.getJSONObject(i).getString("@id");
         id = id.substring(id.lastIndexOf("/") + 1);
@@ -217,6 +218,7 @@ public class FedoraHarvester {
           idocsEntities.clear();
           idocsOAI.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
+          return; 
         }
         if (idocsHeslar.size() > batchSize) {
           solr.add("heslar", idocsHeslar);

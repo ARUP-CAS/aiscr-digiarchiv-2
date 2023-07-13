@@ -24,7 +24,7 @@ public class AkceSearcher implements EntitySearcher {
   final String ENTITY = "akce";
 
   private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "child_dokument",
-    "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "organizace", "vedouci_akce", "okres", "datestamp"});
+    "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "organizace", "hlavni_vedouci", "okres", "datestamp"});
 
   @Override
   public void filter(JSONObject jo, String pristupnost, String org) {
@@ -45,7 +45,7 @@ public class AkceSearcher implements EntitySearcher {
 
   @Override
   public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,entity,pristupnost,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
+    return new String[]{"ident_cely,entity,pristupnost,okres,hlavni_vedouci,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
       "katastr:f_katastr_" + pristupnost,
       "lokalizace:f_lokalizace_" + pristupnost,
       "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
@@ -98,7 +98,7 @@ public class AkceSearcher implements EntitySearcher {
 
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"ident_cely", "katastr", "f_katastr:katastr", "okres", "f_okres:okres", "vedouci_akce", "loc", "entity", "datestamp",
+    return new String[]{"ident_cely", "katastr", "f_katastr:katastr", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
       "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost",
       "organizace", "f_organizace:organizace", "vazba_projekt", "child_dokument",
       "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
@@ -123,7 +123,7 @@ public class AkceSearcher implements EntitySearcher {
     }
 
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-      query.setFields("ident_cely,entity,vedouci_akce,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres,child_dokument,vazba_projekt");
+      query.setFields("ident_cely,entity,hlavni_vedouci,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres,child_dokument,vazba_projekt");
     } else {
 //      query.setFields("ident_cely","katastr","f_katastr:katastr","okres","f_okres:okres","vedouci_akce", "loc","entity","datestamp",
 //      "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,

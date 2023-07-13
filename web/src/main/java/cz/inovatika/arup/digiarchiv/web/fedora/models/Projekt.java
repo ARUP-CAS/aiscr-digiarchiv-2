@@ -202,7 +202,7 @@ class ProjektChraneneUdaje {
   public String kulturni_pamatka_popis;
   
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    IndexUtils.addSecuredJSONField(idoc, this);
+    IndexUtils.setSecuredJSONField(idoc, this);
     
     IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
     

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -22,7 +23,10 @@ import org.apache.solr.common.SolrInputDocument;
 public class DokumentacniJednotka {
 
   @Field
-  public String entity = "dok_jednotka";
+  public String entity = "dokumentacni_jednotka";
+
+  @Field
+  public boolean searchable = true;
 
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
   @JacksonXmlProperty(localName = "ident_cely")
@@ -30,7 +34,7 @@ public class DokumentacniJednotka {
   public String ident_cely;
 
 //<xs:element name="pian" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{pian.ident_cely}" | "{pian.ident_cely}" -->
-  @JacksonXmlProperty(localName = "pian")
+  @JacksonXmlProperty(localName = "pian") 
   public Vocab pian;
 
 //<xs:element name="typ" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ.ident_cely}" | "{typ.heslo}" -->
@@ -54,6 +58,25 @@ public class DokumentacniJednotka {
 //<xs:element name="komponenta" minOccurs="0" maxOccurs="unbounded" type="amcr:komponentaType"/> <!-- "{komponenty.komponenty}" -->
   @JacksonXmlProperty(localName = "komponenta")
   public List<Komponenta> komponenta = new ArrayList();
+  
+  public SolrInputDocument createSolrDoc() {
+    
+    DocumentObjectBinder dob = new DocumentObjectBinder();
+    SolrInputDocument idoc = dob.toSolrInputDocument(this);
+    //akceDoc.setField("entity", "akce");
+    //akceDoc.setField("pristupnost", pristupnost);
+    IndexUtils.addVocabField(idoc, "pian", pian);
+    IndexUtils.addVocabField(idoc, "typ", typ);
+    IndexUtils.addVocabField(idoc, "adb", adb);
+    
+    for (Komponenta k : komponenta) {
+      IndexUtils.addJSONField(idoc, "komponenta", komponenta);
+      k.fillSolrFields(idoc);
+    }
+    
+    return idoc;
+    
+  }
 
   public void fillSolrFields(SolrInputDocument idoc) {
     

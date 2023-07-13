@@ -172,6 +172,10 @@ public class SolrSearcher {
       }
     }
     query.set("facet", "true");
+    
+    query.add("stats.field", "{!key=lat}lat_"+pristupnost);
+    query.add("stats.field", "{!key=lng}lng_"+pristupnost);
+            
     //LOGGER.log(Level.INFO, "query: {0}", query );
 
   }
@@ -486,6 +490,9 @@ public class SolrSearcher {
   }
 
   public static void addFavorites(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+    if (!jo.has("response")) {
+      return;
+    }
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);

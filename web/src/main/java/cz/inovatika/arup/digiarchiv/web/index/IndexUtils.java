@@ -9,7 +9,6 @@ import static cz.inovatika.arup.digiarchiv.web.index.SolrSearcher.getSufixesByLe
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -21,9 +20,9 @@ public class IndexUtils {
   
   private static final Logger LOGGER = Logger.getLogger(IndexUtils.class.getName());
   
-  private static SolrClient _solr;
+  private static Http2SolrClient _solr;
   
-  public synchronized static SolrClient getClient() {
+  public synchronized static Http2SolrClient getClient() {
     try {
       if (_solr == null) {
         _solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
@@ -33,6 +32,12 @@ public class IndexUtils {
     }
     return _solr;
   }
+  
+  public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
+    if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
+      idoc.addField(field, value);
+    }
+  }
 
   public static void addSecuredFieldNonRepeat(SolrInputDocument idoc, String field, Object value, String level) {
     List<String> prSufix = getSufixesByLevel(level);
@@ -41,6 +46,14 @@ public class IndexUtils {
       if (idoc.getFieldValues(f) == null || !idoc.getFieldValues(f).contains(value)) {
         idoc.addField(f, value);
       }
+    }
+  }
+
+  public static void setSecuredField(SolrInputDocument idoc, String field, Object value, String level) {
+    List<String> prSufix = getSufixesByLevel(level);
+    for (String sufix : prSufix) {
+      String f = field + "_" + sufix;
+      idoc.setField(f, value);
     }
   }
 
@@ -65,14 +78,36 @@ public class IndexUtils {
     }
   }
   
-  public static void addSecuredJSONField(SolrInputDocument idoc, Object o) {
+  public static void addJSONField(SolrInputDocument idoc, String field, Object o) {
     if (o != null) {
       try {
         ObjectMapper objectMapper = new ObjectMapper();
-        idoc.addField("chranene_udaje", objectMapper.writeValueAsString(o));
+        idoc.addField(field, objectMapper.writeValueAsString(o));
       } catch (JsonProcessingException ex) {
         LOGGER.log(Level.SEVERE, null, ex);
       }
     }
   }
+  
+  public static void setSecuredJSONField(SolrInputDocument idoc, Object o) {
+    if (o != null) {
+      try {
+        ObjectMapper objectMapper = new ObjectMapper();
+        idoc.setField("chranene_udaje", objectMapper.writeValueAsString(o));
+      } catch (JsonProcessingException ex) {
+        LOGGER.log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+  
+//  public static void addSecuredJSONField(SolrInputDocument idoc, Object o) {
+//    if (o != null) {
+//      try {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        idoc.addField("chranene_udaje", objectMapper.writeValueAsString(o));
+//      } catch (JsonProcessingException ex) {
+//        LOGGER.log(Level.SEVERE, null, ex);
+//      }
+//    }
+//  }
 }
