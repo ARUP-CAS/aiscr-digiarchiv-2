@@ -1,0 +1,251 @@
+// --- FACETS ---
+
+.app-facets {
+  @import "./app-facets-search";
+  @import "./app-facets-used";
+  //@import "./app-facets-date";
+
+  /* background-color: $app-color-lightnes;
+  border-radius: $app-border-radius; */
+  
+  .mat-mdc-expansion-panel {
+    @extend .mat-mdc-elevation-z0, .app-clean-mg, .app-clean-radius, .app-clean-bg !optional;
+    @include set-border(bottom, 1, solid, #{$app-gray-3});
+
+    &.app-scroll {
+      &.mat-mdc-expanded {
+        padding-bottom: $app-gap;
+      }
+
+      .mat-mdc-expansion-panel-header {
+        .app-count {
+          font-weight: normal;
+          color: $app-gray-5;
+        }
+      }
+
+      .mat-mdc-expansion-panel-content {
+        /* height: auto;
+        max-height: 200px;
+        overflow-y: auto; */
+
+        .mat-mdc-expansion-panel-body {
+          padding-bottom: 0;
+        }
+      }
+    }
+
+    &.app-panel-date-range,
+    &.app-panel-year-range,
+    &.app-panel-filter-by-field {
+      .mat-mdc-card {
+        @extend .app-clean-bg, .app-clean-pd;
+    
+        .mat-mdc-card-content {
+          .mat-mdc-form-field {
+            &.mat-mdc-form-field-appearance-fill {
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+              .mat-mdc-form-field-wrapper {
+                margin-bottom: -1.3437em;
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                .mat-mdc-form-field-flex {
+                  @extend .app-clean-pd;
+                  border-radius: $app-border-radius;
+                  background-color: $app-color-lightnes;
+                  border: 1px solid $app-gray-4;
+                  padding-left: $app-gap !important;
+                  align-items: center;
+                  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                  .mat-mdc-form-field-suffix {
+                    .mat-mdc-icon {
+                      margin-top: 3px;
+                    }
+                  }
+                }
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                .mat-mdc-form-field-underline {
+                  &:before {
+                    background-color: transparent;
+                  }
+                  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+                  .mat-mdc-form-field-ripple {
+                    background-color: transparent;
+                  } 
+                }
+              }
+            }
+    
+            &.mat-mdc-focused {
+              box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
+              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+              .mat-mdc-form-field-ripple {
+                background-color: transparent;
+              }
+            }
+          }
+
+          /* .mat-mdc-flat-button {
+            &:not(.app-apply-filter) {
+              background-color: $app-gray-2;
+            }
+          } */
+        }
+      }
+    }
+
+    &.app-panel-year-range,
+    &.app-panel-filter-by-field {
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+      .mat-mdc-form-field-infix {
+        width: auto;
+      }
+    }
+
+    &.app-panel-filter-by-field {
+      .mat-mdc-form-field {
+        .mat-mdc-select {
+          /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
+          /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
+          .mat-mdc-select-arrow-wrapper {
+            transform: none;
+            /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
+            .mat-mdc-select-arrow {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+
+      .app-in-facet-dynamic {
+        .mat-mdc-icon {
+          &:not(.app-icon-op) {
+            width: 28px;
+          }
+        }
+      }
+    }
+  }
+
+  .mat-mdc-list {
+    @extend .app-clean-pd;
+
+    a {
+      color: inherit;
+    }
+
+    &:not(.app-list-used-facet) {
+      .mat-mdc-list-item {
+        &.app-facet-entity {
+          @include setEntityColor(facet);
+          @extend .app-font-family-rc;
+          margin-bottom: $app-gap-half;
+          border-radius: $app-border-radius;
+          height: $app-facet-entity-height;
+
+          &:hover {
+            @extend .app-cursor-pointer;
+          }
+
+          .app-fx-wrapper {
+            & > div {
+              display: flex;
+              align-items: center;
+            }
+
+            .app-fx-left {
+              border-top-left-radius: $app-border-radius;
+              border-bottom-left-radius: $app-border-radius;
+              justify-content: center; 
+
+              .mat-mdc-icon {
+                @include setIcon(24);
+                @extend .app-clean-mg;
+              }
+            }
+
+            .app-fx-right {
+              border-top-right-radius: $app-border-radius;
+              border-bottom-right-radius: $app-border-radius;
+              border-right: 1px solid;
+              border-top: 1px solid;
+              border-bottom: 1px solid;
+              padding-left: $app-gap;
+
+              strong {
+                font-weight: normal;
+              }
+    
+              span {
+                color: inherit !important;
+              }
+            }
+          }
+        }
+        /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+        .mat-mdc-list-item-content {
+          @extend .app-clean-pd;
+
+          span {
+            color: $app-gray-5;
+            font-size: 14px;
+            margin-left: calc(#{$app-gap} / 2);  
+          }
+        }
+
+        &.app-list-table {
+          // height: auto;
+          // min-height: 22px;
+          overflow: hidden;
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+          .mat-mdc-list-item-content {
+            display: table;
+
+            .mat-mdc-checkbox,
+            .app-list-content {
+              display: table-cell;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              max-width: 270px;
+            }
+          }
+        }
+      }
+      
+    }
+
+    @extend .app-list-view-facet;
+  }
+
+  .mat-mdc-tree {
+    .mat-mdc-tree-node {
+      & > span {
+        color: $app-gray-5;
+        font-size: 14px;
+        margin-left: calc(#{$app-gap} / 2);  
+      }
+
+      &.app-node-child {
+        padding-left: 0 !important;
+      }
+    }
+  }
+
+  .app-apply-filter {
+    line-height: 28px;
+
+    &:not(.app-facet-dynamic) {
+      margin-left: $app-gap-icon;
+      margin-top: $app-gap-half;
+    }
+
+    &.app-facet-dynamic {
+      margin-top: $app-gap;
+    }
+  }
+}

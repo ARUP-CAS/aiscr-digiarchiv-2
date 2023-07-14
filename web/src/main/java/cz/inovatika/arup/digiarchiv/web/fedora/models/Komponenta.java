@@ -66,6 +66,22 @@ public class Komponenta {
     IndexUtils.addVocabField(kdoc, "obdobi", obdobi);
     IndexUtils.addVocabField(kdoc, "areal", areal);
     IndexUtils.addVocabField(kdoc, "aktivita", aktivita);
+    if (!nalez_objekt.isEmpty()) {
+      kdoc.addField("typ_nalezu", "objekt");
+    }
+    for (NalezObjekt no : nalez_objekt) {
+      IndexUtils.addJSONField(kdoc, "nalez_objekt", no);
+      IndexUtils.addVocabField(kdoc, "nalez_predmet_specifikace", no.specifikace);
+      IndexUtils.addVocabField(kdoc, "nalez_predmet_druh", no.druh);
+    }
+    if (!nalez_predmet.isEmpty()) {
+      kdoc.addField("typ_nalezu", "predmet");
+    }
+    for (NalezPredmet np : nalez_predmet) {
+      IndexUtils.addJSONField(kdoc, "nalez_predmet", np);
+      IndexUtils.addVocabField(kdoc, "nalez_predmet_specifikace", np.specifikace);
+      IndexUtils.addVocabField(kdoc, "nalez_predmet_druh", np.druh);
+    }
     for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
       idoc.setField("komponenta_" + entry.getKey(), entry.getValue().getValue());
     }

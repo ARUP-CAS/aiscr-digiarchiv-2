@@ -2,7 +2,7 @@
 
 app-adv-search {
   .app-add-condition {
-    .mat-mdc-icon {
+    .mat-icon {
       @include setIcon($position: bottom);
     }
   }

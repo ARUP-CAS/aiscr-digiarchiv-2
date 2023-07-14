@@ -175,6 +175,7 @@ public class SolrSearcher {
     
     query.add("stats.field", "{!key=lat}lat_"+pristupnost);
     query.add("stats.field", "{!key=lng}lng_"+pristupnost);
+    query.add("echoParams", "all");
             
     //LOGGER.log(Level.INFO, "query: {0}", query );
 
@@ -273,32 +274,38 @@ public class SolrSearcher {
           }
           String fq = field + ":[" + parts[0] + " TO " + end + "]";
           query.addFilterQuery(fq);
-        } else if (field.startsWith("f_typ_nalezu")) {
-          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+          
+//  "securedFacets": [
+//    "f_kategorie", "f_druh_nalezu", "f_specifikace", "f_typ_nalezu",
+//    "f_okres", "f_katastr", "f_typ_vyzkumu","f_dok_jednotka_typ"],
+    
+    
+//        } else if (field.startsWith("f_typ_nalezu")) {
+//          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (field.startsWith("f_katastr")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_areal")) {
-          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_aktivita")) {
-          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//        } else if (field.startsWith("f_areal")) {
+//          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//        } else if (field.startsWith("f_aktivita")) {
+//          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (field.startsWith("f_kategorie")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (field.startsWith("f_druh_nalezu")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_specifikace")) {
-          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//        } else if (field.startsWith("f_specifikace")) {
+//          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (field.startsWith("f_typ_vyzkumu")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (field.startsWith("f_dok_jednotka_typ")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_adb_typ_sondy")) {
+//        } else if (field.startsWith("f_adb_typ_sondy")) {
+//          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//        } else if (field.startsWith("f_adb_podnet")) {
           addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_adb_podnet")) {
-          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.startsWith("f_pian_")) {
-          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-        } else if (field.equals("f_obdobi")) {
-          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//        } else if (field.startsWith("f_pian_")) {
+//          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//        } else if (field.equals("f_obdobi")) {
+//          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
         } else if (filterFields.contains(field)) {
           addFilterNoQuotes(query, field, request.getParameterValues(field));
         } else {

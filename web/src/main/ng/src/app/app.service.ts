@@ -97,10 +97,8 @@ export class AppService {
   }
 
   getHeslarTranslation(value: string, heslar: string): any {
-    // if (this.config.poleToHeslar.hasOwnProperty(heslar)) {
-    //   heslar = this.config.poleToHeslar[heslar];
-    // }
-    const hkey = heslar + '_' + value;
+    // const hkey = heslar + '_' + value;
+    const hkey = 'heslar.' + value;
     const t = this.translate.instant(hkey);
     if (t === hkey) {
       return value;

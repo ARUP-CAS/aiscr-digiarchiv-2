@@ -2,7 +2,7 @@
 
 .app-toolbar {
   .app-action-links {
-    .mat-mdc-icon {
+    .mat-icon {
       @include setIcon($position: bottom);
     }
   }
@@ -22,7 +22,7 @@
       min-width: 100% !important;
     }
 
-    .mat-mdc-paginator-container {
+    .mat-paginator-container {
       justify-content: start;
     }
   }
@@ -32,11 +32,11 @@
     .app-paginator-wrapper {
       flex-wrap: wrap;
 
-      .mat-mdc-paginator {
+      .mat-paginator {
         flex: 0 0 100% !important;
       }
 
-      .mat-mdc-form-field {
+      .mat-form-field {
         &.app-page-num {
           margin-left: $app-gap ;
         }

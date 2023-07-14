@@ -11,7 +11,7 @@ a {
   }
 
   &.app-icon-inside {
-    .mat-mdc-icon {
+    .mat-icon {
       vertical-align: middle;
     }
   }
@@ -127,14 +127,14 @@ a {
 }
 
 .app-rotate-up {
-  .mat-mdc-icon {
+  .mat-icon {
     transition: all 0.4s ease;
     transform: rotateZ(180deg);
   }
 }
 
 .app-rotate-down {
-  .mat-mdc-icon {
+  .mat-icon {
     transition: all 0.4s ease;
     transform: rotateZ(0deg);
   }
@@ -192,7 +192,7 @@ a {
     }
   }
   
-  .mat-mdc-icon {
+  .mat-icon {
     color: $app-accent-color !important;
   }
 }
@@ -210,7 +210,7 @@ a {
   align-items: center;
   vertical-align: sub;
 
-  .mat-mdc-icon {
+  .mat-icon {
     @extend .app-clean-mg;
     @include setIcon(14, $app-color-lightnes);
   }

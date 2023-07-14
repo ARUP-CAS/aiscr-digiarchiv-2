@@ -44,7 +44,7 @@ app-footer {
           vertical-align: text-top;
         }
   
-        .mat-mdc-icon {
+        .mat-icon {
           @include setIcon($size: 20, $position: sub);
         }
 

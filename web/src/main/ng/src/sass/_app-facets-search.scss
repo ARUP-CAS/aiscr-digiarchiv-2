@@ -1,54 +1,49 @@
 // --- FACETS SEARCH  ---
 
 app-facets-search {
-  .mat-mdc-card {
+  .mat-card {
     @extend .app-clean-bg;
     @include set-border(bottom, 1, solid, #{$app-gray-3});
 
-    .mat-mdc-card-content {
-      .mat-mdc-form-field {
-        &.mat-mdc-form-field-appearance-fill {
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-          .mat-mdc-form-field-wrapper {
+    .mat-card-content {
+      .mat-form-field {
+        &.mat-form-field-appearance-fill {
+          .mat-form-field-wrapper {
             margin-bottom: -1.3437em;
-            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-            .mat-mdc-form-field-flex {
+  
+            .mat-form-field-flex {
               @extend .app-clean-pd;
               border-radius: $app-border-radius;
               background-color: $app-color-lightnes;
               border: 1px solid $app-gray-4;
               padding-left: $app-gap !important;
               align-items: center;
-              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-              .mat-mdc-form-field-suffix {
+
+              .mat-form-field-suffix {
                 margin-right: $app-gap-icon;
                 
-                .mat-mdc-icon {
+                .mat-icon {
                   margin-top: 3px;
                 }
               }
             }
-            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-            /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-            .mat-mdc-form-field-underline {
+  
+            .mat-form-field-underline {
               &:before {
                 background-color: transparent;
               }
-              /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-              .mat-mdc-form-field-ripple {
+  
+              .mat-form-field-ripple {
                 background-color: transparent;
               } 
             }
           }
         }
 
-        &.mat-mdc-focused {
+        &.mat-focused {
           box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-          .mat-mdc-form-field-ripple {
+
+          .mat-form-field-ripple {
             background-color: transparent;
           }
         }

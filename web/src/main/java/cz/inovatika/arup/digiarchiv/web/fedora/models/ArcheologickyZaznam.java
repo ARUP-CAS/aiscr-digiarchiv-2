@@ -128,10 +128,17 @@ public class ArcheologickyZaznam implements FedoraModel {
         idoc.addField("dokumentacni_jednotka_komponenta_obdobi", djdoc.getFieldValue("komponenta_obdobi"));
         idoc.addField("dokumentacni_jednotka_komponenta_areal", djdoc.getFieldValue("komponenta_areal"));
         idoc.addField("dokumentacni_jednotka_komponenta_aktivita", djdoc.getFieldValue("komponenta_aktivita"));
+
+        idoc.addField("dokumentacni_jednotka_komponenta_typ_nalezu", djdoc.getFieldValue("komponenta_typ_nalezu"));
+        idoc.addField("dokumentacni_jednotka_komponenta_nalez_objekt_druh", djdoc.getFieldValue("komponenta_nalez_objekt_druh"));
+        idoc.addField("dokumentacni_jednotka_komponenta_nalez_objekt_specifikace", djdoc.getFieldValue("komponenta_nalez_objekt_specifikace"));
+        idoc.addField("dokumentacni_jednotka_komponenta_nalez_predmet_druh", djdoc.getFieldValue("komponenta_nalez_predmet_druh"));
+        idoc.addField("dokumentacni_jednotka_komponenta_nalez_predmet_specifikace", djdoc.getFieldValue("komponenta_nalez_predmet_specifikace"));
+        
         IndexUtils.addFieldNonRepeat(idoc, "dokumentacni_jednotka_typ", djdoc.getFieldValue("typ"));
 
         // add loc field by pian
-        addLocByPian(idoc, (String) djdoc.getFieldValue("pian"));
+        addPian(idoc, (String) djdoc.getFieldValue("pian"));
         
         //add adb fields
         addAdbFields(idoc, (String) djdoc.getFieldValue("adb"));
@@ -158,7 +165,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
   private void addAdbFields(SolrInputDocument idoc, String ident_cely) {
     SolrQuery query = new SolrQuery("ident_cely:\"" + ident_cely + "\"")
-            .setFields("ident_cely,podnet,typ_sondy");
+            .setFields("ident_cely,podnet,typ_sondy,autor_popisu,autor_revize");
     JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 
     if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -172,14 +179,14 @@ public class ArcheologickyZaznam implements FedoraModel {
     }
   }
 
-  private void addLocByPian(SolrInputDocument idoc, String pian) {
+  private void addPian(SolrInputDocument idoc, String pian) {
     SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"");
     JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 
     if (json.getJSONObject("response").getInt("numFound") > 0) {
       for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
         JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-
+        idoc.addField("pian", pianDoc.toString());
         for (String key : pianDoc.keySet()) {
           switch (key) {
             case "entity":

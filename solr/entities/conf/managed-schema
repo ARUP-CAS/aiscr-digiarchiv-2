@@ -399,7 +399,6 @@
 
 <copyField source="areal" dest="f_areal" />
 
-<copyField source="*typ_nalezu" dest="f_typ_nalezu" />
 
 <copyField source="druh_nalezu" dest="f_druh_nalezu" />
 <copyField source="*druh_nalezu" dest="f_druh_nalezu" />
@@ -414,13 +413,18 @@
 <copyField source="*_aktivita" dest="f_aktivita" />
 <copyField source="*_obdobi" dest="f_obdobi" />
 <copyField source="*_areal" dest="f_areal" />
+<copyField source="*specifikace" dest="f_specifikace" />
+<copyField source="*typ_nalezu" dest="f_typ_nalezu" />
+<copyField source="*druh_nalezu" dest="f_druh_nalezu" />
+<copyField source="*objekt_druh" dest="f_druh_nalezu" />
+<copyField source="*predmet_druh" dest="f_druh_nalezu" />
 
 <copyField source="okres" dest="f_okres" />
 <copyField source="*_okres" dest="f_okres" />
 <copyField source="typ_dokumentu" dest="f_typ_dokumentu" /> 
 <copyField source="autor" dest="f_autor" />
-<copyField source="adb_autor_popisu" dest="f_autor" />
-<copyField source="adb_autor_revize" dest="f_autor" />
+<copyField source="*adb_autor_popisu" dest="f_autor" />
+<copyField source="*adb_autor_revize" dest="f_autor" />
 
 <copyField source="extra_data_osoby" dest="f_osoby" />
 

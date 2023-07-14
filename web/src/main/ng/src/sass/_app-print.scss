@@ -12,14 +12,14 @@
   }
 
   main,
-  .mat-mdc-drawer-container {
+  .mat-drawer-container {
     background-color: transparent !important;
   }
   .noprint {
     display: none !important;  
   }  
 
-  .mat-mdc-card {
+  .mat-card {
     box-shadow: none !important;
 
     &.app-entity-dokument,
@@ -35,26 +35,26 @@
       padding: 0 !important;
     }
 
-    .mat-mdc-card-content {
-      .mat-mdc-expansion-panel {
-        .mat-mdc-expansion-panel-header {
+    .mat-card-content {
+      .mat-expansion-panel {
+        .mat-expansion-panel-header {
           border: 1px solid $app-gray-4;
         }
   
         &.app-panel-inner {
-          .mat-mdc-expansion-panel-header {
+          .mat-expansion-panel-header {
             border: none !important;
           }
         }
   
-        .mat-mdc-expansion-panel-body {
-          .mat-mdc-card-header {
+        .mat-expansion-panel-body {
+          .mat-card-header {
             width: 100%;
           }
         }
 
         &.app-panel-souvisejici-zaznamy {
-          .mat-mdc-expansion-panel-content {
+          .mat-expansion-panel-content {
             max-height: unset !important;
             overflow-y: unset !important;
           }
@@ -63,12 +63,12 @@
     }
 
     .app-filter-badge {
-      .mat-mdc-icon {
+      .mat-icon {
         display: none !important;  
       }  
     }
 
-    .mat-mdc-card-actions {
+    .mat-card-actions {
       display: none !important;
     }
 
@@ -77,7 +77,7 @@
       margin-bottom: $app-gap;
       background-color: transparent !important;
 
-      .mat-mdc-card-content {
+      .mat-card-content {
         color: $app-gray-6 !important;
 
         a {

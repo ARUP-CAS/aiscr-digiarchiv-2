@@ -31,7 +31,7 @@ app-searchbar {
       box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
     }
 
-    .mat-mdc-icon {
+    .mat-icon {
       margin-left: $app-searchbar-field-icon-gap;
       margin-right: $app-searchbar-field-icon-gap;
       vertical-align: middle;
@@ -61,7 +61,7 @@ app-searchbar {
       text-align: right;
 
       .app-mobile-controls {
-        .mat-mdc-icon {
+        .mat-icon {
           color: $app-gray-5;
           margin-right: 0;
         }
@@ -84,7 +84,7 @@ app-searchbar {
       flex: 1 1 0%;
     }
     
-    .mat-mdc-unelevated-button {
+    .mat-flat-button {
       line-height: $app-searchbar-field-height;
       height: $app-searchbar-field-height;
       margin-right: $app-gap-button;

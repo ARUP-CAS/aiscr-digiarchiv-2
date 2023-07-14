@@ -30,12 +30,12 @@ app-navbar {
         color: $app-color-darknes;
         margin-top: $app-gap !important;
 
-        .mat-mdc-icon {
+        .mat-icon {
           @include setIcon(24);
         }
       }
 
-      .mat-mdc-icon {
+      .mat-icon {
         @include setIcon(20, inherit, sub);
         margin-right: $app-gap-icon;
         //display: none;

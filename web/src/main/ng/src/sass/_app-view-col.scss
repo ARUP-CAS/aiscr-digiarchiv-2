@@ -23,16 +23,14 @@
       margin-right: 0;
     }
 
-    .mat-mdc-card {
+    .mat-card {
       max-height: 216px;
       
-      .mat-mdc-card-header {
-        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-        .mat-mdc-card-header-text {
+      .mat-card-header {
+        .mat-card-header-text {
           width: 100%;
   
-          .mat-mdc-card-title {
+          .mat-card-title {
             position: relative;
             visibility: hidden;
             max-height: 20px;
@@ -49,7 +47,7 @@
         }
       }
 
-      .mat-mdc-card-content {
+      .mat-card-content {
         height: 100px;
         min-height: 100px;
 
@@ -67,7 +65,7 @@
             vertical-align: middle;
           }
 
-          .mat-mdc-icon {
+          .mat-icon {
             @include setIcon(32);
           }
 
@@ -79,14 +77,14 @@
         }
       }
 
-      .mat-mdc-card-actions {
+      .mat-card-actions {
         place-content: center !important;
 
         .app-metadata {
           display: none;
         }
 
-        .mat-mdc-unelevated-button {
+        .mat-flat-button {
           @extend .app-clean-mg;
 
           &:not(.app-col-detail) {

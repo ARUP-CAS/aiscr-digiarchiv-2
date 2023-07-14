@@ -793,6 +793,10 @@
        <str name="facet.field">f_areal</str>
        <str name="facet.field">f_obdobi</str>
        <str name="facet.field">f_aktivita</str>
+       <str name="facet.field">f_typ_nalezu</str>
+       <str name="facet.field">f_specifikace</str>
+       <str name="facet.field">f_druh_nalezu</str>
+       <str name="facet.field">f_typ_vyzkumu</str>
        
        <str name="facet.field">kategorie_dokumentu</str>
        <str name="facet.field">f_typ_dokumentu</str>

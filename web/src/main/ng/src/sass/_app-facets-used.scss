@@ -2,24 +2,24 @@
 
 app-facets-used,
 .app-facets-used {
-  .mat-mdc-list {
+  .mat-list {
     @include set-border(bottom, 1, solid, #{$app-gray-3});
     padding: 10px 0 $app-gap 0 !important;
     margin-top: $app-gap;
     
-    .mat-mdc-subheader {
+    .mat-subheader {
       @extend .app-font-bold;
       color: $app-primary-color;
       height: 0;
       padding-right: 8px;
 
-      .mat-mdc-icon {
+      .mat-icon {
         color: $app-color-warning;
         margin-left: $app-gap-icon;
       }
     }
 
-    .mat-mdc-list-item {
+    .mat-list-item {
       height: auto;
 
       .app-display-table {
@@ -38,7 +38,7 @@ app-facets-used,
       }
       
 
-      .mat-mdc-icon {
+      .mat-icon {
         &:hover {
           color: $app-color-warning;
         }

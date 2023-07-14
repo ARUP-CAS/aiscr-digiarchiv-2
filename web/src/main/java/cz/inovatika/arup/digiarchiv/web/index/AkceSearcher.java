@@ -74,6 +74,7 @@ public class AkceSearcher implements EntitySearcher {
     try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
+      System.out.println(query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
       SolrSearcher.addFavorites(jo, client, request);
       return jo;
@@ -102,10 +103,10 @@ public class AkceSearcher implements EntitySearcher {
       "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost",
       "organizace", "f_organizace:organizace", "vazba_projekt", "child_dokument",
       "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
-      "vedouci_akce_ostatni", "organizace_ostatni", "uzivatelske_oznaceni", "ulozeni_nalezu", "poznamka",
-      "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
+      "vedouci_akce_ostatni", "organizace_ostatni", "uzivatelske_oznaceni:uzivatelske_oznaceni_"+pristupnost, "ulozeni_nalezu", "poznamka",
+      "dokumentacni_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
       "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]",
-      "lokalizace:f_lokalizace_" + pristupnost,
+      "lokalizace:lokalizace_okolnosti_" + pristupnost,
       "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
   }
 

@@ -68,13 +68,19 @@ public class IndexUtils {
   
   public static void addVocabField(SolrInputDocument idoc, String field, Vocab v) {
     if(v != null) {
+      idoc.setField(field, v.getId());
+    }
+  }
+  
+  public static void addRefField(SolrInputDocument idoc, String field, Vocab v) {
+    if(v != null) {
       idoc.setField(field, v.getValue());
     }
   }
   
   public static void addSecuredVocabField(SolrInputDocument idoc, String field, Vocab v, String pristupnost) {
     if(v != null) {
-      addSecuredFieldNonRepeat(idoc, field, v.getValue(), pristupnost);
+      addSecuredFieldNonRepeat(idoc, field, v.getId(), pristupnost);
     }
   }
   

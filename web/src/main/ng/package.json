@@ -22,8 +22,11 @@
     "@angular/compiler": "^16.0.0",
     "@angular/core": "^16.0.0",
     "@angular/forms": "^16.0.0",
-    "@angular/material": "^16.1.2",
-    "@angular/material-moment-adapter": "^16.1.2",
+
+    "@angular/flex-layout": "^14.0.0-beta.40",
+    "@angular/material": "^14.0.5",
+    "@angular/material-moment-adapter": "^14.0.5",
+
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/platform-server": "^16.0.0",
@@ -43,7 +46,7 @@
     "leaflet.markercluster": "^1.5.3",
     "moment": "^2.29.4",
     "ng-recaptcha": "^12.0.1",
-    "ngx-flexible-layout": "^16.0.1",
+    
     "request": "^2.88.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

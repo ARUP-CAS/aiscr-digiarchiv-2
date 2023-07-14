@@ -1,7 +1,7 @@
 // --- SIDENAV LIST ---
 
 app-sidenav-list {
-  .mat-mdc-list-item {
+  .mat-list-item {
     background-color: transparent !important;
 
     &.app-active {
@@ -11,7 +11,7 @@ app-sidenav-list {
       border-radius: 0;
     }
 
-    .mat-mdc-icon {
+    .mat-icon {
       @include setIcon(20, inherit, sub);
       margin-right: $app-gap-icon;
     } 

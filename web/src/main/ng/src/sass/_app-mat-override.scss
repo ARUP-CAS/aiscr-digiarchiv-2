@@ -1,12 +1,12 @@
 // --- MAT OVERRIDE ---
 
 // toolbar
-.mat-mdc-toolbar {
+.mat-toolbar {
   font-size: inherit;
 }
 
 // card
-.mat-mdc-card {
+.mat-card {
   @include setEntityColor(card);
 
   .app-link-close {
@@ -17,23 +17,22 @@
     @include setLinkColor($app-color-darknes);
   }
 
-  .mat-mdc-card-header {
+  .mat-card-header {
     .app-last-change {
       font-size: 12px;
       color: $app-gray-6;
       font-weight: normal;
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-    .mat-mdc-card-header-text {
+
+    .mat-card-header-text {
       @extend .app-clean-mg, .app-w-100;
 
-      .mat-mdc-icon {
+      .mat-icon {
         margin-right: $app-gap-icon;
         vertical-align: bottom;
       }
 
-      .mat-mdc-card-title {
+      .mat-card-title {
         font-size: $app-card-title-font-size;
         font-weight: 700;
 
@@ -45,9 +44,9 @@
     }
   }
 
-  .mat-mdc-card-content {
+  .mat-card-content {
     .app-metadata {
-      .mat-mdc-icon {
+      .mat-icon {
         @include setIcon(18);
         @extend .app-clean-mg;
       }
@@ -57,8 +56,8 @@
     .app-card-detail {
       margin-top: $app-gap-half;
 
-      &>.mat-mdc-accordion {
-        &> :not(.mat-mdc-expansion-panel-spacing) {
+      &>.mat-accordion {
+        &> :not(.mat-expansion-panel-spacing) {
           &:not(:last-child) {
             margin-bottom: 2px;
           }
@@ -67,15 +66,15 @@
     }
 
     // general expansion panel behavior of card
-    .mat-mdc-expansion-panel {
-      @extend .mat-mdc-elevation-z0 !optional;
+    .mat-expansion-panel {
+      @extend .mat-elevation-z0;
 
       &.app-panel-souvisejici-zaznamy {
-        .mat-mdc-expansion-panel-content {
+        .mat-expansion-panel-content {
           max-height: 635px;
           overflow-y: auto;
 
-          .mat-mdc-expansion-panel-body {
+          .mat-expansion-panel-body {
             $val: calc(2 * #{$app-gap});
 
             .app-related-item {
@@ -93,8 +92,8 @@
       }
 
       &.virtual {
-        .mat-mdc-expansion-panel-content {
-          .mat-mdc-expansion-panel-body {
+        .mat-expansion-panel-content {
+          .mat-expansion-panel-body {
             padding: 16px 0;
           }
         }
@@ -102,27 +101,27 @@
 
 
 
-      &.mat-mdc-expansion-panel-spacing {
+      &.mat-expansion-panel-spacing {
         @extend .app-clean-mg;
       }
 
       &.app-panel-inner {
-        .mat-mdc-expansion-panel-header {
+        .mat-expansion-panel-header {
           @extend .app-clean-bg, .app-clean-pd;
           margin-top: 4px;
 
-          .mat-mdc-expansion-panel-header-title {
+          .mat-expansion-panel-header-title {
             color: $app-gray-9;
             flex-wrap: wrap;
 
-            .mat-mdc-icon {
+            .mat-icon {
               @include setIcon($size: 20);
             }
           }
         }
 
-        .mat-mdc-expansion-panel-content {
-          .mat-mdc-expansion-panel-body {
+        .mat-expansion-panel-content {
+          .mat-expansion-panel-body {
             /* padding-top: 2px;
             padding-bottom: 0; */
             padding: 2px 20px 0px 20px; // issue #44
@@ -130,20 +129,20 @@
         }
       }
 
-      .mat-mdc-expansion-panel-header {
+      .mat-expansion-panel-header {
         background-color: $app-gray-1  !important;
         flex-direction: row-reverse;
 
-        .mat-mdc-expansion-indicator {
+        .mat-expansion-indicator {
           margin-right: $app-gap;
         }
       }
 
-      .mat-mdc-expansion-panel-content {
-        .mat-mdc-expansion-panel-body {
+      .mat-expansion-panel-content {
+        .mat-expansion-panel-body {
           padding-top: $app-gap;
 
-          .mat-mdc-icon {
+          .mat-icon {
             @include setIcon($size: 20, $position: text-bottom);
           }
 
@@ -167,16 +166,16 @@
     }
   }
 
-  .mat-mdc-card-actions {
+  .mat-card-actions {
     @extend .app-clean-mg;
     padding-top: 0;
 
-    .mat-mdc-button-base {
+    .mat-button-base {
       &:not(:first-child) {
         margin: 0 0 0 $app-gap-button;
       }
 
-      &.mat-mdc-unelevated-button {
+      &.mat-flat-button {
         background-color: $app-gray-1;
 
         a {
@@ -210,7 +209,7 @@
   &.app-card-info {
     background-color: $app-card-info-bg;
 
-    .mat-mdc-card-content {
+    .mat-card-content {
       color: $app-color-info;
 
       .app-text {
@@ -221,7 +220,7 @@
       .app-info-badge {
         @include setEntityColor(cardInfoBadge);
 
-        .mat-mdc-icon {
+        .mat-icon {
           margin-right: $app-gap-icon;
           @include setIcon(18, inherit, bottom);
         }
@@ -238,19 +237,19 @@
 }
 
 // table
-.mat-mdc-table {
+.mat-table {
   width: 100%;
 }
 
 
 // expansion panel
-.mat-mdc-expansion-panel {
-  .mat-mdc-expansion-panel-header {
+.mat-expansion-panel {
+  .mat-expansion-panel-header {
     font-weight: 700;
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-  .mat-mdc-list-item-content {
-    .mat-mdc-icon {
+
+  .mat-list-item-content {
+    .mat-icon {
       &:not(.app-icon-op) {
         @include setIcon(18, $position: bottom);
         color: $app-primary-color-darker;
@@ -258,8 +257,8 @@
     }
   }
 
-  .mat-mdc-expansion-panel-header,
-  .mat-mdc-expansion-panel-body {
+  .mat-expansion-panel-header,
+  .mat-expansion-panel-body {
     .app-facets & {
       padding-left: $app-gap;
       padding-right: $app-gap;
@@ -269,27 +268,27 @@
 
 
 // mat list
-.mat-mdc-list {
-  .mat-mdc-subheader {
+.mat-list {
+  .mat-subheader {
     font-size: 15px;
   }
 
-  .mat-mdc-list-item {
-    .mat-mdc-icon {
+  .mat-list-item {
+    .mat-icon {
       &:not(.app-icon-op) {
         margin-right: $app-gap-icon  !important;
       }
     }
   }
 
-  .mat-mdc-icon {
+  .mat-icon {
     &:not(.app-icon-op) {
       @include setIcon(18, $position: text-top);
     }
   }
 
   &.app-list-view-facet {
-    .mat-mdc-list-item {
+    .mat-list-item {
       height: $app-list-view-facet-item-height;
       color: $app-list-view-facet-item-color;
 
@@ -304,13 +303,13 @@
   &.app-list-view-admin {
     @extend .app-clean-pd;
 
-    .mat-mdc-list-item {
+    .mat-list-item {
       height: $app-list-view-facet-item-height;
-      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-      .mat-mdc-list-item-content {
+
+      .mat-list-item-content {
         @extend .app-clean-pd;
 
-        .mat-mdc-icon {
+        .mat-icon {
           color: $app-color-warning;
         }
       }
@@ -324,11 +323,11 @@
 
 
 // mat tree
-.mat-mdc-tree {
+.mat-tree {
   @extend .app-clean-bg;
   margin-left: -5px;
 
-  .mat-mdc-tree-node {
+  .mat-tree-node {
     min-height: $app-list-view-facet-item-height;
     color: $app-list-view-facet-item-color;
     font-size: initial;
@@ -341,14 +340,14 @@
       }
     }
 
-    .mat-mdc-icon-button {
+    .mat-icon-button {
       width: $app-list-view-facet-item-height;
       height: $app-list-view-facet-item-height;
       line-height: $app-list-view-facet-item-height;
       margin-right: $app-gap-icon;
     }
 
-    .mat-mdc-checkbox {
+    .mat-checkbox {
       margin-right: $app-gap-icon;
     }
   }
@@ -366,7 +365,7 @@
   margin-right: 2px;
   color: $app-gray-9;
 
-  .mat-mdc-icon {
+  .mat-icon {
     $size: 18;
     font-size: #{$size}px !important;
     height: #{$size}px !important;
@@ -374,7 +373,7 @@
     vertical-align: sub !important;
     color: $app-badge-color;
 
-    .mat-mdc-card-title & {
+    .mat-card-title & {
       @extend .app-clean-mg;
     }
   }
@@ -400,7 +399,7 @@
 .app-filter-badge {
   color: currentColor;
 
-  .mat-mdc-icon {
+  .mat-icon {
     $size: 18;
     font-size: #{$size}px !important;
     height: #{$size}px !important;
@@ -408,7 +407,7 @@
     vertical-align: sub !important;
     color: $app-badge-color;
 
-    .mat-mdc-card-title & {
+    .mat-card-title & {
       @extend .app-clean-mg;
     }
   }
@@ -429,15 +428,14 @@
 }
 
 // mat-menu-panel
-.mat-mdc-menu-panel {
+.mat-menu-panel {
   max-width: 320px !important;
 }
 
 // mat form field
-.mat-mdc-form-field {
-  &.mat-mdc-form-field-appearance-fill {
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-mdc-form-field-infix {
+.mat-form-field {
+  &.mat-form-field-appearance-fill {
+    .mat-form-field-infix {
       padding: 0.25em 0 0.75em 0;
       padding: 0.1em 0 0.65em 0;
     }
@@ -445,6 +443,6 @@
 }
 
 // tooltip
-.mat-mdc-tooltip {
+.mat-tooltip {
   font-size: 14px !important;
 }

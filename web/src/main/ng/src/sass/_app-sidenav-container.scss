@@ -3,11 +3,11 @@
 .app-sidenav-container {
   height: calc(100vh - 217px);
 
-  .mat-mdc-sidenav {
+  .mat-sidenav {
     @extend .app-clean-bg, .app-clean-border;
     width: calc(#{$app-table-cell-left-width} + 40px);
 
-    .mat-mdc-drawer-inner-container {
+    .mat-drawer-inner-container {
       background-color: $app-color-lightnes;
       width: $app-table-cell-left-width;
       box-shadow: 0 -1px 24px rgb(0 0 0 / 40%);
@@ -21,14 +21,13 @@
     @media #{$lt-sm} { 
       width: 100%;
 
-      .mat-mdc-drawer-inner-container {
+      .mat-drawer-inner-container {
         width: 100%;
       }
     }
 
-    .mat-mdc-tab-group {
-      /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-      .mat-mdc-tab-label {
+    .mat-tab-group {
+      .mat-tab-label {
         min-width: 50%;
       }
     }
@@ -47,20 +46,20 @@
         @extend .app-clean-mg;
       }
 
-      .mat-mdc-card-header {
-        .mat-mdc-card-title {
+      .mat-card-header {
+        .mat-card-title {
           @extend .app-clean-mg;
           font-size: 14px;
          
           a {
-            .mat-mdc-icon {
+            .mat-icon {
               @include setIcon(20);
             }
           }
         }
       }
-      .mat-mdc-card-content,
-      .mat-mdc-card-actions {
+      .mat-card-content,
+      .mat-card-actions {
         display: none !important;
       }
     }
@@ -70,13 +69,13 @@
         border-bottom: 1px solid $app-gray-3;
       }
 
-      .mat-mdc-paginator-container {
+      .mat-paginator-container {
         width: auto;
       }
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      .mat-mdc-paginator-page-size,
+
+      .mat-paginator-page-size,
       .app-sorting,
-      .mat-mdc-form-field-label {
+      .mat-form-field-label {
         display: none !important;
       }
 
@@ -117,7 +116,7 @@
     max-height: calc(100% - #{$app-gap-top-card-info});
     overflow-y: auto;
 
-    .mat-mdc-card-title {
+    .mat-card-title {
       max-width: calc(100% - 35px);
     }
 
@@ -138,7 +137,7 @@
     border: 2px solid #ccc;
 
     a {
-      .mat-mdc-icon {
+      .mat-icon {
         @extend .app-mr-1;
         color: $app-color-warning;
         @include setIcon($size: 18, $position: middle);

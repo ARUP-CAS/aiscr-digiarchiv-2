@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class Akce {
 
 //<xs:element name="vedouci_akce_ostatni" minOccurs="0" maxOccurs="unbounded" type="amcr:vedouci_akce_ostatniType"/> <!-- "{akcevedouci_set}" -->
   @JacksonXmlProperty(localName = "vedouci_akce_ostatni")
-  public List<Object> vedouci_akce_ostatni = new ArrayList();
+  public List<VedouciAkceOstatni> vedouci_akce_ostatni = new ArrayList();
 
 //<xs:element name="specifikace_data" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{specifikace_data.ident_cely}" | "{specifikace_data.heslo}" -->
   @JacksonXmlProperty(localName = "specifikace_data")
@@ -94,11 +95,19 @@ public class Akce {
     //akceDoc.setField("entity", "akce");
     //akceDoc.setField("pristupnost", pristupnost);
     IndexUtils.addVocabField(akceDoc, "projekt", projekt);
-    IndexUtils.addVocabField(akceDoc, "hlavni_vedouci", hlavni_vedouci);
+    IndexUtils.addRefField(akceDoc, "hlavni_vedouci", hlavni_vedouci);
     IndexUtils.addVocabField(akceDoc, "organizace", organizace);
     IndexUtils.addVocabField(akceDoc, "specifikace_data", specifikace_data);
     IndexUtils.addVocabField(akceDoc, "hlavni_typ", hlavni_typ);
     IndexUtils.addVocabField(akceDoc, "vedlejsi_typ", vedlejsi_typ);
+    IndexUtils.addVocabField(akceDoc, "f_typ_vyzkumu", hlavni_typ);
+    IndexUtils.addVocabField(akceDoc, "f_typ_vyzkumu", vedlejsi_typ);
+    
+    for (VedouciAkceOstatni o : vedouci_akce_ostatni) {
+      IndexUtils.addJSONField(akceDoc, "vedouci_akce_ostatni", o);
+      IndexUtils.addRefField(akceDoc, "vedouci_akce_ostatni_jmeno", o.vedouci);
+      IndexUtils.addVocabField(akceDoc, "vedouci_akce_ostatni_organizace", o.organizace);
+    }
     
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(akceDoc, pristupnost);
