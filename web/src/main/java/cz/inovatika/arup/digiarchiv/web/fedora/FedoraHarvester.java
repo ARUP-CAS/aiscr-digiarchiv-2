@@ -218,7 +218,7 @@ public class FedoraHarvester {
           idocsEntities.clear();
           idocsOAI.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-          //return; 
+          return; 
         }
         if (idocsHeslar.size() > batchSize) {
           solr.add("heslar", idocsHeslar);

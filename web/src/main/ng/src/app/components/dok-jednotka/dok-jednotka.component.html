@@ -13,8 +13,8 @@
   </ng-container>
   
   <mat-accordion multi="true">
-    <app-pian  [result]="result.pian"></app-pian>
-    <app-adb [result]="result.adb"></app-adb>
+    <app-pian *ngIf="result.pian" [result]="result.pian"></app-pian>
+    <app-adb *ngIf="result.adb" [result]="result.adb"></app-adb>
     <app-komponenta *ngFor="let komponenta of result.komponenta" [result]="komponenta"></app-komponenta>
   </mat-accordion>
 </mat-expansion-panel>

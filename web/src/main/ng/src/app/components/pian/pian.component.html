@@ -1,5 +1,5 @@
-<ng-container [ngSwitch]="inDocument">
-  <mat-expansion-panel *ngSwitchCase="false" #panel [expanded]="true" hideToggle class="app-panel-inner">
+<ng-container *ngIf="result?.ident_cely">
+  <mat-expansion-panel *ngIf="!inDocument" #panel [expanded]="true" hideToggle class="app-panel-inner">
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -18,7 +18,7 @@
       <label class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ result.centroid_n }} : {{ result.centroid_e }}
     </div>
   </mat-expansion-panel>
-  <mat-card *ngSwitchCase="true" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
+  <mat-card *ngIf="inDocument" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
     <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
     </a>

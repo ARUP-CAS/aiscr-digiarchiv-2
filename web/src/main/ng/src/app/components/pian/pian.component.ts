@@ -36,6 +36,21 @@ export class PianComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.result?.ident_cely) {
+      this.initProperties();
+    } else {
+      console.log(this.result);
+      this.service.getIdAsChild([this.result.id], "pian").subscribe((res: any) => {
+        this.result = res.response.docs[0];
+        this.initProperties();
+      });
+    }
+
+     
+
+  }
+
+  initProperties() {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
@@ -45,9 +60,6 @@ export class PianComponent implements OnInit {
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        publisher = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-
-     
-
   }
 
   toggleFav() {

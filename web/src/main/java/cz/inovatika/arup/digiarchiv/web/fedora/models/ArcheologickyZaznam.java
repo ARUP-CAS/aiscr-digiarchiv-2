@@ -120,7 +120,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         SolrInputDocument djdoc = dj.createSolrDoc();
         idocs.add(djdoc);
 
-        IndexUtils.addJSONField(idoc, "dokumentacni_jednotka", dokumentacni_jednotka);
+        IndexUtils.addJSONField(idoc, "dokumentacni_jednotka", dj);
         // choose dokumentacni_jednotka fields to put in idoc for akce/lokalita
         idoc.addField("dokumentacni_jednotka_ident_cely", dj.ident_cely);
         idoc.addField("dokumentacni_jednotka_pian", djdoc.getFieldValue("pian"));
@@ -186,7 +186,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     if (json.getJSONObject("response").getInt("numFound") > 0) {
       for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
         JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-        idoc.addField("pian", pianDoc.toString());
+        // idoc.addField("pian", pianDoc.toString());
         for (String key : pianDoc.keySet()) {
           switch (key) {
             case "entity":
