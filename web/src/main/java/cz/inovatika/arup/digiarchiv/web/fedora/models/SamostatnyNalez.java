@@ -5,9 +5,18 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.WKTReader;
 
 /**
  *
@@ -117,10 +126,16 @@ public class SamostatnyNalez implements FedoraModel {
 
 //<xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:sn-chranene_udajeType"/> <!-- SELF -->
   @JacksonXmlProperty(localName = "chranene_udaje")
-  public SnChraneneUdaje chranene_udaje;
+  private SnChraneneUdaje chranene_udaje;
 
 //<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->  
+  @JacksonXmlProperty(localName = "historie")
+  public List<Historie> historie = new ArrayList();
+
 //<xs:element name="soubor" minOccurs="0" maxOccurs="unbounded" type="amcr:souborType"/>  <!-- "{soubory.soubory}" -->  
+  @JacksonXmlProperty(localName = "soubor")
+  public List<Soubor> soubor = new ArrayList();
+
   @Override
   public boolean isOAI() {
     return true;
@@ -147,7 +162,8 @@ public class SamostatnyNalez implements FedoraModel {
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
     boolean searchable = stav == 4;
     idoc.setField("searchable", searchable);
-    
+    IndexUtils.setDateStamp(idoc, historie);
+
     IndexUtils.addVocabField(idoc, "okres", okres);
     IndexUtils.addVocabField(idoc, "projekt", projekt);
     IndexUtils.addVocabField(idoc, "okolnosti", okolnosti);
@@ -155,53 +171,83 @@ public class SamostatnyNalez implements FedoraModel {
     IndexUtils.addVocabField(idoc, "druh_nalezu", druh_nalezu);
     IndexUtils.addVocabField(idoc, "specifikace", specifikace);
     IndexUtils.addVocabField(idoc, "nalezce", nalezce);
-  
+
+    List<SolrInputDocument> idocs = new ArrayList<>();
+    try {
+      for (Soubor s : soubor) {
+        SolrInputDocument djdoc = s.createSolrDoc();
+        idocs.add(djdoc);
+        IndexUtils.addJSONField(idoc, "soubor", s);
+      }
+      if (!idocs.isEmpty()) {
+        IndexUtils.getClient().add("soubor", idocs, 10);
+      }
+    } catch (SolrServerException | IOException ex) {
+      Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);
+    }
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
     }
   }
-  
-  
+
 }
 
-
-  class SnChraneneUdaje {
+class SnChraneneUdaje {
 
 //<xs:element name="katastr" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "ruian-{katastr.kod}" | "{katastr.nazev}" -->
-    @JacksonXmlProperty(localName = "katastr")
-    public Vocab katastr;
+  @JacksonXmlProperty(localName = "katastr")
+  public Vocab katastr;
 
 //<xs:element name="lokalizace" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{lokalizace}" -->
-    @JacksonXmlProperty(localName = "lokalizace")
-    public String lokalizace;
+  @JacksonXmlProperty(localName = "lokalizace")
+  public String lokalizace;
 
 //<xs:element name="geom_gml" minOccurs="0" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{geom}") -->
-    @JacksonXmlProperty(localName = "geom_gml")
-    public Object geom_gml;
-    
+  @JacksonXmlProperty(localName = "geom_gml")
+  public Object geom_gml;
+
 //<xs:element name="geom_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom}") | ST_AsText("{geom}") -->
-    @JacksonXmlProperty(localName = "geom_wkt")
-    public WKT geom_wkt;
+  @JacksonXmlProperty(localName = "geom_wkt")
+  public WKT geom_wkt;
 
 //<xs:element name="geom_sjtsk_gml" minOccurs="0" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{geom_sjtsk}") -->
-    @JacksonXmlProperty(localName = "geom_sjtsk_gml")
-    public Object geom_sjtsk_gml;
-    
+  @JacksonXmlProperty(localName = "geom_sjtsk_gml")
+  public Object geom_sjtsk_gml;
+
 //<xs:element name="geom_sjtsk_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom_sjtsk}") | ST_AsText("{geom_sjtsk}") -->
-    @JacksonXmlProperty(localName = "geom_sjtsk_wkt")
-    public WKT geom_sjtsk_wkt;
+  @JacksonXmlProperty(localName = "geom_sjtsk_wkt")
+  public WKT geom_sjtsk_wkt;
 
-    public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-      
-      IndexUtils.setSecuredJSONField(idoc, this);
-      
-      if (katastr != null) {
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
-      }
+  public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
 
-      if (lokalizace != null) {
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_lokalizace", lokalizace, pristupnost);
+    IndexUtils.setSecuredJSONField(idoc, this);
+
+    if (katastr != null) {
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
+    }
+
+    if (lokalizace != null) {
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "f_lokalizace", lokalizace, pristupnost);
+    }
+
+    if (geom_wkt != null) {
+
+      String wktStr = geom_wkt.getValue();
+      final WKTReader reader = new WKTReader();
+      try {
+        Geometry geometry = reader.read(wktStr);
+        Point p = geometry.getCentroid();
+//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
+//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
+      } catch (Exception e) {
+        throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
       }
 
     }
+
   }
+}

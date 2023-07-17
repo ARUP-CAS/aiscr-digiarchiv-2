@@ -59,7 +59,7 @@ public class ArcheologickyZaznam implements FedoraModel {
   @JacksonXmlProperty(localName = "lokalita")
   public Lokalita lokalita;
 //</xs:choice>
-
+ 
 //<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
   @JacksonXmlProperty(localName = "historie")
   public List<Historie> historie = new ArrayList();
@@ -115,17 +115,8 @@ public class ArcheologickyZaznam implements FedoraModel {
     for (ExtOdkaz v : ext_odkaz) {
       IndexUtils.addJSONField(idoc, "ext_odkaz", v);
     }
-
-    if (!historie.isEmpty()) {
-      historie.sort(new Comparator<Historie>() {
-        @Override
-        public int compare(Historie h1, Historie h2) {
-          // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-          return h2.datum_zmeny.compareTo(h1.datum_zmeny);
-        }
-      });
-      idoc.setField("datestamp", historie.get(0).datum_zmeny);
-    }
+    
+    IndexUtils.setDateStamp(idoc, historie);
     
 
     List<SolrInputDocument> idocs = new ArrayList<>();

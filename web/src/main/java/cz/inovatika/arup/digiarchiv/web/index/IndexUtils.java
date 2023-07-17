@@ -4,9 +4,11 @@ package cz.inovatika.arup.digiarchiv.web.index;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Historie;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Lang;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 import static cz.inovatika.arup.digiarchiv.web.index.SolrSearcher.getSufixesByLevel;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,6 +112,19 @@ public class IndexUtils {
       } catch (JsonProcessingException ex) {
         LOGGER.log(Level.SEVERE, null, ex);
       }
+    }
+  }
+  
+  public static void setDateStamp(SolrInputDocument idoc, List<Historie> historie) {
+    if (!historie.isEmpty()) {
+      historie.sort(new Comparator<Historie>() {
+        @Override
+        public int compare(Historie h1, Historie h2) {
+          // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+          return h2.datum_zmeny.compareTo(h1.datum_zmeny);
+        }
+      });
+      idoc.setField("datestamp", historie.get(0).datum_zmeny);
     }
   }
   
