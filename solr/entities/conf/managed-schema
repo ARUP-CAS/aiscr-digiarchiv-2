@@ -30,6 +30,10 @@
    <field name="pristupnost" type="string" indexed="true" stored="true" />
    
    <field name="loc" type="location" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_A" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_B" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_C" type="location_rpt" indexed="true" stored="true" multiValued="true" />
+   <field name="loc_D" type="location_rpt" indexed="true" stored="true" multiValued="true" />
    <field name="loc_rpt" type="location_rpt" indexed="true" stored="true" multiValued="true" />
    <field name="loc_rpt_A" type="location_rpt" indexed="true" stored="true" multiValued="true" />
    <field name="loc_rpt_B" type="location_rpt" indexed="true" stored="true" multiValued="true" />

@@ -26,11 +26,11 @@ export class DokJednotkaComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  pian(id: string) {
-    if (this.pians) {
-      return this.pians.filter(p => p.ident_cely === id);
-    } else {
-      return [];
-    }
-  }
+  // pian(id: string) {
+  //   if (this.pians) {
+  //     return this.pians.filter(p => p.ident_cely === id);
+  //   } else {
+  //     return [];
+  //   }
+  // }
 }

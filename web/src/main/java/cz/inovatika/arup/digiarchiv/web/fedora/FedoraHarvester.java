@@ -37,6 +37,7 @@ public class FedoraHarvester {
 
   List<SolrInputDocument> idocsEntities = new ArrayList();
   List<SolrInputDocument> idocsHeslar = new ArrayList();
+  List<SolrInputDocument> idocsOrganizations = new ArrayList();
   List<SolrInputDocument> idocsOAI = new ArrayList();
 
   /**
@@ -135,6 +136,10 @@ public class FedoraHarvester {
         solr.add("heslar", idocsHeslar);
         idocsHeslar.clear();
       }
+      if (!idocsOrganizations.isEmpty()) {
+        solr.add("organizations", idocsOrganizations);
+        idocsOrganizations.clear();
+      }
       solr.close();
       Instant end = Instant.now();
       String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -218,11 +223,16 @@ public class FedoraHarvester {
           idocsEntities.clear();
           idocsOAI.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-          return; 
+          // return; 
         }
         if (idocsHeslar.size() > batchSize) {
           solr.add("heslar", idocsHeslar);
           idocsHeslar.clear();
+          LOGGER.log(Level.INFO, "Indexed {0}", indexed);
+        }
+        if (!idocsOrganizations.isEmpty()) {
+          solr.add("organizations", idocsOrganizations);
+          idocsOrganizations.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
         }
       }
@@ -242,6 +252,11 @@ public class FedoraHarvester {
         solr.add("heslar", idocsHeslar);
         idocsHeslar.clear();
       }
+      if (!idocsOrganizations.isEmpty()) {
+        solr.add("organizations", idocsOrganizations);
+        idocsOrganizations.clear();
+      }
+      LOGGER.log(Level.INFO, "Index model {0} finished", model);
     }
   }
 
@@ -281,11 +296,17 @@ public class FedoraHarvester {
       DocumentObjectBinder dob = new DocumentObjectBinder();
       SolrInputDocument idoc = dob.toSolrInputDocument(fm);
       fm.fillSolrFields(idoc);
-      if (fm.isEntity()) {
-        idocsEntities.add(idoc);
-      }
-      if (fm.isHeslo()) {
-        idocsHeslar.add(idoc);
+      String core = fm.coreName();
+      switch(core) {
+        case "entities":
+              idocsEntities.add(idoc);
+              break;
+        case "heslar":
+              idocsHeslar.add(idoc);
+              break;
+        case "organizations":
+              idocsOrganizations.add(idoc);
+              break;
       }
 
     }

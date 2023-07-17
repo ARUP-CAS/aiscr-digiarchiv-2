@@ -13,6 +13,7 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.ArcheologickyZaznam;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Let;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Organizace;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
 import java.io.IOException;
@@ -38,15 +39,9 @@ public interface FedoraModel {
   
   /**
    * 
-   * @return true for models that should index in entities 
+   * @return the core to index to (entities, heslar, organizations)
    */
-  public boolean isEntity();
-  
-  /**
-   * 
-   * @return true for Heslo
-   */
-  public boolean isHeslo();
+  public String coreName();
   
   /**
    * Creates SolrInputDocument tfor index in oai core
@@ -136,6 +131,8 @@ public interface FedoraModel {
         return SamostatnyNalez.class;
       case "heslo":
         return Heslo.class;
+      case "organizace":
+        return Organizace.class;
 //      case "knihovna_3d":
 //        return Dokument.class;
       default:

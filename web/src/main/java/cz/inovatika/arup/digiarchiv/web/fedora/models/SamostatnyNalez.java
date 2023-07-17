@@ -127,13 +127,8 @@ public class SamostatnyNalez implements FedoraModel {
   }
 
   @Override
-  public boolean isEntity() {
-    return true;
-  }
-
-  @Override
-  public boolean isHeslo() {
-    return false;
+  public String coreName() {
+    return "entities";
   }
 
   @Override

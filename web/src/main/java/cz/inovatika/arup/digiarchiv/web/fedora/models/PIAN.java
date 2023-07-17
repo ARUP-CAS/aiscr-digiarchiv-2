@@ -69,13 +69,8 @@ public class PIAN implements FedoraModel {
   }
 
   @Override
-  public boolean isEntity() {
-    return true;
-  }
-
-  @Override
-  public boolean isHeslo() {
-    return false;
+  public String coreName() {
+    return "entities";
   }
 
   @Override
@@ -128,10 +123,6 @@ class PIANChraneneUdaje {
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
     IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
     IndexUtils.setSecuredJSONField(idoc, this);
-//    IndexUtils.addSecuredJSONField(idoc, "geom_gml", geom_gml);
-//    IndexUtils.addSecuredJSONField(idoc, "geom_wkt", geom_wkt);
-//    IndexUtils.addSecuredJSONField(idoc, "geom_sjtsk_gml", geom_sjtsk_gml);
-//    IndexUtils.addSecuredJSONField(idoc, "geom_sjtsk_wkt", geom_sjtsk_wkt);
 
     if (geom_wkt != null) {
 
@@ -140,8 +131,8 @@ class PIANChraneneUdaje {
       try {
         Geometry geometry = reader.read(wktStr);
         Point p = geometry.getCentroid();
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
+//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
+//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

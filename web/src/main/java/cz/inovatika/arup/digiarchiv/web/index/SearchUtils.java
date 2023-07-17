@@ -232,7 +232,7 @@ public class SearchUtils {
   public static ComponentSearcher getComponentSearcher(String component) {
     ComponentSearcher searcher;
     switch ((String) component) {
-      case "dok_jednotka":
+      case "dokumentacni_jednotka":
         searcher = new DokJednotkaSearcher();
         break;
       case "jednotka_dokumentu":

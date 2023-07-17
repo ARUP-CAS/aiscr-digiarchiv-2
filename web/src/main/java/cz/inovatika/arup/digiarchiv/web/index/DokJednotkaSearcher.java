@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,6 +45,21 @@ public class DokJednotkaSearcher implements ComponentSearcher {
           parentSearchable = true;
         }
       }
+      
+      String ident_cely = doc.getString("ident_cely");
+      SolrQuery query = new SolrQuery("*").addFilterQuery("dokumentacni_jednotka_ident_cely:\""+ident_cely+"\"");
+      try {
+        JSONObject sub = SolrSearcher.json(client, "entities", query);
+        JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
+        for (int j = 0; j < subs.length(); j++) {
+          doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
+        }
+        parentSearchable = true;
+        
+      } catch (SolrServerException | IOException ex) {
+        Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      
     }
   }
 

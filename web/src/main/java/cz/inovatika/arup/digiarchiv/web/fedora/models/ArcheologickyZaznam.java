@@ -8,6 +8,7 @@ import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -60,11 +61,17 @@ public class ArcheologickyZaznam implements FedoraModel {
 //</xs:choice>
 
 //<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
+  @JacksonXmlProperty(localName = "historie")
+  public List<Historie> historie = new ArrayList();
+
 //<xs:element name="dokumentacni_jednotka" minOccurs="0" maxOccurs="unbounded" type="amcr:dokumentacni_jednotkaType"/> <!-- "{dokumentacni_jednotky_akce}" -->
   @JacksonXmlProperty(localName = "dokumentacni_jednotka")
   public List<DokumentacniJednotka> dokumentacni_jednotka = new ArrayList();
 
 //<xs:element name="ext_odkaz" minOccurs="0" maxOccurs="unbounded" type="amcr:az-ext_odkazType"/> <!-- "{externi_odkazy}" -->
+  @JacksonXmlProperty(localName = "ext_odkaz")
+  public List<ExtOdkaz> ext_odkaz = new ArrayList();
+
 //<xs:element name="dokument" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{casti_dokumentu.dokument.ident_cely}" | "{casti_dokumentu.dokument.ident_cely}" -->
   @JacksonXmlProperty(localName = "dokument")
   public List<Vocab> dokument = new ArrayList();
@@ -75,13 +82,8 @@ public class ArcheologickyZaznam implements FedoraModel {
   }
 
   @Override
-  public boolean isEntity() {
-    return true;
-  }
-
-  @Override
-  public boolean isHeslo() {
-    return false;
+  public String coreName() {
+    return "entities";
   }
 
   @Override
@@ -110,10 +112,22 @@ public class ArcheologickyZaznam implements FedoraModel {
       IndexUtils.addVocabField(idoc, "dokument", v);
     }
 
-//    for (DokumentacniJednotka dj : dokumentacni_jednotka) {
-//      // Should index as entity
-//      dj.fillSolrFields(idoc);
-//    }
+    for (ExtOdkaz v : ext_odkaz) {
+      IndexUtils.addJSONField(idoc, "ext_odkaz", v);
+    }
+
+    if (!historie.isEmpty()) {
+      historie.sort(new Comparator<Historie>() {
+        @Override
+        public int compare(Historie h1, Historie h2) {
+          // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+          return h2.datum_zmeny.compareTo(h1.datum_zmeny);
+        }
+      });
+      idoc.setField("datestamp", historie.get(0).datum_zmeny);
+    }
+    
+
     List<SolrInputDocument> idocs = new ArrayList<>();
     try {
       for (DokumentacniJednotka dj : dokumentacni_jednotka) {
@@ -134,12 +148,12 @@ public class ArcheologickyZaznam implements FedoraModel {
         idoc.addField("dokumentacni_jednotka_komponenta_nalez_objekt_specifikace", djdoc.getFieldValue("komponenta_nalez_objekt_specifikace"));
         idoc.addField("dokumentacni_jednotka_komponenta_nalez_predmet_druh", djdoc.getFieldValue("komponenta_nalez_predmet_druh"));
         idoc.addField("dokumentacni_jednotka_komponenta_nalez_predmet_specifikace", djdoc.getFieldValue("komponenta_nalez_predmet_specifikace"));
-        
+
         IndexUtils.addFieldNonRepeat(idoc, "dokumentacni_jednotka_typ", djdoc.getFieldValue("typ"));
 
         // add loc field by pian
         addPian(idoc, (String) djdoc.getFieldValue("pian"));
-        
+
         //add adb fields
         addAdbFields(idoc, (String) djdoc.getFieldValue("adb"));
       }
@@ -199,12 +213,12 @@ public class ArcheologickyZaznam implements FedoraModel {
               // idoc.setField("dokumentacni_jednotka_pian_" + key, pianDoc.opt(key));
               if (key.startsWith("loc")) {
                 SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.opt(key));
-              } else if (key.startsWith("centroid_n")) {
-                SolrSearcher.addFieldNonRepeat(idoc, "lat" + key.substring(10), pianDoc.opt(key));
-                SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.opt(key));
-              } else if (key.startsWith("centroid_e")) {
-                SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(10), pianDoc.opt(key));
-                SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.opt(key));
+              } else if (key.startsWith("lat")) {
+                // SolrSearcher.addFieldNonRepeat(idoc, "lat" + key.substring(3), pianDoc.opt(key));
+                SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.optInt(key));
+              } else if (key.startsWith("lng")) {
+                // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
+                SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.optInt(key));
               } else {
                 SolrSearcher.addFieldNonRepeat(idoc, "dokumentacni_jednotka_pian_" + key, pianDoc.opt(key));
               }

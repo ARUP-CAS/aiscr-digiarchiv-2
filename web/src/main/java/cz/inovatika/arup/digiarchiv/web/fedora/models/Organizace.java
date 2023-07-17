@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.List;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
@@ -11,72 +12,77 @@ import org.apache.solr.common.SolrInputDocument;
  *
  * @author alberto
  */
-@JacksonXmlRootElement(localName = "heslo")
-public class Heslo implements FedoraModel {
-  
-//  <xs:complexType name="hesloType">
-//    <xs:sequence>
-//    </xs:sequence>
-//  </xs:complexType>
+@JacksonXmlRootElement(localName = "organizace")
+public class Organizace implements FedoraModel {
 
 //      <xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
   @JacksonXmlProperty(localName = "ident_cely")
   @Field
   public String ident_cely;
   
-//      <xs:element name="nazev_heslare" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev_heslare.nazev}" -->
-  @JacksonXmlProperty(localName = "nazev_heslare")
-  public Lang nazev_heslare;
+//<xs:element name="nazev" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev}" -->
+  @JacksonXmlProperty(localName = "nazev")
+  public Lang nazev;
   
-//      <xs:element name="heslo" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{heslo}" -->
-  @JacksonXmlProperty(localName = "heslo")
-  public Lang heslo;
+//<xs:element name="nazev_en" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev_en}" -->
+  @JacksonXmlProperty(localName = "nazev_en")
+  public Lang nazev_en;
   
-//      <xs:element name="heslo_en" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{heslo_en}" -->
-  @JacksonXmlProperty(localName = "heslo_en")
-  public Lang heslo_en;
+//<xs:element name="nazev_zkraceny" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev_zkraceny}" -->
+  @JacksonXmlProperty(localName = "nazev_zkraceny")
+  public Lang nazev_zkraceny;
   
-//      <xs:element name="popis" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{popis}" -->
-  @JacksonXmlProperty(localName = "popis")
+//<xs:element name="nazev_zkraceny_en" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev_zkraceny_en}" -->
+  @JacksonXmlProperty(localName = "nazev_zkraceny_en")
+  public Lang nazev_zkraceny_en;
+  
+//<xs:element name="typ_organizace" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ_organizace.ident_cely}" | "{typ_organizace.heslo}" -->
+  @JacksonXmlProperty(localName = "typ_organizace")
+  public Vocab typ_organizace;
+  
+//<xs:element name="oao" minOccurs="1" maxOccurs="1" type="xs:boolean"/> <!-- "{oao}" -->
+  @JacksonXmlProperty(localName = "oao")
   @Field
-  public Lang popis;
+  public boolean oao;
   
-//      <xs:element name="popis_en" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{popis_en}" -->
-  @JacksonXmlProperty(localName = "popis_en")
+//<xs:element name="mesicu_do_zverejneni" minOccurs="1" maxOccurs="1" type="xs:integer"/> <!-- "{mesicu_do_zverejneni}" -->
+  @JacksonXmlProperty(localName = "mesicu_do_zverejneni")
   @Field
-  public Lang popis_en;
+  public long mesicu_do_zverejneni;
   
-//      <xs:element name="zkratka" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{zkratka}" -->
-  @JacksonXmlProperty(localName = "zkratka")
-  public Lang zkratka;
+//<xs:element name="zverejneni_pristupnost" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{zverejneni_pristupnost.ident_cely}" | "{zverejneni_pristupnost.heslo}" -->
+  @JacksonXmlProperty(localName = "zverejneni_pristupnost")
+  public Vocab zverejneni_pristupnost;
   
-//      <xs:element name="zkratka_en" minOccurs="0" maxOccurs="1" type="amcr:langstringType"/> <!-- "{zkratka_en}" -->
-  @JacksonXmlProperty(localName = "zkratka_en")
-  public Lang zkratka_en;
-  
-  
-//      <xs:element name="razeni" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{razeni}" -->
-  @JacksonXmlProperty(localName = "razeni")
+//<xs:element name="email" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{email}" -->
+  @JacksonXmlProperty(localName = "email")
   @Field
-  public long razeni;
+  public String email;
   
-//      <xs:element name="hierarchie_vyse" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_vyseType"/> <!-- "{nadrazena_hesla}" -->
-  @JacksonXmlProperty(localName = "hierarchie_vyse")
-  private List<HierarchieVyse> hierarchie_vyse;
-  public List<HierarchieVyse> getHierarchieVyse() {
-      return hierarchie_vyse;
-  }
+//<xs:element name="telefon" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{telefon}" -->
+  @JacksonXmlProperty(localName = "telefon")
+  @Field
+  public String telefon;
   
-//      <xs:element name="hierarchie_nize" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_nizeType"/> <!-- "{podrazena_hesla}" -->
-  @JacksonXmlProperty(localName = "hierarchie_nize")
-  private List<HierarchieNize> hierarchie_nize;
-  public List<HierarchieNize> getHierarchieNize() {
-      return hierarchie_nize;
-  }
+//<xs:element name="adresa" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{adresa}" -->
+  @JacksonXmlProperty(localName = "adresa")
+  @Field
+  public String adresa;
   
-//      <xs:element name="dokument_typ_material_rada" minOccurs="0" maxOccurs="unbounded" type="amcr:dokument_typ_material_radaType"/> <!-- "{dokument_typ_material_rada}" -->
-//      <xs:element name="datace" minOccurs="0" maxOccurs="1" type="amcr:dataceType"/> <!-- "{datace_obdobi}" -->
-//      <xs:element name="odkaz" minOccurs="0" maxOccurs="unbounded" type="amcr:odkazType"/> <!-- "{heslar_odkaz}" -->
+//<xs:element name="ico" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{ico}" -->
+  @JacksonXmlProperty(localName = "ico")
+  @Field
+  public String ico;
+  
+//<xs:element name="soucast" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{soucast.ident_cely}" | "{soucast.nazev}" -->
+  @JacksonXmlProperty(localName = "soucast")
+  public Vocab soucast;
+  
+//<xs:element name="zanikla" minOccurs="1" maxOccurs="1" type="xs:boolean"/> <!-- "{zanikla}" -->
+  @JacksonXmlProperty(localName = "zanikla")
+  @Field
+  public boolean zanikla;
+  
 
   @Override
   public SolrInputDocument createOAIDocument(String xml) {
@@ -85,27 +91,14 @@ public class Heslo implements FedoraModel {
 
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
-    if (heslo != null) {
-      idoc.setField("cs", heslo.getValue());
-    }
-    if (heslo_en != null) {
-      idoc.setField("en", heslo_en.getValue());
-    }
-    if (nazev_heslare != null) {
-      idoc.setField("nazev_heslare", nazev_heslare.getValue());
-    }
-    if (zkratka != null) {
-      idoc.setField("zkratka", zkratka.getValue());
-    }
-    if (zkratka_en != null) {
-      idoc.setField("zkratka_en", zkratka_en.getValue());
-    }
-    
-//    if(hierarchie_nize != null) {
-//      for(HierarchieNize hz: hierarchie_nize) {
-//        idoc.setField("en", hz.);
-//      }
-//    }
+    IndexUtils.addLangField(idoc, "nazev", nazev);
+    IndexUtils.addLangField(idoc, "nazev_en", nazev_en);
+    IndexUtils.addLangField(idoc, "nazev_zkraceny", nazev_zkraceny);
+    IndexUtils.addLangField(idoc, "nazev_zkraceny_en", nazev_zkraceny_en);
+    IndexUtils.addVocabField(idoc, "typ_organizace", typ_organizace);
+    IndexUtils.addVocabField(idoc, "zverejneni_pristupnost", zverejneni_pristupnost);
+    IndexUtils.addVocabField(idoc, "soucast", soucast);
+      
   }
 
   @Override
@@ -114,14 +107,8 @@ public class Heslo implements FedoraModel {
   }
 
   @Override
-  public boolean isEntity() {
-    return false;
+  public String coreName() {
+    return "organizations";
   }
-
-  @Override
-  public boolean isHeslo() {
-    return true;
-  }
-  
   
 }

@@ -4,6 +4,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Lang;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 import static cz.inovatika.arup.digiarchiv.web.index.SolrSearcher.getSufixesByLevel;
 import java.util.List;
@@ -73,6 +74,12 @@ public class IndexUtils {
   }
   
   public static void addRefField(SolrInputDocument idoc, String field, Vocab v) {
+    if(v != null) {
+      idoc.setField(field, v.getValue());
+    }
+  }
+  
+  public static void addLangField(SolrInputDocument idoc, String field, Lang v) {
     if(v != null) {
       idoc.setField(field, v.getValue());
     }

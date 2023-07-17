@@ -36,9 +36,9 @@
           <ng-container *ngIf="result.pristupnost">
             <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
             <app-inline-filter [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
-            <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.chranene_udaje?.zm10">
+            <span class="app-pipe"></span>
             <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
             <app-inline-filter [field]="'zm10'" [value]="result.chranene_udaje.zm10" [heslar]="'zm10'"></app-inline-filter>
             <span class="app-pipe"></span>
@@ -96,7 +96,7 @@
             </mat-expansion-panel-header>
             <table>
               <tbody>
-                <tr *ngIf="result.centroid_n || result.centroid_e">
+                <tr *ngIf="result.chranene_udaje || result.centroid_n">
                   <th class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</th>
                   <td><ng-container *ngIf="result.centroid_n">{{ result.centroid_n }}</ng-container><ng-container *ngIf="result.centroid_e">&#160;:&#160;{{ result.centroid_e }}</ng-container></td>
                 </tr>

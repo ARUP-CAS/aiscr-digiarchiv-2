@@ -114,14 +114,8 @@ public class Heslo implements FedoraModel {
   }
 
   @Override
-  public boolean isEntity() {
-    return false;
+  public String coreName() {
+    return "heslar";
   }
-
-  @Override
-  public boolean isHeslo() {
-    return true;
-  }
-  
   
 }
