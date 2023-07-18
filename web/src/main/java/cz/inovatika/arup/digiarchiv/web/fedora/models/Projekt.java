@@ -5,11 +5,18 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.WKTReader;
 
 /**
  *
@@ -97,11 +104,17 @@ public class Projekt implements FedoraModel {
   public ProjektChraneneUdaje chranene_udaje;
   
 //<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
+  @JacksonXmlProperty(localName = "historie")
+  public List<Historie> historie = new ArrayList();
+
 //<xs:element name="oznamovatel" minOccurs="0" maxOccurs="1" type="amcr:oznamovatelType"/> <!-- "{oznamovatel}" -->
   @JacksonXmlProperty(localName = "oznamovatel")
   public Oznamovatel oznamovatel;
   
 //<xs:element name="soubor" minOccurs="0" maxOccurs="unbounded" type="amcr:souborType"/>  <!-- {soubory.soubory} -->
+  @JacksonXmlProperty(localName = "soubor")
+  public List<Soubor> soubor = new ArrayList();
+
 //<xs:element name="archeologicky_zaznam" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{akce_set.archeologicky_zaznam.ident_cely}" | "{akce_set.archeologicky_zaznam.ident_cely}" -->
   @JacksonXmlProperty(localName = "archeologicky_zaznam")
   public List<Vocab> archeologicky_zaznam = new ArrayList();
@@ -129,6 +142,7 @@ public class Projekt implements FedoraModel {
   public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
     idoc.setField("searchable", true);
+    IndexUtils.setDateStamp(idoc, historie);
     
     IndexUtils.addVocabField(idoc, "okres", okres);
     idoc.setField("typ_projektu", typ_projektu.getId());
@@ -147,6 +161,20 @@ public class Projekt implements FedoraModel {
     
     for(Vocab v : dokument) {
       idoc.setField("dokument", v.getValue());
+    }
+    
+    List<SolrInputDocument> idocs = new ArrayList<>();
+    try {
+      for (Soubor s : soubor) {
+        SolrInputDocument djdoc = s.createSolrDoc();
+        idocs.add(djdoc);
+        IndexUtils.addJSONField(idoc, "soubor", s);
+      }
+      if (!idocs.isEmpty()) {
+        IndexUtils.getClient().add("soubor", idocs, 10);
+      }
+    } catch (SolrServerException | IOException ex) {
+      Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
     }
     
     if (chranene_udaje != null) {
@@ -204,14 +232,27 @@ class ProjektChraneneUdaje {
     for (Vocab v: dalsi_katastr) {
       IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
     }
-//    
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalizace", lokalizace, pristupnost);
-    //idoc.setField("lokalizace", lokalizace);
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
-    //idoc.setField("parcelni_cislo", parcelni_cislo);
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
-    //idoc.setField("kulturni_pamatka_cislo", kulturni_pamatka_cislo);
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
-    //idoc.setField("kulturni_pamatka_popis", kulturni_pamatka_popis);
+
+//    IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalizace", lokalizace, pristupnost);
+//    IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
+//    IndexUtils.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
+//    IndexUtils.addSecuredFieldNonRepeat(idoc, "kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
+    
+    if (geom_wkt != null) {
+
+      String wktStr = geom_wkt.getValue();
+      final WKTReader reader = new WKTReader();
+      try {
+        Geometry geometry = reader.read(wktStr);
+        Point p = geometry.getCentroid();
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
+      } catch (Exception e) {
+        throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
+      }
+
+    }
   }
 }

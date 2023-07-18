@@ -101,7 +101,11 @@ public class PIANSearcher implements EntitySearcher{
   public String[] getSearchFields(String pristupnost) {
   
     return new String[]{"ident_cely,entity,stav,typ,presnost,geom_system,geom_updated_at,geom_sjtsk_updated_at,pristupnost,chranene_udaje:[json]", 
-      "centroid_n:centroid_n_" + pristupnost, "centroid_e:centroid_e_" + pristupnost};
+      "centroid_n:centroid_n_" + pristupnost, "centroid_e:centroid_e_" + pristupnost,
+      "lat:lat_" + pristupnost,
+      "lng:lng_" + pristupnost,
+      "loc_rpt:loc_rpt_" + pristupnost,
+      "loc:loc_" + pristupnost};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -141,6 +145,7 @@ public class PIANSearcher implements EntitySearcher{
       query.setFacet(false).setRequestHandler("/select");
       query.set("defType", "edismax");
       query.setFields("pian:[json],ident_cely,organizace,pristupnost","loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost);
+      
       query.setRows(Math.min(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForCluster", 5000), Integer.parseInt(request.getParameter("rows"))));
       
       JSONObject jo = SearchUtils.json(query, client, "entities");

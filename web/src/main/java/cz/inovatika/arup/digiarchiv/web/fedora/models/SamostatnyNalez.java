@@ -237,8 +237,6 @@ class SnChraneneUdaje {
       try {
         Geometry geometry = reader.read(wktStr);
         Point p = geometry.getCentroid();
-//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
-//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

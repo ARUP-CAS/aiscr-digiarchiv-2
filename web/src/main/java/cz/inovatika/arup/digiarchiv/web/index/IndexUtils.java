@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONObject;
 
 /**
  *
@@ -109,6 +110,17 @@ public class IndexUtils {
       try {
         ObjectMapper objectMapper = new ObjectMapper();
         idoc.setField("chranene_udaje", objectMapper.writeValueAsString(o));
+      } catch (JsonProcessingException ex) {
+        LOGGER.log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+  
+  public static void setSecuredJSONFieldPrefix(SolrInputDocument idoc, String prefix, Object o) {
+    if (o != null) { 
+      try {
+        ObjectMapper objectMapper = new ObjectMapper();
+        idoc.setField(prefix +"_chranene_udaje", objectMapper.writeValueAsString(o));
       } catch (JsonProcessingException ex) {
         LOGGER.log(Level.SEVERE, null, ex);
       }

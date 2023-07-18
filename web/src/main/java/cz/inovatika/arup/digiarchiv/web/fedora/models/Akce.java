@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.SolrInputField;
+import org.json.JSONObject;
 
 /**
  *
@@ -86,9 +87,8 @@ public class Akce {
   private AkceChraneneUdaje chranene_udaje;
 
   public void fillSolrFields(SolrInputDocument idoc) {
-    
+
     // idoc from archeologicky_zaznam.
-    
     String pristupnost = (String) idoc.getFieldValue("pristupnost");
     DocumentObjectBinder dob = new DocumentObjectBinder();
     SolrInputDocument akceDoc = dob.toSolrInputDocument(this);
@@ -102,21 +102,21 @@ public class Akce {
     IndexUtils.addVocabField(akceDoc, "vedlejsi_typ", vedlejsi_typ);
     IndexUtils.addVocabField(akceDoc, "f_typ_vyzkumu", hlavni_typ);
     IndexUtils.addVocabField(akceDoc, "f_typ_vyzkumu", vedlejsi_typ);
-    
+
     for (VedouciAkceOstatni o : vedouci_akce_ostatni) {
       IndexUtils.addJSONField(akceDoc, "vedouci_akce_ostatni", o);
       IndexUtils.addRefField(akceDoc, "vedouci_akce_ostatni_jmeno", o.vedouci);
       IndexUtils.addVocabField(akceDoc, "vedouci_akce_ostatni_organizace", o.organizace);
     }
-    
+
     if (chranene_udaje != null) {
       chranene_udaje.fillSolrFields(akceDoc, pristupnost);
     }
-    
-    for (Entry<String,SolrInputField> entry : akceDoc.entrySet()) {
+
+    for (Entry<String, SolrInputField> entry : akceDoc.entrySet()) {
       idoc.setField(entry.getKey(), entry.getValue().getValue());
     }
-    
+
   }
 
 }
@@ -125,13 +125,13 @@ class AkceChraneneUdaje {
 //<xs:element name="lokalizace_okolnosti" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{lokalizace_okolnosti}" -->
   @JacksonXmlProperty(localName = "lokalizace_okolnosti")
   public String lokalizace_okolnosti;
-  
+
 //<xs:element name="souhrn_upresneni" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{souhrn_upresneni}" -->
   @JacksonXmlProperty(localName = "souhrn_upresneni")
   public String souhrn_upresneni;
-  
+
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    IndexUtils.setSecuredJSONField(idoc, this);
+    IndexUtils.setSecuredJSONFieldPrefix(idoc, "akce", this);
     IndexUtils.setSecuredField(idoc, "lokalizace_okolnosti", lokalizace_okolnosti, pristupnost);
     IndexUtils.setSecuredField(idoc, "souhrn_upresneni", souhrn_upresneni, pristupnost);
   }

@@ -7,15 +7,12 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.stream.XMLStreamException;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
@@ -218,12 +215,12 @@ public class FedoraHarvester {
           solr.add("entities", idocsEntities);
           solr.commit("entities");
 
-          solr.add("oai", idocsOAI);
-          solr.commit("oai");
+//          solr.add("oai", idocsOAI);
+//          solr.commit("oai");
           idocsEntities.clear();
           idocsOAI.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-          // return; 
+          //return; 
         }
         if (idocsHeslar.size() > batchSize) {
           solr.add("heslar", idocsHeslar);

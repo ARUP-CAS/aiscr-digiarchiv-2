@@ -247,11 +247,15 @@ public class SearchServlet extends HttpServlet {
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
-          query.setFields("geom_wkt");
+          query.setFields("geom_wkt,chranene_udaje:[json]");
 
           JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+          if (jo.has("geom_wkt")) {
+            jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
+          } else {
+            jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value")));
+          }
 
-          jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
           return jo.toString();
 
         } catch (Exception ex) {
@@ -296,26 +300,30 @@ public class SearchServlet extends HttpServlet {
     QUERY {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        String entity = "" + request.getParameter("entity");
-        EntitySearcher searcher = SearchUtils.getSearcher(entity);
-        if (searcher == null) {
-          searcher = new DokumentSearcher();
-        }
-        JSONObject jo = searcher.search(request);
-
-        // Remove stats in case of one result, without access
-        int numFound = jo.getJSONObject("response").getInt("numFound");
-        if (numFound == 1) {
-          String docPr = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("pristupnost");
-          String pristupnost = LoginServlet.pristupnost(request.getSession());
-          if (docPr.compareTo(pristupnost) > 0) {
-            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
-            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          String entity = "" + request.getParameter("entity");
+          EntitySearcher searcher = SearchUtils.getSearcher(entity);
+          if (searcher == null) {
+            searcher = new DokumentSearcher();
           }
+          JSONObject jo = searcher.search(request);
+          searcher.getChilds(jo, client, request);
+          // Remove stats in case of one result, without access
+          int numFound = jo.getJSONObject("response").getInt("numFound");
+          if (numFound == 1) {
+            String docPr = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("pristupnost");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            if (docPr.compareTo(pristupnost) > 0) {
+              jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
+              jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+            }
+          }
+          return jo.toString();
+        } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, null, ex);
+          return new JSONObject().put("error", ex).toString();
         }
-
-        return jo.toString();
+        
       }
     },
     EXPORT_MAPA {

@@ -51,29 +51,31 @@ public class ProjektSearcher implements EntitySearcher {
       }
 
       if (docPr.compareTo(pristupnost) > 0) {
-        doc.remove("katastr");
-        doc.remove("dalsi_katastry");
-        doc.remove("loc");
-        doc.remove("lat");
-        doc.remove("lng");
-        doc.remove("pian");
-        doc.remove("parent_akce_katastr");
-        doc.remove("dok_jednotka");
+        doc.remove("chranene_udaje");
         
-        Object[] keys = doc.keySet().toArray();
-        for (Object okey : keys) {
-          String key = (String) okey;
-          if (key.endsWith("_D") && "D".compareTo(pristupnost) > 0) {
-            doc.remove((String) key);
-          }
-          if (key.endsWith("_C") && "C".compareTo(pristupnost) > 0) {
-            doc.remove((String) key);
-          }
-          if (key.endsWith("_B") && "B".compareTo(pristupnost) > 0) {
-            doc.remove((String) key);
-          }
-
-        }
+//        doc.remove("katastr");
+//        doc.remove("dalsi_katastry");
+//        doc.remove("loc");
+//        doc.remove("lat");
+//        doc.remove("lng");
+//        doc.remove("pian");
+//        doc.remove("parent_akce_katastr");
+//        doc.remove("dok_jednotka");
+//        
+//        Object[] keys = doc.keySet().toArray();
+//        for (Object okey : keys) {
+//          String key = (String) okey;
+//          if (key.endsWith("_D") && "D".compareTo(pristupnost) > 0) {
+//            doc.remove((String) key);
+//          }
+//          if (key.endsWith("_C") && "C".compareTo(pristupnost) > 0) {
+//            doc.remove((String) key);
+//          }
+//          if (key.endsWith("_B") && "B".compareTo(pristupnost) > 0) {
+//            doc.remove((String) key);
+//          }
+//
+//        }
 
       }
       
@@ -147,7 +149,34 @@ public class ProjektSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*,akce:[json],pian:[json]","katastr","okres","hlavni_katastr_A:katastr","okres"};
+    
+    return new String[]{"katastr","okres","hlavni_katastr_A:katastr",
+      "entity",
+      "ident_cely",
+      "stav",
+      "typ_projektu",
+      "podnet",
+      "planovane_zahajeni",
+      "vedouci_projektu",
+      "organizace",
+      "uzivatelske_oznaceni",
+      "oznaceni_stavby",
+      "kulturni_pamatka",
+      "datum_zahajeni",
+      "datum_ukonceni",
+      "termin_odevzdani_nz",
+      "pristupnost",
+      "chranene_udaje:[json]",
+      "datestamp",
+      "oznamovatel",
+      "soubor",
+      "archeologicky_zaznam",
+      "samostatny_nalez",
+      "dokument",
+      "lat:lat_" + pristupnost,
+      "lng:lng_" + pristupnost,
+      "loc_rpt:loc_rpt_" + pristupnost,
+      "loc:loc_" + pristupnost};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -157,7 +186,7 @@ public class ProjektSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields("*,akce:[json],pian:[json]","hlavni_katastr_A:katastr","okres","hlavni_katastr_A:f_katastr","okres");
+    query.setFields(getSearchFields(pristupnost));
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
     }

@@ -64,21 +64,21 @@ export class MapaComponent implements OnInit, OnDestroy {
     iconUrl: 'assets/img/pin.png',
     //shadowUrl: 'assets/img/marker-shadow.png'
   });
-  
+
   iconPoint = L.icon({
     iconSize: [16, 26],
     iconAnchor: [8, 26],
     iconUrl: 'assets/img/pin-point.png',
     //shadowUrl: 'assets/img/marker-shadow.png'
   });
-  
+
   hitIcon = L.icon({
     iconSize: [12, 20],
     iconAnchor: [6, 20],
     iconUrl: 'assets/img/pin-hit.png',
     //shadowUrl: 'assets/img/marker-shadow.png'
   });
-  
+
   hitIconPoint = L.icon({
     iconSize: [16, 26],
     iconAnchor: [8, 26],
@@ -108,7 +108,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   firstChange = true;
   firstZoom = true;
 
-  layersControl = {baseLayers:{}, overlays:{}};
+  layersControl = { baseLayers: {}, overlays: {} };
 
   osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: this.config.mapOptions.maxZoom,
@@ -211,14 +211,14 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   initLayers() {
     this.baseLayers = {};
-    this.baseLayers[this.service.getTranslation('map.layer.cuzk_zakladni')]= this.cuzkZM,
-    this.baseLayers[this.service.getTranslation('map.layer.cuzk_orto')]= this.cuzkOrt,
-    this.baseLayers[this.service.getTranslation('map.layer.cuzk_stin')]= this.cuzkEL,
-    this.baseLayers[this.service.getTranslation('map.layer.openstreet')]= this.osm;
+    this.baseLayers[this.service.getTranslation('map.layer.cuzk_zakladni')] = this.cuzkZM,
+      this.baseLayers[this.service.getTranslation('map.layer.cuzk_orto')] = this.cuzkOrt,
+      this.baseLayers[this.service.getTranslation('map.layer.cuzk_stin')] = this.cuzkEL,
+      this.baseLayers[this.service.getTranslation('map.layer.openstreet')] = this.osm;
     this.overlays = {};
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_mapa')] = this.cuzkWMS;
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_uzemi')] = this.cuzkWMS2;
-    
+
     this.options.layers = [this.osm];
 
     this.layersControl = {
@@ -264,7 +264,6 @@ export class MapaComponent implements OnInit, OnDestroy {
 
       this.markers = new L.markerClusterGroup();
       this.markersList = [];
-      
       switch (this.showType) {
         case 'cluster': {
           this.state.loading = true;
@@ -284,7 +283,8 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.setMarkersData();
           if (!byLoc) {
             this.markersList.forEach(m => {
-              if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
+              if (m.pianPresnost !== 'HES-000864' && m.pianTyp !== 'bod') {
+              //if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
                 this.addShape(m.pianId, m.pianPresnost, m.docId.length);
               }
             });
@@ -353,9 +353,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       mrk.pianTyp = typ;
       mrk.docId = [doc.ident_cely];
       mrk.doc = doc;
-      if(isPian) {
+      if (isPian) {
         mrk.on('click', (e) => {
-            this.setPianId(e.target.pianId);
+          this.setPianId(e.target.pianId);
         });
         mrk.bindTooltip(this.popUpHtml(id, presnost, mrk.docId)).openTooltip();
       } else {
@@ -373,14 +373,15 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setClusterDataByPian(docs: any[]) {
     this.markers = new L.markerClusterGroup();
-    docs.forEach(doc => {
-      if (doc.pian && doc.pian.length > 0) {
-        doc.pian.forEach(pian => {
-          if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
-            this.addMarker(pian.ident_cely, true, pian.centroid_n, pian.centroid_e, pian.presnost, pian.typ, doc);
-          }
-        });
+    docs.forEach(pian => {
+      //if (doc.pian && doc.pian.length > 0) {
+      //  doc.pian.forEach(pian => {
+      if (this.state.hasRights(pian.pristupnost, pian.organizace)) {
+        const coords = pian.loc_rpt[0].split(',');
+        this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, pian);
       }
+      //  });
+      //}
     });
     this.markers.addLayers(this.markersList);
     this.currentZoom = this.map.getZoom();
@@ -409,7 +410,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
           if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
-            this.addMarker(pian.ident_cely, true, pian.centroid_n, pian.centroid_e, pian.presnost, pian.typ, doc);
+            const coords = pian.loc_rpt[0].split(',');
+            this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, doc);
           }
         });
       } else if (doc.loc_rpt) {
@@ -458,8 +460,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (!res) {
       this.clearSelectedMarker();
       //if (this.showType === 'heat') {
-        // this.markers = new L.featureGroup();
-        this.updateBounds(this.map.getBounds(), false, 'hitMarker');
+      // this.markers = new L.featureGroup();
+      this.updateBounds(this.map.getBounds(), false, 'hitMarker');
       //}
       return;
     }
@@ -544,7 +546,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       // if (this.state.locationFilterEnabled) {
       //   this.locationFilter.setBounds(bounds);
       // }
-      
+
       this.map.fitBounds(bounds);
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
@@ -586,11 +588,11 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     this.locationFilter.on('change', (e) => {
-      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds())  && !this.firstChange) {
+      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds()) && !this.firstChange) {
         this.updateBounds(null, true, 'locChange');
       }
       this.firstChange = false;
-      
+
     });
 
     this.locationFilter.on('enabled', () => {
@@ -617,7 +619,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   debounce(func, wait, immediate) {
     var timeout;
-    return  () => {
+    return () => {
       var context = this, args = arguments;
       clearTimeout(timeout);
       timeout = setTimeout(function () {
@@ -641,17 +643,17 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (this.locationFilter.isEnabled() && isLocation) {
       // bounds = this.locationFilter.getBounds();
       this.state.locationFilterBounds = this.locationFilter.getBounds();
-    } 
+    }
 
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
 
-    const queryParams: any =  { loc_rpt: value, page: 0 };
+    const queryParams: any = { loc_rpt: value, page: 0 };
     if (this.state.locationFilterEnabled) {
-      queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' + 
-                          this.state.locationFilterBounds.getSouthWest().lng + ',' + 
-                          this.state.locationFilterBounds.getNorthEast().lat + ',' + 
-                          this.state.locationFilterBounds.getNorthEast().lng;
+      queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' +
+        this.state.locationFilterBounds.getSouthWest().lng + ',' +
+        this.state.locationFilterBounds.getNorthEast().lat + ',' +
+        this.state.locationFilterBounds.getNorthEast().lng;
     } else {
       queryParams.vyber = null;
     }
@@ -739,6 +741,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.service.getWKT(ident_cely).subscribe((resp: any) => {
       const wkt = new Wkt.Wkt();
       wkt.read(resp.geom_wkt_c);
+      console.log(wkt.toJson())
       if (wkt.toJson().type !== 'Point') {
         const layer = geoJSON((wkt.toJson() as any), {
           style: () => ({
