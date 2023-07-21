@@ -1,23 +1,18 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.SolrInputField;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -130,7 +125,7 @@ public class ArcheologickyZaznam implements FedoraModel {
       for (DokumentacniJednotka dj : dokumentacni_jednotka) {
         SolrInputDocument djdoc = dj.createSolrDoc();
         idocs.add(djdoc);
-
+ 
         IndexUtils.addJSONField(idoc, "dokumentacni_jednotka", dj);
         // choose dokumentacni_jednotka fields to put in idoc for akce/lokalita
         idoc.addField("dokumentacni_jednotka_ident_cely", dj.ident_cely);
@@ -168,6 +163,51 @@ public class ArcheologickyZaznam implements FedoraModel {
     if (lokalita != null) {
       lokalita.fillSolrFields(idoc);
     }
+    
+    setFullText(idoc);
+  }
+  
+  public void setFullText(SolrInputDocument idoc) {
+    List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("akce").toList();
+    String pristupnost = (String) idoc.getFieldValue("pristupnost");
+    List<String> prSufix = new ArrayList<>();
+
+    if ("A".compareTo(pristupnost) >= 0) {
+      prSufix.add("A");
+    }
+    if ("B".compareTo(pristupnost) >= 0) {
+      prSufix.add("B");
+    }
+    if ("C".compareTo(pristupnost) >= 0) {
+      prSufix.add("C");
+    }
+    if ("D".compareTo(pristupnost) >= 0) {
+      prSufix.add("D");
+    }
+
+    Object[] fields = idoc.getFieldNames().toArray();
+    for (Object f : fields) {
+      String s = (String) f;
+      
+      // SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
+      
+      if (indexFields.contains(s)) {
+        for (String sufix : prSufix) {
+          IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+        }
+      } 
+    }
+
+    // Fields allways searchable
+    String[] defFields = new String[]{"ident_cely", "organizace",
+      "vedouci_akce", "specifikace_data", "datum_zahajeni", "okres",
+      "datum_ukonceni", "je_nz", "pristupnost"};
+    for (String field : defFields) {
+      IndexUtils.addFieldNonRepeat(idoc, "text_all_A", idoc.getFieldValues(field));
+      IndexUtils.addFieldNonRepeat(idoc, "text_all_B", idoc.getFieldValues(field));
+      IndexUtils.addFieldNonRepeat(idoc, "text_all_C", idoc.getFieldValues(field));
+      IndexUtils.addFieldNonRepeat(idoc, "text_all_D", idoc.getFieldValues(field));
+    }
   }
 
   private void addAdbFields(SolrInputDocument idoc, String ident_cely) {
@@ -191,6 +231,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 
     if (json.getJSONObject("response").getInt("numFound") > 0) {
+      idoc.addField("pian_id", pian);
       for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
         JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
 //        JSONObject cu = new JSONObject((String)idoc.getFieldValue("chranene_udaje"));
@@ -216,7 +257,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                 }
                 
               } else {
-                SolrSearcher.addFieldNonRepeat(idoc, "dokumentacni_jednotka_pian_" + key, pianDoc.opt(key));
+                // SolrSearcher.addFieldNonRepeat(idoc, "dokumentacni_jednotka_pian_" + key, pianDoc.opt(key));
               }
           }
         }
@@ -247,6 +288,7 @@ class AZChraneneUdaje {
 
     for (Vocab v : dalsi_katastr) {
       IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
+      IndexUtils.addSecuredFieldNonRepeat(idoc, "f_dalsi_katastr", v.getValue(), pristupnost);
     }
     IndexUtils.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
 

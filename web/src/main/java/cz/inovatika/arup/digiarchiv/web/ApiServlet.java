@@ -33,7 +33,6 @@ public class ApiServlet extends HttpServlet {
     response.setContentType("text/plain;charset=UTF-8");
     
       String path = request.getPathInfo();
-      
       RequestDispatcher rd=request.getRequestDispatcher(path);  
       rd.forward(request, response);
       

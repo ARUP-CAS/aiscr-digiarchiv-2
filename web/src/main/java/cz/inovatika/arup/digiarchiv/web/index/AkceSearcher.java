@@ -64,8 +64,8 @@ public class AkceSearcher implements EntitySearcher {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      if (doc.has("dokumentacni_jednotka_pian_ident_cely")) {
-        JSONArray cdjs = doc.getJSONArray("dokumentacni_jednotka_pian_ident_cely");
+      if (doc.has("dokumentacni_jednotka_pian")) {
+        JSONArray cdjs = doc.getJSONArray("dokumentacni_jednotka_pian");
         for (int j = 0; j < cdjs.length(); j++) {
           String cdj = cdjs.getString(j);
           JSONObject sub = SolrSearcher.getById(client, cdj, fields);
@@ -125,7 +125,7 @@ public class AkceSearcher implements EntitySearcher {
       "vedouci_akce_ostatni", "organizace_ostatni", "uzivatelske_oznaceni:uzivatelske_oznaceni_"+pristupnost, "ulozeni_nalezu", "poznamka",
       "dokumentacni_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
       "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]",
-      "dokumentacni_jednotka_pian_ident_cely",
+      "dokumentacni_jednotka_pian",
       "dokumentacni_jednotka:[json]",
       "chranene_udaje:[json]",
       "lat:lat_" + pristupnost,
@@ -151,7 +151,7 @@ public class AkceSearcher implements EntitySearcher {
 
     if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
       query.setFields("ident_cely,entity,hlavni_vedouci,organizace,pristupnost,pian:[json],katastr,okres,child_dokument,vazba_projekt",
-      "dokumentacni_jednotka_pian_ident_cely",
+      "dokumentacni_jednotka_pian",
       "dokumentacni_jednotka:[json]",
       "chranene_udaje:[json]",
       "lat:lat_" + pristupnost,

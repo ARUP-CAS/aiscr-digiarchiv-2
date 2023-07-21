@@ -44,7 +44,7 @@ public class Soubor implements FedoraModel {
 //<xs:element name="size_mb" minOccurs="1" maxOccurs="1" type="xs:decimal"/> <!-- "{size_mb}" -->
   @JacksonXmlProperty(localName = "size_mb")
   @Field
-  public int size_mb;
+  public float size_mb;
   
 //<xs:element name="sha_512" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{sha_512}" -->
   @JacksonXmlProperty(localName = "sha_512")

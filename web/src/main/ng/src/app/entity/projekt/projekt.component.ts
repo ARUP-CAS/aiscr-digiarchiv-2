@@ -60,20 +60,21 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   setVsize() {
 
-    if (this.result.child_akce) {
-      this.numChildren += this.result.child_akce.length;
+    if (this.result.archeologicky_zaznam) {
+      this.numChildren += this.result.archeologicky_zaznam.length;
     }
-    if (this.result.child_samostatny_nalez) {
-      this.numChildren += this.result.child_samostatny_nalez.length;
+    if (this.result.samostatny_nalez) {
+      this.numChildren += this.result.samostatny_nalez.length;
     }
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getAkce() {
     this.result.akce = [];
-    if (this.result.child_akce && this.hasRights) {
-      for (let i = 0; i < this.result.child_akce.length; i=i+10) {
-        const ids = this.result.child_akce.slice(i, i+10);
+    console.log(this.result.archeologicky_zaznam,this.hasRights)
+    if (this.result.archeologicky_zaznam && this.hasRights) {
+      for (let i = 0; i < this.result.archeologicky_zaznam.length; i=i+10) {
+        const ids = this.result.archeologicky_zaznam.slice(i, i+10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs);
           this.numChildren = this.numChildren - ids.length + res.response.docs.length;

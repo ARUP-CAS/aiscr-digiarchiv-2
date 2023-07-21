@@ -11,7 +11,7 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon class="app-clean-mg app-color-accent">link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="hasRights">
+        <ng-container *ngIf="result.katastr">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
         </ng-container>
         &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
@@ -40,9 +40,9 @@
           <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
         </ng-container>
       </div>
-      <div *ngIf="result.organizace_prihlaseni">
+      <div *ngIf="result.organizace">
         <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
-        <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace_prihlaseni" [heslar]="'organizace'"></app-inline-filter>
+        <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
       <div *ngIf="result.dalsi_katastry && hasRights">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
@@ -116,13 +116,13 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.lokalita">
+              <tr *ngIf="result.chranene_udaje?.lokalizace">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
-                <td>{{ result.lokalita }}</td>
+                <td>{{ result.chranene_udaje?.lokalizace }}</td>
               </tr>
-              <tr *ngIf="result.parcelni_cislo">
+              <tr *ngIf="result.chranene_udaje?.parcelni_cislo">
                 <th class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</th>
-                <td>{{ result.parcelni_cislo }}</td>
+                <td>{{ result.chranene_udaje?.parcelni_cislo }}</td>
               </tr>
               <tr *ngIf="result.planovane_zahajeni">
                 <th class="app-label">{{ 'card.desc.Plánované zahájení' | translate }}:</th>
@@ -130,7 +130,11 @@
               </tr>
               <tr *ngIf="result.uzivatelske_oznaceni">
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                <td>{{ result.uzivatelske_oznaceni }}</td>
+                <td>{{ result.uzivatelske_oznaceni | translate }}</td>
+              </tr>
+              <tr *ngIf="result.kulturni_pamatka">
+                <th class="app-label">{{ 'card.desc.Památková ochrana' | translate }}:</th>
+                <td>{{ result.kulturni_pamatka | translateHeslar : '' }}</td>
               </tr>
               <tr *ngIf="result.nkp_cislo">
                 <th class="app-label">{{ 'card.desc.Rejstříkové číslo ÚSKP' | translate }}:</th>

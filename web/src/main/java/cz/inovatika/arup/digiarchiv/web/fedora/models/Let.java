@@ -120,7 +120,7 @@ public class Let implements FedoraModel {
   public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("searchable", true);
 
-    IndexUtils.addVocabField(idoc, "pozorovatel", pozorovatel);
+    IndexUtils.addRefField(idoc, "pozorovatel", pozorovatel);
     IndexUtils.addVocabField(idoc, "organizace", organizace);
     IndexUtils.addVocabField(idoc, "letiste_start", letiste_start);
     IndexUtils.addVocabField(idoc, "letiste_cil", letiste_cil);

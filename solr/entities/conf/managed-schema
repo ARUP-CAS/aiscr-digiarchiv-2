@@ -131,8 +131,13 @@
    <dynamicField name="f_dalsi_katastry_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    
    <!-- Projekt fields -->
-   <field name="child_akce" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="child_samostatny_nalez" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="archeologicky_zaznam" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="samostatny_nalez" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+<!-- Uz je definavane vis pro akce   
+   <field name="dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
+   -->
+   
    <!--
    Musime prejmenovat pro projekt. Akce ma nevalidni data pro tyto pole.
    Misto toho pouzivame datum_zahajeni_v a datum_ukonceni_v

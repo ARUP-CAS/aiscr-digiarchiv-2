@@ -111,7 +111,7 @@ public class ProjektSearcher implements EntitySearcher {
               + "katastr,"
               + "okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,"
               + "organizace.dalsi_katastry,lokalizace,pian:[json]";
-      SolrSearcher.addChildField(client, doc, "child_akce", "akce", fields);
+      SolrSearcher.addChildField(client, doc, "archeologicky_zaznam", "akce", fields);
 
       fields = "ident_cely,pristupnost,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
       SolrSearcher.addChildField(client, doc, "child_samostatny_nalez", "samostatny_nalez", fields);
@@ -150,7 +150,10 @@ public class ProjektSearcher implements EntitySearcher {
   @Override
   public String[] getSearchFields(String pristupnost) {
     
-    return new String[]{"katastr","okres","hlavni_katastr_A:katastr",
+    return new String[]{"okres",
+      "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
+      //"hlavni_katastr:f_katastr_" + pristupnost,
+      "katastr:f_katastr_" + pristupnost,
       "entity",
       "ident_cely",
       "stav",
