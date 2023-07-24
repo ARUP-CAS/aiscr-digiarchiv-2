@@ -64,29 +64,31 @@ public class DokumentSearcher implements EntitySearcher {
 
   @Override
   public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";
-    String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";
-    for (int i = 0; i < ja.length(); i++) {
-      JSONObject doc = ja.getJSONObject(i);
+//    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+//    String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";
+//    String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";
+//    for (int i = 0; i < ja.length(); i++) {
+//      JSONObject doc = ja.getJSONObject(i);
 //      if (LoginServlet.userId(request) != null) {
 //        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
 //      } 
-      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_akce", "akce", fieldsAkce);
-      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_akce", "akce", fieldsAkce);
-
-      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_lokalita", "lokalita", fieldsLok);
-      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_lokalita", "lokalita", fieldsLok);
-    }
+//      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_akce", "akce", fieldsAkce);
+//      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_akce", "akce", fieldsAkce);
+//
+//      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_lokalita", "lokalita", fieldsLok);
+//      SolrSearcher.addChildField(client, doc, "jednotka_dokumentu_vazba_druha_lokalita", "lokalita", fieldsLok);
+//    }
 
   }
 
   @Override
   public String[] getSearchFields(String pristupnost) {
-//    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json],location_info:[json]",
-//              "okres","f_okres"};
-
-    String[] f = new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json],location_info:[json]",
+      
+    String[] f = new String[]{
+        "*",
+      //  "ident_cely,pristupnost,entity,organizace","neident_akce_katastr","autor","rok_vzniku","datestamp","typ_dokumentu","material_originalu","rada","popis",
+        "neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json],location_info:[json]",
+      "dokument_cast:[json]",
       "okres", "f_okres",
       "katastr:f_katastr_" + pristupnost,
       "dalsi_katastry:f_dalsi_katastry_" + pristupnost,

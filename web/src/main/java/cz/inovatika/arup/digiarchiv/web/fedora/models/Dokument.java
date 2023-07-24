@@ -16,9 +16,6 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.io.WKTReader;
 
 /**
  *
@@ -211,8 +208,8 @@ public class Dokument implements FedoraModel {
         }
 
         for (DokumentCast dc: dokument_cast) {
-            IndexUtils.addJSONField(idoc, "dokument_cast", dc);
-            dc.fillSolrFields(idoc);
+            // IndexUtils.addJSONField(idoc, "dokument_cast", dc);
+            dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
 
         setFullText(idoc);

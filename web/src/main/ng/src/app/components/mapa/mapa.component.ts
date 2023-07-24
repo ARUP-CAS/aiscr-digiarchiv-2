@@ -741,7 +741,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.service.getWKT(ident_cely).subscribe((resp: any) => {
       const wkt = new Wkt.Wkt();
       wkt.read(resp.geom_wkt_c);
-      console.log(wkt.toJson())
+      
       if (wkt.toJson().type !== 'Point') {
         const layer = geoJSON((wkt.toJson() as any), {
           style: () => ({

@@ -102,7 +102,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     boolean searchable = stav == 3;
     idoc.setField("searchable", searchable);
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-    IndexUtils.addVocabField(idoc, "okres", okres);
+    IndexUtils.addRefField(idoc, "okres", okres);
 
 
     if (chranene_udaje != null) {
