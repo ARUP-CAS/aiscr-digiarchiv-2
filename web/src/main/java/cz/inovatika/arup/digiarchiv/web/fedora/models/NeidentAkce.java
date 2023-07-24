@@ -68,7 +68,7 @@ public class NeidentAkce {
         SolrInputDocument kdoc = dob.toSolrInputDocument(this);
         IndexUtils.addRefField(kdoc, "okres", okres);
         IndexUtils.addRefField(kdoc, "katastr", katastr);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_okres", okres.getValue(), "A");
+        IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres.getValue());
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), "A");
 
         for (Vocab v : vedouci) {

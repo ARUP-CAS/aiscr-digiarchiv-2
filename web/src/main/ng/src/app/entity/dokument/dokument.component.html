@@ -79,12 +79,12 @@
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.dokument_cast_vazba_akce?.length > 0 || result.dokument_cast_vazba_druha_akce?.length > 0">
-        {{ 'card.desc.Počet akcí' | translate }}: <strong>{{result.dokument_cast_vazba_akce?.length + result.dokument_cast_vazba_druha_akce?.length}}</strong>
+      <ng-container *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0">
+        {{ 'card.desc.Počet archeologickych zaznamu' | translate }}: <strong>{{result.dokument_cast_archeologicky_zaznam?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
-      <ng-container *ngIf="result.dokument_cast_vazba_lokalita?.length > 0 || result.dokument_cast_vazba_druha_lokalita?.length > 0">
-        {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{result.dokument_cast_vazba_lokalita?.length + result.dokument_cast_vazba_druha_lokalita?.length}}</strong>
+      <ng-container *ngIf="result.dokument_cast_projekt?.length > 0">
+        {{ 'card.desc.Počet projektu' | translate }}: <strong>{{result.dokument_cast_projekt?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
       <ng-container *ngIf="result.soubor?.length > 0">
@@ -269,19 +269,10 @@
                   {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }} <mat-icon>link</mat-icon></a><ng-container *ngIf="dokument_cast.poznamka"> ({{ dokument_cast.poznamka }})</ng-container> 
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <ng-container *ngIf="dokument_cast.vazba_akce || dokument_cast.vazba_lokalita">
+              <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
                 <label class="app-label">{{ 'card.desc.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
-                <ng-container *ngIf="dokument_cast.vazba_akce">
-                  <a [routerLink]="'/id/' + dokument_cast.vazba_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.vazba_akce }} <mat-icon>link</mat-icon></a>
-                </ng-container>
-                <ng-container *ngIf="dokument_cast.vazba_druha_akce">
-                  <a [routerLink]="'/id/' + dokument_cast.vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
-                </ng-container>
-                <ng-container *ngIf="dokument_cast.vazba_lokalita">
-                  <a [routerLink]="'/id/' + dokument_cast.vazba_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.vazba_lokalita }} <mat-icon>link</mat-icon></a>
-                </ng-container>
-                <ng-container *ngIf="dokument_cast.vazba_druha_lokalita">
-                  <a [routerLink]="'/id/' + dokument_cast.vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
+                <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
+                  <a [routerLink]="'/id/' + dokument_cast.archeologicky_zaznam.id" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.vazba_akce }} <mat-icon>link</mat-icon></a>
                 </ng-container>
               </ng-container>
 
@@ -372,7 +363,7 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.dokument_cast_vazba_akce?.length > 0 || result.lokalita?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:

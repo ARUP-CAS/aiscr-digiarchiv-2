@@ -85,46 +85,27 @@ export class DokumentComponent implements OnInit, OnChanges {
     if (this.inDocument) {
       this.state.loading = true;
       this.state.documentProgress = 0;
-      this.getAkce();
-      this.getLokalita();
+      this.getArchZaznam();
     }
   }
 
   setVsize() {
 
-    if (this.result.jednotka_dokumentu_vazba_akce) {
-      this.numChildren += this.result.jednotka_dokumentu_vazba_akce.length;
-    }
-    if (this.result.jednotka_dokumentu_vazba_druha_akce) {
-      this.numChildren += this.result.jednotka_dokumentu_vazba_druha_akce.length;
-    }
-    if (this.result.jednotka_dokumentu_vazba_lokalita) {
-      this.numChildren += this.result.jednotka_dokumentu_vazba_lokalita.length;
-    }
-    if (this.result.jednotka_dokumentu_vazba_druha_lokalita) {
-      this.numChildren += this.result.jednotka_dokumentu_vazba_druha_lokalita.length;
+    if (this.result.dokument_cast_archeologicky_zaznam) {
+      this.numChildren += this.result.dokument_cast_archeologicky_zaznam.length;
     }
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
-  getAkce() {
+  getArchZaznam() {
     this.result.akce = [];
-    if (this.result.jednotka_dokumentu_vazba_akce) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_akce.length; i = i + 10) {
-        const ids = this.result.jednotka_dokumentu_vazba_akce.slice(i, i + 10);
+    this.result.lokalita = [];
+    if (this.result.dokument_cast_archeologicky_zaznam) {
+      for (let i = 0; i < this.result.dokument_cast_archeologicky_zaznam.length; i = i + 10) {
+        const ids = this.result.dokument_cast_archeologicky_zaznam.slice(i, i + 10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs);
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
-        });
-      }
-    }
-    if (this.result.jednotka_dokumentu_vazba_druha_akce) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_druha_akce.length; i = i + 10) {
-        const ids = this.result.jednotka_dokumentu_vazba_druha_akce.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs);
+          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
+          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
           this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
@@ -133,33 +114,6 @@ export class DokumentComponent implements OnInit, OnChanges {
     }
   }
 
-  getLokalita() {
-    this.result.lokalita = [];
-    this.checkLoading();
-    if (this.result.jednotka_dokumentu_vazba_lokalita) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_lokalita.length; i = i + 10) {
-        const ids = this.result.jednotka_dokumentu_vazba_lokalita.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs);
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
-          this.checkLoading();
-        });
-      }
-    }
-    if (this.result.jednotka_dokumentu_vazba_druha_lokalita) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_druha_lokalita.length; i = i + 10) {
-        const ids = this.result.jednotka_dokumentu_vazba_druha_lokalita.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs);
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
-          this.checkLoading();
-        });
-      }
-    }
-  }
 
   imageLoaded() {
     this.state.imagesLoaded++;
@@ -193,8 +147,7 @@ export class DokumentComponent implements OnInit, OnChanges {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       // this.setVsize();
-      this.getAkce();
-      this.getLokalita();
+      this.getArchZaznam();
       this.hasDetail = true;
     });
   }

@@ -47,60 +47,82 @@ public class DokumentCast {
 //<xs:element name="neident_akce" minOccurs="0" maxOccurs="1" type="amcr:neident_akceType"/> <!-- "{neident_akce}" -->
     @JacksonXmlProperty(localName = "neident_akce")
     public NeidentAkce neident_akce;
-    
+
     public List<String> location_info = new ArrayList();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-        
+
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
         idoc.addField("dokument_cast_ident_cely", ident_cely);
         IndexUtils.addVocabField(idoc, "dokument_cast_archeologicky_zaznam", archeologicky_zaznam);
         IndexUtils.addVocabField(idoc, "dokument_cast_projekt", projekt);
         idoc.addField("dokument_cast_poznamka", poznamka);
-        
+
         for (Komponenta k : komponenta) {
             IndexUtils.addJSONField(idoc, "komponenta", komponenta);
             k.fillSolrFields(idoc);
         }
-        
+
         if (neident_akce != null) {
             IndexUtils.addJSONField(idoc, "neident_akce", this);
             neident_akce.fillSolrFields(idoc);
         }
+
+        if (archeologicky_zaznam != null) {
+            addLocation(idoc, pristupnost);
+        }
         
-        addLocation(idoc, pristupnost);
         idoc.addField("location_info", location_info);
     }
-    
-    private void addLocation(SolrInputDocument idoc, String pristupnost) {
-    SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
-            .setFields("katastr:hlavni_katastr_" + pristupnost, "okres,pristupnost");
-    JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 
-    
-    if (json.getJSONObject("response").getInt("numFound") > 0) {
-      JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+    private void addLocation(SolrInputDocument idoc, String pristupnost) {
+        SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
+                .setFields("*,katastr:hlavni_katastr_" + pristupnost, "okres,pristupnost");
+        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+
+        if (json.getJSONObject("response").getInt("numFound") > 0) {
+            JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 //      for (String f : facetFields) {
 //        if (doc.has(f)) {
 //          SolrSearcher.addFieldNonRepeat(idoc, f, doc.get(f));
 //        }
 //      }
 
-      if (doc.has("katastr")) {
-          
-        SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
-        SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_okres", doc.getString("okres"));
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_okres", doc.getString("okres"), doc.getString("pristupnost"));
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), doc.getString("pristupnost"));
-        JSONObject li = new JSONObject()
-                .put("pristupnost", doc.getString("pristupnost"))
-                .put("katastr", doc.getString("katastr"))
-                .put("okres", doc.getString("okres"));
-        if (!location_info.contains(li.toString())) {
-          location_info.add(li.toString());
+            if (doc.has("katastr")) {
+
+                SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), doc.getString("pristupnost"));
+                SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_okres", doc.getString("okres"));
+                IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("okres"));
+                JSONObject li = new JSONObject()
+                        .put("pristupnost", doc.getString("pristupnost"))
+                        .put("katastr", doc.getString("katastr"))
+                        .put("okres", doc.getString("okres"));
+                if (!location_info.contains(li.toString())) {
+                    location_info.add(li.toString());
+                }
+            }
+
+            for (String key : doc.keySet()) {
+                if (key.startsWith("loc")) {
+                    SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
+                } else if (key.startsWith("lat") || key.startsWith("lng")) {
+                    // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
+                    JSONArray val = doc.optJSONArray(key);
+                    for (int i = 0; i < val.length(); i++) {
+                        SolrSearcher.addFieldNonRepeat(idoc, key, val.getBigDecimal(i).toString());
+                    }
+
+                } else if (key.equals("pian_id")) {
+                    // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
+                    JSONArray val = doc.optJSONArray(key);
+                    for (int i = 0; i < val.length(); i++) {
+                        SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
+                    }
+
+                }
+            }
         }
-      } 
-    }
     }
 
 }

@@ -220,7 +220,7 @@ public class FedoraHarvester {
           idocsEntities.clear();
           idocsOAI.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-          return; 
+          //return; 
         }
         if (idocsHeslar.size() > batchSize) {
           solr.add("heslar", idocsHeslar);
@@ -284,27 +284,31 @@ public class FedoraHarvester {
 
     Class clazz = FedoraModel.getModelClass(model);
     if (clazz != null) {
-      FedoraModel fm = FedoraModel.parseXml(xml, clazz);
-      if (fm.isOAI()) {
-        SolrInputDocument oaidoc = fm.createOAIDocument(xml);
-        idocsOAI.add(oaidoc);
-      }
-
-      DocumentObjectBinder dob = new DocumentObjectBinder();
-      SolrInputDocument idoc = dob.toSolrInputDocument(fm);
-      fm.fillSolrFields(idoc);
-      String core = fm.coreName();
-      switch(core) {
-        case "entities":
-              idocsEntities.add(idoc);
-              break;
-        case "heslar":
-              idocsHeslar.add(idoc);
-              break;
-        case "organizations":
-              idocsOrganizations.add(idoc);
-              break;
-      }
+        try {
+            FedoraModel fm = FedoraModel.parseXml(xml, clazz);
+            if (fm.isOAI()) {
+                SolrInputDocument oaidoc = fm.createOAIDocument(xml);
+                idocsOAI.add(oaidoc);
+            }
+            
+            DocumentObjectBinder dob = new DocumentObjectBinder();
+            SolrInputDocument idoc = dob.toSolrInputDocument(fm);
+            fm.fillSolrFields(idoc);
+            String core = fm.coreName();
+            switch(core) {
+                case "entities":
+                    idocsEntities.add(idoc);
+                    break;
+                case "heslar":
+                    idocsHeslar.add(idoc);
+                    break;
+                case "organizations":
+                    idocsOrganizations.add(idoc);
+                    break;
+            } } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            throw ex;
+        }
 
     }
 

@@ -45,14 +45,6 @@ public class AkceSearcher implements EntitySearcher {
   }
 
   @Override
-  public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,entity,pristupnost,okres,hlavni_vedouci,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
-      "katastr:f_katastr_" + pristupnost,
-      "lokalizace:f_lokalizace_" + pristupnost,
-      "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
-  }
-
-  @Override
   public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
     PIANSearcher ps = new PIANSearcher();
     String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -133,6 +125,15 @@ public class AkceSearcher implements EntitySearcher {
       "loc_rpt:loc_rpt_" + pristupnost,
       "loc:loc_rpt_" + pristupnost,
       "lokalizace:lokalizace_okolnosti_" + pristupnost,
+      "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
+  }
+
+  @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    //  return getSearchFields(pristupnost);
+    return new String[]{"ident_cely,entity,pristupnost,okres,hlavni_vedouci,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
+      "lokalizace:lokalizace_okolnosti_" + pristupnost,
+      "katastr:f_katastr_" + pristupnost,
       "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
   }
 

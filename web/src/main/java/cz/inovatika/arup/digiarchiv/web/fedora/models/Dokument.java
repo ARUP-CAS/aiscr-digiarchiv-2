@@ -157,6 +157,9 @@ public class Dokument implements FedoraModel {
         boolean searchable = stav == 3;
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, historie);
+        
+        entity = "3D".equals(rada.getValue()) ? "knihovna_3d" : "dokument";
+        idoc.setField("entity", entity);
 
         IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
         IndexUtils.addVocabField(idoc, "let", let);

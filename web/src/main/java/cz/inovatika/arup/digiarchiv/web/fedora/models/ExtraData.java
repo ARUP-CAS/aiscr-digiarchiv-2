@@ -120,12 +120,12 @@ public class ExtraData {
     
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
 
-        IndexUtils.addVocabField(idoc, "zachovalost", zachovalost);
-        IndexUtils.addVocabField(idoc, "nahrada", nahrada);
-        IndexUtils.addVocabField(idoc, "udalost_typ", udalost_typ);
-        IndexUtils.addVocabField(idoc, "zeme", zeme);
-        IndexUtils.addJSONField(idoc, "geom_gml", geom_gml);
-        IndexUtils.addJSONField(idoc, "geom_wkt", geom_wkt);
+        IndexUtils.addVocabField(idoc, "extra_data_zachovalost", zachovalost);
+        IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
+        IndexUtils.addVocabField(idoc, "extra_data_udalost_typ", udalost_typ);
+        IndexUtils.addVocabField(idoc, "extra_data_zeme", zeme);
+        IndexUtils.addJSONField(idoc, "extra_data_geom_gml", geom_gml);
+        IndexUtils.addJSONField(idoc, "extra_data_geom_wkt", geom_wkt);
         if (geom_wkt != null) {
 
             String wktStr = geom_wkt.getValue();
