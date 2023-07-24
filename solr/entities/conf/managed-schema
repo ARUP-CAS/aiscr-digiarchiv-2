@@ -85,6 +85,7 @@
    <field name="komponenta" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="nalez_dokumentu" type="string" indexed="false" stored="true"  multiValued="true" />
    <field name="neident_akce" type="string" indexed="false" stored="true"  multiValued="true" />
+   <field name="dokument_cast" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    
    <field name="child_soubor" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="parent_akce_katastr" type="string" indexed="false" stored="true" multiValued="true" /> 

@@ -1,428 +1,411 @@
 {
-  "solrhost": "http://localhost:8983/solr/",
-  "solrRels" : "http://localhost:8983/solr/",
-  
-  "OAIHarvester": {
-    "url": "https://api.aiscr.cz/dapro/oai",
-    "sets": ["soubor", "adb", "dok_jednotka", "ext_zdroj", "pian", "let", "projekt", "akce", "lokalita", "samostatny_nalez", "dokument"]
-  },
-  
-  "OAI": {
-    "repositoryName": "repositoryName",
-    "adminEmail": "mail@oai",
-    "sets": [
-      {
-        "spec": "projekt",
-        "name": "Projekty / Projects",
-        "description": ["Evidenční jednotky terénní činnosti badatelského nebo záchranného rázu evidované již ve fázi přípravy. Pro vymezení projektu je rozhodující podnět k výzkumu a provádějící subjekt (oprávněná organizace), lokalizace a příp. projektová dokumentace. Na projekt zpravidla navazuje jedna či (méně často) více terénních akcí."]
-      }
+    "solrhost": "http://localhost:8983/solr/",
+    "solrRels": "http://localhost:8983/solr/",
+
+    "OAIHarvester": {
+        "url": "https://api.aiscr.cz/dapro/oai",
+        "sets": ["soubor", "adb", "dok_jednotka", "ext_zdroj", "pian", "let", "projekt", "akce", "lokalita", "samostatny_nalez", "dokument"]
+    },
+
+    "OAI": {
+        "repositoryName": "repositoryName",
+        "adminEmail": "mail@oai",
+        "sets": [
+            {
+                "spec": "projekt",
+                "name": "Projekty / Projects",
+                "description": ["Evidenční jednotky terénní činnosti badatelského nebo záchranného rázu evidované již ve fázi přípravy. Pro vymezení projektu je rozhodující podnět k výzkumu a provádějící subjekt (oprávněná organizace), lokalizace a příp. projektová dokumentace. Na projekt zpravidla navazuje jedna či (méně často) více terénních akcí."]
+            }
+        ]
+    },
+
+    "fedora": {
+        "api.point": "http://192.168.8.33:8080/rest/AMCR-test/",
+        "user": "",
+        "pwd": ""
+    },
+
+    "mail": {
+        "smtp.host": "mail.arup.cas.cz",
+        "smtp.port": 25,
+        "destMail": "info@amapa.cz",
+        "subject": "Digitální archiv AMČR - komentář k záznamu ",
+        "smtp.user": "user",
+        "smtp.pwd": "heslo"
+    },
+
+    "imagesDir": "/home/alberto/Projects/ARUP/data/",
+    "thumbsDir": "/home/alberto/.amcr/thumbs/",
+    "thesauriDir": "/home/alberto/.amcr/thesauri/",
+    "dynamicThumbs": false,
+    "thumbWidth": 100,
+    "thumbHeight": 100,
+    "mediumHeight": 1000,
+    "maxPixels": 5000000,
+    "watermark.alpha": 0,
+    "sessionTimeout": 3600,
+    "indexSecLevel": "E",
+
+    "translations": {
+        "jazyk_dokumentu": {
+            "heslar": "jazyk_dokumentu",
+            "label": "caption"
+        },
+        "typ_dokumentu": {
+            "heslar": "typ_dokumentu",
+            "label": "caption"
+        },
+        "kategorie_dokumentu": {
+            "heslar": "typ_dokumentu",
+            "label": "caption"
+        },
+        "organizace_autora": {
+            "heslar": "organizace",
+            "label": "caption"
+        },
+        "pristupnost_dokument": {
+            "heslar": "pristupnost_dokument",
+            "label": "vyznam"
+        },
+        "rada": {
+            "heslar": "rada",
+            "label": "vysvetlivka"
+        },
+        "ulozeni_originalu": {
+            "heslar": "ulozeni_originalu",
+            "label": "caption"
+        },
+        "material_dokumentu": {
+            "heslar": "material_dokumentu",
+            "label": "caption"
+        },
+        "katastr": {
+            "heslar": "katastr",
+            "label": "caption"
+        },
+        "okres": { 
+            "heslar": "okresy",
+            "label": "full_name"
+        }
+    },
+
+    "amcrapi": {
+        "url_old": "http://api.archeologickamapa.cz/xmlrpc/0/?t=600",
+        "url": "https://backend.aiscr.cz/xmlrpc/0/?t=600",
+        "user": "",
+        "pwd": ""
+    },
+
+    "securedFacetsOld": [
+        "f_kategorie", "f_druh_nalezu", "f_specifikace", "f_typ_nalezu",
+        "f_okres", "f_katastr", "f_typ_vyzkumu", "f_dok_jednotka_typ"],
+
+    "securedFacets": [
+        "f_kategorie", 
+        "f_okres", "f_katastr", "f_dok_jednotka_typ"],
+
+    "indexFieldsByType": {
+        "dokument": [
+            "ident_cely",
+            "typ_dokumentu",
+            "material_originalu",
+            "rada",
+            "autor",
+            "rok_vzniku",
+            "organizace",
+            "jazyk_dokumentu",
+            "ulozeni_originalu",
+            "child_soubor",
+            "popis",
+            "poznamka",
+            "typ_dokumentu_posudek",
+            "oznaceni_originalu",
+
+            "soubor_nazev",
+
+            "dokument_cast_ident_cely",
+            "dokument_cast_archeologicky_zaznam",
+            "dokument_cast_projekt",
+            "dokument_cast_poznamka",
+
+            "komponenta_dokument_ident_cely",
+            "komponenta_dokument_obdobi", 
+            "komponenta_dokument_presna_datace",
+            "komponenta_dokument_areal", 
+            "f_aktivita", 
+            "komponenta_dokument_poznamka",
+
+            "nalez_dokumentu_typ_nalezu", 
+            "nalez_dokumentu_druh_nalezu", 
+            "nalez_dokumentu_kategorie", 
+            "nalez_dokumentu_specifikace", 
+            "nalez_dokumentu_poznamka",
+
+            "pian_id",
+
+            "extra_data_region",
+            "extra_data_cislo_objektu",
+            "extra_data_format", 
+            "extra_data_zachovalost", 
+            "extra_data_nahrada", 
+            "extra_data_odkaz",
+            "extra_data_datum_vzniku",
+            "extra_data_udalost_typ",
+            "extra_data_udalost",
+            "extra_data_zeme", 
+            "extra_data_osoby",
+
+            "let_ident_cely",
+            "let_datum",
+            "let_pozorovatel",
+            "let_organizace",
+            "let_fotoaparat",
+            "let_pilot",
+            "let_typ_letounu",
+            "let_ucel_letu",
+            "let_letiste_start", 
+            "let_letiste_cil", 
+            "let_pocasi", 
+            "let_dohlednost", 
+            "let_uzivatelske_oznaceni",
+
+            "tvar_tvar", 
+            "tvar_poznamka",
+
+            "neident_akce_okres",
+            "neident_akce_katastr",
+            "neident_akce_vedouci",
+            "neident_akce_rok_zahajeni",
+            "neident_akce_rok_ukonceni",
+            "neident_akce_lokalizace",
+            "neident_akce_popis",
+            "neident_akce_poznamka",
+            "neident_akce_pian",
+
+            "parent_akce_okres",
+            "parent_akce_katastr"
+        ],
+
+        "archeologicky_zaznam": [
+            "ident_cely",
+            "okres",
+            "katastr",
+            "dalsi_katastry", 
+
+            "dokument",
+            
+            "dokumentacni_jednotka_ident_cely",
+            "dokumentacni_jednotka_typ", 
+            "dokumentacni_jednotka_nazev",
+
+            "pian_id",
+
+            "dokumentacni_jednotka_komponenta_ident_cely",
+            "dokumentacni_jednotka_komponenta_obdobi", 
+            "dokumentacni_jednotka_komponenta_presna_datace",
+            "dokumentacni_jednotka_komponenta_areal", 
+            "f_aktivita", 
+            "dokumentacni_jednotka_komponenta_poznamka",
+
+            "dokumentacni_jednotka_adb_ident_cely",
+            "dokumentacni_jednotka_adb_typ_sondy", 
+            "dokumentacni_jednotka_adb_uzivatelske_oznaceni_sondy",
+            "dokumentacni_jednotka_adb_trat",
+            "dokumentacni_jednotka_adb_cislo_popisne",
+            "dokumentacni_jednotka_adb_parcelni_cislo",
+            "dokumentacni_jednotka_adb_podnet", 
+            "dokumentacni_jednotka_adb_autor_popisu",
+            "dokumentacni_jednotka_adb_rok_popisu",
+            "dokumentacni_jednotka_adb_autor_revize",
+            "dokumentacni_jednotka_adb_rok_revize",
+            "dokumentacni_jednotka_adb_poznamka",
+
+            "dokumentacni_jednotka_komponenta_typ_nalezu", 
+            "dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
+            "dokumentacni_jednotka_komponenta_nalez_objekt_specifikace", 
+            "dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
+            "dokumentacni_jednotka_komponenta_nalez_predmet_specifikace"
+        ],
+
+        "akce": [
+
+            "poznamka",
+            "vedouci_akce",
+            "organizace", 
+            "organizace_ostatni", 
+            "vedouci_akce_ostatni",
+            "hlavni_typ", 
+            "vedlejsi_typ", 
+            "datum_zahajeni_v",
+            "datum_ukonceni_v",
+            "lokalizace",
+            "ulozeni_nalezu",
+            "uzivatelske_oznaceni",
+
+            "projekt",
+
+            "vyskovy_bod_ident_cely",
+            "vyskovy_bod_typ"
+        ],
+
+        "lokalita": [
+            "typ_lokality", 
+            "nazev",
+            "druh", 
+            "popis",
+            "poznamka",
+            "uzivatelske_oznaceni",
+            "child_dokument"
+
+        ],
+
+        "projekt": [
+            "ident_cely",
+            "typ_projektu", 
+            "okres",
+            "katastr",
+            "dalsi_katastry",
+            "podnet",
+            "lokalita",
+            "parcelni_cislo",
+            "vedouci_projektu",
+            "organizace_prihlaseni", 
+            "uzivatelske_oznaceni", 
+            "nkp_cislo",
+            "nkp_popis",
+            "datum_zahajeni",
+            "datum_ukonceni",
+            "child_akce",
+            "child_samostatny_nalez"
+        ],
+
+        "samostatny_nalez": [
+            "ident_cely",
+            "inv_cislo",
+            "okres",
+            "nalezove_okolnosti", 
+            "obdobi", 
+            "presna_datace",
+            "druh_nalezu", 
+            "specifikace", 
+            "poznamka",
+            "nalezce",
+            "predano_organizace", 
+            "katastr",
+            "lokalizace",
+            "projekt_id",
+            "datum_nalezu",
+            "child_soubor",
+            "soubor_nazev"
+        ]
+    },
+
+    "kategoriet": {
+        "nálezová zpráva": "texty",
+        "příloha NZ/ZAA": "texty",
+        "expertní posudek": "texty",
+        "restaurátorská zpráva": "texty",
+        "investorská zpráva": "texty",
+        "hlášení/ZAA": "texty",
+        "text jiný": "texty",
+        "kresba předmětu": "texty",
+
+        "data analýzy ekofaktů": "ddata",
+        "data geodetická": "ddata",
+        "data geofyzikální": "ddata",
+        "data GPS": "ddata",
+        "data terénního výzkumu": "ddata",
+        "data vektorového plánu": "ddata",
+
+        "foto krajiny": "foto",
+        "foto lokality": "foto",
+        "foto výzkumu/sondy": "foto",
+        "foto osobní": "foto",
+        "foto události": "foto",
+        "foto pracovní": "foto",
+        "foto objektu": "foto",
+        "foto předmětu": "foto",
+        "foto mikro": "foto",
+        "foto konzervace": "foto",
+
+        "letfoto krajiny": "lfoto",
+        "letfoto lokality": "lfoto",
+        "letfoto metoda": "lfoto",
+        "letfoto výzkumu": "lfoto",
+        "letfoto vegetačních příznaků": "lfoto",
+        "letfoto půdních příznaků": "lfoto",
+        "letfoto sněžných příznaků": "lfoto",
+        "letfoto stínových příznaků": "lfoto",    
+
+        "plán regionu": "mplany",
+        "plán lokality": "mplany",
+        "plán výzkumu": "mplany",
+        "plán sondy": "mplany",
+        "plán objektu": "mplany",
+        "mapa": "mplany",
+
+        "3D – textura": "ddata3d",
+        "3D – rekonstrukce": "ddata3d",
+        "3D – dokumentace": "ddata3d",
+
+        "-": "neuvedeno"
+    },
+
+    "heslare": [
+        "aktivity",
+        "areal_druha",
+        "areal_prvni",
+        "autorska_role",
+        "dohlednost",
+        "druh_lokality_druha",
+        "druh_lokality_prvni",
+        "format_dokumentu",
+        "jazyk_dokumentu",
+        "katastr",
+        "kraje",
+        "kulturni_pamatka",
+        "letiste",
+        "material_dokumentu",
+        "nahrada",
+        "nalezove_okolnosti", 
+        "obdobi_druha",
+        "obdobi_prvni",
+        "objekt_druh",
+        "objekt_kategorie",
+        "okresy",
+        "organizace",
+        "pocasi",
+        "podnet",
+        "posudek",
+        "predmet_druh",
+        "predmet_kategorie",
+        "presnost",
+        "pristupnost",
+        "rada",
+        "specifikace_data",
+        "specifikace_objektu_druha",
+        "specifikace_objektu_prvni",
+        "specifikace_predmetu",
+        "tvar",
+        "typ_akce_druha",
+        "typ_akce_prvni",
+        "typ_dj",
+        "typ_dokumentu",
+        "typ_dokumentu_selectable",
+        "typ_externiho_zdroje",
+        "typ_lokality",
+        "typ_material_rada",
+        "typ_nalezu",
+        "typ_organizace",
+        "typ_pian",
+        "typ_projektu",
+        "typ_sondy",
+        "typ_udalosti",
+        "ulozeni_originalu",
+        "uzivatele",
+        "zachovalost",
+        "zeme",
+        "zm10",
+        "zm50"
     ]
-  },
-  
-  "fedora": {
-    "api.point": "http://192.168.8.33:8080/rest/AMCR-test/",
-    "user": "",
-    "pwd": ""
-  },
-  
-  "mail": {
-    "smtp.host": "mail.arup.cas.cz",
-    "smtp.port": 25,
-    "destMail": "info@amapa.cz",
-    "subject": "Digitální archiv AMČR - komentář k záznamu ",
-    "smtp.user":"user",
-    "smtp.pwd":"heslo"
-  },
-  
-  "imagesDir": "/home/alberto/Projects/ARUP/data/",
-  "thumbsDir": "/home/alberto/.amcr/thumbs/",
-  "thesauriDir": "/home/alberto/.amcr/thesauri/",
-  "dynamicThumbs": false,
-  "thumbWidth": 100,
-  "thumbHeight": 100,
-  "mediumHeight": 1000,
-  "maxPixels": 5000000,
-  "watermark.alpha": 0,
-  "sessionTimeout": 3600,
-  "indexSecLevel": "E",
-  
-  "translations": {
-    "jazyk_dokumentu": {
-      "heslar": "jazyk_dokumentu",
-      "label": "caption"
-    },
-    "typ_dokumentu": {
-      "heslar": "typ_dokumentu",
-      "label": "caption"
-    },
-    "kategorie_dokumentu": {
-      "heslar": "typ_dokumentu",
-      "label": "caption"
-    },
-    "organizace_autora": {
-      "heslar": "organizace",
-      "label": "caption"
-    },
-    "pristupnost_dokument": {
-      "heslar": "pristupnost_dokument",
-      "label": "vyznam"
-    },
-    "rada": {
-      "heslar": "rada",
-      "label": "vysvetlivka"
-    },
-    "ulozeni_originalu": {
-      "heslar": "ulozeni_originalu",
-      "label": "caption"
-    },
-    "material_dokumentu": {
-      "heslar": "material_dokumentu",
-      "label": "caption"
-    },
-    "katastr": {
-      "heslar": "katastr",
-      "label": "caption"
-    },
-    "okres": { 
-      "heslar": "okresy",
-      "label": "full_name"
-    }
-  },
-
-  "amcrapi": {
-    "url_old":"http://api.archeologickamapa.cz/xmlrpc/0/?t=600",
-    "url":"https://backend.aiscr.cz/xmlrpc/0/?t=600",
-    "user": "",
-    "pwd": ""
-  },
-  
-  "securedFacetsOld": [
-    "f_kategorie", "f_druh_nalezu", "f_specifikace","f_typ_nalezu",
-    "f_okres", "f_katastr", "f_typ_vyzkumu","f_dok_jednotka_typ"],
-  
-  "securedFacets": [
-    "f_kategorie", 
-    "f_okres", "f_katastr","f_dok_jednotka_typ"],
-  
-  "indexFieldsByType": {
-    "dokument": [
-      "ident_cely",
-      "typ_dokumentu",
-      "material_originalu",
-      "rada",
-      "autor",
-      "rok_vzniku",
-      "organizace",
-      "jazyk_dokumentu",
-      "ulozeni_originalu",
-      "child_soubor",
-      "popis",
-      "poznamka",
-      "typ_dokumentu_posudek",
-      "oznaceni_originalu",
-      
-      "soubor_nazev",
-      
-      "jednotka_dokumentu_ident_cely",
-      "jednotka_dokumentu_vazba_akce",
-      "jednotka_dokumentu_vazba_lokalita",
-      "jednotka_dokumentu_poznamka",
-      
-      "komponenta_dokument_ident_cely",
-      "komponenta_dokument_obdobi", 
-      "komponenta_dokument_presna_datace",
-      "komponenta_dokument_areal", 
-      "f_aktivita", 
-      "komponenta_dokument_poznamka",
-      
-      "nalez_dokumentu_typ_nalezu", 
-      "nalez_dokumentu_druh_nalezu", 
-      "nalez_dokumentu_kategorie", 
-      "nalez_dokumentu_specifikace", 
-      "nalez_dokumentu_poznamka",
-      
-      "pian_id",
-      
-      "extra_data_region",
-      "extra_data_cislo_objektu",
-      "extra_data_format", 
-      "extra_data_zachovalost", 
-      "extra_data_nahrada", 
-      "extra_data_odkaz",
-      "extra_data_datum_vzniku",
-      "extra_data_udalost_typ",
-      "extra_data_udalost",
-      "extra_data_zeme", 
-      "extra_data_osoby",
-      
-      "let_ident_cely",
-      "let_datum",
-      "let_pozorovatel",
-      "let_organizace",
-      "let_fotoaparat",
-      "let_pilot",
-      "let_typ_letounu",
-      "let_ucel_letu",
-      "let_letiste_start", 
-      "let_letiste_cil", 
-      "let_pocasi", 
-      "let_dohlednost", 
-      "let_uzivatelske_oznaceni",
-      
-      "tvar_tvar", 
-      "tvar_poznamka",
-      
-      "neident_akce_okres",
-      "neident_akce_katastr",
-      "neident_akce_vedouci",
-      "neident_akce_rok_zahajeni",
-      "neident_akce_rok_ukonceni",
-      "neident_akce_lokalizace",
-      "neident_akce_popis",
-      "neident_akce_poznamka",
-      "neident_akce_pian",
-      
-      "parent_akce_okres",
-      "parent_akce_katastr"
-    ],
-
-    "akce": [
-      "ident_cely",
-      "poznamka",
-      "okres",
-      "katastr",
-      "dalsi_katastry",
-      "vedouci_akce",
-      "organizace", 
-      "organizace_ostatni", 
-      "vedouci_akce_ostatni",
-      "hlavni_typ", 
-      "vedlejsi_typ", 
-      "datum_zahajeni_v",
-      "datum_ukonceni_v",
-      "lokalizace",
-      "ulozeni_nalezu",
-      "uzivatelske_oznaceni",
-      "child_dokument",
-      
-      "vazba_projekt_akce_id_projekt",
-      
-      "dok_jednotka_ident_cely",
-      "dok_jednotka_typ", 
-      "dok_jednotka_nazev",
-      
-      "dokumentacni_jednotka_pian_ident_cely",
-      
-      "adb_ident_cely",
-      "adb_typ_sondy", 
-      "adb_uzivatelske_oznaceni_sondy",
-      "adb_trat",
-      "adb_cislo_popisne",
-      "adb_parcelni_cislo",
-      "adb_podnet", 
-      "adb_autor_popisu",
-      "adb_rok_popisu",
-      "adb_autor_revize",
-      "adb_rok_revize",
-      "adb_poznamka",
-      
-      "vyskovy_bod_ident_cely",
-      "vyskovy_bod_typ", 
-      
-      "komponenta_ident_cely",
-      "komponenta_obdobi", 
-      "komponenta_presna_datace",
-      "komponenta_areal", 
-      "f_aktivita", 
-      "komponenta_poznamka",
-      
-      "nalez_typ_nalezu", 
-      "nalez_druh_nalezu", 
-      "nalez_kategorie", 
-      "nalez_specifikace", 
-      "nalez_poznamka"
-    ],
-    
-    "lokalita": [
-      "ident_cely",
-      "okres",
-      "katastr",
-      "dalsi_katastry",
-      "typ_lokality", 
-      "nazev",
-      "druh", 
-      "popis",
-      "poznamka",
-      "uzivatelske_oznaceni",
-      "child_dokument",
-      
-      "dok_jednotka_ident_cely",
-      "dok_jednotka_typ", 
-      "dok_jednotka_nazev",
-      
-      "dokumentacni_jednotka_pian_ident_cely",
-      
-      "komponenta_ident_cely",
-      "komponenta_obdobi", 
-      "komponenta_presna_datace",
-      "komponenta_areal", 
-      "f_aktivita", 
-      "komponenta_poznamka",
-      
-      "nalez_typ_nalezu", 
-      "nalez_druh_nalezu", 
-      "nalez_kategorie", 
-      "nalez_specifikace", 
-      "nalez_poznamka"
-    ],
-    
-    "projekt": [
-      "ident_cely",
-      "typ_projektu", 
-      "okres",
-      "katastr",
-      "dalsi_katastry",
-      "podnet",
-      "lokalita",
-      "parcelni_cislo",
-      "vedouci_projektu",
-      "organizace_prihlaseni", 
-      "uzivatelske_oznaceni", 
-      "nkp_cislo",
-      "nkp_popis",
-      "datum_zahajeni",
-      "datum_ukonceni",
-      "child_akce",
-      "child_samostatny_nalez"
-    ],
-    
-    "samostatny_nalez": [
-      "ident_cely",
-      "inv_cislo",
-      "okres",
-      "nalezove_okolnosti", 
-      "obdobi", 
-      "presna_datace",
-      "druh_nalezu", 
-      "specifikace", 
-      "poznamka",
-      "nalezce",
-      "predano_organizace", 
-      "katastr",
-      "lokalizace",
-      "projekt_id",
-      "datum_nalezu",
-      "child_soubor",
-      "soubor_nazev"
-    ]
-  },
-  
-  "kategoriet": {
-    "nálezová zpráva": "texty",
-    "příloha NZ/ZAA": "texty",
-    "expertní posudek": "texty",
-    "restaurátorská zpráva": "texty",
-    "investorská zpráva": "texty",
-    "hlášení/ZAA": "texty",
-    "text jiný": "texty",
-    "kresba předmětu": "texty",
-    
-    "data analýzy ekofaktů": "ddata",
-    "data geodetická": "ddata",
-    "data geofyzikální": "ddata",
-    "data GPS": "ddata",
-    "data terénního výzkumu": "ddata",
-    "data vektorového plánu": "ddata",
-    
-    "foto krajiny": "foto",
-    "foto lokality": "foto",
-    "foto výzkumu/sondy": "foto",
-    "foto osobní": "foto",
-    "foto události": "foto",
-    "foto pracovní": "foto",
-    "foto objektu": "foto",
-    "foto předmětu": "foto",
-    "foto mikro": "foto",
-    "foto konzervace": "foto",
-
-    "letfoto krajiny": "lfoto",
-    "letfoto lokality": "lfoto",
-    "letfoto metoda": "lfoto",
-    "letfoto výzkumu": "lfoto",
-    "letfoto vegetačních příznaků": "lfoto",
-    "letfoto půdních příznaků": "lfoto",
-    "letfoto sněžných příznaků": "lfoto",
-    "letfoto stínových příznaků": "lfoto",    
-
-    "plán regionu": "mplany",
-    "plán lokality": "mplany",
-    "plán výzkumu": "mplany",
-    "plán sondy": "mplany",
-    "plán objektu": "mplany",
-    "mapa": "mplany",
-    
-    "3D – textura": "ddata3d",
-    "3D – rekonstrukce": "ddata3d",
-    "3D – dokumentace": "ddata3d",
-    
-    "-": "neuvedeno"
-  },
-  
-  "heslare": [
-    "aktivity",
-    "areal_druha",
-    "areal_prvni",
-    "autorska_role",
-    "dohlednost",
-    "druh_lokality_druha",
-    "druh_lokality_prvni",
-    "format_dokumentu",
-    "jazyk_dokumentu",
-    "katastr",
-    "kraje",
-    "kulturni_pamatka",
-    "letiste",
-    "material_dokumentu",
-    "nahrada",
-    "nalezove_okolnosti", 
-    "obdobi_druha",
-    "obdobi_prvni",
-    "objekt_druh",
-    "objekt_kategorie",
-    "okresy",
-    "organizace",
-    "pocasi",
-    "podnet",
-    "posudek",
-    "predmet_druh",
-    "predmet_kategorie",
-    "presnost",
-    "pristupnost",
-    "rada",
-    "specifikace_data",
-    "specifikace_objektu_druha",
-    "specifikace_objektu_prvni",
-    "specifikace_predmetu",
-    "tvar",
-    "typ_akce_druha",
-    "typ_akce_prvni",
-    "typ_dj",
-    "typ_dokumentu",
-    "typ_dokumentu_selectable",
-    "typ_externiho_zdroje",
-    "typ_lokality",
-    "typ_material_rada",
-    "typ_nalezu",
-    "typ_organizace",
-    "typ_pian",
-    "typ_projektu",
-    "typ_sondy",
-    "typ_udalosti",
-    "ulozeni_originalu",
-    "uzivatele",
-    "zachovalost",
-    "zeme",
-    "zm10",
-    "zm50"
-  ]
 }

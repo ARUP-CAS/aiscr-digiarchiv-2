@@ -251,9 +251,11 @@ public class SearchServlet extends HttpServlet {
 
           JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
           if (jo.has("geom_wkt")) {
-            jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
+            jo.put("geom_wkt_c", jo.getString("geom_wkt"));
+            // jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
           } else {
-            jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value")));
+            jo.put("geom_wkt_c", jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value"));
+            // jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value")));
           }
 
           return jo.toString();

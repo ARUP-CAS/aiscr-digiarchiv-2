@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
-import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.Date;

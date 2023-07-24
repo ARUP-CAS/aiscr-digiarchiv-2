@@ -220,7 +220,7 @@ public class FedoraHarvester {
           idocsEntities.clear();
           idocsOAI.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-          // return; 
+          return; 
         }
         if (idocsHeslar.size() > batchSize) {
           solr.add("heslar", idocsHeslar);
@@ -276,7 +276,7 @@ public class FedoraHarvester {
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
       LOGGER.log(Level.SEVERE, null, ex);
-      throw new Exception(ex);
+      // throw new Exception(ex);
     }
   }
 

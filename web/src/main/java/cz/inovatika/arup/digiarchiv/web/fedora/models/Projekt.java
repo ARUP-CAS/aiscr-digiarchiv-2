@@ -290,7 +290,7 @@ class ProjektChraneneUdaje {
 
         for (Vocab v : dalsi_katastr) {
             IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_dalsi_katastr", v.getValue(), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
         }
 
         if (geom_wkt != null) {

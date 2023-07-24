@@ -123,7 +123,7 @@ public class AkceSearcher implements EntitySearcher {
       "organizace", "f_organizace:organizace", "vazba_projekt", "child_dokument",
       "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
       "vedouci_akce_ostatni", "organizace_ostatni", "uzivatelske_oznaceni:uzivatelske_oznaceni_"+pristupnost, "ulozeni_nalezu", "poznamka",
-      "dokumentacni_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
+      "pian:[json],adb:[json],projekt:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
       "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]",
       "dokumentacni_jednotka_pian",
       "dokumentacni_jednotka:[json]",

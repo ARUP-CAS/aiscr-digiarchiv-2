@@ -10,6 +10,7 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.ADB;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.ArcheologickyZaznam;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Dokument;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Let;
@@ -101,7 +102,7 @@ public interface FedoraModel {
       sr.nextTag();
       sr.nextTag();
       return (FedoraModel) xmlMapper.readValue(sr, clazz);
-    } catch (XMLStreamException | IOException ex) {
+    } catch (Exception ex) {
       Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, "Error parsing {0}", xml);
       Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
       throw new Exception(ex);
@@ -132,7 +133,9 @@ public interface FedoraModel {
       case "heslo":
         return Heslo.class;
       case "organizace":
-        return Organizace.class;
+        return Heslo.class;
+      case "dokument":
+        return Dokument.class;
 //      case "knihovna_3d":
 //        return Dokument.class;
       default:
