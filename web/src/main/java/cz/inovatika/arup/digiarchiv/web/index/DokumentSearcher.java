@@ -83,7 +83,7 @@ public class DokumentSearcher implements EntitySearcher {
             if (LoginServlet.userId(request) != null) {
                 SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
             }
-            SolrSearcher.addChildField(client, doc, "dokument_cast_archeologicky_zaznam", "akce", String.join(",", f));
+            SolrSearcher.addChildFieldByEntity(client, doc, "dokument_cast_archeologicky_zaznam", String.join(",", f));
 
             if (doc.has("pian_id")) {
                 JSONArray cdjs = doc.getJSONArray("pian_id");

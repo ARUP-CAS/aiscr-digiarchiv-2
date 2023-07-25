@@ -196,6 +196,7 @@ public class Projekt implements FedoraModel {
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
+        setFullText(idoc);
     }
 
     public void setFullText(SolrInputDocument idoc) {

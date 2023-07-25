@@ -101,20 +101,40 @@ public class ProjektSearcher implements EntitySearcher {
   
   @Override
   public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+      
+      PIANSearcher ps = new PIANSearcher();
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        String[] fs = ps.getSearchFields(pristupnost);
+        String pfields = String.join(",", fs);
+        
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
       if (LoginServlet.userId(request) != null) {
         SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
       }
-      String fields = "ident_cely,pristupnost,"
+      String fields = "ident_cely,pristupnost,entity,"
               + "katastr,"
               + "okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,"
               + "organizace.dalsi_katastry,lokalizace,pian:[json]";
-      SolrSearcher.addChildField(client, doc, "archeologicky_zaznam", "akce", fields);
+      SolrSearcher.addChildFieldByEntity(client, doc, "archeologicky_zaznam", fields);
 
       fields = "ident_cely,pristupnost,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
       SolrSearcher.addChildField(client, doc, "child_samostatny_nalez", "samostatny_nalez", fields);
+      if (doc.has("pian_id")) {
+        JSONArray cdjs = doc.getJSONArray("pian_id");
+        for (int j = 0; j < cdjs.length(); j++) {
+          String cdj = cdjs.getString(j);
+          JSONObject sub = SolrSearcher.getById(client, cdj, pfields);
+          if (sub != null) {
+            doc.append("pian", sub);
+          }
+          
+        }
+      }
     }
   }
 
@@ -174,6 +194,7 @@ public class ProjektSearcher implements EntitySearcher {
       "oznamovatel",
       "soubor",
       "archeologicky_zaznam",
+      "pian_id",
       "samostatny_nalez",
       "dokument",
       "lat:lat_" + pristupnost,

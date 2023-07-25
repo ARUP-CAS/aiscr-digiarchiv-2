@@ -496,6 +496,27 @@ public class SolrSearcher {
     }
   }
 
+  public static void addChildFieldByEntity(Http2SolrClient client, JSONObject doc, String idField, String queryFields) {
+    if (doc.has(idField)) {
+      Object obj = doc.get(idField);
+      if (obj instanceof JSONArray) {
+        JSONArray ids = doc.getJSONArray(idField);
+        for (int a = 0; a < ids.length(); a++) {
+          String id = ids.getString(a);
+          JSONObject sub = SolrSearcher.getById(client, id, queryFields);
+          if (sub != null) {
+            doc.append(sub.getString("entity"), sub);
+          }
+        }
+      } else {
+        JSONObject sub = SolrSearcher.getById(client, (String) obj, queryFields);
+        if (sub != null) {
+          doc.append(sub.getString("entity"), sub);
+        }
+      }
+    }
+  }
+
   public static void addFavorites(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
     if (!jo.has("response")) {
       return;

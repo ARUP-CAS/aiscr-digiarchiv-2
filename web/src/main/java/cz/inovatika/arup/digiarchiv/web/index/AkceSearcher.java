@@ -56,8 +56,8 @@ public class AkceSearcher implements EntitySearcher {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      if (doc.has("dokumentacni_jednotka_pian")) {
-        JSONArray cdjs = doc.getJSONArray("dokumentacni_jednotka_pian");
+      if (doc.has("pian_id")) {
+        JSONArray cdjs = doc.getJSONArray("pian_id");
         for (int j = 0; j < cdjs.length(); j++) {
           String cdj = cdjs.getString(j);
           JSONObject sub = SolrSearcher.getById(client, cdj, fields);

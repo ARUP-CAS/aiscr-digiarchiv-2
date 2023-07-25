@@ -85,11 +85,13 @@ public class Heslo implements FedoraModel {
 
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
-    if (heslo != null) {
-      idoc.setField("cs", heslo.getValue());
-    }
+    idoc.setField("cs", heslo.getValue());
+//    if (heslo != null) {
+//    }
     if (heslo_en != null) {
       idoc.setField("en", heslo_en.getValue());
+    } else {
+        idoc.setField("en", heslo.getValue());
     }
     if (nazev_heslare != null) {
       idoc.setField("nazev_heslare", nazev_heslare.getValue());

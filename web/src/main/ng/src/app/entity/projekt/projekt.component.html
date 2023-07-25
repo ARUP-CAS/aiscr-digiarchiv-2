@@ -130,7 +130,7 @@
               </tr>
               <tr *ngIf="result.uzivatelske_oznaceni">
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                <td>{{ result.uzivatelske_oznaceni | translate }}</td>
+                <td>{{ result.uzivatelske_oznaceni[0] | translate }}</td>
               </tr>
               <tr *ngIf="result.kulturni_pamatka">
                 <th class="app-label">{{ 'card.desc.Památková ochrana' | translate }}:</th>

@@ -79,6 +79,7 @@ public class I18n {
       heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getString(locale));
     }
     
+    // Organizace
     String field = "nazev_zkraceny";
     if ("en".equals(locale)) {
       field += "_en";
@@ -90,6 +91,16 @@ public class I18n {
     docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < docs.length(); i++) {
       heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getString(field));
+    }
+    
+    //Pristupnost indexujeme zkratky
+    String urlPr = opts.getString("solrhost", "http://localhost:8983/solr/")
+            + "heslar/select?q=nazev_heslare:pristupnost&wt=json&fl=ident_cely,zkratka," + locale;
+    inputStream = RESTHelper.inputStream(urlPr);
+    solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
+    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < docs.length(); i++) {
+      heslarDoc.put(docs.getJSONObject(i).getString("zkratka"), docs.getJSONObject(i).getString(locale));
     }
 
     def.put("heslar", heslarDoc);
