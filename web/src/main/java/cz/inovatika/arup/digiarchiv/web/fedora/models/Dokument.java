@@ -192,6 +192,8 @@ public class Dokument implements FedoraModel {
                 SolrInputDocument djdoc = s.createSolrDoc();
                 idocs.add(djdoc);
                 IndexUtils.addJSONField(idoc, "soubor", s);
+                idoc.addField("soubor_nazev", s.nazev);
+                idoc.addField("soubor_filepath", s.path);
             }
             if (!idocs.isEmpty()) {
                 IndexUtils.getClient().add("soubor", idocs, 10);

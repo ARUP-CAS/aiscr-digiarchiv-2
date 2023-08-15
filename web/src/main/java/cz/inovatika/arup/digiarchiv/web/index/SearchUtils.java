@@ -93,6 +93,7 @@ public class SearchUtils {
 
   public static JSONObject json(SolrQuery query, String coreUrl) {
     query.set("wt", "json");
+    query.setRequestHandler("/search");
     String jsonResponse;
     try (Http2SolrClient client = new Http2SolrClient.Builder(coreUrl).build()) {
       QueryRequest qreq = new QueryRequest(query);
@@ -122,6 +123,7 @@ public class SearchUtils {
 
   public static JSONObject json(SolrQuery query, Http2SolrClient client, String core) {
     query.set("wt", "json");
+    query.setRequestHandler("/search");
     String qt = query.get("qt");
     String jsonResponse;
     try {

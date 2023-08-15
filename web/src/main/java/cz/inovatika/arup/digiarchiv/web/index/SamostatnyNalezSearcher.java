@@ -36,7 +36,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
       }
       String fields = "ident_cely,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet,pian_id,pian:[json]";
-      SolrSearcher.addChildField(client, doc, "projekt_id", "projekt", fields);
+      SolrSearcher.addChildField(client, doc, "projekt", "valid_projekt", fields);
     }
   }
 
@@ -74,7 +74,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    String[] ret = new String[]{"ident_cely, datestamp, entity, stav, typ, inv_cislo, projekt_id, okres, hloubka, poznamka, nalezove_okolnosti, pristupnost",
+    String[] ret = new String[]{"ident_cely, datestamp, entity, stav, typ, inv_cislo, projekt, okres, hloubka, poznamka, nalezove_okolnosti, pristupnost",
             "obdobi, presna_datace, druh, specifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace", "predmet_kategorie", 
             "datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor, soubor_filepath",
             "soubor:[json]", "katastr:f_katastr_" + pristupnost,  

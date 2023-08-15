@@ -118,7 +118,7 @@
             "child_soubor",
             "popis",
             "poznamka",
-            "typ_dokumentu_posudek",
+            "posudek",
             "oznaceni_originalu",
 
             "soubor_nazev",
@@ -153,7 +153,7 @@
             "extra_data_udalost_typ",
             "extra_data_udalost",
             "extra_data_zeme", 
-            "extra_data_osoby",
+            "osoba",
 
             "let_ident_cely",
             "let_datum",
@@ -193,7 +193,7 @@
             "dalsi_katastry", 
 
             "dokument",
-            
+
             "dokumentacni_jednotka_ident_cely",
             "dokumentacni_jednotka_typ", 
             "dokumentacni_jednotka_nazev",
@@ -281,23 +281,23 @@
 
         "samostatny_nalez": [
             "ident_cely",
-            "inv_cislo",
-            "okres",
-            "nalezove_okolnosti", 
-            "obdobi", 
-            "presna_datace",
-            "druh_nalezu", 
-            "specifikace", 
-            "poznamka",
-            "nalezce",
-            "predano_organizace", 
-            "katastr",
-            "lokalizace",
-            "projekt_id",
-            "datum_nalezu",
-            "child_soubor",
-            "soubor_nazev"
-        ]
+                "evidencni_cislo",
+                "okolnosti", 
+                "presna_datace",
+                "poznamka",
+                "predano_organizace", 
+                "katastr",
+                "lokalizace",
+                "datum_nalezu",
+                "child_soubor",
+                "soubor_nazev",
+                "projekt",
+            
+                "okres",
+                "specifikace", 
+                "nalezce",
+                "obdobi", 
+                "druh_nalezu"]
     },
 
     "kategoriet": {

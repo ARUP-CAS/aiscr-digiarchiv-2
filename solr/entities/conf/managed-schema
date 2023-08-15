@@ -73,6 +73,7 @@
    
    <field name="autor" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    <field name="typ_dokumentu_posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
+   <field name="posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    
    <field name="extra_data" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    

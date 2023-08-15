@@ -123,7 +123,7 @@ public class ProjektSearcher implements EntitySearcher {
       SolrSearcher.addChildFieldByEntity(client, doc, "archeologicky_zaznam", fields);
 
       fields = "ident_cely,pristupnost,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
-      SolrSearcher.addChildField(client, doc, "child_samostatny_nalez", "samostatny_nalez", fields);
+      SolrSearcher.addChildField(client, doc, "samostatny_nalez", "valid_samostatny_nalez", fields, "searchable:true");
       if (doc.has("pian_id")) {
         JSONArray cdjs = doc.getJSONArray("pian_id");
         for (int j = 0; j < cdjs.length(); j++) {

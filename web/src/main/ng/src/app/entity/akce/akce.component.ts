@@ -60,7 +60,7 @@ export class AkceComponent implements OnInit, OnChanges {
         setTimeout(() => {
           this.state.loading = true;
           this.state.imagesLoading = true;
-          this.result.dokument = [];
+          this.result.valid_dokument = [];
           this.result.projekt = [];
           this.getDokuments();
           this.getProjekts();
@@ -81,9 +81,9 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   setVsize() {
-    if (this.result.child_dokument) {
-      this.numChildren += this.result.child_dokument.length;
-      this.state.numImages = this.result.child_dokument.length;
+    if (this.result.dokument) {
+      this.numChildren += this.result.dokument.length;
+      this.state.numImages = this.result.dokument.length;
     }
     if (this.result.vazba_projekt) {
       this.numChildren += this.result.vazba_projekt.length;
@@ -95,30 +95,30 @@ export class AkceComponent implements OnInit, OnChanges {
   checkLoading() {
     this.state.loading = (this.dokLoaded + this.result.projekt.length) < this.numChildren;
     if (!this.state.loading) {
-      this.result.dokument = this.result.dokumentTemp.concat([]);
+      this.result.valid_dokument = this.result.dokumentTemp.concat([]);
     }
   }
 
 
   getDokuments() {
-    if (this.result.child_dokument && this.hasRights) {
-      for (let i = 0; i < this.result.child_dokument.length; i++) {
+    if (this.result.dokument && this.hasRights) {
+      for (let i = 0; i < this.result.dokument.length; i++) {
         this.result.dokumentTemp.push({});
       }
-      for (let i = 0; i < this.result.child_dokument.length; i = i + 20) {
-        const ids = this.result.child_dokument.slice(i, i + 20);
+      for (let i = 0; i < this.result.dokument.length; i = i + 20) {
+        const ids = this.result.dokument.slice(i, i + 20);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
           // Odpoved ma jine serazeni.
           const sorted: any[] = [];
           ids.forEach(id => {
             const doc = res.response.docs.find(d => d.ident_cely === id);
             // sorted.push(doc);
-            const idx = this.result.child_dokument.findIndex(d => d === id);
+            const idx = this.result.dokument.findIndex(d => d === id);
             this.result.dokumentTemp[idx] = doc;
             this.dokLoaded++;
           });
-          // this.result.dokument = this.result.dokument.concat(res.response.docs);
-          // this.result.dokument = this.result.dokument.concat(sorted);
+          // this.result.valid_dokument = this.result.dokument.concat(res.response.docs);
+          // this.result.valid_dokument = this.result.dokument.concat(sorted);
           this.state.documentProgress = this.dokLoaded / this.numChildren * 100;
           this.checkLoading();
           
@@ -144,7 +144,7 @@ export class AkceComponent implements OnInit, OnChanges {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       this.setVsize();
-      this.result.dokument = [];
+      this.result.valid_dokument = [];
       this.result.dokumentTemp = [];
       this.result.projekt = [];
       this.getDokuments();

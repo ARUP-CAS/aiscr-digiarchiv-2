@@ -72,19 +72,19 @@ public class IndexUtils {
   
   public static void addVocabField(SolrInputDocument idoc, String field, Vocab v) {
     if(v != null) {
-      idoc.setField(field, v.getId());
+      idoc.addField(field, v.getId());
     }
   }
   
   public static void addRefField(SolrInputDocument idoc, String field, Vocab v) {
     if(v != null) {
-      idoc.setField(field, v.getValue());
+      idoc.addField(field, v.getValue());
     }
   }
   
   public static void addLangField(SolrInputDocument idoc, String field, Lang v) {
     if(v != null) {
-      idoc.setField(field, v.getValue());
+      idoc.addField(field, v.getValue());
     }
   }
   

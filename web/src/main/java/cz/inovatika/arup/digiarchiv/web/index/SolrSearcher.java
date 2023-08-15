@@ -102,7 +102,7 @@ public class SolrSearcher {
 //        q = "\"" + q + "\"";
 //      }
     }
-    query.setRequestHandler("/search");
+    query.setRequestHandler("/search"); 
 
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
@@ -460,9 +460,12 @@ public class SolrSearcher {
     return new JSONObject((String) resp.get("response"));
   }
 
-  public static JSONObject getById(Http2SolrClient client, String id, String fields) {
+  public static JSONObject getById(Http2SolrClient client, String id, String fields, String filter) {
     try {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");
+      if (filter != null) {
+          query.addFilterQuery(filter);
+      }
       query.setFields(fields).setRequestHandler("/search");
       JSONObject jo = SearchUtils.json(query, client, "entities");
       if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
@@ -475,25 +478,33 @@ public class SolrSearcher {
     return null;
   }
 
-  public static void addChildField(Http2SolrClient client, JSONObject doc, String idField, String newField, String queryFields) {
+  public static JSONObject getById(Http2SolrClient client, String id, String fields) {
+    return SolrSearcher.getById(client, id, fields, null);
+  }
+
+  public static void addChildField(Http2SolrClient client, JSONObject doc, String idField, String newField, String queryFields, String filter) {
     if (doc.has(idField)) {
       Object obj = doc.get(idField);
       if (obj instanceof JSONArray) {
         JSONArray ids = doc.getJSONArray(idField);
         for (int a = 0; a < ids.length(); a++) {
           String id = ids.getString(a);
-          JSONObject sub = SolrSearcher.getById(client, id, queryFields);
+          JSONObject sub = SolrSearcher.getById(client, id, queryFields, filter);
           if (sub != null) {
             doc.append(newField, sub);
           }
         }
       } else {
-        JSONObject sub = SolrSearcher.getById(client, (String) obj, queryFields);
+        JSONObject sub = SolrSearcher.getById(client, (String) obj, queryFields, filter);
         if (sub != null) {
           doc.append(newField, sub);
         }
       }
     }
+  }
+
+  public static void addChildField(Http2SolrClient client, JSONObject doc, String idField, String newField, String queryFields) {
+    SolrSearcher.addChildField(client, doc, idField, newField, queryFields, null);
   }
 
   public static void addChildFieldByEntity(Http2SolrClient client, JSONObject doc, String idField, String queryFields) {

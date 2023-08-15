@@ -70,23 +70,21 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   }  
 
   setVsize() {
-      if (this.result.projekt_id) {
-        this.numChildren += this.result.projekt_id.length;
+      if (this.result.projekt) {
+        this.numChildren += this.result.projekt.length;
       }
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getProjekts() {
-    if (this.result.projekt_id) {
-      this.result.projekt = [];
-      
-      for (let i = 0; i < this.result.projekt_id.length; i=i+10) {
-        const ids = this.result.projekt_id.slice(i, i+10);
-        this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
-          this.result.projekt = this.result.projekt.concat(res.response.docs);
+    console.log(this.result.projekt)
+    if (this.result.projekt) {
+      this.result.valid_projekt = [];
+        this.service.getIdAsChild([this.result.projekt], "projekt").subscribe((res: any) => {
+          this.result.valid_projekt = this.result.valid_projekt.concat(res.response.docs);
           this.state.loading = false;
         });
-      }
+      
     }
   }
 
