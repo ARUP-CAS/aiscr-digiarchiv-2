@@ -102,7 +102,7 @@ public interface FedoraModel {
       sr.nextTag();
       sr.nextTag();
       return (FedoraModel) xmlMapper.readValue(sr, clazz);
-    } catch (Exception ex) {
+    } catch (IOException | XMLStreamException ex) {
       Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, "Error parsing {0}", xml);
       Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
       throw new Exception(ex);

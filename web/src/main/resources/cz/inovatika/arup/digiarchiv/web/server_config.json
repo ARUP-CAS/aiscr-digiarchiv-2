@@ -124,6 +124,8 @@
             "komponenta_dokument_areal", 
             "f_aktivita", 
             "komponenta_dokument_poznamka",
+            "komponenta_nalez_objekt_poznamka",
+            "komponenta_nalez_predmet_poznamka",
 
             "nalez_dokumentu_typ_nalezu", 
             "nalez_dokumentu_druh_nalezu", 

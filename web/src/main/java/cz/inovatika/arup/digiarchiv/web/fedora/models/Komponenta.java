@@ -71,8 +71,9 @@ public class Komponenta {
     }
     for (NalezObjekt no : nalez_objekt) {
       IndexUtils.addJSONField(kdoc, "nalez_objekt", no);
-      IndexUtils.addVocabField(kdoc, "nalez_predmet_specifikace", no.specifikace);
-      IndexUtils.addVocabField(kdoc, "nalez_predmet_druh", no.druh);
+      IndexUtils.addVocabField(kdoc, "nalez_objekt_specifikace", no.specifikace);
+      IndexUtils.addVocabField(kdoc, "nalez_objekt_druh", no.druh);
+      kdoc.addField("nalez_objekt_poznamka", no.poznamka);
     }
     if (!nalez_predmet.isEmpty()) {
       kdoc.addField("typ_nalezu", "predmet");
@@ -81,6 +82,7 @@ public class Komponenta {
       IndexUtils.addJSONField(kdoc, "nalez_predmet", np);
       IndexUtils.addVocabField(kdoc, "nalez_predmet_specifikace", np.specifikace);
       IndexUtils.addVocabField(kdoc, "nalez_predmet_druh", np.druh);
+      kdoc.addField("nalez_predmet_poznamka", np.poznamka);
     }
     for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
       idoc.setField("komponenta_" + entry.getKey(), entry.getValue().getValue());
