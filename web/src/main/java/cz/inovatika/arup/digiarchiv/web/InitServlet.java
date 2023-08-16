@@ -5,6 +5,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -54,7 +55,7 @@ public class InitServlet extends HttpServlet {
     if (getServletContext().getInitParameter("def_config_dir") != null) {
       DEFAULT_CONFIG_DIR = getServletContext().getInitParameter("def_config_dir");
     }
-    
+   
     DEFAULT_CONFIG_FILE = getServletContext().getRealPath(DEFAULT_CONFIG_DIR) + File.separator + DEFAULT_CONFIG_FILE;
     DEFAULT_I18N_DIR = getServletContext().getRealPath(DEFAULT_I18N_DIR);
     
@@ -67,6 +68,11 @@ public class InitServlet extends HttpServlet {
     }
     
     LOGGER.log(Level.INFO, "CONFIG_DIR is -> {0}", CONFIG_DIR);
+  }
+  
+  @Override
+  public void destroy() {
+      IndexUtils.closeClient();
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

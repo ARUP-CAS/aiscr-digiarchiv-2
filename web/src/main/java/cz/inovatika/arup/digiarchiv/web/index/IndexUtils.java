@@ -37,6 +37,13 @@ public class IndexUtils {
     return _solr;
   }
   
+  public static void closeClient() {
+    if (_solr != null) {
+      _solr.close();
+      _solr = null;
+    }
+  }
+  
   public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
     if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
       idoc.addField(field, value);

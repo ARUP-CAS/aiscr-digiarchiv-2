@@ -126,6 +126,8 @@
    <field name="child_ext_zdroj" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <field name="vedouci_akce_ostatni" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <field name="vedouci_akce_ostatni_jmeno" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
+   <field name="vedouci_akce_ostatni_organizace" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
    <field name="organizace_ostatni" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
    <field name="dalsi_katastry" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
    <field name="dalsi_katastr" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 
@@ -418,8 +420,7 @@
 <copyField source="*specifikace" dest="f_specifikace" />
 <copyField source="dok_jednotka_typ" dest="f_dok_jednotka_typ" />
 
-<copyField source="okres" dest="f_okres" />
-<copyField source="*_okres" dest="f_okres" />
+
 -->
 
 <copyField source="*_aktivita" dest="f_aktivita" />

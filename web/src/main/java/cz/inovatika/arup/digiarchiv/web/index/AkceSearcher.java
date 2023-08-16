@@ -23,9 +23,6 @@ public class AkceSearcher implements EntitySearcher {
 
   final String ENTITY = "akce";
 
-  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "child_dokument",
-    "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "organizace", "hlavni_vedouci", "okres", "datestamp"});
-
   @Override
   public void filter(JSONObject jo, String pristupnost, String org) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
@@ -33,13 +30,6 @@ public class AkceSearcher implements EntitySearcher {
       JSONObject doc = ja.getJSONObject(i);
       if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
         doc.remove("chranene_udaje");
-//        Object[] keys =  doc.keySet().toArray();
-//        for (Object key : keys) {
-//          if (!allowedFields.contains((String)key)) {
-//            doc.remove((String)key);
-//          }
-//          
-//        }
       }
     }
   }
@@ -131,7 +121,7 @@ public class AkceSearcher implements EntitySearcher {
   @Override
   public String[] getChildSearchFields(String pristupnost) {
     //  return getSearchFields(pristupnost);
-    return new String[]{"ident_cely,entity,pristupnost,okres,hlavni_vedouci,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
+    return new String[]{"ident_cely,entity,pristupnost,okres,hlavni_vedouci,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dokument",
       "lokalizace:lokalizace_okolnosti_" + pristupnost,
       "katastr:f_katastr_" + pristupnost,
       "dalsi_katastry:f_dalsi_katastry_" + pristupnost};

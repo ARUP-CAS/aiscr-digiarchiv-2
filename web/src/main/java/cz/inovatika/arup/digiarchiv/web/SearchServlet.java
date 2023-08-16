@@ -309,7 +309,7 @@ public class SearchServlet extends HttpServlet {
             searcher = new DokumentSearcher();
           }
           JSONObject jo = searcher.search(request);
-          searcher.getChilds(jo, client, request);
+          // searcher.getChilds(jo, client, request);
           // Remove stats in case of one result, without access
           int numFound = jo.getJSONObject("response").getInt("numFound");
           if (numFound == 1) {

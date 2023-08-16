@@ -69,21 +69,21 @@ export class LokalitaComponent implements OnInit, OnChanges {
   }
 
   setVsize() {
-      if (this.result.child_dokument) {
-        this.numChildren += this.result.child_dokument.length;
+      if (this.result.dokument) {
+        this.numChildren += this.result.dokument.length;
       }
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getDokuments() {
-    if (this.result.child_dokument && this.hasRights) {
-      this.result.dokument = [];
-      for (let i = 0; i < this.result.child_dokument.length; i=i+10) {
-        const ids = this.result.child_dokument.slice(i, i+10);
+    if (this.result.dokument && this.hasRights) {
+      this.result.full_dokument = [];
+      for (let i = 0; i < this.result.dokument.length; i=i+10) {
+        const ids = this.result.dokument.slice(i, i+10);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
-          this.result.dokument = this.result.dokument.concat(res.response.docs);
-          this.state.documentProgress = this.result.dokument.length / this.numChildren *100;
-          this.state.loading = (this.result.dokument.length) < this.numChildren;
+          this.result.full_dokument = this.result.full_dokument.concat(res.response.docs);
+          this.state.documentProgress = this.result.full_dokument.length / this.numChildren *100;
+          this.state.loading = (this.result.full_dokument.length) < this.numChildren;
         });
       }
     }

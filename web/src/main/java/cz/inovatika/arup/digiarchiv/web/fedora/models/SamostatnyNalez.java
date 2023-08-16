@@ -224,22 +224,20 @@ public class SamostatnyNalez implements FedoraModel {
         for (Object f : fields) {
             String s = (String) f;
             // SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
-
             if (indexFields.contains(s)) {
-//                if ("projekt".equals(s)) {
-//                    System.out.println(idoc.getFieldValues(s));
-//                }
                 for (String sufix : prSufixAll) {
                     IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
-                    // idoc.addField("text_all_" + sufix, idoc.getFieldValues(s));
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, okres);
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, specifikace);
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, nalezce);
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, obdobi);
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, druh_nalezu);
-
                 }
             }
+        }
+        
+        // Add value of vocab fields
+        for (String sufix : prSufixAll) {
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, okres);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, specifikace);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, nalezce);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, obdobi);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, druh_nalezu);
         }
     }
 

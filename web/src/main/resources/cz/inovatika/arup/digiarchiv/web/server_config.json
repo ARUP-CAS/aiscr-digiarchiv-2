@@ -107,21 +107,11 @@
     "indexFieldsByType": {
         "dokument": [
             "ident_cely",
-            "typ_dokumentu",
-            "material_originalu",
-            "rada",
             "autor",
             "rok_vzniku",
-            "organizace",
-            "jazyk_dokumentu",
-            "ulozeni_originalu",
-            "child_soubor",
             "popis",
             "poznamka",
-            "posudek",
             "oznaceni_originalu",
-
-            "soubor_nazev",
 
             "dokument_cast_ident_cely",
             "dokument_cast_archeologicky_zaznam",
@@ -153,7 +143,6 @@
             "extra_data_udalost_typ",
             "extra_data_udalost",
             "extra_data_zeme", 
-            "osoba",
 
             "let_ident_cely",
             "let_datum",
@@ -189,8 +178,6 @@
         "archeologicky_zaznam": [
             "ident_cely",
             "okres",
-            "katastr",
-            "dalsi_katastry", 
 
             "dokument",
 
@@ -230,17 +217,9 @@
         "akce": [
 
             "poznamka",
-            "vedouci_akce",
-            "organizace", 
-            "organizace_ostatni", 
-            "vedouci_akce_ostatni",
-            "hlavni_typ", 
-            "vedlejsi_typ", 
-            "datum_zahajeni_v",
-            "datum_ukonceni_v",
-            "lokalizace",
+            "vedouci_akce_ostatni_jmeno",
             "ulozeni_nalezu",
-            "uzivatelske_oznaceni",
+            
 
             "projekt",
 
@@ -249,13 +228,10 @@
         ],
 
         "lokalita": [
-            "typ_lokality", 
             "nazev",
-            "druh", 
             "popis",
             "poznamka",
-            "uzivatelske_oznaceni",
-            "child_dokument"
+            "uzivatelske_oznaceni"
 
         ],
 

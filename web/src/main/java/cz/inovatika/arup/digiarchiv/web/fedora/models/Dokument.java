@@ -13,9 +13,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONObject;
 
 /**
  *
@@ -162,7 +164,6 @@ public class Dokument implements FedoraModel {
         idoc.setField("entity", entity);
 
         IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
-        IndexUtils.addVocabField(idoc, "let", let);
         IndexUtils.addVocabField(idoc, "material_originalu", material_originalu);
         IndexUtils.addVocabField(idoc, "rada", rada);
 
@@ -216,8 +217,41 @@ public class Dokument implements FedoraModel {
             // IndexUtils.addJSONField(idoc, "dokument_cast", dc);
             dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
+        
+
+        if (let != null) {
+            addLet(idoc);
+        }
 
         setFullText(idoc);
+    }
+    
+    private void addLet(SolrInputDocument idoc) {
+        
+        IndexUtils.addVocabField(idoc, "let", let); 
+        SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"")
+            .setFields("ident_cely",
+                        "datum",
+                        "pozorovatel",
+                        "organizace",
+                        "fotoaparat",
+                        "pilot",
+                        "typ_letounu",
+                        "ucel_letu",
+                        "letiste_start", 
+                        "letiste_cil", 
+                        "pocasi", 
+                        "dohlednost", 
+                        "uzivatelske_oznaceni");
+        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+        if (json.getJSONObject("response").getInt("numFound") > 0) {
+            for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
+                JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
+                for (String key : doc.keySet()) {
+                    SolrSearcher.addFieldNonRepeat(idoc, "let_" + key, doc.opt(key));
+                }
+            }
+        }
     }
 
     public void setFullText(SolrInputDocument idoc) {
@@ -240,6 +274,26 @@ public class Dokument implements FedoraModel {
             }
 
         }
+                for (String sufix : prSufix) {
+                    IndexUtils.addRefField(idoc, "text_all_" + sufix, typ_dokumentu);
+                    IndexUtils.addRefField(idoc, "text_all_" + sufix, material_originalu);
+                    IndexUtils.addRefField(idoc, "text_all_" + sufix, rada);
+                    IndexUtils.addRefField(idoc, "text_all_" + sufix, organizace);
+                    for (Vocab v: osoba) {
+                        IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
+                    }
+                    for (Vocab v: jazyk_dokumentu) {
+                        IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
+                    }
+                    
+                    IndexUtils.addRefField(idoc, "text_all_" + sufix, ulozeni_originalu);
+                    for (Vocab v: posudek) {
+                        IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
+                    }
+                    for (Soubor v: soubor) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, v.nazev);
+                    }
+                }
     }
 
 }
