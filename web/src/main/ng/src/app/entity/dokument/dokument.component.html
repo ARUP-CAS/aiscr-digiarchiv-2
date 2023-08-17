@@ -11,9 +11,11 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngFor="let a of result.autor; let last = last;">
-          <app-inline-filter [isChild]="isChild" [field]="'f_autor'" [value]="a"></app-inline-filter><span *ngIf="!last">; </span>
-        </ng-container><span class="app-pipe"></span>
+        <ng-container *ngIf="result.autor">
+          <ng-container *ngFor="let a of result.autor; let last = last;">
+            <app-inline-filter [isChild]="isChild" [field]="'f_autor'" [value]="a"></app-inline-filter><span *ngIf="!last">; </span>
+          </ng-container><span class="app-pipe"></span>
+        </ng-container>
         <app-inline-filter [isChild]="isChild" [field]="'f_rok_vzniku'" [value]="result.rok_vzniku" [isYear]="true"></app-inline-filter>
         <span class="app-pipe"></span>
       </div>

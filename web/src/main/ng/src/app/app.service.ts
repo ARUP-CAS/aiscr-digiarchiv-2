@@ -145,6 +145,12 @@ export class AppService {
     return this.get(`/search/dokument`, params);
   }
 
+  checkRelations(id: string): Observable<SolrResponse> {
+    const params: HttpParams = new HttpParams()
+      .set('id', id);
+    return this.get(`/search/check_relations`, params);
+  }
+
   getId(id: string): Observable<SolrResponse> {
     const params: HttpParams = new HttpParams()
       .set('id', id);

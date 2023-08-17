@@ -97,6 +97,49 @@ public class SearchServlet extends HttpServlet {
         return json.toString();
       }
     },
+    CHECK_RELATIONS {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        JSONObject json = new JSONObject();
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          String entity = request.getParameter("entity");
+          SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+                  .setFacet(false);
+          query.setRequestHandler("/search");
+          if (entity == null) {
+            query.setFields("entity");
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
+              return jo.toString();
+            }
+            entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+          }
+          String pristupnost = LoginServlet.pristupnost(request.getSession());
+          if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+          }
+          EntitySearcher searcher = SearchUtils.getSearcher(entity);
+          query.setFields(searcher.getRelationsFields());
+          
+          
+          JSONObject jo = SearchUtils.json(query, client, "entities");
+          if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+              JSONObject doc = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+              searcher.checkRelations(doc, client, request);
+              return doc.toString();
+          } else {
+              return "{}";
+          }
+          
+
+        } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, null, ex);
+          json.put("error", ex);
+        }
+        return json.toString();
+      }
+    },
     ID {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {

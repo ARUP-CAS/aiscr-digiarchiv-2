@@ -66,6 +66,8 @@ export class AkceComponent implements OnInit, OnChanges {
           this.getProjekts();
         }, 100);
       }
+    } else {
+      this.checkRelations();
     }
   }
 
@@ -80,16 +82,23 @@ export class AkceComponent implements OnInit, OnChanges {
     }
   }
 
+  checkRelations() {
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.dokument = res.dokument;
+      this.result.projekt = res.projekt;
+    });
+  }
+
   setVsize() {
-    if (this.result.dokument) {
-      this.numChildren += this.result.dokument.length;
-      this.state.numImages = this.result.dokument.length;
-    }
-    if (this.result.vazba_projekt) {
-      this.numChildren += this.result.vazba_projekt.length;
-    }
-    this.state.numChildren = this.numChildren;
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+      if (this.result.dokument) {
+        this.numChildren += this.result.dokument.length;
+        this.state.numImages = this.result.dokument.length;
+      }
+      if (this.result.vazba_projekt) {
+        this.numChildren += this.result.vazba_projekt.length;
+      }
+      this.state.numChildren = this.numChildren;
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   checkLoading() {
@@ -121,7 +130,7 @@ export class AkceComponent implements OnInit, OnChanges {
           // this.result.valid_dokument = this.result.dokument.concat(sorted);
           this.state.documentProgress = this.dokLoaded / this.numChildren * 100;
           this.checkLoading();
-          
+
         });
       }
     }
@@ -141,8 +150,8 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   getFullId() {
-    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-      this.result = res.response.docs[0];
+    //this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+      //this.result = res.response.docs[0];
       this.setVsize();
       this.result.valid_dokument = [];
       this.result.dokumentTemp = [];
@@ -152,7 +161,7 @@ export class AkceComponent implements OnInit, OnChanges {
       // this.result.akce = res.response.docs[0].akce;
       // this.result.lokalita = res.response.docs[0].lokalita;
       this.hasDetail = true;
-    });
+    //});
   }
 
   toggleDetail() {

@@ -482,6 +482,18 @@ public class SolrSearcher {
     return SolrSearcher.getById(client, id, fields, null);
   }
 
+  public static boolean existsById(Http2SolrClient client, String id) {
+    try {
+      SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");
+      query.setRequestHandler("/search");
+      JSONObject jo = SearchUtils.json(query, client, "entities");
+        return jo.getJSONObject("response").optInt("numFound", 0) > 0;
+    } catch (Exception ex) {
+      LOGGER.log(Level.WARNING, "Error {0}", ex);
+      return false;
+    }
+  }
+
   public static void addChildField(Http2SolrClient client, JSONObject doc, String idField, String newField, String queryFields, String filter) {
     if (doc.has(idField)) {
       Object obj = doc.get(idField);

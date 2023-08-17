@@ -20,4 +20,6 @@ public interface EntitySearcher {
   public void filter(JSONObject jo, String pristupnost, String org);
   public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request);
   public String[] getChildSearchFields(String pristupnost);
+  public String[] getRelationsFields();
+  public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request);
 }

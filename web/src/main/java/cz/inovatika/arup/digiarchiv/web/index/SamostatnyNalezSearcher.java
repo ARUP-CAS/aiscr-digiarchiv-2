@@ -27,6 +27,15 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
     return this.getSearchFields(pristupnost);
   }
 
+    @Override
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+    }
+
+    @Override
+    public String[] getRelationsFields() {
+        return new String[]{"dokument", "projekt"};
+    }
+
   @Override
   public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");

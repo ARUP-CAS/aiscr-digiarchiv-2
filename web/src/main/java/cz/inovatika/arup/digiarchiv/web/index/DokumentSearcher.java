@@ -63,6 +63,15 @@ public class DokumentSearcher implements EntitySearcher {
     }
 
     @Override
+    public String[] getRelationsFields() {
+        return new String[]{"dokument", "projekt"};
+    }
+
+    @Override
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+    }
+
+    @Override
     public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         PIANSearcher ps = new PIANSearcher();
         String pristupnost = LoginServlet.pristupnost(request.getSession());
