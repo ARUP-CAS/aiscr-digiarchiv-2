@@ -62,8 +62,8 @@
         {{'card.desc.Počet akcí' | translate}}: <strong>{{result.child_akce?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container>
-      <ng-container *ngIf="result.valid_samostatny_nalez?.length > 0"> 
-        {{'card.desc.Počet samostatných nálezů' | translate}}: <strong>{{result.valid_samostatny_nalez?.length}}</strong> 
+      <ng-container *ngIf="result.samostatny_nalez?.length > 0"> 
+        {{'card.desc.Počet samostatných nálezů' | translate}}: <strong>{{result.samostatny_nalez?.length}}</strong> 
         <span class="app-pipe"></span>
       </ng-container>
     </div>

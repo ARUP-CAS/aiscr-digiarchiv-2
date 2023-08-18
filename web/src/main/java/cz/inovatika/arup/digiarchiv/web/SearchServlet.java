@@ -176,7 +176,7 @@ public class SearchServlet extends HttpServlet {
               if ("pian".equals(entity) || "adb".equals(entity)) {
                 searcher.getChilds(jo, client, request);
               }
-//              searcher.getChilds(jo, client, request);
+              searcher.checkRelations(jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0), client, request);
               searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             }
             ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);

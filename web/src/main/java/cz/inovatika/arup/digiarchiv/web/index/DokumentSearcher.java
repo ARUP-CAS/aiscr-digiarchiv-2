@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import static cz.inovatika.arup.digiarchiv.web.index.AkceSearcher.LOGGER;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -56,19 +57,24 @@ public class DokumentSearcher implements EntitySearcher {
     }
 
     @Override
-    public String[] getChildSearchFields(String pristupnost) {
-        String[] f = new String[]{"ident_cely,pristupnost,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath,location_info:[json]"};
-        //if (pristupnost)
-        return f;
-    }
+    public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
+        JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
+        if (doc.has("dokument_cast_archeologicky_zaznam")) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                    .setRows(10000)
+                    .setFields("ident_cely");
+            try {
+                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                for (int a = 0; a < ja.length(); a++) {
+                    dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+                }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
+        doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
 
-    @Override
-    public String[] getRelationsFields() {
-        return new String[]{"dokument", "projekt"};
-    }
-
-    @Override
-    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
     }
 
     @Override
@@ -123,6 +129,19 @@ public class DokumentSearcher implements EntitySearcher {
             "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
             "lokalizace:f_lokalizace_" + pristupnost};
         return f;
+    }
+
+    @Override
+    public String[] getChildSearchFields(String pristupnost) {
+        String[] f = new String[]{
+            "ident_cely,entity,pristupnost,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath,location_info:[json]"};
+        //if (pristupnost)
+        return f;
+    }
+
+    @Override
+    public String[] getRelationsFields() {
+        return new String[]{"ident_cely", "dokument_cast_archeologicky_zaznam"};
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

@@ -61,7 +61,7 @@ export class AkceComponent implements OnInit, OnChanges {
           this.state.loading = true;
           this.state.imagesLoading = true;
           this.result.valid_dokument = [];
-          this.result.projekt = [];
+          this.result.valid_projekt = [];
           this.getDokuments();
           this.getProjekts();
         }, 100);
@@ -94,15 +94,15 @@ export class AkceComponent implements OnInit, OnChanges {
         this.numChildren += this.result.dokument.length;
         this.state.numImages = this.result.dokument.length;
       }
-      if (this.result.vazba_projekt) {
-        this.numChildren += this.result.vazba_projekt.length;
+      if (this.result.projekt) {
+        this.numChildren += 1;
       }
       this.state.numChildren = this.numChildren;
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   checkLoading() {
-    this.state.loading = (this.dokLoaded + this.result.projekt.length) < this.numChildren;
+    this.state.loading = (this.dokLoaded + this.result.valid_projekt.length) < this.numChildren;
     if (!this.state.loading) {
       this.result.valid_dokument = this.result.dokumentTemp.concat([]);
     }
@@ -138,14 +138,11 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   getProjekts() {
-    if (this.result.vazba_projekt) {
-      for (let i = 0; i < this.result.vazba_projekt.length; i = i + 10) {
-        const ids = this.result.vazba_projekt.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
-          this.result.projekt = this.result.projekt.concat(res.response.docs);
+    if (this.result.projekt) {
+        this.service.getIdAsChild([this.result.projekt], "projekt").subscribe((res: any) => {
+          this.result.valid_projekt = res.response.docs;
           this.checkLoading();
         });
-      }
     }
   }
 
@@ -155,7 +152,7 @@ export class AkceComponent implements OnInit, OnChanges {
       this.setVsize();
       this.result.valid_dokument = [];
       this.result.dokumentTemp = [];
-      this.result.projekt = [];
+      this.result.valid_projekt = [];
       this.getDokuments();
       this.getProjekts();
       // this.result.akce = res.response.docs[0].akce;

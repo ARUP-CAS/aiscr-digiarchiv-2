@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,21 +92,25 @@ public class ProjektSearcher implements EntitySearcher {
     }
     
   }
-  
-  @Override
-  public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,pristupnost,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,podnet", 
-            "katastr:f_katastr_" + pristupnost,  
-            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
-  }
 
     @Override
-    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-    }
-
-    @Override
-    public String[] getRelationsFields() {
-        return new String[]{"dokument", "projekt"};
+    public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
+        JSONArray samostatny_nalez = new JSONArray();
+        if (doc.has("samostatny_nalez")) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                    .setRows(10000)
+                    .setFields("ident_cely");
+            try {
+                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                for (int a = 0; a < ja.length(); a++) {
+                    samostatny_nalez.put(ja.getJSONObject(a).getString("ident_cely"));
+                }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
+        doc.put("samostatny_nalez", samostatny_nalez);
     }
   
   @Override
@@ -174,6 +179,18 @@ public class ProjektSearcher implements EntitySearcher {
       LOGGER.log(Level.SEVERE, null, ex);
       return ex.toString();
     }
+  }
+
+    @Override
+    public String[] getRelationsFields() {
+        return new String[]{"ident_cely", "samostatny_nalez"};
+    }
+  
+  @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return new String[]{"ident_cely,entity,pristupnost,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,podnet", 
+            "katastr:f_katastr_" + pristupnost,  
+            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
   }
   
   @Override

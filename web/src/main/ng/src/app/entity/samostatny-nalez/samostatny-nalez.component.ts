@@ -67,17 +67,24 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
       this.state.loading = true;
       this.getProjekts();
      }
+     //this.checkRelations();
   }  
+
+  checkRelations() {
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.samostatny_nalez = res.samostatny_nalez;
+    });
+  }
 
   setVsize() {
       if (this.result.projekt) {
-        this.numChildren += this.result.projekt.length;
+        this.numChildren = 1;
       }
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+      console.log(this.vsSize)
   }
 
   getProjekts() {
-    console.log(this.result.projekt)
     if (this.result.projekt) {
       this.result.valid_projekt = [];
         this.service.getIdAsChild([this.result.projekt], "projekt").subscribe((res: any) => {

@@ -56,6 +56,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
       this.state.loading = true;
       this.getDokuments();
      }
+     this.checkRelations();
   }
 
   ngOnChanges(c) {
@@ -68,6 +69,13 @@ export class LokalitaComponent implements OnInit, OnChanges {
     }
   }
 
+  checkRelations() {
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.dokument = res.dokument;
+      this.result.projekt = res.projekt;
+    });
+  }
+
   setVsize() {
       if (this.result.dokument) {
         this.numChildren += this.result.dokument.length;
@@ -76,7 +84,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
   }
 
   getDokuments() {
-    if (this.result.dokument && this.hasRights) {
+    if (this.result.dokument && this.result.dokument.length > 0 && this.hasRights) {
       this.result.full_dokument = [];
       for (let i = 0; i < this.result.dokument.length; i=i+10) {
         const ids = this.result.dokument.slice(i, i+10);

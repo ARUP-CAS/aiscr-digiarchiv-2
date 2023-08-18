@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,13 +37,20 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-        PIANSearcher ps = new PIANSearcher();
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
             pristupnost = "D";
         }
+        PIANSearcher ps = new PIANSearcher();
         String[] fs = ps.getSearchFields(pristupnost);
         String fields = String.join(",", fs);
+
+        DokumentSearcher ds = new DokumentSearcher();
+        String dfs = String.join(",", ds.getChildSearchFields(pristupnost));
+
+        ProjektSearcher prs = new ProjektSearcher();
+        String pfs = String.join(",", prs.getChildSearchFields(pristupnost));
+
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
@@ -61,37 +69,39 @@ public class AkceSearcher implements EntitySearcher {
 //      if (LoginServlet.userId(request) != null) {
 //        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
 //      }
-            String dfs = "ident_cely,entity,pristupnost,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
             SolrSearcher.addChildField(client, doc, "dokument", "valid_dokument", dfs);
-//
-//      fields = "ident_cely,pristupnost,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet";
-//
-//      SolrSearcher.addChildField(client, doc, "vazba_projekt", "projekt", fields);
+            SolrSearcher.addChildField(client, doc, "projekt", "valid_projekt", fields);
         }
     }
 
     @Override
     public String[] getRelationsFields() {
-        return new String[]{"dokument", "projekt"};
+        return new String[]{"ident_cely", "dokument", "projekt"};
     }
 
     @Override
     public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
-        String pristupnost = LoginServlet.pristupnost(request.getSession());
-        if ("E".equals(pristupnost)) {
-            pristupnost = "D";
-        }
-
+        
         JSONArray valid_dokuments = new JSONArray();
-
-        JSONArray ids = doc.getJSONArray("dokument");
-        for (int a = 0; a < ids.length(); a++) {
-            String id = ids.getString(a);
-            if (SolrSearcher.existsById(client, id)) {
-                valid_dokuments.put(id);
+        if (doc.has("dokument")) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                    .setRows(10000)
+                    .setFields("ident_cely");
+            try {
+                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                for (int a = 0; a < ja.length(); a++) {
+                    valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
+                }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
         doc.put("dokument", valid_dokuments);
+
+        if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
+            doc.remove("projekt");
+        }
     }
 
     @Override
@@ -126,7 +136,7 @@ public class AkceSearcher implements EntitySearcher {
     public String[] getSearchFields(String pristupnost) {
         return new String[]{"ident_cely", "katastr", "f_katastr:katastr", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
             "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost",
-            "organizace", "f_organizace:organizace", "vazba_projekt", "dokument",
+            "organizace", "f_organizace:organizace", "projekt", "dokument",
             "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
             "vedouci_akce_ostatni", "organizace_ostatni", "uzivatelske_oznaceni:uzivatelske_oznaceni_" + pristupnost, "ulozeni_nalezu", "poznamka",
             "pian:[json],adb:[json],projekt:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",

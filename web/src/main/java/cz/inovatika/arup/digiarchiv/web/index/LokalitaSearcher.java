@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,12 +59,33 @@ public class LokalitaSearcher implements EntitySearcher {
   }
 
     @Override
-    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+    public String[] getRelationsFields() {
+        return new String[]{"ident_cely", "dokument", "projekt"};
     }
 
     @Override
-    public String[] getRelationsFields() {
-        return new String[]{"dokument", "projekt"};
+    public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
+        
+        JSONArray valid_dokuments = new JSONArray();
+        if (doc.has("dokument")) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                    .setRows(10000)
+                    .setFields("ident_cely");
+            try {
+                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                for (int a = 0; a < ja.length(); a++) {
+                    valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
+                }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
+        doc.put("dokument", valid_dokuments);
+
+        if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
+            doc.remove("projekt");
+        }
     }
   
   @Override
@@ -76,7 +98,7 @@ public class LokalitaSearcher implements EntitySearcher {
           SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
         }
         String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
-        SolrSearcher.addChildField(client, doc, "child_dokument", "dokument", fields);
+        SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
       }
     } else {
         JSONObject doc = jo.getJSONObject("doc");
@@ -84,7 +106,7 @@ public class LokalitaSearcher implements EntitySearcher {
           SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
         }
         String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
-        SolrSearcher.addChildField(client, doc, "child_dokument", "dokument", fields);
+        SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
     }
   }
 
@@ -119,7 +141,7 @@ public class LokalitaSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument", "f_katastr:katastr",
+    return new String[]{"*,dok_jednotka:[json],pian:[json],adb:[json],ext_zdroj:[json],dokument,projekt", 
             "nazev:f_nazev_" + pristupnost, 
             "popis:f_popis_" + pristupnost, 
             "katastr:f_katastr_" + pristupnost,  
