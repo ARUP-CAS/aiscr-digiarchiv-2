@@ -78,11 +78,7 @@ public class Heslo implements FedoraModel {
 //      <xs:element name="datace" minOccurs="0" maxOccurs="1" type="amcr:dataceType"/> <!-- "{datace_obdobi}" -->
 //      <xs:element name="odkaz" minOccurs="0" maxOccurs="unbounded" type="amcr:odkazType"/> <!-- "{heslar_odkaz}" -->
 
-  @Override
-  public SolrInputDocument createOAIDocument(String xml) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
+  
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("cs", heslo.getValue());

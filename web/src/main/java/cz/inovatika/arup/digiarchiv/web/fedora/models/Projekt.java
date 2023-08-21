@@ -130,16 +130,6 @@ public class Projekt implements FedoraModel {
     public List<Vocab> dokument = new ArrayList();
 
     @Override
-    public SolrInputDocument createOAIDocument(String xml) {
-        SolrInputDocument idoc = new SolrInputDocument();
-        idoc.setField("ident_cely", ident_cely);
-        idoc.setField("model", "projekt");
-        idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-        idoc.setField("xml", xml);
-        return idoc;
-    }
-
-    @Override
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = !archeologicky_zaznam.isEmpty() || !samostatny_nalez.isEmpty();

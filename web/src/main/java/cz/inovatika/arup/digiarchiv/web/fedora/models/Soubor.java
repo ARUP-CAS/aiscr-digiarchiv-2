@@ -57,11 +57,6 @@ public class Soubor implements FedoraModel {
   
 
   @Override
-  public SolrInputDocument createOAIDocument(String xml) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
   public void fillSolrFields(SolrInputDocument idoc) {
       IndexUtils.setDateStamp(idoc, historie);
   }

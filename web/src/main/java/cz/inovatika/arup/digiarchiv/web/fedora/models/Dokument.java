@@ -143,17 +143,6 @@ public class Dokument implements FedoraModel {
     }
 
     @Override
-    public SolrInputDocument createOAIDocument(String xml) {
-
-        SolrInputDocument idoc = new SolrInputDocument();
-        idoc.setField("ident_cely", ident_cely);
-        idoc.setField("model", entity);
-        idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-        idoc.setField("xml", xml);
-        return idoc;
-    }
-
-    @Override
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = stav == 3;

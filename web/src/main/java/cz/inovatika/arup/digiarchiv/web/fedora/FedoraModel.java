@@ -45,13 +45,6 @@ public interface FedoraModel {
   public String coreName();
   
   /**
-   * Creates SolrInputDocument tfor index in oai core
-   * @param xml Full xml string
-   * @return Document created
-   */
-  public SolrInputDocument createOAIDocument(String xml);
-  
-  /**
    * Set all fields for entities core
    * @param idoc 
    */

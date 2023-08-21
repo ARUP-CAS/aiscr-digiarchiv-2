@@ -85,11 +85,6 @@ public class Organizace implements FedoraModel {
   
 
   @Override
-  public SolrInputDocument createOAIDocument(String xml) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
   public void fillSolrFields(SolrInputDocument idoc) {
     IndexUtils.addLangField(idoc, "nazev", nazev);
     IndexUtils.addLangField(idoc, "nazev_en", nazev_en);

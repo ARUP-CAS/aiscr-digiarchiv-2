@@ -6,6 +6,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -215,8 +216,8 @@ public class FedoraHarvester {
           solr.add("entities", idocsEntities);
           solr.commit("entities");
 
-//          solr.add("oai", idocsOAI);
-//          solr.commit("oai");
+          solr.add("oai", idocsOAI);
+          solr.commit("oai");
           idocsEntities.clear();
           idocsOAI.clear();
           LOGGER.log(Level.INFO, "Indexed {0}", indexed);
@@ -286,14 +287,14 @@ public class FedoraHarvester {
     if (clazz != null) {
         try {
             FedoraModel fm = FedoraModel.parseXml(xml, clazz);
-            if (fm.isOAI()) {
-                SolrInputDocument oaidoc = fm.createOAIDocument(xml);
-                idocsOAI.add(oaidoc);
-            }
             
             DocumentObjectBinder dob = new DocumentObjectBinder();
             SolrInputDocument idoc = dob.toSolrInputDocument(fm);
             fm.fillSolrFields(idoc);
+            if (fm.isOAI()) {
+                SolrInputDocument oaidoc = createOAIDocument(xml, idoc);
+                idocsOAI.add(oaidoc);
+            }
             String core = fm.coreName();
             switch(core) {
                 case "entities":
@@ -313,4 +314,14 @@ public class FedoraHarvester {
     }
 
   }
+  
+  private SolrInputDocument createOAIDocument(String xml, SolrInputDocument edoc) {
+
+        SolrInputDocument idoc = new SolrInputDocument();
+        idoc.setField("ident_cely", edoc.getFieldValue("ident_cely"));
+        idoc.setField("model", edoc.getFieldValue("model"));
+        idoc.setField("pristupnost", edoc.getFieldValue("pristupnost"));
+        idoc.setField("xml", xml);
+        return idoc;
+    }
 }
