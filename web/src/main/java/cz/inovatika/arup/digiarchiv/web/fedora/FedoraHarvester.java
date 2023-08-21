@@ -319,9 +319,11 @@ public class FedoraHarvester {
 
         SolrInputDocument idoc = new SolrInputDocument();
         idoc.setField("ident_cely", edoc.getFieldValue("ident_cely"));
-        idoc.setField("model", edoc.getFieldValue("model"));
+        idoc.setField("model", edoc.getFieldValue("entity"));
         idoc.setField("pristupnost", edoc.getFieldValue("pristupnost"));
-        idoc.setField("xml", xml);
+        idoc.setField("datestamp", edoc.getFieldValue("datestamp"));
+        String xmlData = xml.substring(xml.indexOf("<amcr"));
+        idoc.setField("xml", xmlData);
         return idoc;
     }
 }

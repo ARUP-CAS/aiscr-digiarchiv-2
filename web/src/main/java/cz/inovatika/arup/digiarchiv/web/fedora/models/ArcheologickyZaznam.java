@@ -83,17 +83,6 @@ public class ArcheologickyZaznam implements FedoraModel {
     }
 
     @Override
-    public SolrInputDocument createOAIDocument(String xml) {
-
-        SolrInputDocument idoc = new SolrInputDocument();
-        idoc.setField("ident_cely", ident_cely);
-        idoc.setField("model", "archeologicky_zaznam");
-        idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-        idoc.setField("xml", xml);
-        return idoc;
-    }
-
-    @Override
     public void fillSolrFields(SolrInputDocument idoc) {
 
         entity = akce != null ? "akce" : "lokalita";

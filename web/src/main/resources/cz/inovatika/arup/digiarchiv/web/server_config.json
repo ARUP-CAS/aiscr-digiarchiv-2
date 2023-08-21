@@ -8,6 +8,7 @@
     },
 
     "OAI": {
+        "baseUrl": "http://baseUrl",
         "repositoryName": "repositoryName",
         "adminEmail": "mail@oai",
         "sets": [
@@ -16,7 +17,10 @@
                 "name": "Projekty / Projects",
                 "description": ["Evidenční jednotky terénní činnosti badatelského nebo záchranného rázu evidované již ve fázi přípravy. Pro vymezení projektu je rozhodující podnět k výzkumu a provádějící subjekt (oprávněná organizace), lokalizace a příp. projektová dokumentace. Na projekt zpravidla navazuje jedna či (méně často) více terénních akcí."]
             }
-        ]
+        ],
+        "recordsPerPage": 50,
+        "orderField": "ident_cely",
+        "orderDirection": "asc"
     },
 
     "fedora": {
