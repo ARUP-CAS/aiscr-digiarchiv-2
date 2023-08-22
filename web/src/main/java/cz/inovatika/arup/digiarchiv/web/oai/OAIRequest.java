@@ -104,37 +104,38 @@ public class OAIRequest {
                 .append("<ListRecords>");
         try {
             String model = req.getParameter("set");
-            String cursor =  CursorMarkParams.CURSOR_MARK_START;
+            String cursor = CursorMarkParams.CURSOR_MARK_START;
             String resumptionToken = req.getParameter("resumptionToken");
             // resumptionToken has format set:cursor
             if (resumptionToken != null) {
-                model = resumptionToken.split(":", 1)[1];
-                cursor = resumptionToken.split(":")[0];
-            } 
-            
+                cursor = resumptionToken.split(":", 2)[1];
+                model = resumptionToken.split(":")[0];
+            }
+
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
                     .addFilterQuery("model:\"" + model + "\"")
+                    // .addFilterQuery("pristupnost:c")
                     .setRows(conf.getInt("recordsPerPage"));
-                query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
-            QueryResponse resp = IndexUtils.getClient().query("oai", query); 
+            query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
+            QueryResponse resp = IndexUtils.getClient().query("oai", query);
             SolrDocumentList docs = resp.getResults();
             for (SolrDocument doc : docs) {
                 appendRecord(ret, doc, req);
             }
-            
+
             String nextCursorMark = resp.getNextCursorMark();
             if (!cursor.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
-              ret.append("<resumptionToken ")
-                      .append("completeListSize=\"")
-                      .append(docs.getNumFound())
-                      .append("\" >")
-                      .append(model)
-                      .append(":")
-                      .append(nextCursorMark)
-                      .append("</resumptionToken>");
+                ret.append("<resumptionToken ")
+                        .append("completeListSize=\"")
+                        .append(docs.getNumFound())
+                        .append("\" >")
+                        .append(model)
+                        .append(":")
+                        .append(nextCursorMark)
+                        .append("</resumptionToken>");
             }
-            
+
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -161,31 +162,31 @@ public class OAIRequest {
         ret.append("</OAI-PMH>");
         return ret.toString();
     }
-    
+
     private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req) {
         String id = (String) doc.getFieldValue("ident_cely");
         Date datestamp = (Date) doc.getFieldValue("datestamp");
         ret.append("<record>");
-            ret.append("<header>")
-                    .append("<identifier>")
-                    .append(Options.getInstance().getJSONObject("OAI").getString("baseUrl"))
-                    .append("/id/")
-                    .append(id)
-                    .append("</identifier>")
-                    .append("<datestamp>")
-                    .append(datestamp.toInstant().toString())
-                    .append("</datestamp>")
-                    .append("<setSpec>")
-                    .append((String) doc.getFieldValue("model"))
-                    .append("</setSpec>");
+        ret.append("<header>")
+                .append("<identifier>")
+                .append(Options.getInstance().getJSONObject("OAI").getString("baseUrl"))
+                .append("/id/")
+                .append(id)
+                .append("</identifier>")
+                .append("<datestamp>")
+                .append(datestamp.toInstant().toString())
+                .append("</datestamp>")
+                .append("<setSpec>")
+                .append((String) doc.getFieldValue("model"))
+                .append("</setSpec>");
 
-            // <setSpec>projekt</setSpec> <!-- "projekt" | "archeologicky_zaznam" | "let" | "adb" | "dokument" | "ext_zdroj" | "pian" | "samostatny_nalez" | "uzivatel" | "heslo" | "ruian_kraj" | "ruian_okres" | "ruian_katastr" | "organizace | "osoba -->
-            ret.append("</header>");
+        // <setSpec>projekt</setSpec> <!-- "projekt" | "archeologicky_zaznam" | "let" | "adb" | "dokument" | "ext_zdroj" | "pian" | "samostatny_nalez" | "uzivatel" | "heslo" | "ruian_kraj" | "ruian_okres" | "ruian_katastr" | "organizace | "osoba -->
+        ret.append("</header>");
 
-            ret.append("<metadata>");
-            ret.append(filter(req, (String) doc.getFieldValue("pristupnost"), (String) doc.getFieldValue("xml")));
-            ret.append("</metadata>");
-            ret.append("</record>");
+        ret.append("<metadata>");
+        ret.append(filter(req, (String) doc.getFieldValue("pristupnost"), (String) doc.getFieldValue("xml")));
+        ret.append("</metadata>");
+        ret.append("</record>");
     }
 
     private static String filter(HttpServletRequest req, String docPristupnost, String xml) {
@@ -193,12 +194,18 @@ public class OAIRequest {
         String userPristupnost = LoginServlet.pristupnost(req.getSession());
 
         if (xml.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
-            String ret = xml.substring(0, xml.indexOf("<amcr:chranene_udaje>"));
-            ret += xml.substring(xml.indexOf("</amcr:chranene_udaje>") + "</amcr:chranene_udaje>".length());
+            String ret = xml;
+            while (ret.contains("<amcr:chranene_udaje>")) {
+                int pos1 = ret.indexOf("<amcr:chranene_udaje>");
+                String s = ret.substring(0, pos1);
+                int pos2 = ret.indexOf("</amcr:chranene_udaje>");
+                s += ret.substring(pos2 + "</amcr:chranene_udaje>".length());
+                ret = s;
+            }
             return ret;
         } else {
             return xml;
         }
-        
+
     }
 }
