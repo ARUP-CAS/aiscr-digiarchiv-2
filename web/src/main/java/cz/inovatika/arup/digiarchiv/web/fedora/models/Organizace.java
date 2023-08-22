@@ -97,11 +97,6 @@ public class Organizace implements FedoraModel {
   }
 
   @Override
-  public boolean isOAI() {
-    return false;
-  }
-
-  @Override
   public String coreName() {
     return "organizations";
   }

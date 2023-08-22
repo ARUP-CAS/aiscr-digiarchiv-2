@@ -108,7 +108,7 @@ public class FedoraServlet extends HttpServlet {
         JSONObject json = new JSONObject();
         try {
           FedoraHarvester fh = new FedoraHarvester();
-          String[] entities = new String[]{"samostatny_nalez", "projekt"};
+          String[] entities = new String[]{"ext_zdroj", "let","pian", "adb", "archeologicky_zaznam","samostatny_nalez", "projekt", "dokument"};
           json = fh.indexModels(entities);
         } catch (JSONException ex) {
           json.put("error", ex.toString());

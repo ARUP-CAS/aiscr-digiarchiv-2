@@ -131,11 +131,6 @@ public class ExtZdroj implements FedoraModel {
   @JacksonXmlProperty(localName = "ext_odkaz")
   //public List<Object> ext_odkaz = new ArrayList();
   public List<Object> ext_odkaz = new ArrayList();
-  
-  @Override
-  public boolean isOAI() {
-    return true;
-  }
 
   @Override
   public String coreName() {

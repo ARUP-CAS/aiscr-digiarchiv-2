@@ -1,6 +1,5 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
@@ -14,7 +13,6 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
-import org.json.JSONObject;
 
 /**
  *
@@ -82,11 +80,6 @@ public class ADB implements FedoraModel {
 //<xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:adb-chranene_udajeType"/> <!-- SELF -->
   @JacksonXmlProperty(localName = "chranene_udaje")
   private ADBChraneneUdaje chranene_udaje;
-
-  @Override
-  public boolean isOAI() {
-    return true;
-  }
 
   @Override
   public String coreName() {

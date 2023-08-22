@@ -13,9 +13,29 @@
         "adminEmail": "mail@oai",
         "sets": [
             {
+                "spec": "dokument",
+                "name": "Dokumenty / Documents",
+                "description": ["description pro dokument"]
+            },
+            {
+                "spec": "akce",
+                "name": "Akce / Field works",
+                "description": ["Akce"]
+            },
+            {
+                "spec": "lokalita",
+                "name": "Lokalita / Location",
+                "description": ["Lokalita"]
+            },
+            {
                 "spec": "projekt",
                 "name": "Projekty / Projects",
                 "description": ["Evidenční jednotky terénní činnosti badatelského nebo záchranného rázu evidované již ve fázi přípravy. Pro vymezení projektu je rozhodující podnět k výzkumu a provádějící subjekt (oprávněná organizace), lokalizace a příp. projektová dokumentace. Na projekt zpravidla navazuje jedna či (méně často) více terénních akcí."]
+            },
+            {
+                "spec": "samostatny_nalez",
+                "name": "Samostatné nálezy / Projects",
+                "description": ["Samostatné nálezy"]
             }
         ],
         "recordsPerPage": 50,

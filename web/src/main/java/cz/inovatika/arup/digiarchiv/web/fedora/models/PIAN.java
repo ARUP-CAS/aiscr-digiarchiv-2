@@ -62,11 +62,8 @@ public class PIAN implements FedoraModel {
   private PIANChraneneUdaje chranene_udaje;
 
 //  <xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
-  @Override
-  public boolean isOAI() {
-    return true;
-  }
-
+  
+  
   @Override
   public String coreName() {
     return "entities";

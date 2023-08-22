@@ -138,11 +138,6 @@ public class SamostatnyNalez implements FedoraModel {
     public List<Soubor> soubor = new ArrayList();
 
     @Override
-    public boolean isOAI() {
-        return true;
-    }
-
-    @Override
     public String coreName() {
         return "entities";
     }

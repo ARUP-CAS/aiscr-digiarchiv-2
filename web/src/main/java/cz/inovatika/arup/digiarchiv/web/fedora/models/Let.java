@@ -91,12 +91,6 @@ public class Let implements FedoraModel {
   @JacksonXmlProperty(localName = "dokument")
   public List<Vocab> dokument = new ArrayList();      
   
-  
-  @Override
-  public boolean isOAI() {
-    return true;
-  }
-
   @Override
   public String coreName() {
     return "entities";

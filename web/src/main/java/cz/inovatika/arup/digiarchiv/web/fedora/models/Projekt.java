@@ -232,11 +232,6 @@ public class Projekt implements FedoraModel {
     }
 
     @Override
-    public boolean isOAI() {
-        return true;
-    }
-
-    @Override
     public String coreName() {
         return "entities";
     }

@@ -106,10 +106,6 @@ public class Heslo implements FedoraModel {
 //    }
   }
 
-  @Override
-  public boolean isOAI() {
-    return false;
-  }
 
   @Override
   public String coreName() {

@@ -62,11 +62,6 @@ public class Soubor implements FedoraModel {
   }
 
   @Override
-  public boolean isOAI() {
-    return false;
-  }
-
-  @Override
   public String coreName() {
     return "soubor";
   }

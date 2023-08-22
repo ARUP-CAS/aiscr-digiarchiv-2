@@ -73,11 +73,6 @@ public class ArcheologickyZaznam implements FedoraModel {
     public List<Vocab> dokument = new ArrayList();
 
     @Override
-    public boolean isOAI() {
-        return true;
-    }
-
-    @Override
     public String coreName() {
         return "entities";
     }

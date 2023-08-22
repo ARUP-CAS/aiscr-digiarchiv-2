@@ -52,29 +52,7 @@ public class OAIRequest {
     }
 
     public static String identify(HttpServletRequest req) {
-
-//    JSONObject conf = Options.getInstance().getJSONObject("OAI");
-//    String xml = headerOAI() + responseDateTag() + requestTag(req)
-//            + "<Identify>"
-//            + "<repositoryName>" + conf.getString("repositoryName") + "</repositoryName>"
-//            + "<baseURL>" + req.getRequestURL() + "</baseURL>"
-//            + "<protocolVersion>2.0</protocolVersion>"
-//            + "<adminEmail>" + conf.getString("adminEmail") + "</adminEmail>"
-//            + "<earliestDatestamp>2012-06-30T22:26:40Z</earliestDatestamp>"
-//            + "<deletedRecord>persistent</deletedRecord>"
-//            + "<granularity>YYYY-MM-DDThh:mm:ssZ</granularity>"
-//            + "<description>"
-//            + "<oai-identifier xmlns=\"http://www.openarchives.org/OAI/2.0/oai-identifier\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd\">"
-//            + "<scheme>oai</scheme>"
-//            + "<repositoryIdentifier>aleph-nkp.cz</repositoryIdentifier>"
-//            + "<delimiter>:</delimiter>"
-//            + "<sampleIdentifier>oai:aleph-nkp.cz:NKC01-000000001</sampleIdentifier>"
-//            + "</oai-identifier>"
-//            + "</description>"
-//            + "</Identify>"
-//            + "</OAI-PMH>";
         return Options.getInstance().getOAIIdentify();
-
     }
 
     public static String listSets(HttpServletRequest req) {
@@ -126,28 +104,33 @@ public class OAIRequest {
                 .append("<ListRecords>");
         try {
             String model = req.getParameter("set");
+            String cursor =  CursorMarkParams.CURSOR_MARK_START;
             String resumptionToken = req.getParameter("resumptionToken");
-            if (resumptionToken == null) {
-                resumptionToken = CursorMarkParams.CURSOR_MARK_START;
-            }
+            // resumptionToken has format set:cursor
+            if (resumptionToken != null) {
+                model = resumptionToken.split(":", 1)[1];
+                cursor = resumptionToken.split(":")[0];
+            } 
             
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
                     .addFilterQuery("model:\"" + model + "\"")
                     .setRows(conf.getInt("recordsPerPage"));
-                query.set(CursorMarkParams.CURSOR_MARK_PARAM, resumptionToken);
-            QueryResponse resp = IndexUtils.getClient().query("oai", query);
+                query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
+            QueryResponse resp = IndexUtils.getClient().query("oai", query); 
             SolrDocumentList docs = resp.getResults();
             for (SolrDocument doc : docs) {
                 appendRecord(ret, doc, req);
             }
             
             String nextCursorMark = resp.getNextCursorMark();
-            if (!resumptionToken.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
+            if (!cursor.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
               ret.append("<resumptionToken ")
                       .append("completeListSize=\"")
                       .append(docs.getNumFound())
                       .append("\" >")
+                      .append(model)
+                      .append(":")
                       .append(nextCursorMark)
                       .append("</resumptionToken>");
             }

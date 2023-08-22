@@ -133,11 +133,6 @@ public class Dokument implements FedoraModel {
     public List<DokumentCast> dokument_cast = new ArrayList();
 
     @Override
-    public boolean isOAI() {
-        return true;
-    }
-
-    @Override
     public String coreName() {
         return "entities";
     }

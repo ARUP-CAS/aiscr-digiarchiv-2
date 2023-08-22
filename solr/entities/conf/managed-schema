@@ -120,6 +120,8 @@
    <field name="adb" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="ext_zdroj" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="typ" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="editor" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <field name="child_dok_jednotka" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="child_dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
