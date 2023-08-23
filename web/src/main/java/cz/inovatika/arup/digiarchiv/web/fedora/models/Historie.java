@@ -21,7 +21,18 @@ public class Historie {
   public Date datum_zmeny;
 
 //<xs:element name="uzivatel" minOccurs="1" maxOccurs="1" type="amcr:refType"/> <!-- "{uzivatel.ident_cely}" | "{uzivatel.ident_cely}" -->
+  @JacksonXmlProperty(localName = "uzivatel")
+  @Field
+  public Vocab uzivatel;
+  
 //<xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
+  @JacksonXmlProperty(localName = "poznamka")
+  @Field
+  public String poznamka;
+  
 //<xs:element name="typ_zmeny" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{typ_zmeny}" -->
+  @JacksonXmlProperty(localName = "typ_zmeny")
+  @Field
+  public String typ_zmeny;
 
 }

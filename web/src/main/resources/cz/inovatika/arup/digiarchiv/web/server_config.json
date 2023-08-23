@@ -45,6 +45,8 @@
 
     "fedora": {
         "api.point": "http://192.168.8.33:8080/rest/AMCR-test/",
+        "search.point": "http://192.168.8.33:8080/rest/fcr:search?",
+        
         "user": "",
         "pwd": ""
     },

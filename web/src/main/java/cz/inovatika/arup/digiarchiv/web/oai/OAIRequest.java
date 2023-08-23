@@ -6,8 +6,11 @@ package cz.inovatika.arup.digiarchiv.web.oai;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -18,6 +21,13 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -32,6 +42,18 @@ import org.json.JSONObject;
  * @author alberto
  */
 public class OAIRequest {
+
+    private static Transformer dcTransformer;
+
+    private static Transformer getTransformer() throws TransformerConfigurationException {
+        if (dcTransformer == null) {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Source xslt = new StreamSource(Options.getInstance().getDCXslt());
+            dcTransformer = factory.newTransformer(xslt);
+            dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
+        }
+        return dcTransformer;
+    }
 
     public static String headerOAI() {
         return "<OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
@@ -183,15 +205,27 @@ public class OAIRequest {
         // <setSpec>projekt</setSpec> <!-- "projekt" | "archeologicky_zaznam" | "let" | "adb" | "dokument" | "ext_zdroj" | "pian" | "samostatny_nalez" | "uzivatel" | "heslo" | "ruian_kraj" | "ruian_okres" | "ruian_katastr" | "organizace | "osoba -->
         ret.append("</header>");
 
-        ret.append("<metadata>");
-        ret.append(filter(req, (String) doc.getFieldValue("pristupnost"), (String) doc.getFieldValue("xml")));
+        ret.append("<metadata>");  
+        String xml = filter(req, doc);
+        if ("oai_dc".equals(req.getParameter("metadataFormat"))) {
+            try {
+                xml = transformToDC(xml);
+            } catch (TransformerException ex) {
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        ret.append(xml);
         ret.append("</metadata>");
         ret.append("</record>");
     }
 
-    private static String filter(HttpServletRequest req, String docPristupnost, String xml) {
+    private static String filter(HttpServletRequest req, SolrDocument doc) {
         // LoginServlet.organizace(req.getSession())
         String userPristupnost = LoginServlet.pristupnost(req.getSession());
+        String docPristupnost = (String) doc.getFieldValue("pristupnost");
+        String model = (String) doc.getFieldValue("model");
+        FedoraModel fm = FedoraModel.getFedoraModel(model);
+        String xml = fm.filterOAI(userPristupnost, doc);
 
         if (xml.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
             String ret = xml;
@@ -207,5 +241,13 @@ public class OAIRequest {
             return xml;
         }
 
+    }
+
+    private static String transformToDC(String xml) throws TransformerException {
+
+        Source text = new StreamSource(new StringReader(xml));
+        StringWriter sw = new StringWriter();
+        getTransformer().transform(text, new StreamResult(sw));
+        return sw.toString();
     }
 }

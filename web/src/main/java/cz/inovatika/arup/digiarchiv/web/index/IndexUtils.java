@@ -143,6 +143,8 @@ public class IndexUtils {
         }
       });
       idoc.setField("datestamp", historie.get(0).datum_zmeny);
+      idoc.setField("historie_typ_zmeny", historie.get(0).typ_zmeny);
+      idoc.setField("historie_uzivatel", historie.get(0).uzivatel.getId());
     }
   }
   

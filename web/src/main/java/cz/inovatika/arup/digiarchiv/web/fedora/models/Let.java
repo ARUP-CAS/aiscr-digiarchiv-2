@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -111,5 +112,10 @@ public class Let implements FedoraModel {
     }
     
   }
+
+    @Override
+    public String filterOAI(String userPristupnost, SolrDocument doc) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }

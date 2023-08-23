@@ -29,6 +29,9 @@
    <field name="entity" type="string" indexed="true" stored="true" />
    <field name="pristupnost" type="string" indexed="true" stored="true" />
    
+   <field name="historie_typ_zmeny" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="historie_uzivatel" type="string" indexed="true" stored="true" multiValued="false" />
+   
    <field name="loc" type="location" indexed="true" stored="true" multiValued="true" />
    <field name="loc_A" type="location_rpt" indexed="true" stored="true" multiValued="true" />
    <field name="loc_B" type="location_rpt" indexed="true" stored="true" multiValued="true" />

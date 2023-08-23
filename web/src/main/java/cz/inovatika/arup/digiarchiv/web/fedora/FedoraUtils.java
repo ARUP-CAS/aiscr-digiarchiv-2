@@ -8,6 +8,7 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 public class FedoraUtils {
   
   private static final String API_POINT = Options.getInstance().getJSONObject("fedora").getString("api.point");
+  private static final String SEARCH_POINT = Options.getInstance().getJSONObject("fedora").getString("search.point");
   private static final HttpClient client = HttpClient.newHttpClient();
   
   
@@ -40,6 +42,20 @@ public class FedoraUtils {
             .uri(new URI(API_POINT + url))
             .header("Authorization", auth_header())
             .header("Accept", "application/ld+json")
+            .build();
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+//      LOGGER.log(Level.INFO, "Status {0}", response.statusCode());
+    return response.body();
+  }
+
+  public static String search(String urlQuery) throws URISyntaxException, IOException, InterruptedException {
+    
+    HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(new URI(SEARCH_POINT + URLEncoder.encode(urlQuery, "UTF8")))
+            .header("Authorization", auth_header())
+            //.header("Accept", "application/ld+json")
             .build();
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 

@@ -173,4 +173,15 @@ public class Options {
       return ex.toString();
     }
   }
+  
+  public File getDCXslt() {
+      String path = InitServlet.CONFIG_DIR + File.separator + "metadata_DC.xslt";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+          return f;
+      } else {
+          File fdef = FileUtils.toFile(Options.class.getResource("oai_identify.xml"));
+          return fdef;
+      }
+  }
 }

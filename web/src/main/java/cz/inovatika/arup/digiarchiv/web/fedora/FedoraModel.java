@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
@@ -61,6 +61,15 @@ public interface FedoraModel {
      * @param idoc
      */
     public void fillSolrFields(SolrInputDocument idoc);
+
+    /**
+     * Filter oai record based on security
+     *
+     * @param userPristupnost
+     * @param doc
+     * @return 
+     */
+    public String filterOAI(String userPristupnost, SolrDocument doc);
 
     /**
      * Find Fedora model name in xml
@@ -145,6 +154,42 @@ public interface FedoraModel {
                 return Heslo.class;
             case "dokument":
                 return Dokument.class;
+//      case "knihovna_3d":
+//        return Dokument.class;
+            default:
+                return null;
+        }
+    }
+    
+    
+    /**
+     * Returns FedoraModel instance by model name
+     *
+     * @param model
+     * @return
+     */
+    public static FedoraModel getFedoraModel(String model) {
+        switch (model) {
+            case "adb":
+                return new ADB();
+            case "let":
+                return new Let();
+            case "ext_zdroj":
+                return new ExtZdroj();
+            case "pian":
+                return new PIAN();
+            case "archeologicky_zaznam":
+                return new ArcheologickyZaznam();
+            case "projekt":
+                return new Projekt();
+            case "samostatny_nalez":
+                return new SamostatnyNalez();
+            case "heslo":
+                return new Heslo();
+            case "organizace":
+                return new Heslo();
+            case "dokument":
+                return new Dokument();
 //      case "knihovna_3d":
 //        return Dokument.class;
             default:

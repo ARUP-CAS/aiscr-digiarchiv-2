@@ -6,7 +6,6 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.Options;
-import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -32,6 +31,7 @@ public class FedoraHarvester {
 
     JSONObject ret = new JSONObject();
     SolrClient solr;
+    int offset = 0;
 
     List<SolrInputDocument> idocsEntities = new ArrayList();
     List<SolrInputDocument> idocsHeslar = new ArrayList();
@@ -70,6 +70,52 @@ public class FedoraHarvester {
             }
         }
         return ret;
+    }
+    
+    /**
+     * Harvest Fedora for updates and index
+     *
+     * @return
+     * @throws IOException
+     */
+    public JSONObject update() throws IOException {
+        try {
+            Instant start = Instant.now();
+            solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+            //http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
+            
+            String s = FedoraUtils.search("condition=fedora_id=AMCR-test/record/*&condition=modified>=2023-08-01T00:00:00.000Z&offset=0&max_results=10");
+            System.out.println(s);
+            JSONObject json = new JSONObject(s);
+            // getModels();
+            
+            ret.put("items", json.getJSONArray("items"));
+            solr.commit("oai");
+            solr.commit("entities");
+            solr.commit("heslar");
+            solr.close();
+            Instant end = Instant.now();
+            String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
+            ret.put("ellapsed time", interval);
+            LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            ret.put("error", ex);
+            if (solr != null) {
+                solr.close();
+            }
+        } finally {
+
+            if (solr != null) {
+                solr.close();
+            }
+        }
+        return ret;
+    }
+    
+    
+    public void setOffset(int offset) throws IOException {
+            this.offset = offset;
     }
 
     /**
@@ -206,7 +252,7 @@ public class FedoraHarvester {
         if (json.has(CONTAINS)) {
             JSONArray records = json.getJSONArray(CONTAINS);
 
-            for (int i = 0; i < records.length(); i++) {
+            for (int i = offset; i < records.length(); i++) { 
                 String id = records.getJSONObject(i).getString("@id");
                 id = id.substring(id.lastIndexOf("/") + 1);
                 processRecord(id, model);
@@ -318,12 +364,14 @@ public class FedoraHarvester {
     }
 
     private SolrInputDocument createOAIDocument(String xml, SolrInputDocument edoc) {
-
         SolrInputDocument idoc = new SolrInputDocument();
         idoc.setField("ident_cely", edoc.getFieldValue("ident_cely"));
         idoc.setField("model", edoc.getFieldValue("entity"));
+        idoc.setField("stav", edoc.getFieldValue("stav"));
         idoc.setField("pristupnost", edoc.getFieldValue("pristupnost"));
         idoc.setField("datestamp", edoc.getFieldValue("datestamp"));
+        idoc.setField("historie_typ_zmeny", edoc.getFieldValue("historie_typ_zmeny"));
+        idoc.setField("historie_uzivatel", edoc.getFieldValue("historie_uzivatel"));
         String xmlData = xml.substring(xml.indexOf("<amcr"));
         idoc.setField("xml", xmlData);
         return idoc;

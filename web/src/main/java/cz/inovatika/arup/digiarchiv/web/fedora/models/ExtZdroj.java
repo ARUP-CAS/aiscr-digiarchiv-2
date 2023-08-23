@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -159,5 +160,10 @@ public class ExtZdroj implements FedoraModel {
           Logger.getLogger(ExtZdroj.class.getName()).log(Level.SEVERE, null, ex);
         }
   }
+
+    @Override
+    public String filterOAI(String userPristupnost, SolrDocument doc) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }

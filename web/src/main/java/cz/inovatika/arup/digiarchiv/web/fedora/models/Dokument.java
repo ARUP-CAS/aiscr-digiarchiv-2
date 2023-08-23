@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONObject;
 
@@ -278,6 +279,11 @@ public class Dokument implements FedoraModel {
                         IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, v.nazev);
                     }
                 }
+    }
+
+    @Override
+    public String filterOAI(String userPristupnost, SolrDocument doc) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

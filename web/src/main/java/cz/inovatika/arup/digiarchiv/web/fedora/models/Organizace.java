@@ -4,8 +4,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
-import java.util.List;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -100,5 +100,10 @@ public class Organizace implements FedoraModel {
   public String coreName() {
     return "organizations";
   }
+
+    @Override
+    public String filterOAI(String userPristupnost, SolrDocument doc) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
   
 }

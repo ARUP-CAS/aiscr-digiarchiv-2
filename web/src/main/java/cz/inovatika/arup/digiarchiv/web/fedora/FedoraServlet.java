@@ -102,9 +102,23 @@ public class FedoraServlet extends HttpServlet {
         return json; 
       }
     },
-    INDEX_ENTITIES { 
+
+    INDEX_UPDATE { 
       @Override
       JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        JSONObject json = new JSONObject();
+        try {
+          FedoraHarvester fh = new FedoraHarvester();
+          json = fh.update();
+        } catch (JSONException ex) {
+          json.put("error", ex.toString());
+        }
+        return json; 
+      }
+    },
+    INDEX_ENTITIES { 
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception { 
         JSONObject json = new JSONObject();
         try {
           FedoraHarvester fh = new FedoraHarvester();
@@ -122,6 +136,9 @@ public class FedoraServlet extends HttpServlet {
         JSONObject json = new JSONObject();
         try {
           FedoraHarvester fh = new FedoraHarvester();
+          if (req.getParameter("offset") != null) {
+              fh.setOffset(Integer.parseInt(req.getParameter("offset")));
+          }
           json = fh.indexModels(req.getParameterValues("model"));
         } catch (JSONException ex) {
           json.put("error", ex.toString());

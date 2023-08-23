@@ -6,14 +6,13 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
@@ -168,10 +167,10 @@ public class SamostatnyNalez implements FedoraModel {
 
             }
             if (!idocs.isEmpty()) {
-                IndexUtils.getClient().add("soubor", idocs, 10);
+                // IndexUtils.getClient().add("soubor", idocs, 10);
             }
-        } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex); 
         }
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -222,6 +221,19 @@ public class SamostatnyNalez implements FedoraModel {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, nalezce);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, obdobi);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, druh_nalezu);
+        }
+    }
+
+    @Override
+    public String filterOAI(String userPristupnost, SolrDocument doc) {
+        long st = (long) doc.getFieldValue("stav");
+        if (st == 4) {
+            return (String) doc.getFieldValue("xml");
+        } else if (userPristupnost.equalsIgnoreCase("B") && true) {
+            // historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
+            return (String) doc.getFieldValue("xml");
+        } else {
+            return "HTTP/1.1 403 Forbidden";
         }
     }
 

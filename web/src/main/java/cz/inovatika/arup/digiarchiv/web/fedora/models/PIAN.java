@@ -6,6 +6,7 @@ import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.Date;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
@@ -81,6 +82,11 @@ public class PIAN implements FedoraModel {
       chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
     }
   }
+
+    @Override
+    public String filterOAI(String userPristupnost, SolrDocument doc) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }
 
