@@ -11,6 +11,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.WKTReader;
+import org.json.JSONObject;
 
 /**
  *
@@ -84,7 +85,7 @@ public class PIAN implements FedoraModel {
   }
 
     @Override
-    public String filterOAI(String userPristupnost, SolrDocument doc) {
+    public String filterOAI(JSONObject user, SolrDocument doc) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

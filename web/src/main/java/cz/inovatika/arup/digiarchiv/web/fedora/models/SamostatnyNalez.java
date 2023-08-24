@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONObject;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.WKTReader;
@@ -225,11 +226,18 @@ public class SamostatnyNalez implements FedoraModel {
     }
 
     @Override
-    public String filterOAI(String userPristupnost, SolrDocument doc) {
+    public String filterOAI(JSONObject user, SolrDocument doc) {
         long st = (long) doc.getFieldValue("stav");
-        if (st == 4) {
+        String userPr = user.optString("pristupnost", "A");
+        if (userPr.compareToIgnoreCase("C") > 0) {
             return (String) doc.getFieldValue("xml");
-        } else if (userPristupnost.equalsIgnoreCase("B") && true) {
+        } else if (userPr.equalsIgnoreCase("C")) {
+            return (String) doc.getFieldValue("xml");
+        } else if (st == 4) {
+            return (String) doc.getFieldValue("xml");
+        } else if (userPr.equalsIgnoreCase("B") && 
+                "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
+                "SN01".equals((String) doc.getFieldValue("historie_uzivatel"))) {
             // historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
             return (String) doc.getFieldValue("xml");
         } else {

@@ -282,7 +282,7 @@ public class Dokument implements FedoraModel {
     }
 
     @Override
-    public String filterOAI(String userPristupnost, SolrDocument doc) {
+    public String filterOAI(JSONObject user, SolrDocument doc) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

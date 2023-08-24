@@ -36,12 +36,44 @@
                 "spec": "samostatny_nalez",
                 "name": "Samostatné nálezy / Projects",
                 "description": ["Samostatné nálezy"]
+            },
+            {
+                "spec": "heslo",
+                "name": "Heslo / Key",
+                "description": ["Heslo"]
+            },
+            {
+                "spec": "ruian_kraj",
+                "name": "RUIAN kraj",
+                "description": ["ruian_kraj"]
+            },
+            {
+                "spec": "ruian_okres",
+                "name": "RUIAN okres",
+                "description": ["ruian_okres "]
+            },
+            {
+                "spec": "ruian_katastr",
+                "name": "RUIAN Katastr",
+                "description": ["ruian_katastr"]
+            },
+            {
+                "spec": "organizace",
+                "name": "organizace / organization",
+                "description": ["organizace"]
+            },
+            {
+                "spec": "osoba",
+                "name": "Osoby / Persons",
+                "description": ["Heslář osob užívaný v AMČR."]
             }
         ],
         "recordsPerPage": 50,
         "orderField": "ident_cely",
         "orderDirection": "asc"
     },
+    
+    "auth": "http://192.168.254.30:8080/api/",
 
     "fedora": {
         "api.point": "http://192.168.8.33:8080/rest/AMCR-test/",

@@ -27,6 +27,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -65,11 +66,11 @@ public interface FedoraModel {
     /**
      * Filter oai record based on security
      *
-     * @param userPristupnost
+     * @param user
      * @param doc
      * @return 
      */
-    public String filterOAI(String userPristupnost, SolrDocument doc);
+    public String filterOAI(JSONObject user, SolrDocument doc);
 
     /**
      * Find Fedora model name in xml

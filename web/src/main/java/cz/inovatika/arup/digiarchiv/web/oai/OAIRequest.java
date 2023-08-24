@@ -138,6 +138,7 @@ public class OAIRequest {
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
                     .addFilterQuery("model:\"" + model + "\"")
                     // .addFilterQuery("pristupnost:c")
+                    .addFilterQuery("-stav:4")
                     .setRows(conf.getInt("recordsPerPage"));
             query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
@@ -221,11 +222,11 @@ public class OAIRequest {
 
     private static String filter(HttpServletRequest req, SolrDocument doc) {
         // LoginServlet.organizace(req.getSession())
-        String userPristupnost = LoginServlet.pristupnost(req.getSession());
+        String userPristupnost = LoginServlet.user(req).optString("pristupnost", "A"); 
         String docPristupnost = (String) doc.getFieldValue("pristupnost");
         String model = (String) doc.getFieldValue("model");
         FedoraModel fm = FedoraModel.getFedoraModel(model);
-        String xml = fm.filterOAI(userPristupnost, doc);
+        String xml = fm.filterOAI(LoginServlet.user(req), doc);
 
         if (xml.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
             String ret = xml;

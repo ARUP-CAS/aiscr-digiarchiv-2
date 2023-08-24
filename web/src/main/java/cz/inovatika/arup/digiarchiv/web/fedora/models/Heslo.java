@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONObject;
 
 /**
  *
@@ -114,7 +115,7 @@ public class Heslo implements FedoraModel {
   }
 
     @Override
-    public String filterOAI(String userPristupnost, SolrDocument doc) {
+    public String filterOAI(JSONObject user, SolrDocument doc) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
   
