@@ -231,9 +231,9 @@ public class SamostatnyNalez implements FedoraModel {
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("C") > 0) {
             return (String) doc.getFieldValue("xml");
-        } else if (userPr.equalsIgnoreCase("C")) {
-            return (String) doc.getFieldValue("xml");
         } else if (st == 4) {
+            return (String) doc.getFieldValue("xml");
+        } else if (userPr.equalsIgnoreCase("C")) {
             return (String) doc.getFieldValue("xml");
         } else if (userPr.equalsIgnoreCase("B") && 
                 "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 

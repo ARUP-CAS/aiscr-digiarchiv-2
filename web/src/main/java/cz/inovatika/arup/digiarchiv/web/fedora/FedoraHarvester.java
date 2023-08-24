@@ -6,13 +6,16 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrInputDocument;
@@ -36,7 +39,11 @@ public class FedoraHarvester {
     List<SolrInputDocument> idocsEntities = new ArrayList();
     List<SolrInputDocument> idocsHeslar = new ArrayList();
     List<SolrInputDocument> idocsOrganizations = new ArrayList();
+    List<SolrInputDocument> idocsUzivatel = new ArrayList();
     List<SolrInputDocument> idocsOAI = new ArrayList();
+
+    long requestTime;
+    long processTime;
 
     /**
      * Full fedora harvest and index
@@ -56,6 +63,8 @@ public class FedoraHarvester {
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
             ret.put("ellapsed time", interval);
+            ret.put("request time", FormatUtils.formatInterval(requestTime));
+            ret.put("process time", FormatUtils.formatInterval(processTime));
             LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -71,7 +80,7 @@ public class FedoraHarvester {
         }
         return ret;
     }
-    
+
     /**
      * Harvest Fedora for updates and index
      *
@@ -83,12 +92,17 @@ public class FedoraHarvester {
             Instant start = Instant.now();
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             //http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
-            
-            String s = FedoraUtils.search("condition=fedora_id=AMCR-test/record/*&condition=modified>=2023-08-01T00:00:00.000Z&offset=0&max_results=10");
-            System.out.println(s);
+
+            String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
+            //lastDate = "2023-08-17T00:00:00.000Z";
+            ret.put("lastDate", lastDate);
+
+            String s = FedoraUtils.search("condition=" + URLEncoder.encode("fedora_id=AMCR-test/record/*", "UTF8")
+                    + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8") + "&offset=0&max_results=10");
             JSONObject json = new JSONObject(s);
             // getModels();
-            
+
+            JSONArray records = json.getJSONArray("items");
             ret.put("items", json.getJSONArray("items"));
             solr.commit("oai");
             solr.commit("entities");
@@ -97,6 +111,8 @@ public class FedoraHarvester {
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
             ret.put("ellapsed time", interval);
+            ret.put("request time", FormatUtils.formatInterval(requestTime));
+            ret.put("process time", FormatUtils.formatInterval(processTime));
             LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -112,10 +128,9 @@ public class FedoraHarvester {
         }
         return ret;
     }
-    
-    
+
     public void setOffset(int offset) throws IOException {
-            this.offset = offset;
+        this.offset = offset;
     }
 
     /**
@@ -139,6 +154,8 @@ public class FedoraHarvester {
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
             ret.put("ellapsed time", interval);
+            ret.put("request time", FormatUtils.formatInterval(requestTime));
+            ret.put("process time", FormatUtils.formatInterval(processTime));
             LOGGER.log(Level.INFO, "Index models finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -167,23 +184,7 @@ public class FedoraHarvester {
             Instant start = Instant.now();
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             processRecord(id);
-            if (!idocsEntities.isEmpty()) {
-                solr.add("entities", idocsEntities);
-                solr.commit("entities");
-
-                solr.add("oai", idocsOAI);
-                solr.commit("oai");
-                idocsEntities.clear();
-                idocsOAI.clear();
-            }
-            if (!idocsHeslar.isEmpty()) {
-                solr.add("heslar", idocsHeslar);
-                idocsHeslar.clear();
-            }
-            if (!idocsOrganizations.isEmpty()) {
-                solr.add("organizations", idocsOrganizations);
-                idocsOrganizations.clear();
-            }
+            checkLists(0);
             solr.close();
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -248,59 +249,24 @@ public class FedoraHarvester {
 //    [{
 //      "@id": "http://192.168.8.33:8080/rest/AMCR-test/model/projekt/member/C-201449117"
 //    }],
+
+        long start = Instant.now().toEpochMilli();
         JSONObject json = new JSONArray(FedoraUtils.request("model/" + model + "/member")).getJSONObject(0);
+        requestTime += Instant.now().toEpochMilli() - start;
+
         if (json.has(CONTAINS)) {
             JSONArray records = json.getJSONArray(CONTAINS);
 
-            for (int i = offset; i < records.length(); i++) { 
+            for (int i = offset; i < records.length(); i++) {
                 String id = records.getJSONObject(i).getString("@id");
                 id = id.substring(id.lastIndexOf("/") + 1);
                 processRecord(id, model);
                 ret.put(model, indexed++);
-
-                if (idocsEntities.size() > batchSize) {
-                    solr.add("entities", idocsEntities);
-                    solr.commit("entities");
-                    idocsEntities.clear();
-                    if (!idocsOAI.isEmpty()) {
-                        solr.add("oai", idocsOAI);
-                        solr.commit("oai");
-                        idocsOAI.clear();
-                    }
-                    LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-                    //return;
-                }
-                if (idocsHeslar.size() > batchSize) {
-                    solr.add("heslar", idocsHeslar);
-                    idocsHeslar.clear();
-                    LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-                }
-                if (!idocsOrganizations.isEmpty()) {
-                    solr.add("organizations", idocsOrganizations);
-                    idocsOrganizations.clear();
-                    LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-                }
+                checkLists(batchSize);
+                LOGGER.log(Level.INFO, "Indexed {0}", indexed);
             }
 
-            if (!idocsEntities.isEmpty()) {
-                solr.add("entities", idocsEntities);
-                solr.commit("entities");
-
-            }
-            if (!idocsOAI.isEmpty()) {
-                solr.add("oai", idocsOAI);
-                solr.commit("oai");
-                idocsEntities.clear();
-                idocsOAI.clear();
-            }
-            if (!idocsHeslar.isEmpty()) {
-                solr.add("heslar", idocsHeslar);
-                idocsHeslar.clear();
-            }
-            if (!idocsOrganizations.isEmpty()) {
-                solr.add("organizations", idocsOrganizations);
-                idocsOrganizations.clear();
-            }
+            checkLists(0);
             LOGGER.log(Level.INFO, "Index model {0} finished", model);
         }
     }
@@ -319,8 +285,13 @@ public class FedoraHarvester {
             // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
             // returns xml
             LOGGER.log(Level.FINE, "Processing record {0}", id);
+            long start = Instant.now().toEpochMilli();
             String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+            requestTime += Instant.now().toEpochMilli() - start;
+
+            start = Instant.now().toEpochMilli();
             indexXml(xml, model);
+            processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
             LOGGER.log(Level.SEVERE, null, ex);
@@ -353,6 +324,9 @@ public class FedoraHarvester {
                     case "organizations":
                         idocsOrganizations.add(idoc);
                         break;
+                    case "uzivatel":
+                        idocsUzivatel.add(idoc);
+                        break;
                 }
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
@@ -375,5 +349,31 @@ public class FedoraHarvester {
         String xmlData = xml.substring(xml.indexOf("<amcr"));
         idoc.setField("xml", xmlData);
         return idoc;
+    }
+
+    private void checkLists(int size) throws SolrServerException, IOException {
+        if (idocsEntities.size() > size) {
+            solr.add("entities", idocsEntities);
+            solr.commit("entities");
+            idocsEntities.clear();
+            if (!idocsOAI.isEmpty()) {
+                solr.add("oai", idocsOAI);
+                solr.commit("oai");
+                idocsOAI.clear();
+            }
+            //return;
+        }
+        if (idocsHeslar.size() > size) {
+            solr.add("heslar", idocsHeslar);
+            idocsHeslar.clear();
+        }
+        if (!idocsOrganizations.isEmpty()) {
+            solr.add("organizations", idocsOrganizations);
+            idocsOrganizations.clear();
+        }
+        if (idocsUzivatel.size() > size) {
+            solr.add("uzivatel", idocsUzivatel);
+            idocsUzivatel.clear();
+        }
     }
 }

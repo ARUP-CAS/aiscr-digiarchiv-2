@@ -50,10 +50,9 @@ public class FedoraUtils {
   }
 
   public static String search(String urlQuery) throws URISyntaxException, IOException, InterruptedException {
-    
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
-            .uri(new URI(SEARCH_POINT + URLEncoder.encode(urlQuery, "UTF8")))
+            .uri(new URI(SEARCH_POINT + urlQuery))
             .header("Authorization", auth_header())
             //.header("Accept", "application/ld+json")
             .build();

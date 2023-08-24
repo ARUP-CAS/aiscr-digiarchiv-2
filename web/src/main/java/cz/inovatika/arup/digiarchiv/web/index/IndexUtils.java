@@ -8,6 +8,10 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.Historie;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Lang;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 import static cz.inovatika.arup.digiarchiv.web.index.SolrSearcher.getSufixesByLevel;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
@@ -145,6 +149,8 @@ public class IndexUtils {
       idoc.setField("datestamp", historie.get(0).datum_zmeny);
       idoc.setField("historie_typ_zmeny", historie.get(0).typ_zmeny);
       idoc.setField("historie_uzivatel", historie.get(0).uzivatel.getId());
+    } else {
+        idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
     }
   }
   

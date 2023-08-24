@@ -66,6 +66,11 @@
                 "spec": "osoba",
                 "name": "Osoby / Persons",
                 "description": ["Heslář osob užívaný v AMČR."]
+            },
+            {
+                "spec": "uzivatel",
+                "name": "uzivatel / Users",
+                "description": ["Users"]
             }
         ],
         "recordsPerPage": 50,

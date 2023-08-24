@@ -8,6 +8,7 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -711,6 +712,29 @@ public class SolrSearcher {
             return true;
         } catch (NumberFormatException ex) {
             return false;
+        }
+    }
+
+    public static Date getLastDatestamp() {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+
+            SolrQuery query = new SolrQuery("*")
+                    .setRows(1)
+                    .setSort("datestamp", SolrQuery.ORDER.desc)
+                    .setFields("datestamp");
+            QueryResponse rsp = client.query("entities", query);
+            if (rsp.getResults().isEmpty()) {
+                Date d = new Date();
+                d.setTime(0);
+                return d;
+            } else {
+                return (Date) rsp.getResults().get(0).getFirstValue("datestamp");
+            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+                Date d = new Date();
+                d.setTime(0);
+                return d;
         }
     }
 

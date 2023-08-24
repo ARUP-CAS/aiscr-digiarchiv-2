@@ -17,6 +17,7 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Let;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Uzivatel;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.logging.Level;
@@ -155,6 +156,8 @@ public interface FedoraModel {
                 return Heslo.class;
             case "dokument":
                 return Dokument.class;
+            case "uzivatel":
+                return Uzivatel.class;
 //      case "knihovna_3d":
 //        return Dokument.class;
             default:
@@ -193,6 +196,8 @@ public interface FedoraModel {
                 return new Dokument();
 //      case "knihovna_3d":
 //        return Dokument.class;
+            case "uzivatel":
+                return new Uzivatel();
             default:
                 return null;
         }
