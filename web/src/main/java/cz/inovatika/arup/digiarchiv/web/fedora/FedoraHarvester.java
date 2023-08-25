@@ -33,6 +33,7 @@ public class FedoraHarvester {
     private static final String CONTAINS = "http://www.w3.org/ns/ldp#contains";
 
     JSONObject ret = new JSONObject();
+    JSONArray errors = new JSONArray();
     SolrClient solr;
     int offset = 0;
 
@@ -65,6 +66,7 @@ public class FedoraHarvester {
             ret.put("ellapsed time", interval);
             ret.put("request time", FormatUtils.formatInterval(requestTime));
             ret.put("process time", FormatUtils.formatInterval(processTime));
+            ret.put("errors", errors);
             LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -91,19 +93,36 @@ public class FedoraHarvester {
         try {
             Instant start = Instant.now();
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
-            //http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
+            int indexed = 0;
 
+            //http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
+            int batchSize = 100;
+            int pOffset = 0;
             String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
             //lastDate = "2023-08-17T00:00:00.000Z";
             ret.put("lastDate", lastDate);
 
             String s = FedoraUtils.search("condition=" + URLEncoder.encode("fedora_id=AMCR-test/record/*", "UTF8")
-                    + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8") + "&offset=0&max_results=10");
+                    + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8") + "&offset=" + pOffset + "&max_results=" + batchSize);
             JSONObject json = new JSONObject(s);
             // getModels();
 
             JSONArray records = json.getJSONArray("items");
-            ret.put("items", json.getJSONArray("items"));
+            while( records.length() > 0 ) {
+                processUpdateItems(records);
+                indexed += records.length();
+                pOffset += batchSize;
+                s = FedoraUtils.search("condition=" + URLEncoder.encode("fedora_id=AMCR-test/record/*", "UTF8")
+                    + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8") + "&offset=" + pOffset + "&max_results=" + batchSize);
+                json = new JSONObject(s);
+                records = json.getJSONArray("items");
+                checkLists(0);
+            }
+
+            ret.put("updated", indexed);
+
+            checkLists(0);
+            ret.put("items", json);
             solr.commit("oai");
             solr.commit("entities");
             solr.commit("heslar");
@@ -113,7 +132,8 @@ public class FedoraHarvester {
             ret.put("ellapsed time", interval);
             ret.put("request time", FormatUtils.formatInterval(requestTime));
             ret.put("process time", FormatUtils.formatInterval(processTime));
-            LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
+            ret.put("errors", errors);
+            LOGGER.log(Level.INFO, "Update finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             ret.put("error", ex);
@@ -127,6 +147,15 @@ public class FedoraHarvester {
             }
         }
         return ret;
+    }
+
+    private void processUpdateItems(JSONArray records) throws Exception {
+        for (int i = 0; i < records.length(); i++) {
+            String id = records.getJSONObject(i).getString("fedora_id");
+            id = id.substring(id.lastIndexOf("record/") + 7);
+            id = id.substring(0, id.indexOf("/metadata"));
+            processRecord(id);
+        }
     }
 
     public void setOffset(int offset) throws IOException {
@@ -156,10 +185,11 @@ public class FedoraHarvester {
             ret.put("ellapsed time", interval);
             ret.put("request time", FormatUtils.formatInterval(requestTime));
             ret.put("process time", FormatUtils.formatInterval(processTime));
+            ret.put("errors", errors);
             LOGGER.log(Level.INFO, "Index models finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-            ret.put("error", ex);
+            errors.put(ex);
             if (solr != null) {
                 solr.close();
             }
@@ -192,7 +222,7 @@ public class FedoraHarvester {
             LOGGER.log(Level.INFO, "Index by ID finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-            ret.put("error", ex);
+            errors.put(ex);
             if (solr != null) {
                 solr.close();
             }
@@ -263,7 +293,7 @@ public class FedoraHarvester {
                 processRecord(id, model);
                 ret.put(model, indexed++);
                 checkLists(batchSize);
-                LOGGER.log(Level.INFO, "Indexed {0}", indexed);
+                // LOGGER.log(Level.INFO, "Indexed {0}", indexed);
             }
 
             checkLists(0);
@@ -272,12 +302,23 @@ public class FedoraHarvester {
     }
 
     private void processRecord(String id) throws Exception {
-        // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
-        // returns xml
-        LOGGER.log(Level.FINE, "Processing record {0}", id);
-        String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
-        String model = FedoraModel.getModel(xml);
-        indexXml(xml, model);
+        try {
+            // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
+            // returns xml
+            LOGGER.log(Level.FINE, "Processing record {0}", id);
+            long start = Instant.now().toEpochMilli();
+            String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+            requestTime += Instant.now().toEpochMilli() - start;
+            String model = FedoraModel.getModel(xml);
+            start = Instant.now().toEpochMilli();
+            indexXml(xml, model);
+            processTime += Instant.now().toEpochMilli() - start;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
+            LOGGER.log(Level.SEVERE, null, ex);
+            errors.put(id + ":  " + ex);
+            // throw new Exception(ex);
+        }
     }
 
     private void processRecord(String id, String model) throws Exception {
@@ -295,6 +336,7 @@ public class FedoraHarvester {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
             LOGGER.log(Level.SEVERE, null, ex);
+            errors.put(model + " " + id + ":  " + ex);
             // throw new Exception(ex);
         }
     }
@@ -367,7 +409,7 @@ public class FedoraHarvester {
             solr.add("heslar", idocsHeslar);
             idocsHeslar.clear();
         }
-        if (!idocsOrganizations.isEmpty()) {
+        if (idocsOrganizations.size() > size) {
             solr.add("organizations", idocsOrganizations);
             idocsOrganizations.clear();
         }
