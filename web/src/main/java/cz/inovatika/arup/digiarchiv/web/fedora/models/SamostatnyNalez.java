@@ -229,15 +229,20 @@ public class SamostatnyNalez implements FedoraModel {
     public String filterOAI(JSONObject user, SolrDocument doc) {
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
+        String userId = user.optString("ident_cely", "A");
         if (userPr.compareToIgnoreCase("C") > 0) {
             return (String) doc.getFieldValue("xml");
         } else if (st == 4) {
             return (String) doc.getFieldValue("xml");
-        } else if (userPr.equalsIgnoreCase("C")) {
+        } else if (userPr.equalsIgnoreCase("C") && 
+                (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
+                userId.equals((String) doc.getFieldValue("historie_uzivatel"))) || 
+                ("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
+                "SN01".equals((String) doc.getFieldValue("historie_uzivatel"))))) {
             return (String) doc.getFieldValue("xml");
         } else if (userPr.equalsIgnoreCase("B") && 
                 "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
-                "SN01".equals((String) doc.getFieldValue("historie_uzivatel"))) {
+                userId.equals((String) doc.getFieldValue("historie_uzivatel"))) {
             // historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
             return (String) doc.getFieldValue("xml");
         } else {

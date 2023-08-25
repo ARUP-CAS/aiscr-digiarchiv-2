@@ -137,8 +137,8 @@ public class OAIRequest {
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
                     .addFilterQuery("model:\"" + model + "\"")
-                    // .addFilterQuery("pristupnost:c")
-                    .addFilterQuery("-stav:4")
+                     .addFilterQuery("pristupnost:c")
+                    //.addFilterQuery("-stav:4")
                     .setRows(conf.getInt("recordsPerPage"));
             query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
