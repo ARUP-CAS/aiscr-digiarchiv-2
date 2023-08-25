@@ -183,6 +183,8 @@ public interface FedoraModel {
             case "pian":
                 return new PIAN();
             case "archeologicky_zaznam":
+            case "akce":
+            case "lokalita":
                 return new ArcheologickyZaznam();
             case "projekt":
                 return new Projekt();

@@ -239,7 +239,20 @@ public class Projekt implements FedoraModel {
 
     @Override
     public String filterOAI(JSONObject user, SolrDocument doc) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//-- A-B: stav = 6
+//-- C: stav >= 0
+//-- D-E: bez omezení
+        long st = (long) doc.getFieldValue("stav");
+        String userPr = user.optString("pristupnost", "A");
+        if (userPr.compareToIgnoreCase("D") >= 0) {
+            return (String) doc.getFieldValue("xml");
+        } else if (userPr.equalsIgnoreCase("C") && st > 0) {
+            return (String) doc.getFieldValue("xml");
+        } else if (userPr.compareToIgnoreCase("B") <= 0 && st == 6) {
+            return (String) doc.getFieldValue("xml");
+        } else {
+            return "HTTP/1.1 403 Forbidden";
+        }
     }
 }
 
