@@ -241,7 +241,7 @@ public class Projekt implements FedoraModel {
     public String filterOAI(JSONObject user, SolrDocument doc) {
 //-- A-B: stav = 6
 //-- C: stav >= 0
-//-- D-E: bez omezení
+//-- D-E: bez omezení 
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("D") >= 0) {
