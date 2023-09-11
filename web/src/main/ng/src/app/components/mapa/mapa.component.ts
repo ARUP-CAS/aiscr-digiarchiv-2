@@ -603,6 +603,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     this.locationFilter.on('disabled', () => {
+      if (this.state.isMapaCollapsed) {
+        return;
+      }
       this.state.locationFilterEnabled = false;
       this.state.locationFilterBounds = null;
       this.updateBounds(null, false, 'locDisabled');
