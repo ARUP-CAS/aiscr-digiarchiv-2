@@ -155,16 +155,7 @@ public class Projekt implements Entity {
     prSufixAll.add("C");
     prSufixAll.add("D");
     
-    if (this.geometry_n != null) {
-      this.loc = this.geometry_n + "," + this.geometry_e;
-              SolrSearcher.addFieldNonRepeat(idoc, "lat", this.geometry_n);
-              SolrSearcher.addFieldNonRepeat(idoc, "lng", this.geometry_e);
-      SolrSearcher.addFieldNonRepeat(idoc, "loc", this.loc);
-      System.out.println(idoc.getFieldValue("pristupnost").toString());
-      SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc_rpt", loc, SolrSearcher.getSufixesByLevel(idoc.getFieldValue("pristupnost").toString()));
-      SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", this.loc);
-    }
-
+    
     if (organizace_prihlaseni != null) {
       SolrSearcher.addFieldNonRepeat(idoc, "organizace_sort", organizace_prihlaseni);
     }
@@ -221,6 +212,15 @@ public class Projekt implements Entity {
     } 
     idoc.setField("pristupnost", pristupnost);
     idoc.setField("searchable", searchable);
+    if (this.geometry_n != null) {
+      this.loc = this.geometry_n + "," + this.geometry_e;
+              SolrSearcher.addFieldNonRepeat(idoc, "lat", this.geometry_n);
+              SolrSearcher.addFieldNonRepeat(idoc, "lng", this.geometry_e);
+      SolrSearcher.addFieldNonRepeat(idoc, "loc", this.loc);
+      SolrSearcher.addSecuredFieldNonRepeat(idoc, "loc_rpt", loc, SolrSearcher.getSufixesByLevel((String)idoc.getFieldValue("pristupnost")));
+      // SolrSearcher.addFieldNonRepeat(idoc, "loc_rpt", this.loc);
+    }
+
   }
   
   private boolean samostatnyNalez(HttpSolrClient client) {

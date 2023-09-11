@@ -436,6 +436,7 @@ public class SolrSearcher {
   }
 
   public static JSONObject json(SolrClient client, String core, SolrQuery query) throws SolrServerException, IOException {
+    query.setRequestHandler("/search");
     QueryRequest req = new QueryRequest(query);
 
     NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
