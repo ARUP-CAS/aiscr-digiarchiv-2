@@ -21,6 +21,166 @@
         
     </xsl:template>
     
+    
+    <!-- dokument -->
+    
+    <xsl:template match="//amcr:dokument">
+        <dc:title xml:lang="cs">AMČR - dokument <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- "AMČR - projekt "{amcr:dokument/amcr:ident_cely} -->
+        <dc:identifier>
+            <xsl:value-of select="amcr:ident_cely"/>
+        </dc:identifier> <!-- {amcr:dokument/amcr:ident_cely} -->
+        <dc:subject xml:lang="cs">dokument</dc:subject> <!-- "projekt" -->
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:dokument/amcr:stav} -->
+        <dc:type>
+            <xsl:value-of select="$base_url"/>/id/
+            <xsl:value-of select="amcr:pristupnost/@id"/>
+        </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:pristupnost[@id]} -->
+        <xsl:for-each select="amcr:typ_dokumentu">
+            <dc:type>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:typ_dokumentu[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:material_originalu">
+            <dc:type>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:material_originalu[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:rada">
+            <dc:type>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:rada[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:posudek">
+            <dc:subject>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:posudek[@id]} -->
+        </xsl:for-each>
+        <dc:date>
+            <xsl:value-of select="amcr:rok_vzniku"/>
+        </dc:date> <!-- {amcr:dokument/amcr:rok_vzniku} -->
+        <xsl:for-each select="amcr:autor">
+            <dc:creator>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:creator> <!-- [base_url]"/id/"{amcr:dokument/amcr:autor[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:organizace">
+            <dc:creator>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:creator> <!-- [base_url]"/id/"{amcr:dokument/amcr:organizace[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:jazyk_dokumentu">
+            <dc:language>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:language> <!-- [base_url]"/id/"{amcr:dokument/amcr:jazyk_dokumentu[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:ulozeni_originalu">
+            <dc:type>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:ulozeni_originalu[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:oznaceni_originalu">
+            <dc:description>
+                <xsl:value-of select="."/>
+            </dc:description> <!-- [base_url]"/id/"{amcr:dokument/amcr:oznaceni_originalu} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:popis">
+            <dc:description>
+                <xsl:value-of select="."/>
+            </dc:description> <!-- [base_url]"/id/"{amcr:dokument/amcr:popis} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:poznamka">
+            <dc:description>
+                <xsl:value-of select="."/>
+            </dc:description> <!-- [base_url]"/id/"{amcr:dokument/amcr:poznamka} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:licence">
+            <dc:description>
+                <xsl:value-of select="."/>
+            </dc:description> <!-- [base_url]"/id/"{amcr:dokument/amcr:licence} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:osoba">
+            <dc:subject>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:osoba[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:extra_data">
+            <dc:description>
+                <xsl:value-of select="amcr:cislo_objektu"/>
+            </dc:description> <!-- {amcr:dokument/amcr:extra_data/amcr:cislo_objektu} -->
+            <dc:format>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="amcr:format/@id"/>
+            </dc:format> <!-- [base_url]"/id/"{amcr:dokument/amcr:extra_data/amcr:format[@id]} -->
+            <dc:format>
+                <xsl:value-of select="amcr:meritko"/>
+            </dc:format> <!-- {amcr:dokument/amcr:extra_data/amcr:meritko} -->
+            <dc:format>
+                <xsl:value-of select="amcr:vyska"/>
+            </dc:format> <!-- {amcr:dokument/amcr:extra_data/amcr:vyska} -->
+            <dc:format>
+                <xsl:value-of select="amcr:sirka"/>
+            </dc:format> <!-- {amcr:dokument/amcr:extra_data/amcr:sirka} -->
+            <dc:type>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="amcr:zachovalost/@id"/>
+            </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:extra_data/amcr:zachovalost[@id]} -->
+            <dc:type>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="amcr:nahrada/@id"/>
+            </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:extra_data/amcr:nahrada[@id]} -->
+        </xsl:for-each>
+    </xsl:template>
+    
+    
+  <dc:relation>text</dc:relation> <!-- {amcr:dokument/amcr:extra_data/amcr:odkaz} -->
+  <dc:coverage>2018-07-01</dc:coverage> <!-- {amcr:dokument/amcr:extra_data/amcr:datum_vzniku} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:extra_data/amcr:udalost_typ[@id]} -->
+  <dc:description>Expedice Rokycansko.</dc:description> <!-- {amcr:dokument/amcr:extra_data/amcr:udalost} -->
+  <dc:coverage>https://api.aiscr.cz/id/HES-123456</dc:coverage> <!-- [base_url]"/id/"{amcr:dokument/amcr:extra_data/amcr:zeme[@id]} -->
+  <dc:coverage>Rokycansko</dc:coverage> <!-- {amcr:dokument/amcr:extra_data/amcr:region} -->
+  <dc:coverage>2017</dc:coverage> <!-- {amcr:dokument/amcr:extra_data/amcr:rok_od} -->
+  <dc:coverage>2018</dc:coverage> <!-- {amcr:dokument/amcr:extra_data/amcr:rok_do} -->
+  <dc:coverage>POINT(X Y)</dc:coverage> <!-- {amcr:dokument/amcr:extra_data/amcr:geom_wkt} -->
+  
+  
+  
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:tvar/amcr:tvar[@id]} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:komponenta/amcr:obdobi[@id]} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:komponenta/amcr:areal[@id]} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:komponenta/amcr:aktivita[@id]} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:komponenta/amcr:nalez_objekt/amcr:druh[@id]} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:komponenta/amcr:nalez_objekt/amcr:specifikace[@id]} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:komponenta/amcr:nalez_predmet/amcr:druh[@id]} -->
+  <dc:subject>https://api.aiscr.cz/id/HES-123456</dc:subject> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:komponenta/amcr:nalez_predmet/amcr:specifikace[@id]} -->
+  <dc:coverage>https://api.aiscr.cz/id/ruian:12</dc:coverage> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:okres[@id]} -->
+  <dc:coverage>https://api.aiscr.cz/id/ruian:123</dc:coverage> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:katastr[@id]} -->
+  <dc:contributor>https://api.aiscr.cz/id/OS-123456</dc:contributor> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:vedouci[@id]} -->
+  <dc:coverage>2015</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni} -->
+  <dc:coverage>2016</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni} -->
+  <dc:coverage>U potoka ve vsi.</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace} -->
+  <dc:description>Náhodně nalezené artefakty.</dc:description> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:popis} -->
+  <dc:description>Asi úplně špatně.</dc:description> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:poznamka} -->
+  <dc:coverage>P-1234-123456(?)</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:pian} -->
+  <dc:format>application/xml</dc:format> <!-- "application/xml" -->
+  <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
+  <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
+  <dc:source>https://api.aiscr.cz/id/C-TX-201901234</dc:source> <!-- [base_url]"/id/"{amcr:dokument/amcr:ident_cely} -->
+  <dc:date>2023-02-01T16:58:50Z</dc:date> <!-- {amcr:dokument/amcr:historie/amcr:datum_zmeny} -->
+  <dc:creator>https://api.aiscr.cz/id/U-123456</dc:creator> <!-- [base_url]"/id/"{amcr:dokument/amcr:historie/amcr:uzivatel[@id]} -->
+  <dc:relation>https://api.aiscr.cz/id/LET-12345</dc:relation> <!-- [base_url]"/id/"{amcr:dokument/amcr:let[@id]} -->
+  <dc:relation>http://fedora.aiscr.cz/rest/AMCR-test/C-201700002/file/39dc3dc9-aa6b-4034-becc-4f8cb1b94580</dc:relation> <!-- [base_url]"/id/"{amcr:dokument/amcr:soubor/amcr:path} -->
+  <dc:relation>https://api.aiscr.cz/id/C-201901234A</dc:relation> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:archeologicky_zaznam[@id]} -->
+  <dc:relation>https://api.aiscr.cz/id/C-201901234</dc:relation> <!-- [base_url]"/id/"{amcr:dokument/amcr:dokument_cast/amcr:projekt[@id]} -->
+    
     <xsl:template match="//amcr:projekt">
         <dc:title xml:lang="cs">AMČR - projekt <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- "AMČR - projekt "{amcr:projekt/amcr:ident_cely} -->
         <dc:identifier>
@@ -29,12 +189,12 @@
         <dc:subject xml:lang="cs">projekt</dc:subject> <!-- "projekt" -->
         <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:projekt/amcr:stav} -->
         <dc:type>
-            <xsl:value-of select="$base_url"/>
+            <xsl:value-of select="$base_url"/>/id/
             <xsl:value-of select="amcr:pristupnost_pom/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:projekt/amcr:pristupnost_pom[@id]} -->
         <xsl:for-each select="amcr:typ_projektu">
             <dc:type>
-                <xsl:value-of select="$base_url"/>
+                <xsl:value-of select="$base_url"/>/id/
                 <xsl:value-of select="./@id"/>
             </dc:type> <!-- [base_url]"/id/"{amcr:projekt/amcr:typ_projektu[@id]} -->
         </xsl:for-each>
@@ -369,8 +529,6 @@
             
     </xsl:template>
     
-    
-    
     <xsl:template match="//amcr:let">
         <dc:title xml:lang="cs">AMČR - let <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - {amcr:let záznam {amcr:archeologicky_zaznam/amcr:ident_cely} -->
         <dc:identifier>
@@ -441,6 +599,82 @@
                 <xsl:value-of select="./@id"/>
             </dc:relation> <!-- [base_url]"/id/"{amcr:let/amcr:dokument[@id]} -->
         </xsl:for-each>
+  
+    </xsl:template>
+    
+    <xsl:template match="//amcr:adb">
+        <dc:title xml:lang="cs">MČR - archeologický dokumentační bod <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - {amcr:let záznam {amcr:adb/amcr:ident_cely} -->
+        <dc:identifier>
+            <xsl:value-of select="amcr:ident_cely"/>
+        </dc:identifier> <!-- {amcr:adb/amcr:ident_cely} -->
+        <dc:subject xml:lang="cs">archeologický dokumentační bod</dc:subject> 
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:adb/amcr:stav_pom} -->
+        <dc:type>
+            <xsl:value-of select="$base_url"/>/id/
+            <xsl:value-of select="amcr:pristupnost_pom/@id"/>
+        </dc:type> <!-- [base_url]"/id/"{amcr:adb/amcr:pristupnost_pom[@id]} -->
+        <xsl:for-each select="amcr:typ_sondy">
+            <dc:subject>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:subject> <!-- [base_url]"/id/"{amcr:adb/amcr:typ_sondy[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:podnet">
+            <dc:subject>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:subject> <!-- [base_url]"/id/"{amcr:adb/amcr:tpodnet[@id]} -->
+        </xsl:for-each>
+        <dc:coverage><xsl:value-of select="amcr:sm5"/></dc:coverage> <!-- {amcr:adb/amcr:sm5} -->
+        <xsl:for-each select="amcr:chranene_udaje">
+            <dc:description><xsl:value-of select="amcr:uzivatelske_oznaceni_sondy"/></dc:description> <!-- {amcr:adb/amcr:chranene_udaje/amcr:uzivatelske_oznaceni_sondy} -->
+            <dc:coverage><xsl:value-of select="amcr:trat"/></dc:coverage> <!-- {amcr:adb/amcr:chranene_udaje/amcr:trat} -->
+            <dc:coverage><xsl:value-of select="amcr:cislo_popisne"/></dc:coverage> <!-- {amcr:adb/amcr:chranene_udaje/amcr:cislo_popisne} -->
+            <dc:coverage><xsl:value-of select="amcr:parcelni_cislo"/></dc:coverage> <!-- {amcr:adb/amcr:chranene_udaje/amcr:parcelni_cislo} -->
+            <dc:description><xsl:value-of select="amcr:poznamka"/></dc:description> <!-- {amcr:adb/amcr:chranene_udaje/amcr:poznamka} -->
+            <xsl:for-each select="amcr:vyskovy_bod">
+                <dc:subject>
+                    <xsl:value-of select="$base_url"/>/id/
+                    <xsl:value-of select="./amcr:typ/@id"/>
+                </dc:subject> <!-- [base_url]"/id/"{amcr:adb/amcr:chranene_udaje/amcr:vyskovy_bod/amcr:typ[@id]} -->
+                <dc:coverage>
+                    <xsl:value-of select="$base_url"/>/id/
+                    <xsl:value-of select="./amcr:geom_wkt"/>
+                </dc:coverage> <!-- {amcr:adb/amcr:chranene_udaje/amcr:vyskovy_bod/amcr:geom_wkt} -->
+            </xsl:for-each>
+        </xsl:for-each>
+        <dc:format>application/xml</dc:format> <!-- "application/xml" -->
+        <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
+        <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
+        
+        <dc:source>
+            <xsl:value-of select="$base_url"/>/id/
+            <xsl:value-of select="ident_cely"/>
+        </dc:source> <!-- [base_url]"/id/"{amcr:adb/amcr:ident_cely} -->
+        <dc:date>
+            <xsl:value-of select="amcr:rok_popisu"/>
+        </dc:date> <!-- {amcr:adb/amcr:rok_popisu} -->
+        <dc:creator>
+            <xsl:value-of select="$base_url"/>/id/
+            <xsl:value-of select="amcr:autor_popisu/@id"/>
+        </dc:creator> <!-- [base_url]"/id/"{amcr:let/amcr:autor_popisu[@id]} -->
+        <dc:date>
+            <xsl:value-of select="amcr:rok_revize"/>
+        </dc:date> <!-- {amcr:adb/amcr:rok_revize} -->
+        <xsl:for-each select="amcr:dokument">
+            <dc:relation>
+                <xsl:value-of select="$base_url"/>/id/
+                <xsl:value-of select="./@id"/>
+            </dc:relation> <!-- [base_url]"/id/"{amcr:let/amcr:dokument[@id]} -->
+        </xsl:for-each>
+        <dc:creator>
+            <xsl:value-of select="$base_url"/>/id/
+            <xsl:value-of select="amcr:autor_revize/@id"/>
+        </dc:creator> <!-- [base_url]"/id/"{amcr:let/amcr:autor_revize[@id]} -->
+        <dc:relation>
+                      <xsl:value-of select="$base_url"/>/id/
+                      <xsl:value-of select="amcr:dokumentacni_jednotka/@id"/>
+        </dc:relation> <!-- [base_url]"/id/"{amcr:adb/amcr:dokumentacni_jednotka[@id]} -->
   
   
     </xsl:template>
