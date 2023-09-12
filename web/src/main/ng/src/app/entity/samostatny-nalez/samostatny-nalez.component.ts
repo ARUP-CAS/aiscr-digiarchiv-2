@@ -71,7 +71,6 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   }  
 
   checkRelations() {
-    console.log('AAAA')
     this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
       this.result.projekt = res.projekt;
     });
