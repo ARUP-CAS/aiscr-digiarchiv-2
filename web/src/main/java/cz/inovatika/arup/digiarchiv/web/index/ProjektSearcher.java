@@ -5,8 +5,6 @@ package cz.inovatika.arup.digiarchiv.web.index;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
@@ -28,28 +26,29 @@ import org.json.JSONObject;
  */
 public class ProjektSearcher implements EntitySearcher {
 
-  public static final Logger LOGGER = Logger.getLogger(ProjektSearcher.class.getName());
-  final String ENTITY = "projekt";
-  
-  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
-    "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
-  
-  @Override
-  public void filter(JSONObject jo, String pristupnost, String org) {
-    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    for (int i = 0; i < ja.length(); i++) {
-      JSONObject doc = ja.getJSONObject(i);
-      String docPr = doc.getString("pristupnost");
-      
-      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
-        Object[] keys =  doc.keySet().toArray();
-        for (Object key : keys) {
-          if (!allowedFields.contains((String)key)) {
-            doc.remove((String)key);
-          }
-          
-        }
-      }
+    public static final Logger LOGGER = Logger.getLogger(ProjektSearcher.class.getName());
+    final String ENTITY = "projekt";
+
+    private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
+        "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
+
+    @Override
+    public void filter(JSONObject jo, String pristupnost, String org) {
+        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject doc = ja.getJSONObject(i);
+                String docPr = doc.getString("pristupnost");
+
+                if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+                    Object[] keys = doc.keySet().toArray();
+                    for (Object key : keys) {
+                        if (!allowedFields.contains((String) key)) {
+                            doc.remove((String) key);
+                        }
+
+                    }
+                }
 
       if (docPr.compareTo(pristupnost) > 0) {
         doc.remove("chranene_udaje");
@@ -152,26 +151,46 @@ public class ProjektSearcher implements EntitySearcher {
     }
   }
 
-  @Override
-  public JSONObject search(HttpServletRequest request) {
-    JSONObject json = new JSONObject();
-    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-      SolrQuery query = new SolrQuery();
-      setQuery(request, query);
-      JSONObject jo = SearchUtils.json(query, client, "entities");
-      SolrSearcher.addFavorites(jo, client, request);
-      return jo;
+    @Override
+    public JSONObject search(HttpServletRequest request) {
+        JSONObject json = new JSONObject();
+        try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery();
+            setQuery(request, query);
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            removeInvalid(client, jo);
+            SolrSearcher.addFavorites(jo, client, request);
+            return jo;
 
-    } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-      json.put("error", ex);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            json.put("error", ex);
+        }
+        return json;
     }
-    return json;
-  }
+
+    // remove invalid child_samostatny_nalez
+    private void removeInvalid(HttpSolrClient client, JSONObject jo) throws SolrServerException, IOException {
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            SolrQuery query = new SolrQuery("*")
+                    .setRows(10000)
+                    .addFilterQuery("entity:samostatny_nalez")
+                    .addFilterQuery("projekt_id:\"" + doc.getString("ident_cely") + "\"");
+            JSONObject sn = SolrSearcher.json(client, "entities", query);
+            JSONArray ja2 = sn.getJSONObject("response").getJSONArray("docs");
+            JSONArray jaSn = new JSONArray();
+            for (int j = 0; j < ja2.length(); j++) {
+                jaSn.put(ja2.getJSONObject(j).getString("ident_cely"));
+            }
+            doc.put("child_samostatny_nalez", jaSn);
+        }
+    }
 
   @Override
   public String export(HttpServletRequest request) {
-    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       return SearchUtils.csv(query, client, "entities");
@@ -180,53 +199,10 @@ public class ProjektSearcher implements EntitySearcher {
       return ex.toString();
     }
   }
-
-    @Override
-    public String[] getRelationsFields() {
-        return new String[]{"ident_cely", "samostatny_nalez"};
-    }
-  
-  @Override
-  public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,entity,pristupnost,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,podnet", 
-            "katastr:f_katastr_" + pristupnost,  
-            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
-  }
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    
-    return new String[]{"okres",
-      "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
-      //"hlavni_katastr:f_katastr_" + pristupnost,
-      "katastr:f_katastr_" + pristupnost,
-      "entity",
-      "ident_cely",
-      "stav",
-      "typ_projektu",
-      "podnet",
-      "planovane_zahajeni",
-      "vedouci_projektu",
-      "organizace",
-      "uzivatelske_oznaceni",
-      "oznaceni_stavby",
-      "kulturni_pamatka",
-      "datum_zahajeni",
-      "datum_ukonceni",
-      "termin_odevzdani_nz",
-      "pristupnost",
-      "chranene_udaje:[json]",
-      "datestamp",
-      "oznamovatel",
-      "soubor",
-      "archeologicky_zaznam",
-      "pian_id",
-      "samostatny_nalez",
-      "dokument",
-      "lat:lat_" + pristupnost,
-      "lng:lng_" + pristupnost,
-      "loc_rpt:loc_rpt_" + pristupnost,
-      "loc:loc_" + pristupnost};
+    return new String[]{"*,akce:[json],pian:[json]","katastr","okres","f_katastr:katastr","f_okres:okres"};
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -236,7 +212,7 @@ public class ProjektSearcher implements EntitySearcher {
       pristupnost = "D";
     }
     query.set("df", "text_all_" + pristupnost);
-    query.setFields(getSearchFields(pristupnost));
+    query.setFields("*,akce:[json],pian:[json]","katastr","okres","f_katastr:katastr","f_okres:okres");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       SolrSearcher.addLocationParams(request, query);
     }
