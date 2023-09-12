@@ -11,8 +11,6 @@ import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -172,7 +170,7 @@ public class OAIRequest {
                 .append(responseDateTag())
                 .append(requestTag(req));
         try {
-            String id = req.getParameter("id");
+            String id = req.getParameter("identifier");
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("ident_cely:\"" + id + "\"");
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
