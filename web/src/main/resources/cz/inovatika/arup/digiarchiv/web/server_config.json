@@ -18,6 +18,11 @@
                 "description": ["description pro dokument"]
             },
             {
+                "spec": "ext_zdroj",
+                "name": "Externí zdroje / External Sources",
+                "description": ["Bibliografický segment AMČR slouží k napojení archeologických záznamů na zdrojové informace v publikacích, odborných zprávách a šedé literatuře. Jako externí zdroje jsou chápány publikace, novinové články, nepublikované odborné zprávy a jiné informační zdroje, které nejsou uloženy v archivech ARÚ a ARÚB a nejsou tudíž zahrnuty mezi dokumenty. Pomocí externích odkazů jsou tyto provázány s akcemi a lokalitami."]
+            },
+            {
                 "spec": "akce",
                 "name": "Akce / Field works",
                 "description": ["Akce"]

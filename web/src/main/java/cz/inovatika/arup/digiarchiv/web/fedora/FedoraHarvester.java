@@ -398,13 +398,13 @@ public class FedoraHarvester {
             solr.add("entities", idocsEntities);
             solr.commit("entities");
             idocsEntities.clear();
+            //return;
+        }
             if (!idocsOAI.isEmpty()) {
                 solr.add("oai", idocsOAI);
                 solr.commit("oai");
                 idocsOAI.clear();
             }
-            //return;
-        }
         if (idocsHeslar.size() > size) {
             solr.add("heslar", idocsHeslar);
             idocsHeslar.clear();
