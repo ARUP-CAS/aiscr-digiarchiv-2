@@ -56,7 +56,6 @@ export class LokalitaComponent implements OnInit, OnChanges {
       this.state.loading = true;
       this.getDokuments();
      }
-     this.checkRelations();
   }
 
   ngOnChanges(c) {
@@ -67,13 +66,6 @@ export class LokalitaComponent implements OnInit, OnChanges {
     if (this.mapDetail) {
       this.getFullId();
     }
-  }
-
-  checkRelations() {
-    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
-      this.result.dokument = res.dokument;
-      this.result.projekt = res.projekt;
-    });
   }
 
   setVsize() {

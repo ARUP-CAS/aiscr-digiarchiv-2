@@ -87,13 +87,6 @@ export class DokumentComponent implements OnInit, OnChanges {
       this.state.documentProgress = 0;
       this.getArchZaznam();
     }
-    this.checkRelations();
-  }
-
-  checkRelations() {
-    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
-      this.result.dokument_cast_archeologicky_zaznam = res.dokument_cast_archeologicky_zaznam;
-    });
   }
 
   setVsize() {

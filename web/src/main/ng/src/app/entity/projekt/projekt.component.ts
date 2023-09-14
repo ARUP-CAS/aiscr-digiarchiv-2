@@ -56,14 +56,7 @@ export class ProjektComponent implements OnInit, OnChanges {
        this.getAkce();
        this.getSamostatnyNalez();
      }
-     // this.checkRelations();
   } 
-
-  checkRelations() {
-    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
-      this.result.samostatny_nalez = res.samostatny_nalez;
-    });
-  }
 
   setVsize() {
 

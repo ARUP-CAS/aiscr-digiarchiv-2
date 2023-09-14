@@ -67,14 +67,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
       this.state.loading = true;
       this.getProjekts();
      }
-     this.checkRelations();
   }  
-
-  checkRelations() {
-    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
-      this.result.projekt = res.projekt;
-    });
-  }
 
   setVsize() {
       if (this.result.projekt) {

@@ -66,9 +66,7 @@ export class AkceComponent implements OnInit, OnChanges {
           this.getProjekts();
         }, 100);
       }
-    } else {
-      this.checkRelations();
-    }
+    } 
   }
 
   ngOnChanges(c) {
@@ -80,13 +78,6 @@ export class AkceComponent implements OnInit, OnChanges {
     if (this.mapDetail) {
       this.getFullId();
     }
-  }
-
-  checkRelations() {
-    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
-      this.result.dokument = res.dokument;
-      this.result.projekt = res.projekt;
-    });
   }
 
   setVsize() {
