@@ -1,6 +1,6 @@
 {
   "/api/**": {
-    "target": "http://localhost:8080/api",
+    "target": "http://localhost:8080/v3/api",
     "logLevel": "debug",
     "pathRewrite": {
       "^/api":""
@@ -11,7 +11,7 @@
   },
   
   "/assets/i18n/**": {
-    "target": "http://localhost:8080/assets/i18n/cs",
+    "target": "http://localhost:8080/v3/assets/i18n/cs",
     "logLevel": "debug",
     "pathRewrite": {
       "^/assets/i18n":""
@@ -21,7 +21,7 @@
   },
   
   "/assets/config_.json": {
-    "target": "http://localhost:8080/assets/config.json",
+    "target": "http://localhost:8080/v3/assets/config.json",
     "pathRewrite": {
       "^/api":""
     },
