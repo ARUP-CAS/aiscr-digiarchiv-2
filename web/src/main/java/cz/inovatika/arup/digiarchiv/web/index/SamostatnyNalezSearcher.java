@@ -27,9 +27,13 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
     }
 
     @Override
-    public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < docs.length(); i++) {
+        JSONObject doc = docs.getJSONObject(i);
         if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
             doc.remove("projekt");
+        }
         }
     }
 

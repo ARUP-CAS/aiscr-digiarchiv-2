@@ -21,7 +21,7 @@
     
     
     <!-- dokument -->
-    <xsl:template match="/amcr:dokument">
+    <xsl:template  match="amcr:dokument">
         <dc:title xml:lang="cs">AMČR - dokument <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- "AMČR - projekt "{amcr:dokument/amcr:ident_cely} -->
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
@@ -293,7 +293,7 @@
   
   
     
-    <xsl:template match="/amcr:projekt">
+    <xsl:template match="amcr:projekt">
         <dc:title xml:lang="cs">AMČR - projekt <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- "AMČR - projekt "{amcr:projekt/amcr:ident_cely} -->
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
@@ -432,7 +432,7 @@
                     
     </xsl:template>
     
-    <xsl:template match="/amcr:archeologicky_zaznam">
+    <xsl:template match="amcr:archeologicky_zaznam">
         <dc:title xml:lang="cs">AMČR - archeologický záznam <xsl:value-of select="amcr:ident_cely"/></dc:title>        <!-- AMČR - archeologický záznam {amcr:archeologicky_zaznam/amcr:ident_cely} -->
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
@@ -641,7 +641,7 @@
             
     </xsl:template>
     
-    <xsl:template match="/amcr:let">
+    <xsl:template match="amcr:let">
         <dc:title xml:lang="cs">AMČR - let <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - {amcr:let záznam {amcr:archeologicky_zaznam/amcr:ident_cely} -->
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
@@ -714,7 +714,7 @@
   
     </xsl:template>
     
-    <xsl:template match="/amcr:adb">
+    <xsl:template match="amcr:adb">
         <dc:title xml:lang="cs">AMČR - archeologický dokumentační bod <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - {amcr:let záznam {amcr:adb/amcr:ident_cely} -->
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
@@ -791,7 +791,7 @@
     </xsl:template>
     
       <!-- ext_zdroj -->
-      <xsl:template match="/amcr:ext_zdroj">
+      <xsl:template match="amcr:ext_zdroj">
         <dc:title xml:lang="cs">AMČR - externí zdroj <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - externí zdroj {amcr:ext_zdroj/amcr:ident_cely} -->
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
@@ -887,4 +887,64 @@
         
       </xsl:template>
 
+  <!-- pian -->
+      <xsl:template match="amcr:pian">
+        <dc:title xml:lang="cs">AMČR - prostorová jednotka <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - prostorová jednotka {amcr:pian/amcr:ident_cely} -->
+        <dc:identifier>
+            <xsl:value-of select="amcr:ident_cely"/>
+        </dc:identifier> <!-- {amcr:pian/amcr:ident_cely} -->
+        <dc:subject xml:lang="cs">PIAN</dc:subject> 
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:pian/amcr:stav_pom} -->
+        <dc:type>
+            <xsl:value-of select="$base_url_id"/>
+            <xsl:value-of select="amcr:pristupnost_pom/@id"/>
+        </dc:type> <!-- [base_url]"/id/"{amcr:pian/amcr:pristupnost_pom[@id]} -->
+        <dc:type>
+            <xsl:value-of select="$base_url_id"/>
+            <xsl:value-of select="amcr:typ/@id"/>
+        </dc:type> <!-- [base_url]"/id/"{amcr:pian/amcr:typ[@id]} -->
+        <dc:type>
+            <xsl:value-of select="$base_url_id"/>
+            <xsl:value-of select="amcr:presnost/@id"/>
+        </dc:type> <!-- [base_url]"/id/"{amcr:pian/amcr:presnost[@id]} -->
+        <dc:type>
+            <xsl:value-of select="$base_url_id"/>
+            <xsl:value-of select="amcr:geom_system/@id"/>
+        </dc:type> <!-- [base_url]"/id/"{amcr:pian/amcr:geom_system[@id]} -->
+        <xsl:for-each select="amcr:chranene_udaje">
+            <dc:coverage>
+                <xsl:value-of select="amcr:zm10"/>
+            </dc:coverage> <!-- {amcr:pian/amcr:chranene_udaje/amcr:zm10} -->
+            <dc:coverage>
+                <xsl:value-of select="amcr:geom_wkt"/>
+            </dc:coverage> <!-- {amcr:pian/amcr:chranene_udaje/amcr:geom_wkt} -->
+            <dc:coverage>
+                <xsl:value-of select="amcr:geom_sjtsk_wkt"/>
+            </dc:coverage> <!-- {amcr:pian/amcr:chranene_udaje/amcr:geom_sjtsk_wkt} -->
+        </xsl:for-each>
+        <dc:format>application/xml</dc:format> <!-- "application/xml" -->
+        <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
+        <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
+        
+        <dc:source>
+            <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:ident_cely"/>
+        </dc:source> <!-- [base_url]"/id/"{amcr:pian/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:historie">
+            <dc:date>
+                <xsl:value-of select="./amcr:datum_zmeny"/>
+            </dc:date> <!-- {amcr:pian/amcr:historie/amcr:datum_zmeny} -->
+            <dc:creator>
+                <xsl:value-of select="$base_url_id"/><xsl:value-of select="./amcr:uzivatel/@id"/>
+            </dc:creator> <!-- [base_url]"/id/"{amcr:pian/amcr:historie/amcr:uzivatel[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:dokumentacni_jednotka">
+            <dc:relation>
+                <xsl:value-of select="$base_url_id"/><xsl:value-of select="./@id"/>
+            </dc:relation> <!-- [base_url]"/id/"{amcr:pian/amcr:dokumentacni_jednotka[@id]} -->
+        </xsl:for-each>
+        
+        
+    </xsl:template>
+        
+  
 </xsl:stylesheet>

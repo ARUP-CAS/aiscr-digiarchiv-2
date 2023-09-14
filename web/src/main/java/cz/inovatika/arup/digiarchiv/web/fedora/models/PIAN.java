@@ -4,7 +4,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -64,7 +66,8 @@ public class PIAN implements FedoraModel {
   private PIANChraneneUdaje chranene_udaje;
 
 //  <xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
-  
+    @JacksonXmlProperty(localName = "historie")
+    public List<Historie> historie = new ArrayList();
   
   @Override
   public String coreName() {
@@ -75,7 +78,8 @@ public class PIAN implements FedoraModel {
   public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("searchable", !this.ident_cely.startsWith("N"));
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-
+    IndexUtils.setDateStamp(idoc, historie);
+    
     IndexUtils.addVocabField(idoc, "typ", typ);
     IndexUtils.addVocabField(idoc, "presnost", presnost);
 
@@ -86,7 +90,17 @@ public class PIAN implements FedoraModel {
 
     @Override
     public String filterOAI(JSONObject user, SolrDocument doc) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//-- A: stav = 2
+//-- B-E: bez omezení
+        long st = (long) doc.getFieldValue("stav");
+        String userPr = user.optString("pristupnost", "A");
+        if (userPr.compareToIgnoreCase("B") >= 0) {
+            return (String) doc.getFieldValue("xml");
+        } else if (userPr.compareToIgnoreCase("B") <= 0 && st == 2) {
+            return (String) doc.getFieldValue("xml");
+        } else {
+            return "HTTP/1.1 403 Forbidden";
+        }
     }
 
 }

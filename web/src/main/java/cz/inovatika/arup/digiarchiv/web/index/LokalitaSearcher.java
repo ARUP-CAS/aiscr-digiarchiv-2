@@ -63,8 +63,11 @@ public class LokalitaSearcher implements EntitySearcher {
         return new String[]{"ident_cely", "dokument", "projekt"};
     }
 
-    @Override
-    public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
+    @Override    
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < docs.length(); i++) {
+        JSONObject doc = docs.getJSONObject(i);
         
         JSONArray valid_dokuments = new JSONArray();
         if (doc.has("dokument")) {
@@ -85,6 +88,7 @@ public class LokalitaSearcher implements EntitySearcher {
 
         if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
             doc.remove("projekt");
+        }
         }
     }
   

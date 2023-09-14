@@ -23,6 +23,12 @@
                 "description": ["Bibliografický segment AMČR slouží k napojení archeologických záznamů na zdrojové informace v publikacích, odborných zprávách a šedé literatuře. Jako externí zdroje jsou chápány publikace, novinové články, nepublikované odborné zprávy a jiné informační zdroje, které nejsou uloženy v archivech ARÚ a ARÚB a nejsou tudíž zahrnuty mezi dokumenty. Pomocí externích odkazů jsou tyto provázány s akcemi a lokalitami."]
             },
             {
+                "spec": "pian",
+                "name": "PIAN / Spatial Units",
+                "description": ["Prostorové vymezení archeologických výzkumů je v AMČR zajišťováno povinným vztahem dokumentačních jednotek k některé z jednotek prostorové identifikace. Tyto jednotky nazýváme PIAN (Prostorová identifikace archeologických nálezů). Každá jednotka PIAN může mít vazby k většímu počtu archeologických záznamů a naopak.",
+                "The spatial delineation of archaeological excavations in the AMCR is ensured by the obligatory relation of documentation units to one of the units of spatial identification. These units are called PIAN (Spatial Identification of Archaeological Finds). Each PIAN unit may have links to a larger number of archaeological records and vice versa"]
+            },
+            {
                 "spec": "akce",
                 "name": "Akce / Field works",
                 "description": ["Akce"]
@@ -30,7 +36,7 @@
             {
                 "spec": "lokalita",
                 "name": "Lokalita / Location",
-                "description": ["Lokalita"]
+                "description": ["Lokalita"] 
             },
             {
                 "spec": "projekt",

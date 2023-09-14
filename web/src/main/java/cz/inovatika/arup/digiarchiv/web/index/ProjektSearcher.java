@@ -92,7 +92,10 @@ public class ProjektSearcher implements EntitySearcher {
     }
 
     @Override
-    public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < docs.length(); i++) {
+        JSONObject doc = docs.getJSONObject(i);
         JSONArray samostatny_nalez = new JSONArray();
         if (doc.has("samostatny_nalez")) {
             SolrQuery query = new SolrQuery("*")
@@ -109,6 +112,7 @@ public class ProjektSearcher implements EntitySearcher {
             }
         }
         doc.put("samostatny_nalez", samostatny_nalez);
+        }
     }
 
     @Override

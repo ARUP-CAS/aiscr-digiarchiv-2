@@ -57,7 +57,10 @@ public class DokumentSearcher implements EntitySearcher {
     }
 
     @Override
-    public void checkRelations(JSONObject doc, Http2SolrClient client, HttpServletRequest request) {
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < docs.length(); i++) {
+        JSONObject doc = docs.getJSONObject(i);
         JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
         if (doc.has("dokument_cast_archeologicky_zaznam")) {
             SolrQuery query = new SolrQuery("*")
@@ -74,7 +77,7 @@ public class DokumentSearcher implements EntitySearcher {
             }
         }
         doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
-
+        }
     }
 
     @Override

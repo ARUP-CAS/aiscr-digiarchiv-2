@@ -125,8 +125,8 @@ public class SearchServlet extends HttpServlet {
           
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+              searcher.checkRelations(jo, client, request);
               JSONObject doc = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-              searcher.checkRelations(doc, client, request);
               return doc.toString();
           } else {
               return "{}";
@@ -176,13 +176,13 @@ public class SearchServlet extends HttpServlet {
               if ("pian".equals(entity) || "adb".equals(entity)) {
                 searcher.getChilds(jo, client, request);
               }
-              searcher.checkRelations(jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0), client, request);
+              searcher.checkRelations(jo, client, request);
               searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             }
             ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
             if (cs != null) {
               cs.getRelated(jo, client, request);
-              if (!cs.isRelatedSearchable()) {
+              if (!cs.isRelatedSearchable()) { 
                 jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
               }
             }
@@ -352,6 +352,7 @@ public class SearchServlet extends HttpServlet {
             searcher = new DokumentSearcher();
           }
           JSONObject jo = searcher.search(request);
+          searcher.checkRelations(jo, client, request);
           // searcher.getChilds(jo, client, request);
           // Remove stats in case of one result, without access
           int numFound = jo.getJSONObject("response").getInt("numFound");

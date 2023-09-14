@@ -56,7 +56,7 @@ export class ProjektComponent implements OnInit, OnChanges {
        this.getAkce();
        this.getSamostatnyNalez();
      }
-     this.checkRelations();
+     // this.checkRelations();
   } 
 
   checkRelations() {
