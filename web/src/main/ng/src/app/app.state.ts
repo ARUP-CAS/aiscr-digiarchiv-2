@@ -288,11 +288,11 @@ export class AppState {
   }
 
   hasRights(pristupnost: string, organizace: string) {
-    if (pristupnost === 'A') {
+    if (pristupnost.toUpperCase() === 'A') {
       return true;
     } else if (this.logged) {
       const sameOrg = this.user.organizaceNazev === organizace;
-      return this.user.pristupnost.localeCompare(pristupnost) > -1 || ((this.user.pristupnost.localeCompare('C') > -1 && sameOrg));
+      return this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
     } else {
       return false;
     }

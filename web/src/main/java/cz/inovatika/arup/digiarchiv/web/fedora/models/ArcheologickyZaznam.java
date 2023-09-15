@@ -233,6 +233,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     }
 
     private void addPian(SolrInputDocument idoc, String pian) {
+        idoc.addField("pian_id", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"");
         JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 

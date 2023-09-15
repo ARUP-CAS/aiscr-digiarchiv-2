@@ -146,7 +146,7 @@
       <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
         <mat-icon>grade</mat-icon>
       </button>
-      <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
+      <button mat-flat-button *ngIf="!isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
         {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
       </button>
       <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">

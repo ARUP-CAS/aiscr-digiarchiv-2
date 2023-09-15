@@ -87,7 +87,7 @@
       <button mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
         <mat-icon>feedback</mat-icon>
       </button>
-      <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
+      <button mat-flat-button *ngIf="!isDocumentDialogOpen" (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
         {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
       </button>
       <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">
@@ -98,7 +98,7 @@
       </button>
     </div>
   </mat-card-actions>
-  <mat-card-content *ngIf="detailExpanded && !isChild && hasRights">
+  <mat-card-content *ngIf="detailExpanded && !isChild">
     <div class="app-card-detail">
       <mat-accordion multi="true">
         <mat-expansion-panel [expanded]="true">

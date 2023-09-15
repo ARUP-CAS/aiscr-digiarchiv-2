@@ -39,16 +39,16 @@ public class SolrSearcher {
 
     public static List<String> getSufixesByLevel(String pr) {
         List<String> prSufix = new ArrayList<>();
-        if ("A".compareTo(pr) >= 0) {
+        if ("A".compareToIgnoreCase(pr) >= 0) {
             prSufix.add("A");
         }
-        if ("B".compareTo(pr) >= 0) {
+        if ("B".compareToIgnoreCase(pr) >= 0) {
             prSufix.add("B");
         }
-        if ("C".compareTo(pr) >= 0) {
+        if ("C".compareToIgnoreCase(pr) >= 0) {
             prSufix.add("C");
         }
-        if ("D".compareTo(pr) >= 0) {
+        if ("D".compareToIgnoreCase(pr) >= 0) {
             prSufix.add("D");
         }
         return prSufix;

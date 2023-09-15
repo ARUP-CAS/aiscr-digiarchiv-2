@@ -137,7 +137,7 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"ident_cely", "katastr", "f_katastr:katastr", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
+        return new String[]{"ident_cely", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
             "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost",
             "organizace", "f_organizace:organizace", "projekt", "dokument",
             "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
@@ -147,6 +147,7 @@ public class AkceSearcher implements EntitySearcher {
             "dokumentacni_jednotka_pian",
             "dokumentacni_jednotka:[json]",
             "chranene_udaje:[json]",
+            "katastr:f_katastr_" + pristupnost, 
             "lat:lat_" + pristupnost,
             "lng:lng_" + pristupnost,
             "loc_rpt:loc_rpt_" + pristupnost,

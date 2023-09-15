@@ -94,7 +94,7 @@
       <button mat-flat-button (click)="openFeedback()" [matTooltip]="'Odeslat komentář' | translate">
         <mat-icon>feedback</mat-icon>
       </button>
-      <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'" *ngIf="hasRights && !isDocumentDialogOpen">
+      <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'" *ngIf="!isDocumentDialogOpen">
         {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
       </button>
       <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">
