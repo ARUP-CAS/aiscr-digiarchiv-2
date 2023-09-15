@@ -1112,6 +1112,12 @@
       
   
   <!-- heslo -->
+      <xsl:template match="amcr:samostatny_nalez">
+        <dc:title xml:lang="cs">AMČR - uživatel <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - uživatel {amcr:uzivatel/amcr:ident_cely} -->
+        <dc:identifier>
+            <xsl:value-of select="amcr:ident_cely"/>
+        </dc:identifier> <!-- {amcr:uzivatel/amcr:ident_cely} -->
+      </xsl:template>
   <dc:title xml:lang="cs">AMČR - heslo HES-123456</dc:title> <!-- "AMČR - heslo "{amcr:heslo/amcr:ident_cely} -->
   <dc:identifier>HES-123456</dc:identifier> <!-- {amcr:heslo/amcr:ident_cely} -->
   <dc:subject xml:lang="cs">heslo</dc:subject> <!-- "heslo" -->

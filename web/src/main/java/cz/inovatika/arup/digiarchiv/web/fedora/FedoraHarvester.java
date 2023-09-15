@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
@@ -105,7 +101,7 @@ public class FedoraHarvester {
             String s = FedoraUtils.search("condition=" + URLEncoder.encode("fedora_id=AMCR-test/record/*", "UTF8")
                     + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8") + "&offset=" + pOffset + "&max_results=" + batchSize);
             JSONObject json = new JSONObject(s);
-            // getModels();
+            // getModels(); 
 
             JSONArray records = json.getJSONArray("items");
             while( records.length() > 0 ) {
@@ -116,12 +112,12 @@ public class FedoraHarvester {
                     + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8") + "&offset=" + pOffset + "&max_results=" + batchSize);
                 json = new JSONObject(s);
                 records = json.getJSONArray("items");
-                checkLists(0);
+                checkLists(0, indexed);
             }
 
             ret.put("updated", indexed);
 
-            checkLists(0);
+            checkLists(0, indexed);
             ret.put("items", json);
             solr.commit("oai");
             solr.commit("entities");
@@ -214,7 +210,7 @@ public class FedoraHarvester {
             Instant start = Instant.now();
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             processRecord(id);
-            checkLists(0);
+            checkLists(0, 1);
             solr.close();
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -292,11 +288,10 @@ public class FedoraHarvester {
                 id = id.substring(id.lastIndexOf("/") + 1);
                 processRecord(id, model);
                 ret.put(model, indexed++);
-                checkLists(batchSize);
-                // LOGGER.log(Level.INFO, "Indexed {0}", indexed);
+                checkLists(batchSize, indexed);
             }
 
-            checkLists(0);
+            checkLists(0, indexed);
             LOGGER.log(Level.INFO, "Index model {0} finished", model);
         }
     }
@@ -393,29 +388,32 @@ public class FedoraHarvester {
         return idoc;
     }
 
-    private void checkLists(int size) throws SolrServerException, IOException {
+    private void checkLists(int size, int indexed) throws SolrServerException, IOException {
         if (idocsEntities.size() > size) {
             solr.add("entities", idocsEntities);
             solr.commit("entities");
             idocsEntities.clear();
-            //return;
+            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
         }
-            if (!idocsOAI.isEmpty()) {
-                solr.add("oai", idocsOAI);
-                solr.commit("oai");
-                idocsOAI.clear();
-            }
+        if (!idocsOAI.isEmpty()) {
+            solr.add("oai", idocsOAI);
+            solr.commit("oai");
+            idocsOAI.clear();
+        }
         if (idocsHeslar.size() > size) {
             solr.add("heslar", idocsHeslar);
             idocsHeslar.clear();
+            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
         }
         if (idocsOrganizations.size() > size) {
             solr.add("organizations", idocsOrganizations);
             idocsOrganizations.clear();
+            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
         }
         if (idocsUzivatel.size() > size) {
             solr.add("uzivatel", idocsUzivatel);
             idocsUzivatel.clear();
+            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
         }
     }
 }

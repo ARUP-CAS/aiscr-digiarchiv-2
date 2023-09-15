@@ -286,6 +286,7 @@
    
    <field name="f_ulozeni_originalu" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_zachovalost" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_jistota" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_nahrada" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_zeme" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_format" type="string" indexed="true" stored="true" multiValued="true" />
@@ -489,7 +490,9 @@
 <copyField source="jazyk_dokumentu" dest="f_jazyk_dokumentu" />
 <copyField source="rada" dest="f_rada" />
 <copyField source="ulozeni_originalu" dest="f_ulozeni_originalu" />
-<copyField source="extra_data_zachovalost" dest="f_zachovalost" />
+<!--<copyField source="extra_data_zachovalost" dest="f_zachovalost" />-->
+<copyField source="zachovalost" dest="f_zachovalost" />
+<copyField source="jistota" dest="f_jistota" />
 <copyField source="extra_data_nahrada" dest="f_nahrada" />
 <copyField source="extra_data_zeme" dest="f_zeme" />
 <copyField source="extra_data_format" dest="f_format" />

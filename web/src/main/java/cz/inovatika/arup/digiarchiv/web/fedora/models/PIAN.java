@@ -88,7 +88,7 @@ public class PIAN implements FedoraModel {
     }
   }
 
-    @Override
+    @Override  
     public String filterOAI(JSONObject user, SolrDocument doc) {
 //-- A: stav = 2
 //-- B-E: bez omezení

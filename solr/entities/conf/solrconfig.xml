@@ -847,6 +847,8 @@
        <str name="facet.field">f_adb_typ_sondy</str>
        <str name="facet.field">f_adb_podnet</str>
 
+       <str name="facet.field">zachovalost</str>
+       <str name="facet.field">jistota</str>
      </lst>
   </initParams>
   
