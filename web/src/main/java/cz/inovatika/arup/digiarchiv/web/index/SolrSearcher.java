@@ -1,10 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.inovatika.arup.digiarchiv.web.LoginServlet;
+import cz.inovatika.arup.digiarchiv.web.LoginServlet; 
 import cz.inovatika.arup.digiarchiv.web.Options;
-import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
 
 import java.io.IOException;
 import java.util.ArrayList;

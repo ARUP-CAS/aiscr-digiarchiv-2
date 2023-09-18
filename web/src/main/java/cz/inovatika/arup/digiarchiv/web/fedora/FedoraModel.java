@@ -16,6 +16,9 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Let;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.RUIANKatastr;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.RUIANKraj;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.RUIANOkres;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Uzivatel;
 import java.io.IOException;
@@ -158,6 +161,12 @@ public interface FedoraModel {
                 return Dokument.class;
             case "uzivatel":
                 return Uzivatel.class;
+            case "ruian_kraj":
+                return RUIANKraj.class;
+            case "ruian_okres":
+                return RUIANOkres.class;
+            case "ruian_katastr":
+                return RUIANKatastr.class;
 //      case "knihovna_3d":
 //        return Dokument.class;
             default:
@@ -200,6 +209,12 @@ public interface FedoraModel {
 //        return Dokument.class;
             case "uzivatel":
                 return new Uzivatel();
+            case "ruian_kraj":
+                return new RUIANKraj();
+            case "ruian_okres":
+                return new RUIANOkres();
+            case "ruian_katastr":
+                return new RUIANKatastr();
             default:
                 return null;
         }

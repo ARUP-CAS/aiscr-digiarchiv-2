@@ -3,9 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
+import java.util.Date;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -15,70 +13,67 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public class Soubor implements FedoraModel {
-  
-//<xs:element name="id" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "soub-{id}" -->
-  @JacksonXmlProperty(localName = "id")
-  @Field
-  public String id;
-  
-//<xs:element name="path" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{path}" -->
-  @JacksonXmlProperty(localName = "path")
-  @Field
-  public String path = "neni";
-  
-//<xs:element name="nazev" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{nazev}" -->
-  @JacksonXmlProperty(localName = "nazev")
-  @Field
-  public String nazev;
-  
-//<xs:element name="mimetype" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{mimetype}" -->
-  @JacksonXmlProperty(localName = "mimetype")
-  @Field
-  public String mimetype;
-  
-//<xs:element name="rozsah" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{rozsah}" -->
-  @JacksonXmlProperty(localName = "rozsah")
-  @Field
-  public long rozsah;
-  
-//<xs:element name="size_mb" minOccurs="1" maxOccurs="1" type="xs:decimal"/> <!-- "{size_mb}" -->
-  @JacksonXmlProperty(localName = "size_mb")
-  @Field
-  public float size_mb;
-  
-//<xs:element name="sha_512" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{sha_512}" -->
-  @JacksonXmlProperty(localName = "sha_512")
-  @Field
-  public String sha_512;
-  
-//<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- historie.historie_set -->
-  @JacksonXmlProperty(localName = "historie")
-  public List<Historie> historie = new ArrayList();
-  
+public class RUIANKatastr implements FedoraModel {
 
-  @Override
-  public void fillSolrFields(SolrInputDocument idoc) {
-      IndexUtils.setDateStamp(idoc, historie);
-  }
-
-  @Override
-  public String coreName() {
-    return "soubor";
-  }
+    @Field
+    public String entity = "ruian_katastr"; 
   
-  public SolrInputDocument createSolrDoc() {
-    
-    DocumentObjectBinder dob = new DocumentObjectBinder();
-    SolrInputDocument idoc = dob.toSolrInputDocument(this);
-    IndexUtils.setDateStamp(idoc, historie);
-    return idoc;
-    
-  }
+//xs:element name="kod" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "ruian-{kod}" -->
+    @JacksonXmlProperty(localName = "kod")
+    @Field
+    public String kod;
+
+//<xs:element name="nazev" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev}" -->
+    @JacksonXmlProperty(localName = "nazev")
+    @Field
+    public String nazev;
+
+//<xs:element name="nazev_en" minOccurs="1" maxOccurs="1" type="amcr:langstringType"/> <!-- "{nazev_en}" -->
+    @JacksonXmlProperty(localName = "nazev_en")
+    @Field
+    public String nazev_en;
+
+//<xs:element name="pian" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{pian}" -->
+    @JacksonXmlProperty(localName = "pian")
+    public Vocab pian;
+
+//<xs:element name="okres" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "ruian-{kraj.kod}" | "{kraj.nazev}" -->
+    @JacksonXmlProperty(localName = "okres")
+    public Vocab okres;
+
+//<xs:element name="definicni_bod_gml" minOccurs="1" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{definicni_bod}") -->
+    @JacksonXmlProperty(localName = "definicni_bod_gml")
+    public Object definicni_bod_gml;
+
+//<xs:element name="definicni_bod_wkt" minOccurs="1" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{definicni_bod}") | ST_AsText("{definicni_bod}") -->
+    @JacksonXmlProperty(localName = "definicni_bod_wkt")
+    public Object definicni_bod_wkt;
+
+//<xs:element name="hranice_gml" minOccurs="1" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{hranice}") -->
+    @JacksonXmlProperty(localName = "hranice_gml")
+    public Object hranice_gml;
+
+//<xs:element name="hranice_wkt" minOccurs="1" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{hranice}") | ST_AsText("{hranice}") -->
+    @JacksonXmlProperty(localName = "hranice_wkt")
+    public Object hranice_wkt;
+
+    @Override
+    public void fillSolrFields(SolrInputDocument idoc) {
+        // nema datum
+        idoc.setField("ident_cely", kod);
+        IndexUtils.addVocabField(idoc, "okres", okres);
+        IndexUtils.addRefField(idoc, "pian", pian);
+        idoc.setField("datestamp", new Date());
+    }
+
+    @Override
+    public String coreName() {
+        return "ruian";
+    }
 
     @Override
     public String filterOAI(JSONObject user, SolrDocument doc) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return (String) doc.getFieldValue("xml");
     }
-  
+
 }

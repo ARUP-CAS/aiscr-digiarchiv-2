@@ -237,8 +237,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"");
         JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 
-        if (json.getJSONObject("response").getInt("numFound") > 0) {
-            idoc.addField("pian_id", pian);
+        if (json.getJSONObject("response").getInt("numFound") > 0) { 
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
 //        JSONObject cu = new JSONObject((String)idoc.getFieldValue("chranene_udaje"));

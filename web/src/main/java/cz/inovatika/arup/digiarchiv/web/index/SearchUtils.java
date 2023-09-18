@@ -8,7 +8,6 @@ package cz.inovatika.arup.digiarchiv.web.index;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
-import org.json.JSONObject;
+import org.json.JSONObject; 
 
 /**
  *
