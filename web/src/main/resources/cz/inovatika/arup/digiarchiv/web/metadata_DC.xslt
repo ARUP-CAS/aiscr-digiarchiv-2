@@ -1058,7 +1058,7 @@
       </xsl:template>
       
       <!-- uzivatel -->
-      <xsl:template match="amcr:samostatny_nalez">
+      <xsl:template match="amcr:uzivatel">
         <dc:title xml:lang="cs">AMČR - uživatel <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - uživatel {amcr:uzivatel/amcr:ident_cely} -->
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
@@ -1264,21 +1264,28 @@
       </xsl:template>
 
   <!-- osoba -->
-  <dc:title xml:lang="cs">AMČR - osoba OS-123456</dc:title> <!-- "AMČR - osoba "{amcr:osoba/amcr:ident_cely} -->
-  <dc:identifier>OS-123456</dc:identifier> <!-- {amcr:osoba/amcr:ident_cely} -->
-  <dc:subject xml:lang="cs">osoba</dc:subject> <!-- "osoba" -->
-  <dc:description>Jan</dc:description> <!-- {amcr:osoba/amcr:jmeno} -->
-  <dc:description>Novák</dc:description> <!-- {amcr:osoba/amcr:prijmeni} -->
-  <dc:title>Novák, J.</dc:title> <!-- {amcr:osoba/amcr:vypis} -->
-  <dc:title>Novák, Jan</dc:title> <!-- {amcr:osoba/amcr:vypis_cely} -->
-  <dc:coverage>1970</dc:coverage> <!-- {amcr:osoba/amcr:rok_narozeni} -->
-  <dc:coverage>2020</dc:coverage> <!-- {amcr:osoba/amcr:rok_umrti} -->
-  <dc:description>Procházka</dc:description> <!-- {amcr:osoba/amcr:rodne_prijmeni} -->
-  <dc:format>application/xml</dc:format> <!-- "application/xml" -->
-  <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
-  <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
-  <dc:source>https://api.aiscr.cz/id/OS-123456</dc:source> <!-- [base_url]"/id/"{amcr:osoba/amcr:ident_cely} -->
-  
-  
+      <xsl:template match="amcr:osoba">
+        <dc:title xml:lang="cs">AMČR - osoba <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - osoba {amcr:osoba/amcr:ident_cely} -->
+        <dc:identifier>
+            <xsl:value-of select="amcr:ident_cely"/>
+        </dc:identifier> <!-- {amcr:osoba/amcr:ident_cely} -->
+        <dc:subject xml:lang="cs">osoba</dc:subject> 
+        <dc:description><xsl:value-of select="amcr:jmeno"/></dc:description> <!-- {amcr:osoba/amcr:jmeno} -->
+        <dc:description>
+            <xsl:value-of select="amcr:prijmeni"/>
+        </dc:description> <!-- {amcr:osoba/amcr:prijmeni} -->
+        <dc:title><xsl:value-of select="amcr:vypis"/></dc:title> <!-- {amcr:osoba/amcr:vypis} -->
+        <dc:title><xsl:value-of select="amcr:vypis_cely"/></dc:title> <!-- {amcr:osoba/amcr:vypis_cely} -->
+        <dc:coverage><xsl:value-of select="amcr:rok_narozeni"/></dc:coverage> <!-- {amcr:osoba/amcr:rok_narozeni} -->
+        <dc:coverage><xsl:value-of select="amcr:rok_umrti"/></dc:coverage> <!-- {amcr:osoba/amcr:rok_umrti} -->
+        <dc:description><xsl:value-of select="amcr:rodne_prijmeni"/></dc:description> <!-- {amcr:osoba/amcr:rodne_prijmeni} -->
+        <dc:format>application/xml</dc:format> <!-- "application/xml" -->
+        <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
+        <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
+        <dc:source>
+            <xsl:value-of select="$base_url_id"/>
+            <xsl:value-of select="amcr:ident_cely"/>
+        </dc:source> <!-- [base_url]"/id/"{amcr:osoba/amcr:ident_cely} -->
+      </xsl:template>
     
 </xsl:stylesheet>

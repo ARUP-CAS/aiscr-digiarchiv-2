@@ -16,6 +16,7 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Let;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Organizace;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Osoba;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.RUIANKatastr;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.RUIANKraj;
@@ -162,6 +163,8 @@ public interface FedoraModel {
                 return Dokument.class;
             case "uzivatel":
                 return Uzivatel.class;
+            case "osoba":
+                return Osoba.class;
             case "ruian_kraj":
                 return RUIANKraj.class;
             case "ruian_okres":
@@ -210,6 +213,8 @@ public interface FedoraModel {
 //        return Dokument.class;
             case "uzivatel":
                 return new Uzivatel();
+            case "osoba":
+                return new Osoba();
             case "ruian_kraj":
                 return new RUIANKraj();
             case "ruian_okres":
