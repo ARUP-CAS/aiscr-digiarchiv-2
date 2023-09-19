@@ -119,6 +119,7 @@
    
    <field name="ident_cely" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    
+  <field name="entity" type="string" indexed="true" stored="true" /> 
   <field name="nazev" type="string" indexed="true" stored="true" /> 
   <field name="nazev_en" type="string" indexed="true" stored="true" /> <!-- "{nazev_en}" -->
   <field name="nazev_zkraceny" type="string" indexed="true" stored="true"/> <!-- "{nazev_zkraceny}" -->

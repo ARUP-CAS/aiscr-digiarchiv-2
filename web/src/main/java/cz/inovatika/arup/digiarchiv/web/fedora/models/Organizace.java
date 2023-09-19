@@ -4,6 +4,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -15,6 +17,9 @@ import org.json.JSONObject;
  */
 @JacksonXmlRootElement(localName = "organizace")
 public class Organizace implements FedoraModel {
+
+  @Field
+  public String entity = "organizace";
 
 //      <xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
   @JacksonXmlProperty(localName = "ident_cely")
@@ -85,6 +90,9 @@ public class Organizace implements FedoraModel {
   public boolean zanikla;
   
 
+    @JacksonXmlProperty(localName = "historie")
+    public List<Historie> historie = new ArrayList();
+    
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
     IndexUtils.addLangField(idoc, "nazev", nazev);
@@ -94,7 +102,7 @@ public class Organizace implements FedoraModel {
     IndexUtils.addVocabField(idoc, "typ_organizace", typ_organizace);
     IndexUtils.addVocabField(idoc, "zverejneni_pristupnost", zverejneni_pristupnost);
     IndexUtils.addVocabField(idoc, "soucast", soucast);
-      
+      IndexUtils.setDateStamp(idoc, historie);
   }
 
   @Override
@@ -104,7 +112,7 @@ public class Organizace implements FedoraModel {
 
     @Override
     public String filterOAI(JSONObject user, SolrDocument doc) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return (String) doc.getFieldValue("xml");
     }
   
 }

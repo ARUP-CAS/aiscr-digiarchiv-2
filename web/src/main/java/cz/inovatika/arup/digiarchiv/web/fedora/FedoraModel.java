@@ -15,6 +15,7 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.Dokument;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Heslo;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Let;
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Organizace;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.PIAN;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.RUIANKatastr;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.RUIANKraj;
@@ -156,7 +157,7 @@ public interface FedoraModel {
             case "heslo":
                 return Heslo.class;
             case "organizace":
-                return Heslo.class;
+                return Organizace.class;
             case "dokument":
                 return Dokument.class;
             case "uzivatel":
@@ -202,7 +203,7 @@ public interface FedoraModel {
             case "heslo":
                 return new Heslo();
             case "organizace":
-                return new Heslo();
+                return new Organizace();
             case "dokument":
                 return new Dokument();
 //      case "knihovna_3d":
