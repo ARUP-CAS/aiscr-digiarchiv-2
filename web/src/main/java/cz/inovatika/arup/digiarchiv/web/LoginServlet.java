@@ -49,7 +49,6 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String action = request.getPathInfo().substring(1);
-            System.out.println("KKK" + action);
             if (action != null) {
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
                 JSONObject json = actionToDo.doPerform(request, response);

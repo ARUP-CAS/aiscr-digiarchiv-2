@@ -171,6 +171,18 @@ public class FedoraServlet extends HttpServlet {
         }
         return json; 
       }
+    },
+    REQUEST { 
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        JSONObject json = new JSONObject();
+        try {
+          json.put("resp", FedoraUtils.request(req.getParameter("url")));
+        } catch (JSONException ex) {
+          json.put("error", ex.toString());
+        }
+        return json; 
+      }
     };
 
     abstract JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception;

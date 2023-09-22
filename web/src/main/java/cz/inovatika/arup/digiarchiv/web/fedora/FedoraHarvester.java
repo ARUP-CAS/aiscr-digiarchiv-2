@@ -1,17 +1,22 @@
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
+import cz.inovatika.arup.digiarchiv.web.InitServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
@@ -45,6 +50,16 @@ public class FedoraHarvester {
     long requestTime;
     long processTime;
 
+    DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("YYYY-MM-dd")
+            .withZone(ZoneId.systemDefault());
+
+    private void writeRetToFile(String type, Instant date) throws IOException {
+
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + "logs" + File.separator + type + "." + formatter.format(date) + ".json");
+        FileUtils.writeStringToFile(f, ret.toString(2), "UTF-8");
+    }
+
     /**
      * Full fedora harvest and index
      *
@@ -52,8 +67,8 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject harvest() throws IOException {
+        Instant start = Instant.now();
         try {
-            Instant start = Instant.now();
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             getModels();
             solr.commit("oai");
@@ -81,6 +96,7 @@ public class FedoraHarvester {
                 solr.close();
             }
         }
+        writeRetToFile("harvest", start);
         return ret;
     }
 
@@ -91,8 +107,8 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject update() throws IOException {
-        try {
             Instant start = Instant.now();
+        try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             int indexed = 0;
 
@@ -151,6 +167,7 @@ public class FedoraHarvester {
                 solr.close();
             }
         }
+        writeRetToFile("update", start);
         return ret;
     }
 
@@ -175,8 +192,8 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexModels(String[] models) throws IOException {
-        try {
             Instant start = Instant.now();
+        try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             for (String model : models) {
                 processModel(model);
@@ -206,6 +223,7 @@ public class FedoraHarvester {
                 solr.close();
             }
         }
+        writeRetToFile("models", start);
         return ret;
     }
 
@@ -217,8 +235,8 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexId(String id) throws IOException {
-        try {
             Instant start = Instant.now();
+        try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             processRecord(id);
             checkLists(0, 1);
@@ -262,6 +280,14 @@ public class FedoraHarvester {
     }
 
     private void getModels() throws Exception {
+
+        JSONArray models = Options.getInstance().getJSONObject("fedora").getJSONArray("models");
+        for (int i = 0; i < models.length(); i++) {
+            processModel(models.getString(i));
+        }
+    }
+
+    private void getModelsFromFedora() throws Exception {
 
         JSONObject json = new JSONArray(FedoraUtils.request("model")).getJSONObject(0);
         // returns list of models (entities) in CONTAINS 
@@ -411,26 +437,11 @@ public class FedoraHarvester {
             idocsEntities.clear();
             LOGGER.log(Level.INFO, "Indexed {0}", indexed);
         }
-        if (!idocsOAI.isEmpty()) {
+        if (idocsOAI.size() > size) {
             solr.add("oai", idocsOAI);
             solr.commit("oai");
             idocsOAI.clear();
         }
-//        if (idocsHeslar.size() > size) {
-//            solr.add("heslar", idocsHeslar);
-//            idocsHeslar.clear();
-//            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-//        }
-//        if (idocsOrganizations.size() > size) {
-//            solr.add("organizations", idocsOrganizations);
-//            idocsOrganizations.clear();
-//            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-//        }
-//        if (idocsUzivatel.size() > size) {
-//            solr.add("uzivatel", idocsUzivatel);
-//            idocsUzivatel.clear();
-//            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
-//        }
 
         for (String key : idocs.keySet()) {
             List l = idocs.get(key);
