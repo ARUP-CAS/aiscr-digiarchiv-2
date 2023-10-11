@@ -147,7 +147,7 @@ public class SamostatnyNalez implements FedoraModel {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = stav == 4;
         idoc.setField("searchable", searchable);
-        IndexUtils.setDateStamp(idoc, historie);
+        IndexUtils.setDateStamp(idoc, ident_cely);
 
         IndexUtils.addVocabField(idoc, "okres", okres);
         IndexUtils.addVocabField(idoc, "projekt", projekt);

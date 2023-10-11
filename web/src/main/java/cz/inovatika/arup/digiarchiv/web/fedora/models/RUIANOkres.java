@@ -60,10 +60,9 @@ public class RUIANOkres implements FedoraModel {
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
-        // nema datum
         idoc.setField("ident_cely", kod);
         IndexUtils.addVocabField(idoc, "kraj", kraj);
-        idoc.setField("datestamp", new Date());
+        IndexUtils.setDateStamp(idoc, kod);
     }
 
     @Override

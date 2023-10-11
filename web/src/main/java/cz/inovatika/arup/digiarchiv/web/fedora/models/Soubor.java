@@ -59,7 +59,7 @@ public class Soubor implements FedoraModel {
 
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
-      IndexUtils.setDateStamp(idoc, historie);
+      IndexUtils.setDateStamp(idoc, id);
   }
 
   @Override
@@ -71,7 +71,7 @@ public class Soubor implements FedoraModel {
     
     DocumentObjectBinder dob = new DocumentObjectBinder();
     SolrInputDocument idoc = dob.toSolrInputDocument(this);
-    IndexUtils.setDateStamp(idoc, historie);
+    IndexUtils.setDateStamp(idoc, id);
     return idoc;
     
   }

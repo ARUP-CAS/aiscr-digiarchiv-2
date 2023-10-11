@@ -135,7 +135,7 @@ public class Projekt implements FedoraModel {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = !archeologicky_zaznam.isEmpty() || !samostatny_nalez.isEmpty();
         idoc.setField("searchable", searchable);
-        IndexUtils.setDateStamp(idoc, historie);
+        IndexUtils.setDateStamp(idoc, ident_cely);
 
         IndexUtils.addRefField(idoc, "okres", okres);
         idoc.setField("typ_projektu", typ_projektu.getId());

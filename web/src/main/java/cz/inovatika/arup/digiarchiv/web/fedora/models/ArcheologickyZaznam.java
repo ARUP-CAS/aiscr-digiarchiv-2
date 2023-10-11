@@ -101,7 +101,7 @@ public class ArcheologickyZaznam implements FedoraModel {
             IndexUtils.addJSONField(idoc, "ext_odkaz", v);
         }
 
-        IndexUtils.setDateStamp(idoc, historie);
+        IndexUtils.setDateStamp(idoc, ident_cely);
 
         List<SolrInputDocument> djdocs = new ArrayList<>();
         try {

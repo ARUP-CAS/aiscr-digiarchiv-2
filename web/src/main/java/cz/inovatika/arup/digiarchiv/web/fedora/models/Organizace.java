@@ -102,7 +102,7 @@ public class Organizace implements FedoraModel {
     IndexUtils.addVocabField(idoc, "typ_organizace", typ_organizace);
     IndexUtils.addVocabField(idoc, "zverejneni_pristupnost", zverejneni_pristupnost);
     IndexUtils.addVocabField(idoc, "soucast", soucast);
-      IndexUtils.setDateStamp(idoc, historie);
+      IndexUtils.setDateStamp(idoc, ident_cely);
   }
 
   @Override

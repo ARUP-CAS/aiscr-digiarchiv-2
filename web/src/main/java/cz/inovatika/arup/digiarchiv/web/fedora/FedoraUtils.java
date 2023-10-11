@@ -13,6 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Base64;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -72,12 +73,7 @@ public class FedoraUtils {
     return response.body();
   }
   
-  public static JSONObject getById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {
-//    String xml = requestXml("record/" + id + "/metadata");
-//    
-//    Projekt p = Projekt.parse(xml);
-//    System.out.println(p.stav);
-//    return org.json.XML.toJSONObject(xml);
-    return null;
+  public static JSONObject getJsonById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {
+    return new JSONArray(request("record/" + id)).getJSONObject(0);
   }
 }

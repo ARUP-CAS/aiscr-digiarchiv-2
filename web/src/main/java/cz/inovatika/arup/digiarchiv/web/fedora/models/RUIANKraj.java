@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.Date;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
@@ -55,9 +56,8 @@ public class RUIANKraj implements FedoraModel {
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
-        // nema datum
         idoc.setField("ident_cely", kod);
-        idoc.setField("datestamp", new Date());
+        IndexUtils.setDateStamp(idoc, kod);
     }
 
     @Override

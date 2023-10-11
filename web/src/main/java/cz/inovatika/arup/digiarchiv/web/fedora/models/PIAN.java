@@ -78,7 +78,7 @@ public class PIAN implements FedoraModel {
   public void fillSolrFields(SolrInputDocument idoc) {
     idoc.setField("searchable", !this.ident_cely.startsWith("N"));
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-    IndexUtils.setDateStamp(idoc, historie);
+    IndexUtils.setDateStamp(idoc, ident_cely);
     
     IndexUtils.addVocabField(idoc, "typ", typ);
     IndexUtils.addVocabField(idoc, "presnost", presnost);

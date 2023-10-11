@@ -59,11 +59,10 @@ public class RUIANKatastr implements FedoraModel {
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
-        // nema datum
         idoc.setField("ident_cely", kod);
         IndexUtils.addVocabField(idoc, "okres", okres);
         IndexUtils.addRefField(idoc, "pian", pian);
-        idoc.setField("datestamp", new Date());
+        IndexUtils.setDateStamp(idoc, kod);
     }
 
     @Override
