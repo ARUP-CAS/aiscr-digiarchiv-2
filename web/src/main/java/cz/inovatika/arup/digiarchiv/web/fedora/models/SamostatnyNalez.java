@@ -148,6 +148,7 @@ public class SamostatnyNalez implements FedoraModel {
         boolean searchable = stav == 4;
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
 
         IndexUtils.addVocabField(idoc, "okres", okres);
         IndexUtils.addVocabField(idoc, "projekt", projekt);

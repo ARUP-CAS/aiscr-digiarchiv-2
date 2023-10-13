@@ -68,6 +68,7 @@ public class Osoba implements FedoraModel {
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
       IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
   }
 
   @Override

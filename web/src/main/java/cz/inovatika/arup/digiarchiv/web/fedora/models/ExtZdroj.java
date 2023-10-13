@@ -146,6 +146,7 @@ public class ExtZdroj implements FedoraModel {
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("searchable", true);
         IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
         IndexUtils.addVocabField(idoc, "typ", typ);
         for (Vocab v : autor) {
             IndexUtils.addVocabField(idoc, "autor", v);

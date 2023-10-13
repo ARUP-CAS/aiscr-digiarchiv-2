@@ -114,6 +114,7 @@ public class Heslo implements FedoraModel {
 //      }
 //    }
         IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
     }
 
     @Override

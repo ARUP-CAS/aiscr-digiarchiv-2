@@ -144,6 +144,7 @@ public class Dokument implements FedoraModel {
         boolean searchable = stav == 3;
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
         
         entity = "3D".equals(rada.getValue()) ? "knihovna_3d" : "dokument";
         idoc.setField("entity", entity);

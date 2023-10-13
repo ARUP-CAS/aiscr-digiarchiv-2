@@ -79,6 +79,7 @@ public class PIAN implements FedoraModel {
     idoc.setField("searchable", !this.ident_cely.startsWith("N"));
     idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
     IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
     
     IndexUtils.addVocabField(idoc, "typ", typ);
     IndexUtils.addVocabField(idoc, "presnost", presnost);

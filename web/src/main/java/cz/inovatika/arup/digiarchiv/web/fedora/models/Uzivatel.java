@@ -105,6 +105,7 @@ public class Uzivatel implements FedoraModel {
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
         IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
     }
 
     @Override
@@ -117,6 +118,7 @@ public class Uzivatel implements FedoraModel {
         DocumentObjectBinder dob = new DocumentObjectBinder();
         SolrInputDocument idoc = dob.toSolrInputDocument(this);
         IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
         return idoc;
 
     }
