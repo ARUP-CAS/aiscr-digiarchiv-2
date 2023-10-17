@@ -58,22 +58,22 @@ public class NeidentAkce {
 //<xs:element name="pian" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{pian}" -->
     @JacksonXmlProperty(localName = "pian")
     @Field
-    public String pian;
+    public String pian; 
 
-    public void fillSolrFields(SolrInputDocument idoc) {
+    public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
         DocumentObjectBinder dob = new DocumentObjectBinder();
         SolrInputDocument kdoc = dob.toSolrInputDocument(this);
         IndexUtils.addRefField(kdoc, "okres", okres);
         IndexUtils.addRefField(kdoc, "katastr", katastr);
         IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres.getValue());
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), "A");
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
 
         for (Vocab v : vedouci) {
             IndexUtils.addRefField(kdoc, "vedouci", v);
         }
 
         JSONObject li = new JSONObject()
-                .put("pristupnost", "A")
+                .put("pristupnost", pristupnost)
                 .put("katastr", kdoc.getFieldValue("katastr"))
                 .put("okres", kdoc.getFieldValue("okres"));
         idoc.addField("location_info", li.toString());

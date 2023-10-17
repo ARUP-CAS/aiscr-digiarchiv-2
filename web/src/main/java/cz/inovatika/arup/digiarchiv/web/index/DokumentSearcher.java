@@ -244,8 +244,9 @@ public class DokumentSearcher implements EntitySearcher {
             if (doc.has("location_info")) {
                 JSONArray lp = doc.getJSONArray("location_info");
                 for (int j = lp.length() - 1; j > -1; j--) {
-                    if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0 && !sameOrg) {
-                        lp.remove(j);// .getJSONObject(j).remove("location_info");
+                    if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
+                        //lp.remove(j);
+                        lp.getJSONObject(j).remove("katastr");
                     }
                 }
             }

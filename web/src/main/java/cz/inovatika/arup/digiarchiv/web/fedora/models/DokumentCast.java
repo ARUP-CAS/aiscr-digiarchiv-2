@@ -65,11 +65,11 @@ public class DokumentCast {
 
         if (neident_akce != null) {
             IndexUtils.addJSONField(idoc, "neident_akce", this);
-            neident_akce.fillSolrFields(idoc);
+            neident_akce.fillSolrFields(idoc, pristupnost.toUpperCase());
         }
 
         if (archeologicky_zaznam != null) {
-            addLocation(idoc, pristupnost);
+            addLocation(idoc, pristupnost.toUpperCase());
         }
         
         idoc.addField("location_info", location_info);
@@ -82,22 +82,17 @@ public class DokumentCast {
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-//      for (String f : facetFields) {
-//        if (doc.has(f)) {
-//          SolrSearcher.addFieldNonRepeat(idoc, f, doc.get(f));
-//        }
-//      }
 
             if (doc.has("katastr")) {
-
                 SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), doc.getString("pristupnost"));
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), pristupnost);
                 SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_okres", doc.getString("okres"));
                 IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("okres"));
                 JSONObject li = new JSONObject()
                         .put("pristupnost", doc.getString("pristupnost"))
                         .put("katastr", doc.getString("katastr"))
                         .put("okres", doc.getString("okres"));
+                
                 if (!location_info.contains(li.toString())) {
                     location_info.add(li.toString());
                 }
