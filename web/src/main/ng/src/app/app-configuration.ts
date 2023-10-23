@@ -27,6 +27,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.amcr;
     }
 
+    public get amcr_server() {
+        return this.config.amcr_server;
+    }
+
     public get isIndexing() {
         return this.config.isIndexing;
     }

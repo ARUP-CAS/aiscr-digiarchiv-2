@@ -4,6 +4,7 @@
   "defaultLang": "cs",
   "serverUrl": "https://digiarchiv.aiscr.cz/",
   "amcr": "http://localhost:8080/amcr/",
+  "amcr_server": "https://wamcr-test.aiscr.cz/",
 
   "mapOptions": {
     "docsForMarker": 500,

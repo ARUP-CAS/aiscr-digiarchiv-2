@@ -136,6 +136,9 @@
         <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
           {{ 'card.menu.api_prefix' | translate }} {{ item.label }}
         </a>
+        <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="config.amcr_server + 'id/' + result.ident_cely" target="_blank">
+          {{ 'card.menu.show_in_AMCR' | translate }}
+        </a>
       </mat-menu>
       <a mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
         <mat-icon>print</mat-icon>

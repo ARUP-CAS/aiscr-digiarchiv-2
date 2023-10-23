@@ -5,6 +5,7 @@ export class Configuration {
   context: string;
   serverUrl: string;
   amcr: string;
+  amcr_server: string;
   isIndexing: boolean;
   defaultLang: string;
   facets: string[];
