@@ -280,19 +280,6 @@
         </xsl:for-each>
     </xsl:template>
     
-  
-  <dc:coverage>https://api.aiscr.cz/id/ruian:12</dc:coverage> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:okres[@id]} -->
-  <dc:coverage>https://api.aiscr.cz/id/ruian:123</dc:coverage> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:katastr[@id]} -->
-  <dc:contributor>https://api.aiscr.cz/id/OS-123456</dc:contributor> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:vedouci[@id]} -->
-  <dc:coverage>2015</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni} -->
-  <dc:coverage>2016</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni} -->
-  <dc:coverage>U potoka ve vsi.</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace} -->
-  <dc:description>Náhodně nalezené artefakty.</dc:description> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:popis} -->
-  <dc:description>Asi úplně špatně.</dc:description> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:poznamka} -->
-  <dc:coverage>P-1234-123456(?)</dc:coverage> <!-- {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:pian} -->
-  
-  
-    
     <xsl:template match="amcr:projekt">
         <dc:title xml:lang="cs">AMČR - projekt <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- "AMČR - projekt "{amcr:projekt/amcr:ident_cely} -->
         <dc:identifier>

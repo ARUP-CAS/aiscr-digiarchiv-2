@@ -122,7 +122,7 @@ public class LoginServlet extends HttpServlet {
                 return jo;
             }
         },
-        LOGIN_3 { 
+        LOGIN { 
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
@@ -162,7 +162,7 @@ public class LoginServlet extends HttpServlet {
 
             }
         },
-        LOGIN {
+        LOGIN_2 {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 

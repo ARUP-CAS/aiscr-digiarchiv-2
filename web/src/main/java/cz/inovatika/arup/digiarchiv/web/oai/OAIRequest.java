@@ -224,21 +224,26 @@ public class OAIRequest {
         String docPristupnost = (String) doc.getFieldValue("pristupnost");
         String model = (String) doc.getFieldValue("model");
         FedoraModel fm = FedoraModel.getFedoraModel(model);
-        String xml = fm.filterOAI(LoginServlet.user(req), doc);
-
-        if (xml.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
+        if (fm.filterOAI(LoginServlet.user(req), doc)) {
+            String xml = (String) doc.getFieldValue("xml");
+            if (xml.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
             String ret = xml;
-            while (ret.contains("<amcr:chranene_udaje>")) {
-                int pos1 = ret.indexOf("<amcr:chranene_udaje>");
-                String s = ret.substring(0, pos1);
-                int pos2 = ret.indexOf("</amcr:chranene_udaje>");
-                s += ret.substring(pos2 + "</amcr:chranene_udaje>".length());
-                ret = s;
+                while (ret.contains("<amcr:chranene_udaje>")) {
+                    int pos1 = ret.indexOf("<amcr:chranene_udaje>");
+                    String s = ret.substring(0, pos1);
+                    int pos2 = ret.indexOf("</amcr:chranene_udaje>");
+                    s += ret.substring(pos2 + "</amcr:chranene_udaje>".length());
+                    ret = s;
+                }
+                return ret;
+            } else {
+                return xml;
             }
-            return ret;
         } else {
-            return xml;
+            return "HTTP/1.1 403 Forbidden";
         }
+
+        
 
     }
 

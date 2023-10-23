@@ -33,8 +33,9 @@ public class AuthService {
                     .header("Content-Type", "application/json")
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            
-            return response.body();
+            String r = response.body();
+            System.out.println(r);
+            return r;
         } catch (Exception ex) {
             Logger.getLogger(AuthService.class.getName()).log(Level.SEVERE, null, ex);
             return ex.toString();

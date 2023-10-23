@@ -76,7 +76,7 @@ public interface FedoraModel {
      * @param doc
      * @return 
      */
-    public String filterOAI(JSONObject user, SolrDocument doc);
+    public boolean filterOAI(JSONObject user, SolrDocument doc);
 
     /**
      * Find Fedora model name in xml

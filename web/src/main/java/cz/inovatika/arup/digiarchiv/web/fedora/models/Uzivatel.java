@@ -153,8 +153,8 @@ public class Uzivatel implements FedoraModel {
     }
 
     @Override
-    public String filterOAI(JSONObject user, SolrDocument doc) {
-        return (String) doc.getFieldValue("xml");
+    public boolean filterOAI(JSONObject user, SolrDocument doc) {
+        return true;
     }
 
 }

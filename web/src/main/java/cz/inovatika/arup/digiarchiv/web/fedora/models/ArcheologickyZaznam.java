@@ -273,14 +273,14 @@ public class ArcheologickyZaznam implements FedoraModel {
     }
 
     @Override
-    public String filterOAI(JSONObject user, SolrDocument doc) {
+    public boolean filterOAI(JSONObject user, SolrDocument doc) {
         
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("A") > 0 || st == 3) {
-            return (String) doc.getFieldValue("xml");
+            return true;
         } else {
-            return "HTTP/1.1 403 Forbidden";
+            return false;
         }
     }
 
