@@ -150,6 +150,9 @@ public class Dokument implements FedoraModel {
         idoc.setField("entity", entity);
 
         IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
+        String kategorie = Options.getInstance().getJSONObject("kategoriet").optString(typ_dokumentu.getValue());
+        SolrSearcher.addFieldNonRepeat(idoc, "kategorie_dokumentu", kategorie);
+    
         IndexUtils.addVocabField(idoc, "material_originalu", material_originalu);
         IndexUtils.addVocabField(idoc, "rada", rada);
 
