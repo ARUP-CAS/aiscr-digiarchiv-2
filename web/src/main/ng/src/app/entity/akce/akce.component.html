@@ -43,7 +43,7 @@
         <span class="app-pipe"></span>
         <ng-container><!-- *ngIf="result.je_nz"-->
           <label class="app-label">{{ 'card.desc.Nahrazuje NZ' | translate }}:</label>&#160;
-          {{ result.je_nz ? 'Ano' : 'Ne' }}<span class="app-pipe"></span>
+          {{ (result.je_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.pristupnost">
           <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
