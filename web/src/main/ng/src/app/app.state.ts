@@ -329,15 +329,15 @@ export class AppState {
       this.logged = false;
       this.user = null;
     } else {
-      this.logged = false;
-      this.user = null;
-      for (const first in res) {
-        if (res[first]) {
-          this.user = res[first];
-          this.logged = true;
-          break;
-        }
-      }
+      this.logged = true;
+      this.user = res;
+      // for (const first in res) {
+      //   if (res[first]) {
+      //     this.user = res[first];
+      //     this.logged = true;
+      //     break;
+      //   }
+      // }
     }
     this.loggedSubject.next(changed === this.logged);
   }

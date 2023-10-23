@@ -40,7 +40,8 @@
           <a *ngIf="state.logged" (click)="showLogin()">
             <mat-icon>logout</mat-icon>
             {{state.user.jmeno}} {{state.user.prijmeni}}
-            ({{'pristupnost_' + state.user.pristupnost | translate}})
+            <!-- ({{'pristupnost_' + state.user.pristupnost | translate}}) -->
+            ({{state.user.skupina[0].value | translate}})
           </a>
           <span class="app-pipe"></span>
           <a *ngIf="state.currentLang !== 'en'" (click)="changeLang('en')">English</a>

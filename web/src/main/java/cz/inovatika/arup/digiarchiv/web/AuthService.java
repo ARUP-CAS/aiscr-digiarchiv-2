@@ -34,7 +34,6 @@ public class AuthService {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String r = response.body();
-            System.out.println(r);
             return r;
         } catch (Exception ex) {
             Logger.getLogger(AuthService.class.getName()).log(Level.SEVERE, null, ex);

@@ -100,6 +100,7 @@ public class I18n {
     solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
     docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < docs.length(); i++) {
+      // heslarDoc.put("pristupnost_" + docs.getJSONObject(i).getString("zkratka").toUpperCase(), docs.getJSONObject(i).getString(locale));
       heslarDoc.put(docs.getJSONObject(i).getString("zkratka"), docs.getJSONObject(i).getString(locale));
     }
 
