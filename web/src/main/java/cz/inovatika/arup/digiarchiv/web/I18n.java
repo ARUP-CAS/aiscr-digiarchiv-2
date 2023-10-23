@@ -80,7 +80,7 @@ public class I18n {
     }
     
     // Organizace
-    String field = "nazev_zkraceny";
+    String field = "nazev"; 
     if ("en".equals(locale)) {
       field += "_en";
     }
