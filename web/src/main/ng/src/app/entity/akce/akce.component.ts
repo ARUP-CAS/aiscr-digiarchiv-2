@@ -43,7 +43,6 @@ export class AkceComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
-    console.log(this.hasRights, this.mapDetail)
     const sd = new Date(this.result.specifikace_data);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =

@@ -3,20 +3,26 @@
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
       {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
-      <app-inline-filter [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
-      <ng-container *ngIf="result.jistota || result.presna_datace">&#160;({{result.jistota}}<ng-container *ngIf="result.jistota && result.presna_datace">;&#160;</ng-container><ng-container *ngIf="result.presna_datace">{{result.presna_datace}}</ng-container>)</ng-container>
-      <ng-container *ngIf="result.areal">&#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="result.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
-      <ng-container *ngIf="aktivity.length > 0"> 
+      <app-inline-filter [field]="'f_obdobi'" [value]="result.obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
+      <ng-container *ngIf="result.jistota || result.presna_datace">&#160;( {{ result.jistota | translate }}<ng-container *ngIf="result.jistota && result.presna_datace">;&#160;</ng-container><ng-container *ngIf="result.presna_datace">{{result.presna_datace}}</ng-container>)</ng-container>
+      <ng-container *ngIf="result.areal">&#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="result.areal.id" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
+      <!-- <ng-container *ngIf="aktivity.length > 0"> 
         &#160;(<ng-container *ngFor="let aktivita of aktivity; let last = last">
           <app-inline-filter [field]="'f_aktivita'" [value]="aktivita" [heslar]="'f_aktivita'"></app-inline-filter>
           <span *ngIf="!last">,&#160;</span></ng-container>)
+      </ng-container> -->
+      <ng-container *ngIf="result.aktivita.length > 0"> 
+        &#160;(<ng-container *ngFor="let aktivita of result.aktivita; let last = last">
+          <app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>
+          <span *ngIf="!last">,&#160;</span></ng-container>)
       </ng-container>
+
     </mat-panel-title>
   </mat-expansion-panel-header>
   <div *ngIf="result.poznamka">
     <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.poznamka }}
   </div>
-  <mat-expansion-panel #panel1 *ngIf="result.nalez" [expanded]="true" hideToggle class="app-panel-inner">
+  <mat-expansion-panel #panel1 *ngIf="result.nalez_objekt || result.nalez_predmet" [expanded]="true" hideToggle class="app-panel-inner">
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
       <mat-panel-title>
         <mat-icon>{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -24,11 +30,17 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <ul class="app-list-inside">
-      <li *ngFor="let nalez of result.nalez">
+      <li *ngFor="let nalez of result.nalez_objekt">
+        <app-nalez [result]="nalez"></app-nalez>
+      </li>
+    </ul>
+    <ul class="app-list-inside">
+      <li *ngFor="let nalez of result.nalez_predmet">
         <app-nalez [result]="nalez"></app-nalez>
       </li>
     </ul>
   </mat-expansion-panel>
+  
 </mat-expansion-panel>
 
   <mat-expansion-panel *ngIf="(result.akce || result.lokalita) && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">

@@ -36,9 +36,25 @@ public class ADBSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+            if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
                 doc.remove("chranene_udaje");
             }
+
+            Object[] keys = doc.keySet().toArray();
+            for (Object okey : keys) {
+                String key = (String) okey;
+                if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+                if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+                if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+
+            }
+
         }
     }
 

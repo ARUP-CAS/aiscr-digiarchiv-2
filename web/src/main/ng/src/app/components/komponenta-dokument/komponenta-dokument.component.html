@@ -6,7 +6,7 @@
       <ng-container *ngIf="result.obdobi">
         <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
       </ng-container>
-      <ng-container *ngIf="result.jistota || result.presna_datace">(<ng-container *ngIf="result.jistota">{{ result.jistota }};</ng-container>{{ result.presna_datace }})</ng-container>
+      <ng-container *ngIf="result.jistota || result.presna_datace">(<ng-container *ngIf="result.jistota">{{ result.jistota | translate }};</ng-container>{{ result.presna_datace }})</ng-container>
       <ng-container *ngIf="result.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
       <ng-container *ngIf="result.aktivita">
         &#160;(<ng-container *ngFor="let ak of result.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>

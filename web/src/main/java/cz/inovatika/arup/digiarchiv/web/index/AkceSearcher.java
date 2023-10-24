@@ -31,6 +31,7 @@ public class AkceSearcher implements EntitySearcher {
             JSONObject doc = ja.getJSONObject(i);
             if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
                 doc.remove("chranene_udaje");
+                doc.remove("akce_chranene_udaje");
             }
         }
     }
@@ -147,6 +148,7 @@ public class AkceSearcher implements EntitySearcher {
             "vedouci_akce_ostatni:[json]",
             "dokumentacni_jednotka_pian",
             "dokumentacni_jednotka:[json]",
+            "akce_chranene_udaje:[json]",
             "chranene_udaje:[json]",
             "katastr:f_katastr_" + pristupnost, 
             "lat:lat_" + pristupnost,
@@ -184,6 +186,7 @@ public class AkceSearcher implements EntitySearcher {
                     "dokumentacni_jednotka_pian",
                     "dokumentacni_jednotka:[json]",
                     "chranene_udaje:[json]",
+                    "akce_chranene_udaje:[json]",
                     "lat:lat_" + pristupnost,
                     "lng:lng_" + pristupnost,
                     "loc_rpt:loc_rpt_" + pristupnost,

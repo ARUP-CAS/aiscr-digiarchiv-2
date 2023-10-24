@@ -31,14 +31,10 @@ export class KomponentaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.idShort = this.data.ident_cely.substring(this.data.ident_cely.lastIndexOf('-') + 1);
-    // this.service.getNalez(this.data.ident_cely).subscribe(res => {
-    //   this.nalez = res;
-    // });
     if (this.result.nalez && !this.result.nalez.hasOwnProperty('length')) {
       this.result.nalez = [this.result.nalez];
     }
-    this.fillAktivity();
+    // this.fillAktivity();
   }
 
   fillAktivity() {

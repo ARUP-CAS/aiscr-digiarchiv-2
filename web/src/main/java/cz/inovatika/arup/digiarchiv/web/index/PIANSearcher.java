@@ -26,7 +26,7 @@ public class PIANSearcher implements EntitySearcher{
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+      if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
         doc.remove("chranene_udaje");
       }
     }

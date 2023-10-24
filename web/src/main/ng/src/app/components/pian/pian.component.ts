@@ -52,7 +52,10 @@ export class PianComponent implements OnInit {
   }
 
   initProperties() {
-    this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
+    if (!this.result) {
+      return;
+    }
+    // this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},

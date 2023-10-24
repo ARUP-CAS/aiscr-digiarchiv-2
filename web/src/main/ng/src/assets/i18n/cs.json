@@ -1,6 +1,8 @@
 {
   "Ano": "Ano",
   "Ne": "Ne",
+  "true": "Ano",
+  "false": "Ne",
   "a": "a",
   "nebo": "nebo",
   "from": "od",

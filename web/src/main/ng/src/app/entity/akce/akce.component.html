@@ -168,9 +168,9 @@
                   </div>
                 </td>
               </tr>
-              <tr *ngIf="result.poznamka">
+              <tr *ngIf="result.akce_chranene_udaje?.souhrn_upresneni">
                 <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
-                <td>{{ result.poznamka }}</td>
+                <td>{{ result.akce_chranene_udaje?.souhrn_upresneni }}</td>
               </tr>
             </tbody>
           </table>

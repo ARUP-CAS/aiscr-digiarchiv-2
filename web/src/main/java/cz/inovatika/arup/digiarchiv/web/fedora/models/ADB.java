@@ -161,7 +161,7 @@ class ADBChraneneUdaje {
         vbdoc.setField("geom_wkt", objectMapper.writeValueAsString(vb.geom_wkt));
 
         idocs.add(vbdoc);
-        // addAsEntity(client, vbdoc, "vyskovy_bod");
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "vyskovy_bod", vb.ident_cely, pristupnost);
       }
       if (!idocs.isEmpty()) {
         IndexUtils.getClient().add("entities", idocs, 10);

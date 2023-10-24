@@ -1,6 +1,8 @@
 {
   "Ano": "Yes",
   "Ne": "No",
+  "true": "Yes",
+  "false": "No",
   "a": "and",
   "nebo":"or",
   "from": "from",
