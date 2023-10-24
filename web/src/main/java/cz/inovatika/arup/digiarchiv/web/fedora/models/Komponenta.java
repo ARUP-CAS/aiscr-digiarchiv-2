@@ -45,7 +45,7 @@ public class Komponenta {
 
 //<xs:element name="aktivita" minOccurs="0" maxOccurs="unbounded" type="amcr:vocabType"/> <!-- "{aktivity.ident_cely}" | "{aktivity.heslo}" -->
   @JacksonXmlProperty(localName = "aktivita")
-  public Vocab aktivita;
+  public List<Vocab> aktivita;
 
 //<xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
   @JacksonXmlProperty(localName = "poznamka")
@@ -65,7 +65,9 @@ public class Komponenta {
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addVocabField(kdoc, "obdobi", obdobi);
     IndexUtils.addVocabField(kdoc, "areal", areal);
-    IndexUtils.addVocabField(kdoc, "aktivita", aktivita);
+    for (Vocab a : aktivita) {
+        IndexUtils.addVocabField(kdoc, "aktivita", a);
+    }
     if (!nalez_objekt.isEmpty()) {
       kdoc.addField("typ_nalezu", "objekt");
     }

@@ -44,24 +44,33 @@
         <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
         <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
-      <div *ngIf="result.dalsi_katastry && hasRights">
+      <div *ngIf="result.chranene_udaje?.dalsi_katastry && hasRights">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
-        <ng-container *ngFor="let k of result.dalsi_katastry; let last = last">
+        <ng-container *ngFor="let k of result.chranene_udaje?.dalsi_katastry; let last = last">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
+      
+      <div *ngIf="result.chranene_udaje?.lokalizace" class="app-truncate-text">
+        <label class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</label>&#160;{{ result.chranene_udaje?.lokalizace }}
+      </div>
       <div *ngIf="result.podnet" class="app-truncate-text">
         <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;{{ result.podnet }}
       </div>
+      <div *ngIf="result.chranene_udaje?.parcelni_cislo" class="app-truncate-text">
+        <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.chranene_udaje?.parcelni_cislo }}
+      </div>
+
+
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.child_akce?.length > 0">
-        {{'card.desc.Počet akcí' | translate}}: <strong>{{result.child_akce?.length}}</strong>
+      <ng-container *ngIf="result.archeologicky_zaznam?.length > 0">
+        {{ 'card.desc.Počet archeologickych zaznamu' | translate }}: <strong>{{result.archeologicky_zaznam?.length}}</strong>
         <span class="app-pipe"></span>
-      </ng-container>
+      </ng-container> 
       <ng-container *ngIf="result.samostatny_nalez?.length > 0"> 
         {{'card.desc.Počet samostatných nálezů' | translate}}: <strong>{{result.samostatny_nalez?.length}}</strong> 
         <span class="app-pipe"></span>
@@ -108,7 +117,7 @@
       </button>
     </div>
   </mat-card-actions>
-  <mat-card-content *ngIf="detailExpanded && !isChild && hasRights" >
+  <mat-card-content *ngIf="detailExpanded && !isChild" >
     <div class="app-card-detail">
       <mat-accordion multi="true">
         <mat-expansion-panel [expanded]="true">
@@ -122,6 +131,10 @@
               <tr *ngIf="result.chranene_udaje?.lokalizace">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
                 <td>{{ result.chranene_udaje?.lokalizace }}</td>
+              </tr>
+              <tr *ngIf="result.podnet">
+                <th class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</th>
+                <td>{{ result.podnet }}</td>
               </tr>
               <tr *ngIf="result.chranene_udaje?.parcelni_cislo">
                 <th class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</th>
@@ -147,9 +160,9 @@
                 <th class="app-label">{{ 'card.desc.Název památky' | translate }}:</th>
                 <td>{{ result.nkp_popis }}</td>
               </tr>
-              <tr *ngIf="result.podnet">
-                <th class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</th>
-                <td>{{ result.podnet }}</td>
+              <tr *ngIf="result.oznaceni_stavby">
+                <th class="app-label">{{ 'card.desc.Projekt - oznaceni_stavby' | translate }}:</th>
+                <td>{{ result.oznaceni_stavby }}</td>
               </tr>
             </tbody>
           </table>

@@ -146,7 +146,7 @@ public class Dokument implements FedoraModel {
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
         
-        entity = "3D".equals(rada.getValue()) ? "knihovna_3d" : "dokument";
+        entity = (rada.getId().toUpperCase().equals("HES-000870")) ? "knihovna_3d" : "dokument";
         idoc.setField("entity", entity);
 
         IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
@@ -217,7 +217,7 @@ public class Dokument implements FedoraModel {
     
     private void addLet(SolrInputDocument idoc) {
         
-        IndexUtils.addVocabField(idoc, "let", let); 
+        IndexUtils.addVocabField(idoc, "let_ident_cely", let); 
         SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"")
             .setFields("ident_cely",
                         "datum",
@@ -236,6 +236,7 @@ public class Dokument implements FedoraModel {
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
+                SolrSearcher.addFieldNonRepeat(idoc, "let", doc.toString());
                 for (String key : doc.keySet()) {
                     SolrSearcher.addFieldNonRepeat(idoc, "let_" + key, doc.opt(key));
                 }

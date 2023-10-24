@@ -164,12 +164,13 @@ a {
 }
 
 .app-split-text {
-  max-width: 1px;
-
+  word-break: break-all;
+  /* max-width: 1px;
+  min-width: 1000px;
   .app-text-content {
     word-wrap: break-word;
     overflow-wrap: break-word;
-  }
+  } */
 }
 
 .app-icon-ap {

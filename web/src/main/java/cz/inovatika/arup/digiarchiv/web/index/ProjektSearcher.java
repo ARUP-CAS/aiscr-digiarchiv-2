@@ -7,6 +7,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
  */
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import static cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher.LOGGER;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -40,48 +41,38 @@ public class ProjektSearcher implements EntitySearcher {
             JSONObject doc = ja.getJSONObject(i);
             String docPr = doc.getString("pristupnost");
 
-            if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
-                Object[] keys = doc.keySet().toArray();
-                for (Object key : keys) {
-                    if (!allowedFields.contains((String) key)) {
-                        doc.remove((String) key);
-                    }
-
-                }
+//            if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+//                Object[] keys = doc.keySet().toArray();
+//                for (Object key : keys) {
+//                    if (!allowedFields.contains((String) key)) {
+//                        doc.remove((String) key);
+//                    }
+//
+//                }
+//            }
+            if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+                doc.remove("chranene_udaje");
             }
 
-            if (docPr.compareTo(pristupnost) > 0) {
-                doc.remove("chranene_udaje");
+            Object[] keys = doc.keySet().toArray();
+            for (Object okey : keys) {
+                String key = (String) okey;
+                if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+                if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+                if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
 
-//        doc.remove("katastr");
-//        doc.remove("dalsi_katastry");
-//        doc.remove("loc");
-//        doc.remove("lat");
-//        doc.remove("lng");
-//        doc.remove("pian");
-//        doc.remove("parent_akce_katastr");
-//        doc.remove("dok_jednotka");
-//        
-//        Object[] keys = doc.keySet().toArray();
-//        for (Object okey : keys) {
-//          String key = (String) okey;
-//          if (key.endsWith("_D") && "D".compareTo(pristupnost) > 0) {
-//            doc.remove((String) key);
-//          }
-//          if (key.endsWith("_C") && "C".compareTo(pristupnost) > 0) {
-//            doc.remove((String) key);
-//          }
-//          if (key.endsWith("_B") && "B".compareTo(pristupnost) > 0) {
-//            doc.remove((String) key);
-//          }
-//
-//        }
             }
 
             if (doc.has("location_info")) {
                 JSONArray lp = doc.getJSONArray("location_info");
                 for (int j = lp.length() - 1; j > -1; j--) {
-                    if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareTo(pristupnost) > 0) {
+                    if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
                         lp.remove(j);// .getJSONObject(j).remove("location_info");
                     }
                 }
@@ -95,23 +86,40 @@ public class ProjektSearcher implements EntitySearcher {
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
-        JSONObject doc = docs.getJSONObject(i);
-        JSONArray samostatny_nalez = new JSONArray();
-        if (doc.has("samostatny_nalez")) {
-            SolrQuery query = new SolrQuery("*")
-                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-                    .setRows(10000)
-                    .setFields("ident_cely");
-            try {
-                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
-                for (int a = 0; a < ja.length(); a++) {
-                    samostatny_nalez.put(ja.getJSONObject(a).getString("ident_cely"));
+            JSONObject doc = docs.getJSONObject(i);
+            JSONArray samostatny_nalez = new JSONArray();
+            if (doc.has("samostatny_nalez")) {
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                        .setRows(10000)
+                        .setFields("ident_cely");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    for (int a = 0; a < ja.length(); a++) {
+                        samostatny_nalez.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
                 }
-            } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
             }
-        }
-        doc.put("samostatny_nalez", samostatny_nalez);
+            doc.put("samostatny_nalez", samostatny_nalez);
+            
+            JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
+            if (doc.has("archeologicky_zaznam")) {
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                        .setRows(10000)
+                        .setFields("ident_cely");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    for (int a = 0; a < ja.length(); a++) {
+                        dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+            doc.put("archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
         }
     }
 
@@ -162,6 +170,8 @@ public class ProjektSearcher implements EntitySearcher {
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             removeInvalid(client, jo);
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
 
@@ -205,7 +215,7 @@ public class ProjektSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,akce:[json],pian:[json]", "katastr", "okres", "f_katastr:katastr", "f_okres:okres"};
+        return new String[]{"*,pian:[json]", "chranene_udaje:[json]", "okres", "katastr:f_katastr_" + pristupnost, "f_okres:okres"};
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -215,7 +225,7 @@ public class ProjektSearcher implements EntitySearcher {
             pristupnost = "D";
         }
         query.set("df", "text_all_" + pristupnost);
-        query.setFields("*,akce:[json],pian:[json]", "katastr", "okres", "f_katastr:katastr", "f_okres:okres");
+        query.setFields(getSearchFields(pristupnost));
         if (Boolean.parseBoolean(request.getParameter("mapa"))) {
             SolrSearcher.addLocationParams(request, query);
         }

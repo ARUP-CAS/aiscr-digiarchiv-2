@@ -226,6 +226,7 @@
       "ulozeni_nalezu": "Fieldwork - finds repository",
       "lokalizace": "Fieldwork - location",
       "je_nz": "Fieldwork - substitutes ER",
+      "odlozena_nz": "Fieldwork - Odložená NZ",
       "vazba_projekt": "Fieldwork - related project",
       "inv_cislo": "Ind. find - registering no.",
       "hloubka": "Ind. find - depth (cm)",
@@ -335,6 +336,7 @@
       "Organizace": "Organisation",
       "Katastr (okres)": "Cadastre (district)",
       "Popis": "Description",
+      "Počet archeologickych zaznamu": "Number of archeological records",
       "Počet akcí": "Number of fieldwork events",
       "Počet lokalit": "Number of sites",
       "Počet souborů": "Number of files",
@@ -384,6 +386,7 @@
       "Další katastry": "Other cadastres",
       "Projekt - typ": "Type",
       "Projekt - podnět": "Motivation",
+      "Projekt - oznaceni_stavby": "Building mark",
       "Počet samostatných nálezů": "Number of individual finds",
       "Parcelní číslo": "Parcel number",
       "Plánované zahájení": "Scheduled launch",
@@ -636,7 +639,8 @@
       "f_obdobi": "Component - period",
       "f_areal": "Component - activity area",
       "extra_data_odkaz": "Document - link",
-      "je_nz": "Fieldwork - substitutes ER"
+      "je_nz": "Fieldwork - substitutes ER",
+      "odlozena_nz": "Fieldwork - Odložená NZ"
     },
     "desc": {
       "Pian": "Pian",

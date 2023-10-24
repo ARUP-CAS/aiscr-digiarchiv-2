@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
-import static cz.inovatika.arup.digiarchiv.web.index.AkceSearcher.LOGGER;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -60,23 +59,23 @@ public class DokumentSearcher implements EntitySearcher {
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
-        JSONObject doc = docs.getJSONObject(i);
-        JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
-        if (doc.has("dokument_cast_archeologicky_zaznam")) {
-            SolrQuery query = new SolrQuery("*")
-                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-                    .setRows(10000)
-                    .setFields("ident_cely");
-            try {
-                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
-                for (int a = 0; a < ja.length(); a++) {
-                    dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+            JSONObject doc = docs.getJSONObject(i);
+            JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
+            if (doc.has("dokument_cast_archeologicky_zaznam")) {
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                        .setRows(10000)
+                        .setFields("ident_cely");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    for (int a = 0; a < ja.length(); a++) {
+                        dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
                 }
-            } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
             }
-        }
-        doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
+            doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
         }
     }
 
@@ -124,8 +123,9 @@ public class DokumentSearcher implements EntitySearcher {
         String[] f = new String[]{
             "*",
             //  "ident_cely,pristupnost,entity,organizace","neident_akce_katastr","autor","rok_vzniku","datestamp","typ_dokumentu","material_originalu","rada","popis",
-            "neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json],location_info:[json]",
+            "neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],let:[json],nalez_dokumentu:[json],tvar:[json],location_info:[json]",
             "dokument_cast:[json]",
+            "komponenta:[json]",
             "okres", "f_okres", "pian_id",
             "katastr:f_katastr_" + pristupnost,
             "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
@@ -200,13 +200,13 @@ public class DokumentSearcher implements EntitySearcher {
                 Object[] keys = doc.keySet().toArray();
                 for (Object okey : keys) {
                     String key = (String) okey;
-                    if (key.endsWith("_D") && "D".compareTo(pristupnost) > 0) {
+                    if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
                         doc.remove((String) key);
                     }
-                    if (key.endsWith("_C") && "C".compareTo(pristupnost) > 0) {
+                    if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
                         doc.remove((String) key);
                     }
-                    if (key.endsWith("_B") && "B".compareTo(pristupnost) > 0) {
+                    if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
                         doc.remove((String) key);
                     }
 

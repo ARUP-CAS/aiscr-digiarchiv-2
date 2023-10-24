@@ -11,8 +11,8 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="result.katastr">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
+        <ng-container *ngIf="result.chranene_udaje?.hlavni_katastr">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.chranene_udaje.hlavni_katastr.value"></app-inline-filter>
         </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
         <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.hlavni_vedouci"></app-inline-filter><span class="app-pipe"></span>
         <!-- <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
@@ -45,6 +45,10 @@
           <label class="app-label">{{ 'card.desc.Nahrazuje NZ' | translate }}:</label>&#160;
           {{ (result.je_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
         </ng-container>
+        <ng-container *ngIf="result.odlozena_nz"><!-- *"-->
+          <label class="app-label">{{ 'card.desc.Odlozena NZ' | translate }}:</label>&#160;
+          {{ (result.odlozena_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
+        </ng-container>
         <ng-container *ngIf="result.pristupnost">
           <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
@@ -54,14 +58,14 @@
         <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
         <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
-      <div *ngIf="result.dalsi_katastry && hasRights">
+      <div *ngIf="result.chranene_udaje?.dalsi_katastr.length > 0">
         <label class="app-label">{{ 'card.desc.dalsi_katastry' | translate }}:</label>&#160;
-        <ng-container *ngFor="let k of result.dalsi_katastry; let last = last">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
-          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
+        <ng-container *ngFor="let k of result.chranene_udaje.dalsi_katastr; let last = last">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>&#160;
+          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="k.value"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
-      <div *ngIf="result.lokalizace && hasRights" class="app-w-max-1 app-w-min-100 app-d-inline-flex">
+      <div *ngIf="result.lokalizace" class="app-w-max-1 app-w-min-100 app-d-inline-flex">
         <label class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</label>&#160;<span class="app-truncate-text">{{ cropped(result.lokalizace) }}</span>
       </div>
     </div>
@@ -140,9 +144,9 @@
                 <th class="app-label">{{ 'card.desc.Vedlejší typ' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.vedlejsi_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
               </tr>
-              <tr *ngIf="result.vedouci_akce_ostatni">
+              <tr *ngIf="result.vedouci_akce_ostatni?.length > 0">
                 <th class="app-label">{{ 'card.desc.Ostatní vedoucí' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.vedouci_akce_ostatni"></app-inline-filter></td>
+                <td><div *ngFor="let va of result.vedouci_akce_ostatni" >{{va.vedouci.value}} ({{'heslar.' + va.organizace.id | translate}})</div></td>
               </tr>
               <tr *ngIf="result.organizace_ostatni">
                 <th class="app-label">{{ 'card.desc.Ostatní organizace' | translate }}:</th>

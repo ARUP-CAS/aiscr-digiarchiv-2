@@ -226,6 +226,7 @@
       "ulozeni_nalezu": "Akce - uložení nálezů",
       "lokalizace": "Akce - lokalizace",
       "je_nz": "Akce - nahrazuje NZ",
+      "odlozena_nz": "Akce - Odložená NZ",
       "vazba_projekt": "Akce - související projekt",
       "inv_cislo": "Sam. nález - evidenční č.",
       "hloubka": "Sam. nález - hloubka (cm)",
@@ -335,6 +336,7 @@
       "Organizace": "Organizace",
       "Katastr (okres)": "Katastr (okres)",
       "Popis": "Popis",
+      "Počet archeologickych zaznamu": "Počet archeologických záznamů",
       "Počet akcí": "Počet akcí",
       "Počet lokalit": "Počet lokalit",
       "Počet souborů": "Počet souborů",
@@ -384,6 +386,7 @@
       "Další katastry": "Další katastry",
       "Projekt - typ": "Typ",
       "Projekt - podnět": "Podnět",
+      "Projekt - oznaceni_stavby": "Označení stavby",
       "Počet samostatných nálezů": "Počet samostatných nálezů",
       "Parcelní číslo": "Parcelní číslo",
       "Plánované zahájení": "Plánované zahájení",
@@ -636,7 +639,8 @@
       "f_obdobi": "Komponenta - období",
       "f_areal": "Komponenta - areál",
       "extra_data_odkaz": "Dokument - odkaz",
-      "je_nz": "Akce - nahrazuje NZ"
+      "je_nz": "Akce - nahrazuje NZ",
+      "odlozena_nz": "Akce - Odložená NZ"
     },
     "desc": {
       "Pian": "Pian",

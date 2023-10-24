@@ -73,9 +73,10 @@ public class NeidentAkce {
         }
 
         JSONObject li = new JSONObject()
-                .put("pristupnost", pristupnost)
+                .put("pristupnost", "A")
                 .put("katastr", kdoc.getFieldValue("katastr"))
                 .put("okres", kdoc.getFieldValue("okres"));
+        
         idoc.addField("location_info", li.toString());
         
 

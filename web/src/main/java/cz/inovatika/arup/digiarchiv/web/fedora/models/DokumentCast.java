@@ -59,20 +59,21 @@ public class DokumentCast {
         idoc.addField("dokument_cast_poznamka", poznamka);
 
         for (Komponenta k : komponenta) {
-            IndexUtils.addJSONField(idoc, "komponenta", komponenta);
+            IndexUtils.addJSONField(idoc, "komponenta", k);
             k.fillSolrFields(idoc);
         }
 
         if (neident_akce != null) {
-            IndexUtils.addJSONField(idoc, "neident_akce", this);
+            IndexUtils.addJSONField(idoc, "neident_akce", neident_akce);
             neident_akce.fillSolrFields(idoc, pristupnost.toUpperCase());
         }
 
         if (archeologicky_zaznam != null) {
             addLocation(idoc, pristupnost.toUpperCase());
+            idoc.addField("location_info", location_info);
         }
         
-        idoc.addField("location_info", location_info);
+        // idoc.addField("location_info", location_info);
     }
 
     private void addLocation(SolrInputDocument idoc, String pristupnost) {

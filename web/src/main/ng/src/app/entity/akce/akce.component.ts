@@ -67,7 +67,7 @@ export class AkceComponent implements OnInit, OnChanges {
           this.getProjekts();
         }, 100);
       }
-    } 
+    }  
   }
 
   ngOnChanges(c) {
