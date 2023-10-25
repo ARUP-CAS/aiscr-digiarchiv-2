@@ -5,7 +5,9 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.SolrInputField;
 
 /**
  *
@@ -42,6 +44,10 @@ public class Lokalita {
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
+
+//        for (Map.Entry<String, SolrInputField> entry : akceDoc.entrySet()) {
+//            idoc.setField(entry.getKey(), entry.getValue().getValue());
+//        }
 
     }
 
@@ -104,9 +110,10 @@ class LokalitaChraneneUdaje {
     public String poznamka;
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "nazev", nazev, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "popis", popis, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
+        IndexUtils.setSecuredJSONFieldPrefix(idoc, "lokalita", this);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalita_chranene_udaje_nazev", nazev, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalita_chranene_udaje_popis", popis, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalita_chranene_udaje_poznamka", poznamka, pristupnost);
     }
 
 }

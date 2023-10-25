@@ -45,7 +45,7 @@ public class Komponenta {
 
 //<xs:element name="aktivita" minOccurs="0" maxOccurs="unbounded" type="amcr:vocabType"/> <!-- "{aktivity.ident_cely}" | "{aktivity.heslo}" -->
   @JacksonXmlProperty(localName = "aktivita")
-  public List<Vocab> aktivita;
+  public List<Vocab> aktivita = new ArrayList();
 
 //<xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
   @JacksonXmlProperty(localName = "poznamka")

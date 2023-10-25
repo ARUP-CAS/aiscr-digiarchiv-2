@@ -255,7 +255,7 @@
           </table>
           
           <mat-accordion multi="true">
-            <app-let *ngIf="result.let_ident_cely" [result]="result.let"></app-let>
+            <app-let *ngIf="result.let" [result]="result.let"></app-let>
             <mat-expansion-panel #panel *ngIf="result.tvar_tvar || result.tvar_poznamka" [expanded]="true" hideToggle class="app-panel-inner">
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                 <mat-panel-title>
@@ -304,7 +304,7 @@
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <ng-container *ngIf="kd.poznamka">{{ kd.poznamka }}</ng-container>
-                  <mat-expansion-panel #panel *ngIf="kd.nalez_objekt.length> 0 ||  kd.nalez_predmet.length> 0" [expanded]="true" hideToggle class="app-panel-inner">
+                  <mat-expansion-panel #panel *ngIf="kd.nalez_objekt?.length> 0 ||  kd.nalez_predmet?.length> 0" [expanded]="true" hideToggle class="app-panel-inner">
                     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                       <mat-panel-title>
                         <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>

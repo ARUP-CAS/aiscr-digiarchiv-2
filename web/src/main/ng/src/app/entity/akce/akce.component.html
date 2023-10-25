@@ -179,14 +179,14 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.ext_zdroj?.length > 0" [expanded]="true">
+        <mat-expansion-panel *ngIf="result.ext_odkaz?.length > 0" [expanded]="true">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Externí zdroje' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ul class="app-clean-mg">
-            <app-externi-zdroj *ngFor="let extZdroj of result.ext_zdroj" [result]="extZdroj"></app-externi-zdroj>  
+            <app-externi-zdroj *ngFor="let eo of result.ext_odkaz" [result]="eo.ext_zdroj"></app-externi-zdroj>  
           </ul>
         </mat-expansion-panel> 
         

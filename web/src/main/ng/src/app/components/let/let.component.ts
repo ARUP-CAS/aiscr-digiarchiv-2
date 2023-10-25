@@ -29,9 +29,20 @@ export class LetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    const id = this.result.id ? this.result.id : this.result;
+
+    this.service.getIdAsChild([id], "let").subscribe((res: any) => {
+      this.result = res.response.docs[0];
+      this.setData();
+    });
+
+
+  }
+  setData() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.bibTex = 
-     `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+    this.bibTex =
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
        url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
@@ -57,6 +68,6 @@ export class LetComponent implements OnInit {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
-  } 
+  }
 
 }

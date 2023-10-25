@@ -32,8 +32,8 @@
             <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.predano_organizace" [heslar]="'organizace'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
-          <ng-container *ngIf="result.inv_cislo">
-            <label class="app-label">{{ 'card.desc.Sam. nález - evidenční č.' | translate }}:</label>&#160;{{result.inv_cislo}}
+          <ng-container *ngIf="result.evidencni_cislo">
+            <label class="app-label">{{ 'card.desc.Sam. nález - evidenční č.' | translate }}:</label>&#160;{{result.evidencni_cislo}}
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.pristupnost">
@@ -46,16 +46,12 @@
             <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
           </ng-container>
           <ng-container *ngIf="result.presna_datace && result.presna_datace !== ''">({{result.presna_datace}})</ng-container>
-          <ng-container *ngIf="result.druh">
+          <ng-container>
             <span class="app-pipe"></span>
             <label class="app-label">{{ 'card.desc.Nález' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_druh_nalezu'" [value]="result.druh" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
-            <ng-container *ngIf="result.specifikace && result.specifikace !== ''">
+            <app-inline-filter [isChild]="isChild" [field]="'f_druh_nalezu'" [value]="result.druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
+            <ng-container *ngIf="result.specifikace">
               (
-                <ng-container *ngIf="result.predmet_kategorie">
-                <app-inline-filter [isChild]="isChild" [field]="'predmet_kategorie'" [value]="result.predmet_kategorie" [heslar]="'predmet_kategorie'" ></app-inline-filter>
-                   - 
-                  </ng-container>
                 <app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" [value]="result.specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>
                 )
             </ng-container>
@@ -141,7 +137,7 @@
                 <th class="app-label">{{ 'card.desc.Sam. nález - počet' | translate }}:</th>
                 <td>{{ result.pocet }}</td>
               </tr>
-              <tr *ngIf="hasRights && result.lokalizace">
+              <tr *ngIf="result.lokalizace">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
                 <td>{{ result.lokalizace }}</td>
               </tr>

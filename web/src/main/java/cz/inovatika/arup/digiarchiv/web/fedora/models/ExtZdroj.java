@@ -147,16 +147,16 @@ public class ExtZdroj implements FedoraModel {
         idoc.setField("searchable", true);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
-        IndexUtils.addVocabField(idoc, "typ", typ);
         for (Vocab v : autor) {
-            IndexUtils.addVocabField(idoc, "autor", v);
+            IndexUtils.addRefField(idoc, "autor", v);
         }
         for (Vocab v : editor) {
-            IndexUtils.addVocabField(idoc, "editor", v);
+            IndexUtils.addRefField(idoc, "editor", v);
         }
         IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
         IndexUtils.addVocabField(idoc, "organizace", organizace);
-        IndexUtils.addVocabField(idoc, "typ", typ);
+        IndexUtils.addRefField(idoc, "typ", typ);
+        IndexUtils.addVocabField(idoc, "typ_id", typ);
         //idoc.addField("ext_odkaz", objectMapper.writeValueAsString(ext_odkaz));
         try {
             ObjectMapper objectMapper = new ObjectMapper();

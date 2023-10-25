@@ -231,7 +231,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                 }
             }
         }
-    }
+    } 
 
     private void addPian(SolrInputDocument idoc, String pian) {
         idoc.addField("pian_id", pian);

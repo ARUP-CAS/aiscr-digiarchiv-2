@@ -1,7 +1,7 @@
-<ng-container [ngSwitch]="inDocument">
+<ng-container *ngIf="result.typ" [ngSwitch]="inDocument">
 	<li *ngSwitchCase="false">
-		<ng-container *ngIf="result.typ === 'kniha'">
-			<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+		<ng-container *ngIf="result.typ[0] === 'kniha'">
+			<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 			<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 			<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
 			<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container> 
@@ -13,8 +13,8 @@
 			<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link " target="_blank">{{ result.link }}</a>.</ng-container>
 		</ng-container>
 	
-		<ng-container *ngIf="result.typ === 'část knihy'">
-			<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+		<ng-container *ngIf="result.typ[0] === 'část knihy'">
+			<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 			<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 			<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
 			<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container>
@@ -28,8 +28,8 @@
 			<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link" target="_blank">{{ result.link }}</a>.</ng-container>
 		</ng-container>
 	
-		<ng-container *ngIf="result.typ === 'článek v časopise'">
-			<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+		<ng-container *ngIf="result.typ[0] === 'článek v časopise'">
+			<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 			<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 			<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
 			<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container>
@@ -40,8 +40,8 @@
 			<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link" target="_blank">{{ result.link }}</a>.</ng-container>
 		</ng-container>
 	
-		<ng-container *ngIf="result.typ === 'článek v novinách'">
-			<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+		<ng-container *ngIf="result.typ[0] === 'článek v novinách'">
+			<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 			<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 			<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
 			<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container>
@@ -52,8 +52,8 @@
 			<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link" target="_blank">{{ result.link }}</a>.</ng-container>
 		</ng-container>
 	
-		<ng-container *ngIf="result.typ === 'nepublikovaná zpráva'">
-			<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+		<ng-container *ngIf="result.typ[0] === 'nepublikovaná zpráva'">
+			<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 			<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 			<ng-container *ngIf="result.oznaceni">{{ result.oznaceni }}&#160;</ng-container>
 			<ng-container *ngIf="result.typ_dokumentu">({{ result.typ_dokumentu }}).&#160;</ng-container>
@@ -75,8 +75,8 @@
 		<mat-card-content>
 			<ul>
 				<li>
-					<ng-container *ngIf="result.typ === 'kniha'">
-						<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+					<ng-container *ngIf="result.typ[0] === 'kniha'">
+						<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 						<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 						<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
 						<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container> 
@@ -88,12 +88,12 @@
 						<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link " target="_blank">{{ result.link }}</a>.</ng-container>
 					</ng-container>
 				
-					<ng-container *ngIf="result.typ === 'část knihy'">
-						<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+					<ng-container *ngIf="result.typ[0] === 'část knihy'">
+						<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 						<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 						<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
-						<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container>
-						<ng-container *ngIf="result.sbornik_editor">In: {{ result.sbornik_editor }} (ed.),&#160;</ng-container>
+						<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container> In:
+						<ng-container *ngIf="result.editor">In: {{ result.editor.join(' – ') }} (ed.),&#160;</ng-container>
 						<ng-container *ngIf="result.sbornik_nazev">{{ result.sbornik_nazev }}.&#160;</ng-container>
 						<ng-container *ngIf="result.edice_rada">{{ result.edice_rada }}.&#160;</ng-container>
 						<ng-container *ngIf="result.misto">{{ result.misto }}:&#160;</ng-container>
@@ -103,8 +103,8 @@
 						<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link" target="_blank">{{ result.link }}</a>.</ng-container>
 					</ng-container>
 				
-					<ng-container *ngIf="result.typ === 'článek v časopise'">
-						<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+					<ng-container *ngIf="result.typ[0] === 'článek v časopise'">
+						<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 						<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 						<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
 						<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container>
@@ -115,8 +115,8 @@
 						<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link" target="_blank">{{ result.link }}</a>.</ng-container>
 					</ng-container>
 				
-					<ng-container *ngIf="result.typ === 'článek v novinách'">
-						<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+					<ng-container *ngIf="result.typ[0] === 'článek v novinách'">
+						<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 						<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 						<ng-container *ngIf="result.nazev">{{ result.nazev }}:&#160;</ng-container>
 						<ng-container *ngIf="result.podnazev">{{ result.podnazev }}.&#160;</ng-container>
@@ -127,8 +127,8 @@
 						<ng-container *ngIf="result.link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.link" target="_blank">{{ result.link }}</a>.</ng-container>
 					</ng-container>
 				
-					<ng-container *ngIf="result.typ === 'nepublikovaná zpráva'">
-						<ng-container *ngIf="result.autori">{{ result.autori.split(';').join(' – ') }}&#160;</ng-container>
+					<ng-container *ngIf="result.typ[0] === 'nepublikovaná zpráva'">
+						<ng-container *ngIf="result.autor">{{ result.autor.join(' – ') }}&#160;</ng-container>
 						<ng-container *ngIf="result.rok_vydani_vzniku">{{ result.rok_vydani_vzniku }}:&#160;</ng-container>
 						<ng-container *ngIf="result.oznaceni">{{ result.oznaceni }}&#160;</ng-container>
 						<ng-container *ngIf="result.typ_dokumentu">({{ result.typ_dokumentu }}).&#160;</ng-container>

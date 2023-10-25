@@ -15,8 +15,8 @@
         <tr *ngIf="result.letiste_start || result.letiste_cil">
           <th class="app-label">{{ 'card.desc.Trasa' | translate }}:</th>
           <td>
-            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.letiste_start"></app-inline-filter>&#160;-&#160; 
-            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.letiste_cil"></app-inline-filter>
+            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
+            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.letiste_cil" [heslar]="'a'"></app-inline-filter>
           </td>
         </tr>
         <tr *ngIf="result.ucel_letu">

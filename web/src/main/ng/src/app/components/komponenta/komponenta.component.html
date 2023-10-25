@@ -11,7 +11,7 @@
           <app-inline-filter [field]="'f_aktivita'" [value]="aktivita" [heslar]="'f_aktivita'"></app-inline-filter>
           <span *ngIf="!last">,&#160;</span></ng-container>)
       </ng-container> -->
-      <ng-container *ngIf="result.aktivita.length > 0"> 
+      <ng-container *ngIf="result.aktivita?.length > 0"> 
         &#160;(<ng-container *ngFor="let aktivita of result.aktivita; let last = last">
           <app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>
           <span *ngIf="!last">,&#160;</span></ng-container>)
