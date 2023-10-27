@@ -40,6 +40,7 @@ public class LokalitaSearcher implements EntitySearcher {
             if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
                 if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
                     doc.remove("chranene_udaje");
+                    doc.remove("lokalita_chranene_udaje");
                 }
                 Object[] keys = doc.keySet().toArray();
                 for (Object okey : keys) {

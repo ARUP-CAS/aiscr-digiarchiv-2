@@ -123,7 +123,7 @@ export class ProjektComponent implements OnInit, OnChanges {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       
-      this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length) < this.numChildren;
+      this.state.loading = (this.result.archeologicky_zaznam.length + this.result.samostatny_nalez.length) < this.numChildren;
       this.state.documentProgress = 0;
       this.getArchZaznam();
       this.getSamostatnyNalez();
@@ -134,10 +134,22 @@ export class ProjektComponent implements OnInit, OnChanges {
   getArchZaznam() {
     this.result.akce = [];
     this.result.lokalita = [];
-    if (this.result.archeologicky_zaznam) {
-      for (let i = 0; i < this.result.archeologicky_zaznam.length; i = i + 10) {
-        const ids = this.result.archeologicky_zaznam.slice(i, i + 10);
+    if (this.result.id_akce) {
+      for (let i = 0; i < this.result.id_akce.length; i = i + 10) {
+        const ids = this.result.id_akce.slice(i, i + 10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
+          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
+    }
+    if (this.result.id_lokalita) {
+      for (let i = 0; i < this.result.id_lokalita.length; i = i + 10) {
+        const ids = this.result.id_lokalita.slice(i, i + 10);
+        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
           this.numChildren = this.numChildren - ids.length + res.response.docs.length;

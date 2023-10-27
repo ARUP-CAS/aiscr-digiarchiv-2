@@ -150,12 +150,13 @@ public class SamostatnyNalez implements FedoraModel {
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
 
-        IndexUtils.addVocabField(idoc, "okres", okres);
+        IndexUtils.addRefField(idoc, "okres", okres);
         IndexUtils.addVocabField(idoc, "projekt", projekt);
         IndexUtils.addVocabField(idoc, "okolnosti", okolnosti);
         IndexUtils.addVocabField(idoc, "obdobi", obdobi);
         IndexUtils.addVocabField(idoc, "druh_nalezu", druh_nalezu);
         IndexUtils.addVocabField(idoc, "specifikace", specifikace);
+        IndexUtils.addVocabField(idoc, "predano_organizace", predano_organizace);
         IndexUtils.addVocabField(idoc, "nalezce", nalezce);
 
         List<SolrInputDocument> idocs = new ArrayList<>();

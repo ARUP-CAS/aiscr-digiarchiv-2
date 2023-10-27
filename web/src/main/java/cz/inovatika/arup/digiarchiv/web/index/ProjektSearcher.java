@@ -103,23 +103,34 @@ public class ProjektSearcher implements EntitySearcher {
                 }
             }
             doc.put("samostatny_nalez", samostatny_nalez);
-            
+
             JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
+            JSONArray id_akce = new JSONArray();
+            JSONArray id_lokalita = new JSONArray();
             if (doc.has("archeologicky_zaznam")) {
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery("{!join fromIndex=entities to=ident_cely from=archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"")
                         .setRows(10000)
-                        .setFields("ident_cely");
+                        .setFields("ident_cely,entity");
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {
                         dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+                        if ("akce".equals(ja.getJSONObject(a).getString("entity"))) {
+                            id_akce.put(ja.getJSONObject(a).getString("ident_cely"));
+                        }
+
+                        if ("lokalita".equals(ja.getJSONObject(a).getString("entity"))) {
+                            id_lokalita.put(ja.getJSONObject(a).getString("ident_cely"));
+                        }
                     }
                 } catch (SolrServerException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
             doc.put("archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
+            doc.put("id_akce", id_akce);
+            doc.put("id_lokalita", id_lokalita);
         }
     }
 

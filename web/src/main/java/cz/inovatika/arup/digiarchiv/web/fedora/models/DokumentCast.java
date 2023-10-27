@@ -83,6 +83,7 @@ public class DokumentCast {
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            idoc.addField("dokument_cast_" + doc.getString("entity"), archeologicky_zaznam.getId());
 
             if (doc.has("katastr")) {
                 SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
