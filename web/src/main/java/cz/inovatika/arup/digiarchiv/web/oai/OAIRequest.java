@@ -206,7 +206,7 @@ public class OAIRequest {
 
         ret.append("<metadata>");  
         String xml = filter(req, doc);
-        if ("oai_dc".equals(req.getParameter("metadataFormat"))) {
+        if ("oai_dc".equals(req.getParameter("metadataPrefix"))) {  
             try {
                 xml = transformToDC(xml);
             } catch (TransformerException ex) {
