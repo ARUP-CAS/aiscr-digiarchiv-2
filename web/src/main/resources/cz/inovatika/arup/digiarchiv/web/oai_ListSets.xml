@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2023-03-15T16:14:34Z</responseDate>
+  <request verb="ListSets">https://api.aiscr.cz/dapro/oai</request>
+  <ListSets>
+    <set>
+      <setSpec>projekt</setSpec>
+      <setName>Projekty / Projects</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Evidenční jednotky terénní činnosti badatelského nebo záchranného rázu evidované již ve fázi přípravy. Pro vymezení projektu je rozhodující podnět k výzkumu a provádějící subjekt (oprávněná organizace), lokalizace a příp. projektová dokumentace. Na projekt zpravidla navazuje jedna či (méně často) více terénních akcí či evidence samostatných nálezů.</dc:description>
+          <dc:description xml:lang="en">Records of field activities of a research or development-led nature recorded in the preparation phase. For the definition of the project, the motivation and the implementing body (authorised organisation), the location and, if applicable, the project documentation are decisive. The project is usually followed by one or (less frequently) more fieldwork, or the recording of individual finds.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>archeologicky_zaznam</setSpec>
+      <setName>Archeologické záznamy / Archaeological Records</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Archeologické záznamy jsou souhrným označením pro dva typy záznamů - archeologické AKCE a LOKALITY. Archeologická akce je soubor archeologických nálezů a pozorování odpovídající určitému místu (prostorovému vymezení), původci (osobě, organizaci), době provedení a použité metodě výzkumu. Akce dělíme na odvozené z projektů (projektové) a samostané, tj. vzniklé bez přímého vzathu k předem evidovanému projektu (např. retrospektivní evidencí). Lokalita je soubor archeologických nálezů a pozorování odpovídající určitému místu (prostorovému vymezení), charakteristickému archeologickému projevu a předpokládané funkční souvislosti v minulosti. Mezi akcí a lokalitou není primární rozdíl vobecnosti nebo věcném obsahu, ale vorganizaci informací (struktuře dat). Zatímco pro vymezení „akce“ je rozhodující archeologická výzkumná aktivita, pro vymezení „lokality“ forma archeologického záznamu (projevu). Archeologické záznamy dále členíme na prostorové celky, tzv. dokumentační jednotky. Za dokumentační jednotku lze považovat celý prostor akce, jeho část odpovídající určité skupině nálezů, příp. jeho část definovanou průběhem výzkumu (např. konkrétní sondu). Akce mohou mít jednu nebo více dokumentačních jednotek různých typů, lokalita má právě jednu. Na dokumentační jednotky se vážou komponenty. Komponenta akce je prostorovým, chronologickým a funkčním celkem nálezů z jedné dokumentační jednotky akce, komponenta lokality je analogickou částí lokality. Komponenty jsou určeny přiřazením k určitému areálu aktivity (specifické funkční části sídelního areálu) a období (chronologicko-kulturnímu zařazení). Každé komponentě se dále přiřazuje i výčet aktivit, tedy druhů činností, které jsou v rámci komponenty přímo doloženy. Komponenty jsou arbitrárně vymezenými jednotkami; rozhodujícím hlediskem při jejich vymezení je přehlednost a srozumitelnost záznamu o výsledích akce. V AMČR nepočítáme s podrobným a vyčerpávajícím popisem archeologických nálezů patřících jednotlivým komponentám, nálezy chápeme jen jako specifické vlastnosti komponent, které nám pomáhají charakterizovat pramenné východisko, podle něhož byla komponenta rozpoznána.</dc:description>                  
+          <dc:description xml:lang="en">Archaeological records are a collective term for two types of records - archaeological FIELDWORK EVENTS and SITES. An archaeological fieldwork event is a collection of archaeological finds and observations corresponding to a specific location (spatial delineation), originator (person, organization), time of execution, and method of research used. Events are divided into those derived from projects (project events) and those that stand alone (individual), i.e., those created without direct relation to a previously recorded project (e.g., retrospective recording). A site is a collection of archaeological finds and observations corresponding to a specific location (spatial delineation), characteristic archaeological manifestation, and presumed past functional context. The primary difference between an event and a site is not in generality or substantive content, but in the organization of information (data structure). While the archaeological research activity is crucial for defining an 'event', the form of the archaeological record (manifestation) is crucial for defining a 'site'. The archaeological record is further subdivided into spatial units, the so-called documentation units. A documentation unit can be considered to be the entire area of an event, its part corresponding to a certain group of finds, or its part defined by the course of fieldwork (e.g. a specific trench). An event may have one or more documentation units of different types; a site has just one. Components are linked to documentation units. An event component is the spatial, chronological, and functional sum of findings from one event documentation unit; a site component is the analogous part of a site. Components are determined by assignment to an activity area (a specific functional part of a settlement area) and period (a chronological and cultural classification). Each component is also assigned a list of activities, i.e., the types of activities that are directly documented within the component. Components are arbitrarily defined units; the decisive aspect in their definition is the clarity and understandability of the record of the event's results. In the AMCR, we do not envisage a detailed and exhaustive description of the archaeological finds belonging to each component; we understand finds only as specific attributes of components that help us to characterize the source material by which the component was recognized.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>let</setSpec>
+      <setName>Lety / Flights</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Záznamy o akcích leteckého průzkumu, při kterých byly pořízeny terénní fotografie. Slouží k evidenci základních údajů o letu, jeho průběhu, okolnostech a podmínkách.</dc:description>
+          <dc:description xml:lang="en">The records of aerial survey events during which field photographs were taken. It is used to record basic data about the flight, its course, circumstances and conditions.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>adb</setSpec>
+      <setName>Archeologické dokumentační body / Archaeological Documentation Points</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Archeologické dokumentační body (ADB) jsou rozšiřujícím popisem dokumentačních jednotek typu "sonda", které zachycují podrobnější informace o okolnostech odkryvu. Jejich hlavním specifikem je možnost přiřzování informací o zachycených stratigrafických horizontech a jejich přesné polohopisné a výškopisné určení pomocí tzv. výškových bodů. Tato data umožňují rekonstruovat zaniklé archeologické terény a predikovat míru jejich dochování v okolí. Systém evidence ADB vychází z principů nastavených L. Hrdličkou, který sestavil a dlouhodobě udržoval Mapu ADB pro Pražskou památkovou rezervaci. Na tuto evidenci data v AMČR přímo navazují.</dc:description>
+          <dc:description xml:lang="cs">Archaeological Documentation Points (ADP) are an expanded description of 'trench' type documentation units that capture more detailed information about the circumstances of an excavation. Their main specificity is the option of assigning information about the captured stratigraphic horizons and their precise positional and elevation determination by means of so-called elevation points. These data allow reconstructing archaeological terrains and predicting the degree of their preservation in the surrounding area. The ADP registration system is based on the principles set by L. Hrdlička, who compiled and maintained the ADP Map for the Prague Conservation Area for a long time. The data in the AMCR are directly related to this registration system.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>dokument</setSpec>
+      <setName>Dokumenty / Documents</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Dokument je prvek dokumentace terénního archeologického výzkumu uložený v archivech ARÚ a ARÚB. Obdobné informační zdroje v jiných institucích chápeme jako externí zdroje; na rozdíl od dokumentů totiž nemůžeme zajistit jejich podrobný metadatový popis ani fulltextovou verzi. Obsah dokumentů lze popsat prostřednictvím komponent a nálezů dokumentu (analogicky ke komponentám a nálezům archeologických záznamů). Takový popis má účel zejména u fotografií a plánů, jejichž obsah je vždy užší než obsah celé terénní akce. Části dokumentu propojují dokumenty s dalšími datovými třídami. Každá část dokumentu eviduje nejvýše jednu vazbu na akci, lokalitu či projekt a libovolný počet napojení na komponenty dokumentu. Dokumenty (zejména hlášení a nálezové zprávy) někdy obsahují informace o terénních výzkumech, které nejsou reportovány v záznamech archeologických akcí, nebo není zatím mezi dokumentem a záznamem o akci nastavena vazba. Pro tyto případy je v AMČR vytvořena datová třída neidentifikované akce ve formě rozšiřujících informací o části dokumentu. V případě leteckých snímků je u dokumentu zpravidla uveden též odkaz na dílčí let.</dc:description>
+          <dc:description xml:lang="cs">A document is an element of documentation of archaeological fieldwork stored in the archives of the ARÚ and ARÚB. Similar information sources in other institutions are treated as external sources; unlike documents, we cannot provide their detailed metadata description or full-text version. The content of documents can be described through document components and finds (analogous to components and finds of archaeological records). Such a description is particularly useful for photographs and plans, whose content is always narrower than the content of the entire fieldwork event. Document parts link documents to other data classes. Each document part records at most one link to an event, site or project and any number of links to components. Documents (especially reports) sometimes contain information about fieldwork that is not reported in archaeological event records, or a link is not yet set up between the document and the event record. For these cases, an unidentified event data class is created in the AMCR in the form of extension information on the document part. In the case of aerial photographs, a link to the flight is usually also included within the document record.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>ext_zdroj</setSpec>
+      <setName>Externí zdroje / External Sources</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Bibliografický segment AMČR slouží k napojení archeologických záznamů na zdrojové informace v publikacích, odborných zprávách a šedé literatuře. Jako externí zdroje jsou chápány publikace, novinové články, nepublikované odborné zprávy a jiné informační zdroje, které nejsou uloženy v archivech ARÚ a ARÚB a nejsou tudíž zahrnuty mezi dokumenty. Pomocí externích odkazů jsou tyto provázány s akcemi a lokalitami.</dc:description>
+          <dc:description xml:lang="en">The AMCR bibliographic segment is used to link archaeological records to source information in publications, expert reports, and grey literature. External sources are understood to be publications, newspaper articles, unpublished reports, and other information sources that are not stored in the ARÚ and ARÚB archives and are therefore not included among the documents. These are linked to fieldwork events and sites by external links.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>pian</setSpec>
+      <setName>PIAN / Spatial Units</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Prostorové vymezení archeologických výzkumů je v AMČR zajišťováno povinným vztahem dokumentačních jednotek k některé z jednotek prostorové identifikace. Tyto jednotky nazýváme PIAN (Prostorová identifikace archeologických nálezů). Každá jednotka PIAN může mít vazby k většímu počtu archeologických záznamů a naopak.</dc:description>
+          <dc:description xml:lang="en">The spatial delineation of archaeological excavations in the AMCR is ensured by the obligatory relation of documentation units to one of the units of spatial identification. These units are called PIAN (Spatial Identification of Archaeological Finds). Each PIAN unit may have links to a larger number of archaeological records and vice versa.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>samostatny_nalez</setSpec>
+      <setName>Samostatné nálezy / Individual Finds</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Evidence samostatných nálezů (AMČR-PAS) slouží ke sběru informací jednotlivých nálezech získaných v rámci archeologických projektů, a to zejména od amatérských spolupracovníků oprávněných archeologických organizací. Jednotlivé nálezy jsou svázány přímo s konkrétním projektem, jsou doprovázeny fotografickou dokumentací, mají své konkrétní prostorové vymezení souřadnicemi a obsahují popis vlastního nálezu. Systém AMČR data o nálezech přijímá až po jejich potvrzení archeologem zodpovědným za provedený průzkum.</dc:description>
+          <dc:description xml:lang="en">The Record of Individual Finds (AMCR-PAS) is used to collect information on individual finds made as part of archaeological projects, particularly from amateur collaborators of authorised archaeological organisations. The individual finds are linked directly to a specific project, are accompanied by photographic documentation, have their specific spatial delineation by coordinates, and include a description of the find itself. The AMCR system accepts data on finds only after they have been confirmed by the archaeologist responsible for the survey.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>uzivatel</setSpec>
+      <setName>Uživatelé / Users</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Uživatel registrovaný v systému AMČR.</dc:description>
+          <dc:description xml:lang="en">User registered in the AMCR system.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo</setSpec>
+      <setName>Hesláře / Vocabularies</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>ruian_kraj</setSpec>
+      <setName>RÚIAN - Kraje / RÚIAN - Regions</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Kraje užívané v AMČR. Převzato z RÚIAN (https://www.cuzk.cz/ruian/).</dc:description>
+          <dc:description xml:lang="en">Regions used in AMCR. Based on RÚIAN (https://www.cuzk.cz/ruian/).</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>ruian_okres</setSpec>
+      <setName>RÚIAN - Okresy / RÚIAN - Districts</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Okresy užívané v AMČR. Převzato z RÚIAN (https://www.cuzk.cz/ruian/).</dc:description>
+          <dc:description xml:lang="en">Districts used in AMCR. Based on RÚIAN (https://www.cuzk.cz/ruian/).</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>ruian_katastr</setSpec>
+      <setName>RÚIAN - Katastrální území / RÚIAN - Cadastral Municipality</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Katastrální území užívané v AMČR. Převzato z RÚIAN (https://www.cuzk.cz/ruian/).</dc:description>
+          <dc:description xml:lang="en">Cadastral territories used in AMCR. Based on RÚIAN (https://www.cuzk.cz/ruian/).</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>organizace</setSpec>
+      <setName>Organizace / Organisations</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Heslář organizací užívaný v AMČR.</dc:description>
+          <dc:description xml:lang="en">List of organizations used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>osoba</setSpec>
+      <setName>Osoby / Persons</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Heslář osob užívaný v AMČR.</dc:description>
+          <dc:description xml:lang="en">List of persons used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+  </ListSets>
+</OAI-PMH>

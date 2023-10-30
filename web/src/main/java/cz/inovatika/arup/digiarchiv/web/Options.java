@@ -172,6 +172,38 @@ public class Options {
       return ex.toString();
     }
   }
+
+  public String getOAIListMetadataFormats() {
+    try {
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListMetadataFormats.xml";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+        return FileUtils.readFileToString(f, "UTF-8");
+      } else {
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListMetadataFormats.xml"));
+        return FileUtils.readFileToString(fdef, "UTF-8");
+      }
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
+
+  public String getOAIListSets() {
+    try {
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListSets.xml";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+        return FileUtils.readFileToString(f, "UTF-8");
+      } else {
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListSets.xml"));
+        return FileUtils.readFileToString(fdef, "UTF-8");
+      }
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
   
   public File getDCXslt() {
       String path = InitServlet.CONFIG_DIR + File.separator + "metadata_DC.xslt";

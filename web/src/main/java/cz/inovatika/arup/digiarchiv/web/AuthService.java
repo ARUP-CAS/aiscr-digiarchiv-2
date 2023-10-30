@@ -13,6 +13,7 @@ import java.net.http.HttpResponse;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 
 /**
@@ -58,13 +59,31 @@ public class AuthService {
     public static JSONObject login(String user, String pwd) throws URISyntaxException, IOException, InterruptedException, Exception {
         String token = getToken(user, pwd);
         if (token != null) {
-            String xml = getUserInfo(new JSONObject(token).getString("token"));
-            Uzivatel uz = (Uzivatel) FedoraModel.parseXml(xml, Uzivatel.class);
-            uz.setPristupnost();
-            ObjectMapper objectMapper = new ObjectMapper();
-            return new JSONObject(objectMapper.writeValueAsString(uz));
+            if (new JSONObject(token).has("token")) {
+                String xml = getUserInfo(new JSONObject(token).getString("token"));
+                Uzivatel uz = (Uzivatel) FedoraModel.parseXml(xml, Uzivatel.class);
+                uz.setPristupnost();
+                ObjectMapper objectMapper = new ObjectMapper();
+                return new JSONObject(objectMapper.writeValueAsString(uz));
+            } else {
+                return new JSONObject().put("error", "invalid credentials");
+            }
         } else {
             return new JSONObject().put("error", "");
         }
     }
+    
+    
+//    public static JSONObject loginBasic(HttpServletRequest req) throws URISyntaxException, IOException, InterruptedException, Exception {
+//        String token = getToken(user, pwd);
+//        if (token != null) {
+//            String xml = getUserInfo(new JSONObject(token).getString("token"));
+//            Uzivatel uz = (Uzivatel) FedoraModel.parseXml(xml, Uzivatel.class);
+//            uz.setPristupnost();
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            return new JSONObject(objectMapper.writeValueAsString(uz));
+//        } else {
+//            return new JSONObject().put("error", "");
+//        }
+//    }
 }

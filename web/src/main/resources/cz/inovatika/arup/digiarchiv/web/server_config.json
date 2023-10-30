@@ -11,6 +11,7 @@
         "baseUrl": "http://baseUrl",
         "repositoryName": "repositoryName",
         "adminEmail": "mail@oai",
+        "metadataPrefixes": ["oai_dc", "oai_amcr"],
         "sets": [
             {
                 "spec": "dokument",
