@@ -119,6 +119,8 @@ public class OAIRequest {
             }
             String cursor = CursorMarkParams.CURSOR_MARK_START;
             String resumptionToken = req.getParameter("resumptionToken");
+            String from = req.getParameter("from");
+            String until = req.getParameter("until");
             // resumptionToken has format set:cursor
             if (resumptionToken != null) {
                 cursor = resumptionToken.split(":", 2)[1];
@@ -131,6 +133,19 @@ public class OAIRequest {
                     // .addFilterQuery("pristupnost:c")
                     // .addFilterQuery("stav:1")
                     .setRows(conf.getInt("recordsPerPage"));
+            if (from != null || until != null) {
+                if (from == null) {
+                    from = "*";
+                } else if (from.length() < 11) {
+                    from = from + "T00:00:00Z";
+                }
+                if (until == null) {
+                    until = "*";
+                } else if (until.length() < 11) {
+                    until = until + "T23:59:59Z";
+                }
+                query.addFilterQuery("datestamp:[" + from + " TO " + until + "]");
+            }
             query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
             SolrDocumentList docs = resp.getResults();
