@@ -12,6 +12,9 @@
         "repositoryName": "repositoryName",
         "adminEmail": "mail@oai",
         "metadataPrefixes": ["oai_dc", "oai_amcr"],
+        "recordsPerPage": 50,
+        "orderField": "datestamp",
+        "orderDirection": "asc",
         "sets": [
             {
                 "spec": "dokument",
@@ -84,10 +87,7 @@
                 "name": "uzivatel / Users",
                 "description": ["Users"]
             }
-        ],
-        "recordsPerPage": 50,
-        "orderField": "ident_cely",
-        "orderDirection": "asc"
+        ]
     },
     
     "auth": "http://192.168.254.30:8080/api/",
