@@ -11,10 +11,12 @@ import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -85,6 +87,7 @@ public class OAIRequest {
     }
 
     public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers) {
+        final String separator = "#";
         String metadataPrefix = req.getParameter("metadataPrefix");
         if (metadataPrefix == null) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
@@ -93,6 +96,7 @@ public class OAIRequest {
                     + "</OAI-PMH>";
             return xml;
         }
+        
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (!metadataPrefixes.contains(metadataPrefix)) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
@@ -101,6 +105,7 @@ public class OAIRequest {
                     + "</OAI-PMH>";
             return xml;
         }
+        
         StringBuilder ret = new StringBuilder();
         JSONObject conf = Options.getInstance().getJSONObject("OAI");
         ret.append(headerOAI())
@@ -118,21 +123,29 @@ public class OAIRequest {
                 model = "*";
             }
             String cursor = CursorMarkParams.CURSOR_MARK_START;
-            String resumptionToken = req.getParameter("resumptionToken");
-            String from = req.getParameter("from");
-            String until = req.getParameter("until");
-            // resumptionToken has format set:cursor
-            if (resumptionToken != null) {
-                cursor = resumptionToken.split(":", 2)[1];
-                model = resumptionToken.split(":")[0];
-            }
-
+                    
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
-                    .addFilterQuery("model:" + model)
+                    .addSort(SolrQuery.SortClause.create("ident_cely", "asc"))
                     // .addFilterQuery("pristupnost:c")
                     // .addFilterQuery("stav:1")
                     .setRows(conf.getInt("recordsPerPage"));
+            
+            String from = req.getParameter("from");
+            String until = req.getParameter("until");
+            
+            // resumptionToken has format set:cursor
+            String resumptionToken = req.getParameter("resumptionToken");
+            if (resumptionToken != null) {
+                byte[] rtDecoded = Base64.getDecoder().decode(resumptionToken);
+                resumptionToken = new String(rtDecoded, StandardCharsets.UTF_8);
+                cursor = resumptionToken.split(separator)[1];
+                model = resumptionToken.split(separator)[0];
+                query.addFilterQuery(conf.getString("orderField") + ":[" + cursor + " TO *]");
+                query.addFilterQuery("ident_cely:{" + resumptionToken.split(separator)[2] + " TO *]");
+            }
+            query.addFilterQuery("model:" + model);
+
             if (from != null || until != null) {
                 if (from == null) {
                     from = "*";
@@ -146,25 +159,39 @@ public class OAIRequest {
                 }
                 query.addFilterQuery("datestamp:[" + from + " TO " + until + "]");
             }
-            query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
+            // query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
+            Object orderField = "model";
+            String lastId = "*";
             SolrDocumentList docs = resp.getResults();
             for (SolrDocument doc : docs) {
                 appendRecord(ret, doc, req, onlyIdentifiers);
+                orderField = doc.getFirstValue(conf.getString("orderField"));
+                lastId = (String) doc.getFirstValue("ident_cely");
+            }
+            
+            String nextCursorMark = model + separator + orderField.toString() + separator + lastId;
+            if ("datestamp".equals(conf.getString("orderField"))) {
+                nextCursorMark = model + separator + ((Date)orderField).toInstant().toString() + separator + lastId; 
             }
 
-            String nextCursorMark = resp.getNextCursorMark();
+            // String nextCursorMark = resp.getNextCursorMark();
             if (!cursor.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
                 ret.append("<resumptionToken ")
-                        .append("completeListSize=\"")
-                        .append(docs.getNumFound())
-                        .append("\" >")
-                        .append(model)
-                        .append(":")
-                        .append(nextCursorMark)
+                        //.append("completeListSize=\"")
+                        //.append(docs.getNumFound())
+                        //.append("\" >")
+                        .append(Base64.getEncoder().encodeToString(nextCursorMark.getBytes(StandardCharsets.UTF_8)))
                         .append("</resumptionToken>");
             }
 
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                    + "<request>" + req.getRequestURL() + "</request>"
+                    + "<error code=\"badResumptionToken\"/>"
+                    + "</OAI-PMH>";
+            return xml;
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
