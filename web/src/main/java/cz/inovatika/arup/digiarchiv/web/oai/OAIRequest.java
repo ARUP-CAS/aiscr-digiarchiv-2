@@ -178,13 +178,14 @@ public class OAIRequest {
             // String nextCursorMark = resp.getNextCursorMark();
             if (!cursor.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
                 ret.append("<resumptionToken ")
-                        //.append("completeListSize=\"")
+                        //.append("completeListSize=\"") 
                         //.append(docs.getNumFound())
                         //.append("\" >")
+                        .append(">")
                         .append(Base64.getEncoder().encodeToString(nextCursorMark.getBytes(StandardCharsets.UTF_8)))
                         .append("</resumptionToken>");
             }
-
+ 
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
