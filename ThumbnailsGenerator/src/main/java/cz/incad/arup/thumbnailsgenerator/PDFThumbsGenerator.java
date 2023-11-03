@@ -71,7 +71,7 @@ public class PDFThumbsGenerator {
       }
 
       generated = 0;
-    } catch (IOException | JSONException ex) {
+    } catch (JSONException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
     }
   }

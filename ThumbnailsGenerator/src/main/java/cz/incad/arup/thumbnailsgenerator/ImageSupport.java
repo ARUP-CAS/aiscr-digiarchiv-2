@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.net.URL;
 import java.util.Date;
 import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
@@ -59,7 +60,7 @@ public class ImageSupport {
 
       //new File(destDir + sb.toString()).mkdirs();
       return destDir + sb.toString();
-    } catch (IOException | JSONException ex) {
+    } catch (JSONException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
       return null;
     }

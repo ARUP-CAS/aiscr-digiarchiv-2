@@ -7,6 +7,9 @@ package cz.incad.arup.thumbnailsgenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,7 +71,7 @@ public class Indexer {
     try {
       Options opts = Options.getInstance();
       return opts.getString("solrhost", DEFAULT_HOST);
-    } catch (JSONException | IOException ex) {
+    } catch (JSONException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
     }
     return DEFAULT_HOST;
@@ -84,7 +87,7 @@ public class Indexer {
     return server;
   }
 
-  public JSONObject createForUsed(boolean overwrite, boolean onlyThumbs) throws IOException {
+  public JSONObject createForUsed(boolean overwrite, boolean onlyThumbs) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
     Date start = new Date();
     totalDocs = 0;
 
@@ -277,16 +280,18 @@ public class Indexer {
     }
   }
 
-  private void createThumbFromSolrDoc(SolrDocument doc, boolean overwrite, boolean force, boolean onlyThumbs) {
+  private void createThumbFromSolrDoc(SolrDocument doc, boolean overwrite, boolean force, boolean onlyThumbs) throws MalformedURLException, IOException, URISyntaxException, InterruptedException {
 
     String imagesDir = opts.getString("imagesDir");
-    String nazev = doc.getFirstValue("nazev").toString();
-    String path = doc.getFirstValue("filepath").toString();
+    String path = doc.getFirstValue("nazev").toString();
+    // String path = doc.getFirstValue("path").toString();
+    String url = doc.getFirstValue("path").toString() + "/orig";
+    url = url.substring(url.indexOf("record"));
     String mimetype = doc.getFirstValue("mimetype").toString();
     if (overwrite || !ImageSupport.thumbExists(path)) {
-      //if (overwrite || !ImageSupport.folderExists(nazev)) {
-
-      File f = new File(imagesDir + path);
+      File f = FedoraUtils.requestFile(url, path).toFile();
+      //FileUtils.copyURLToFile(new URL(url), f);
+      // File f = new File(imagesDir + path);
       if (!f.exists()) {
         LOGGER.log(Level.FINE, "File {0} doesn't exists", f);
       } else {
@@ -306,16 +311,17 @@ public class Indexer {
     totalDocs++;
   }
 
-  private void createThumbFromJSON(JSONObject json, boolean overwrite, boolean force, boolean onlyThumbs) {
+  private void createThumbFromJSON(JSONObject json, boolean overwrite, boolean force, boolean onlyThumbs) throws MalformedURLException, IOException, URISyntaxException, InterruptedException {
 
     String imagesDir = opts.getString("imagesDir");
     String nazev = json.getJSONArray("nazev").getString(0);
-    String path = json.getJSONArray("filepath").getString(0);
+    String path = json.getJSONArray("path").getString(0);
+    String url = opts.getString("fedoraServer") + json.getJSONArray("path").getString(0) + "/orig";
     String mimetype = json.getJSONArray("mimetype").getString(0);
     if (overwrite || !ImageSupport.thumbExists(path)) {
-      //if (overwrite || !ImageSupport.folderExists(nazev)) {
-
-      File f = new File(imagesDir + path);
+      File f = FedoraUtils.requestFile(url, path).toFile();
+      //FileUtils.copyURLToFile(new URL(url), f);
+      // File f = new File(imagesDir + path);
       if (!f.exists()) {
         LOGGER.log(Level.FINE, "File {0} doesn't exists", f);
       } else {
@@ -327,6 +333,7 @@ public class Indexer {
 //                            ImageSupport.thumbnailPdfPage(f, 0, nazev);
 //                            ImageSupport.mediumPdf(f, nazev);
         } else {
+          //ImageSupport.thumbnailzeImg(f, path, onlyThumbs);
           ImageSupport.thumbnailzeImg(f, path, onlyThumbs);
           imgGenerated++;
         }
@@ -379,7 +386,7 @@ public class Indexer {
 
       SolrQuery query = new SolrQuery();
       //query.setRequestHandler(core);
-      query.setQuery("filepath:\"" + filepath + "\"");
+      query.setQuery("path:\"" + filepath + "\"");
 
       exists = relationsClient.query(query).getResults().getNumFound() > 0;
 
