@@ -168,10 +168,10 @@ public class OAIRequest {
                 appendRecord(ret, doc, req, onlyIdentifiers);
                 orderField = doc.getFirstValue(conf.getString("orderField"));
                 lastId = (String) doc.getFirstValue("ident_cely");
-            }
+            } 
             
             String nextCursorMark = model + separator + orderField.toString() + separator + lastId;
-            if ("datestamp".equals(conf.getString("orderField"))) {
+            if ("datestamp".equals(conf.getString("orderField")) && docs.getNumFound() > 0) {
                 nextCursorMark = model + separator + ((Date)orderField).toInstant().toString() + separator + lastId; 
             }
 
@@ -245,8 +245,13 @@ public class OAIRequest {
     private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req, boolean onlyIdentifiers) {
         String id = (String) doc.getFieldValue("ident_cely");
         Date datestamp = (Date) doc.getFieldValue("datestamp");
+        boolean isDeleted = false;
+        if (doc.containsKey("is_deleted")) {
+            isDeleted = (boolean) doc.getFieldValue("is_deleted");
+        }
+        String status = isDeleted ? " status=\"deleted\"" : ""; 
         ret.append("<record>");
-        ret.append("<header>")
+        ret.append("<header").append(status).append(" >")
                 .append("<identifier>")
                 .append(Options.getInstance().getJSONObject("OAI").getString("baseUrl"))
                 .append("/id/")
@@ -262,7 +267,7 @@ public class OAIRequest {
         // <setSpec>projekt</setSpec> <!-- "projekt" | "archeologicky_zaznam" | "let" | "adb" | "dokument" | "ext_zdroj" | "pian" | "samostatny_nalez" | "uzivatel" | "heslo" | "ruian_kraj" | "ruian_okres" | "ruian_katastr" | "organizace | "osoba -->
         ret.append("</header>");
 
-        if (!onlyIdentifiers) {
+        if (!onlyIdentifiers && !isDeleted) {
 
             ret.append("<metadata>");
             String xml = filter(req, doc);
