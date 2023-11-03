@@ -115,13 +115,14 @@ public class SearchUtils {
     try (Http2SolrClient client = new Http2SolrClient.Builder(coreUrl).build()) {
       return client.query(query).getResults();
     } catch (SolrServerException | IOException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex); 
       return null;
     }
   }
 
   public static JSONObject json(SolrQuery query, Http2SolrClient client, String core) {
     query.set("wt", "json");
+    query.addFilterQuery("-is_deleted:true");
     query.setRequestHandler("/search");
     String qt = query.get("qt");
     String jsonResponse;

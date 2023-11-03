@@ -193,6 +193,7 @@
   <field name="_version_" type="plong" indexed="false" stored="false"/>
   <field name="datestamp" type="pdate" indexed="true" stored="true" multiValued="false" required="true"/>
   <field name="ident_cely" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
+  <field name="is_deleted" type="boolean" indexed="true" stored="true" default="false" /> 
   <field name="indextime" type="pdate" default="NOW" indexed="true" stored="true"/>
   <field name="model" type="string"/>
   <field name="pristupnost" type="string"/>

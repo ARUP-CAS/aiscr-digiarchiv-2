@@ -23,6 +23,7 @@
    <field name="_version_" type="plong" indexed="false" stored="false"/>
    <field name="indextime" type="pdate" indexed="true" stored="true" default="NOW" /> 
    <field name="datestamp" type="pdate" indexed="true" stored="true" /> 
+   <field name="is_deleted" type="boolean" indexed="true" stored="true" default="false" /> 
    <field name="ident_cely" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="searchable" type="boolean" indexed="true" stored="true" multiValued="false" />
    <field name="stav" type="pint" indexed="true" stored="true" multiValued="false" />
@@ -393,9 +394,7 @@
    <field name="text_all_C" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    <field name="text_all_D" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    <field name="text_all_E" type="text_general" indexed="true" stored="false" multiValued="true" /> 
-   
-   
-   
+  
    <!-- secured fields -->
    <field name="chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false"/>
    
