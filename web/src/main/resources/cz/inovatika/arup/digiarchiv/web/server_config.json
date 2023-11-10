@@ -8,13 +8,14 @@
     },
 
     "OAI": {
-        "baseUrl": "http://baseUrl",
+        "baseUrl": "http://baseUrl", 
         "repositoryName": "repositoryName",
         "adminEmail": "mail@oai",
         "metadataPrefixes": ["oai_dc", "oai_amcr"],
         "recordsPerPage": 50,
         "orderField": "datestamp",
         "orderDirection": "asc",
+        "resumptionTokenExpires": 60,
         "sets": [
             {
                 "spec": "dokument",

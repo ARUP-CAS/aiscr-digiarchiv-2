@@ -12,11 +12,14 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,11 +32,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -85,6 +91,47 @@ public class OAIRequest {
     public static String metadataFormats(HttpServletRequest req) {
         return Options.getInstance().getOAIListMetadataFormats();
     }
+    
+    private static void storeResumptionToken(String token, JSONObject data) {
+        try {
+        SolrInputDocument idoc = new SolrInputDocument();
+        idoc.setField("id", token);
+        idoc.setField("type", "resumptionToken");
+        String d = ZonedDateTime
+                .now(ZoneOffset.UTC)
+                .truncatedTo(ChronoUnit.SECONDS)
+                .plus(Duration.of(Options.getInstance().getJSONObject("OAI").getInt("resumptionTokenExpires"), ChronoUnit.MINUTES))
+                .format(DateTimeFormatter.ISO_INSTANT);
+        data.put("expires", d);
+        idoc.setField("data", data.toString());
+        idoc.setField("expiration", d);
+        IndexUtils.getClient().add("work", idoc);
+        IndexUtils.getClient().commit("work");
+        } catch (Exception ex) {
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    private static JSONObject retrieveResumptionToken(String resumptionToken) {
+        try {
+            SolrQuery query = new SolrQuery("id:" + resumptionToken)
+                    .setFields("data:[json]")
+                    .addFilterQuery("type:resumptionToken")
+                    .addFilterQuery("expiration:[NOW TO *]");
+            QueryResponse resp = IndexUtils.getClient().query("work", query);
+            SolrDocumentList docs = resp.getResults();
+            if (docs.isEmpty()) {
+                return null;
+            }
+            SolrDocument doc = docs.get(0);
+            return  new JSONObject((String)doc.getFirstValue("data"));
+        } catch (SolrServerException | IOException ex) {
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 
     public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers) {
         final String separator = "#";
@@ -119,11 +166,13 @@ public class OAIRequest {
 
         try {
             String model = req.getParameter("set");
+            String from = req.getParameter("from");
+            String until = req.getParameter("until");
+            long page = 0;
             if (model == null) {
                 model = "*";
             }
             String cursor = CursorMarkParams.CURSOR_MARK_START;
-                    
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
                     .addSort(SolrQuery.SortClause.create("ident_cely", "asc"))
@@ -131,19 +180,32 @@ public class OAIRequest {
                     // .addFilterQuery("stav:1")
                     .setRows(conf.getInt("recordsPerPage"));
             
-            String from = req.getParameter("from");
-            String until = req.getParameter("until");
-            
-            // resumptionToken has format set:cursor
-            String resumptionToken = req.getParameter("resumptionToken");
+            String resumptionToken = req.getParameter("resumptionToken"); 
             if (resumptionToken != null) {
-                byte[] rtDecoded = Base64.getDecoder().decode(resumptionToken);
-                resumptionToken = new String(rtDecoded, StandardCharsets.UTF_8);
-                cursor = resumptionToken.split(separator)[1];
-                model = resumptionToken.split(separator)[0];
-                query.addFilterQuery(conf.getString("orderField") + ":[" + cursor + " TO *]");
-                query.addFilterQuery("ident_cely:{" + resumptionToken.split(separator)[2] + " TO *]");
+                JSONObject solrRt = retrieveResumptionToken(resumptionToken);
+                if (solrRt != null) {
+                    // Build query with info in resumptionToken
+                    model = solrRt.getString("model");
+                    cursor = solrRt.getString("nextCursorMark");
+                    page = solrRt.getLong("page") + 1;
+                    if (solrRt.has("from")) {
+                        from = solrRt.getString("from");
+                    }
+                    if (solrRt.has("until")) {
+                        from = solrRt.getString("until");
+                    }
+                    
+                } else {
+                    String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                            + "<request>" + req.getRequestURL() + "</request>"
+                            + "<error code=\"badResumptionToken\"/>"
+                            + "</OAI-PMH>";
+                    return xml;
+                }
+            } else {
+                
             }
+            
             query.addFilterQuery("model:" + model);
 
             if (from != null || until != null) {
@@ -159,30 +221,39 @@ public class OAIRequest {
                 }
                 query.addFilterQuery("datestamp:[" + from + " TO " + until + "]");
             }
-            // query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
+            query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
-            Object orderField = "model";
-            String lastId = "*";
+            
             SolrDocumentList docs = resp.getResults();
             for (SolrDocument doc : docs) {
                 appendRecord(ret, doc, req, onlyIdentifiers);
-                orderField = doc.getFirstValue(conf.getString("orderField"));
-                lastId = (String) doc.getFirstValue("ident_cely");
             } 
             
-            String nextCursorMark = model + separator + orderField.toString() + separator + lastId;
-            if ("datestamp".equals(conf.getString("orderField")) && docs.getNumFound() > 0) {
-                nextCursorMark = model + separator + ((Date)orderField).toInstant().toString() + separator + lastId; 
-            }
+            String nextCursorMark = resp.getNextCursorMark();
+            String oaiCursor = "";
+            
+            oaiCursor = " cursor=\"" + (page * conf.getInt("recordsPerPage")) + "\"";
+            System.out.println(docs.getStart());
+            
+            JSONObject rt = new JSONObject();
+            rt.put("model", model);
+            rt.put("from", from);
+            rt.put("until", until);
+            rt.put("numFound", docs.getNumFound());
+            rt.put("page", page);
+            rt.put("nextCursorMark", nextCursorMark);
+            String md5Hex = DigestUtils.md5Hex(rt.toString()).toUpperCase();
+            storeResumptionToken(md5Hex, rt);
 
             // String nextCursorMark = resp.getNextCursorMark();
             if (!cursor.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
                 ret.append("<resumptionToken ")
-                        //.append("completeListSize=\"") 
-                        //.append(docs.getNumFound())
-                        //.append("\" >")
+                        .append("completeListSize=\"") 
+                        .append(docs.getNumFound())
+                        .append("\" ")
+                        .append(oaiCursor)
                         .append(">")
-                        .append(Base64.getEncoder().encodeToString(nextCursorMark.getBytes(StandardCharsets.UTF_8)))
+                        .append(md5Hex)
                         .append("</resumptionToken>");
             }
  
