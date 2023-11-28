@@ -1,7 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2023-03-15T16:13:11Z</responseDate>
-  <request verb="Identify">https://api.aiscr.cz/oai</request>
   <Identify>
     <repositoryName>Archaeological Map of the Czech Republic (AMCR)</repositoryName>
     <baseURL>https://api.aiscr.cz/oai</baseURL>
@@ -41,4 +37,3 @@
       </oai_dc:dc>
     </description>
   </Identify>
-</OAI-PMH>

@@ -51,6 +51,10 @@ public class OAIServlet extends HttpServlet {
                     JSONObject jo = AuthService.login(values[0], values[1]);
                     if (!jo.has("error")) {
                         request.getSession().setAttribute("user", jo);
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        out.print("Invalid credentials");
+                        return;
                     }
                     
                 }

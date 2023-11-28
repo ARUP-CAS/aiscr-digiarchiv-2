@@ -602,25 +602,25 @@
             </dc:creator> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:historie/amcr:uzivatel[@id]} -->
         </xsl:for-each>
         <xsl:for-each select="amcr:dokumentacni_jednotka/amcr:pian">
-            `<dc:relation>
+            <dc:relation>
                 <xsl:value-of select="$base_url_id"/>
                 <xsl:value-of select="./@id"/>
             </dc:relation> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokumentacni_jednotka/amcr:pian[@id]} -->
         </xsl:for-each>
         <xsl:for-each select="amcr:dokumentacni_jednotka/amcr:adb">
-            `<dc:relation>
+            <dc:relation>
                 <xsl:value-of select="$base_url_id"/>
                 <xsl:value-of select="./@id"/>
             </dc:relation> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokumentacni_jednotka/amcr:adb[@id]} -->
         </xsl:for-each>
         <xsl:for-each select="amcr:ext_odkaz/amcr:ext_zdroj">
-            `<dc:relation>
+            <dc:relation>
                 <xsl:value-of select="$base_url_id"/>
                 <xsl:value-of select="./@id"/>
             </dc:relation> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:ext_odkaz/amcr:ext_zdroj[@id]} -->
         </xsl:for-each>
         <xsl:for-each select="amcr:dokument">
-            `<dc:relation>
+            <dc:relation>
                 <xsl:value-of select="$base_url_id"/>
                 <xsl:value-of select="./@id"/>
             </dc:relation> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:dokument[@id]} -->

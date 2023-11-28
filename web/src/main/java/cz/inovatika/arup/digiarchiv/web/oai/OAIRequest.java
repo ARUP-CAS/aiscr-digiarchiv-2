@@ -81,39 +81,56 @@ public class OAIRequest {
     }
 
     public static String identify(HttpServletRequest req) {
-        return Options.getInstance().getOAIIdentify();
+        StringBuilder ret = new StringBuilder();
+        ret.append(headerOAI())
+                .append(responseDateTag())
+                .append(requestTag(req))
+                .append(Options.getInstance().getOAIIdentify())
+                .append("</OAI-PMH>");
+        return ret.toString();
     }
 
     public static String listSets(HttpServletRequest req) {
-        return Options.getInstance().getOAIListSets();
+        StringBuilder ret = new StringBuilder();
+        ret.append(headerOAI())
+                .append(responseDateTag())
+                .append(requestTag(req))
+                .append(Options.getInstance().getOAIListSets())
+                .append("</OAI-PMH>");
+        return ret.toString();
     }
 
     public static String metadataFormats(HttpServletRequest req) {
-        return Options.getInstance().getOAIListMetadataFormats();
+        StringBuilder ret = new StringBuilder();
+        ret.append(headerOAI())
+                .append(responseDateTag())
+                .append(requestTag(req))
+                .append(Options.getInstance().getOAIListMetadataFormats())
+                .append("</OAI-PMH>");
+        return ret.toString();
     }
-    
+
     private static void storeResumptionToken(String token, JSONObject data) {
         try {
-        SolrInputDocument idoc = new SolrInputDocument();
-        idoc.setField("id", token);
-        idoc.setField("type", "resumptionToken");
-        String d = ZonedDateTime
-                .now(ZoneOffset.UTC)
-                .truncatedTo(ChronoUnit.SECONDS)
-                .plus(Duration.of(Options.getInstance().getJSONObject("OAI").getInt("resumptionTokenExpires"), ChronoUnit.MINUTES))
-                .format(DateTimeFormatter.ISO_INSTANT);
-        data.put("expires", d);
-        idoc.setField("data", data.toString());
-        idoc.setField("expiration", d);
-        IndexUtils.getClient().add("work", idoc);
-        IndexUtils.getClient().commit("work");
+            SolrInputDocument idoc = new SolrInputDocument();
+            idoc.setField("id", token);
+            idoc.setField("type", "resumptionToken");
+            String d = ZonedDateTime
+                    .now(ZoneOffset.UTC)
+                    .truncatedTo(ChronoUnit.SECONDS)
+                    .plus(Duration.of(Options.getInstance().getJSONObject("OAI").getInt("resumptionTokenExpires"), ChronoUnit.MINUTES))
+                    .format(DateTimeFormatter.ISO_INSTANT);
+            data.put("expires", d);
+            idoc.setField("data", data.toString());
+            idoc.setField("expiration", d);
+            IndexUtils.getClient().add("work", idoc);
+            IndexUtils.getClient().commit("work");
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
     }
-    
+
     private static JSONObject retrieveResumptionToken(String resumptionToken) {
         try {
             SolrQuery query = new SolrQuery("id:" + resumptionToken)
@@ -126,7 +143,7 @@ public class OAIRequest {
                 return null;
             }
             SolrDocument doc = docs.get(0);
-            return  new JSONObject((String)doc.getFirstValue("data"));
+            return new JSONObject((String) doc.getFirstValue("data"));
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -134,25 +151,56 @@ public class OAIRequest {
     }
 
     public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers) {
-        final String separator = "#";
+        String resumptionToken = req.getParameter("resumptionToken");
         String metadataPrefix = req.getParameter("metadataPrefix");
-        if (metadataPrefix == null) {
+        if (resumptionToken != null) {
+            
+            
+            if (req.getParameterMap().size() > 2) {
+            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                    + "<request>" + req.getRequestURL() + "</request>"
+                    + "<error code=\"badArgument\">Invalid arguments</error>"
+                    + "</OAI-PMH>";
+            return xml;
+        }
+            
+            JSONObject solrRt = retrieveResumptionToken(resumptionToken);
+            if (solrRt != null) {
+                // Build query with info in resumptionToken
+                metadataPrefix = solrRt.getString("metadataPrefix");
+            } else {
+                String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                        + "<request>" + req.getRequestURL() + "</request>"
+                        + "<error code=\"badResumptionToken\"/>"
+                        + "</OAI-PMH>";
+                return xml;
+            }
+        }
+        if (metadataPrefix == null && resumptionToken == null) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                     + "<request>" + req.getRequestURL() + "</request>"
                     + "<error code=\"badArgument\">metadataPrefix is missing</error>"
                     + "</OAI-PMH>";
             return xml;
         }
-        
+        String[] reqMetadataPrefixes = req.getParameterValues("metadataPrefix");
+        if (resumptionToken == null && reqMetadataPrefixes != null && reqMetadataPrefixes.length > 1) {
+            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                    + "<request>" + req.getRequestURL() + "</request>"
+                    + "<error code=\"badArgument\">multiple metadataPrefixes</error>"
+                    + "</OAI-PMH>";
+            return xml;
+        }
+
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
-        if (!metadataPrefixes.contains(metadataPrefix)) {
+        if (resumptionToken == null && !metadataPrefixes.contains(metadataPrefix)) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                     + "<request>" + req.getRequestURL() + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
         }
-        
+
         StringBuilder ret = new StringBuilder();
         JSONObject conf = Options.getInstance().getJSONObject("OAI");
         ret.append(headerOAI())
@@ -171,6 +219,8 @@ public class OAIRequest {
             long page = 0;
             if (model == null) {
                 model = "*";
+            } else if (model.equals("archeologicky_zaznam")) {
+                model = "(akce OR lokalita)";
             }
             String cursor = CursorMarkParams.CURSOR_MARK_START;
             SolrQuery query = new SolrQuery("*")
@@ -179,12 +229,12 @@ public class OAIRequest {
                     // .addFilterQuery("pristupnost:c")
                     // .addFilterQuery("stav:1")
                     .setRows(conf.getInt("recordsPerPage"));
-            
-            String resumptionToken = req.getParameter("resumptionToken"); 
+
             if (resumptionToken != null) {
                 JSONObject solrRt = retrieveResumptionToken(resumptionToken);
                 if (solrRt != null) {
                     // Build query with info in resumptionToken
+                    metadataPrefix = solrRt.getString("metadataPrefix");
                     model = solrRt.getString("model");
                     cursor = solrRt.getString("nextCursorMark");
                     page = solrRt.getLong("page") + 1;
@@ -194,7 +244,7 @@ public class OAIRequest {
                     if (solrRt.has("until")) {
                         from = solrRt.getString("until");
                     }
-                    
+
                 } else {
                     String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                             + "<request>" + req.getRequestURL() + "</request>"
@@ -202,10 +252,8 @@ public class OAIRequest {
                             + "</OAI-PMH>";
                     return xml;
                 }
-            } else {
-                
             }
-            
+
             query.addFilterQuery("model:" + model);
 
             if (from != null || until != null) {
@@ -223,20 +271,18 @@ public class OAIRequest {
             }
             query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
-            
+
             SolrDocumentList docs = resp.getResults();
             for (SolrDocument doc : docs) {
-                appendRecord(ret, doc, req, onlyIdentifiers);
-            } 
-            
+                appendRecord(ret, doc, req, onlyIdentifiers, metadataPrefix);
+            }
+
             String nextCursorMark = resp.getNextCursorMark();
-            String oaiCursor = "";
-            
-            oaiCursor = " cursor=\"" + (page * conf.getInt("recordsPerPage")) + "\"";
-            System.out.println(docs.getStart());
-            
+            String oaiCursor = " cursor=\"" + (page * conf.getInt("recordsPerPage")) + "\"";
+
             JSONObject rt = new JSONObject();
             rt.put("model", model);
+            rt.put("metadataPrefix", metadataPrefix);
             rt.put("from", from);
             rt.put("until", until);
             rt.put("numFound", docs.getNumFound());
@@ -248,7 +294,7 @@ public class OAIRequest {
             // String nextCursorMark = resp.getNextCursorMark();
             if (!cursor.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
                 ret.append("<resumptionToken ")
-                        .append("completeListSize=\"") 
+                        .append("completeListSize=\"")
                         .append(docs.getNumFound())
                         .append("\" ")
                         .append(oaiCursor)
@@ -256,7 +302,7 @@ public class OAIRequest {
                         .append(md5Hex)
                         .append("</resumptionToken>");
             }
- 
+
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
@@ -285,6 +331,14 @@ public class OAIRequest {
                     + "</OAI-PMH>";
             return xml;
         }
+        String[] reqMetadataPrefixes = req.getParameterValues("metadataPrefix");
+        if (reqMetadataPrefixes.length > 1) {
+            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                    + "<request>" + req.getRequestURL() + "</request>"
+                    + "<error code=\"badArgument\">multiple metadataPrefixes</error>"
+                    + "</OAI-PMH>";
+            return xml;
+        }
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (!metadataPrefixes.contains(metadataPrefix)) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
@@ -303,9 +357,17 @@ public class OAIRequest {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("ident_cely:\"" + id + "\"");
             QueryResponse resp = IndexUtils.getClient().query("oai", query);
+
+            if (resp.getResults().getNumFound() == 0) {
+                String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                        + "<request>" + req.getRequestURL() + "</request>"
+                        + "<error code=\"idDoesNotExist \"/>"
+                        + "</OAI-PMH>";
+                return xml;
+            }
             SolrDocument doc = resp.getResults().get(0);
 
-            appendRecord(ret, doc, req, false);
+            appendRecord(ret, doc, req, false, metadataPrefix);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -313,14 +375,14 @@ public class OAIRequest {
         return ret.toString();
     }
 
-    private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req, boolean onlyIdentifiers) {
+    private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req, boolean onlyIdentifiers, String metadataPrefix) {
         String id = (String) doc.getFieldValue("ident_cely");
         Date datestamp = (Date) doc.getFieldValue("datestamp");
         boolean isDeleted = false;
         if (doc.containsKey("is_deleted")) {
             isDeleted = (boolean) doc.getFieldValue("is_deleted");
         }
-        String status = isDeleted ? " status=\"deleted\"" : ""; 
+        String status = isDeleted ? " status=\"deleted\"" : "";
         ret.append("<record>");
         ret.append("<header").append(status).append(" >")
                 .append("<identifier>")
@@ -342,7 +404,7 @@ public class OAIRequest {
 
             ret.append("<metadata>");
             String xml = filter(req, doc);
-            if (!xml.equals(ERROR_404_MSG) && "oai_dc".equals(req.getParameter("metadataPrefix"))) {
+            if (!xml.equals(ERROR_404_MSG) && "oai_dc".equals(metadataPrefix)) {
                 try {
                     xml = transformToDC(xml);
                 } catch (TransformerException ex) {
@@ -354,7 +416,7 @@ public class OAIRequest {
         }
         ret.append("</record>");
     }
-    
+
     private static final String ERROR_404_MSG = "HTTP/1.1 403 Forbidden";
 
     private static String filter(HttpServletRequest req, SolrDocument doc) {

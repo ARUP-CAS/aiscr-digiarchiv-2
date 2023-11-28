@@ -154,7 +154,20 @@ public class Uzivatel implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        return true;
+        
+//-- A: nikdy
+//-- B-C: ident_cely = {user}.ident_cely
+//-- D-E: bez omezení
+        String userPr = user.optString("pristupnost", "A");
+        if (userPr.equalsIgnoreCase("A")) {
+            return false;
+        } else if (userPr.compareToIgnoreCase("D") >= 0) {
+            return true;
+        } else if (userPr.compareToIgnoreCase("C") <= 0 && user.getString("ident_cely").equals(doc.getFirstValue("ident_cely"))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

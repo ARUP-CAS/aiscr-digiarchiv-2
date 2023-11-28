@@ -25,6 +25,7 @@ import cz.inovatika.arup.digiarchiv.web.fedora.models.SamostatnyNalez;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Uzivatel;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLInputFactory;
@@ -48,12 +49,14 @@ public interface FedoraModel {
      */
     public static boolean isOAI(String model) {
         JSONArray sets = Options.getInstance().getJSONObject("OAI").getJSONArray("sets");
-        for (int i = 0; i < sets.length(); i++) {
-            if (model.equals(sets.getJSONObject(i).getString("spec"))) {
-                return true;
-            }
-        }
-        return false;
+        List<Object> l = sets.toList();
+        return l.contains(model);
+//        for (int i = 0; i < sets.length(); i++) {
+//            if (model.equals(sets.getString(i))) {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     /**

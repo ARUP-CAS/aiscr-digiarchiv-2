@@ -1,7 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2023-03-15T16:15:00Z</responseDate>
-  <request verb="ListMetadataFormats">https://api.aiscr.cz/oai</request>
   <ListMetadataFormats>
     <metadataFormat>
       <metadataPrefix>oai_dc</metadataPrefix>
@@ -14,4 +10,3 @@
       <metadataNamespace>https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd</metadataNamespace>
     </metadataFormat>
   </ListMetadataFormats>
-</OAI-PMH>
