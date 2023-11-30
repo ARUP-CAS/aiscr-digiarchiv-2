@@ -43,9 +43,12 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-
+    response.setContentType("application/json;charset=UTF-8");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setDateHeader("Expires", 0); // Proxies.
+    
+    
         PrintWriter out = response.getWriter();
         try {
             String action = request.getPathInfo().substring(1);
@@ -87,20 +90,19 @@ public class LoginServlet extends HttpServlet {
     }
 
     public static String pristupnost(HttpSession session) {
+        System.out.println(session);
         JSONObject ses = (JSONObject) session.getAttribute("user");
-        String userid = (String) session.getAttribute("userid");
         String pristupnost = "A";
         if (ses != null && !ses.has("error")) {
-            pristupnost = ses.getJSONObject(userid).getString("pristupnost");
+            pristupnost = ses.getString("pristupnost");
         }
         return pristupnost;
     }
 
     public static String organizace(HttpSession session) {
         JSONObject ses = (JSONObject) session.getAttribute("user");
-        String userid = (String) session.getAttribute("userid");
         if (ses != null && !ses.has("error")) {
-            return ses.getJSONObject(userid).getString("organizaceNazev");
+            return ses.getJSONObject("organizace").getString("id");
         }
         return "";
     }
@@ -119,6 +121,32 @@ public class LoginServlet extends HttpServlet {
                 String user = req.getParameter("user");
                 String pwd = req.getParameter("pwd");
                 jo.put("token", AuthService.getToken(user, pwd));
+                return jo;
+            }
+        },
+        ISLOGGED {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                int left = (int) Math.round(req.getSession().getMaxInactiveInterval() - (Instant.now().toEpochMilli() - req.getSession().getLastAccessedTime()) * .001);
+                boolean expired = left < 0;
+                JSONObject jo = new JSONObject();
+                try {
+                    if (expired || req.getSession(false) == null || req.getSession(false).getAttribute("user") == null) {
+                        jo.put("error", "nologged");
+                        req.getSession();
+                    } else {
+                        req.getSession().setMaxInactiveInterval(left);
+                        if (Boolean.parseBoolean(req.getParameter("wantsUser"))) {
+                            jo = (JSONObject) req.getSession().getAttribute("user");
+                            jo.put("remaining", left);
+                        } else {
+                            jo.put("remaining", left);
+                        }
+                    }
+
+                } catch (Exception ex) {
+                    jo.put("error", ex.toString());
+                }
                 return jo;
             }
         },
@@ -142,8 +170,8 @@ public class LoginServlet extends HttpServlet {
                         jo = AuthService.login(user, pwd);
                         LOGGER.log(Level.FINE, jo.toString(2));
                         req.getSession().setAttribute("user", jo);
+                        req.getSession().setAttribute("userid", jo.getString("ident_cely"));
                         req.getSession().setMaxInactiveInterval(Options.getInstance().getInt("sessionTimeout", 300));
-
 
                     } else {
                         req.getSession().setAttribute("user", null);
@@ -157,7 +185,8 @@ public class LoginServlet extends HttpServlet {
                     jo.put("error", ex.toString());
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
-
+        resp.setContentType("application/json;charset=UTF-8");
+        resp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
                 return jo;
 
             }
@@ -263,33 +292,8 @@ public class LoginServlet extends HttpServlet {
                 } catch (Exception ex) {
                     jo.put("error", ex.toString());
                 }
-                return jo;
-            }
-        },
-        ISLOGGED {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                int left = (int) Math.round(req.getSession().getMaxInactiveInterval() - (Instant.now().toEpochMilli() - req.getSession().getLastAccessedTime()) * .001);
-                boolean expired = left < 0;
-
-                JSONObject jo = new JSONObject();
-
-                try {
-                    if (expired || req.getSession(false) == null || req.getSession(false).getAttribute("user") == null) {
-                        jo.put("error", "nologged");
-                    } else {
-                        req.getSession().setMaxInactiveInterval(left);
-                        if (Boolean.parseBoolean(req.getParameter("wantsUser"))) {
-                            jo = (JSONObject) req.getSession().getAttribute("user");
-                            jo.getJSONObject((String) req.getSession().getAttribute("userid")).put("remaining", left);
-                        } else {
-                            jo.put("remaining", left);
-                        }
-                    }
-
-                } catch (Exception ex) {
-                    jo.put("error", ex.toString());
-                }
+        resp.setContentType("application/json;charset=UTF-8");
+        resp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
                 return jo;
             }
         };
