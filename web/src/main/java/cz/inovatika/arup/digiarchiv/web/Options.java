@@ -216,4 +216,18 @@ public class Options {
           return fdef;
       }
   }
+  
+  
+  
+  public File getEmptyXslt() {
+      String path = InitServlet.CONFIG_DIR + File.separator + "cleanEmpty.xslt";
+      File f = new File(path);
+      
+      if (f.exists() && f.canRead()) {
+          return f;
+      } else {
+          File fdef = FileUtils.toFile(Options.class.getResource("metadata_DC.xslt"));
+          return fdef;
+      }
+  }
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.inovatika.arup.digiarchiv.web.oai;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
@@ -11,19 +7,16 @@ import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -33,7 +26,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -41,8 +33,9 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -51,6 +44,7 @@ import org.json.JSONObject;
 public class OAIRequest {
 
     private static Transformer dcTransformer;
+    private static Transformer emptyTransformer;
 
     private static Transformer getTransformer() throws TransformerConfigurationException {
         if (dcTransformer == null) {
@@ -60,6 +54,16 @@ public class OAIRequest {
             dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
         }
         return dcTransformer;
+    }
+
+    private static Transformer getTransformer2() throws TransformerConfigurationException {
+        if (emptyTransformer == null) {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Source xslt = new StreamSource(Options.getInstance().getEmptyXslt());
+            emptyTransformer = factory.newTransformer(xslt);
+            emptyTransformer.setOutputProperty("omit-xml-declaration", "yes");
+        }
+        return emptyTransformer;
     }
 
     public static String headerOAI() {
@@ -221,6 +225,9 @@ public class OAIRequest {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
                 model = "(akce OR lokalita)";
+            } else if (model.startsWith("archeologicky_zaznam:")) {
+                model = model.substring("archeologicky_zaznam:".length());
+                System.out.println(model);
             }
             String cursor = CursorMarkParams.CURSOR_MARK_START;
             SolrQuery query = new SolrQuery("*")
@@ -451,6 +458,25 @@ public class OAIRequest {
         Source text = new StreamSource(new StringReader(xml));
         StringWriter sw = new StringWriter();
         getTransformer().transform(text, new StreamResult(sw));
-        return sw.toString();
+        
+        Pattern emptyValueTag = Pattern.compile("\\s*<dc:\\w+.*/>");
+    Pattern emptyTagMultiLine = Pattern.compile("\\s*<\\w+>\n*\\s*</\\w+>");
+
+        String dc = sw.toString();
+    dc = emptyValueTag.matcher(dc).replaceAll("");
+
+    while (dc.length() != (dc = emptyTagMultiLine.matcher(dc).replaceAll("")).length()) {
     }
+
+    return dc;
+    
+    
+        // return sw.toString();
+//        String dc = sw.toString();
+//        Source dc2 = new StreamSource(new StringReader(dc));
+//        StringWriter sw2 = new StringWriter();
+//        getTransformer2().transform(dc2, new StreamResult(sw2));
+//        return sw2.toString();
+    }
+    
 }
