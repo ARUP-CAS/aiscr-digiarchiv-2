@@ -283,12 +283,12 @@ public class SolrSearcher {
 //          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
                 } else if (field.startsWith("f_kategorie")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-                } else if (field.startsWith("f_druh_nalezu")) {
-                    addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//                } else if (field.startsWith("f_druh_nalezu")) {
+//                    addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
 //        } else if (field.startsWith("f_specifikace")) {
 //          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-                } else if (field.startsWith("f_typ_vyzkumu")) {
-                    addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
+//                } else if (field.startsWith("f_typ_vyzkumu")) {
+//                    addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
                 } else if (field.startsWith("f_dok_jednotka_typ")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
 //        } else if (field.startsWith("f_adb_typ_sondy")) {

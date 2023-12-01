@@ -90,7 +90,6 @@ public class LoginServlet extends HttpServlet {
     }
 
     public static String pristupnost(HttpSession session) {
-        System.out.println(session);
         JSONObject ses = (JSONObject) session.getAttribute("user");
         String pristupnost = "A";
         if (ses != null && !ses.has("error")) {
@@ -184,8 +183,6 @@ public class LoginServlet extends HttpServlet {
                     jo.put("error", ex.toString());
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
-        resp.setContentType("application/json;charset=UTF-8");
-        resp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
                 return jo;
 
             }
