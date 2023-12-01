@@ -505,7 +505,7 @@
 <copyField source="kulturni_pamatka" dest="f_kulturni_pamatka" />
 
 
-<copyField source="nalezove_okolnosti" dest="f_nalezove_okolnosti" /> 
+<!--<copyField source="okolnosti" dest="f_nalezove_okolnosti" />--> 
 
 <copyField source="typ_lokality" dest="f_typ_lokality" />
 <!--

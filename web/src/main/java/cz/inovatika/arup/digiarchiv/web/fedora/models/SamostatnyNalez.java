@@ -153,7 +153,9 @@ public class SamostatnyNalez implements FedoraModel {
         IndexUtils.addRefField(idoc, "okres", okres);
         IndexUtils.addVocabField(idoc, "projekt", projekt);
         IndexUtils.addVocabField(idoc, "okolnosti", okolnosti);
+        IndexUtils.addVocabField(idoc, "f_nalezove_okolnosti", okolnosti);
         IndexUtils.addVocabField(idoc, "obdobi", obdobi);
+        IndexUtils.addVocabField(idoc, "f_obdobi", obdobi);
         IndexUtils.addVocabField(idoc, "druh_nalezu", druh_nalezu);
         IndexUtils.addVocabField(idoc, "specifikace", specifikace);
         IndexUtils.addVocabField(idoc, "predano_organizace", predano_organizace);

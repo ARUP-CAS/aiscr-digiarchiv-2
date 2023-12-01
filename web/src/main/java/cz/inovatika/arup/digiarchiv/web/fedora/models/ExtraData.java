@@ -120,6 +120,7 @@ public class ExtraData {
     
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
 
+        IndexUtils.addVocabField(idoc, "extra_data_format", format);
         IndexUtils.addVocabField(idoc, "extra_data_zachovalost", zachovalost);
         IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
         IndexUtils.addVocabField(idoc, "extra_data_udalost_typ", udalost_typ);
