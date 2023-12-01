@@ -129,9 +129,10 @@ public class ArcheologickyZaznam implements FedoraModel {
                 idoc.addField("dokumentacni_jednotka_komponenta_nalez_predmet_specifikace", djdoc.getFieldValue("komponenta_nalez_predmet_specifikace"));
 
                 IndexUtils.addFieldNonRepeat(idoc, "dokumentacni_jednotka_typ", djdoc.getFieldValue("typ"));
+                IndexUtils.addFieldNonRepeat(idoc, "f_typ_vyzkumu", djdoc.getFieldValue("typ"));
 
                 // add loc field by pian
-                addPian(idoc, (String) djdoc.getFieldValue("pian"));
+                addPian(idoc, (String) djdoc.getFieldValue("pian"), (String) idoc.getFieldValue("pristupnost"));
 
                 //add adb fields
                 addAdbFields(idoc, (String) djdoc.getFieldValue("adb"));
@@ -233,9 +234,10 @@ public class ArcheologickyZaznam implements FedoraModel {
         }
     } 
 
-    private void addPian(SolrInputDocument idoc, String pian) {
+    private void addPian(SolrInputDocument idoc, String pian, String pristupnost) {
         idoc.addField("pian_id", pian);
-        SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"");
+        SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
+                .setFields("*,chranene_udaje:[json]");
         JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 
         if (json.getJSONObject("response").getInt("numFound") > 0) { 
@@ -244,6 +246,12 @@ public class ArcheologickyZaznam implements FedoraModel {
 //        JSONObject cu = new JSONObject((String)idoc.getFieldValue("chranene_udaje"));
 //        cu.put("pian", pianDoc);
 //        idoc.setField("chranene_udaje", cu.toString());
+
+
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getJSONArray("typ").getString(0), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("presnost"), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("chranene_udaje").getString("zm10"), pristupnost);
+            
                 for (String key : pianDoc.keySet()) {
                     switch (key) {
                         case "entity":
@@ -271,6 +279,7 @@ public class ArcheologickyZaznam implements FedoraModel {
             }
         }
     }
+    
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {

@@ -60,9 +60,9 @@ public class Dokument implements FedoraModel {
     public List<Vocab> posudek = new ArrayList();
 
 //<xs:element name="autor" minOccurs="0" maxOccurs="unbounded" type="amcr:autorType"/> <!-- "{dokumentautor_set.autor.ident_cely}"  | "{dokumentautor_set.poradi}" | "{dokumentautor_set.autor.vypis_cely}" -->
-  @JacksonXmlProperty(localName = "autor")
-  public List<Vocab> autor = new ArrayList();
-  
+    @JacksonXmlProperty(localName = "autor")
+    public List<Vocab> autor = new ArrayList();
+
 //<xs:element name="rok_vzniku" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{rok_vzniku}" -->
     @JacksonXmlProperty(localName = "rok_vzniku")
     @Field
@@ -145,37 +145,35 @@ public class Dokument implements FedoraModel {
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
-        
+
         entity = (rada.getId().toUpperCase().equals("HES-000870")) ? "knihovna_3d" : "dokument";
         idoc.setField("entity", entity);
 
         IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
         String kategorie = Options.getInstance().getJSONObject("kategoriet").optString(typ_dokumentu.getValue());
         SolrSearcher.addFieldNonRepeat(idoc, "kategorie_dokumentu", kategorie);
-    
+
         IndexUtils.addVocabField(idoc, "material_originalu", material_originalu);
         IndexUtils.addVocabField(idoc, "rada", rada);
 
-        for (Vocab v: posudek) {
+        for (Vocab v : posudek) {
             IndexUtils.addVocabField(idoc, "posudek", v);
         }
 
-        for (Vocab v: autor) {
+        for (Vocab v : autor) {
             IndexUtils.addRefField(idoc, "autor", v);
         }
         IndexUtils.addVocabField(idoc, "organizace", organizace);
 
-        for (Vocab v: jazyk_dokumentu) {
+        for (Vocab v : jazyk_dokumentu) {
             IndexUtils.addVocabField(idoc, "jazyk_dokumentu", v);
         }
         IndexUtils.addVocabField(idoc, "ulozeni_originalu", ulozeni_originalu);
-        
 
-        for (Vocab v: osoba) {
+        for (Vocab v : osoba) {
             IndexUtils.addRefField(idoc, "osoba", v);
         }
-        
-        
+
         List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
@@ -202,11 +200,16 @@ public class Dokument implements FedoraModel {
             extra_data.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
 
-        for (DokumentCast dc: dokument_cast) {
+        for (DokumentCast dc : dokument_cast) {
             // IndexUtils.addJSONField(idoc, "dokument_cast", dc);
             dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+            if (idoc.containsKey("dokument_cast_akce")) {
+                for (Object val : idoc.getFieldValues("dokument_cast_akce")) {
+                    processAkce(idoc, (String) val);
+                }
+                
+            }
         }
-        
 
         if (let != null) {
             addLet(idoc);
@@ -214,12 +217,30 @@ public class Dokument implements FedoraModel {
 
         setFullText(idoc);
     }
-    
+
+    private boolean processAkce(SolrInputDocument idoc, String id) {
+
+        SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
+                .addFilterQuery("searchable:true")
+                .setFields("katastr,okres,pristupnost");
+        query.addField("f_typ_vyzkumu");
+        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+        if (json.getJSONObject("response").getInt("numFound") > 0) {
+            JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            if (doc.has("f_typ_vyzkumu")) {
+                SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", doc.get("f_typ_vyzkumu"));
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void addLet(SolrInputDocument idoc) {
-        
-        IndexUtils.addVocabField(idoc, "let_ident_cely", let); 
+
+        IndexUtils.addVocabField(idoc, "let_ident_cely", let);
         SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"")
-            .setFields("ident_cely",
+                .setFields("ident_cely",
                         "datum",
                         "pozorovatel",
                         "organizace",
@@ -227,10 +248,10 @@ public class Dokument implements FedoraModel {
                         "pilot",
                         "typ_letounu",
                         "ucel_letu",
-                        "letiste_start", 
-                        "letiste_cil", 
-                        "pocasi", 
-                        "dohlednost", 
+                        "letiste_start",
+                        "letiste_cil",
+                        "pocasi",
+                        "dohlednost",
                         "uzivatelske_oznaceni");
         JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
         if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -264,26 +285,26 @@ public class Dokument implements FedoraModel {
             }
 
         }
-                for (String sufix : prSufix) {
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, typ_dokumentu);
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, material_originalu);
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, rada);
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, organizace);
-                    for (Vocab v: osoba) {
-                        IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
-                    }
-                    for (Vocab v: jazyk_dokumentu) {
-                        IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
-                    }
-                    
-                    IndexUtils.addRefField(idoc, "text_all_" + sufix, ulozeni_originalu);
-                    for (Vocab v: posudek) {
-                        IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
-                    }
-                    for (Soubor v: soubor) {
-                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, v.nazev);
-                    }
-                }
+        for (String sufix : prSufix) {
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, typ_dokumentu);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, material_originalu);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, rada);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, organizace);
+            for (Vocab v : osoba) {
+                IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
+            }
+            for (Vocab v : jazyk_dokumentu) {
+                IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
+            }
+
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, ulozeni_originalu);
+            for (Vocab v : posudek) {
+                IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
+            }
+            for (Soubor v : soubor) {
+                IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, v.nazev);
+            }
+        }
     }
 
     @Override

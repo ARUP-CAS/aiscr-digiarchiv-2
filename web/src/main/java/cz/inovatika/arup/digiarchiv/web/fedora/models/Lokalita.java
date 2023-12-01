@@ -5,9 +5,7 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.SolrInputField;
 
 /**
  *
@@ -38,6 +36,7 @@ public class Lokalita {
     public void fillSolrFields(SolrInputDocument idoc) {
         IndexUtils.addVocabField(idoc, "typ_lokality", typ_lokality);
         IndexUtils.addVocabField(idoc, "druh", druh);
+        IndexUtils.addVocabField(idoc, "f_druh_lokality", druh);
         IndexUtils.addVocabField(idoc, "zachovalost", zachovalost);
         IndexUtils.addVocabField(idoc, "jistota", jistota);
 

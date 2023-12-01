@@ -67,6 +67,7 @@ public class DokumentacniJednotka {
     //akceDoc.setField("pristupnost", pristupnost);
     IndexUtils.addVocabField(idoc, "pian", pian);
     IndexUtils.addVocabField(idoc, "typ", typ);
+    
     IndexUtils.addVocabField(idoc, "adb", adb);
     
     for (Komponenta k : komponenta) {

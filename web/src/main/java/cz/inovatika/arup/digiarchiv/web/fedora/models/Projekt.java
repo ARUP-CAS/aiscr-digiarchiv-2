@@ -6,6 +6,7 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -160,7 +161,7 @@ public class Projekt implements FedoraModel {
 
         for (Vocab v : archeologicky_zaznam) {
             idoc.addField("archeologicky_zaznam", v.getValue());
-            addPian(idoc, v.getValue());
+            addArch(idoc, v.getValue());
         }
 
         for (Vocab v : samostatny_nalez) {
@@ -212,25 +213,59 @@ public class Projekt implements FedoraModel {
         }
     }
 
-    private void addPian(SolrInputDocument idoc, String az) {
+    private void addArch(SolrInputDocument idoc, String az) {
+        String[] facetFields = new String[]{"dokumentacni_jednotka_komponenta_areal", 
+            "dokumentacni_jednotka_komponenta_obdobi", 
+            "f_aktivita", 
+            "dokumentacni_jednotka_komponenta_typ_nalezu", 
+            "dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
+            "dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
+            "dokumentacni_jednotka_komponenta_nalez_predmet_specifikace", 
+            "dokumentacni_jednotka_typ", 
+            "f_typ_vyzkumu"};
         SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
-                setFields("pian_id");
+                setFields("pian_id,pristupnost");
+        for (String f : facetFields) {
+            query.addField(f);
+        }
         JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
 
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject azDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
+                String pristupnost = azDoc.getString("pristupnost");
                 if (azDoc.has("pian_id")) {
                     JSONArray pians = azDoc.getJSONArray("pian_id");
                     for (int j = 0; j < pians.length(); j++) {
-                        idoc.addField("pian_id", pians.optString(j));
+                        // idoc.addField("pian_id", pians.optString(j));
+                        addPian(idoc, pristupnost, pians.optString(j));
+                    }
+                }
 
+                for (String f : facetFields) {
+                    if (azDoc.has(f)) {
+                        SolrSearcher.addFieldNonRepeat(idoc, f, azDoc.get(f));
                     }
                 }
 
             }
         }
+    }
+
+    private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) {
+        SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
+                .setFields("typ,presnost,chranene_udaje:[json]");
+        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+
+        if (json.getJSONObject("response").getInt("numFound") > 0) {
+            JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pian_id);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_typ", doc.getJSONArray("typ").getString(0), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_presnost", doc.getString("presnost"), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", doc.getJSONObject("chranene_udaje").getString("zm10"), pristupnost);
+        }
+
     }
 
     @Override

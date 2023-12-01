@@ -97,8 +97,8 @@ public class ADB implements FedoraModel {
         IndexUtils.addVocabField(idoc, "dokumentacni_jednotka", dokumentacni_jednotka);
         IndexUtils.addVocabField(idoc, "typ_sondy", typ_sondy);
         IndexUtils.addVocabField(idoc, "podnet", podnet);
-        IndexUtils.addVocabField(idoc, "autor_popisu", autor_popisu);
-        IndexUtils.addVocabField(idoc, "autor_revize", autor_revize);
+        IndexUtils.addRefField(idoc, "autor_popisu", autor_popisu);
+        IndexUtils.addRefField(idoc, "autor_revize", autor_revize);
 
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"), ident_cely);
