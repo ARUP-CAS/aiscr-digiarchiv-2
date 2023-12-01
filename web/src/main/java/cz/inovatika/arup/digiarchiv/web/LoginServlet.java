@@ -143,7 +143,6 @@ public class LoginServlet extends HttpServlet {
                             jo.put("remaining", left);
                         }
                     }
-
                 } catch (Exception ex) {
                     jo.put("error", ex.toString());
                 }
