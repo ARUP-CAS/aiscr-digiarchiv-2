@@ -30,7 +30,7 @@ export class LetComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const id = this.result.id ? this.result.id : this.result;
+    const id = this.result.ident_cely ? this.result.ident_cely : this.result;
 
     this.service.getIdAsChild([id], "let").subscribe((res: any) => {
       this.result = res.response.docs[0];

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author alberto
  */
-@WebServlet(name="HandleServlet", urlPatterns = {"/id/*"})
+@WebServlet(name="HandleServlet", urlPatterns = {"/idnode/*"})
 public class HandleServlet extends HttpServlet {
 
   /**
