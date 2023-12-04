@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,8 +78,8 @@ public class NeidentAkce {
                 .put("katastr", kdoc.getFieldValue("katastr"))
                 .put("okres", kdoc.getFieldValue("okres"));
         
-        idoc.addField("location_info", li.toString());
-        
+        //idoc.addField("location_info", li.toString());
+        SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
 
         for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
             idoc.setField("neident_akce_" + entry.getKey(), entry.getValue().getValue());

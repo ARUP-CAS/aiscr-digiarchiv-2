@@ -11,8 +11,8 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon class="app-clean-mg app-color-accent">link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="result.katastr">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
+        <ng-container *ngIf="result.hlavni_katastr">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.hlavni_katastr"></app-inline-filter>
         </ng-container>
         &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
         <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.vedouci_projektu"></app-inline-filter><span class="app-pipe"></span>
@@ -44,23 +44,15 @@
         <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
         <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
-      <div *ngIf="result.chranene_udaje?.dalsi_katastry && hasRights">
+      <div *ngIf="result.chranene_udaje?.dalsi_katastr">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
-        <ng-container *ngFor="let k of result.chranene_udaje?.dalsi_katastry; let last = last">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
-          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
+        <ng-container *ngFor="let k of result.chranene_udaje.dalsi_katastr; let last = last">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
+          <!-- &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>) -->
+          <span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
       
-      <div *ngIf="result.chranene_udaje?.lokalizace" class="app-truncate-text">
-        <label class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</label>&#160;{{ result.chranene_udaje?.lokalizace }}
-      </div>
-      <div *ngIf="result.podnet" class="app-truncate-text">
-        <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;{{ result.podnet }}
-      </div>
-      <div *ngIf="result.chranene_udaje?.parcelni_cislo" class="app-truncate-text">
-        <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.chranene_udaje?.parcelni_cislo }}
-      </div>
 
 
     </div>

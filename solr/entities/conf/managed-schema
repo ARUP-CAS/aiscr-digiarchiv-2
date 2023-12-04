@@ -108,6 +108,7 @@
   
    <!-- Akce and lokalita fields -->
    <field name="je_nz" type="boolean" indexed="true" stored="true" multiValued="false" /> 
+   <field name="odlozena_nz" type="boolean" indexed="true" stored="true" multiValued="false" /> 
    
    <field name="datum_zahajeni_v" type="pdate" indexed="true" stored="true" />
    <field name="datum_ukonceni_v" type="pdate" indexed="true" stored="true" />

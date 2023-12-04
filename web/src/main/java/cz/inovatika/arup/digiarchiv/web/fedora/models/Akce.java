@@ -96,7 +96,7 @@ public class Akce {
         IndexUtils.addVocabField(akceDoc, "projekt", projekt);
         IndexUtils.addRefField(akceDoc, "hlavni_vedouci", hlavni_vedouci);
         IndexUtils.addVocabField(akceDoc, "organizace", organizace);
-        IndexUtils.addRefField(akceDoc, "specifikace_data", specifikace_data);
+        IndexUtils.addVocabField(akceDoc, "specifikace_data", specifikace_data);
         IndexUtils.addVocabField(akceDoc, "hlavni_typ", hlavni_typ);
         IndexUtils.addVocabField(akceDoc, "vedlejsi_typ", vedlejsi_typ);
         IndexUtils.addVocabField(akceDoc, "f_typ_vyzkumu", hlavni_typ);

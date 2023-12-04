@@ -28,15 +28,15 @@
     <div class="app-metadata app-row-gap-16" >
       <div>
         <label class="app-label">{{ 'card.desc.Datum výzkumu' | translate }}:</label>&#160;
-        {{ result.specifikace_data }} 
-        <ng-container *ngIf="result.specifikace_data === 'přesně'">
+        {{ result.specifikace_data | translateHeslar : 'kk' }} 
+        <ng-container *ngIf="result.specifikace_data === 'HES-000887'"><!-- přesně -->
           {{ result.datum_zahajeni | date : 'dd.MM.yyyy' }}
           <ng-container *ngIf="result.datum_ukonceni"> - {{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}</ng-container>
         </ng-container>
-        <ng-container *ngIf="result.specifikace_data !== 'přesně'">
+        <ng-container *ngIf="result.specifikace_data !== 'HES-000887'">
           {{ result.datum_zahajeni }}
           <ng-container *ngIf="result.datum_ukonceni">
-            <ng-container *ngIf="result.specifikace_data !== 'před rokem'"> - </ng-container>
+            <ng-container *ngIf="result.specifikace_data !== 'před rokem'"> - </ng-container><!-- před rokem nemam HESLO -->
             {{ result.datum_ukonceni }}
           </ng-container>
         </ng-container>
@@ -45,8 +45,8 @@
           <label class="app-label">{{ 'card.desc.Nahrazuje NZ' | translate }}:</label>&#160;
           {{ (result.je_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
         </ng-container>
-        <ng-container *ngIf="result.odlozena_nz"><!-- *"-->
-          <label class="app-label">{{ 'card.desc.Odlozena NZ' | translate }}:</label>&#160;
+        <ng-container *ngIf="result.hasOwnProperty('odlozena_nz')"><!-- *"-->
+          <label class="app-label">{{ 'card.desc.odlozena_nz' | translate }}:</label>&#160;
           {{ (result.odlozena_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.pristupnost">

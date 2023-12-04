@@ -70,10 +70,9 @@ public class DokumentCast {
 
         if (archeologicky_zaznam != null) {
             addLocation(idoc, pristupnost.toUpperCase());
-            idoc.addField("location_info", location_info);
+            // SolrSearcher.addFieldNonRepeat(idoc, "location_info", location_info);
+            //idoc.addField("location_info", location_info);
         }
-        
-        // idoc.addField("location_info", location_info);
     }
 
     private void addLocation(SolrInputDocument idoc, String pristupnost) {
@@ -97,6 +96,7 @@ public class DokumentCast {
                 
                 if (!location_info.contains(li.toString())) {
                     location_info.add(li.toString());
+                    SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
                 }
             }
 

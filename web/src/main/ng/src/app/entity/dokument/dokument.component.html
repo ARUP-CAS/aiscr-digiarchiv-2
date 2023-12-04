@@ -66,14 +66,14 @@
         <div *ngIf="result.location_info && result.location_info.length > 0">
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
-          <ng-container *ngFor="let item of result.location_info">
+          <ng-container *ngFor="let item of result.location_info; let last = last">
+            <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
+           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">, </span>
+          </ng-container>
+          <!-- <ng-container *ngFor="let item of result.neident_akce">
             <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
-          </ng-container>
-          <ng-container *ngFor="let item of result.neident_akce">
-            <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
-           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
-          </ng-container>
+          </ng-container> -->
         </div>
         <div *ngIf="result.popis" class="app-truncate-text">
           <ng-container>
@@ -295,9 +295,9 @@
                       <ng-container *ngIf="kd.obdobi">
                         <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
                       </ng-container>
-                      <ng-container *ngIf="kd.jistota || kd.presna_datace">(<ng-container *ngIf="kd.jistota">{{ kd.jistota | translate }};</ng-container>{{ kd.presna_datace }})</ng-container>
+                      <ng-container *ngIf="kd.hasOwnProperty('jistota') || kd.presna_datace">(<ng-container *ngIf="!kd.jistota">{{ 'komponenta_dokument_jistota_false' | translate }};</ng-container>{{ kd.presna_datace }})</ng-container>
                       <ng-container *ngIf="kd.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="kd.areal.id" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
-                      <ng-container *ngIf="kd.aktivita">
+                      <ng-container *ngIf="kd.aktivita?.length > 0">
                         &#160;(<ng-container *ngFor="let ak of kd.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak.id" [heslar]="'f_aktivita'"></app-inline-filter>
                         <span *ngIf="!last">,&#160; </span></ng-container>)
                       </ng-container>

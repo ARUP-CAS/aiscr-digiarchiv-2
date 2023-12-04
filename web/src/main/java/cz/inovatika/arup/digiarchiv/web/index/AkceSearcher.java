@@ -29,7 +29,7 @@ public class AkceSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+            if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
                 doc.remove("chranene_udaje");
                 doc.remove("akce_chranene_udaje");
             }
@@ -115,6 +115,8 @@ public class AkceSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
         } catch (Exception ex) {
@@ -139,7 +141,7 @@ public class AkceSearcher implements EntitySearcher {
     @Override
     public String[] getSearchFields(String pristupnost) {
         return new String[]{"ident_cely", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
-            "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost",
+            "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "odlozena_nz", "pristupnost",
             "organizace", "f_organizace:organizace", "projekt", "dokument",
             "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
             "organizace_ostatni", "uzivatelske_oznaceni:uzivatelske_oznaceni_" + pristupnost, "ulozeni_nalezu", "poznamka",

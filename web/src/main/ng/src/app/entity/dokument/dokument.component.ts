@@ -74,6 +74,8 @@ export class DokumentComponent implements OnInit, OnChanges {
       });
     }
 
+    
+
     if (this.result.soubor_filepath?.length > 0) {
       this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
     }
@@ -158,6 +160,9 @@ export class DokumentComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
+      if (this.result.dokument_cast) {
+        this.result.dokument_cast.sort((dc1, dc2) => dc1.ident_cely.localeCompare(dc2.ident_cely) );
+      }
       // this.setVsize();
       this.getArchZaznam();
       this.hasDetail = true;

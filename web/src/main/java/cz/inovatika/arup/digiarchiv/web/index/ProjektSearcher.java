@@ -226,7 +226,7 @@ public class ProjektSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,pian:[json]", "chranene_udaje:[json]", "okres", "katastr:f_katastr_" + pristupnost, "f_okres:okres"};
+        return new String[]{"*,pian:[json]", "chranene_udaje:[json]", "okres", "hlavni_katastr:hlavni_katastr_" + pristupnost, "katastr:f_katastr_" + pristupnost, "f_okres:okres"};
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
