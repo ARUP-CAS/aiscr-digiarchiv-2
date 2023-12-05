@@ -262,49 +262,42 @@
               </ul>
             </mat-expansion-panel>
 
-            <mat-expansion-panel #panel *ngFor="let jednotka_dokumentu of result.jednotka_dokumentu" [expanded]="true" hideToggle class="app-panel-inner">
+            <mat-expansion-panel #panel *ngFor="let dokument_cast of result.dokument_cast" [expanded]="true" hideToggle class="app-panel-inner">
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
                 <mat-panel-title>
                   <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                  {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + jednotka_dokumentu.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ jednotka_dokumentu.ident_cely }} <mat-icon>link</mat-icon></a><ng-container *ngIf="jednotka_dokumentu.poznamka"> ({{ jednotka_dokumentu.poznamka }})</ng-container> 
+                  {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }} <mat-icon>link</mat-icon></a><ng-container *ngIf="dokument_cast.poznamka"> ({{ dokument_cast.poznamka }})</ng-container> 
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <ng-container *ngIf="jednotka_dokumentu.vazba_akce || jednotka_dokumentu.vazba_lokalita">
+              <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
                 <label class="app-label">{{ 'card.desc.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
-                <ng-container *ngIf="jednotka_dokumentu.vazba_akce">
-                  <a [routerLink]="'/id/' + jednotka_dokumentu.vazba_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ jednotka_dokumentu.vazba_akce }} <mat-icon>link</mat-icon></a>
-                </ng-container>
-                <ng-container *ngIf="jednotka_dokumentu.vazba_druha_akce">
-                  <a [routerLink]="'/id/' + jednotka_dokumentu.vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ jednotka_dokumentu.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
-                </ng-container>
-                <ng-container *ngIf="jednotka_dokumentu.vazba_lokalita">
-                  <a [routerLink]="'/id/' + jednotka_dokumentu.vazba_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ jednotka_dokumentu.vazba_lokalita }} <mat-icon>link</mat-icon></a>
-                </ng-container>
-                <ng-container *ngIf="jednotka_dokumentu.vazba_druha_lokalita">
-                  <a [routerLink]="'/id/' + jednotka_dokumentu.vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ jednotka_dokumentu.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
+                <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
+                  <a [routerLink]="'/id/' + dokument_cast.archeologicky_zaznam.id" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.archeologicky_zaznam.id }} <mat-icon>link</mat-icon></a>
                 </ng-container>
               </ng-container>
 
               <mat-accordion multi="true">
-                <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka>
+                <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka> -->
                 <mat-expansion-panel #panel *ngFor="let kd of result.komponenta" [expanded]="true" hideToggle class="app-panel-inner">
                   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
                     <mat-panel-title>
                       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
                       {{ 'card.panelTitle.Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
                       <ng-container *ngIf="kd.obdobi">
-                        <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
+                        <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
                       </ng-container>
-                      <ng-container *ngIf="kd.jistota || kd.presna_datace">(<ng-container *ngIf="kd.jistota">{{ kd.jistota |translate }};</ng-container>{{ kd.presna_datace }})</ng-container>
-                      <ng-container *ngIf="kd.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="kd.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
+                      <ng-container *ngIf="!kd.jistota || kd.presna_datace">(<ng-container *ngIf="!kd.jistota">{{ 'komponenta_dokument_jistota_false' | translate }}
+                        <ng-container *ngIf="!result.jistota && result.presna_datace">;&#160;</ng-container>
+                        </ng-container>{{ kd.presna_datace }})</ng-container>
+                      <ng-container *ngIf="kd.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="kd.areal.id" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
                       <ng-container *ngIf="kd.aktivita?.length > 0">
-                        &#160;(<ng-container *ngFor="let ak of kd.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
+                        &#160;(<ng-container *ngFor="let ak of kd.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak.id" [heslar]="'f_aktivita'"></app-inline-filter>
                         <span *ngIf="!last">,&#160; </span></ng-container>)
                       </ng-container>
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <ng-container *ngIf="kd.poznamka">{{ kd.poznamka }}</ng-container>
-                  <mat-expansion-panel #panel *ngIf="kd.nalez_dokumentu" [expanded]="true" hideToggle class="app-panel-inner">
+                  <mat-expansion-panel #panel *ngIf="kd.nalez_objekt?.length> 0 ||  kd.nalez_predmet?.length> 0" [expanded]="true" hideToggle class="app-panel-inner">
                     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                       <mat-panel-title>
                         <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -312,20 +305,21 @@
                       </mat-panel-title>
                     </mat-expansion-panel-header>
                     <ul class="app-list-inside">
-                      <ng-container *ngIf="kd.nalez_dokumentu.length">
-                        <li *ngFor="let nalez_dokumentu of kd.nalez_dokumentu">
-                          <app-nalez [result]="nalez_dokumentu"></app-nalez>
+                        <li *ngFor="let nalez_objekt of kd.nalez_objekt">
+                          <app-nalez [result]="nalez_objekt"></app-nalez>
                         </li>
-                      </ng-container>
-                      <ng-container *ngIf="!kd.nalez_dokumentu.length">
+                        <li *ngFor="let nalez_predmet of kd.nalez_predmet">
+                          <app-nalez [result]="nalez_predmet"></app-nalez>
+                        </li>
+                      <!-- <ng-container *ngIf="!kd.nalez_dokumentu.length">
                         <li>
                           <app-nalez [result]="kd.nalez_dokumentu"></app-nalez>
                         </li>
-                      </ng-container>
+                      </ng-container> -->
                     </ul>
                   </mat-expansion-panel>
                 </mat-expansion-panel>
-                <mat-expansion-panel #panel *ngIf="jednotka_dokumentu.neident_akce" [expanded]="true" hideToggle class="app-panel-inner">
+                <mat-expansion-panel #panel *ngIf="dokument_cast.neident_akce" [expanded]="true" hideToggle class="app-panel-inner">
                   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                     <mat-panel-title>
                       <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -333,37 +327,37 @@
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <table>
-                    <tr *ngIf="jednotka_dokumentu.neident_akce.katastr || jednotka_dokumentu.neident_akce.okres">
+                    <tr *ngIf="dokument_cast.neident_akce.katastr || dokument_cast.neident_akce.okres">
                       <th class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</th>
                       <td>
-                        <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="jednotka_dokumentu.neident_akce.katastr"></app-inline-filter>
-                        <ng-container *ngIf="jednotka_dokumentu.neident_akce.okres">
-                          &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="jednotka_dokumentu.neident_akce.okres"></app-inline-filter>)
+                        <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="dokument_cast.neident_akce.katastr.value"></app-inline-filter>
+                        <ng-container *ngIf="dokument_cast.neident_akce.okres">
+                          &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="dokument_cast.neident_akce.okres.value"></app-inline-filter>)
                         </ng-container></td>
                     </tr>
-                    <tr *ngIf="jednotka_dokumentu.neident_akce.vedouci">
+                    <tr *ngFor="let v of dokument_cast.neident_akce.vedouci">
                       <th class="app-label">{{ 'card.desc.Vedoucí akce' | translate }}:</th>
-                      <td>{{ jednotka_dokumentu.neident_akce.vedouci }}</td>
+                      <td>{{ v.value }}</td>
                     </tr>
-                    <tr *ngIf="jednotka_dokumentu.neident_akce.rok_zahajeni || jednotka_dokumentu.neident_akce.rok_ukonceni">
+                    <tr *ngIf="dokument_cast.neident_akce.rok_zahajeni || dokument_cast.neident_akce.rok_ukonceni">
                       <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
-                      <td>{{ jednotka_dokumentu.neident_akce.rok_zahajeni }}<ng-container *ngIf="jednotka_dokumentu.neident_akce.rok_ukonceni">-{{ jednotka_dokumentu.neident_akce.rok_ukonceni }}</ng-container></td>
+                      <td>{{ dokument_cast.neident_akce.rok_zahajeni }}<ng-container *ngIf="dokument_cast.neident_akce.rok_ukonceni">-{{ dokument_cast.neident_akce.rok_ukonceni }}</ng-container></td>
                     </tr>
-                    <tr *ngIf="jednotka_dokumentu.neident_akce.lokalizace">
+                    <tr *ngIf="dokument_cast.neident_akce.lokalizace">
                       <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
-                      <td>{{ jednotka_dokumentu.neident_akce.lokalizace }}</td>
+                      <td>{{ dokument_cast.neident_akce.lokalizace }}</td>
                     </tr>
-                    <tr *ngIf="jednotka_dokumentu.neident_akce.popis">
+                    <tr *ngIf="dokument_cast.neident_akce.popis">
                       <th class="app-label">{{ 'card.desc.Popis' | translate }}:</th>
-                      <td>{{ jednotka_dokumentu.neident_akce.popis }}</td>
+                      <td>{{ dokument_cast.neident_akce.popis }}</td>
                     </tr>
-                    <tr *ngIf="jednotka_dokumentu.neident_akce.poznamka">
+                    <tr *ngIf="dokument_cast.neident_akce.poznamka">
                       <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
-                      <td>{{ jednotka_dokumentu.neident_akce.poznamka }}</td>
+                      <td>{{ dokument_cast.neident_akce.poznamka }}</td>
                     </tr>
-                    <tr *ngIf="jednotka_dokumentu.neident_akce.pian">
+                    <tr *ngIf="dokument_cast.neident_akce.pian">
                       <th class="app-label">{{ 'card.desc.Pian' | translate }}:</th>
-                      <td>{{ jednotka_dokumentu.neident_akce.pian }}</td>
+                      <td>{{ dokument_cast.neident_akce.pian }}</td>
                     </tr>
                   </table> 
                 </mat-expansion-panel>
