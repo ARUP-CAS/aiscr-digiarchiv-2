@@ -160,7 +160,10 @@ public class ExtZdroj implements FedoraModel {
         //idoc.addField("ext_odkaz", objectMapper.writeValueAsString(ext_odkaz));
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            idoc.addField("ext_odkaz", objectMapper.writeValueAsString(ext_odkaz));
+            for (Object o: ext_odkaz) {
+                idoc.addField("ext_odkaz", objectMapper.writeValueAsString(o));
+            }
+            
         } catch (JsonProcessingException ex) {
             Logger.getLogger(ExtZdroj.class.getName()).log(Level.SEVERE, null, ex);
         }

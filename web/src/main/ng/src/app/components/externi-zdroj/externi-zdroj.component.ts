@@ -23,17 +23,17 @@ export class ExterniZdrojComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.result.id ? this.result.id : this.result;
+    const id = this.result.ident_cely ? this.result.ident_cely : this.result;
 
-      this.service.getIdAsChild([id], "ext_zdroj").subscribe((res: any) => {
-        this.result = res.response.docs[0]; 
-        this.setData();
-      });
+      // this.service.getIdAsChild([id], "ext_zdroj").subscribe((res: any) => {
+      //   this.result = res.response.docs[0]; 
+      //   this.setData();
+      // });
 
     }
+
   setData(){  
     const autor = this.result.autor ? this.result.autor.join(' – ') : '';
-    console.log(this.result)
     switch (this.result.typ) {
       case 'kniha':
         this.bibTex = `@book{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},

@@ -167,13 +167,13 @@ public class SearchServlet extends HttpServlet {
             query.setFields(searcher.getSearchFields(pristupnost));
           } else {
             query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
-                    + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
+                    + "ext_odkaz:[json],ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
                     + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
           }
           JSONObject jo = SearchUtils.json(query, client, "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             if (searcher != null) {
-              if ("pian".equals(entity) || "adb".equals(entity)) {
+              if ("pian".equals(entity) || "adb".equals(entity) || "ext_zdroj".equals(entity)) {
                 searcher.getChilds(jo, client, request);
               }
               searcher.checkRelations(jo, client, request);
@@ -229,7 +229,7 @@ public class SearchServlet extends HttpServlet {
             query.setFields(searcher.getChildSearchFields(pristupnost));
           } else {
             query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
-                    + "ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
+                    + "ext_zdroj:[json],ext_odkaz:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
                     + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
           }
           JSONObject jo = SearchUtils.json(query, client, "entities");
