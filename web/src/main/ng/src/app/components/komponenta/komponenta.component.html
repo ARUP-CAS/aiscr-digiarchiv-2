@@ -22,7 +22,7 @@
   <div *ngIf="result.poznamka">
     <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.poznamka }}
   </div>
-  <mat-expansion-panel #panel1 *ngIf="result.nalez_objekt || result.nalez_predmet" [expanded]="true" hideToggle class="app-panel-inner">
+  <mat-expansion-panel #panel1 *ngIf="result.nalez_objekt?.length > 0 || result.nalez_predmet?.length > 0" [expanded]="true" hideToggle class="app-panel-inner">
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
       <mat-panel-title>
         <mat-icon>{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>

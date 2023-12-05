@@ -83,7 +83,8 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
           this.result.valid_projekt = this.result.valid_projekt.concat(res.response.docs);
           this.state.loading = false;
         });
-      
+    } else {
+      this.state.loading = false;
     }
   }
 

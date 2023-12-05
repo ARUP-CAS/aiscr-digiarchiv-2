@@ -141,9 +141,9 @@
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
                 <td>{{ result.lokalizace }}</td>
               </tr>
-              <tr *ngIf="result.nalezove_okolnosti">
+              <tr *ngIf="result.okolnosti">
                 <th class="app-label">{{ 'card.desc.Nálezové okolnosti' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.nalezove_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
+                <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
               </tr>
               <tr *ngIf="result.hasOwnProperty('hloubka')">
                 <th class="app-label">{{ 'card.desc.Sam. nález - hloubka (cm)' | translate }}:</th>
@@ -153,9 +153,21 @@
                 <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
                 <td>{{ result.poznamka }}</td>
               </tr>
-              <tr *ngIf="result.loc_rpt">
-                <th class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</th>
-                <td>{{ result.centroid_e }} : {{ result.centroid_n }}</td>
+              <tr *ngIf="result.geom_system">
+                <th class="app-label">{{ 'card.desc.Primární EPSG' | translate }}:</th>
+                <td>{{ result.centroid_e }} : {{ result.geom_system }}</td>
+              </tr>
+              <tr *ngIf="result.chranene_udaje?.geom_gml">
+                <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                <td>{{ result.chranene_udaje?.geom_gml | json }}<br/>
+                  <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_gml">{{ result.chranene_udaje?.geom_sjtsk_gml | json }}</ng-container>
+                </td>
+              </tr>
+              <tr *ngIf="result.chranene_udaje?.geom_wkt">
+                <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                <td>{{ result.chranene_udaje?.geom_wkt.value }}, EPSG:{{ result.chranene_udaje.geom_wkt.epsg }}<br/>
+                  <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_wkt">{{ result.chranene_udaje?.geom_sjtsk_wkt.value }}, EPSG:{{ result.chranene_udaje.geom_sjtsk_wkt.espg }}</ng-container>
+                  </td>
               </tr>
               </tbody>
             </table>

@@ -455,6 +455,7 @@
 <copyField source="vedouci_akce" dest="f_vedouci" />
 <copyField source="vedouci_akce_ostatni" dest="f_vedouci" />
 <copyField source="vedouci_projektu" dest="f_vedouci" />
+<copyField source="vedouci_akce_ostatni_jmeno" dest="f_vedouci" />
 
 <copyField source="nalezce" dest="f_nalezce" />
 
@@ -476,6 +477,7 @@
 <copyField source="organizace_ostatni" dest="f_organizace" />
 <copyField source="organizace_prihlaseni" dest="f_organizace" />
 <copyField source="predano_organizace" dest="f_organizace" />
+<copyField source="vedouci_akce_ostatni_organizace" dest="f_organizace" />
 
 <copyField source="let_pozorovatel" dest="f_let_pozorovatel" />
 <copyField source="let_organizace" dest="f_let_organizace" />

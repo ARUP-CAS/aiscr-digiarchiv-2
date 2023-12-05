@@ -44,7 +44,7 @@
         <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
         <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
-      <div *ngIf="result.chranene_udaje?.dalsi_katastr">
+      <div *ngIf="result.chranene_udaje?.dalsi_katastr?.length > 0">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
         <ng-container *ngFor="let k of result.chranene_udaje.dalsi_katastr; let last = last">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>

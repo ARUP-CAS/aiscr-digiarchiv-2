@@ -55,15 +55,15 @@
             <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
           </ng-container>
         </div>
-        <div *ngIf="result.komponenta_dokument_obdobi || result.komponenta_dokument_presna_datace || result.komponenta_dokument_areal">
-          <ng-container *ngIf="result.komponenta_dokument_obdobi || result.komponenta_dokument_presna_datace">
+        <div *ngIf="result.komponenta_obdobi || result.komponenta_presna_datace || result.komponenta_dokument_areal">
+          <ng-container *ngIf="result.komponenta_obdobi || result.komponenta_presna_datace">
             <label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.komponenta_dokument_obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
-            <ng-container *ngIf="result.presna_datace">&#160;({{ result.komponenta_dokument_presna_datace }})</ng-container> 
+            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.komponenta_obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
+            <ng-container *ngIf="result.komponenta_presna_datace">&#160;({{ result.komponenta_presna_datace }})</ng-container> 
           </ng-container><span class="app-pipe"></span>
-          <ng-container *ngIf="result.komponenta_dokument_areal">
+          <ng-container *ngIf="result.komponenta_areal">
             <label class="app-label">{{ 'card.desc.Komponenta - areál' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.komponenta_dokument_areal" [heslar]="'areal_druha'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.komponenta_areal" [heslar]="'areal_druha'"></app-inline-filter>
           </ng-container><span class="app-pipe"></span>
         </div>
         <div *ngIf="result.extra_data_odkaz">
@@ -82,16 +82,16 @@
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.jednotka_dokumentu_vazba_akce?.length > 0 || result.jednotka_dokumentu_vazba_druha_akce?.length > 0">
-        {{ 'card.desc.Počet akcí' | translate }}: <strong>{{result.jednotka_dokumentu_vazba_akce?.length + result.jednotka_dokumentu_vazba_druha_akce?.length}}</strong>
+      <ng-container *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0">
+        {{ 'card.desc.Počet archeologickych zaznamu' | translate }}: <strong>{{result.dokument_cast_archeologicky_zaznam?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
-      <ng-container *ngIf="result.jednotka_dokumentu_vazba_lokalita?.length > 0 || result.jednotka_dokumentu_vazba_druha_lokalita?.length > 0">
-        {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{result.jednotka_dokumentu_vazba_lokalita?.length + result.jednotka_dokumentu_vazba_druha_lokalita?.length}}</strong>
+      <ng-container *ngIf="result.dokument_cast_projekt?.length > 0">
+        {{ 'card.desc.Počet projektu' | translate }}: <strong>{{result.dokument_cast_projekt?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
       <ng-container *ngIf="result.soubor?.length > 0">
-        {{ 'card.desc.Počet souborů' | translate }}: <strong>{{result.soubor.length}}</strong>
+        {{'card.desc.Počet souborů' | translate}}: <strong>{{result.soubor.length}}</strong>
       </ng-container>
     </div>
     <div>
@@ -184,7 +184,7 @@
               </tr>
               <tr *ngIf="result.extra_data_format">
                 <th class="app-label">{{ 'card.desc.Dokument - formát' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'extra_data_format'" [value]="result.extra_data_format"></app-inline-filter></td>
+                <td><app-inline-filter [isChild]="isChild" [field]="'extra_data_format'" [value]="result.extra_data_format" [heslar]="'format'"></app-inline-filter></td>
               </tr>
               <tr *ngIf="result.extra_data_vyska">
                 <th class="app-label">{{ 'card.desc.Výška (cm)' | translate }}:</th>
@@ -287,7 +287,7 @@
 
               <mat-accordion multi="true">
                 <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka>
-                <mat-expansion-panel #panel *ngFor="let kd of result.komponenta_dokument" [expanded]="true" hideToggle class="app-panel-inner">
+                <mat-expansion-panel #panel *ngFor="let kd of result.komponenta" [expanded]="true" hideToggle class="app-panel-inner">
                   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
                     <mat-panel-title>
                       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -372,7 +372,7 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="testData('souvisejici_zaznamy')" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:
@@ -380,16 +380,16 @@
           </mat-expansion-panel-header>
           
           <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
-            [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
-            <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            [minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
             <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
+            <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
           </cdk-virtual-scroll-viewport>
           
           <ng-container *ngIf="vsSize > 0 && state.printing" >
-            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
+            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
           </ng-container>
-
+          
         </mat-expansion-panel>
       </mat-accordion>
     </div>

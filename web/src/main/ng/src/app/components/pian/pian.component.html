@@ -14,8 +14,8 @@
       <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
       <app-inline-filter [field]="'f_pian_zm10'" [value]="result.chranene_udaje.zm10"></app-inline-filter>
     </div>
-    <div *ngIf="result.centroid_n">
-      <label class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ result.centroid_n }} : {{ result.centroid_e }}
+    <div *ngIf="result.lat">
+      <label class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ result.lat }} : {{ result.lng }}
     </div>
   </mat-expansion-panel>
   <mat-card *ngIf="inDocument" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">

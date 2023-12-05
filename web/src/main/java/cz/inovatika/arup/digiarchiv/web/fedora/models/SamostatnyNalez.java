@@ -159,7 +159,7 @@ public class SamostatnyNalez implements FedoraModel {
         IndexUtils.addVocabField(idoc, "druh_nalezu", druh_nalezu);
         IndexUtils.addVocabField(idoc, "specifikace", specifikace);
         IndexUtils.addVocabField(idoc, "predano_organizace", predano_organizace);
-        IndexUtils.addVocabField(idoc, "nalezce", nalezce);
+        IndexUtils.addRefField(idoc, "nalezce", nalezce);
 
         List<SolrInputDocument> idocs = new ArrayList<>();
         try {

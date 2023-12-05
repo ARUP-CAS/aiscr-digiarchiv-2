@@ -98,8 +98,21 @@ public class Library3DSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
-              "f_areal:f_areal_"+pristupnost,"f_obdobi:f_obdobi_"+pristupnost};
+//    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
+//              "f_areal:f_areal_"+pristupnost,"f_obdobi:f_obdobi_"+pristupnost};
+    
+            String[] f = new String[]{
+            "*",
+            "neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],let:[json],nalez_dokumentu:[json],tvar:[json],location_info:[json]",
+            "dokument_cast:[json]",
+            "komponenta:[json]",
+            "okres", "f_okres", "pian_id",
+            "katastr:f_katastr_" + pristupnost,
+            "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
+            "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
+            "lokalizace:f_lokalizace_" + pristupnost};
+            
+            return f;
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

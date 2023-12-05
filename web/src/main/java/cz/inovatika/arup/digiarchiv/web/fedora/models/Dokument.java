@@ -239,20 +239,7 @@ public class Dokument implements FedoraModel {
     private void addLet(SolrInputDocument idoc) {
 
         IndexUtils.addVocabField(idoc, "let_ident_cely", let);
-        SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"")
-                .setFields("ident_cely",
-                        "datum",
-                        "pozorovatel",
-                        "organizace",
-                        "fotoaparat",
-                        "pilot",
-                        "typ_letounu",
-                        "ucel_letu",
-                        "letiste_start",
-                        "letiste_cil",
-                        "pocasi",
-                        "dohlednost",
-                        "uzivatelske_oznaceni");
+        SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"");
         JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {

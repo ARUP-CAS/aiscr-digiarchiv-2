@@ -39,7 +39,7 @@
     <div *ngIf="result.autor_revize">
       <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ result.autor_revize }}
     </div>
-    <div *ngIf="result.rok_revize">
+    <div *ngIf="result.rok_revize > 0">
       <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result.rok_revize }}
     </div>
     <div *ngIf="result.chranene_udaje?.poznamka">

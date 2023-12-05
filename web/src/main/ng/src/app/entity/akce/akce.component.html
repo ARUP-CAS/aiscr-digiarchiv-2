@@ -28,13 +28,19 @@
     <div class="app-metadata app-row-gap-16" >
       <div>
         <label class="app-label">{{ 'card.desc.Datum výzkumu' | translate }}:</label>&#160;
-        {{ result.specifikace_data | translateHeslar : 'kk' }} 
+        {{ result.specifikace_data | translateHeslar : 'sd' }} 
         <ng-container *ngIf="result.specifikace_data === 'HES-000887'"><!-- přesně -->
           {{ result.datum_zahajeni | date : 'dd.MM.yyyy' }}
           <ng-container *ngIf="result.datum_ukonceni"> - {{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}</ng-container>
         </ng-container>
-        <ng-container *ngIf="result.specifikace_data !== 'HES-000887'">
-          {{ result.datum_zahajeni }}
+        <ng-container *ngIf="result.specifikace_data === 'HES-000886' || result.specifikace_data === 'HES-000889'">
+          {{ result.datum_zahajeni | date : 'yyyy' }}
+          <ng-container *ngIf="result.datum_ukonceni">
+            - {{ result.datum_ukonceni | date : 'yyyy' }}
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="result.specifikace_data !== 'HES-000887' && result.specifikace_data !== 'HES-000886' && result.specifikace_data !== 'HES-000889'">
+          {{ result.datum_zahajeni | date : 'yyyy' }}
           <ng-container *ngIf="result.datum_ukonceni">
             <ng-container *ngIf="result.specifikace_data !== 'před rokem'"> - </ng-container><!-- před rokem nemam HESLO -->
             {{ result.datum_ukonceni }}
@@ -146,12 +152,16 @@
               </tr>
               <tr *ngIf="result.vedouci_akce_ostatni?.length > 0">
                 <th class="app-label">{{ 'card.desc.Ostatní vedoucí' | translate }}:</th>
-                <td><div *ngFor="let va of result.vedouci_akce_ostatni" >{{va.vedouci.value}} ({{'heslar.' + va.organizace.id | translate}})</div></td>
+                <td><div *ngFor="let va of result.vedouci_akce_ostatni" >
+                  <app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="va.vedouci.value" [heslar]="'organizace'"></app-inline-filter>
+                  (<app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="va.organizace.id" [heslar]="'organizace'"></app-inline-filter>)
+                  <!-- {{va.vedouci.value}} ({{'heslar.' + va.organizace.id | translate}}) -->
+                </div></td>
               </tr>
-              <tr *ngIf="result.organizace_ostatni">
+              <!-- <tr *ngIf="result.organizace_ostatni">
                 <th class="app-label">{{ 'card.desc.Ostatní organizace' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace_ostatni" [heslar]="'organizace'"></app-inline-filter></td>
-              </tr>
+              </tr> -->
               <tr *ngIf="result.uzivatelske_oznaceni">
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
                 <td>{{ result.uzivatelske_oznaceni }}</td>
