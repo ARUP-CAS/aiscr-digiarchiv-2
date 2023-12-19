@@ -498,10 +498,8 @@ public class FedoraHarvester {
                 LOGGER.log(Level.SEVERE, null, ex);
                 throw ex;
             }
-
-        }
-
-    }
+        } 
+    } 
 
     private SolrInputDocument createOAIDocument(String xml, SolrInputDocument edoc) {
         SolrInputDocument idoc = new SolrInputDocument();

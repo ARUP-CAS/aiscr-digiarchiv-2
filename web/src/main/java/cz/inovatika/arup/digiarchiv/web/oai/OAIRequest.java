@@ -35,9 +35,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
-import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.json.JSONObject;  
 
 /**
  *
@@ -243,11 +241,7 @@ public class OAIRequest {
         }
         String[] reqMetadataPrefixes = req.getParameterValues("metadataPrefix");
         if (resumptionToken == null && reqMetadataPrefixes != null && reqMetadataPrefixes.length > 1) {
-            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                    + "<request>" + req.getRequestURL() + "</request>"
-                    + "<error code=\"badArgument\">multiple metadataPrefixes</error>"
-                    + "</OAI-PMH>";
-            return xml;
+            return badArgument(req, "multiple metadataPrefixes");
         }
 
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
@@ -278,10 +272,8 @@ public class OAIRequest {
             if (model == null) {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
-                model = "(akce OR lokalita)";
-            } else if (model.startsWith("archeologicky_zaznam:")) {
-                model = model.substring("archeologicky_zaznam:".length());
-            }
+                model = model + "*";
+            } 
             String cursor = CursorMarkParams.CURSOR_MARK_START;
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
@@ -368,11 +360,7 @@ public class OAIRequest {
 
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                    + "<request>" + req.getRequestURL() + "</request>"
-                    + "<error code=\"badResumptionToken\"/>"
-                    + "</OAI-PMH>";
-            return xml;
+            return badArgument(req);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
         }

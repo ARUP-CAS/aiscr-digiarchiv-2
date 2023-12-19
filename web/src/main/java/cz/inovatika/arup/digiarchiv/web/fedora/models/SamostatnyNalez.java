@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -231,9 +232,26 @@ public class SamostatnyNalez implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
+        
+//-- A: stav = 4
+//-- B: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
+//-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace)
+//-- D-E: bez omezení
+        
+         
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
         String userId = user.optString("ident_cely", "A");
+        String userOrg = user.getJSONObject("organizace").optString("id", "");
+        String projektId = (String) doc.getFieldValue("projekt");
+        String projektOrg = null;
+        SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
+                .setFields("organizace");
+        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+
+        if (json.getJSONObject("response").getInt("numFound") > 0) {
+            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");
+        }
         if (userPr.compareToIgnoreCase("C") > 0) {
             return true;
         } else if (st == 4) {
@@ -241,9 +259,8 @@ public class SamostatnyNalez implements FedoraModel {
         } else if (userPr.equalsIgnoreCase("C") && 
                 (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
                 userId.equals((String) doc.getFieldValue("historie_uzivatel"))) || 
-                ("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
-                "SN01".equals((String) doc.getFieldValue("historie_uzivatel"))))) {
-            return true;
+                (userOrg.equals(projektOrg)) )) {
+            return true; 
         } else if (userPr.equalsIgnoreCase("B") && 
                 "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
                 userId.equals((String) doc.getFieldValue("historie_uzivatel"))) {
