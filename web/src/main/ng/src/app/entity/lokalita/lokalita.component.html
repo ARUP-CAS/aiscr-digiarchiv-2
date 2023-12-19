@@ -14,7 +14,7 @@
         <ng-container *ngIf="result.katastr">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.chranene_udaje.hlavni_katastr.value"></app-inline-filter>
         </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
-        <span class="app-pipe"></span><ng-container *ngIf="hasRights">{{ result.nazev }}<span class="app-pipe"></span></ng-container>
+        <span class="app-pipe"></span><ng-container *ngIf="result.nazev">{{ result.nazev }}<span class="app-pipe"></span></ng-container>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
     </mat-card-title>
@@ -62,7 +62,7 @@
       </ng-container>
     </div>
     <div>
-      <button *ngIf="!mapDetail && hasRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
+      <button *ngIf="!mapDetail && result.chranene_udaje" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
         <mat-icon>map</mat-icon>
       </button>
       <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">

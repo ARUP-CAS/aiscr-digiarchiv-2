@@ -506,7 +506,11 @@ public class FedoraHarvester {
     private SolrInputDocument createOAIDocument(String xml, SolrInputDocument edoc) {
         SolrInputDocument idoc = new SolrInputDocument();
         idoc.setField("ident_cely", edoc.getFieldValue("ident_cely"));
-        idoc.setField("model", edoc.getFieldValue("entity"));
+        String model = (String) edoc.getFieldValue("entity");
+        if (model.equals("akce") || model.equals("lokalita")) {
+            model = "archeologicky_zaznam:" + model;
+        }
+        idoc.setField("model", model);
         idoc.setField("stav", edoc.getFieldValue("stav"));
         idoc.setField("pristupnost", edoc.getFieldValue("pristupnost"));
         idoc.setField("datestamp", edoc.getFieldValue("datestamp"));

@@ -58,12 +58,12 @@
           </ng-container>
         </div>
         <div>
-          <ng-container *ngIf="hasRights">
+          <ng-container *ngIf="result.chranene_udaje">
             <label class="app-label">{{'card.desc.Katastr (okres)' | translate}}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.chranene_udaje.katastr.value"></app-inline-filter>&#160;
           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
           </ng-container>
-          <ng-container *ngIf="!hasRights">
+          <ng-container *ngIf="!result.chranene_udaje">
             <label class="app-label">{{'card.desc.Okres' | translate}}:</label>&#160;
             (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
           </ng-container>
@@ -82,7 +82,7 @@
       </ng-container>
     </div>
     <div>
-      <button *ngIf="!mapDetail && hasRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
+      <button *ngIf="!mapDetail && result.chranene_udaje" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
         <mat-icon>map</mat-icon>
       </button>
       <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">

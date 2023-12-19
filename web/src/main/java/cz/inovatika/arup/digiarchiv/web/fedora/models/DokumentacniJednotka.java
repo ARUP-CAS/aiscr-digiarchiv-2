@@ -65,7 +65,7 @@ public class DokumentacniJednotka {
     SolrInputDocument idoc = dob.toSolrInputDocument(this);
     //akceDoc.setField("entity", "akce");
     //akceDoc.setField("pristupnost", pristupnost);
-    IndexUtils.addVocabField(idoc, "pian_ident_cely", pian);
+    IndexUtils.addVocabField(idoc, "pian", pian);
     IndexUtils.addVocabField(idoc, "typ", typ);
     
     IndexUtils.addVocabField(idoc, "adb", adb);

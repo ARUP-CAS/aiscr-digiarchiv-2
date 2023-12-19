@@ -37,7 +37,7 @@ public class LokalitaSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+            if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
                 if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
                     doc.remove("chranene_udaje");
                     doc.remove("lokalita_chranene_udaje");
@@ -153,10 +153,11 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,pian:[json],adb:[json],ext_zdroj:[json],dokument,projekt",
+        return new String[]{"*,ident_cely,pian:[json],adb:[json],ext_zdroj:[json],dokument,projekt",
             "dokumentacni_jednotka:[json]",
             "lokalita_chranene_udaje:[json]",
             "chranene_udaje:[json]",
+            "loc_rpt:loc_rpt_" + pristupnost,
             "nazev:lokalita_chranene_udaje_nazev_" + pristupnost,
             "popis:lokalita_chranene_udaje_popis_" + pristupnost,
             "katastr:f_katastr_" + pristupnost,
@@ -179,7 +180,9 @@ public class LokalitaSearcher implements EntitySearcher {
         }
 
         if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-            query.setFields("ident_cely,entity,nazev,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres,child_dokument");
+            query.setFields("ident_cely,entity,nazev,organizace,pristupnost,pian:[json],okres,child_dokument",
+            "katastr:f_katastr_" + pristupnost,
+                    "loc_rpt:loc_rpt_" + pristupnost);
         } else {
             query.setFields(getSearchFields(pristupnost));
         }

@@ -106,11 +106,11 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
       this.state.loading = true;
       this.getProjekts();
       this.hasDetail = true;
-      if (this.result.loc_rpt) {
-        const coords = this.result.loc_rpt[0].split(',');
-        this.result.centroid_e = coords[0];
-        this.result.centroid_n = coords[1];
-      }
+      // if (this.result.loc_rpt) {
+      //   const coords = this.result.loc_rpt[0].split(',');
+      //   this.result.centroid_e = coords[0];
+      //   this.result.centroid_n = coords[1];
+      // }
     });
   }
 

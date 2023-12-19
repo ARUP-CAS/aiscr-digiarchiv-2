@@ -21,7 +21,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
   @Input() mapDetail: boolean;
   @Input() isDocumentDialogOpen: boolean;
   @Input() inDocument = false;
-  hasRights: boolean;
+  // hasRights: boolean;
   hasDetail: boolean;
   bibTex: string;
 
@@ -41,7 +41,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
+    // this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},

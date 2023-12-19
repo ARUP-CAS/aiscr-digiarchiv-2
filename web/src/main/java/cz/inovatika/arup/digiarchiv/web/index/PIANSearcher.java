@@ -59,7 +59,7 @@ public class PIANSearcher implements EntitySearcher {
 
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery("entity:dokumentacni_jednotka")
-                        .addFilterQuery("pian_ident_cely:\"" + doc.getString("ident_cely") + "\"");
+                        .addFilterQuery("pian:\"" + doc.getString("ident_cely") + "\"");
                 JSONObject r = SolrSearcher.json(client, "entities", query);
                 JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
 
@@ -70,7 +70,6 @@ public class PIANSearcher implements EntitySearcher {
             } catch (SolrServerException | IOException ex) {
                 Logger.getLogger(PIANSearcher.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
 

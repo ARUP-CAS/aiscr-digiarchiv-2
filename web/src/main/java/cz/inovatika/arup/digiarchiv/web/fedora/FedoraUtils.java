@@ -58,8 +58,7 @@ public class FedoraUtils {
             //.header("Accept", "application/ld+json")
             .build();
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-//      LOGGER.log(Level.INFO, "Status {0}", response.statusCode());
+    
     return response.body();
   }
   

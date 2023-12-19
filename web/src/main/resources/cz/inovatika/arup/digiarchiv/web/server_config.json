@@ -1,5 +1,5 @@
 {
-    "solrhost": "http://localhost:8984/solr/",
+    "solrhost": "http://localhost:8983/solr/",
     "solrRels": "http://localhost:8983/solr/",
 
     "OAIHarvester": {

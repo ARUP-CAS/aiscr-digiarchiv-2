@@ -281,6 +281,14 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.setClusterDataByPian(res.response.docs);
             }
             this.state.loading = false;
+            setTimeout(() => {
+              if (this.state.mapResult) {
+                this.hitMarker(this.state.mapResult);
+              } else {
+                // this.fitOnMarkers();
+              }
+      
+            }, 1000);
           });
           break;
         }
@@ -348,6 +356,18 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
   }
 
+  addMarkerByResult(doc: any) {
+    if (doc.pian && doc.pian.length > 0) {
+      doc.pian.forEach(pian => {
+          const coords = pian.loc_rpt[0].split(',');
+          this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, doc);
+      });
+    } else if (doc.loc_rpt) {
+        const coords = doc.loc_rpt[0].split(',');
+        this.addMarker(doc.ident_cely, false, coords[0], coords[1], '', '', doc);
+    }
+  }
+
   addMarker(id: string, isPian: boolean, lat: string, lng: string, presnost: string, typ: string, doc: any) {
     let mrk = this.markerExists(id);
     if (!mrk) {
@@ -407,6 +427,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.currentZoom = this.map.getZoom();
   }
 
+
+
   setMarkersData() {
     this.markersList = [];
     this.markers = new L.featureGroup();
@@ -464,10 +486,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   hitMarker(res) {
     if (!res) {
       this.clearSelectedMarker();
-      //if (this.showType === 'heat') {
-      // this.markers = new L.featureGroup();
       this.updateBounds(this.map.getBounds(), false, 'hitMarker');
-      //}
       return;
     }
     const docId = res.ident_cely;
@@ -476,8 +495,24 @@ export class MapaComponent implements OnInit, OnDestroy {
       // the same or document
       changed = false;
     }
-    const ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
-    this.clearSelectedMarker();
+    let ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
+    if (changed) {
+      this.clearSelectedMarker();
+    }
+    
+    if (!ms || ms.length === 0) {
+      this.addMarkerByResult(res);
+
+      if (this.showType !== 'heat') {
+        this.markersList.forEach(mrk => {
+          mrk.addTo(this.markers);
+        });
+      }
+
+
+      ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
+    }
+    
     ms.forEach(m => {
       m.setIcon(m.pianTyp === 'bod' ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
@@ -488,6 +523,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         }
       }
     });
+
     if (changed && ms.length > 0) {
       this.zoomingOnMarker = true;
       if (this.map.getZoom() < this.config.mapOptions.hitZoomLevel) {
@@ -498,7 +534,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     }
     if (!ms || ms.length === 0) {
-      this.state.mapResult = null;
+      //this.state.mapResult = null;
     }
     this.selectedMarker = ms;
   }
