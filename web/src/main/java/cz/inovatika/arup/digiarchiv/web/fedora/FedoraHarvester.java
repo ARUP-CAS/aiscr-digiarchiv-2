@@ -509,6 +509,7 @@ public class FedoraHarvester {
             model = "archeologicky_zaznam:" + model;
         }
         idoc.setField("model", model);
+        // idoc.setField("organizace", edoc.getFieldValue("organizace"));
         idoc.setField("stav", edoc.getFieldValue("stav"));
         idoc.setField("pristupnost", edoc.getFieldValue("pristupnost"));
         idoc.setField("datestamp", edoc.getFieldValue("datestamp"));

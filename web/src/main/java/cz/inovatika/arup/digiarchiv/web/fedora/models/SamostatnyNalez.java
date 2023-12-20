@@ -242,7 +242,10 @@ public class SamostatnyNalez implements FedoraModel {
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
         String userId = user.optString("ident_cely", "A");
-        String userOrg = user.getJSONObject("organizace").optString("id", "");
+        String userOrg = "";
+        if (user.has("organizace")) {
+          userOrg = user.getJSONObject("organizace").optString("id", "");
+        }
         String projektId = (String) doc.getFieldValue("projekt");
         String projektOrg = null;
         SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")

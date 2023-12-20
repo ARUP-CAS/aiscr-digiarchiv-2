@@ -7,6 +7,6 @@
     <metadataFormat>
       <metadataPrefix>oai_amcr</metadataPrefix>
       <schema>https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd</schema>
-      <metadataNamespace>https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd</metadataNamespace>
+      <metadataNamespace>https://api.aiscr.cz/schema/amcr/2.0/</metadataNamespace>
     </metadataFormat>
   </ListMetadataFormats>

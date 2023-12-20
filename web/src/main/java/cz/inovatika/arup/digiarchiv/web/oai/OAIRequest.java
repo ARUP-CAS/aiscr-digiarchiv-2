@@ -272,7 +272,7 @@ public class OAIRequest {
             if (model == null) {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
-                model = model + "*";
+                model = model + "\\:*";
             } 
             String cursor = CursorMarkParams.CURSOR_MARK_START;
             SolrQuery query = new SolrQuery("*")
@@ -306,7 +306,8 @@ public class OAIRequest {
                 }
             }
 
-            query.addFilterQuery("model:" + model);
+            query.addFilterQuery("model:"
+                    + model);
 
             if (from != null || until != null) {
                 if (from == null) {
