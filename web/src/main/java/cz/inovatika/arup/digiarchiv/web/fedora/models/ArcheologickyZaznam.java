@@ -248,6 +248,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 //        idoc.setField("chranene_udaje", cu.toString());
 
 
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getJSONArray("typ").getString(0), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("presnost"), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("chranene_udaje").getString("zm10"), pristupnost);

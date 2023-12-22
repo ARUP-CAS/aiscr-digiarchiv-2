@@ -35,7 +35,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
-import org.json.JSONObject;  
+import org.json.JSONObject;
 
 /**
  *
@@ -107,13 +107,19 @@ public class OAIRequest {
     public static String metadataFormats(HttpServletRequest req) {
         try {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
-            String id = req.getParameter("identifier").substring(prefix.length());
-            SolrQuery query = new SolrQuery("*")
-                    .addFilterQuery("ident_cely:\"" + id + "\"");
-            QueryResponse resp = IndexUtils.getClient().query("oai", query);
+            String identifier = req.getParameter("identifier");
+            if (identifier != null) {
+                if (identifier.length() < prefix.length()) {
+                    return idDoesNotExist(req);
+                }
+                String id = identifier.substring(prefix.length());
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("ident_cely:\"" + id + "\"");
+                QueryResponse resp = IndexUtils.getClient().query("oai", query);
 
-            if (resp.getResults().getNumFound() == 0) {
-                return idDoesNotExist(req);
+                if (resp.getResults().getNumFound() == 0) {
+                    return idDoesNotExist(req);
+                }
             }
 
             StringBuilder ret = new StringBuilder();
@@ -273,7 +279,7 @@ public class OAIRequest {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
                 model = model + "\\:*";
-            } 
+            }
             String cursor = CursorMarkParams.CURSOR_MARK_START;
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
@@ -438,9 +444,9 @@ public class OAIRequest {
         String status = isDeleted ? " status=\"deleted\"" : "";
 
         String model = (String) doc.getFieldValue("model");
-        if (model.equals("akce") || model.equals("lokalita") ) {
+        if (model.equals("akce") || model.equals("lokalita")) {
             model = "archeologicky_zaznam:" + model;
-        } 
+        }
 
         ret.append("<record>");
         ret.append("<header").append(status).append(" >")

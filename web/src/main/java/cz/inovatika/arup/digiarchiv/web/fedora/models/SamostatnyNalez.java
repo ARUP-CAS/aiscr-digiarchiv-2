@@ -242,7 +242,7 @@ public class SamostatnyNalez implements FedoraModel {
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
         String userId = user.optString("ident_cely", "A");
-        String userOrg = "";
+        String userOrg = "none";
         if (user.has("organizace")) {
           userOrg = user.getJSONObject("organizace").optString("id", "");
         }

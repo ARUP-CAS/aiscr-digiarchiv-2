@@ -284,11 +284,9 @@ export class MapaComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               if (this.state.mapResult) {
                 this.hitMarker(this.state.mapResult);
-              } else {
-                // this.fitOnMarkers();
-              }
+              } 
       
-            }, 1000);
+            }, 100);
           });
           break;
         }
@@ -296,6 +294,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.setMarkersData();
           if (!byLoc) {
             this.markersList.forEach(m => {
+              console.log(m)
               if (m.pianPresnost !== 'HES-000864' && m.pianTyp !== 'bod') {
               //if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
                 this.addShape(m.pianId, m.pianPresnost, m.docId.length);
@@ -303,6 +302,14 @@ export class MapaComponent implements OnInit, OnDestroy {
             });
           }
           this.state.loading = false;
+          setTimeout(() => {
+            if (this.state.mapResult) {
+              this.hitMarker(this.state.mapResult);
+            } else {
+              // this.fitOnMarkers();
+            }
+
+          }, 100);
           break;
         }
         case 'heat': {
@@ -319,14 +326,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else {
         this.locationFilter.disable();
       }
-      setTimeout(() => {
-        if (this.state.mapResult) {
-          this.hitMarker(this.state.mapResult);
-        } else {
-          // this.fitOnMarkers();
-        }
-
-      }, 100);
 
       if ((this.showDetail || this.isInit) && this.state.solrResponse.response.docs.length === 1) {
         this.state.setMapResult(this.state.solrResponse.response.docs[0], false);

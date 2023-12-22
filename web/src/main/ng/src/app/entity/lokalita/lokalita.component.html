@@ -11,7 +11,7 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="result.katastr">
+        <ng-container *ngIf="result.chranene_udaje">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.chranene_udaje.hlavni_katastr.value"></app-inline-filter>
         </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
         <span class="app-pipe"></span><ng-container *ngIf="result.nazev">{{ result.nazev }}<span class="app-pipe"></span></ng-container>
