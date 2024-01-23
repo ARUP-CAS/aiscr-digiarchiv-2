@@ -34,19 +34,16 @@ public class Lokalita {
     private LokalitaChraneneUdaje chranene_udaje;
 
     public void fillSolrFields(SolrInputDocument idoc) {
-        IndexUtils.addVocabField(idoc, "typ_lokality", typ_lokality);
-        IndexUtils.addVocabField(idoc, "druh", druh);
+        IndexUtils.addVocabField(idoc, "lokalita_typ_lokality", typ_lokality);
+        IndexUtils.addVocabField(idoc, "f_typ_lokality", typ_lokality);
+        IndexUtils.addVocabField(idoc, "lokalita_druh", druh);
         IndexUtils.addVocabField(idoc, "f_druh_lokality", druh);
-        IndexUtils.addVocabField(idoc, "zachovalost", zachovalost);
-        IndexUtils.addVocabField(idoc, "jistota", jistota);
+        IndexUtils.addVocabField(idoc, "lokalita_zachovalost", zachovalost);
+        IndexUtils.addVocabField(idoc, "lokalita_jistota", jistota);
 
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
-
-//        for (Map.Entry<String, SolrInputField> entry : akceDoc.entrySet()) {
-//            idoc.setField(entry.getKey(), entry.getValue().getValue());
-//        }
 
     }
 

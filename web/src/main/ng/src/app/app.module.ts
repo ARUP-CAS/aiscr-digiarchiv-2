@@ -77,6 +77,7 @@ import { KomponentaDokumentComponent } from './components/komponenta-dokument/ko
 import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 import { CitationComponent } from './components/citation/citation.component';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { ResultActionsComponent } from './components/result-actions/result-actions.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -187,7 +188,8 @@ const providers: any[] =[
     BibtextDialogComponent,
     FeedbackDialogComponent,
     KomponentaDokumentComponent,
-    CitationComponent
+    CitationComponent,
+    ResultActionsComponent
   ],
   imports: [
     CommonModule,

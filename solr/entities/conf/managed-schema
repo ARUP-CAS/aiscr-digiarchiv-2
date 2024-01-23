@@ -89,6 +89,10 @@
    <field name="tvar" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="jednotka_dokumentu" type="string" indexed="false" stored="true" multiValued="true" docValues="false" />   
    <field name="pian" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="pian_A" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="pian_B" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="pian_C" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="pian_D" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="odkaz" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="soubor" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="komponenta_dokument" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 

@@ -395,6 +395,9 @@ public class OAIRequest {
         if (metadataPrefix == null) {
             return badArgument(req, "metadataPrefix is missing");
         }
+        if (req.getParameter("identifier") == null) {
+            return badArgument(req, "identifier is missing");
+        }
         String[] reqMetadataPrefixes = req.getParameterValues("metadataPrefix");
         if (reqMetadataPrefixes.length > 1) {
             return badArgument(req, "multiple metadataPrefixes");
@@ -412,7 +415,7 @@ public class OAIRequest {
                 .append(responseDateTag())
                 .append(requestTag(req));
         try {
-            String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
+            String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";            
             if (req.getParameter("identifier").length() < prefix.length()) {
                 return idDoesNotExist(req);
             }

@@ -155,7 +155,7 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"ident_cely,pristupnost,okres,typ_lokality,druh,datestamp,dokument,projekt",
+        return new String[]{"ident_cely,pristupnost,okres,lokalita_typ_lokality,lokalita_druh,lokalita_zachovalost,lokalita_jistota,datestamp,dokument,projekt",
             "dokumentacni_jednotka:[json]",
             "lokalita_chranene_udaje:[json]",
             "chranene_udaje:[json]",
