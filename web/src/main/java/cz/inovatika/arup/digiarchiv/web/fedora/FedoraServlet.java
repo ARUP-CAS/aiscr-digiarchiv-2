@@ -54,7 +54,14 @@ public class FedoraServlet extends HttpServlet {
         if (isLocalhost || pristupnost.compareTo(confLevel) >= 0) {
           Actions actionToDo = Actions.valueOf(action.toUpperCase());
           JSONObject json = actionToDo.doPerform(request, response);
-          out.println(json.toString(2));
+          if (actionToDo.equals(Actions.GET_ID)) {
+              response.setContentType("application/xml;charset=UTF-8");
+              out.println(json.getString("model"));
+              
+          } else {
+              out.println(json.toString(2));
+          }
+          
         } else {
           out.print("Insuficient rights");
         }

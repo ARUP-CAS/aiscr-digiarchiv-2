@@ -70,6 +70,7 @@
    <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />
    
    
+   <field name="jazyk_dokumentu" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="datum_zverejneni" type="pdate" indexed="true" stored="true" />
    <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
    <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
@@ -84,7 +85,7 @@
    <field name="typ_dokumentu_posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    <field name="posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    
-   <field name="extra_data" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   <field name="extra_data" type="string_big" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    
    <field name="tvar" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="jednotka_dokumentu" type="string" indexed="false" stored="true" multiValued="true" docValues="false" />   
@@ -493,14 +494,19 @@
 
 <copyField source="tvar_tvar" dest="f_tvar" />
 
+<copyField source="jazyk_dokumentu" dest="f_jazyk_dokumentu" />
 <copyField source="material_originalu" dest="f_material_dokumentu" />
 
 <copyField source="posudek" dest="f_typ_dokumentu_posudek" />
-
-<copyField source="jazyk_dokumentu" dest="f_jazyk_dokumentu" />
 <copyField source="rada" dest="f_rada" />
 <copyField source="ulozeni_originalu" dest="f_ulozeni_originalu" />
-<!--<copyField source="extra_data_zachovalost" dest="f_zachovalost" />-->
+
+<!--
+
+
+<copyField source="extra_data_zachovalost" dest="f_zachovalost" />
+
+-->
 <copyField source="zachovalost" dest="f_zachovalost" />
 <copyField source="jistota" dest="f_jistota" />
 <copyField source="extra_data_nahrada" dest="f_nahrada" />

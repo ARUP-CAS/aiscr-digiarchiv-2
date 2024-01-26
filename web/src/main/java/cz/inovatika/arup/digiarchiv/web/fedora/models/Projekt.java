@@ -228,7 +228,7 @@ public class Projekt implements FedoraModel {
         for (String f : facetFields) {
             query.addField(f);
         }
-        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", az);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
 
@@ -256,7 +256,7 @@ public class Projekt implements FedoraModel {
     private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
                 .setFields("typ,presnost,chranene_udaje:[json]");
-        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", pian_id);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);

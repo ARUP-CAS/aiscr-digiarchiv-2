@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -60,11 +56,11 @@ public class DokumentCast {
 
         for (Komponenta k : komponenta) {
             IndexUtils.addJSONField(idoc, "komponenta", k);
-            k.fillSolrFields(idoc);
+            k.fillSolrFields(idoc, "dokument_cast");
         }
 
         if (neident_akce != null) {
-            IndexUtils.addJSONField(idoc, "neident_akce", neident_akce);
+            IndexUtils.addJSONField(idoc, "dokument_cast_neident_akce", neident_akce);
             neident_akce.fillSolrFields(idoc, pristupnost.toUpperCase());
         }
 
@@ -78,11 +74,13 @@ public class DokumentCast {
     private void addLocation(SolrInputDocument idoc, String pristupnost) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
                 .setFields("*,katastr:hlavni_katastr_" + pristupnost, "okres,pristupnost");
-        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", archeologicky_zaznam.getId());
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             idoc.addField("dokument_cast_" + doc.getString("entity"), archeologicky_zaznam.getId());
+            
+            idoc.addField("dokument_cast_" + doc.getString("entity") + "_hlavni_vedouci", doc.optString("hlavni_vedouci"));
 
             if (doc.has("katastr")) {
                 SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
@@ -126,7 +124,7 @@ public class DokumentCast {
     private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
                 .setFields("typ,presnost,chranene_udaje:[json]");
-        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", pian_id);
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pian_id);

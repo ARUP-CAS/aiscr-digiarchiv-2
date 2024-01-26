@@ -72,7 +72,7 @@ public class DokumentacniJednotka {
     
     for (Komponenta k : komponenta) {
       IndexUtils.addJSONField(idoc, "komponenta", komponenta);
-      k.fillSolrFields(idoc);
+      k.fillSolrFields(idoc, "dok_jednotka");
     }
     
     return idoc;
@@ -91,7 +91,7 @@ public class DokumentacniJednotka {
       Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
     }
     for (Komponenta k : komponenta) {
-      k.fillSolrFields(idoc);
+      k.fillSolrFields(idoc, "dok_jednotka");
     }
     
     if(pian != null) {

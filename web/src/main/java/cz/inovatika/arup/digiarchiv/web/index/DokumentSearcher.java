@@ -95,11 +95,14 @@ public class DokumentSearcher implements EntitySearcher {
         };
 //        String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";
 //        String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";
+
+
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
             if (LoginServlet.userId(request) != null) {
                 SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
             }
+            
             SolrSearcher.addChildFieldByEntity(client, doc, "dokument_cast_archeologicky_zaznam", String.join(",", f));
 
             if (doc.has("pian_id")) {
@@ -119,17 +122,18 @@ public class DokumentSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-
         String[] f = new String[]{
-            "*",
-            //  "ident_cely,pristupnost,entity,organizace","neident_akce_katastr","autor","rok_vzniku","datestamp","typ_dokumentu","material_originalu","rada","popis",
-            "neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],let:[json],nalez_dokumentu:[json],tvar:[json],location_info:[json]",
-            "dokument_cast:[json]",
+            Options.getInstance().getJSONObject("fields").getJSONArray("common").join(",").replaceAll("\"", ""),
+            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").join(",").replaceAll("\"", ""),
+            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("detail").join(",").replaceAll("\"", ""),
+            "dokument_cast_neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],nalez_dokumentu:[json],location_info:[json]",
+            // "dokument_cast:[json]",
             "komponenta:[json]",
             "okres", "f_okres", "pian_id",
 //            "f_pian_presnost:f_pian_presnost_" + pristupnost,
 //            "f_pian_typ:f_pian_typ_" + pristupnost,
 //            "f_pian_zm10:f_pian_zm10_" + pristupnost,
+            "loc:loc_" + pristupnost,
             "katastr:f_katastr_" + pristupnost,
             "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
             "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
@@ -186,7 +190,7 @@ public class DokumentSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            String organizace = doc.getString("organizace");
+            String organizace = doc.optString("organizace");
             String docPr = doc.getString("pristupnost");
 
             boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
@@ -216,8 +220,8 @@ public class DokumentSearcher implements EntitySearcher {
                 }
 
             }
-            if (doc.has("neident_akce")) {
-                doc.put("f_katastr", doc.getJSONArray("neident_akce_katastr").toList());
+            if (doc.has("dokument_cast_neident_akce_katastr")) {
+                doc.put("f_katastr", doc.getJSONArray("dokument_cast_neident_akce_katastr").toList());
             }
             if (doc.has("lokalita")) {
                 JSONArray lp = doc.getJSONArray("lokalita");

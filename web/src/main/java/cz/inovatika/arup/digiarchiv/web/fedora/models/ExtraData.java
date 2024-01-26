@@ -1,9 +1,12 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 import org.locationtech.jts.geom.Geometry;
@@ -117,9 +120,13 @@ public class ExtraData {
     @JacksonXmlProperty(localName = "geom_wkt")
     public WKT geom_wkt;
 
-    
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            idoc.addField("extra_data", objectMapper.writeValueAsString(this));
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
+        }
         IndexUtils.addVocabField(idoc, "extra_data_format", format);
         IndexUtils.addVocabField(idoc, "extra_data_zachovalost", zachovalost);
         IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
@@ -142,8 +149,8 @@ public class ExtraData {
                 throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
             }
 
-        }
-        
+        } 
+
     }
 
 }

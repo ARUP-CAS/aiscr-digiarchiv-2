@@ -82,7 +82,7 @@ public class NeidentAkce {
         SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
 
         for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
-            idoc.setField("neident_akce_" + entry.getKey(), entry.getValue().getValue());
+            idoc.setField("dokument_cast_neident_akce_" + entry.getKey(), entry.getValue().getValue());
         }
     }
 }

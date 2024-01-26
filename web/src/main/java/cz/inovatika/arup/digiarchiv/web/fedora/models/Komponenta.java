@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -60,7 +56,7 @@ public class Komponenta {
   @JacksonXmlProperty(localName = "nalez_predmet")
   public List<NalezPredmet> nalez_predmet = new ArrayList();
 
-  public void fillSolrFields(SolrInputDocument idoc) {
+  public void fillSolrFields(SolrInputDocument idoc, String prefix) {
     DocumentObjectBinder dob = new DocumentObjectBinder();
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addVocabField(kdoc, "obdobi", obdobi);
@@ -87,7 +83,7 @@ public class Komponenta {
       kdoc.addField("nalez_predmet_poznamka", np.poznamka);
     }
     for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
-      idoc.setField("komponenta_" + entry.getKey(), entry.getValue().getValue());
+      idoc.setField(prefix + "_komponenta_" + entry.getKey(), entry.getValue().getValue());
     }
   }
 

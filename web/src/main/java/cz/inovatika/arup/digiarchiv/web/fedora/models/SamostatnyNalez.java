@@ -250,7 +250,7 @@ public class SamostatnyNalez implements FedoraModel {
         String projektOrg = null;
         SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
                 .setFields("organizace");
-        JSONObject json = SearchUtils.json(query, IndexUtils.getClient(), "entities");
+        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", projektId);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");

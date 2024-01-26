@@ -479,7 +479,20 @@ public class FedoraHarvester {
                 DocumentObjectBinder dob = new DocumentObjectBinder();
                 SolrInputDocument idoc = dob.toSolrInputDocument(fm);
                 fm.fillSolrFields(idoc);
-                if (FedoraModel.isOAI((String) idoc.getFieldValue("entity"))) {
+                String entity = (String) idoc.getFieldValue("entity");
+                if (Options.getInstance().getJSONObject("fields").has(entity)) {
+                    JSONArray facets = Options.getInstance().getJSONObject("fields").getJSONObject(entity).getJSONArray("facets");
+                    for (int i = 0; i < facets.length(); i++) {
+                        String f = facets.getString(i);
+                        if (f.contains(":")) {
+                            String[] origins = f.split(":")[1].split(",");
+                            for (String orig : origins) {
+                                idoc.addField(f.split(":")[0], idoc.getFieldValues(orig));
+                            }
+                        }
+                    }
+                }
+                if (FedoraModel.isOAI(entity)) {
                     SolrInputDocument oaidoc = createOAIDocument(xml, idoc);
                     idocsOAI.add(oaidoc);
                 }
@@ -498,8 +511,8 @@ public class FedoraHarvester {
                 LOGGER.log(Level.SEVERE, null, ex);
                 throw ex;
             }
-        } 
-    } 
+        }
+    }
 
     private SolrInputDocument createOAIDocument(String xml, SolrInputDocument edoc) {
         SolrInputDocument idoc = new SolrInputDocument();
