@@ -325,7 +325,8 @@
       "dokument_cast:[json]",
       "dokument_cast_archeologicky_zaznam",
       "extra_data:[json]",
-      "let:[json]","tvar:[json]"
+      "let:[json]","tvar:[json]",
+      "osoba"
     ],
     "facets": [
       "f_areal:dokument_cast_komponenta_areal",
@@ -393,6 +394,42 @@
       "f_obdobi",
       "f_kategorie"
     ]
+  },
+  "samostatny_nalez": {
+    "header": [
+      "nalezce",
+      "datum_nalezu",
+      "predano_organizace",
+      "evidencni_cislo",
+      "obdobi",
+      "presna_datace",
+      "druh_nalezu",
+      "specifikace",
+      "chranene_udaje_katastr", 
+      "okres"
+    ],
+    "detail": [
+      "pocet",
+      "chranene_udaje_lokalizace",
+      "okolnosti",
+      "hloubka",
+      "poznamka",
+      "geom_system",
+      "chranene_udaje_geom_gml",
+      "chranene_udaje_geom_sjtsk_gml",
+      "chranene_udaje_geom_wkt",
+      "chranene_udaje_geom_sjtsk_wkt"
+    ],
+    "facets": [
+      "f_nalezove_okolnosti:nalezove_okolnosti",
+      "f_organizace:predano_organizace",
+      "f_obdobi:obdobi",
+      "f_okres:okres",
+      "f_katastr:chranene_udaje.katastr",
+      "pristupnost",
+      "f_druh_nalezu:druh_nalezu",
+      "f_specifikace:specifikace"
+    ]
   }
-    }
+  }
 }

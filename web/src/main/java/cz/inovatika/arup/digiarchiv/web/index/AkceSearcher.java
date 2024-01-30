@@ -74,6 +74,32 @@ public class AkceSearcher implements EntitySearcher {
             SolrSearcher.addChildField(client, doc, "projekt", "valid_projekt", fields);
         }
     }
+    
+    public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("pian_id")) {
+                JSONArray cdjs = doc.getJSONArray("pian_id");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    String cdj = cdjs.getString(j);
+                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                    if (sub != null) {
+                        doc.append("pian", sub);
+                    }
+
+                }
+            }
+        }
+    }
 
     @Override
     public String[] getRelationsFields() {
@@ -117,6 +143,10 @@ public class AkceSearcher implements EntitySearcher {
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            
+            if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+                addPians(jo, client, request);
+            }
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
         } catch (Exception ex) {
@@ -153,6 +183,7 @@ public class AkceSearcher implements EntitySearcher {
             "akce_chranene_udaje:[json]",
             "chranene_udaje:[json]",
             "ext_odkaz:[json]",
+            "pian_id",
             "katastr:f_katastr_" + pristupnost, 
             "lat:lat_" + pristupnost,
             "lng:lng_" + pristupnost,
@@ -185,7 +216,7 @@ public class AkceSearcher implements EntitySearcher {
         }
 
         if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-            query.setFields("ident_cely,entity,hlavni_vedouci,organizace,pristupnost,pian:[json],katastr,okres,child_dokument,vazba_projekt",
+            query.setFields("ident_cely,entity,hlavni_vedouci,organizace,pristupnost,pian:[json],katastr,okres,child_dokument,vazba_projekt,pian_id",
                     "dokumentacni_jednotka_pian",
                     "dokumentacni_jednotka:[json]",
                     "chranene_udaje:[json]",

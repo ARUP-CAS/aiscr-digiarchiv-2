@@ -122,6 +122,32 @@ public class LokalitaSearcher implements EntitySearcher {
             SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
         }
     }
+    
+    public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("pian_id")) {
+                JSONArray cdjs = doc.getJSONArray("pian_id");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    String cdj = cdjs.getString(j);
+                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                    if (sub != null) {
+                        doc.append("pian", sub);
+                    }
+
+                }
+            }
+        }
+    }
 
     @Override
     public JSONObject search(HttpServletRequest request) {
@@ -131,6 +157,9 @@ public class LokalitaSearcher implements EntitySearcher {
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
+            if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+                addPians(jo, client, request);
+            }
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);
             return jo;

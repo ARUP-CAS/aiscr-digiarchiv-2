@@ -294,7 +294,6 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.setMarkersData();
           if (!byLoc) {
             this.markersList.forEach(m => {
-              console.log(m)
               if (m.pianPresnost !== 'HES-000864' && m.pianTyp !== 'bod') {
               //if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
                 this.addShape(m.pianId, m.pianPresnost, m.docId.length);

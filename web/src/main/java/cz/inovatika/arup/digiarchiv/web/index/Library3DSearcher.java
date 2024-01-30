@@ -98,21 +98,23 @@ public class Library3DSearcher implements EntitySearcher {
   
   @Override
   public String[] getSearchFields(String pristupnost) {
-//    return new String[]{"*,neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],jednotka_dokumentu:[json],let:[json],nalez_dokumentu:[json],komponenta_dokument:[json],tvar:[json]",
-//              "f_areal:f_areal_"+pristupnost,"f_obdobi:f_obdobi_"+pristupnost};
-    
-            String[] f = new String[]{
-            "*",
-            "neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],let:[json],nalez_dokumentu:[json],tvar:[json],location_info:[json]",
-            "dokument_cast:[json]",
+String[] f = new String[]{
+            Options.getInstance().getJSONObject("fields").getJSONArray("common").join(",").replaceAll("\"", ""),
+            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").join(",").replaceAll("\"", ""),
+            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("detail").join(",").replaceAll("\"", ""),
+            "dokument_cast_neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],nalez_dokumentu:[json],location_info:[json]",
+            // "dokument_cast:[json]",
             "komponenta:[json]",
             "okres", "f_okres", "pian_id",
+//            "f_pian_presnost:f_pian_presnost_" + pristupnost,
+//            "f_pian_typ:f_pian_typ_" + pristupnost,
+//            "f_pian_zm10:f_pian_zm10_" + pristupnost,
+            "loc:loc_" + pristupnost,
             "katastr:f_katastr_" + pristupnost,
             "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
             "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
             "lokalizace:f_lokalizace_" + pristupnost};
-            
-            return f;
+        return f;
   }
 
   public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

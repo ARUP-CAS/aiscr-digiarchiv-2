@@ -31,6 +31,9 @@ public class DokumentSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+                getChilds(jo, client, request);
+            }
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -133,7 +136,7 @@ public class DokumentSearcher implements EntitySearcher {
 //            "f_pian_presnost:f_pian_presnost_" + pristupnost,
 //            "f_pian_typ:f_pian_typ_" + pristupnost,
 //            "f_pian_zm10:f_pian_zm10_" + pristupnost,
-            "loc:loc_" + pristupnost,
+            "loc_rpt:loc_" + pristupnost,
             "katastr:f_katastr_" + pristupnost,
             "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
             "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
