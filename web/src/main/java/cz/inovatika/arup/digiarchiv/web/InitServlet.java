@@ -52,6 +52,8 @@ public class InitServlet extends HttpServlet {
   @Override
   public void init() throws ServletException {
   System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
+  System.setProperty("jdk.httpclient.keepalive.timeout", "2");
+  
     if (getServletContext().getInitParameter("def_config_dir") != null) {
       DEFAULT_CONFIG_DIR = getServletContext().getInitParameter("def_config_dir");
     }
