@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONObject;
 
@@ -28,23 +29,43 @@ public class IndexUtils {
 
     private static final Logger LOGGER = Logger.getLogger(IndexUtils.class.getName());
 
-    private static Http2SolrClient _solr;
+    private static Http2SolrClient _solrBin;
+    private static Http2SolrClient _solrNoOp;
 
-    public synchronized static Http2SolrClient getClient() {
+    public synchronized static Http2SolrClient getClientNoOp() {
         try {
-            if (_solr == null) {
-                _solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+            if (_solrNoOp == null) {
+                NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
+                dontMessWithSolr.setWriterType("json");
+                _solrNoOp = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost"))
+                        .withResponseParser(dontMessWithSolr)
+                        .build();
             }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
-        return _solr;
+        return _solrNoOp;
+    }
+
+    public synchronized static Http2SolrClient getClientBin() {
+        try {
+            if (_solrBin == null) {
+                _solrBin = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+            }
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+        return _solrBin;
     }
 
     public static void closeClient() {
-        if (_solr != null) {
-            _solr.close();
-            _solr = null;
+        if (_solrBin != null) {
+            _solrBin.close();
+            _solrBin = null;
+        }
+        if (_solrNoOp != null) {
+            _solrNoOp.close();
+            _solrNoOp = null;
         }
     }
 

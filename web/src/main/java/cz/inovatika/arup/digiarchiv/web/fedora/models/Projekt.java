@@ -180,7 +180,7 @@ public class Projekt implements FedoraModel {
                 IndexUtils.addJSONField(idoc, "soubor", s);
             }
             if (!idocs.isEmpty()) {
-                IndexUtils.getClient().add("soubor", idocs, 10);
+                IndexUtils.getClientBin().add("soubor", idocs, 10);
             }
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
@@ -228,7 +228,7 @@ public class Projekt implements FedoraModel {
         for (String f : facetFields) {
             query.addField(f);
         }
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", az);
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", az);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
 
@@ -256,7 +256,7 @@ public class Projekt implements FedoraModel {
     private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
                 .setFields("typ,presnost,chranene_udaje:[json]");
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", pian_id);
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian_id);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);

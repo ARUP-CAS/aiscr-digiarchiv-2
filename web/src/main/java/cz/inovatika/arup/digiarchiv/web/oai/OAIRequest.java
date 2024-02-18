@@ -116,7 +116,7 @@ public class OAIRequest {
                 String id = identifier.substring(prefix.length());
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery("ident_cely:\"" + id + "\"");
-                QueryResponse resp = IndexUtils.getClient().query("oai", query);
+                QueryResponse resp = IndexUtils.getClientBin().query("oai", query);
 
                 if (resp.getResults().getNumFound() == 0) {
                     return idDoesNotExist(req);
@@ -149,8 +149,8 @@ public class OAIRequest {
             data.put("expires", d);
             idoc.setField("data", data.toString());
             idoc.setField("expiration", d);
-            IndexUtils.getClient().add("work", idoc);
-            IndexUtils.getClient().commit("work");
+            IndexUtils.getClientBin().add("work", idoc);
+            IndexUtils.getClientBin().commit("work");
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -163,7 +163,7 @@ public class OAIRequest {
                     .setFields("data:[json]")
                     .addFilterQuery("type:resumptionToken")
                     .addFilterQuery("expiration:[NOW TO *]");
-            QueryResponse resp = IndexUtils.getClient().query("work", query);
+            QueryResponse resp = IndexUtils.getClientBin().query("work", query);
             SolrDocumentList docs = resp.getResults();
             if (docs.isEmpty()) {
                 return null;
@@ -332,7 +332,7 @@ public class OAIRequest {
                 query.addFilterQuery("datestamp:[" + from + " TO " + until + "]");
             }
             query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
-            QueryResponse resp = IndexUtils.getClient().query("oai", query);
+            QueryResponse resp = IndexUtils.getClientBin().query("oai", query);
 
             SolrDocumentList docs = resp.getResults();
             if (docs.getNumFound() == 0) {
@@ -425,7 +425,7 @@ public class OAIRequest {
             String id = req.getParameter("identifier").substring(prefix.length());
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("ident_cely:\"" + id + "\"");
-            QueryResponse resp = IndexUtils.getClient().query("oai", query);
+            QueryResponse resp = IndexUtils.getClientBin().query("oai", query);
 
             if (resp.getResults().getNumFound() == 0) {
                 return idDoesNotExist(req);

@@ -184,7 +184,7 @@ public class Dokument implements FedoraModel {
                 idoc.addField("soubor_filepath", s.path);
             }
             if (!idocs.isEmpty()) {
-                IndexUtils.getClient().add("soubor", idocs, 10);
+                IndexUtils.getClientBin().add("soubor", idocs, 10);
             }
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, null, ex);
@@ -224,7 +224,7 @@ public class Dokument implements FedoraModel {
                 .addFilterQuery("searchable:true")
                 .setFields("katastr,okres,pristupnost");
         query.addField("f_typ_vyzkumu");
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", id);
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", id);
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             if (doc.has("f_typ_vyzkumu")) {
@@ -240,7 +240,7 @@ public class Dokument implements FedoraModel {
 
         IndexUtils.addVocabField(idoc, "let_ident_cely", let);
         SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"");
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", let.getId());
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", let.getId());
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);

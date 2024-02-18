@@ -116,8 +116,9 @@ public class SearchUtils {
         }
     }
 
-    public static JSONObject searchOrIndex(SolrQuery query, Http2SolrClient client, String core, String id) {
+    public static JSONObject searchOrIndex(SolrQuery query, String core, String id) {
         try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             JSONObject json = json(query, client, core);
             if (json.getJSONObject("response").getInt("numFound") > 0) {
                 return json;

@@ -138,7 +138,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                 addAdbFields(idoc, (String) djdoc.getFieldValue("adb"));
             }
             if (!djdocs.isEmpty()) {
-                IndexUtils.getClient().add("entities", djdocs, 10);
+                IndexUtils.getClientBin().add("entities", djdocs, 10);
             }
         } catch (Exception ex) {
             Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);
@@ -221,7 +221,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     private void addAdbFields(SolrInputDocument idoc, String ident_cely) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + ident_cely + "\"")
                 .setFields("ident_cely,podnet,typ_sondy,autor_popisu,autor_revize");
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", ident_cely);
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", ident_cely);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
@@ -238,7 +238,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         idoc.addField("pian_id", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
                 .setFields("*,chranene_udaje:[json]");
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", pian);
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) { 
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {

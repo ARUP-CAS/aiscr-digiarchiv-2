@@ -175,7 +175,7 @@ class ADBChraneneUdaje {
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "vyskovy_bod", vb.ident_cely, pristupnost);
             }
             if (!idocs.isEmpty()) {
-                IndexUtils.getClient().add("entities", idocs, 10);
+                IndexUtils.getClientBin().add("entities", idocs, 10);
             }
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);

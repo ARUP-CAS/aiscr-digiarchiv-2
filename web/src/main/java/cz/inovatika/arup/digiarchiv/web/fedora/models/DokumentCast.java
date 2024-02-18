@@ -74,7 +74,7 @@ public class DokumentCast {
     private void addLocation(SolrInputDocument idoc, String pristupnost) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
                 .setFields("*,katastr:hlavni_katastr_" + pristupnost, "okres,pristupnost");
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", archeologicky_zaznam.getId());
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", archeologicky_zaznam.getId());
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
@@ -124,7 +124,7 @@ public class DokumentCast {
     private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
                 .setFields("typ,presnost,chranene_udaje:[json]");
-        JSONObject json = SearchUtils.searchOrIndex(query, IndexUtils.getClient(), "entities", pian_id);
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian_id);
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pian_id);
