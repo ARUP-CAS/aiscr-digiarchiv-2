@@ -36,7 +36,7 @@ public class HeslarIndexer {
   public JSONObject clean() {
 
     JSONObject ret = new JSONObject();
-    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            try {            Http2SolrClient client = IndexUtils.getClientNoOp();
       
 
       client.deleteByQuery("heslar", "*:*", 10);

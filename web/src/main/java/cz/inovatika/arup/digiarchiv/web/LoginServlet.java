@@ -235,7 +235,7 @@ public class LoginServlet extends HttpServlet {
 
                             // Pridame organizace z heslaru
                             int organizaceId = userJo.getInt("organizace");
-                            try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                                    try {            Http2SolrClient client = IndexUtils.getClientNoOp();
                                 SolrQuery query = new SolrQuery("id:" + organizaceId)
                                         .setRows(1)
                                         .addFilterQuery("heslar_name:organizace");

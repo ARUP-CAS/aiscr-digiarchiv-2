@@ -27,7 +27,8 @@ public class DokumentSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -48,7 +49,8 @@ public class DokumentSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");
@@ -99,13 +101,12 @@ public class DokumentSearcher implements EntitySearcher {
 //        String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";
 //        String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";
 
-
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
             if (LoginServlet.userId(request) != null) {
                 SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
             }
-            
+
             SolrSearcher.addChildFieldByEntity(client, doc, "dokument_cast_archeologicky_zaznam", String.join(",", f));
 
             if (doc.has("pian_id")) {
@@ -133,9 +134,9 @@ public class DokumentSearcher implements EntitySearcher {
             // "dokument_cast:[json]",
             "komponenta:[json]",
             "okres", "f_okres", "pian_id",
-//            "f_pian_presnost:f_pian_presnost_" + pristupnost,
-//            "f_pian_typ:f_pian_typ_" + pristupnost,
-//            "f_pian_zm10:f_pian_zm10_" + pristupnost,
+            //            "f_pian_presnost:f_pian_presnost_" + pristupnost,
+            //            "f_pian_typ:f_pian_typ_" + pristupnost,
+            //            "f_pian_zm10:f_pian_zm10_" + pristupnost,
             "loc_rpt:loc_" + pristupnost,
             "katastr:f_katastr_" + pristupnost,
             "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
@@ -271,7 +272,8 @@ public class DokumentSearcher implements EntitySearcher {
     }
 
     public String getPristupnostBySoubor(String id, String field) {
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
 
             SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
             QueryResponse rsp = client.query("relations", query);

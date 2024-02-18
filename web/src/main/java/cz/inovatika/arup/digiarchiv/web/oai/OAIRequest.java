@@ -319,12 +319,12 @@ public class OAIRequest {
                     + model);
 
             if (from != null || until != null) {
-                if (from == null) {
+                if (from == null || from.isBlank()) {
                     from = "*";
                 } else if (from.length() < 11) {
                     from = from + "T00:00:00Z";
                 }
-                if (until == null) {
+                if (until == null || until.isBlank()) {
                     until = "*";
                 } else if (until.length() < 11) {
                     until = until + "T23:59:59Z";

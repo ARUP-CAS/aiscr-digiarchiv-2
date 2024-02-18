@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web;
 import cz.inovatika.arup.digiarchiv.web.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.PIANSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
@@ -81,7 +82,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           SolrQuery query = new SolrQuery("*")
                   .setRequestHandler("/search")
                   .setRows(0)
@@ -102,7 +103,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           String entity = request.getParameter("entity");
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
@@ -145,14 +146,14 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
           String entity = request.getParameter("entity");
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
           if (entity == null) {
             query.setFields("entity");
-            JSONObject jo = SearchUtils.json(query, client, "entities");
+            JSONObject jo = SearchUtils.json(query, IndexUtils.getClientNoOp(), "entities");
             if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
               return jo.toString();
             }
@@ -164,24 +165,24 @@ public class SearchServlet extends HttpServlet {
           }
           EntitySearcher searcher = SearchUtils.getSearcher(entity);
           if (searcher != null) {
-            query.setFields(searcher.getSearchFields(pristupnost));
+            query.setFields(searcher.getSearchFields(pristupnost)); 
           } else {
             query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
                     + "ext_odkaz:[json],ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
                     + "dokument:[json],projekt:[json],samostatny_nalez:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
           }
-          JSONObject jo = SearchUtils.json(query, client, "entities");
+          JSONObject jo = SearchUtils.json(query, IndexUtils.getClientNoOp(), "entities");
           if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
             if (searcher != null) {
               //if ("pian".equals(entity) || "adb".equals(entity) || "ext_zdroj".equals(entity)) {
-                searcher.getChilds(jo, client, request);
+                searcher.getChilds(jo, IndexUtils.getClientNoOp(), request);
               //}
-              searcher.checkRelations(jo, client, request);
+              searcher.checkRelations(jo, IndexUtils.getClientNoOp(), request);
               searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             }
             ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
             if (cs != null) {
-              cs.getRelated(jo, client, request);
+              cs.getRelated(jo, IndexUtils.getClientNoOp(), request);
               if (!cs.isRelatedSearchable()) { 
                 jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
               }
@@ -206,7 +207,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           String entity = request.getParameter("entity");
           SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
                   .addFilterQuery("entity:" + entity)
@@ -266,7 +267,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
@@ -286,7 +287,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
@@ -315,7 +316,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
           SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                   .setFacet(false);
           query.setRequestHandler("/search");
@@ -328,7 +329,7 @@ public class SearchServlet extends HttpServlet {
               query.setFields("geometrie:geom_wkt");
           }
 
-          JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+          JSONObject jo = SearchUtils.json(query, IndexUtils.getClientNoOp(), "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 
           if ("GeoJSON".equals(format)) {
             jo.put("geometrie", GPSconvertor.convertGeojson(jo.getString("geometrie")));
@@ -345,14 +346,14 @@ public class SearchServlet extends HttpServlet {
     QUERY {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
           String entity = "" + request.getParameter("entity");
           EntitySearcher searcher = SearchUtils.getSearcher(entity);
           if (searcher == null) {
             searcher = new DokumentSearcher();
           }
           JSONObject jo = searcher.search(request);
-          searcher.checkRelations(jo, client, request);
+          searcher.checkRelations(jo, IndexUtils.getClientNoOp(), request);
           // searcher.getChilds(jo, client, request);
           // Remove stats in case of one result, without access
           int numFound = jo.getJSONObject("response").getInt("numFound");
@@ -412,7 +413,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           String pristupnost = LoginServlet.pristupnost(request.getSession());
           SolrQuery query = new SolrQuery("heslar:\"" + request.getParameter("id") + "\"")
                   .setRows(1000);
@@ -437,7 +438,7 @@ public class SearchServlet extends HttpServlet {
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         JSONObject ret = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           String pristupnost = LoginServlet.pristupnost(request.getSession());
           SolrQuery query = new SolrQuery("*")
                   .setFields("id,heslar,pole,heslo,poradi")
@@ -486,7 +487,7 @@ public class SearchServlet extends HttpServlet {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           SolrQuery query = new SolrQuery("*").setFilterQueries("heslar_name:obdobi_prvni")
                   .setRows(1000)
                   .setSort("poradi", SolrQuery.ORDER.asc)
@@ -510,7 +511,7 @@ public class SearchServlet extends HttpServlet {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
           String entity = request.getParameter("entity");
           if (entity == null) {
             entity = "dokument";

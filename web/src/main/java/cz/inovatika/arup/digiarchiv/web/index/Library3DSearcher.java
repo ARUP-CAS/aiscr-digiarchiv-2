@@ -68,7 +68,7 @@ public class Library3DSearcher implements EntitySearcher {
   @Override
   public JSONObject search(HttpServletRequest request) {
     JSONObject json = new JSONObject();
-    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            try {            Http2SolrClient client = IndexUtils.getClientNoOp();
       SolrQuery query = new SolrQuery("*");
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -86,7 +86,7 @@ public class Library3DSearcher implements EntitySearcher {
 
   @Override
   public String export(HttpServletRequest request) {
-    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            try {            Http2SolrClient client = IndexUtils.getClientNoOp();
       SolrQuery query = new SolrQuery();
       setQuery(request, query);
       return SearchUtils.csv(query, client, "entities");
@@ -208,7 +208,7 @@ String[] f = new String[]{
   }
 
   public String getPristupnostBySoubor(String id, String field) {
-    try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            try {            Http2SolrClient client = IndexUtils.getClientNoOp();
 
       SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
       QueryResponse rsp = client.query("relations", query);

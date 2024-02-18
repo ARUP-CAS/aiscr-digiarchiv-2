@@ -76,7 +76,7 @@ public class PIANSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery()
                     .setFacet(true);
             setQuery(request, query);
@@ -119,7 +119,7 @@ public class PIANSearcher implements EntitySearcher {
     public JSONObject getMapPians(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         // Menime entity
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             String entity = "" + request.getParameter("entity");
             if (entity == null || "null".equals(entity)) {
@@ -154,7 +154,7 @@ public class PIANSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");
