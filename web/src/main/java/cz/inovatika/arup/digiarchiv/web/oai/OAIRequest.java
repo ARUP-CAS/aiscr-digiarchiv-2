@@ -303,7 +303,7 @@ public class OAIRequest {
                         from = solrRt.getString("from");
                     }
                     if (solrRt.has("until")) {
-                        from = solrRt.getString("until");
+                        until = solrRt.getString("until");
                     }
 
                 } else {
@@ -321,12 +321,12 @@ public class OAIRequest {
             if (from != null || until != null) {
                 if (from == null || from.isBlank()) {
                     from = "*";
-                } else if (from.length() < 11) {
+                } else if (from.length() < 11 && !"*".equals(from)) {
                     from = from + "T00:00:00Z";
                 }
                 if (until == null || until.isBlank()) {
                     until = "*";
-                } else if (until.length() < 11) {
+                } else if (until.length() < 11 && !"*".equals(until)) {
                     until = until + "T23:59:59Z";
                 }
                 query.addFilterQuery("datestamp:[" + from + " TO " + until + "]");

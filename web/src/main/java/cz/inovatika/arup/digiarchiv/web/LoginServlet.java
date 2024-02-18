@@ -5,6 +5,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,12 +44,11 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    response.setContentType("application/json;charset=UTF-8");
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-    response.setDateHeader("Expires", 0); // Proxies.
-    
-    
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+        response.setDateHeader("Expires", 0); // Proxies.
+
         PrintWriter out = response.getWriter();
         try {
             String action = request.getPathInfo().substring(1);
@@ -111,8 +111,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     enum Actions {
-        
-        TOKEN { 
+
+        TOKEN {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
@@ -148,7 +148,7 @@ public class LoginServlet extends HttpServlet {
                 return jo;
             }
         },
-        LOGIN { 
+        LOGIN {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
@@ -164,7 +164,7 @@ public class LoginServlet extends HttpServlet {
                     }
 
                     if (user != null) {
-                        
+
                         jo = AuthService.login(user, pwd);
                         LOGGER.log(Level.FINE, jo.toString(2));
                         req.getSession().setAttribute("user", jo);
@@ -235,7 +235,8 @@ public class LoginServlet extends HttpServlet {
 
                             // Pridame organizace z heslaru
                             int organizaceId = userJo.getInt("organizace");
-                                    try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+                            try {
+                                Http2SolrClient client = IndexUtils.getClientNoOp();
                                 SolrQuery query = new SolrQuery("id:" + organizaceId)
                                         .setRows(1)
                                         .addFilterQuery("heslar_name:organizace");
@@ -250,7 +251,7 @@ public class LoginServlet extends HttpServlet {
 
                             } catch (Exception ex) {
                                 LOGGER.log(Level.WARNING, "Uzivatel bez organizace");
-                                userJo.put("organizaceNazev", "");
+                                userJo.put("organizaceNazev", ""); 
                             }
 
                             LOGGER.log(Level.FINE, jo.toString(2));
@@ -288,8 +289,8 @@ public class LoginServlet extends HttpServlet {
                 } catch (Exception ex) {
                     jo.put("error", ex.toString());
                 }
-        resp.setContentType("application/json;charset=UTF-8");
-        resp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+                resp.setContentType("application/json;charset=UTF-8");
+                resp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
                 return jo;
             }
         };
