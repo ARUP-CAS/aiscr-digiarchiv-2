@@ -146,7 +146,6 @@ public class SearchUtils {
             }
             NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
             dontMessWithSolr.setWriterType("json");
-            client.setParser(dontMessWithSolr);
             NamedList<Object> qresp = client.request(qreq, core);
             jsonResponse = (String) qresp.get("response");
             return new JSONObject(jsonResponse);
