@@ -75,4 +75,8 @@ public class FedoraUtils {
   public static JSONObject getJsonById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {
     return new JSONArray(request("record/" + id)).getJSONObject(0);
   }
+  
+  public static JSONObject getJsonMetadataById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {
+    return new JSONArray(request("record/" + id + "/metadata/fcr:metadata")).getJSONObject(0);
+  }
 }

@@ -161,7 +161,7 @@ public class IndexUtils {
 
     public static void setDateStamp(SolrInputDocument idoc, String id) {
         try {
-            JSONObject json = FedoraUtils.getJsonById(id);
+            JSONObject json = FedoraUtils.getJsonMetadataById(id);
             String d = json.getJSONArray("http://fedora.info/definitions/v4/repository#lastModified")
                     .getJSONObject(0).getString("@value");
             idoc.setField("datestamp", d);

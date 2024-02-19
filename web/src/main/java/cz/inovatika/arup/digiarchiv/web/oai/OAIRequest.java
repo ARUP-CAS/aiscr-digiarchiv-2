@@ -204,6 +204,13 @@ public class OAIRequest {
                 + "</OAI-PMH>";
     }
 
+    private static boolean validSet(String set) {
+        if ("akce".equals(set) || "lokalita".equals(set)) {
+            return false;
+        }
+        return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set); 
+    }
+
     public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers) {
         List<String> validParams = List.of("verb", "resumptionToken", "metadataPrefix", "from", "until", "set");
         List<String> params = Collections.list(req.getParameterNames());
@@ -280,6 +287,8 @@ public class OAIRequest {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
                 model = model + "\\:*";
+            } else if (!validSet(model)) {
+                return badArgument(req, "Invalid set");
             } else {
                 model = ClientUtils.escapeQueryChars(model);
             }
@@ -373,7 +382,11 @@ public class OAIRequest {
             return badArgument(req);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            return badArgument(req);
+        } catch (Exception ex) {
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            return badArgument(req);
+        } 
         if (onlyIdentifiers) {
             ret.append("</ListIdentifiers>");
         } else {
@@ -435,7 +448,11 @@ public class OAIRequest {
             appendRecord(ret, doc, req, false, metadataPrefix);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            return badArgument(req);
+        } catch (Exception ex) {
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            return badArgument(req);
+        } 
         ret.append("</OAI-PMH>");
         return ret.toString();
     }
@@ -488,7 +505,9 @@ public class OAIRequest {
         ret.append("</record>");
     }
 
-    private static final String ERROR_404_MSG = "HTTP/1.1 403 Forbidden";
+    private static final String ERROR_404_MSG = "<amcr:amcr xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:gml=\"https://www.opengis.net/gml/3.2\" xmlns:amcr=\"https://api.aiscr.cz/schema/amcr/2.0/\" xsi:schemaLocation=\"https://api.aiscr.cz/schema/amcr/2.0/ https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd\">\n" +
+"    HTTP/1.1 403 Forbidden\n" +
+"  </amcr:amcr>";
 
     private static String filter(HttpServletRequest req, SolrDocument doc) {
         // LoginServlet.organizace(req.getSession())

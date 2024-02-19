@@ -340,6 +340,28 @@ public class FedoraHarvester {
         }
     }
 
+    public JSONObject getIdMetadata(String id) throws IOException {
+        try {
+            LOGGER.log(Level.INFO, "Processing record {0}", id);
+            return FedoraUtils.getJsonMetadataById(id);
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject().put("error", ex);
+        }
+    }
+
+    public JSONObject getIdJSON(String id) throws IOException {
+        try {
+            LOGGER.log(Level.INFO, "Processing record {0}", id);
+            return FedoraUtils.getJsonById(id);
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject().put("error", ex);
+        }
+    }
+
     private void getModels() throws Exception {
 
         JSONArray models = Options.getInstance().getJSONObject("fedora").getJSONArray("models");

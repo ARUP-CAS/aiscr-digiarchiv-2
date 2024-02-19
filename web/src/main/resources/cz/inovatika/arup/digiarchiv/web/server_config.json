@@ -16,7 +16,7 @@
         "orderField": "datestamp",
         "orderDirection": "desc",
         "resumptionTokenExpires": 60,
-        "sets": ["dokument","ext_zdroj","pian","akce","lokalita","projekt","samostatny_nalez","heslo","ruian_kraj","ruian_okres","ruian_katastr","organizace",
+        "sets": ["dokument","ext_zdroj","pian","akce","lokalita","archeologicky_zaznam","archeologicky_zaznam:akce","archeologicky_zaznam:lokalita","projekt","samostatny_nalez","heslo","ruian_kraj","ruian_okres","ruian_katastr","organizace",
             "osoba","uzivatel","let", "adb"]
     },
     

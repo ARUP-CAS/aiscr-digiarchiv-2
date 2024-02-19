@@ -179,6 +179,32 @@ public class FedoraServlet extends HttpServlet {
         return json; 
       }
     },
+    GET_ID_METADATA { 
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        JSONObject json = new JSONObject();
+        try {
+          FedoraHarvester fh = new FedoraHarvester();
+          json.put("model", fh.getIdMetadata(req.getParameter("id")));
+        } catch (JSONException ex) {
+          json.put("error", ex.toString());
+        }
+        return json; 
+      }
+    },
+    GET_ID_JSON { 
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        JSONObject json = new JSONObject();
+        try {
+          FedoraHarvester fh = new FedoraHarvester();
+          json.put("model", fh.getIdJSON(req.getParameter("id")));
+        } catch (JSONException ex) {
+          json.put("error", ex.toString());
+        }
+        return json; 
+      }
+    },
     REQUEST { 
       @Override
       JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
