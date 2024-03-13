@@ -430,6 +430,8 @@ public class OAIRequest {
         ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req));
+        
+        ret.append("<GetRecord>");
         try {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";            
             if (req.getParameter("identifier").length() < prefix.length()) {
@@ -453,7 +455,7 @@ public class OAIRequest {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
             return badArgument(req);
         } 
-        ret.append("</OAI-PMH>");
+        ret.append("</GetRecord></OAI-PMH>");
         return ret.toString();
     }
 
@@ -470,7 +472,6 @@ public class OAIRequest {
         if (model.equals("akce") || model.equals("lokalita")) {
             model = "archeologicky_zaznam:" + model;
         }
-
         ret.append("<record>");
         ret.append("<header").append(status).append(" >")
                 .append("<identifier>")
