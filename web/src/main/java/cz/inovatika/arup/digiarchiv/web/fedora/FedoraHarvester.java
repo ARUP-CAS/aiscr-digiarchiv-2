@@ -156,12 +156,12 @@ public class FedoraHarvester {
                 s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
                 json = new JSONObject(s);
                 records = json.getJSONArray("items");
-                checkLists(0, indexed);
+                checkLists(0, indexed, "update");
             }
 
             ret.put("updated", indexed);
 
-            checkLists(0, indexed);
+            checkLists(0, indexed, "update");
             ret.put("items", json);
             solr.commit("oai");
             solr.commit("entities");
@@ -300,7 +300,7 @@ public class FedoraHarvester {
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             processRecord(id);
-            checkLists(0, 1);
+            checkLists(0, 1, id);
             solr.close();
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -413,10 +413,10 @@ public class FedoraHarvester {
                 }
 
                 ret.put(model, indexed++);
-                checkLists(batchSize, indexed);
+                checkLists(batchSize, indexed, model);
             }
 
-            checkLists(0, indexed);
+            checkLists(0, indexed, model);
             LOGGER.log(Level.INFO, "Index model {0} finished", model);
         }
     }
@@ -555,12 +555,12 @@ public class FedoraHarvester {
         return idoc;
     }
 
-    private void checkLists(int size, int indexed) throws SolrServerException, IOException {
+    private void checkLists(int size, int indexed, String model) throws SolrServerException, IOException {
         if (idocsEntities.size() > size) {
             solr.add("entities", idocsEntities);
             solr.commit("entities");
             idocsEntities.clear();
-            LOGGER.log(Level.INFO, "Indexed {0}", indexed);
+            LOGGER.log(Level.INFO, "Indexed {0}. {1}", new Object[]{indexed, model});
         }
         if (idocsOAI.size() > size) {
             solr.add("oai", idocsOAI);

@@ -104,10 +104,9 @@ public class Dokument implements FedoraModel {
     @Field
     public String poznamka;
 
-//<xs:element name="licence" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{licence}" -->
+//<xs:element name="licence" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{licence.ident_cely}" | "{licence.heslo}" -->
     @JacksonXmlProperty(localName = "licence")
-    @Field
-    public String licence;
+    public Vocab licence;
 
 //<xs:element name="osoba" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{osoby.ident_cely}" | "{osoby.vypis_cely}" -->
     @JacksonXmlProperty(localName = "osoba")
@@ -169,7 +168,8 @@ public class Dokument implements FedoraModel {
             IndexUtils.addVocabField(idoc, "jazyk_dokumentu", v);
         }
         IndexUtils.addVocabField(idoc, "ulozeni_originalu", ulozeni_originalu);
-
+        IndexUtils.addVocabField(idoc, "licence", licence);
+        
         for (Vocab v : osoba) {
             IndexUtils.addRefField(idoc, "osoba", v);
         }

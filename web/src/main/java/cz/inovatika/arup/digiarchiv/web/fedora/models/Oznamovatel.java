@@ -1,8 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.apache.solr.client.solrj.beans.Field;
 
 /**
@@ -35,5 +33,10 @@ public class Oznamovatel {
   @JacksonXmlProperty(localName = "email")
   @Field
   public String email;
+  
+  // <xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
+  @JacksonXmlProperty(localName = "poznamka")
+  @Field
+  public String poznamka;
   
 }

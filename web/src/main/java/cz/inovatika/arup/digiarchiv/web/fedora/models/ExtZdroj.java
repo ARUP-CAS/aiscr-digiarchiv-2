@@ -121,7 +121,8 @@ public class ExtZdroj implements FedoraModel {
 
 //  <xs:element name="organizace" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{organizace.ident_cely}" | "{organizace.nazev}" -->
     @JacksonXmlProperty(localName = "organizace")
-    public Vocab organizace;
+    @Field
+    public String organizace;
 
 //  <xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
     @JacksonXmlProperty(localName = "poznamka")
@@ -154,7 +155,7 @@ public class ExtZdroj implements FedoraModel {
             IndexUtils.addRefField(idoc, "editor", v);
         }
         IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
-        IndexUtils.addVocabField(idoc, "organizace", organizace);
+        // IndexUtils.addVocabField(idoc, "organizace", organizace);
         IndexUtils.addRefField(idoc, "typ", typ);
         IndexUtils.addVocabField(idoc, "typ_id", typ);
         //idoc.addField("ext_odkaz", objectMapper.writeValueAsString(ext_odkaz));
