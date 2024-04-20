@@ -116,27 +116,46 @@ public class SearchUtils {
         }
     }
 
-    public static JSONObject searchOrIndex(SolrQuery query, String core, String id) {
+    public static JSONObject searchOrIndex(SolrQuery query, String core, String id) throws Exception {
         try {
             Http2SolrClient client = IndexUtils.getClientNoOp();
-            JSONObject json = json(query, client, core);
+            JSONObject json = json(query, client, core, false);
             if (json.getJSONObject("response").getInt("numFound") > 0) {
                 return json;
             } else {
                 FedoraHarvester fh = new FedoraHarvester();
                 fh.indexId(id);
-                return json(query, client, core);
+                return json(query, client, core, false);
             }
         } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error retrieving {0}", id);
             LOGGER.log(Level.SEVERE, null, ex);
-            return new JSONObject().put("error", ex);
+            throw ex;
+        }
+    }
+
+    public static JSONObject searchById(SolrQuery query, String core, String id) {
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
+            JSONObject json = json(query, client, core);
+            return json;
+        } catch (Exception ex) {
+            return new JSONObject();
         }
     }
 
     public static JSONObject json(SolrQuery query, Http2SolrClient client, String core) { 
+        return json(query, client, core, true);
+    }
+
+    public static JSONObject json(SolrQuery query, Http2SolrClient client, String core, boolean onlySearchable) { 
         query.set("wt", "json");
         query.addFilterQuery("-is_deleted:true");
-        query.setRequestHandler("/search");
+        if (onlySearchable) {
+            query.setRequestHandler("/search");
+        } else {
+            query.setRequestHandler("/select");
+        }
         String qt = query.get("qt");
         String jsonResponse;
         try {

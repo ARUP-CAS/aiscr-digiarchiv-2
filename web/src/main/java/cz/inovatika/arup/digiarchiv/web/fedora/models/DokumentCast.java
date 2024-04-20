@@ -46,7 +46,7 @@ public class DokumentCast {
 
     public List<String> location_info = new ArrayList();
 
-    public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+    public void fillSolrFields(SolrInputDocument idoc, String pristupnost) throws Exception {
 
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
         idoc.addField("dokument_cast_ident_cely", ident_cely);
@@ -71,7 +71,7 @@ public class DokumentCast {
         }
     }
 
-    private void addLocation(SolrInputDocument idoc, String pristupnost) {
+    private void addLocation(SolrInputDocument idoc, String pristupnost) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
                 .setFields("*,katastr:hlavni_katastr_" + pristupnost, "okres,pristupnost");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", archeologicky_zaznam.getId());
@@ -121,7 +121,7 @@ public class DokumentCast {
         }
     }
     
-    private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) {
+    private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
                 .setFields("typ,presnost,chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian_id);

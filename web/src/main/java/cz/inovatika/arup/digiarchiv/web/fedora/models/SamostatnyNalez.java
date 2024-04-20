@@ -144,7 +144,7 @@ public class SamostatnyNalez implements FedoraModel {
     }
 
     @Override
-    public void fillSolrFields(SolrInputDocument idoc) {
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = stav == 4;
         idoc.setField("searchable", searchable);
@@ -250,7 +250,7 @@ public class SamostatnyNalez implements FedoraModel {
         String projektOrg = null;
         SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
                 .setFields("organizace");
-        JSONObject json = SearchUtils.searchOrIndex(query, "entities", projektId);
+        JSONObject json = SearchUtils.searchById(query, "entities", projektId);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");

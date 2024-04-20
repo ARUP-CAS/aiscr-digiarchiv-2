@@ -132,7 +132,7 @@ public class Projekt implements FedoraModel {
     public List<Vocab> dokument = new ArrayList();
 
     @Override
-    public void fillSolrFields(SolrInputDocument idoc) {
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = !archeologicky_zaznam.isEmpty() || !samostatny_nalez.isEmpty();
         idoc.setField("searchable", searchable);
@@ -213,7 +213,7 @@ public class Projekt implements FedoraModel {
         }
     }
 
-    private void addArch(SolrInputDocument idoc, String az) {
+    private void addArch(SolrInputDocument idoc, String az) throws Exception {
         String[] facetFields = new String[]{"dokumentacni_jednotka_komponenta_areal", 
             "dokumentacni_jednotka_komponenta_obdobi", 
             "f_aktivita", 
@@ -253,7 +253,7 @@ public class Projekt implements FedoraModel {
         }
     }
 
-    private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) {
+    private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
                 .setFields("typ,presnost,chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian_id);

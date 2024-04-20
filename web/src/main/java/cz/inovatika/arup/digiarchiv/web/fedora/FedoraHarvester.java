@@ -295,7 +295,7 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    public JSONObject indexId(String id) throws IOException {
+    public JSONObject indexId(String id) throws Exception {
         Instant start = Instant.now();
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
@@ -305,13 +305,14 @@ public class FedoraHarvester {
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
             ret.put("ellapsed time", interval);
-            LOGGER.log(Level.INFO, "Index by ID finished in {0}", interval);
+            LOGGER.log(Level.INFO, "Index by ID {0} finished in {1}", new Object[]{id, interval});
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             errors.put(ex);
             if (solr != null) {
                 solr.close();
             }
+            throw ex;
         } finally {
 
             if (solr != null) {
@@ -467,7 +468,7 @@ public class FedoraHarvester {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
             LOGGER.log(Level.SEVERE, null, ex);
             errors.put(id + ":  " + ex);
-            // throw new Exception(ex);
+            throw ex;
         }
     }
 
@@ -560,7 +561,7 @@ public class FedoraHarvester {
             solr.add("entities", idocsEntities);
             solr.commit("entities");
             idocsEntities.clear();
-            LOGGER.log(Level.INFO, "Indexed {0}. {1}", new Object[]{indexed, model});
+            LOGGER.log(Level.INFO, "Indexed {0} -> {1}", new Object[]{indexed, model});
         }
         if (idocsOAI.size() > size) {
             solr.add("oai", idocsOAI);
@@ -578,7 +579,7 @@ public class FedoraHarvester {
             if (l.size() > size) {
                 solr.add(key, l);
                 l.clear();
-                LOGGER.log(Level.INFO, "Indexed {0} {1}", new Object[]{indexed, key});
+                LOGGER.log(Level.INFO, "Indexed {0} - {1}", new Object[]{indexed, key});
             }
         }
     }

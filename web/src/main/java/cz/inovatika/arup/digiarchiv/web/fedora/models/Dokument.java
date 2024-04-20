@@ -138,7 +138,7 @@ public class Dokument implements FedoraModel {
     }
 
     @Override
-    public void fillSolrFields(SolrInputDocument idoc) {
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = stav == 3;
         idoc.setField("searchable", searchable);
@@ -218,25 +218,23 @@ public class Dokument implements FedoraModel {
         setFullText(idoc);
     }
 
-    private boolean processAkce(SolrInputDocument idoc, String id) {
+    private void processAkce(SolrInputDocument idoc, String id) throws Exception {
 
         SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
-                .addFilterQuery("searchable:true")
-                .setFields("katastr,okres,pristupnost");
-        query.addField("f_typ_vyzkumu");
+                //.addFilterQuery("searchable:true")
+                .setFields("searchable,katastr,okres,pristupnost,f_typ_vyzkumu");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", id);
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-            if (doc.has("f_typ_vyzkumu")) {
-                SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", doc.get("f_typ_vyzkumu"));
+            if (doc.optBoolean("searchable")) {
+                if (doc.has("f_typ_vyzkumu")) {
+                    SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", doc.get("f_typ_vyzkumu"));
+                }
             }
-            return true;
-        } else {
-            return false;
         }
     }
 
-    private void addLet(SolrInputDocument idoc) {
+    private void addLet(SolrInputDocument idoc) throws Exception {
 
         IndexUtils.addVocabField(idoc, "let_ident_cely", let);
         SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"");

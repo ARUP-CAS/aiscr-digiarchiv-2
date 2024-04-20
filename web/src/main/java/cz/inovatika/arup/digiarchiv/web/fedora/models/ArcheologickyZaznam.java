@@ -79,7 +79,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     }
 
     @Override
-    public void fillSolrFields(SolrInputDocument idoc) {
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception {
 
         entity = akce != null ? "akce" : "lokalita";
         idoc.setField("entity", entity);
@@ -132,10 +132,14 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "f_typ_vyzkumu", djdoc.getFieldValue("typ"));
 
                 // add loc field by pian
-                addPian(idoc, (String) djdoc.getFieldValue("pian"), (String) idoc.getFieldValue("pristupnost"));
+                if (djdoc.getFieldValue("pian") != null ) {
+                    addPian(idoc, (String) djdoc.getFieldValue("pian"), (String) idoc.getFieldValue("pristupnost"));
+                }
 
                 //add adb fields
-                addAdbFields(idoc, (String) djdoc.getFieldValue("adb"));
+                if (idoc.getFieldValue("adb") != null ) {
+                    addAdbFields(idoc, (String) djdoc.getFieldValue("adb"));
+                }
             }
             if (!djdocs.isEmpty()) {
                 IndexUtils.getClientBin().add("entities", djdocs, 10);
@@ -218,7 +222,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         }
     }
 
-    private void addAdbFields(SolrInputDocument idoc, String ident_cely) {
+    private void addAdbFields(SolrInputDocument idoc, String ident_cely) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + ident_cely + "\"")
                 .setFields("ident_cely,podnet,typ_sondy,autor_popisu,autor_revize");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", ident_cely);
@@ -234,7 +238,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         }
     } 
 
-    private void addPian(SolrInputDocument idoc, String pian, String pristupnost) {
+    private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
                 .setFields("*,chranene_udaje:[json]");

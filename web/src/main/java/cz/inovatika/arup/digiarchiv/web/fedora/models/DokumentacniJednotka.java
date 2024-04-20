@@ -72,7 +72,7 @@ public class DokumentacniJednotka {
     
     for (Komponenta k : komponenta) {
       IndexUtils.addJSONField(idoc, "komponenta", komponenta);
-      k.fillSolrFields(idoc, "dok_jednotka");
+      k.fillSolrFields(idoc, "dokumentacni_jednotka");
     }
     
     return idoc;
@@ -85,13 +85,13 @@ public class DokumentacniJednotka {
     
     try {
       ObjectMapper objectMapper = new ObjectMapper();
-      idoc.addField("dok_jednotka", objectMapper.writeValueAsString(this));
-      // IndexUtils.addFieldNonRepeat(idoc, "dok_jednotka", objectMapper.writeValueAsString(this));
+      idoc.addField("dokumentacni_jednotka", objectMapper.writeValueAsString(this));
+      // IndexUtils.addFieldNonRepeat(idoc, "dokumentacni_jednotka", objectMapper.writeValueAsString(this));
     } catch (JsonProcessingException ex) {
       Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
     }
     for (Komponenta k : komponenta) {
-      k.fillSolrFields(idoc, "dok_jednotka");
+      k.fillSolrFields(idoc, "dokumentacni_jednotka");
     }
     
     if(pian != null) {

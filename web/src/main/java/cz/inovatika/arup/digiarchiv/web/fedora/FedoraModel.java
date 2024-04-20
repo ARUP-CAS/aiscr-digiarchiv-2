@@ -70,7 +70,7 @@ public interface FedoraModel {
      *
      * @param idoc
      */
-    public void fillSolrFields(SolrInputDocument idoc);
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception;
 
     /**
      * Filter oai record based on security
@@ -129,7 +129,7 @@ public interface FedoraModel {
             sr.nextTag();
             sr.nextTag();
             return (FedoraModel) xmlMapper.readValue(sr, clazz);
-        } catch (IOException | XMLStreamException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, "Error parsing {0}", xml);
             Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new Exception(ex);
