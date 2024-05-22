@@ -189,11 +189,15 @@ public class FedoraHarvester {
     private void processUpdateItems(JSONArray records, boolean isDeleted) throws Exception {
         for (int i = 0; i < records.length(); i++) {
             String id = records.getJSONObject(i).getString("fedora_id");
-            id = id.substring(id.lastIndexOf("record/") + 7);
-            id = id.substring(0, id.indexOf("/metadata"));
             if (isDeleted) {
+                id = id.substring(id.lastIndexOf("member/") + 7);
                 processDeleted(id, records.getJSONObject(i).getString("modified"));
             } else {
+                id = id.substring(id.lastIndexOf("record/") + 7);
+                if (id.contains("/metadata")) {
+                    id = id.substring(0, id.indexOf("/metadata"));
+                }
+                id = id.split("/")[0];
                 processRecord(id);
             }
         }
