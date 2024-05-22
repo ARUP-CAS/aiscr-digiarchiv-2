@@ -135,9 +135,13 @@ public class SearchUtils {
     }
 
     public static JSONObject searchById(SolrQuery query, String core, String id) {
+        return searchById(query, core, id, true);
+    }
+
+    public static JSONObject searchById(SolrQuery query, String core, String id, boolean onlySearchable) {
         try {
             Http2SolrClient client = IndexUtils.getClientNoOp();
-            JSONObject json = json(query, client, core);
+            JSONObject json = json(query, client, core, onlySearchable);
             return json;
         } catch (Exception ex) {
             return new JSONObject();

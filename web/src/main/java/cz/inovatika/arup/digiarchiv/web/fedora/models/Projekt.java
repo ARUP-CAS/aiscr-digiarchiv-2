@@ -31,6 +31,7 @@ import org.locationtech.jts.io.WKTReader;
 @JacksonXmlRootElement(localName = "projekt")
 public class Projekt implements FedoraModel {
 
+
     @Field
     public String entity = "projekt";
 
@@ -280,6 +281,7 @@ public class Projekt implements FedoraModel {
 //-- D-E: bez omezení 
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
+        System.out.println(userPr);
         if (userPr.compareToIgnoreCase("D") >= 0) {
             return true;
         } else if (userPr.equalsIgnoreCase("C") && st >= 1) {
@@ -293,6 +295,8 @@ public class Projekt implements FedoraModel {
 }
 
 class ProjektChraneneUdaje {
+    
+    public static final Logger LOGGER = Logger.getLogger(ProjektChraneneUdaje.class.getName());
 
 //<xs:element name="hlavni_katastr" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "ruian-{hlavni_katastr.kod}" | "{hlavni_katastr.nazev}" -->
     @JacksonXmlProperty(localName = "hlavni_katastr")
@@ -337,16 +341,21 @@ class ProjektChraneneUdaje {
         if (geom_wkt != null) {
 
             String wktStr = geom_wkt.getValue();
-            final WKTReader reader = new WKTReader();
-            try {
-                Geometry geometry = reader.read(wktStr);
-                Point p = geometry.getCentroid();
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
-            } catch (Exception e) {
-                throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
+            if (!wktStr.isBlank()) {
+                final WKTReader reader = new WKTReader();
+                try {
+                    Geometry geometry = reader.read(wktStr);
+                    Point p = geometry.getCentroid();
+                    IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
+                    IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
+                    IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
+                    IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Can't parse string {0} as WKT", wktStr);
+                    throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
+                    
+                }
+                
             }
 
         }

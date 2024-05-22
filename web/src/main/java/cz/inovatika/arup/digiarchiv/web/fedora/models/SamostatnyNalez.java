@@ -246,15 +246,25 @@ public class SamostatnyNalez implements FedoraModel {
         if (user.has("organizace")) {
           userOrg = user.getJSONObject("organizace").optString("id", "");
         }
+        
         String projektId = (String) doc.getFieldValue("projekt");
+        
+        SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
+                .setFields("projekt");
+        JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
+        if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
+            projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt");
+        }
+        
         String projektOrg = null;
-        SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
+        query = new SolrQuery("ident_cely:\"" + projektId + "\"")
                 .setFields("organizace");
-        JSONObject json = SearchUtils.searchById(query, "entities", projektId);
+        JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");
         }
+        
         if (userPr.compareToIgnoreCase("C") > 0) {
             return true;
         } else if (st == 4) {
