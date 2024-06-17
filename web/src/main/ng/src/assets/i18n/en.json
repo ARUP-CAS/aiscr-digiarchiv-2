@@ -271,7 +271,9 @@
       "rada": "Document - series",
       "predano_organizace": "Transferred to organisation",
       "predmet_kategorie": "Find - category",
-      "vyber": "Map selection"
+      "vyber": "Map selection",
+      "f_nahrada": "Document - replacement copy",
+      "f_udalost_typ": "Document - type of event"
     }
   },
 
@@ -436,7 +438,8 @@
       "záznamů": "records",
       "dalsi_katastry": "Other cadastres",
       "lokalita_zachovalost": "State of preservation",
-      "lokalita_jistota": "Level of confidence"
+      "lokalita_jistota": "Level of confidence",
+      "geom_system": "Primary EPSG"
     },
     "button": {
       "Skrýt detail": "Hide detail",
