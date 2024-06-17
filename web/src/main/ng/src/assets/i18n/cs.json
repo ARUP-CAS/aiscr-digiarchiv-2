@@ -271,7 +271,9 @@
       "rada": "Dokument - řada",
       "predano_organizace": "Předáno organizaci",
       "predmet_kategorie": "Nález - kategorie",
-      "vyber": "Mapový výběr"
+      "vyber": "Mapový výběr",
+      "f_nahrada": "Dokument - náhradní kopie",
+      "f_udalost_typ": "Dokument - typ události"
     }
   },
 
@@ -351,9 +353,9 @@
       "Původní označení": "Původní označení",
       "Dokument - datum zveřejnění": "Datum zveřejnění",
       "Objekt/kontext": "Objekt/kontext",
-      "Poloha (WGS-84)": "Poloha (WKT)",
-      "Poloha (WKT)": "Poloha (WGS-84)",
-      "Poloha (GML)": "Poloha (GML)",
+      "Poloha (WGS-84)": "Lokalizace (WKT)",
+      "Poloha (WKT)": "Lokalizace (WGS-84)",
+      "Poloha (GML)": "Lokalizace (GML)",
       "Dokument - formát": "Formát",
       "Výška (cm)": "Výška (cm)",
       "Šířka (cm)": "Šířka (cm)",
@@ -436,7 +438,8 @@
       "záznamů": "záznamů",
       "dalsi_katastry": "Další katastry",
       "lokalita_zachovalost": "Stav dochování",
-      "lokalita_jistota": "Jistota určení"
+      "lokalita_jistota": "Jistota určení",
+      "geom_system": "Primární EPSG"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
