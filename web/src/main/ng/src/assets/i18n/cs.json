@@ -240,7 +240,7 @@
       "nazev": "Lokalita - název",
       "dok_jednotka_ident_cely": "Dok. jednotka - identifikátor",
       "dok_jednotka_nazev": "Dok. jednotka - název",
-      "dok_jednotka_negativni_jednotka": "Dok. jednotka - negativní zjištění",
+      "dok_jednotka_negativni_jednotka": "Dok. jednotka - typ zjištění",
       "pian_ident_cely": "Dok. jednotka - související PIAN",
       "adb_ident_cely": "ADB - identifikátor",
       "adb_uzivatelske_oznaceni_sondy": "ADB - uživatelské označení",
@@ -308,7 +308,7 @@
       "pocet": "Počet",
       "nalezove_okolnosti": "Nálezové okolnosti",
       "hloubka": "Hloubka (cm)",
-      "dok_jednotka_negativni_jednotka": "Negativní zjištění",
+      "dok_jednotka_negativni_jednotka": "Typ zjištění",
       "f_pozorovatel": "Pozorovatel",
       "f_pian_zm10": "Základní mapa 1:10 000"
     },
@@ -353,6 +353,7 @@
       "Objekt/kontext": "Objekt/kontext",
       "Poloha (WGS-84)": "Poloha (WKT)",
       "Poloha (WKT)": "Poloha (WGS-84)",
+      "Poloha (GML)": "Poloha (GML)",
       "Dokument - formát": "Formát",
       "Výška (cm)": "Výška (cm)",
       "Šířka (cm)": "Šířka (cm)",
@@ -414,7 +415,7 @@
       "Rok popisu": "Rok popisu",
       "Autor revize": "Autor revize",
       "Rok revize": "Rok revize",
-      "Dok. jednotka - negativní zjištění": "Negativní zjištění",
+      "Dok. jednotka - negativní zjištění": "Typ zjištění",
       "Dostupné z": "Dostupné z",
       "Datum a čas": "Datum a čas",
       "Trasa": "Trasa",
@@ -433,7 +434,9 @@
       "Favorites": "Oblíbené",
       "Persistentní odkaz": "Persistentní odkaz",
       "záznamů": "záznamů",
-      "dalsi_katastry": "Další katastry"
+      "dalsi_katastry": "Další katastry",
+      "lokalita_zachovalost": "Stav dochování",
+      "lokalita_jistota": "Jistota určení"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
