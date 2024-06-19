@@ -25,32 +25,34 @@ public class DokJednotkaSearcher implements ComponentSearcher {
 
   @Override
   public void getRelated(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fields = "ident_cely,entity,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
             + ",nazev,typ_lokality,druh,popis";
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      if (doc.has("parent_akce")) {
-        JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_akce"), fields);
-        if (sub != null) {
-          doc.append(sub.getString("entity"), sub);
-          parentSearchable = true;
-        }
-      }
-      if (doc.has("parent_lokalita")) {
-        JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_lokalita"), fields);
-        if (sub != null) {
-          doc.append(sub.getString("entity"), sub);
-          parentSearchable = true;
-        }
-      }
+//      if (doc.has("parent_akce")) {
+//        JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_akce"), fields);
+//        if (sub != null) {
+//          doc.append(sub.getString("entity"), sub);
+//          parentSearchable = true;
+//        }
+//      }
+//      if (doc.has("parent_lokalita")) {
+//        JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_lokalita"), fields);
+//        if (sub != null) {
+//          doc.append(sub.getString("entity"), sub);
+//          parentSearchable = true;
+//        }
+//      }
       
       String ident_cely = doc.getString("ident_cely");
       SolrQuery query = new SolrQuery("*").addFilterQuery("dokumentacni_jednotka_ident_cely:\""+ident_cely+"\"");
+      AkceSearcher as = new AkceSearcher();
+      query.setFields(as.getChildSearchFields("A"));
       try {
         JSONObject sub = SolrSearcher.json(client, "entities", query);
         JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
+        
         for (int j = 0; j < subs.length(); j++) {
           doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
         }

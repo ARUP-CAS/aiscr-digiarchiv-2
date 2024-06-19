@@ -71,8 +71,9 @@ public class DokumentacniJednotka {
     IndexUtils.addVocabField(idoc, "adb", adb);
     
     for (Komponenta k : komponenta) {
-      IndexUtils.addJSONField(idoc, "komponenta", komponenta);
+      IndexUtils.addJSONField(idoc, "komponenta", k);
       k.fillSolrFields(idoc, "dokumentacni_jednotka");
+      
     }
     
     return idoc;

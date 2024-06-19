@@ -1,10 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
-import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -199,6 +196,7 @@ public class AkceSearcher implements EntitySearcher {
     public String[] getChildSearchFields(String pristupnost) {
         //  return getSearchFields(pristupnost);
         return new String[]{"ident_cely,entity,pristupnost,okres,hlavni_vedouci,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dokument",
+            "akce_chranene_udaje:[json]",
             "lokalizace:lokalizace_okolnosti_" + pristupnost,
             "katastr:f_katastr_" + pristupnost,
             "dalsi_katastry:f_dalsi_katastry_" + pristupnost};

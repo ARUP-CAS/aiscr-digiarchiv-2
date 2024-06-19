@@ -265,14 +265,14 @@
         "foto mikro": "foto",
         "foto konzervace": "foto",
 
-        "letfoto krajiny": "lfoto",
-        "letfoto lokality": "lfoto",
-        "letfoto metoda": "lfoto",
-        "letfoto výzkumu": "lfoto",
-        "letfoto vegetačních příznaků": "lfoto",
-        "letfoto půdních příznaků": "lfoto",
-        "letfoto sněžných příznaků": "lfoto",
-        "letfoto stínových příznaků": "lfoto",    
+        "letecká fotografie krajiny": "lfoto",
+        "letecká fotografie lokality": "lfoto",
+        "letecká fotografie metoda": "lfoto",
+        "letecká fotografie výzkumu": "lfoto",
+        "letecká fotografie vegetačních příznaků": "lfoto",
+        "letecká fotografie půdních příznaků": "lfoto",
+        "letecká fotografie sněžných příznaků": "lfoto",
+        "letecká fotografie stínových příznaků": "lfoto",    
 
         "plán regionu": "mplany",
         "plán lokality": "mplany",
@@ -392,7 +392,8 @@
       "f_druh_nalezu",
       "f_specifikace",
       "f_obdobi",
-      "f_kategorie"
+      "f_kategorie",
+      "lokalita_zachovalost"
     ]
   },
   "samostatny_nalez": {

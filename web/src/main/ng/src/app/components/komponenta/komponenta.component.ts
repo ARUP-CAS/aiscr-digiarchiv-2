@@ -31,6 +31,7 @@ export class KomponentaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.result)
     if (this.result.nalez && !this.result.nalez.hasOwnProperty('length')) {
       this.result.nalez = [this.result.nalez];
     }

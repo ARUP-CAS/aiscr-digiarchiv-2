@@ -29,6 +29,7 @@ public class KomponentaSearcher implements ComponentSearcher {
     String fields = "*";
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
+      parentSearchable = true;
       if (doc.has("parent")) {
         JSONObject ch = SolrSearcher.getById(client, doc.getString("parent"), fields);
         if (ch != null) {

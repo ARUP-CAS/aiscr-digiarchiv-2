@@ -2,9 +2,13 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
@@ -15,7 +19,12 @@ import org.apache.solr.common.SolrInputField;
  * @author alberto
  */
 public class Komponenta {
+@Field
+  public String entity = "komponenta";
 
+  @Field
+  public boolean searchable = true;
+  
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
   @JacksonXmlProperty(localName = "ident_cely")
   @Field
@@ -59,10 +68,11 @@ public class Komponenta {
   public void fillSolrFields(SolrInputDocument idoc, String prefix) {
     DocumentObjectBinder dob = new DocumentObjectBinder();
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
-    IndexUtils.addVocabField(kdoc, "obdobi", obdobi);
+    IndexUtils.addJSONField(kdoc, "obdobi", obdobi);
     IndexUtils.addVocabField(kdoc, "areal", areal);
     for (Vocab a : aktivita) {
-        IndexUtils.addVocabField(kdoc, "aktivita", a);
+        // IndexUtils.addVocabField(kdoc, "aktivita", a);
+        IndexUtils.addJSONField(kdoc, "aktivita", a);
     }
     if (!nalez_objekt.isEmpty()) {
       kdoc.addField("typ_nalezu", "objekt");
@@ -85,6 +95,12 @@ public class Komponenta {
     for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
       idoc.setField(prefix + "_komponenta_" + entry.getKey(), entry.getValue().getValue());
     }
+      try {
+          IndexUtils.getClientBin().add("entities", kdoc, 10);
+      } catch (SolrServerException | IOException ex) {
+          Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
+          Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
+      }
   }
 
 }

@@ -37,7 +37,8 @@
         </ng-container>
         <ng-container *ngIf="result.lokalita_zachovalost">
           <label class="app-label">{{ 'card.desc.lokalita_zachovalost' | translate }}:</label>&#160;
-          <span>{{ result.lokalita_zachovalost | translateHeslar : 'lokalita_zachovalost' }}</span> 
+          <app-inline-filter [isChild]="isChild" [field]="'lokalita_zachovalost'" [value]="result.lokalita_zachovalost" [heslar]="'lokalita_zachovalost'"></app-inline-filter>
+          <!-- <span>{{ result.lokalita_zachovalost | translateHeslar : 'lokalita_zachovalost' }}</span>  -->
           <span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.lokalita_jistota">

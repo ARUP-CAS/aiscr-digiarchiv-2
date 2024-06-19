@@ -260,6 +260,9 @@ public class SearchUtils {
             case "dokument":
                 searcher = new DokumentSearcher();
                 break;
+//            case "komponenta":
+//                searcher = new KomponentaSearcher();
+//                break;
             default:
                 searcher = null;
         }

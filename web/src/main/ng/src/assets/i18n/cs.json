@@ -265,6 +265,7 @@
       "f_dokumentacni_jednotka_typ": "Akce/lokalita - typ dokumentační jednotky",
       "f_typ_lokality": "Lokalita - typ",
       "f_druh_lokality": "Lokalita - druh",
+      "lokalita_zachovalost": "Lokalita - stav dochování",
       "f_nalezce": "Sam. nález - nálezce",
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
       "loc_rpt": "Mapový výběr",

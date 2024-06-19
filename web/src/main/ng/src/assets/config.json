@@ -209,7 +209,9 @@
     {"type": "text", "field": "komponenta_poznamka"},
 
     {"type": "text", "field": "nalez_pocet"},
-    {"type": "text", "field": "nalez_poznamka"}   
+    {"type": "text", "field": "nalez_poznamka"}, 
+
+    {"type": "text", "field": "lokalita_zachovalost"}
   ],
   
   "facets": [
@@ -236,9 +238,9 @@
     "f_nalezove_okolnosti",    
     "f_typ_lokality",    
     "f_druh_lokality",
-    "f_typ_projektu", 
-    "f_zachovalost",
+    "f_typ_projektu",
     "f_jistota",
+    "lokalita_zachovalost",
     
     "f_autor",
     "kategorie_dokumentu",

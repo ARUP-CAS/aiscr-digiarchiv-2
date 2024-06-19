@@ -110,6 +110,9 @@
    <field name="parent_lokalita_okres" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="location_info" type="string" indexed="false" stored="true" multiValued="true" /> 
    
+   
+   <field name="aktivita" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+   
   
    <!-- Akce and lokalita fields -->
    <field name="je_nz" type="boolean" indexed="true" stored="true" multiValued="false" /> 
@@ -214,6 +217,7 @@
    <dynamicField name="nalez_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    <dynamicField name="ext_zdroj_*" type="lowercase_cs" indexed="true" stored="true"  multiValued="true" />
    
+   <field name="typ_nalezu" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    <field name="adv_jmeno" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    
    <!-- obdobi integer for filters --> 
