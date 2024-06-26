@@ -4,6 +4,8 @@ export interface Sort { label: string; field: string; dir: string; entity?: stri
 export class Configuration {
   context: string;
   serverUrl: string;
+  registrationUrl: string;
+  helpUrl: string;
   amcr: string;
   amcr_server: string;
   isIndexing: boolean;

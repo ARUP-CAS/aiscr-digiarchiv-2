@@ -6,6 +6,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { DOCUMENT } from '@angular/common';
+import { AppConfiguration } from 'src/app/app-configuration';
 
 @Component({
   selector: 'app-navbar',
@@ -22,6 +23,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private overlay: Overlay,
     private viewContainerRef: ViewContainerRef,
+    public config: AppConfiguration,
     private dialog: MatDialog,
     public state: AppState,
     private service: AppService,

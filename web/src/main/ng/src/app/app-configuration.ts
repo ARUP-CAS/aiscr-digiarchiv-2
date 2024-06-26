@@ -23,6 +23,14 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.serverUrl;
     }
 
+    public get registrationUrl() {
+        return this.config.registrationUrl;
+    }
+
+    public get helpUrl() {
+        return this.config.helpUrl;
+    }
+
     public get amcr() {
         return this.config.amcr;
     }

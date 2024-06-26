@@ -82,8 +82,8 @@ public class I18n {
     // Organizace
     String field = "nazev"; 
     if ("en".equals(locale)) {
-      field += "_zkraceny_en";
-    }
+      field += "_en";
+    } 
     String urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/")
             + "organizations/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + field;
     inputStream = RESTHelper.inputStream(urlOrg);

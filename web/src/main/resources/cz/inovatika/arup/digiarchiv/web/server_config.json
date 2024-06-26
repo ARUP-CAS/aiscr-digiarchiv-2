@@ -17,7 +17,7 @@
         "orderDirection": "desc",
         "resumptionTokenExpires": 60,
         "sets": ["dokument","ext_zdroj","pian","akce","lokalita","archeologicky_zaznam","archeologicky_zaznam:akce","archeologicky_zaznam:lokalita","projekt","samostatny_nalez","heslo","ruian_kraj","ruian_okres","ruian_katastr","organizace",
-            "osoba","uzivatel","let", "adb"]
+            "osoba","uzivatel","let", "adb","knihovna_3d"]
     },
     
     "auth": "http://192.168.254.30:8080/api/",
@@ -290,12 +290,12 @@
     
     
 
-    "fields": {
-        "common": [
-          "ident_cely",
-          "pristupnost",
-          "entity"
-        ],
+"fields": {
+    "common": [
+      "ident_cely",
+      "pristupnost",
+      "entity"
+    ],
   "dokument": {
     "header": [
       "autor",

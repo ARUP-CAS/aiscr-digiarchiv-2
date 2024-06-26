@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Projekt;
@@ -213,9 +209,8 @@ public interface FedoraModel {
             case "organizace":
                 return new Organizace();
             case "dokument":
+            case "knihovna_3d":
                 return new Dokument();
-//      case "knihovna_3d":
-//        return Dokument.class;
             case "uzivatel":
                 return new Uzivatel();
             case "osoba":
