@@ -74,6 +74,13 @@
     -->
     <!-- <lib dir="${solr.install.dir:../../../..}/modules/ltr/lib" regex=".*\.jar" /> -->
      <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib" regex=".*\.jar"  /> 
+     
+     
+<!--  <lib dir="${solr.install.dir:../../../..}/modules/langid/lib/" regex=".*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/modules/langid/lib/" regex="solr-langid-\d.*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib/" regex="solr-analysis-extras-\d.*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib/" regex="lucene-analysis-icu-\d.*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib/" regex="icu4j-\d.*\.jar" />-->
     
     
 
@@ -775,7 +782,7 @@
        <str name="stats.field">datum_zverejneni</str>
        <str name="stats.field">extra_data_datum_vzniku</str>
        <str name="stats.field">let_datum</str>
-       <str name="stats.field">datum_nalezu</str>
+       <str name="stats.field">samostatny_nalez_datum_nalezu</str>
        <str name="stats.field">rok_vzniku</str>
        <str name="stats.field">rok_vydani</str>
        <str name="stats.field">datum_provedeni_od</str>

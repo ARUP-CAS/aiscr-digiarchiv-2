@@ -155,7 +155,7 @@ class ADBChraneneUdaje {
         IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
 
-        IndexUtils.setSecuredJSONField(idoc, this);
+        IndexUtils.setSecuredJSONField(idoc, "adb_chranene_udaje", this);
 
         // VyskovyBod as solr document
         List<SolrInputDocument> idocs = new ArrayList<>();

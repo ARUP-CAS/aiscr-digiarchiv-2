@@ -60,11 +60,11 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   setVsize() {
 
-    if (this.result.archeologicky_zaznam) {
-      this.numChildren += this.result.archeologicky_zaznam.length;
+    if (this.result.projekt_archeologicky_zaznam) {
+      this.numChildren += this.result.projekt_archeologicky_zaznam.length;
     }
-    if (this.result.samostatny_nalez) {
-      this.numChildren += this.result.samostatny_nalez.length;
+    if (this.result.projekt_samostatny_nalez) {
+      this.numChildren += this.result.projekt_samostatny_nalez.length;
     }
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
@@ -88,9 +88,9 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   getSamostatnyNalez() {
     this.result.valid_samostatny_nalez = [];
-    if (this.result.samostatny_nalez) {
-      for (let i = 0; i < this.result.samostatny_nalez.length; i=i+10) {
-        const ids = this.result.samostatny_nalez.slice(i, i+10);
+    if (this.result.projekt_samostatny_nalez) {
+      for (let i = 0; i < this.result.projekt_samostatny_nalez.length; i=i+10) {
+        const ids = this.result.projekt_samostatny_nalez.slice(i, i+10);
         this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
           this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
           if (res.response.docs.length < 10) {
@@ -123,7 +123,7 @@ export class ProjektComponent implements OnInit, OnChanges {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       
-      this.state.loading = (this.result.archeologicky_zaznam.length + this.result.samostatny_nalez.length) < this.numChildren;
+      this.state.loading = (this.result.projekt_archeologicky_zaznam.length + this.result.projekt_samostatny_nalez.length) < this.numChildren;
       this.state.documentProgress = 0;
       this.getArchZaznam();
       this.getSamostatnyNalez();

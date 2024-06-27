@@ -70,16 +70,16 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   }  
 
   setVsize() {
-      if (this.result.projekt) {
+      if (this.result.samostatny_nalez_projekt) {
         this.numChildren = 1;
       }
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getProjekts() {
-    if (this.result.projekt) {
+    if (this.result.samostatny_nalez_projekt) {
       this.result.valid_projekt = [];
-        this.service.getIdAsChild([this.result.projekt], "projekt").subscribe((res: any) => {
+        this.service.getIdAsChild([this.result.samostatny_nalez_projekt], "projekt").subscribe((res: any) => {
           this.result.valid_projekt = this.result.valid_projekt.concat(res.response.docs);
           this.state.loading = false;
         });

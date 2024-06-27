@@ -10,7 +10,7 @@
         <ng-container [ngSwitch]="isChild">
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
-        </ng-container><span class="app-pipe"></span>{{ result.nalezce }}<span class="app-pipe"></span>{{ result.datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
+        </ng-container><span class="app-pipe"></span>{{ result.samostatny_nalez_nalezce }}<span class="app-pipe"></span>{{ result.samostatny_nalez_datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
     </mat-card-title>
@@ -26,14 +26,14 @@
         <mat-icon>image_not_supported</mat-icon>
       </div>
       <div fxFlex class="app-metadata">
-        <div *ngIf="result.predano_organizace || result.inv_cislo || result.pristupnost">
-          <ng-container *ngIf="result.predano_organizace">
+        <div *ngIf="result.samostatny_nalez_predano_organizace || result.samostatny_nalez_evidencni_cislo || result.pristupnost">
+          <ng-container *ngIf="result.samostatny_nalez_predano_organizace">
             <label class="app-label">{{ 'card.desc.Předáno organizaci' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.predano_organizace" [heslar]="'organizace'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
-          <ng-container *ngIf="result.evidencni_cislo">
-            <label class="app-label">{{ 'card.desc.Sam. nález - evidenční č.' | translate }}:</label>&#160;{{result.evidencni_cislo}}
+          <ng-container *ngIf="result.samostatny_nalez_evidencni_cislo">
+            <label class="app-label">{{ 'card.desc.Sam. nález - evidenční č.' | translate }}:</label>&#160;{{result.samostatny_nalez_evidencni_cislo}}
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.pristupnost">
@@ -42,30 +42,30 @@
           </ng-container>
         </div>
         <div>
-          <ng-container *ngIf="result.obdobi"><label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
+          <ng-container *ngIf="result.samostatny_nalez_obdobi"><label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.samostatny_nalez_obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
           </ng-container>
-          <ng-container *ngIf="result.presna_datace && result.presna_datace !== ''">({{result.presna_datace}})</ng-container>
+          <ng-container *ngIf="result.samostatny_nalez_presna_datace && result.samostatny_nalez_presna_datace !== ''">({{result.samostatny_nalez_presna_datace}})</ng-container>
           <ng-container>
             <span class="app-pipe"></span>
             <label class="app-label">{{ 'card.desc.Nález' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_druh_nalezu'" [value]="result.druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
-            <ng-container *ngIf="result.specifikace">
+            <app-inline-filter [isChild]="isChild" [field]="'f_druh_nalezu'" [value]="result.samostatny_nalez_druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
+            <ng-container *ngIf="result.samostatny_nalez_specifikace">
               (
-                <app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" [value]="result.specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>
+                <app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" [value]="result.samostatny_nalez_specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>
                 )
             </ng-container>
           </ng-container>
         </div>
         <div>
-          <ng-container *ngIf="result.chranene_udaje">
+          <ng-container *ngIf="result.samostatny_nalez_chranene_udaje">
             <label class="app-label">{{'card.desc.Katastr (okres)' | translate}}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.chranene_udaje.katastr.value"></app-inline-filter>&#160;
-          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
+            <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.samostatny_nalez_chranene_udaje.katastr.value"></app-inline-filter>&#160;
+          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.samostatny_nalez_okres"></app-inline-filter>)
           </ng-container>
-          <ng-container *ngIf="!result.chranene_udaje">
+          <ng-container *ngIf="!result.samostatny_nalez_chranene_udaje">
             <label class="app-label">{{'card.desc.Okres' | translate}}:</label>&#160;
-            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
+            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.samostatny_nalez_okres"></app-inline-filter>)
           </ng-container>
         </div>
       </div>
@@ -73,7 +73,7 @@
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.projekt">
+      <ng-container *ngIf="result.samostatny_nalez_projekt">
         {{'Počet projektů' | translate}}: <strong>1</strong>
         <span class="app-pipe"></span>
       </ng-container>
@@ -95,47 +95,47 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.pocet">
+              <tr *ngIf="result.samostatny_nalez_pocet">
                 <th class="app-label">{{ 'card.desc.Sam. nález - počet' | translate }}:</th>
-                <td>{{ result.pocet }}</td>
+                <td>{{ result.samostatny_nalez_pocet }}</td>
               </tr>
-              <tr *ngIf="result.lokalizace">
+              <tr *ngIf="result.samostatny_nalez_lokalizace">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
-                <td>{{ result.lokalizace }}</td>
+                <td>{{ result.samostatny_nalez_lokalizace }}</td>
               </tr>
-              <tr *ngIf="result.okolnosti">
+              <tr *ngIf="result.samostatny_nalez_okolnosti">
                 <th class="app-label">{{ 'card.desc.Nálezové okolnosti' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
+                <td><app-inline-filter [isChild]="isChild" [field]="'f_nalezove_okolnosti'" [value]="result.samostatny_nalez_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
               </tr>
-              <tr *ngIf="result.hasOwnProperty('hloubka')">
+              <tr *ngIf="result.hasOwnProperty('samostatny_nalez_hloubka')">
                 <th class="app-label">{{ 'card.desc.Sam. nález - hloubka (cm)' | translate }}:</th>
-                <td>{{ result.hloubka }} cm</td>
+                <td>{{ result.samostatny_nalez_hloubka }} cm</td>
               </tr>
-              <tr *ngIf="result.poznamka">
+              <tr *ngIf="result.samostatny_nalez_poznamka">
                 <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
-                <td>{{ result.poznamka }}</td>
+                <td>{{ result.samostatny_nalez_poznamka }}</td>
               </tr>
-              <tr *ngIf="result.geom_system">
-                <th class="app-label">{{ 'card.desc.Primární EPSG' | translate }}:</th>
-                <td>{{ result.centroid_e }} : {{ result.geom_system }}</td>
+              <tr *ngIf="result.samostatny_nalez_geom_system">
+                <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                <td>{{ result.samostatny_nalez_geom_system }}</td>
               </tr>
-              <tr *ngIf="result.chranene_udaje?.geom_gml">
+              <tr *ngIf="result.samostatny_nalez_chranene_udaje?.geom_gml">
                 <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
-                <td>{{ result.chranene_udaje?.geom_gml | json }}<br/>
-                  <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_gml">{{ result.chranene_udaje?.geom_sjtsk_gml | json }}</ng-container>
+                <td>{{ result.samostatny_nalez_chranene_udaje?.geom_gml | json }}<br/>
+                  <ng-container *ngIf="result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml">{{ result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml | json }}</ng-container>
                 </td>
               </tr>
-              <tr *ngIf="result.chranene_udaje?.geom_wkt">
+              <tr *ngIf="result.samostatny_nalez_chranene_udaje?.geom_wkt">
                 <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
-                <td>{{ result.chranene_udaje?.geom_wkt.value }}, EPSG:{{ result.chranene_udaje.geom_wkt.epsg }}<br/>
-                  <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_wkt">{{ result.chranene_udaje?.geom_sjtsk_wkt.value }}, EPSG:{{ result.chranene_udaje.geom_sjtsk_wkt.espg }}</ng-container>
+                <td>{{ result.samostatny_nalez_chranene_udaje?.geom_wkt.value }}, EPSG:{{ result.samostatny_nalez_chranene_udaje.geom_wkt.epsg }}<br/>
+                  <ng-container *ngIf="result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt">{{ result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt.value }}, EPSG:{{ result.samostatny_nalez_chranene_udaje.geom_sjtsk_wkt.espg }}</ng-container>
                   </td>
               </tr>
               </tbody>
             </table>
         </mat-expansion-panel>
     
-        <mat-expansion-panel *ngIf="result.projekt" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.samostatny_nalez_projekt" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:

@@ -176,10 +176,71 @@
    
    
    <!-- Samostatny nalez fields -->
-   <field name="hloubka" type="pint" indexed="true" stored="true" multiValued="false" /> 
-   <field name="datum_nalezu" type="pdate" indexed="true" stored="true" />
-   <field name="full_text_notlogged" type="text_general" indexed="true" stored="false" multiValued="true" /> 
-   <field name="full_text_logged" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   <field name="samostatny_nalez_okres" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_projekt" type="string" indexed="true" stored="true" multiValued="fslse" /> 
+   <field name="samostatny_nalez_evidencni_cislo" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_hloubka" type="pint" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_okolnosti" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_obdobi" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_presna_datace" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_druh_nalezu" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_specifikace" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_pocet" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_poznamka" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_predano" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_predano_organizace" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_datum_nalezu" type="pdate" indexed="true" stored="true" multiValued="false" />
+   <field name="samostatny_nalez_geom_system" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_geom_updated_at" type="pdate" indexed="true" stored="true" multiValued="false" />
+   <field name="samostatny_nalez_geom_sjtsk_updated_at" type="pdate" indexed="true" stored="true" multiValued="false" />
+   <field name="samostatny_nalez_nalezce" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_chranene_udaje" type="string" indexed="false" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_katastr_A" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_katastr_B" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_katastr_C" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_katastr_D" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_lokalizace_A" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_lokalizace_B" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_lokalizace_C" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_lokalizace_D" type="string" indexed="true" stored="true" multiValued="false" /> 
+   
+   <!-- Projekt fields -->
+   <field name="projekt_typ_projektu" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_okres" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_podnet" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_planovane_zahajeni" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_vedouci_projektu" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_organizace" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_uzivatelske_oznaceni" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_oznaceni_stavby" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_kulturni_pamatka" type="string" indexed="true" stored="true" multiValued="false" /> 
+   
+   <field name="projekt_datum_zahajeni" type="rdate" indexed="true" stored="true" />
+   <field name="projekt_datum_zahajeni_od" type="pdate" indexed="true" stored="true" />
+   <field name="projekt_datum_zahajeni_do" type="pdate" indexed="true" stored="true" />
+   <field name="projekt_datum_ukonceni" type="rdate" indexed="true" stored="true" />
+   <field name="projekt_datum_ukonceni_od" type="pdate" indexed="true" stored="true" />
+   <field name="projekt_datum_ukonceni_do" type="pdate" indexed="true" stored="true" />
+   
+   <field name="projekt_termin_odevzdani_nz" type="pdate" indexed="true" stored="true" />
+   
+   <field name="projekt_chranene_udaje" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_oznamovatel" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_archeologicky_zaznam" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="projekt_samostatny_nalez" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="projekt_dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   <field name="projekt_hlavni_katastr_A" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_hlavni_katastr_B" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_hlavni_katastr_C" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_hlavni_katastr_D" type="string" indexed="true" stored="true" multiValued="false" /> 
+   
+   <field name="projekt_dalsi_katastr_A" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="projekt_dalsi_katastr_B" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="projekt_dalsi_katastr_C" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="projekt_dalsi_katastr_D" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   
    
    <!-- ADB fields -->
    <field name="vyskovy_bod" type="lowercase_cs" indexed="true" stored="true" multiValued="true" /> 

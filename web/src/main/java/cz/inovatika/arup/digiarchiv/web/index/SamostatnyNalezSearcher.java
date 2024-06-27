@@ -4,6 +4,8 @@ import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -30,16 +32,16 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
-        JSONObject doc = docs.getJSONObject(i);
-        if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
-            doc.remove("projekt");
-        }
+            JSONObject doc = docs.getJSONObject(i);
+            if (doc.has("samostatny_nalez_projekt") && !SolrSearcher.existsById(client, doc.getString("samostatny_nalez_projekt"))) {
+                doc.remove("samostatny_nalez_projekt");
+            }
         }
     }
 
     @Override
     public String[] getRelationsFields() {
-        return new String[]{"ident_cely", "projekt"};
+        return new String[]{"ident_cely", "samostatny_nalez_projekt"};
     }
 
     @Override
@@ -58,7 +60,8 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery("*");
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -77,7 +80,8 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");
@@ -89,15 +93,29 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        String[] ret = new String[]{"ident_cely, datestamp, entity, stav, typ, evidencni_cislo, projekt, okres, hloubka, poznamka, nalezove_okolnosti, pristupnost",
-            "obdobi, presna_datace, druh_nalezu, specifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace", "predmet_kategorie",
-            "datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor, soubor_filepath",
-            "soubor:[json]", "katastr:f_katastr_" + pristupnost,
-            "chranene_udaje:[json]",
-            "lokalizace:f_lokalizace_" + pristupnost,
-            "f_katastr:f_katastr_" + pristupnost,
-            "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost,
-            "lat:lat_" + pristupnost, "lng:lng_" + pristupnost};
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("header").toList();
+        List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("detail").toList();
+
+        fields.addAll(headerFields);
+        fields.addAll(detailFields);
+
+        fields.add("samostatny_nalez_lokalizace:samostatny_nalez_lokalizace_" + pristupnost);
+        fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
+
+        String[] ret = fields.toArray(new String[0]);
+
+//        String[] ret = new String[]{"ident_cely, datestamp, entity, stav, pristupnost",
+//            "samostatny_nalez_evidencni_cislo, samostatny_nalez_projekt, samostatny_nalez_okres, samostatny_nalez_hloubka, samostatny_nalez_poznamka, samostatny_nalez_nalezove_okolnosti",
+//            "obdobi, presna_datace, druh_nalezu, specifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace", "predmet_kategorie",
+//            "datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor, soubor_filepath",
+//            "soubor:[json]", "katastr:f_katastr_" + pristupnost,
+//            "chranene_udaje:[json]",
+//            "lokalizace:f_lokalizace_" + pristupnost,
+//            "f_katastr:f_katastr_" + pristupnost,
+//            "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost,
+//            "lat:lat_" + pristupnost, "lng:lng_" + pristupnost};
         return ret;
     }
 
@@ -127,9 +145,10 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
             if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+                doc.remove("samostatny_nalez_chranene_udaje");
                 doc.remove("katastr");
                 doc.remove("f_katastr");
-                doc.remove("f_katastr_" + pristupnost);
+                doc.remove("samostatny_nalez_katastr_" + pristupnost);
             }
         }
     }

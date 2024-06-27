@@ -292,8 +292,7 @@
 
 "fields": {
     "common": [
-      "ident_cely",
-      "pristupnost",
+      "ident_cely", "datestamp", "entity", "stav", "pristupnost",
       "entity"
     ],
   "dokument": {
@@ -396,40 +395,97 @@
       "lokalita_zachovalost"
     ]
   },
+  "projekt": {
+    "header": [
+        "projekt_okres",
+        "projekt_vedouci_projektu",
+        "projekt_organizace",
+        "projekt_typ_projektu",
+        "projekt_datum_zahajeni",
+        "projekt_podnet",
+        "projekt_chranene_udaje:[json]",
+        "projekt_archeologicky_zaznam",
+        "projekt_dokument",
+        "projekt_samostatny_nalez"
+            ],
+    "detail": [
+                "projekt_planovane_zahajeni",
+                "projekt_podnet",
+                "projekt_uzivatelske_oznaceni",
+                "projekt_kulturni_pamatka",
+                "projekt_oznaceni_stavby"
+            ],
+    "facets": [
+      "f_vedouci:projekt_vedouci_projektu",
+      "f_organizace:projekt_organizace",
+      "f_typ_projektu:projekt_typ_projektu",
+      "f_okres:projekt_okres",
+      "f_katastr:projekt_chranene_udaje_hlavni_katastr",
+      "f_katastr:projekt_chranene_udaje_dalsi_katastr"
+    ],
+    "full_text": [
+        "projekt_typ_projektu", 
+        "projekt_okres",
+        "projekt_hlavni_katastr",
+        "projekt_dalsi_katastr",
+        "projekt_podnet",
+        "projekt_vedouci_projektu",
+        "projekt_organizace", 
+        "projekt_oznaceni_stavby", 
+        "projekt_datum_zahajeni",
+        "projekt_datum_ukonceni",
+        "projekt_archeologicky_zaznam",
+        "projekt_dokument",
+        "projekt_samostatny_nalez"]
+  },
   "samostatny_nalez": {
     "header": [
-      "nalezce",
-      "datum_nalezu",
-      "predano_organizace",
-      "evidencni_cislo",
-      "obdobi",
-      "presna_datace",
-      "druh_nalezu",
-      "specifikace",
-      "chranene_udaje_katastr", 
-      "okres"
+      "samostatny_nalez_nalezce",
+      "samostatny_nalez_datum_nalezu",
+      "samostatny_nalez_predano_organizace",
+      "samostatny_nalez_evidencni_cislo",
+      "samostatny_nalez_obdobi",
+      "samostatny_nalez_presna_datace",
+      "samostatny_nalez_druh_nalezu",
+      "samostatny_nalez_specifikace",
+      "samostatny_nalez_chranene_udaje_katastr", 
+      "samostatny_nalez_okres"
     ],
     "detail": [
-      "pocet",
-      "chranene_udaje_lokalizace",
-      "okolnosti",
-      "hloubka",
-      "poznamka",
-      "geom_system",
-      "chranene_udaje_geom_gml",
-      "chranene_udaje_geom_sjtsk_gml",
-      "chranene_udaje_geom_wkt",
-      "chranene_udaje_geom_sjtsk_wkt"
+      "samostatny_nalez_pocet",
+      "samostatny_nalez_chranene_udaje_lokalizace",
+      "samostatny_nalez_okolnosti",
+      "samostatny_nalez_hloubka",
+      "samostatny_nalez_poznamka",
+      "samostatny_nalez_geom_system",
+      "samostatny_nalez_projekt",
+      "samostatny_nalez_chranene_udaje:[json]"
     ],
     "facets": [
-      "f_nalezove_okolnosti:nalezove_okolnosti",
-      "f_organizace:predano_organizace",
-      "f_obdobi:obdobi",
-      "f_okres:okres",
-      "f_katastr:chranene_udaje.katastr",
-      "pristupnost",
-      "f_druh_nalezu:druh_nalezu",
-      "f_specifikace:specifikace"
+      "f_nalezove_okolnosti:samostatny_nalez_nalezove_okolnosti",
+      "f_organizace:samostatny_nalez_predano_organizace",
+      "f_obdobi:samostatny_nalez_obdobi",
+      "f_okres:samostatny_nalez_okres",
+      "f_katastr:samostatny_nalez_chranene_udaje_katastr", 
+      "f_druh_nalezu:samostatny_nalez_druh_nalezu",
+      "f_specifikace:samostatny_nalez_specifikace"
+    ],
+    "full_text": [
+        "samostatny_nalez_evidencni_cislo",
+        "samostatny_nalez_okolnosti", 
+        "samostatny_nalez_presna_datace",
+        "samostatny_nalez_poznamka",
+        "samostatny_nalez_predano_organizace",
+        "samostatny_nalez_datum_nalezu",
+        "samostatny_nalez_projekt",
+        "samostatny_nalez_okres",
+        "samostatny_nalez_specifikace", 
+        "samostatny_nalez_nalezce",
+        "samostatny_nalez_obdobi", 
+        "samostatny_nalez_druh_nalezu", 
+        "samostatny_nalez_katastr",
+        "samostatny_nalez_lokalizace",
+        "soubor_nazev"
     ]
   }
   }

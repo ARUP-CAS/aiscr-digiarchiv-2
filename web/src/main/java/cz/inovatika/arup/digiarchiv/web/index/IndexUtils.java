@@ -137,11 +137,11 @@ public class IndexUtils {
         }
     }
 
-    public static void setSecuredJSONField(SolrInputDocument idoc, Object o) {
+    public static void setSecuredJSONField(SolrInputDocument idoc, String field, Object o) {
         if (o != null) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                idoc.setField("chranene_udaje", objectMapper.writeValueAsString(o));
+                idoc.setField(field, objectMapper.writeValueAsString(o));
             } catch (JsonProcessingException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }

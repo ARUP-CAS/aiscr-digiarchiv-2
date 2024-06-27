@@ -315,7 +315,7 @@ class AZChraneneUdaje {
     public String uzivatelske_oznaceni;
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-        IndexUtils.setSecuredJSONField(idoc, this);
+        IndexUtils.setSecuredJSONField(idoc, "archeologicky_zaznam_chranene_udaje", this);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
 

@@ -32,6 +32,8 @@ import org.locationtech.jts.io.WKTReader;
 public class Projekt implements FedoraModel {
 
 
+    public String fieldPrefix = "projekt_";
+    
     @Field
     public String entity = "projekt";
 
@@ -47,58 +49,58 @@ public class Projekt implements FedoraModel {
 
 //<xs:element name="typ_projektu" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ_projektu.ident_cely}" | "{typ_projektu.heslo}" -->
     @JacksonXmlProperty(localName = "typ_projektu")
-    public Vocab typ_projektu;
+    public Vocab projekt_typ_projektu;
 
 //<xs:element name="okres" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "ruian-{hlavni_katastr.okres.kod}" | "{hlavni_katastr.okres.nazev}" -->
     @JacksonXmlProperty(localName = "okres")
-    public Vocab okres;
+    public Vocab projekt_okres;
 
 //<xs:element name="podnet" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{podnet}" -->
     @JacksonXmlProperty(localName = "podnet")
     @Field
-    public String podnet;
+    public String projekt_podnet;
 
 //<xs:element name="planovane_zahajeni" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{planovane_zahajeni_str}" -->
     @JacksonXmlProperty(localName = "planovane_zahajeni")
     @Field
-    public String planovane_zahajeni;
+    public String projekt_planovane_zahajeni;
 
 //<xs:element name="vedouci_projektu" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{vedouci_projektu.ident_cely}" | "{vedouci_projektu.vypis_cely}" -->
     @JacksonXmlProperty(localName = "vedouci_projektu")
-    public Vocab vedouci_projektu;
+    public Vocab projekt_vedouci_projektu;
 
 //<xs:element name="organizace" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{organizace.ident_cely}" | "{organizace.nazev}" -->
     @JacksonXmlProperty(localName = "organizace")
-    public Vocab organizace;
+    public Vocab projekt_organizace;
 
 //<xs:element name="uzivatelske_oznaceni" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{uzivatelske_oznaceni}" -->
     @JacksonXmlProperty(localName = "uzivatelske_oznaceni")
     @Field
-    public String uzivatelske_oznaceni;
+    public String projekt_uzivatelske_oznaceni;
 
 //<xs:element name="oznaceni_stavby" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{oznaceni_stavby}" -->
     @JacksonXmlProperty(localName = "oznaceni_stavby")
     @Field
-    public String oznaceni_stavby;
+    public String projekt_oznaceni_stavby;
 
 //<xs:element name="kulturni_pamatka" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{kulturni_pamatka.ident_cely}" | "{kulturni_pamatka.heslo}" -->
     @JacksonXmlProperty(localName = "kulturni_pamatka")
-    public Vocab kulturni_pamatka;
+    public Vocab projekt_kulturni_pamatka;
 
 //<xs:element name="datum_zahajeni" minOccurs="0" maxOccurs="1" type="xs:date"/> <!-- "{datum_zahajeni}" -->
     @JacksonXmlProperty(localName = "datum_zahajeni")
     @Field
-    public Date datum_zahajeni;
+    public Date projekt_datum_zahajeni;
 
 //<xs:element name="datum_ukonceni" minOccurs="0" maxOccurs="1" type="xs:date"/> <!-- "{datum_ukonceni}" -->
     @JacksonXmlProperty(localName = "datum_ukonceni")
     @Field
-    public Date datum_ukonceni;
+    public Date projekt_datum_ukonceni;
 
 //<xs:element name="termin_odevzdani_nz" minOccurs="0" maxOccurs="1" type="xs:date"/> <!-- "{termin_odevzdani_nz}" -->
     @JacksonXmlProperty(localName = "termin_odevzdani_nz")
     @Field
-    public Date termin_odevzdani_nz;
+    public Date projekt_termin_odevzdani_nz;
 
 //<xs:element name="pristupnost_pom" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost.ident_cely}" | "{pristupnost.heslo}" -->
     @JacksonXmlProperty(localName = "pristupnost_pom")
@@ -106,7 +108,7 @@ public class Projekt implements FedoraModel {
 
 //<xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:projekt-chranene_udajeType"/> <!-- self -->
     @JacksonXmlProperty(localName = "chranene_udaje")
-    private ProjektChraneneUdaje chranene_udaje;
+    private ProjektChraneneUdaje projekt_chranene_udaje;
 
 //<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
     @JacksonXmlProperty(localName = "historie")
@@ -114,7 +116,7 @@ public class Projekt implements FedoraModel {
 
 //<xs:element name="oznamovatel" minOccurs="0" maxOccurs="1" type="amcr:oznamovatelType"/> <!-- "{oznamovatel}" -->
     @JacksonXmlProperty(localName = "oznamovatel")
-    public Oznamovatel oznamovatel;
+    public Oznamovatel projekt_oznamovatel;
 
 //<xs:element name="soubor" minOccurs="0" maxOccurs="unbounded" type="amcr:souborType"/>  <!-- {soubory.soubory} -->
     @JacksonXmlProperty(localName = "soubor")
@@ -122,55 +124,57 @@ public class Projekt implements FedoraModel {
 
 //<xs:element name="archeologicky_zaznam" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{akce_set.archeologicky_zaznam.ident_cely}" | "{akce_set.archeologicky_zaznam.ident_cely}" -->
     @JacksonXmlProperty(localName = "archeologicky_zaznam")
-    public List<Vocab> archeologicky_zaznam = new ArrayList();
+    public List<Vocab> projekt_archeologicky_zaznam = new ArrayList();
 
 //<xs:element name="samostatny_nalez" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{samostatne_nalezy.ident_cely}" | "{samostatne_nalezy.ident_cely}" -->
     @JacksonXmlProperty(localName = "samostatny_nalez")
-    public List<Vocab> samostatny_nalez = new ArrayList();
+    public List<Vocab> projekt_samostatny_nalez = new ArrayList();
 
 //<xs:element name="dokument" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{casti_dokumentu.dokument.ident_cely}" | "{casti_dokumentu.dokument.ident_cely}" -->
     @JacksonXmlProperty(localName = "dokument")
-    public List<Vocab> dokument = new ArrayList();
+    public List<Vocab> projekt_dokument = new ArrayList();
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-        boolean searchable = !archeologicky_zaznam.isEmpty() || !samostatny_nalez.isEmpty();
+        boolean searchable = !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty();
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
 
-        IndexUtils.addRefField(idoc, "okres", okres);
-        idoc.setField("typ_projektu", typ_projektu.getId());
-        IndexUtils.addRefField(idoc, "vedouci_projektu", vedouci_projektu);
-        IndexUtils.addVocabField(idoc, "organizace", organizace);
-        IndexUtils.addVocabField(idoc, "kulturni_pamatka", kulturni_pamatka);
+        IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
+        
+        IndexUtils.addRefField(idoc, "projekt_okres", projekt_okres);
+        IndexUtils.addVocabField(idoc, "projekt_typ_projektu", projekt_typ_projektu);
+        IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
+        IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
+        IndexUtils.addVocabField(idoc, "projekt_kulturni_pamatka", projekt_kulturni_pamatka);
 
-        if (datum_zahajeni != null) {
-            IndexUtils.addFieldNonRepeat(idoc, "datum_provedeni_od", datum_zahajeni);
-            IndexUtils.addFieldNonRepeat(idoc, "datum_zahajeni_v", datum_zahajeni);
+        if (projekt_datum_zahajeni != null) {
+            IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_od", projekt_datum_zahajeni);
+            IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_do", projekt_datum_zahajeni);
             String ukonceni = "*";
-            if (datum_ukonceni != null) {
-                IndexUtils.addFieldNonRepeat(idoc, "datum_provedeni_do", datum_ukonceni);
-                IndexUtils.addFieldNonRepeat(idoc, "datum_ukonceni_v", datum_ukonceni);
-                if (!datum_ukonceni.before(datum_zahajeni)) {
-                    ukonceni = datum_ukonceni.toInstant().toString();
+            if (projekt_datum_ukonceni != null) {
+                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_provedeni_do", projekt_datum_ukonceni);
+                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_ukonceni_v", projekt_datum_ukonceni);
+                if (!projekt_datum_ukonceni.before(projekt_datum_zahajeni)) {
+                    ukonceni = projekt_datum_ukonceni.toInstant().toString();
                 }
             }
-            IndexUtils.addFieldNonRepeat(idoc, "datum_provedeni", "[" + datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
+            IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_provedeni", "[" + projekt_datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
         }
 
-        for (Vocab v : archeologicky_zaznam) {
-            idoc.addField("archeologicky_zaznam", v.getValue());
-            addArch(idoc, v.getValue());
+        for (Vocab v : projekt_archeologicky_zaznam) {
+            idoc.addField("projekt_archeologicky_zaznam", v.getValue());
+            // addArch(idoc, v.getValue());
         }
 
-        for (Vocab v : samostatny_nalez) {
-            idoc.addField("samostatny_nalez", v.getValue());
+        for (Vocab v : projekt_samostatny_nalez) {
+            idoc.addField("projekt_samostatny_nalez", v.getValue());
         }
 
-        for (Vocab v : dokument) {
-            idoc.setField("dokument", v.getValue());
+        for (Vocab v : projekt_dokument) {
+            idoc.setField("projekt_dokument", v.getValue());
         }
 
         List<SolrInputDocument> idocs = new ArrayList<>();
@@ -187,10 +191,41 @@ public class Projekt implements FedoraModel {
             Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (chranene_udaje != null) {
-            chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+        if (projekt_chranene_udaje != null) {
+            projekt_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
+        
+        setSortFields(idoc);
         setFullText(idoc);
+    }
+    
+    private void setSortFields(SolrInputDocument idoc) {
+        
+        IndexUtils.addRefField(idoc, "autor_sort", projekt_vedouci_projektu);
+        IndexUtils.addRefField(idoc, "organizace_sort", projekt_organizace);
+        IndexUtils.addRefField(idoc, "okres_sort", projekt_okres);
+        if (projekt_chranene_udaje != null && projekt_chranene_udaje.hlavni_katastr != null)
+        IndexUtils.addRefField(idoc, "katastr_sort", projekt_chranene_udaje.hlavni_katastr);
+        
+    }
+    
+    public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("projekt").getJSONArray("facets").toList();
+        // List<String> prSufixAll = new ArrayList<>();
+        
+        for (Object f : indexFields) {
+            String s = (String) f;
+            String dest = s.split(":")[0];
+            String orig = s.split(":")[1];
+            if (idoc.containsKey(orig)) {
+                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(s));
+            } 
+            for (String sufix : prSufix) {
+                if (idoc.containsKey(orig + "_" + sufix)) {
+                    IndexUtils.addFieldNonRepeat(idoc, dest + sufix, idoc.getFieldValues(s + "_" + sufix));
+                }
+            }
+        }
     }
 
     public void setFullText(SolrInputDocument idoc) {
@@ -211,6 +246,16 @@ public class Projekt implements FedoraModel {
                     IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
                 }
             }
+        }
+        
+        // Add value of vocab fields
+        for (String sufix : prSufixAll) {
+            idoc.addField("text_all_" + sufix, ident_cely);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, projekt_kulturni_pamatka);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, projekt_okres);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, projekt_organizace);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, projekt_typ_projektu);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, projekt_vedouci_projektu);
         }
     }
 
@@ -328,13 +373,13 @@ class ProjektChraneneUdaje {
     public String kulturni_pamatka_popis;
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-        IndexUtils.setSecuredJSONField(idoc, this);
+        IndexUtils.setSecuredJSONField(idoc, "projekt_chranene_udaje", this);
 
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
 
         for (Vocab v : dalsi_katastr) {
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_dalsi_katastr", v.getValue(), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
         }
 

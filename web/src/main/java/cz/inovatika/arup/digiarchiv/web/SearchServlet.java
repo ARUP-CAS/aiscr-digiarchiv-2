@@ -353,8 +353,8 @@ public class SearchServlet extends HttpServlet {
             searcher = new DokumentSearcher();
           }
           JSONObject jo = searcher.search(request);
-          searcher.checkRelations(jo, IndexUtils.getClientNoOp(), request);
-          // searcher.getChilds(jo, client, request);
+          // searcher.checkRelations(jo, IndexUtils.getClientNoOp(), request);
+          
           // Remove stats in case of one result, without access
           int numFound = jo.getJSONObject("response").getInt("numFound");
           if (numFound == 1) {

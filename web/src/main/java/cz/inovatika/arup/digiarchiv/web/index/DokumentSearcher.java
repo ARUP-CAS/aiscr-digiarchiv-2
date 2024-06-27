@@ -33,12 +33,17 @@ public class DokumentSearcher implements EntitySearcher {
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-                getChilds(jo, client, request);
+                //getChilds(jo, client, request);
+                addPians(jo, client, request);
             }
+            LOGGER.log(Level.INFO, "addFavorites");
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
+            
+            LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            LOGGER.log(Level.INFO, "hotovo");
             return jo;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -103,12 +108,29 @@ public class DokumentSearcher implements EntitySearcher {
 
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (LoginServlet.userId(request) != null) {
-                SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
-            }
+//            if (LoginServlet.userId(request) != null) {
+//                SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+//            }
 
             SolrSearcher.addChildFieldByEntity(client, doc, "dokument_cast_archeologicky_zaznam", String.join(",", f));
 
+            
+        }
+
+    }
+    
+    public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getMapaSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
             if (doc.has("pian_id")) {
                 JSONArray cdjs = doc.getJSONArray("pian_id");
                 for (int j = 0; j < cdjs.length(); j++) {
@@ -121,7 +143,6 @@ public class DokumentSearcher implements EntitySearcher {
                 }
             }
         }
-
     }
 
     @Override
@@ -235,7 +256,7 @@ public class DokumentSearcher implements EntitySearcher {
                         lp.getJSONObject(j).remove("katastr");
                         lp.getJSONObject(j).remove("dalsi_katastry");
                     } else {
-                        doc.append("f_katastr", lp.getJSONObject(j).getString("katastr"));
+                        doc.append("f_katastr", lp.getJSONObject(j).get("katastr"));
                     }
                 }
             }

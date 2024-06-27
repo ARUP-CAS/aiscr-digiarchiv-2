@@ -11,11 +11,11 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon class="app-clean-mg app-color-accent">link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="result.hlavni_katastr">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.hlavni_katastr"></app-inline-filter>
+        <ng-container *ngIf="result.projekt_hlavni_katastr">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.projekt_hlavni_katastr"></app-inline-filter>
         </ng-container>
-        &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
-        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.vedouci_projektu"></app-inline-filter><span class="app-pipe"></span>
+        &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.projekt_okres"></app-inline-filter>)
+        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.projekt_vedouci_projektu"></app-inline-filter><span class="app-pipe"></span>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
     </mat-card-title>
@@ -25,46 +25,49 @@
       <mat-icon>image_not_supported</mat-icon>
     </div>
     <div class="app-metadata app-row-gap-16">
-      <div *ngIf="result.typ_projektu || result.datum_zahajeni">
-        <ng-container *ngIf="result.typ_projektu">
+      <div *ngIf="result.projekt_typ_projektu || result.projekt_datum_zahajeni">
+        <ng-container *ngIf="result.projekt_typ_projektu">
           <label class="app-label">{{ 'card.desc.Projekt - typ' | translate }}:</label>&#160;
-          <app-inline-filter [isChild]="isChild" [field]="'f_typ_projektu'" [value]="result.typ_projektu" [heslar]="'typ_projektu'"></app-inline-filter>
+          <app-inline-filter [isChild]="isChild" [field]="'f_typ_projektu'" [value]="result.projekt_typ_projektu" [heslar]="'typ_projektu'"></app-inline-filter>
           <span class="app-pipe"></span>
         </ng-container>
-        <ng-container *ngIf="result.datum_zahajeni">
+        <ng-container *ngIf="result.projekt_datum_zahajeni">
           <label class="app-label">{{ 'card.desc.Datum výzkumu' | translate }}:</label>&#160;
-          {{ result.datum_zahajeni | date : 'dd.MM.yyyy'}} - {{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}<span class="app-pipe"></span>
+          {{ result.projekt_datum_zahajeni | date : 'dd.MM.yyyy'}} - {{ result.projekt_datum_ukonceni | date : 'dd.MM.yyyy' }}<span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.pristupnost">
           <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
         </ng-container>
       </div>
-      <div *ngIf="result.organizace">
+      <div *ngIf="result.projekt_organizace">
         <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
-        <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
+        <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.projekt_organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
-      <div *ngIf="result.chranene_udaje?.dalsi_katastr?.length > 0">
+      <div *ngIf="result.projekt_chranene_udaje?.dalsi_katastr?.length > 0">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
-        <ng-container *ngFor="let k of result.chranene_udaje.dalsi_katastr; let last = last">
+        <ng-container *ngFor="let k of result.projekt_chranene_udaje.dalsi_katastr; let last = last">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
           <!-- &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>) -->
           <span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
-      
+      <div *ngIf="result.projekt_podnet">
+        <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;
+        {{ result.projekt_podnet }}
+      </div>
 
 
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.archeologicky_zaznam?.length > 0">
-        {{ 'card.desc.Počet archeologickych zaznamu' | translate }}: <strong>{{result.archeologicky_zaznam?.length}}</strong>
+      <ng-container *ngIf="result.projekt_archeologicky_zaznam?.length > 0">
+        {{ 'card.desc.Počet archeologickych zaznamu' | translate }}: <strong>{{result.projekt_archeologicky_zaznam?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
-      <ng-container *ngIf="result.samostatny_nalez?.length > 0"> 
-        {{'card.desc.Počet samostatných nálezů' | translate}}: <strong>{{result.samostatny_nalez?.length}}</strong> 
+      <ng-container *ngIf="result.projekt_samostatny_nalez?.length > 0"> 
+        {{'card.desc.Počet samostatných nálezů' | translate}}: <strong>{{result.projekt_samostatny_nalez?.length}}</strong> 
         <span class="app-pipe"></span>
       </ng-container>
     </div>
@@ -82,61 +85,61 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.chranene_udaje?.lokalizace">
+              <tr *ngIf="result.projekt_chranene_udaje?.lokalizace">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
-                <td>{{ result.chranene_udaje?.lokalizace }}</td>
+                <td>{{ result.projekt_chranene_udaje?.lokalizace }}</td>
               </tr>
-              <tr *ngIf="result.podnet">
+              <tr *ngIf="result.projekt_podnet">
                 <th class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</th>
-                <td>{{ result.podnet }}</td>
+                <td>{{ result.projekt_podnet }}</td>
               </tr>
-              <tr *ngIf="result.chranene_udaje?.parcelni_cislo">
+              <tr *ngIf="result.projekt_chranene_udaje?.parcelni_cislo">
                 <th class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</th>
-                <td>{{ result.chranene_udaje?.parcelni_cislo }}</td>
+                <td>{{ result.projekt_chranene_udaje?.parcelni_cislo }}</td>
               </tr>
-              <tr *ngIf="result.planovane_zahajeni">
+              <tr *ngIf="result.projekt_planovane_zahajeni">
                 <th class="app-label">{{ 'card.desc.Plánované zahájení' | translate }}:</th>
-                <td>{{ result.planovane_zahajeni }}</td>
+                <td>{{ result.projekt_planovane_zahajeni }}</td>
               </tr>
-              <tr *ngIf="result.uzivatelske_oznaceni">
+              <tr *ngIf="result.projekt_uzivatelske_oznaceni">
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                <td>{{ result.uzivatelske_oznaceni[0] | translate }}</td>
+                <td>{{ result.projekt_uzivatelske_oznaceni | translate }}</td>
               </tr>
-              <tr *ngIf="result.kulturni_pamatka">
+              <tr *ngIf="result.projekt_kulturni_pamatka">
                 <th class="app-label">{{ 'card.desc.Památková ochrana' | translate }}:</th>
-                <td>{{ result.kulturni_pamatka | translateHeslar : '' }}</td>
+                <td>{{ result.projekt_kulturni_pamatka | translateHeslar : '' }}</td>
               </tr>
-              <tr *ngIf="result.nkp_cislo">
+              <tr *ngIf="result.projekt_chranene_udaje?.kulturni_pamatka_cislo">
                 <th class="app-label">{{ 'card.desc.Rejstříkové číslo ÚSKP' | translate }}:</th>
-                <td>{{ result.nkp_cislo }}</td>
+                <td>{{ result.projekt_chranene_udaje.kulturni_pamatka_cislo }}</td>
               </tr>
-              <tr *ngIf="result.nkp_popis">
+              <tr *ngIf="result.projekt_chranene_udaje?.kulturni_pamatka_popis">
                 <th class="app-label">{{ 'card.desc.Název památky' | translate }}:</th>
-                <td>{{ result.nkp_popis }}</td>
+                <td>{{ result.projekt_chranene_udaje.kulturni_pamatka_popis }}</td>
               </tr>
-              <tr *ngIf="result.oznaceni_stavby">
+              <tr *ngIf="result.projekt_oznaceni_stavby">
                 <th class="app-label">{{ 'card.desc.Projekt - oznaceni_stavby' | translate }}:</th>
-                <td>{{ result.oznaceni_stavby }}</td>
+                <td>{{ result.projekt_oznaceni_stavby }}</td>
               </tr>
             </tbody>
           </table>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.akce?.length > 0 || result.samostatny_nalez?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.projekt_archeologicky_zaznam?.length > 0 || result.projekt_samostatny_nalez?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}:
+              {{ 'card.panelTitle.Související záznamy' | translate }}: {{ vsSize }}
             </mat-panel-title>
           </mat-expansion-panel-header>
           
           <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
             [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
-            <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-akce *cdkVirtualFor="let akce of result.projekt_archeologicky_zaznam" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-samostatny-nalez *ngFor="let sn of result.valid_samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
           </cdk-virtual-scroll-viewport>
           
           <ng-container *ngIf="vsSize > 0 && state.printing" >
-            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-akce *ngFor="let akce of result.projekt_archeologicky_zaznam" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-samostatny-nalez *ngFor="let sn of result.valid_samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
           </ng-container>
           

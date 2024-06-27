@@ -314,6 +314,11 @@ export class MapaComponent implements OnInit, OnDestroy {
         case 'heat': {
           this.setMarkersData();
           this.state.loading = false;
+          setTimeout(() => {
+            if (this.state.mapResult) {
+              this.hitMarker(this.state.mapResult);
+            } 
+          }, 100);
           break;
         }
       }
