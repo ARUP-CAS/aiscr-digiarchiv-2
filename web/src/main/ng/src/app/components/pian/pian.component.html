@@ -4,15 +4,15 @@
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
         {{ 'card.panelTitle.Pian' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
-        <app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_pian'"></app-inline-filter>
-        <ng-container *ngIf="result.presnost">&#160;({{'card.desc.přesnost' | translate }}:&#160;
-          <app-inline-filter [field]="'f_pian_presnost'" [value]="result.presnost" [heslar]="'presnost'"></app-inline-filter>
+        <app-inline-filter [field]="'f_pian_typ'" [value]="result.pian_typ" [heslar]="'typ_pian'"></app-inline-filter>
+        <ng-container *ngIf="result.pian_presnost">&#160;({{'card.desc.přesnost' | translate }}:&#160;
+          <app-inline-filter [field]="'f_pian_presnost'" [value]="result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>
           )</ng-container>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <div *ngIf="result.chranene_udaje?.zm10">
+    <div *ngIf="result.pian_chranene_udaje?.zm10">
       <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
-      <app-inline-filter [field]="'f_pian_zm10'" [value]="result.chranene_udaje.zm10"></app-inline-filter>
+      <app-inline-filter [field]="'f_pian_zm10'" [value]="result.pian_chranene_udaje.zm10"></app-inline-filter>
     </div>
     <div *ngIf="result.lat">
       <label class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ result.lat[0] }} : {{ result.lng[0] }}
@@ -25,22 +25,22 @@
     <mat-card-header>
       <mat-card-title>
         {{ 'card.title.Pian' | translate }}&#160;{{ result.ident_cely }}
-        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="result.typ" [heslar]="'typ_pian'"></app-inline-filter>
-        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="result.presnost" [heslar]="'presnost'"></app-inline-filter>
+        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="result.pian_typ" [heslar]="'typ_pian'"></app-inline-filter>
+        <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>
         <span class="app-pipe"></span>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="app-metadata app-row-gap-16">
-        <div *ngIf="result.pristupnost || result.zm10">
+        <div *ngIf="result.pristupnost || result.pian_chranene_udaje?.zm10">
           <ng-container *ngIf="result.pristupnost">
             <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
             <app-inline-filter [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
           </ng-container>
-          <ng-container *ngIf="result.chranene_udaje?.zm10">
+          <ng-container *ngIf="result.pian_chranene_udaje?.zm10">
             <span class="app-pipe"></span>
             <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'zm10'" [value]="result.chranene_udaje.zm10" [heslar]="'zm10'"></app-inline-filter>
+            <app-inline-filter [field]="'zm10'" [value]="result.pian_chranene_udaje.zm10" [heslar]="'zm10'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
         </div>
@@ -99,23 +99,23 @@
             </mat-expansion-panel-header>
             <table>
               <tbody>
-                <tr *ngIf="result.chranene_udaje || result.lat">
+                <tr *ngIf="result.pian_chranene_udaje || result.lat">
                   <th class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</th>
                   <td><ng-container *ngIf="result.lat">{{ result.lat }}</ng-container><ng-container *ngIf="result.lng">&#160;:&#160;{{ result.lng }}</ng-container></td>
                 </tr>
-                <tr *ngIf="result.geom_system">
+                <tr *ngIf="result.pian_geom_system">
                   <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
-                  <td>{{ result.geom_system }}</td>
+                  <td>{{ result.pian_geom_system }}</td>
                 </tr>
-                <tr *ngIf="result.chranene_udaje?.geom_gml">
+                <tr *ngIf="result.pian_chranene_udaje?.geom_gml">
                   <th class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</th>
-                  <td>{{ result.chranene_udaje.geom_gml | json }} 
-                    <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_gml"><br/> {{ result.chranene_udaje.geom_sjtsk_gml | json }}</ng-container> </td>
+                  <td>{{ result.pian_chranene_udaje.geom_gml | json }} 
+                    <ng-container *ngIf="result.pian_chranene_udaje?.geom_sjtsk_gml"><br/> {{ result.pian_chranene_udaje.geom_sjtsk_gml | json }}</ng-container> </td>
                 </tr>
-                <tr *ngIf="result.chranene_udaje?.geom_wkt">
+                <tr *ngIf="result.pian_chranene_udaje?.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Geometrie WKT' | translate }}:</th>
-                  <td>{{ result.chranene_udaje.geom_wkt | json }}
-                    <ng-container *ngIf="result.chranene_udaje?.geom_sjtsk_wkt"><br/> {{ result.chranene_udaje.geom_sjtsk_wkt | json }}</ng-container> </td>
+                  <td>{{ result.pian_chranene_udaje.geom_wkt | json }}
+                    <ng-container *ngIf="result.pian_chranene_udaje?.geom_sjtsk_wkt"><br/> {{ result.pian_chranene_udaje.geom_sjtsk_wkt | json }}</ng-container> </td>
                 </tr>
               </tbody>
             </table>

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ADB implements FedoraModel {
 
 //<xs:element name="dokumentacni_jednotka" minOccurs="1" maxOccurs="1" type="amcr:refType"/> <!-- "{dokumentacni_jednotka.archeologicky_zaznam.ident_cely}" | "{dokumentacni_jednotka.ident_cely}" -->
     @JacksonXmlProperty(localName = "dokumentacni_jednotka")
-    public Vocab dokumentacni_jednotka;
+    public Vocab adb_dokumentacni_jednotka;
 
 //<xs:element name="stav_pom" minOccurs="1" maxOccurs="1" type="xs:integer"/> <!-- "{dokumentacni_jednotka.archeologicky_zaznam.stav}" -->
     @JacksonXmlProperty(localName = "stav_pom")
@@ -41,39 +42,39 @@ public class ADB implements FedoraModel {
 
 //<xs:element name="typ_sondy" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ_sondy.ident_cely}" | "{typ_sondy.heslo}" -->
     @JacksonXmlProperty(localName = "typ_sondy")
-    public Vocab typ_sondy;
+    public Vocab adb_typ_sondy;
 
 //<xs:element name="podnet" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{podnet.ident_cely}" | "{podnet.heslo}" -->
     @JacksonXmlProperty(localName = "podnet")
-    public Vocab podnet;
+    public Vocab adb_podnet;
 
 //<xs:element name="stratigraficke_jednotky" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{stratigraficke_jednotky}" -->
     @JacksonXmlProperty(localName = "stratigraficke_jednotky")
     @Field
-    public String stratigraficke_jednotky;
+    public String adb_stratigraficke_jednotky;
 
 //<xs:element name="autor_popisu" minOccurs="1" maxOccurs="1" type="amcr:refType"/> <!-- "{autor_popisu.ident_cely}" | "{autor_popisu.vypis_cely}" -->
     @JacksonXmlProperty(localName = "autor_popisu")
-    public Vocab autor_popisu;
+    public Vocab adb_autor_popisu;
 
 //<xs:element name="rok_popisu" minOccurs="1" maxOccurs="1" type="xs:integer"/> <!-- "{rok_popisu}" -->
     @JacksonXmlProperty(localName = "rok_popisu")
     @Field
-    public int rok_popisu;
+    public int adb_rok_popisu;
 
 //<xs:element name="autor_revize" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{autor_revize.ident_cely}" | "{autor_revize.vypis_cely}" -->
     @JacksonXmlProperty(localName = "autor_revize")
-    public Vocab autor_revize;
+    public Vocab adb_autor_revize;
 
 //<xs:element name="rok_revize" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{rok_revize}" -->
     @JacksonXmlProperty(localName = "rok_revize")
     @Field
-    public int rok_revize;
+    public int adb_rok_revize;
 
 //<xs:element name="sm5" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{sm5.mapno}" -->
     @JacksonXmlProperty(localName = "sm5")
     @Field
-    public String sm5;
+    public String adb_sm5;
 
 //<xs:element name="pristupnost_pom" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{dokumentacni_jednotka.archeologicky_zaznam.pristupnost.ident_cely}" | "{dokumentacni_jednotka.archeologicky_zaznam.pristupnost.heslo}" -->
     @JacksonXmlProperty(localName = "pristupnost_pom")
@@ -81,7 +82,7 @@ public class ADB implements FedoraModel {
 
 //<xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:adb-chranene_udajeType"/> <!-- SELF -->
     @JacksonXmlProperty(localName = "chranene_udaje")
-    private ADBChraneneUdaje chranene_udaje;
+    private ADBChraneneUdaje adb_chranene_udaje;
 
     @Override
     public String coreName() {
@@ -94,14 +95,29 @@ public class ADB implements FedoraModel {
         idoc.setField("searchable", true);
         idoc.setField("stav", stav_pom);
         IndexUtils.setDateStamp(idoc, ident_cely);
-        IndexUtils.addVocabField(idoc, "dokumentacni_jednotka", dokumentacni_jednotka);
-        IndexUtils.addVocabField(idoc, "typ_sondy", typ_sondy);
-        IndexUtils.addVocabField(idoc, "podnet", podnet);
-        IndexUtils.addRefField(idoc, "autor_popisu", autor_popisu);
-        IndexUtils.addRefField(idoc, "autor_revize", autor_revize);
+        IndexUtils.addVocabField(idoc, "adb_dokumentacni_jednotka", adb_dokumentacni_jednotka);
+        IndexUtils.addVocabField(idoc, "adb_typ_sondy", adb_typ_sondy);
+        IndexUtils.addVocabField(idoc, "adb_podnet", adb_podnet);
+        
+        IndexUtils.addVocabField(idoc, "f_adb_typ_sondy", adb_typ_sondy);
+        IndexUtils.addVocabField(idoc, "f_adb_podnet", adb_podnet);
+        
+        IndexUtils.addRefField(idoc, "adb_autor_popisu", adb_autor_popisu);
+        IndexUtils.addRefField(idoc, "adb_autor_revize", adb_autor_revize);
 
-        if (chranene_udaje != null) {
-            chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"), ident_cely);
+        if (adb_chranene_udaje != null) {
+            adb_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"), ident_cely);
+        }
+        
+
+        
+        // Add value of vocab fields
+        for (String sufix : SolrSearcher.prSufixAll) {
+            idoc.addField("text_all_" + sufix, ident_cely);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, adb_autor_popisu);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, adb_autor_revize);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, adb_typ_sondy);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, adb_podnet);
         }
     }
 
@@ -149,13 +165,19 @@ class ADBChraneneUdaje {
     public List<VyskovyBod> vyskovy_bod = new ArrayList();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost, String ident_cely) {
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "uzivatelske_oznaceni_sondy", uzivatelske_oznaceni_sondy, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "trat", trat, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "cislo_popisne", cislo_popisne, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "parcelni_cislo", parcelni_cislo, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "poznamka", poznamka, pristupnost);
+        
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_uzivatelske_oznaceni_sondy", uzivatelske_oznaceni_sondy, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_trat", trat, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_cislo_popisne", cislo_popisne, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_parcelni_cislo", parcelni_cislo, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_poznamka", poznamka, pristupnost);
 
         IndexUtils.setSecuredJSONField(idoc, "adb_chranene_udaje", this);
+        
+        // Add value of vocab fields
+        for (String sufix : SolrSearcher.prSufixAll) {
+            idoc.addField("text_all_" + sufix, uzivatelske_oznaceni_sondy);
+        }
 
         // VyskovyBod as solr document
         List<SolrInputDocument> idocs = new ArrayList<>();
@@ -166,13 +188,14 @@ class ADBChraneneUdaje {
                 vbdoc.setField("entity", "vyskovy_bod");
                 vbdoc.setField("searchable", true);
                 vbdoc.setField("ident_cely", vb.ident_cely);
-                vbdoc.setField("parent", ident_cely);
-                vbdoc.setField("typ", vb.typ);
-                vbdoc.setField("geom_gml", objectMapper.writeValueAsString(vb.geom_gml));
-                vbdoc.setField("geom_wkt", objectMapper.writeValueAsString(vb.geom_wkt));
+                vbdoc.setField("vyskovy_bod_parent", ident_cely);
+                vbdoc.setField("vyskovy_bod_typ", vb.typ);
+                vbdoc.setField("vyskovy_bod_geom_gml", objectMapper.writeValueAsString(vb.geom_gml));
+                vbdoc.setField("vyskovy_bod_geom_wkt", objectMapper.writeValueAsString(vb.geom_wkt));
 
                 idocs.add(vbdoc);
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "vyskovy_bod", vb.ident_cely, pristupnost);
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_vyskovy_bod", vb.ident_cely, pristupnost);
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ", vb.typ, pristupnost);
             }
             if (!idocs.isEmpty()) {
                 IndexUtils.getClientBin().add("entities", idocs, 10);

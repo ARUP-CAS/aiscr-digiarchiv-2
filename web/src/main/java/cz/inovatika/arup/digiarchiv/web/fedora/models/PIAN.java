@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,26 +37,26 @@ public class PIAN implements FedoraModel {
 
 //  <xs:element name="typ" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ.ident_cely}" | "{typ.heslo}" -->
   @JacksonXmlProperty(localName = "typ")
-  public Vocab typ;
+  public Vocab pian_typ;
 
 //  <xs:element name="presnost" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{presnost.ident_cely}" | "{presnost.heslo}" -->
   @JacksonXmlProperty(localName = "presnost")
-  public Vocab presnost;
+  public Vocab pian_presnost;
 
 //  <xs:element name="geom_system" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{geom_system}" -->
   @JacksonXmlProperty(localName = "geom_system")
   @Field
-  public String geom_system;
+  public String pian_geom_system;
 
 //  <xs:element name="geom_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_updated_at}" -->
   @JacksonXmlProperty(localName = "geom_updated_at")
   @Field
-  public Date geom_updated_at;
+  public Date pian_geom_updated_at;
 
 //  <xs:element name="geom_sjtsk_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_sjtsk_updated_at}" -->
   @JacksonXmlProperty(localName = "geom_sjtsk_updated_at")
   @Field
-  public Date geom_sjtsk_updated_at;
+  public Date pian_geom_sjtsk_updated_at;
 
 //  <xs:element name="pristupnost_pom" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost_pom.ident_cely}" | "{pristupnost_pom.heslo}" -->
   @JacksonXmlProperty(localName = "pristupnost_pom")
@@ -63,7 +64,7 @@ public class PIAN implements FedoraModel {
 
 //  <xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:pian-chranene_udajeType"/> <!-- SELF -->
   @JacksonXmlProperty(localName = "chranene_udaje")
-  private PIANChraneneUdaje chranene_udaje;
+  private PIANChraneneUdaje pian_chranene_udaje;
 
 //  <xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
     @JacksonXmlProperty(localName = "historie")
@@ -81,11 +82,16 @@ public class PIAN implements FedoraModel {
     IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
     
-    IndexUtils.addVocabField(idoc, "typ", typ);
-    IndexUtils.addVocabField(idoc, "presnost", presnost);
+    IndexUtils.addVocabField(idoc, "pian_typ", pian_typ);
+    IndexUtils.addVocabField(idoc, "pian_presnost", pian_presnost);
 
-    if (chranene_udaje != null) {
-      chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+    if (pian_chranene_udaje != null) {
+      pian_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+    }
+    // Add value of vocab fields
+    for (String sufix : SolrSearcher.prSufixAll) {
+        idoc.addField("text_all_" + sufix, ident_cely);
+        IndexUtils.addRefField(idoc, "text_all_" + sufix, pian_typ);
     }
   }
 
@@ -129,7 +135,7 @@ class PIANChraneneUdaje {
   public WKT geom_sjtsk_wkt;
 
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_chranene_udaje_zm10", zm10, pristupnost);
     IndexUtils.setSecuredJSONField(idoc, "pian_chranene_udaje", this);
 
     if (geom_wkt != null) {
@@ -139,8 +145,6 @@ class PIANChraneneUdaje {
       try {
         Geometry geometry = reader.read(wktStr);
         Point p = geometry.getCentroid();
-//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_e", p.getX(), pristupnost);
-//        IndexUtils.addSecuredFieldNonRepeat(idoc, "centroid_n", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

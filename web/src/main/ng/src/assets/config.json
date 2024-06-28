@@ -202,7 +202,6 @@
     {"type": "text", "field": "adb_poznamka"},
 
     {"type": "text", "field": "vyskovy_bod_ident_cely"},
-    {"type": "number", "field": "vyskovy_bod_niveleta"},
 
     {"type": "text", "field": "komponenta_ident_cely"},
     {"type": "text", "field": "komponenta_jistota"},

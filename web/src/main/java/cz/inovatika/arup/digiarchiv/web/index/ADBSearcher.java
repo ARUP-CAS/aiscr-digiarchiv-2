@@ -119,7 +119,7 @@ public class ADBSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,vyskovy_bod:[json],chranene_udaje:[json]"};
+        return new String[]{"*,adb_chranene_udaje_vyskovy_bod:[json],adb_chranene_udaje:[json]"};
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

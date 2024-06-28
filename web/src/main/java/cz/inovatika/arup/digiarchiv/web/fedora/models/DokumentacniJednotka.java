@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,29 +31,29 @@ public class DokumentacniJednotka {
 
 //<xs:element name="pian" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{pian.ident_cely}" | "{pian.ident_cely}" -->
   @JacksonXmlProperty(localName = "pian") 
-  public Vocab pian;
+  public Vocab dokumentacni_jednotka_pian;
 
 //<xs:element name="typ" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ.ident_cely}" | "{typ.heslo}" -->
   @JacksonXmlProperty(localName = "typ")
-  public Vocab typ;
+  public Vocab dokumentacni_jednotka_typ;
 
 //<xs:element name="negativni_jednotka" minOccurs="1" maxOccurs="1" type="xs:boolean"/> <!-- "{negativni_jednotka}" -->
   @JacksonXmlProperty(localName = "negativni_jednotka")
   @Field
-  public boolean negativni_jednotka;
+  public boolean dokumentacni_jednotka_negativni_jednotka;
 
 //<xs:element name="nazev" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{nazev}" -->
   @JacksonXmlProperty(localName = "nazev")
   @Field
-  public String nazev;
+  public String dokumentacni_jednotka_nazev;
 
 //<xs:element name="adb" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{Adb.ident_cely}" | "{Adb.ident_cely}" -->
   @JacksonXmlProperty(localName = "adb")
-  public Vocab adb;
+  public Vocab dokumentacni_jednotka_adb;
 
 //<xs:element name="komponenta" minOccurs="0" maxOccurs="unbounded" type="amcr:komponentaType"/> <!-- "{komponenty.komponenty}" -->
   @JacksonXmlProperty(localName = "komponenta")
-  public List<Komponenta> komponenta = new ArrayList();
+  public List<Komponenta> dokumentacni_jednotka_komponenta = new ArrayList();
   
   public SolrInputDocument createSolrDoc() {
     
@@ -65,15 +61,14 @@ public class DokumentacniJednotka {
     SolrInputDocument idoc = dob.toSolrInputDocument(this);
     //akceDoc.setField("entity", "akce");
     //akceDoc.setField("pristupnost", pristupnost);
-    IndexUtils.addVocabField(idoc, "pian", pian);
-    IndexUtils.addVocabField(idoc, "typ", typ);
+    IndexUtils.addVocabField(idoc, "dokumentacni_jednotka_pian", dokumentacni_jednotka_pian);
+    IndexUtils.addVocabField(idoc, "dokumentacni_jednotka_typ", dokumentacni_jednotka_typ);
     
-    IndexUtils.addVocabField(idoc, "adb", adb);
+    IndexUtils.addVocabField(idoc, "dokumentacni_jednotka_adb", dokumentacni_jednotka_adb);
     
-    for (Komponenta k : komponenta) {
-      IndexUtils.addJSONField(idoc, "komponenta", k);
+    for (Komponenta k : dokumentacni_jednotka_komponenta) {
+      IndexUtils.addJSONField(idoc, "dokumentacni_jednotka_komponenta", k);
       k.fillSolrFields(idoc, "dokumentacni_jednotka");
-      
     }
     
     return idoc;
@@ -91,11 +86,11 @@ public class DokumentacniJednotka {
     } catch (JsonProcessingException ex) {
       Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
     }
-    for (Komponenta k : komponenta) {
+    for (Komponenta k : dokumentacni_jednotka_komponenta) {
       k.fillSolrFields(idoc, "dokumentacni_jednotka");
     }
     
-    if(pian != null) {
+    if(dokumentacni_jednotka_pian != null) {
       // Add fields from PIAN.
     }
   }

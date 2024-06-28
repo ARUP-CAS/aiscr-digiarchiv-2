@@ -33,6 +33,8 @@ import org.json.JSONObject;
 public class SolrSearcher {
 
     public static final Logger LOGGER = Logger.getLogger(SolrSearcher.class.getName());
+    
+    public static String[] prSufixAll = new String[]{"A", "B", "C", "D"};
 
     public static List<String> getSufixesByLevel(String pr) {
         List<String> prSufix = new ArrayList<>();

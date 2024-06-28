@@ -257,6 +257,9 @@ public class SearchUtils {
             case "adb":
                 searcher = new ADBSearcher();
                 break;
+            case "dokumentacni_jednotka":
+                searcher = new DokJednotkaSearcher();
+                break;
             case "dokument":
                 searcher = new DokumentSearcher();
                 break;
