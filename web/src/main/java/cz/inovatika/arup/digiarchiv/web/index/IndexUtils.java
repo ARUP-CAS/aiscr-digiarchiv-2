@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Historie;
@@ -12,6 +13,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -185,6 +188,47 @@ public class IndexUtils {
         } else {
             // idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
         }
+    }
+    
+    public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix) {
+        boolean secured = path.contains("chranene_udaje");
+        String[] parts = path.split("\\.", 2);
+        Collection<Object> vals = idoc.getFieldValues(parts[0]);
+        if (vals == null) {
+            return;
+        }
+        if (parts.length > 1) {
+            System.out.println(parts[0]);
+            for (Object o: vals) {
+                Object jpReturns = JsonPath.read((String)o, "$." + parts[1]);
+                if (jpReturns instanceof List) {
+                    List<String> svals = (List<String>)jpReturns;
+                    for (String val: svals) {
+                        if (secured) {
+                            for (String sufix : prSufix) {
+                                IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, val);
+                            }
+                        } else {
+                            addFieldNonRepeat(idoc, field, val);
+                        }
+
+                    }
+                } else {
+                    if (secured) {
+                        for (String sufix : prSufix) {
+                            IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, jpReturns);
+                        }
+                    } else {
+                        addFieldNonRepeat(idoc, field, jpReturns);
+                    }
+                }
+                
+            }
+            
+        } else {
+            addFieldNonRepeat(idoc, field, vals);
+        }
+        
     }
 
 //  public static void addSecuredJSONField(SolrInputDocument idoc, Object o) {

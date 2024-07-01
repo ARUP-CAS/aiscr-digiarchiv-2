@@ -1,7 +1,9 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
+import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -169,27 +171,44 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"ident_cely", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
-            "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "odlozena_nz", "pristupnost",
-            "organizace", "f_organizace:organizace", "projekt", "dokument",
-            "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
-            "organizace_ostatni", "uzivatelske_oznaceni:uzivatelske_oznaceni_" + pristupnost, "ulozeni_nalezu", "poznamka",
-            "pian:[json],adb:[json],projekt:[json],dokument:[json],projekt:[json]",
-            "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]",
-            "vedouci_akce_ostatni:[json]",
-            "dokumentacni_jednotka_pian",
-            "dokumentacni_jednotka:[json]",
-            "akce_chranene_udaje:[json]",
-            "chranene_udaje:[json]",
-            "ext_odkaz:[json]",
-            "pian_id",
-            "katastr:f_katastr_" + pristupnost, 
-            "lat:lat_" + pristupnost,
-            "lng:lng_" + pristupnost,
-            "loc_rpt:loc_rpt_" + pristupnost,
-            "loc:loc_rpt_" + pristupnost,
-            "lokalizace:lokalizace_okolnosti_" + pristupnost,
-            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
+        
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("header").toList();
+        List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("detail").toList();
+
+        fields.addAll(azHeaderFields);
+        fields.addAll(headerFields);
+        fields.addAll(detailFields);
+
+        fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("katastr:f_katastr_" + pristupnost);
+
+        String[] ret = fields.toArray(new String[0]);
+        return ret;
+        
+//        return new String[]{"ident_cely", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
+//            "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "odlozena_nz", "pristupnost",
+//            "organizace", "f_organizace:organizace", "projekt", "dokument",
+//            "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
+//            "organizace_ostatni", "uzivatelske_oznaceni:uzivatelske_oznaceni_" + pristupnost, "ulozeni_nalezu", "poznamka",
+//            "pian:[json],adb:[json],projekt:[json],dokument:[json],projekt:[json]",
+//            "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]",
+//            "vedouci_akce_ostatni:[json]",
+//            "dokumentacni_jednotka_pian",
+//            "dokumentacni_jednotka:[json]",
+//            "akce_chranene_udaje:[json]",
+//            "chranene_udaje:[json]",
+//            "ext_odkaz:[json]",
+//            "pian_id",
+//            "katastr:f_katastr_" + pristupnost, 
+//            "lat:lat_" + pristupnost,
+//            "lng:lng_" + pristupnost,
+//            "loc_rpt:loc_rpt_" + pristupnost,
+//            "loc:loc_rpt_" + pristupnost,
+//            "lokalizace:lokalizace_okolnosti_" + pristupnost,
+//            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
     }
 
     @Override

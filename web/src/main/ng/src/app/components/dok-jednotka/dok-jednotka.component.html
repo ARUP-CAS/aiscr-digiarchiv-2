@@ -3,19 +3,19 @@
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
       {{ 'card.panelTitle.Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
-      <app-inline-filter [field]="'f_dokumentacni_jednotka_typ'" [value]="result.dokumentacni_jednotka_typ" [heslar]="'typ_dj'"></app-inline-filter>
-      <ng-container *ngIf="result.dokumentacni_jednotka_nazev">&#160;({{result.dokumentacni_jednotka_nazev}})</ng-container>
+      <app-inline-filter [field]="'f_dj_typ'" [value]="result.dj_typ.id" [heslar]="'typ_dj'"></app-inline-filter>
+      <ng-container *ngIf="result.dj_nazev">&#160;({{result.dj_nazev}})</ng-container>
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <ng-container><!--*ngIf="result.dokumentacni_jednotka_negativni_jednotka"-->
+  <ng-container><!--*ngIf="result.dj_negativni_jednotka"-->
     <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
-    {{ result.dokumentacni_jednotka_negativni_jednotka === '1'  ? ('Ano' | translate) : ('Ne' | translate) }}
+    {{ result.dj_negativni_jednotka === '1'  ? ('Ano' | translate) : ('Ne' | translate) }}
   </ng-container>
   
   <mat-accordion multi="true">
-    <app-pian *ngIf="result.dokumentacni_jednotka_pian" [result]="result.dokumentacni_jednotka_pian"></app-pian>
-    <app-adb *ngIf="result.dokumentacni_jednotka_adb" [result]="result.dokumentacni_jednotka_adb"></app-adb>
-    <app-komponenta *ngFor="let komponenta of result.dokumentacni_jednotka_komponenta" [result]="komponenta"></app-komponenta>
+    <app-pian *ngIf="result.dj_pian" [result]="result.dj_pian"></app-pian>
+    <app-adb *ngIf="result.dj_adb" [result]="result.dj_adb"></app-adb>
+    <app-komponenta *ngFor="let komponenta of result.dj_komponenta" [result]="komponenta"></app-komponenta>
   </mat-accordion>
 </mat-expansion-panel>
 

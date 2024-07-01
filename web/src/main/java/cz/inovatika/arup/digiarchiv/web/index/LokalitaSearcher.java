@@ -41,7 +41,7 @@ public class LokalitaSearcher implements EntitySearcher {
             doc.remove("pian_"+pristupnost);
             if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
                 if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
-                    doc.remove("chranene_udaje");
+                    doc.remove("az_chranene_udaje");
                     doc.remove("lokalita_chranene_udaje");
                 }
                 Object[] keys = doc.keySet().toArray();
@@ -184,16 +184,35 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"ident_cely,entity,pristupnost,okres,lokalita_typ_lokality,lokalita_druh,lokalita_zachovalost,lokalita_jistota,datestamp,dokument,projekt",
-            "dokumentacni_jednotka:[json]",
-            "lokalita_chranene_udaje:[json]",
-            "chranene_udaje:[json]",
-            "pian_" + pristupnost + ":[json]",
-            "loc_rpt:loc_rpt_" + pristupnost,
-            "nazev:lokalita_chranene_udaje_nazev_" + pristupnost,
-            "popis:lokalita_chranene_udaje_popis_" + pristupnost,
-            "katastr:f_katastr_" + pristupnost,
-            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
+        
+        
+        
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("header").toList();
+        List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("detail").toList();
+
+        fields.addAll(azHeaderFields);
+        fields.addAll(headerFields);
+        fields.addAll(detailFields);
+
+        fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("katastr:f_katastr_" + pristupnost);
+
+        String[] ret = fields.toArray(new String[0]);
+        return ret;
+//        
+//        return new String[]{"ident_cely,entity,pristupnost,okres,lokalita_typ_lokality,lokalita_druh,lokalita_zachovalost,lokalita_jistota,datestamp,dokument,projekt",
+//            "dokumentacni_jednotka:[json]",
+//            "lokalita_chranene_udaje:[json]",
+//            "chranene_udaje:[json]",
+//            "pian_" + pristupnost + ":[json]",
+//            "loc_rpt:loc_rpt_" + pristupnost,
+//            "nazev:lokalita_chranene_udaje_nazev_" + pristupnost,
+//            "popis:lokalita_chranene_udaje_popis_" + pristupnost,
+//            "katastr:f_katastr_" + pristupnost,
+//            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

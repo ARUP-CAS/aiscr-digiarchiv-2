@@ -6,6 +6,7 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -223,26 +224,23 @@ public class SamostatnyNalez implements FedoraModel {
 
     public void setFullText(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("full_text").toList();
-        List<String> prSufixAll = new ArrayList<>();
-        prSufixAll.add("A");
-        prSufixAll.add("B");
-        prSufixAll.add("C");
-        prSufixAll.add("D");
 
         for (Object f : indexFields) {
             String s = (String) f;
-            if (idoc.containsKey(s)) {
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "text_all", idoc.getFieldValues(s), prSufix);
-            }
+            String dest = s.split(":")[0];
+            String orig = s.split(":")[1];
+            if (idoc.containsKey(orig)) {
+                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
+            } 
             for (String sufix : prSufix) {
-                if (idoc.containsKey(s + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                if (idoc.containsKey(orig + "_" + sufix)) {
+                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
                 }
             }
         }
         
         // Add value of vocab fields
-        for (String sufix : prSufixAll) {
+        for (String sufix : SolrSearcher.prSufixAll) {
             idoc.addField("text_all_" + sufix, ident_cely);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, okres);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, specifikace);

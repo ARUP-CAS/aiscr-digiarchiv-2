@@ -211,7 +211,7 @@
     {"type": "text", "field": "nalez_pocet"},
     {"type": "text", "field": "nalez_poznamka"}, 
 
-    {"type": "text", "field": "lokalita_zachovalost"}
+    {"type": "text", "field": "f_lokalita_zachovalost"}
   ],
   
   "facets": [
@@ -240,7 +240,7 @@
     "f_druh_lokality",
     "f_typ_projektu",
     "f_jistota",
-    "lokalita_zachovalost",
+    "f_lokalita_zachovalost",
     
     "f_autor",
     "kategorie_dokumentu",
@@ -255,7 +255,7 @@
     "f_tvar",
     "f_osoby",
     
-    "f_dokumentacni_jednotka_typ",
+    "f_dj_typ",
     "f_pian_typ",
     "f_pian_presnost",
     "f_pian_zm10",

@@ -11,11 +11,11 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="result.chranene_udaje?.hlavni_katastr">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.chranene_udaje.hlavni_katastr.value"></app-inline-filter>
-        </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
-        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.hlavni_vedouci"></app-inline-filter><span class="app-pipe"></span>
-        <!-- <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
+        <ng-container *ngIf="result.az_chranene_udaje?.hlavni_katastr">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
+        </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.az_okres"></app-inline-filter>)
+        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="result.akce_hlavni_vedouci"></app-inline-filter><span class="app-pipe"></span>
+        <!-- <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.akce_organizace" [heslar]="'organizace'"></app-inline-filter>
         <span class="app-pipe"></span> -->
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
@@ -28,61 +28,61 @@
     <div class="app-metadata app-row-gap-16" >
       <div>
         <label class="app-label">{{ 'card.desc.Datum výzkumu' | translate }}:</label>&#160;
-        {{ result.specifikace_data | translateHeslar : 'sd' }} 
-        <ng-container *ngIf="result.specifikace_data === 'HES-000887'"><!-- přesně -->
-          {{ result.datum_zahajeni | date : 'dd.MM.yyyy' }}
-          <ng-container *ngIf="result.datum_ukonceni"> - {{ result.datum_ukonceni | date : 'dd.MM.yyyy' }}</ng-container>
+        {{ result.akce_specifikace_data | translateHeslar : 'sd' }} 
+        <ng-container *ngIf="result.akce_specifikace_data === 'HES-000887'"><!-- přesně -->
+          {{ result.akce_datum_zahajeni | date : 'dd.MM.yyyy' }}
+          <ng-container *ngIf="result.akce_datum_ukonceni"> - {{ result.akce_datum_ukonceni | date : 'dd.MM.yyyy' }}</ng-container>
         </ng-container>
-        <ng-container *ngIf="result.specifikace_data === 'HES-000886' || result.specifikace_data === 'HES-000889'">
-          {{ result.datum_zahajeni | date : 'yyyy' }}
-          <ng-container *ngIf="result.datum_ukonceni">
-            - {{ result.datum_ukonceni | date : 'yyyy' }}
+        <ng-container *ngIf="result.akce_specifikace_data === 'HES-000886' || result.akce_specifikace_data === 'HES-000889'">
+          {{ result.akce_datum_zahajeni | date : 'yyyy' }}
+          <ng-container *ngIf="result.akce_datum_ukonceni">
+            - {{ result.akce_datum_ukonceni | date : 'yyyy' }}
           </ng-container>
         </ng-container>
-        <ng-container *ngIf="result.specifikace_data !== 'HES-000887' && result.specifikace_data !== 'HES-000886' && result.specifikace_data !== 'HES-000889'">
-          {{ result.datum_zahajeni | date : 'yyyy' }}
-          <ng-container *ngIf="result.datum_ukonceni">
-            <ng-container *ngIf="result.specifikace_data !== 'před rokem'"> - </ng-container><!-- před rokem nemam HESLO -->
-            {{ result.datum_ukonceni }}
+        <ng-container *ngIf="result.akce_specifikace_data !== 'HES-000887' && result.akce_specifikace_data !== 'HES-000886' && result.akce_specifikace_data !== 'HES-000889'">
+          {{ result.akce_datum_zahajeni | date : 'yyyy' }}
+          <ng-container *ngIf="result.akce_datum_ukonceni">
+            <ng-container *ngIf="result.akce_specifikace_data !== 'před rokem'"> - </ng-container><!-- před rokem nemam HESLO -->
+            {{ result.akce_datum_ukonceni }}
           </ng-container>
         </ng-container>
         <span class="app-pipe"></span>
-        <ng-container><!-- *ngIf="result.je_nz"-->
+        <ng-container><!-- *ngIf="result.akce_je_nz"-->
           <label class="app-label">{{ 'card.desc.Nahrazuje NZ' | translate }}:</label>&#160;
-          {{ (result.je_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
+          {{ (result.akce_je_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
         </ng-container>
-        <ng-container *ngIf="result.hasOwnProperty('odlozena_nz')"><!-- *"-->
+        <ng-container *ngIf="result.hasOwnProperty('akce_odlozena_nz')"><!-- *"-->
           <label class="app-label">{{ 'card.desc.odlozena_nz' | translate }}:</label>&#160;
-          {{ (result.odlozena_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
+          {{ (result.akce_odlozena_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.pristupnost">
           <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
         </ng-container>
       </div>
-      <div *ngIf="result.organizace">
+      <div *ngIf="result.akce_organizace">
         <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
-        <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
+        <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.akce_organizace" [heslar]="'organizace'"></app-inline-filter>
       </div>
-      <div *ngIf="result.chranene_udaje?.dalsi_katastr.length > 0">
+      <div *ngIf="result.az_chranene_udaje?.dalsi_katastr.length > 0">
         <label class="app-label">{{ 'card.desc.dalsi_katastry' | translate }}:</label>&#160;
-        <ng-container *ngFor="let k of result.chranene_udaje.dalsi_katastr; let last = last">
+        <ng-container *ngFor="let k of result.az_chranene_udaje.dalsi_katastr; let last = last">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>&#160;
           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="k.value"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
-      <div *ngIf="result.lokalizace" class="app-w-max-1 app-w-min-100 app-d-inline-flex">
-        <label class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</label>&#160;<span class="app-truncate-text">{{ cropped(result.lokalizace) }}</span>
+      <div *ngIf="result.akce_chranene_udaje?.lokalizace_okolnosti" class="app-w-max-1 app-w-min-100 app-d-inline-flex">
+        <label class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</label>&#160;<span class="app-truncate-text">{{ cropped(result.akce_chranene_udaje.lokalizace_okolnosti) }}</span>
       </div>
     </div>
   </mat-card-content>
   <mat-card-actions fxLayout="row" fxLayoutAlign="start end" *ngIf="!isChild">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.dokument?.length > 0">
-        {{'card.desc.Počet dokumentů' | translate}}: <strong>{{result.dokument.length}}</strong>
+      <ng-container *ngIf="result.az_dokument?.length > 0">
+        {{'card.desc.Počet dokumentů' | translate}}: <strong>{{result.az_dokument.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container>
-      <ng-container *ngIf="result.projekt">
+      <ng-container *ngIf="result.akce_projekt">
         {{'card.desc.Počet projektů' | translate}}: <strong>1</strong>
         <span class="app-pipe"></span>
       </ng-container>
@@ -101,17 +101,17 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.hlavni_typ">
+              <tr *ngIf="result.akce_hlavni_typ">
                 <th class="app-label">{{ 'card.desc.Hlavní typ' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.hlavni_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
+                <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.akce_hlavni_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
               </tr>
-              <tr *ngIf="result.vedlejsi_typ">
+              <tr *ngIf="result.akce_vedlejsi_typ">
                 <th class="app-label">{{ 'card.desc.Vedlejší typ' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.vedlejsi_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
+                <td><app-inline-filter [isChild]="isChild" [field]="'f_typ_vyzkumu'" [value]="result.akce_vedlejsi_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
               </tr>
-              <tr *ngIf="result.vedouci_akce_ostatni?.length > 0">
+              <tr *ngIf="result.akce_vedouci_akce_ostatni?.length > 0">
                 <th class="app-label">{{ 'card.desc.Ostatní vedoucí' | translate }}:</th>
-                <td><div *ngFor="let va of result.vedouci_akce_ostatni" >
+                <td><div *ngFor="let va of result.akce_vedouci_akce_ostatni" >
                   <app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="va.vedouci.value" [heslar]="'organizace'"></app-inline-filter>
                   (<app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="va.organizace.id" [heslar]="'organizace'"></app-inline-filter>)
                   <!-- {{va.vedouci.value}} ({{'heslar.' + va.organizace.id | translate}}) -->
@@ -121,30 +121,30 @@
                 <th class="app-label">{{ 'card.desc.Ostatní organizace' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace_ostatni" [heslar]="'organizace'"></app-inline-filter></td>
               </tr> -->
-              <tr *ngIf="result.uzivatelske_oznaceni">
+              <tr *ngIf="result.az_chranene_udaje?.uzivatelske_oznaceni">
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                <td>{{ result.uzivatelske_oznaceni }}</td>
+                <td>{{ result.az_chranene_udaje.uzivatelske_oznaceni }}</td>
               </tr>
-              <tr *ngIf="result.ulozeni_nalezu">
+              <tr *ngIf="result.akce_ulozeni_nalezu">
                 <th class="app-label">{{ 'card.desc.Uložení nálezů' | translate }}:</th>
-                <td>{{ result.ulozeni_nalezu }}</td>
+                <td>{{ result.akce_ulozeni_nalezu }}</td>
               </tr>
-              <tr *ngIf="result.lokalizace">
+              <tr *ngIf="result.akce_chranene_udaje?.lokalizace_okolnosti">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</th>
                 <td class="app-split-text">
                   <div class="app-text-content">
-                    {{ result.lokalizace }}
+                    {{ result.akce_chranene_udaje.lokalizace_okolnosti }}
                   </div>
                 </td>
               </tr>
               <tr *ngIf="result.akce_chranene_udaje?.souhrn_upresneni">
                 <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
-                <td>{{ result.akce_chranene_udaje?.souhrn_upresneni }}</td>
+                <td>{{ result.akce_chranene_udaje.souhrn_upresneni }}</td>
               </tr>
             </tbody>
           </table>
           <mat-accordion multi="true">
-            <app-dok-jednotka *ngFor="let dok_jednotka of result.dokumentacni_jednotka" [result]="dok_jednotka" [pians]="result.pian" [adbs]="result.adb"></app-dok-jednotka> 
+            <app-dok-jednotka *ngFor="let dok_jednotka of result.az_dokumentacni_jednotka" [result]="dok_jednotka" [pians]="result.pian" [adbs]="result.adb"></app-dok-jednotka> 
           </mat-accordion>
         </mat-expansion-panel>
 

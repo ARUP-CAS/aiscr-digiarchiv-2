@@ -218,11 +218,11 @@ public class Projekt implements FedoraModel {
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(s));
+                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
             } 
             for (String sufix : prSufix) {
                 if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
                 }
             }
         }

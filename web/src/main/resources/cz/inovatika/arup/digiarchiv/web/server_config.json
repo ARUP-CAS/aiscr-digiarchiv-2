@@ -175,18 +175,7 @@
             "dokumentacni_jednotka_komponenta_nalez_predmet_specifikace"
         ],
 
-        "akce": [
-
-            "poznamka",
-            "vedouci_akce_ostatni_jmeno",
-            "ulozeni_nalezu",
-            
-
-            "projekt",
-
-            "vyskovy_bod_ident_cely",
-            "vyskovy_bod_typ"
-        ],
+        
 
         "lokalita": [
             "nazev",
@@ -348,17 +337,71 @@
       "f_kategorie", "f_zeme"
     ]
   },
+  "archeologicky_zaznam": {
+    "header": [
+      "az_okres",
+      "az_chranene_udaje_hlavni_katastr",
+      "az_chranene_udaje_dalsi_katastry",
+      "az_chranene_udaje:[json]"
+    ],
+    "detail": [
+    ],
+    "facets": [
+    ]
+  },
+  "akce": {
+    "header": [
+        "akce_hlavni_vedouci", "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "odlozena_nz", "pristupnost",
+        "akce_projekt", "akce_typ","akce_je_nz","akce_odlozena_nz","akce_hlavni_vedouci",
+        "akce_organizace","akce_vedouci_akce_ostatni","akce_specifikace_data","akce_datum_zahajeni", 
+        "akce_datum_ukonceni" ,"akce_hlavni_typ","akce_vedlejsi_typ","akce_ulozeni_nalezu",
+        "akce_ulozeni_dokumentace","akce_chranene_udaje:[json]"
+    ],
+    "detail": [
+        "az_dokumentacni_jednotka:[json]"    
+    ],
+    "facets": [
+        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
+        "f_typ_vyzkumu:akce_hlavni_typ",
+        "f_typ_vyzkumu:akce_vedlejsi_typ",
+        "f_okres:az_okres",
+        "f_katastr:az_chranene_udaje.hlavni_katastr.id",
+        "f_vedouci:akce_hlavni_vedouci",
+        "f_vedouci:akce_vedouci_akce_ostatni",
+        "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
+        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
+        "f_aktivita:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita[*].id",
+        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
+        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
+        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
+        "f_organizace:akce_organizace"
+    ],
+    "facets2": [
+        "f_pian_presnost",
+        "f_adb_podnet",
+        "f_adb_typ_sondy",
+        "f_pian_zm10",
+        "f_autor",
+        "f_pian_typ",
+        "f_kategorie"
+    ],
+    "full_text": [
+        "akce_vedouci_akce_ostatni",
+        "akce_ulozeni_nalezu",
+        "akce_projekt",
+        "vyskovy_bod_ident_cely",
+        "vyskovy_bod_typ"
+    ]
+  },
   "lokalita": {
     "header": [
-      "chranene_udaje_hlavni_katastr",
-      "okres",
-      "lokalita_chranene_udaje_nazev",
+      "lokalita_chranene_udaje:[json]",
       "lokalita_typ_lokality",
       "lokalita_druh",
       "lokalita_zachovalost",
-      "lokalita_jistota",
-      "chranene_udaje_dalsi_katastry",
-      "lokalita_chranene_udaje_popis"
+      "lokalita_jistota"
     ],
     "detail": [
       "chranene_udaje_uzivatelske_oznaceni",
@@ -376,23 +419,33 @@
       "dokumentacni_jednotka_pian_chranene_udaje_geom_wkt_centroid_e"
     ],
     "facets": [
-      "f_areal",
+            
+        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
+        "f_typ_lokality:lokalita_typ_lokality",
+        "f_okres:az_okres",
+        "f_druh_lokality:lokalita_druh",
+        "f_aktivita:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita[*].id",
+        "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
+        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
+        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
+        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
+        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
+        "f_lokalita_zachovalost:lokalita_zachovalost",
+        "f_organizace:akce_organizace"
+    ],
+    "facets2": [
       "f_pian_presnost",
-      "f_typ_lokality",
-      "f_okres",
-      "f_katastr",
-      "pristupnost",
-      "f_druh_lokality",
-      "f_aktivita",
       "f_pian_zm10",
-      "f_typ_nalezu",
-      "f_dok_jednotka_typ",
       "f_pian_typ",
-      "f_druh_nalezu",
-      "f_specifikace",
-      "f_obdobi",
-      "f_kategorie",
-      "lokalita_zachovalost"
+      "f_kategorie"
+    ],
+    "full_text": [
+        "lokalita_nazev",
+        "lokalita_popis",
+        "lokalita_poznamka",
+        "lokalita_uzivatelske_oznaceni"
     ]
   },
   "projekt": {

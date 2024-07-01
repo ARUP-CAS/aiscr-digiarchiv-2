@@ -780,13 +780,13 @@
      <lst name="appends">
        
        <str name="stats.field">datum_zverejneni</str>
-       <str name="stats.field">extra_data_datum_vzniku</str>
-       <str name="stats.field">let_datum</str>
        <str name="stats.field">samostatny_nalez_datum_nalezu</str>
-       <str name="stats.field">rok_vzniku</str>
-       <str name="stats.field">rok_vydani</str>
        <str name="stats.field">datum_provedeni_od</str>
        <str name="stats.field">datum_provedeni_do</str>
+       <str name="stats.field">extra_data_datum_vzniku</str>
+       <str name="stats.field">let_datum</str>
+       <str name="stats.field">rok_vzniku</str>
+       <str name="stats.field">rok_vydani</str>>
        
        <str name="fq">searchable:true</str>
 	   
@@ -814,10 +814,10 @@
 	   
        <str name="facet.field">f_druh_lokality</str>
        <str name="facet.field">f_typ_lokality</str>
-       <str name="facet.field">lokalita_zachovalost</str>
+       <str name="facet.field">f_lokalita_zachovalost</str>
 	   
        <str name="facet.field">f_typ_dokumentu_posudek</str>
-       <str name="facet.field">f_dokumentacni_jednotka_typ</str>
+       <str name="facet.field">f_dj_typ</str>
 
        <str name="facet.field">f_autor</str>
        <str name="facet.field">f_osoby</str>

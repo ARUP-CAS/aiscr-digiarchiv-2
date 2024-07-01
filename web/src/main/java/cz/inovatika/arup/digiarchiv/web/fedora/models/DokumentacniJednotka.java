@@ -31,29 +31,29 @@ public class DokumentacniJednotka {
 
 //<xs:element name="pian" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{pian.ident_cely}" | "{pian.ident_cely}" -->
   @JacksonXmlProperty(localName = "pian") 
-  public Vocab dokumentacni_jednotka_pian;
+  public Vocab dj_pian;
 
 //<xs:element name="typ" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ.ident_cely}" | "{typ.heslo}" -->
   @JacksonXmlProperty(localName = "typ")
-  public Vocab dokumentacni_jednotka_typ;
+  public Vocab dj_typ;
 
 //<xs:element name="negativni_jednotka" minOccurs="1" maxOccurs="1" type="xs:boolean"/> <!-- "{negativni_jednotka}" -->
   @JacksonXmlProperty(localName = "negativni_jednotka")
   @Field
-  public boolean dokumentacni_jednotka_negativni_jednotka;
+  public boolean dj_negativni_jednotka;
 
 //<xs:element name="nazev" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{nazev}" -->
   @JacksonXmlProperty(localName = "nazev")
   @Field
-  public String dokumentacni_jednotka_nazev;
+  public String dj_nazev;
 
 //<xs:element name="adb" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{Adb.ident_cely}" | "{Adb.ident_cely}" -->
   @JacksonXmlProperty(localName = "adb")
-  public Vocab dokumentacni_jednotka_adb;
+  public Vocab dj_adb;
 
 //<xs:element name="komponenta" minOccurs="0" maxOccurs="unbounded" type="amcr:komponentaType"/> <!-- "{komponenty.komponenty}" -->
   @JacksonXmlProperty(localName = "komponenta")
-  public List<Komponenta> dokumentacni_jednotka_komponenta = new ArrayList();
+  public List<Komponenta> dj_komponenta = new ArrayList();
   
   public SolrInputDocument createSolrDoc() {
     
@@ -61,14 +61,14 @@ public class DokumentacniJednotka {
     SolrInputDocument idoc = dob.toSolrInputDocument(this);
     //akceDoc.setField("entity", "akce");
     //akceDoc.setField("pristupnost", pristupnost);
-    IndexUtils.addVocabField(idoc, "dokumentacni_jednotka_pian", dokumentacni_jednotka_pian);
-    IndexUtils.addVocabField(idoc, "dokumentacni_jednotka_typ", dokumentacni_jednotka_typ);
+    IndexUtils.addVocabField(idoc, "dj_pian", dj_pian);
+    IndexUtils.addVocabField(idoc, "dj_typ", dj_typ);
     
-    IndexUtils.addVocabField(idoc, "dokumentacni_jednotka_adb", dokumentacni_jednotka_adb);
+    IndexUtils.addVocabField(idoc, "dj_adb", dj_adb);
     
-    for (Komponenta k : dokumentacni_jednotka_komponenta) {
-      IndexUtils.addJSONField(idoc, "dokumentacni_jednotka_komponenta", k);
+    for (Komponenta k : dj_komponenta) {
       k.fillSolrFields(idoc, "dokumentacni_jednotka");
+      IndexUtils.addJSONField(idoc, "dj_komponenta", k);
     }
     
     return idoc;
@@ -86,11 +86,11 @@ public class DokumentacniJednotka {
     } catch (JsonProcessingException ex) {
       Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
     }
-    for (Komponenta k : dokumentacni_jednotka_komponenta) {
+    for (Komponenta k : dj_komponenta) {
       k.fillSolrFields(idoc, "dokumentacni_jednotka");
     }
     
-    if(dokumentacni_jednotka_pian != null) {
+    if(dj_pian != null) {
       // Add fields from PIAN.
     }
   }
