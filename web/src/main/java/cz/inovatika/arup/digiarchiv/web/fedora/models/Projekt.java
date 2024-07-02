@@ -326,7 +326,6 @@ public class Projekt implements FedoraModel {
 //-- D-E: bez omezení 
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
-        System.out.println(userPr);
         if (userPr.compareToIgnoreCase("D") >= 0) {
             return true;
         } else if (userPr.equalsIgnoreCase("C") && st >= 1) {

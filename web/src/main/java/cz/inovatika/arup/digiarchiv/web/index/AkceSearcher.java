@@ -69,8 +69,8 @@ public class AkceSearcher implements EntitySearcher {
 //      if (LoginServlet.userId(request) != null) {
 //        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
 //      }
-            SolrSearcher.addChildField(client, doc, "dokument", "valid_dokument", dfs);
-            SolrSearcher.addChildField(client, doc, "projekt", "valid_projekt", fields);
+            SolrSearcher.addChildField(client, doc, "az_dokument", "valid_dokument", dfs);
+            SolrSearcher.addChildField(client, doc, "akce_projekt", "valid_projekt", fields);
         }
     }
     
@@ -174,10 +174,12 @@ public class AkceSearcher implements EntitySearcher {
         
         List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
         List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+        List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
         List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("header").toList();
         List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("detail").toList();
 
         fields.addAll(azHeaderFields);
+        fields.addAll(azDetailFields);
         fields.addAll(headerFields);
         fields.addAll(detailFields);
 

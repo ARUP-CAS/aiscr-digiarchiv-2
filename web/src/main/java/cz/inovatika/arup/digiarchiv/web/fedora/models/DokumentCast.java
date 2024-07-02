@@ -113,7 +113,7 @@ public class DokumentCast {
                     JSONArray val = doc.optJSONArray(key);
                     for (int i = 0; i < val.length(); i++) {
                         // SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
-                        addPian(idoc, pristupnost, val.optString(i));
+                        addPian(idoc, val.optString(i), pristupnost);
                     }
 
                 }
@@ -121,16 +121,46 @@ public class DokumentCast {
         }
     }
     
-    private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) throws Exception {
-        SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
-                .setFields("typ,presnost,chranene_udaje:[json]");
-        JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian_id);
-        if (json.getJSONObject("response").getInt("numFound") > 0) {
-            JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-            SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pian_id);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_typ", doc.getJSONArray("typ").getString(0), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_presnost", doc.getString("presnost"), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", doc.getJSONObject("chranene_udaje").getString("zm10"), pristupnost);
+    private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
+        idoc.addField("pian_id", pian);
+        SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
+                .setFields("*,pian_chranene_udaje:[json]");
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
+
+        if (json.getJSONObject("response").getInt("numFound") > 0) { 
+            for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
+                JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
+
+            // IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
+            IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
+            IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
+            
+                for (String key : pianDoc.keySet()) {
+                    switch (key) {
+                        case "entity":
+                        case "searchable":
+                        case "_version_":
+                        case "stav":
+                        case "chranene_udaje":
+                            break;
+                        default:
+                            // idoc.setField("dj_pian_" + key, pianDoc.opt(key));
+                            if (key.startsWith("loc")) {
+                                SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.opt(key));
+                            } else if (key.startsWith("lat") || key.startsWith("lng")) {
+                                // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
+                                JSONArray val = pianDoc.optJSONArray(key);
+                                for (int i = 0; i < val.length(); i++) {
+                                    SolrSearcher.addFieldNonRepeat(idoc, key, val.getBigDecimal(i).toString());
+                                }
+
+                            } else {
+                                // SolrSearcher.addFieldNonRepeat(idoc, "dj_pian_" + key, pianDoc.opt(key));
+                            }
+                    }
+                }
+            }
         }
     }
 

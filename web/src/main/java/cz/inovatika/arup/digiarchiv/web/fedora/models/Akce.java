@@ -103,8 +103,6 @@ public class Akce {
 
         for (VedouciAkceOstatni o : akce_vedouci_akce_ostatni) {
             IndexUtils.addJSONField(akceDoc, "akce_vedouci_akce_ostatni", o);
-            IndexUtils.addRefField(akceDoc, "akce_vedouci_akce_ostatni_jmeno", o.vedouci);
-            IndexUtils.addVocabField(akceDoc, "akce_vedouci_akce_ostatni_organizace", o.organizace);
         }
 
         if (akce_chranene_udaje != null) {
@@ -176,6 +174,7 @@ public class Akce {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_vedlejsi_typ);
             for (VedouciAkceOstatni o : akce_vedouci_akce_ostatni) {
                 IndexUtils.addRefField(idoc, "text_all_" + sufix, o.organizace);
+                IndexUtils.addRefField(idoc, "text_all_" + sufix, o.vedouci);
             }
         }
         
@@ -183,6 +182,8 @@ public class Akce {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_organizace);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_specifikace_data);
         }
+        
+        
     }
 
 }

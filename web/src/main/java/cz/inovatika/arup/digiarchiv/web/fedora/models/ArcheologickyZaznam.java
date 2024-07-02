@@ -132,18 +132,18 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "f_typ_vyzkumu", djdoc.getFieldValue("dj_typ"));
 
                 // add loc field by pian
-                if (djdoc.getFieldValue("pian") != null ) {
-                    addPian(idoc, (String) djdoc.getFieldValue("pian"), (String) idoc.getFieldValue("pristupnost"));
+                if (djdoc.getFieldValue("dj_pian") != null ) {
+                    addPian(idoc, (String) djdoc.getFieldValue("dj_pian"), (String) idoc.getFieldValue("pristupnost"));
                 }
 
                 //add adb fields
-                if (idoc.getFieldValue("adb") != null ) {
-                    addAdbFields(idoc, (String) djdoc.getFieldValue("adb"));
+                if (idoc.getFieldValue("dj_adb") != null ) {
+                    addAdbFields(idoc, (String) djdoc.getFieldValue("dj_adb"));
                 }
             }
             if (!djdocs.isEmpty()) {
                 IndexUtils.getClientBin().add("entities", djdocs, 10);
-            }
+            } 
         } catch (Exception ex) {
             Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -216,7 +216,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
     private void addAdbFields(SolrInputDocument idoc, String ident_cely) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + ident_cely + "\"")
-                .setFields("ident_cely,podnet,typ_sondy,autor_popisu,autor_revize");
+                .setFields("ident_cely,adb_podnet,adb_typ_sondy,adb_autor_popisu,adb_autor_revize");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", ident_cely);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -233,21 +233,17 @@ public class ArcheologickyZaznam implements FedoraModel {
     private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
-                .setFields("*,chranene_udaje:[json]");
+                .setFields("*,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) { 
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-//        JSONObject cu = new JSONObject((String)idoc.getFieldValue("chranene_udaje"));
-//        cu.put("pian", pianDoc);
-//        idoc.setField("chranene_udaje", cu.toString());
 
-
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getJSONArray("typ").getString(0), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("presnost"), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("chranene_udaje").getString("zm10"), pristupnost);
+            // IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
+            IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
+            IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
             
                 for (String key : pianDoc.keySet()) {
                     switch (key) {

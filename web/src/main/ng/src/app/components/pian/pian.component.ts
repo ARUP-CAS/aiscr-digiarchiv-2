@@ -40,7 +40,6 @@ export class PianComponent implements OnInit {
       this.initProperties();
     } else {
       const pianid = this.result.id ? this.result.id : this.result;
-
       this.service.getIdAsChild([pianid], "pian").subscribe((res: any) => {
         this.result = res.response.docs[0];
         this.initProperties();

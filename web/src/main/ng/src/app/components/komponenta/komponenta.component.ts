@@ -31,37 +31,10 @@ export class KomponentaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.result)
     if (this.result.nalez && !this.result.nalez.hasOwnProperty('length')) {
       this.result.nalez = [this.result.nalez];
     }
     // this.fillAktivity();
-  }
-
-  fillAktivity() {
-    this.hasAktivita('aktivita_sidlistni') ? this.aktivity.push('sidlistni') : '';
-    this.hasAktivita('aktivita_tezebni') ? this.aktivity.push('tezebni') : '';
-    this.hasAktivita('aktivita_vyrobni') ? this.aktivity.push('vyrobni') : '';
-    this.hasAktivita('aktivita_komunikace') ? this.aktivity.push('komunikace') : '';
-    this.hasAktivita('aktivita_boj') ? this.aktivity.push('boj') : '';
-    this.hasAktivita('aktivita_kultovni') ? this.aktivity.push('kultovni') : '';
-    this.hasAktivita('aktivita_pohrebni') ? this.aktivity.push('pohrebni') : '';
-    this.hasAktivita('aktivita_deponovani') ? this.aktivity.push('deponovani') : '';
-    this.hasAktivita('aktivita_intruze') ? this.aktivity.push('intruze') : '';
-    this.hasAktivita('aktivita_jina') ? this.aktivity.push('jina') : '';
-  }
-
-  hasAnyAktivita() {
-    return this.hasAktivita('aktivita_sidlistni') ||
-      this.hasAktivita('aktivita_tezebni') ||
-      this.hasAktivita('aktivita_vyrobni') ||
-      this.hasAktivita('aktivita_komunikace') ||
-      this.hasAktivita('aktivita_boj') ||
-      this.hasAktivita('aktivita_kultovni') ||
-      this.hasAktivita('aktivita_pohrebni') ||
-      this.hasAktivita('aktivita_deponovani') ||
-      this.hasAktivita('aktivita_intruze') ||
-      this.hasAktivita('aktivita_jina');
   }
 
   hasAktivita(field: string) {

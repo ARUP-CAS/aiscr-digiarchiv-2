@@ -75,7 +75,7 @@
     <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
   </mat-card-actions>
-  <mat-card-content *ngIf="detailExpanded && !isChild">
+  <mat-card-content *ngIf="detailExpanded && !isChild && hasDetail">
     <div class="app-card-detail">
       <mat-accordion multi="true">
         <mat-expansion-panel [expanded]="true">
@@ -101,7 +101,7 @@
             </tbody>
           </table>
           <mat-accordion multi="true">
-            <app-dok-jednotka *ngFor="let dok_jednotka of result.dokumentacni_jednotka" [result]="dok_jednotka" [pians]="result.pian" [adbs]="result.adb"></app-dok-jednotka> 
+            <app-dok-jednotka *ngFor="let dok_jednotka of result.az_dokumentacni_jednotka" [result]="dok_jednotka" [pians]="result.az_dj_pian" [adbs]="result.az_dj_adb"></app-dok-jednotka> 
           </mat-accordion>
         </mat-expansion-panel>
 

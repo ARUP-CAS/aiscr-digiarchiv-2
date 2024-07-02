@@ -792,10 +792,7 @@
 	   
        <str name="facet.field">{!ex=entityF}entity</str>
        <str name="f.entity.facet.mincount">0</str>
-	   
-	   <!--
-       <str name="facet.pivot">{!ex=f_typ_dokumentuF}kategorie_dokumentu,f_typ_dokumentu</str>
-	   -->
+       <str name="facet.field">pristupnost</str>
 	   
        <str name="facet.field">f_areal</str>
        <str name="facet.field">f_obdobi</str>
@@ -808,7 +805,6 @@
        <str name="facet.field">kategorie_dokumentu</str>
        <str name="facet.field">f_typ_dokumentu</str>
 	   
-       <str name="facet.field">pristupnost</str>
 	   
        <str name="facet.field">f_okres</str>
 	   
@@ -852,9 +848,9 @@
        <str name="facet.field">f_tvar</str>
 
        <str name="facet.field">f_nalezove_okolnosti</str>
-<!--        <str name="facet.field">f_pian_typ</str>
+        <str name="facet.field">f_pian_typ</str>
        <str name="facet.field">f_pian_presnost</str>
-       <str name="facet.field">f_pian_zm10</str> -->
+<!--       <str name="facet.field">f_pian_zm10</str> -->
        <str name="facet.field">f_adb_typ_sondy</str>
        <str name="facet.field">f_adb_podnet</str>
 

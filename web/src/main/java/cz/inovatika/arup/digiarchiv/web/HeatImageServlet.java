@@ -71,7 +71,6 @@ public class HeatImageServlet extends HttpServlet {
         
         //System.out.println(r.toString(2));
                 
-        System.out.println(r.getJSONObject("facet_counts"));
         String png = r.getJSONObject("facet_counts")
                 .getJSONObject("facet_heatmaps")
                 .getJSONObject("loc_rpt")

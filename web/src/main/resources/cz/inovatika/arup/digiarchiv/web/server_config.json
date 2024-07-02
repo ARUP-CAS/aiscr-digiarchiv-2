@@ -60,7 +60,7 @@
     },
 
     "securedFacets": [
-        "f_kategorie", "f_pian_typ", "f_pian_presnost", "f_pian_zm10",
+        "f_kategorie", "f_pian_zm10",
         "f_okres", "f_katastr"],
     
     "indexFieldsByType": {
@@ -340,11 +340,15 @@
   "archeologicky_zaznam": {
     "header": [
       "az_okres",
+                "az_dokument", "az_ext_odkaz",
       "az_chranene_udaje_hlavni_katastr",
       "az_chranene_udaje_dalsi_katastry",
       "az_chranene_udaje:[json]"
     ],
     "detail": [
+        "az_dokumentacni_jednotka:[json]",
+        "az_dj_pian",
+        "az_dj_adb"
     ],
     "facets": [
     ]
@@ -358,7 +362,6 @@
         "akce_ulozeni_dokumentace","akce_chranene_udaje:[json]"
     ],
     "detail": [
-        "az_dokumentacni_jednotka:[json]"    
     ],
     "facets": [
         "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
@@ -404,22 +407,8 @@
       "lokalita_jistota"
     ],
     "detail": [
-      "chranene_udaje_uzivatelske_oznaceni",
-      "lokalita_chranene_udaje_popis",
-      "lokalita_chranene_udaje_poznamka",
-      "dokumentacni_jednotka_ident_cely",
-      "dokumentacni_jednotka_typ",
-      "dokumentacni_jednotka_nazev",
-      "dokumentacni_jednotka_negativni_jednotka",
-      "dokumentacni_jednotka_pian_ident_cely",
-      "dokumentacni_jednotka_pian_typ",
-      "dokumentacni_jednotka_pian_presnost",
-      "dokumentacni_jednotka_pian_chranene_udaje_zm10",
-      "dokumentacni_jednotka_pian_chranene_udaje_geom_wkt_centroid_n",
-      "dokumentacni_jednotka_pian_chranene_udaje_geom_wkt_centroid_e"
     ],
     "facets": [
-            
         "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
         "f_typ_lokality:lokalita_typ_lokality",
         "f_okres:az_okres",
@@ -433,12 +422,12 @@
         "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
         "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
         "f_lokalita_zachovalost:lokalita_zachovalost",
+        "f_pian_presnost:pian_presnost",
+        "f_pian_typ:pian_typ",
+        "f_pian_zm10:pian_chranene_udaje.zm10",
         "f_organizace:akce_organizace"
     ],
     "facets2": [
-      "f_pian_presnost",
-      "f_pian_zm10",
-      "f_pian_typ",
       "f_kategorie"
     ],
     "full_text": [

@@ -198,7 +198,6 @@ public class IndexUtils {
             return;
         }
         if (parts.length > 1) {
-            System.out.println(parts[0]);
             for (Object o: vals) {
                 Object jpReturns = JsonPath.read((String)o, "$." + parts[1]);
                 if (jpReturns instanceof List) {

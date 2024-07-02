@@ -185,14 +185,14 @@ public class LokalitaSearcher implements EntitySearcher {
     @Override
     public String[] getSearchFields(String pristupnost) {
         
-        
-        
         List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
         List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+        List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
         List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("header").toList();
         List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("detail").toList();
 
         fields.addAll(azHeaderFields);
+        fields.addAll(azDetailFields);
         fields.addAll(headerFields);
         fields.addAll(detailFields);
 
