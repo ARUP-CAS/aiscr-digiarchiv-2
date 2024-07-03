@@ -131,7 +131,7 @@
       "not": "block"
     },
     "field": {
-      "kategorie_dokumentu": "Document - category",
+      "dokument_kategorie_dokumentu": "Document - category",
       "f_typ_dokumentu": "Document - type",
       "pristupnost": "Acessibility",
       "f_organizace": "Organisation",
@@ -706,7 +706,7 @@
   },
 
 
-  "kategorie_dokumentu": {
+  "dokument_kategorie_dokumentu": {
     "texty": "Texts",
     "foto": "Photographs",
     "lfoto": "Aerial images",

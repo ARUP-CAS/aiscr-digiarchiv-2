@@ -218,7 +218,7 @@ export class AppState {
       keys.forEach(f => {
         const field = f.split(',')[0];
         switch (field) {
-          case 'kategorie_dokumentu':
+          case 'dokument_kategorie_dokumentu':
             const fp = { field, values: [], count: -1 };
             pivots[f].forEach(f1 => {
               fp.values.push(f1);

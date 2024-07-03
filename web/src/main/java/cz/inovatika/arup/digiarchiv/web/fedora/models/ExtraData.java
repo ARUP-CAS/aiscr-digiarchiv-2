@@ -120,20 +120,20 @@ public class ExtraData {
     @JacksonXmlProperty(localName = "geom_wkt")
     public WKT geom_wkt;
 
-    public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            idoc.addField("extra_data", objectMapper.writeValueAsString(this));
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        IndexUtils.addVocabField(idoc, "extra_data_format", format);
-        IndexUtils.addVocabField(idoc, "extra_data_zachovalost", zachovalost);
-        IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
-        IndexUtils.addVocabField(idoc, "extra_data_udalost_typ", udalost_typ);
-        IndexUtils.addVocabField(idoc, "extra_data_zeme", zeme);
-        IndexUtils.addJSONField(idoc, "extra_data_geom_gml", geom_gml);
-        IndexUtils.addJSONField(idoc, "extra_data_geom_wkt", geom_wkt);
+    public void fillSolrFields(SolrInputDocument idoc, String prefix, String pristupnost) {
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            idoc.addField(prefix + "_" + "extra_data", objectMapper.writeValueAsString(this));
+//        } catch (JsonProcessingException ex) {
+//            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        IndexUtils.addVocabField(idoc, "extra_data_format", format);
+//        IndexUtils.addVocabField(idoc, "extra_data_zachovalost", zachovalost);
+//        IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
+//        IndexUtils.addVocabField(idoc, "extra_data_udalost_typ", udalost_typ);
+//        IndexUtils.addVocabField(idoc, "extra_data_zeme", zeme);
+//        IndexUtils.addJSONField(idoc, "extra_data_geom_gml", geom_gml);
+//        IndexUtils.addJSONField(idoc, "extra_data_geom_wkt", geom_wkt);
         if (geom_wkt != null) {
 
             String wktStr = geom_wkt.getValue();

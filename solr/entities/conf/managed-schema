@@ -59,6 +59,8 @@
    <field name="soubor_vytvoreno" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <field name="soubor_rozsah" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="soubor_size_bytes" type="pint" indexed="true" stored="true"  multiValued="true" />   
+   <field name="soubor_filepath" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="soubor_nazev" type="string" indexed="false" stored="true" multiValued="true" /> 
    
    <!-- Dokument fields -->
    <field name="dokument_let" type="string" indexed="true" stored="true" multiValued="false" />
@@ -77,12 +79,14 @@
    <field name="dokument_poznamka" type="string_big" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_licence" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_osoba" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_kategorie_dokumentu" type="string" indexed="true" stored="true" multiValued="false" />
    
    <field name="dokument_extra_data" type="string_big" indexed="false" stored="true" multiValued="false"  /> 
    <field name="dokument_tvar" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
    <field name="dokument_cast" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
    <field name="dokument_cast_akce" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_archeologicky_zaznam" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_cast_lokalita" type="string" indexed="true" stored="true" multiValued="true" />
 <!--      
    <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
    <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
@@ -313,8 +317,26 @@
    <field name="komponenta_nalez_objekt" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="komponenta_nalez_predmet" type="string" indexed="true" stored="true" multiValued="true" /> 
    
-
+   <!-- Let fields -->
+   <field name="let_hodina_zacatek" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_hodina_konec" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_pozorovatel" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_organizace" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_pilot" type="string" indexed="true" stored="true" multiValued="false" /> 
    
+   <field name="let_letiste_start" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_letiste_cil" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_pocasi" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_dohlednost" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="let_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="let_fotoaparat" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="let_typ_letounu" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="let_ucel_letu" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="let_uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="true" />
+
+   <field name="let_dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+
    
    <field name="typ_nalezu" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    <field name="adv_jmeno" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
@@ -455,12 +477,7 @@
    <field name="extra_data_meritko" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="extra_data_odkaz" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="extra_data_udalost" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="extra_data_region" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_fotoaparat" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_typ_letounu" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_ucel_letu" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="extra_data_region" type="text_general" indexed="true" stored="true" multiValued="true" />>
    <field name="tvar_poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="jednotka_dokumentu_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="jednotka_dokumentu_poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
@@ -523,7 +540,7 @@
    <field name="chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false"/>
    
    <!-- For all other fields -->
-   <dynamicField name="*" type="lowercase_cs" multiValued="false"/>
+   <!--<dynamicField name="*" type="lowercase_cs" multiValued="false"/>-->
    
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field

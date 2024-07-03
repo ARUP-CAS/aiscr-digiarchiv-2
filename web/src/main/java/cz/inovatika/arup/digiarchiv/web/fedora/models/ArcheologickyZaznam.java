@@ -311,6 +311,6 @@ class AZChraneneUdaje {
             // IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
         }
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "az_chranene_udaje_uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
+        // IndexUtils.addSecuredFieldNonRepeat(idoc, "az_chranene_udaje_uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
     }
 }

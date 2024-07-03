@@ -71,6 +71,7 @@ public class NeidentAkce {
 
         for (Vocab v : vedouci) {
             IndexUtils.addRefField(kdoc, "vedouci", v);
+            IndexUtils.addRefField(idoc, "f_vedouci", v);
         }
 
         JSONObject li = new JSONObject()
@@ -81,8 +82,8 @@ public class NeidentAkce {
         //idoc.addField("location_info", li.toString());
         SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
 
-        for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
-            idoc.setField("dokument_cast_neident_akce_" + entry.getKey(), entry.getValue().getValue());
-        }
+//        for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
+//            idoc.setField("dokument_cast_neident_akce_" + entry.getKey(), entry.getValue().getValue());
+//        }
     }
 }

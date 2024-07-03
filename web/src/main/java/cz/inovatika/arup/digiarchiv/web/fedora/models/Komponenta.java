@@ -73,7 +73,7 @@ public class Komponenta {
     IndexUtils.addVocabField(kdoc, "komponenta_areal", komponenta_areal);
     for (Vocab a : komponenta_aktivita) {
         // IndexUtils.addVocabField(kdoc, "aktivita", a);
-        IndexUtils.addJSONField(kdoc, "aktivita", a);
+        IndexUtils.addJSONField(kdoc, "komponenta_aktivita", a);
     }
     if (!komponenta_nalez_objekt.isEmpty()) {
       komponenta_typ_nalezu = "objekt";

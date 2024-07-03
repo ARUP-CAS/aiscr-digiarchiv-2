@@ -131,7 +131,7 @@
       "not": "block"
     },
     "field": {
-      "kategorie_dokumentu": "Dokument - kategorie",
+      "dokument_kategorie_dokumentu": "Dokument - kategorie",
       "f_typ_dokumentu": "Dokument - typ",
       "pristupnost": "Přístupnost",
       "f_organizace": "Organizace",
@@ -707,7 +707,7 @@
   },
 
 
-  "kategorie_dokumentu": {
+  "dokument_kategorie_dokumentu": {
     "texty": "Texty",
     "foto": "Fotografie",
     "lfoto": "Letecké fotografie",

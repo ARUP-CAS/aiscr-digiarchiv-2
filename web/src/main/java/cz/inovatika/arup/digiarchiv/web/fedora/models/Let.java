@@ -28,70 +28,70 @@ public class Let implements FedoraModel {
 //<xs:element name="datum" minOccurs="0" maxOccurs="1" type="xs:date"/> <!-- "{datum}" -->
     @JacksonXmlProperty(localName = "datum")
     @Field
-    public Date datum;
+    public Date let_datum;
 
 //<xs:element name="hodina_zacatek" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{hodina_zacatek}" -->
     @JacksonXmlProperty(localName = "hodina_zacatek")
     @Field
-    public String hodina_zacatek;
+    public String let_hodina_zacatek;
 
 //<xs:element name="hodina_konec" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{hodina_konec}" -->
     @JacksonXmlProperty(localName = "hodina_konec")
     @Field
-    public String hodina_konec;
+    public String let_hodina_konec;
 
 //<xs:element name="pozorovatel" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{pozorovatel.ident_cely}" | "{pozorovatel.vypis_cely}" -->
     @JacksonXmlProperty(localName = "pozorovatel")
-    public Vocab pozorovatel;
+    public Vocab let_pozorovatel;
 
 //<xs:element name="organizace" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{organizace.ident_cely}" | "{organizace.nazev}" -->
     @JacksonXmlProperty(localName = "organizace")
-    public Vocab organizace;
+    public Vocab let_organizace;
 
 //<xs:element name="fotoaparat" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{fotoaparat}" -->
     @JacksonXmlProperty(localName = "fotoaparat")
     @Field
-    public String fotoaparat;
+    public String let_fotoaparat;
 
 //<xs:element name="pilot" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{pilot}" -->
     @JacksonXmlProperty(localName = "pilot")
     @Field
-    public String pilot;
+    public String let_pilot;
 
 //<xs:element name="typ_letounu" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{typ_letounu}" -->
     @JacksonXmlProperty(localName = "typ_letounu")
     @Field
-    public String typ_letounu;
+    public String let_typ_letounu;
 
 //<xs:element name="ucel_letu" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{ucel_letu}" -->
     @JacksonXmlProperty(localName = "ucel_letu")
     @Field
-    public String ucel_letu;
+    public String let_ucel_letu;
 
 //<xs:element name="letiste_start" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{letiste_start.ident_cely}" | "{letiste_start.heslo}" -->
     @JacksonXmlProperty(localName = "letiste_start")
-    public Vocab letiste_start;
+    public Vocab let_letiste_start;
 
 //<xs:element name="letiste_cil" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{letiste_cil.ident_cely}" | "{letiste_cil.heslo}" -->
     @JacksonXmlProperty(localName = "letiste_cil")
-    public Vocab letiste_cil;
+    public Vocab let_letiste_cil;
 
 //<xs:element name="pocasi" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pocasi.ident_cely}" | "{pocasi.heslo}" -->
     @JacksonXmlProperty(localName = "pocasi")
-    public Vocab pocasi;
+    public Vocab let_pocasi;
 
 //<xs:element name="dohlednost" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{dohlednost.ident_cely}" | "{dohlednost.heslo}" -->
     @JacksonXmlProperty(localName = "dohlednost")
-    public Vocab dohlednost;
+    public Vocab let_dohlednost;
 
 //<xs:element name="uzivatelske_oznaceni" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{uzivatelske_oznaceni}" -->
     @JacksonXmlProperty(localName = "uzivatelske_oznaceni")
     @Field
-    public String uzivatelske_oznaceni;
+    public String let_uzivatelske_oznaceni;
 
 //<xs:element name="dokument" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{dokument_set.ident_cely}" | "{dokument_set.ident_cely}" -->
     @JacksonXmlProperty(localName = "dokument")
-    public List<Vocab> dokument = new ArrayList();
+    public List<Vocab> let_dokument = new ArrayList();
 
     @Override
     public String coreName() {
@@ -102,14 +102,14 @@ public class Let implements FedoraModel {
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("searchable", true);
         IndexUtils.setDateStamp(idoc, ident_cely);
-        IndexUtils.addRefField(idoc, "pozorovatel", pozorovatel);
-        IndexUtils.addVocabField(idoc, "organizace", organizace);
-        IndexUtils.addVocabField(idoc, "letiste_start", letiste_start);
-        IndexUtils.addVocabField(idoc, "letiste_cil", letiste_cil);
-        IndexUtils.addVocabField(idoc, "pocasi", pocasi);
-        IndexUtils.addVocabField(idoc, "dohlednost", dohlednost);
-        for (Vocab v : dokument) {
-            IndexUtils.addVocabField(idoc, "dokument", v);
+        IndexUtils.addRefField(idoc, "let_pozorovatel", let_pozorovatel);
+        IndexUtils.addVocabField(idoc, "let_organizace", let_organizace);
+        IndexUtils.addVocabField(idoc, "let_letiste_start", let_letiste_start);
+        IndexUtils.addVocabField(idoc, "let_letiste_cil", let_letiste_cil);
+        IndexUtils.addVocabField(idoc, "let_pocasi", let_pocasi);
+        IndexUtils.addVocabField(idoc, "let_dohlednost", let_dohlednost);
+        for (Vocab v : let_dokument) {
+            IndexUtils.addVocabField(idoc, "let_dokument", v);
         }
 
     }

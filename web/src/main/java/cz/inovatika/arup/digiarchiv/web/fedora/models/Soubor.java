@@ -73,7 +73,7 @@ public class Soubor implements FedoraModel {
     DocumentObjectBinder dob = new DocumentObjectBinder();
     SolrInputDocument idoc = dob.toSolrInputDocument(this);
     IndexUtils.setDateStamp(idoc, id);
-        IndexUtils.setDateStampFromHistory(idoc, historie);
+    IndexUtils.setDateStampFromHistory(idoc, historie);
     return idoc;
     
   }

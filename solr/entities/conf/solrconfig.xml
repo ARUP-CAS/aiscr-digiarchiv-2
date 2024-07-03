@@ -747,7 +747,7 @@
   <requestHandler name="/search" class="solr.SearchHandler">
 	<lst name="defaults">
 	  <str name="echoParams">explicit</str>
-	  <str name="df">text_all</str>
+	  <str name="df">text_all_D</str>
 	  <str name="q">*:*</str>
 	  <int name="rows">20</int>
 	   
@@ -802,7 +802,7 @@
        <str name="facet.field">f_druh_nalezu</str>
        <str name="facet.field">f_typ_vyzkumu</str>
        
-       <str name="facet.field">kategorie_dokumentu</str>
+       <str name="facet.field">dokument_kategorie_dokumentu</str>
        <str name="facet.field">f_typ_dokumentu</str>
 	   
 	   
@@ -1126,7 +1126,7 @@
   </updateProcessor>
 
   <!-- The update.autoCreateFields property can be turned to false to disable schemaless mode -->
-  <updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:true}"
+  <updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:false}"
            processor="uuid,remove-blank,field-name-mutating,parse-boolean,parse-long,parse-double,parse-date,add-schema-fields">
     <processor class="solr.LogUpdateProcessorFactory"/>
     <processor class="solr.DistributedUpdateProcessorFactory"/>

@@ -9,6 +9,7 @@ import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -180,7 +181,7 @@ public class Dokument implements FedoraModel {
                 SolrInputDocument djdoc = s.createSolrDoc();
                 idocs.add(djdoc);
                 IndexUtils.addJSONField(idoc, "soubor", s);
-                idoc.addField("soubor_nazev", s.nazev);
+                // idoc.addField("soubor_nazev", s.nazev);
                 idoc.addField("soubor_filepath", s.path);
             }
             if (!idocs.isEmpty()) {
@@ -197,7 +198,8 @@ public class Dokument implements FedoraModel {
         }
 
         if (dokument_extra_data != null) {
-            dokument_extra_data.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+            IndexUtils.addJSONField(idoc, "dokument_extra_data", dokument_extra_data);
+            dokument_extra_data.fillSolrFields(idoc, "dukument", (String) idoc.getFieldValue("pristupnost"));
         }
 
         for (DokumentCast dc : dokument_cast) {
@@ -207,14 +209,13 @@ public class Dokument implements FedoraModel {
                 for (Object val : idoc.getFieldValues("dokument_cast_akce")) {
                     processAkce(idoc, (String) val);
                 }
-                
             }
         }
 
         if (dokument_let != null) {
             addLet(idoc);
         }
-
+        setFacets(idoc);
         setFullText(idoc);
     }
 
@@ -236,7 +237,7 @@ public class Dokument implements FedoraModel {
 
     private void addLet(SolrInputDocument idoc) throws Exception {
 
-        IndexUtils.addVocabField(idoc, "let_ident_cely", dokument_let);
+//        IndexUtils.addVocabField(idoc, "dokument_let", dokument_let);
         SolrQuery query = new SolrQuery("ident_cely:\"" + dokument_let.getId() + "\"");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", dokument_let.getId());
         if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -247,6 +248,26 @@ public class Dokument implements FedoraModel {
 //                    SolrSearcher.addFieldNonRepeat(idoc, "let_" + key, doc.opt(key));
 //                }
             }
+        }
+    }
+    
+    public void setFacets(SolrInputDocument idoc) {
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("facets").toList();
+        // List<String> prSufixAll = new ArrayList<>();
+        
+        for (Object f : indexFields) {
+            String s = (String) f;
+            String dest = s.split(":")[0];
+            String orig = s.split(":")[1];
+            IndexUtils.addByPath(idoc, orig, dest, Arrays.asList(SolrSearcher.prSufixAll));
+//            if (idoc.containsKey(orig)) {
+//                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
+//            } 
+//            for (String sufix : prSufix) {
+//                if (idoc.containsKey(orig + "_" + sufix)) {
+//                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
+//                }
+//            }
         }
     }
 

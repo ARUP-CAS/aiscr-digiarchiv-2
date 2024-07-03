@@ -87,11 +87,11 @@ public class SearchServlet extends HttpServlet {
                     SolrQuery query = new SolrQuery("*")
                             .setRequestHandler("/search")
                             .setRows(0)
-                            .setFacet(true).addFacetField("kategorie_dokumentu", "rada")
+                            .setFacet(true).addFacetField("dokument_kategorie_dokumentu", "dokument_rada")
                             .setParam("json.nl", "map");
                     JSONObject jo = SearchUtils.json(query, client, "entities");
                     json = jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("entity");
-                    json.put("kategorie", jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("kategorie_dokumentu"));
+                    json.put("kategorie", jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("dokument_kategorie_dokumentu"));
 
                 } catch (Exception ex) {
                     json.put("error", ex);

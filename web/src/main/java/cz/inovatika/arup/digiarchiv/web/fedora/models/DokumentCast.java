@@ -49,14 +49,14 @@ public class DokumentCast {
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) throws Exception {
 
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
-        idoc.addField("dokument_cast_ident_cely", ident_cely);
+        // idoc.addField("dokument_cast_ident_cely", ident_cely);
         IndexUtils.addVocabField(idoc, "dokument_cast_archeologicky_zaznam", archeologicky_zaznam);
         IndexUtils.addVocabField(idoc, "dokument_cast_projekt", projekt);
-        idoc.addField("dokument_cast_poznamka", poznamka);
+        // idoc.addField("dokument_cast_poznamka", poznamka);
 
         for (Komponenta k : komponenta) {
-            IndexUtils.addJSONField(idoc, "komponenta", k);
-            k.fillSolrFields(idoc, "dokument_cast");
+            // IndexUtils.addJSONField(idoc, "komponenta", k);
+             k.fillSolrFields(idoc, "dokument_cast");
         }
 
         if (neident_akce != null) {
@@ -73,20 +73,21 @@ public class DokumentCast {
 
     private void addLocation(SolrInputDocument idoc, String pristupnost) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
-                .setFields("*,katastr:hlavni_katastr_" + pristupnost, "okres,pristupnost");
+                .setFields("*,katastr:hlavni_katastr_" + pristupnost, "az_okres,pristupnost");
+        
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", archeologicky_zaznam.getId());
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             idoc.addField("dokument_cast_" + doc.getString("entity"), archeologicky_zaznam.getId());
             
-            idoc.addField("dokument_cast_" + doc.getString("entity") + "_hlavni_vedouci", doc.optString("hlavni_vedouci"));
+            idoc.addField("f_vedouci", doc.optString("akce_hlavni_vedouci"));
 
             if (doc.has("katastr")) {
-                SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
+                // SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), pristupnost);
-                SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_okres", doc.getString("okres"));
-                IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("okres"));
+                // SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_okres", doc.getString("az_okres"));
+                IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("az_okres"));
                 JSONObject li = new JSONObject()
                         .put("pristupnost", doc.getString("pristupnost"))
                         .put("katastr", doc.getString("katastr"))

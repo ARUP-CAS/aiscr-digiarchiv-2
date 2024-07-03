@@ -76,14 +76,14 @@ public class Lokalita {
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             IndexUtils.addByPath(idoc, orig, dest, prSufix);
-            if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-            } 
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
-                }
-            }
+//            if (idoc.containsKey(orig)) {
+//                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
+//            } 
+//            for (String sufix : prSufix) {
+//                if (idoc.containsKey(orig + "_" + sufix)) {
+//                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
+//                }
+//            }
         }
     }
 

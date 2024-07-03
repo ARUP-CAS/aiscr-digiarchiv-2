@@ -194,10 +194,12 @@ public class IndexUtils {
         boolean secured = path.contains("chranene_udaje");
         String[] parts = path.split("\\.", 2);
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
+            
         if (vals == null) {
             return;
         }
         if (parts.length > 1) {
+            
             for (Object o: vals) {
                 Object jpReturns = JsonPath.read((String)o, "$." + parts[1]);
                 if (jpReturns instanceof List) {
@@ -225,7 +227,13 @@ public class IndexUtils {
             }
             
         } else {
-            addFieldNonRepeat(idoc, field, vals);
+            if (secured) {
+                for (String sufix : prSufix) {
+                    IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, vals);
+                }
+            } else {
+                addFieldNonRepeat(idoc, field, vals);
+            }
         }
         
     }
