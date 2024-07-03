@@ -100,8 +100,12 @@ public class DokumentCast {
             }
 
             for (String key : doc.keySet()) {
-                if (key.startsWith("loc")) {
-                    SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
+                if (key.startsWith("loc") && !doc.has("pian_id")) {
+                    //SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
+                    JSONArray val = doc.optJSONArray(key);
+                    for (int i = 0; i < val.length(); i++) {
+                        SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
+                    }
                 } else if (key.startsWith("lat") || key.startsWith("lng")) {
                     // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
                     JSONArray val = doc.optJSONArray(key);

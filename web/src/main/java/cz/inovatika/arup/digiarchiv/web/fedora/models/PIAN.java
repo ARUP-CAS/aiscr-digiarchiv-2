@@ -135,7 +135,7 @@ class PIANChraneneUdaje {
   public WKT geom_sjtsk_wkt;
 
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
-    IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_chranene_udaje_zm10", zm10, pristupnost);
+    IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
     IndexUtils.setSecuredJSONField(idoc, "pian_chranene_udaje", this);
 
     if (geom_wkt != null) {

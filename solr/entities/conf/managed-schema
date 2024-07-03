@@ -87,6 +87,7 @@
    <field name="dokument_cast_akce" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_archeologicky_zaznam" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_lokalita" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_cast_neident_akce" type="string_big" indexed="false" stored="true" multiValued="false"  /> 
 <!--      
    <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
    <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
@@ -455,6 +456,9 @@
    
    <field name="f_typ_projektu" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_kulturni_pamatka" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_adb_typ_sondy" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_adb_podnet" type="string" indexed="true" stored="true" multiValued="true" />
+   
    
    <field name="f_dj_typ" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_nalezove_okolnosti" type="string" indexed="true" stored="true" multiValued="true" />
