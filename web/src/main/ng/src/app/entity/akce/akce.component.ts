@@ -82,10 +82,10 @@ export class AkceComponent implements OnInit, OnChanges {
 
   setVsize() {
       if (this.result.dokument) {
-        this.numChildren += this.result.dokument.length;
-        this.state.numImages = this.result.dokument.length;
+        this.numChildren += this.result.az_dokument.length;
+        this.state.numImages = this.result.az_dokument.length;
       }
-      if (this.result.projekt) {
+      if (this.result.akce_projekt) {
         this.numChildren += 1;
       }
       this.state.numChildren = this.numChildren;
@@ -101,24 +101,22 @@ export class AkceComponent implements OnInit, OnChanges {
 
 
   getDokuments() {
-    if (this.result.dokument && this.hasRights) {
-      for (let i = 0; i < this.result.dokument.length; i++) {
+    if (this.result.az_dokument) {
+      for (let i = 0; i < this.result.az_dokument.length; i++) {
         this.result.dokumentTemp.push({});
       }
-      for (let i = 0; i < this.result.dokument.length; i = i + 20) {
-        const ids = this.result.dokument.slice(i, i + 20);
+      for (let i = 0; i < this.result.az_dokument.length; i = i + 20) {
+        const ids = this.result.az_dokument.slice(i, i + 20);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
           // Odpoved ma jine serazeni.
           const sorted: any[] = [];
           ids.forEach(id => {
             const doc = res.response.docs.find(d => d.ident_cely === id);
             // sorted.push(doc);
-            const idx = this.result.dokument.findIndex(d => d === id);
+            const idx = this.result.az_dokument.findIndex(d => d === id);
             this.result.dokumentTemp[idx] = doc;
             this.dokLoaded++;
           });
-          // this.result.valid_dokument = this.result.dokument.concat(res.response.docs);
-          // this.result.valid_dokument = this.result.dokument.concat(sorted);
           this.state.documentProgress = this.dokLoaded / this.numChildren * 100;
           this.checkLoading();
 
@@ -129,8 +127,8 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   getProjekts() {
-    if (this.result.projekt) {
-        this.service.getIdAsChild([this.result.projekt], "projekt").subscribe((res: any) => {
+    if (this.result.akce_projekt) {
+        this.service.getIdAsChild([this.result.akce_projekt], "projekt").subscribe((res: any) => {
           this.result.valid_projekt = res.response.docs;
           this.checkLoading();
         });

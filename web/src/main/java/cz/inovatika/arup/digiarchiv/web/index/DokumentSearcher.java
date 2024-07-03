@@ -4,6 +4,7 @@ import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -67,26 +68,29 @@ public class DokumentSearcher implements EntitySearcher {
 
     @Override
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < docs.length(); i++) {
-            JSONObject doc = docs.getJSONObject(i);
-            JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
-            if (doc.has("dokument_cast_archeologicky_zaznam")) {
-                SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-                        .setRows(10000)
-                        .setFields("ident_cely");
-                try {
-                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
-                    for (int a = 0; a < ja.length(); a++) {
-                        dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
-                    }
-                } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
-            doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
-        }
+//        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+//        for (int i = 0; i < docs.length(); i++) {
+//            JSONObject doc = docs.getJSONObject(i);
+//            JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
+//            if (doc.has("dokument_cast_archeologicky_zaznam")) {
+//                String fq = "{!join fromIndex=entities from=ident_cely to=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"";
+//                System.out.println(fq);
+//                SolrQuery query = new SolrQuery("*")
+//                        .addFilterQuery(fq)
+//                        .setRows(10000)
+//                        .setFields("ident_cely");
+//                try {
+//                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+//                    System.out.println(ja);
+//                    for (int a = 0; a < ja.length(); a++) {
+//                        dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+//                    }
+//                } catch (SolrServerException | IOException ex) {
+//                    LOGGER.log(Level.SEVERE, null, ex);
+//                }
+//            }
+//            doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
+//        }
     }
 
     @Override
@@ -103,19 +107,11 @@ public class DokumentSearcher implements EntitySearcher {
             "katastr:f_katastr_" + pristupnost,
             "ident_cely,entity,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
         };
-//        String fieldsAkce = "ident_cely,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace";
-//        String fieldsLok = "ident_cely,katastr,okres,nazev,typ_lokality,druh,pristupnost,dalsi_katastry,popis";
 
-        for (int i = 0; i < ja.length(); i++) {
-            JSONObject doc = ja.getJSONObject(i);
-//            if (LoginServlet.userId(request) != null) {
-//                SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
-//            }
-
-            SolrSearcher.addChildFieldByEntity(client, doc, "dokument_cast_archeologicky_zaznam", String.join(",", f));
-
-            
-        }
+//        for (int i = 0; i < ja.length(); i++) {
+//            JSONObject doc = ja.getJSONObject(i);
+//            SolrSearcher.addChildFieldByEntity(client, doc, "dokument_cast_archeologicky_zaznam", String.join(",", f));
+//        }
 
     }
     
@@ -147,31 +143,43 @@ public class DokumentSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        String[] f = new String[]{
-            Options.getInstance().getJSONObject("fields").getJSONArray("common").join(",").replaceAll("\"", ""),
-            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").join(",").replaceAll("\"", ""),
-            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("detail").join(",").replaceAll("\"", ""),
-            "dokument_cast_neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],nalez_dokumentu:[json],location_info:[json]",
-            // "dokument_cast:[json]",
-            "komponenta:[json]",
-            "okres", "f_okres", "pian_id",
-            //            "f_pian_presnost:f_pian_presnost_" + pristupnost,
-            //            "f_pian_typ:f_pian_typ_" + pristupnost,
-            //            "f_pian_zm10:f_pian_zm10_" + pristupnost,
-            "loc_rpt:loc_" + pristupnost,
-            "katastr:f_katastr_" + pristupnost,
-            "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
-            "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
-            "lokalizace:f_lokalizace_" + pristupnost};
-        return f;
+        
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").toList();
+        List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("detail").toList();
+
+        fields.addAll(headerFields);
+        fields.addAll(detailFields);
+        
+        fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
+
+        String[] ret = fields.toArray(new String[0]);
+        
+        return ret;
+        
+//        String[] f = new String[]{
+//            Options.getInstance().getJSONObject("fields").getJSONArray("common").join(",").replaceAll("\"", ""),
+//            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").join(",").replaceAll("\"", ""),
+//            Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("detail").join(",").replaceAll("\"", ""),
+//            "dokument_cast_neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],nalez_dokumentu:[json],location_info:[json]",
+//            // "dokument_cast:[json]",
+//            "komponenta:[json]",
+//            "okres", "f_okres", "pian_id",
+//            //            "f_pian_presnost:f_pian_presnost_" + pristupnost,
+//            //            "f_pian_typ:f_pian_typ_" + pristupnost,
+//            //            "f_pian_zm10:f_pian_zm10_" + pristupnost,
+//            "loc_rpt:loc_" + pristupnost,
+//            "katastr:f_katastr_" + pristupnost,
+//            "dalsi_katastry:f_dalsi_katastry_" + pristupnost,
+//            "f_typ_vyzkumu:f_typ_vyzkumu_" + pristupnost,
+//            "lokalizace:f_lokalizace_" + pristupnost};
+//        return f;
     }
 
     @Override
     public String[] getChildSearchFields(String pristupnost) {
-        String[] f = new String[]{
-            "ident_cely,entity,pristupnost,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath,location_info:[json]"};
-        //if (pristupnost)
-        return f;
+        return getSearchFields(pristupnost);
     }
 
     @Override

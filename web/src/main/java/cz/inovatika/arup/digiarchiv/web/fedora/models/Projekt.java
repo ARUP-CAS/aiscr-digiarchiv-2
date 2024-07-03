@@ -230,11 +230,7 @@ public class Projekt implements FedoraModel {
 
     public void setFullText(SolrInputDocument idoc) {
         List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("projekt").toList();
-        List<String> prSufixAll = new ArrayList<>();
-        prSufixAll.add("A");
-        prSufixAll.add("B");
-        prSufixAll.add("C");
-        prSufixAll.add("D");
+        
 
         Object[] fields = idoc.getFieldNames().toArray();
         for (Object f : fields) {
@@ -242,14 +238,14 @@ public class Projekt implements FedoraModel {
             // SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
 
             if (indexFields.contains(s)) {
-                for (String sufix : prSufixAll) {
+                for (String sufix : SolrSearcher.prSufixAll) {
                     IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
                 }
             }
         }
         
         // Add value of vocab fields
-        for (String sufix : prSufixAll) {
+        for (String sufix : SolrSearcher.prSufixAll) {
             idoc.addField("text_all_" + sufix, ident_cely);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, projekt_kulturni_pamatka);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, projekt_okres);

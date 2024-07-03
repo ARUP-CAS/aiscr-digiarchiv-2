@@ -64,77 +64,7 @@
         "f_okres", "f_katastr"],
     
     "indexFieldsByType": {
-        "dokument": [
-            "ident_cely",
-            "autor",
-            "rok_vzniku",
-            "popis",
-            "poznamka",
-            "oznaceni_originalu",
-
-            "dokument_cast_ident_cely",
-            "dokument_cast_archeologicky_zaznam",
-            "dokument_cast_projekt",
-            "dokument_cast_poznamka",
-
-            "komponenta_dokument_ident_cely",
-            "komponenta_dokument_obdobi", 
-            "komponenta_dokument_presna_datace",
-            "komponenta_dokument_areal", 
-            "f_aktivita", 
-            "komponenta_dokument_poznamka",
-            "komponenta_nalez_objekt_poznamka",
-            "komponenta_nalez_predmet_poznamka",
-
-            "nalez_dokumentu_typ_nalezu", 
-            "nalez_dokumentu_druh_nalezu", 
-            "nalez_dokumentu_kategorie", 
-            "nalez_dokumentu_specifikace", 
-            "nalez_dokumentu_poznamka",
-
-            "pian_id",
-
-            "extra_data_region",
-            "extra_data_cislo_objektu",
-            "extra_data_format", 
-            "extra_data_zachovalost", 
-            "extra_data_nahrada", 
-            "extra_data_odkaz",
-            "extra_data_datum_vzniku",
-            "extra_data_udalost_typ",
-            "extra_data_udalost",
-            "extra_data_zeme", 
-
-            "let_ident_cely",
-            "let_datum",
-            "let_pozorovatel",
-            "let_organizace",
-            "let_fotoaparat",
-            "let_pilot",
-            "let_typ_letounu",
-            "let_ucel_letu",
-            "let_letiste_start", 
-            "let_letiste_cil", 
-            "let_pocasi", 
-            "let_dohlednost", 
-            "let_uzivatelske_oznaceni",
-
-            "tvar_tvar", 
-            "tvar_poznamka",
-
-            "neident_akce_okres",
-            "neident_akce_katastr",
-            "neident_akce_vedouci",
-            "neident_akce_rok_zahajeni",
-            "neident_akce_rok_ukonceni",
-            "neident_akce_lokalizace",
-            "neident_akce_popis",
-            "neident_akce_poznamka",
-            "neident_akce_pian",
-
-            "parent_akce_okres",
-            "parent_akce_katastr"
-        ],
+        
 
         "archeologicky_zaznam": [
             "ident_cely",
@@ -286,13 +216,15 @@
     ],
   "dokument": {
     "header": [
-      "autor",
-      "rok_vzniku",
-      "typ_dokumentu",
-      "material_originalu",
-      "rada",
-      "organizace",
-      "okres",
+      "dokument_autor",
+      "dokument_rok_vzniku",
+      "dokument_typ_dokumentu",
+      "dokument_material_originalu",
+      "dokument_rada",
+      "dokument_organizace",
+      "dokument_okres",
+      "dokument_popis", 
+      "dokument_cast_archeologicky_zaznam",
       "archeologicky_zaznam_chranene_udaje_hlavni_katastr",
       "projekt_chranene_udaje_hlavni_katastr",
       "projekt_chranene_udaje_dalsi_katastr",
@@ -300,21 +232,19 @@
       "dokument_cast_neident_akce_katastr",
       "archeologicky_zaznam_okres",
       "projekt_okres",
-      "dokument_cast_neident_akce_okres",
-      "popis", "dokument_cast_akce", "dokument_cast_lokalita"
+      "dokument_cast_neident_akce_okres","dokument_cast_akce", "dokument_cast_lokalita"
     ],
     "detail": [
-      "jazyk_dokumentu",
-      "poznamka",
-      "posudek",
-      "ulozeni_originalu",
-      "oznaceni_originalu",
-      "datum_zverejneni",
+      "dokument_jazyk_dokumentu",
+      "dokument_poznamka",
+      "dokument_posudek",
+      "dokument_ulozeni_originalu",
+      "dokument_oznaceni_originalu",
+      "dokument_datum_zverejneni",
       "dokument_cast:[json]",
-      "dokument_cast_archeologicky_zaznam",
-      "extra_data:[json]",
-      "let:[json]","tvar:[json]",
-      "osoba"
+      "dokument_extra_data:[json]",
+      "dokument_let:[json]","dokument_tvar:[json]",
+      "dokument_osoba"
     ],
     "facets": [
       "f_areal:dokument_cast_komponenta_areal",
@@ -335,6 +265,77 @@
       "f_specifikace",
       "f_obdobi", "f_typ_dokumentu", "f_jazyk_dokumentu",
       "f_kategorie", "f_zeme"
+    ],
+    "full_text": [
+        "ident_cely",
+        "dokument_autor",
+        "dokument_rok_vzniku",
+        "dokument_popis",
+        "dokument_poznamka",
+        "dokument_oznaceni_originalu",
+
+        "dokument_cast_ident_cely",
+        "dokument_cast_archeologicky_zaznam",
+        "dokument_cast_projekt",
+        "dokument_cast_poznamka",
+
+        "komponenta_dokument_ident_cely",
+        "komponenta_dokument_obdobi", 
+        "komponenta_dokument_presna_datace",
+        "komponenta_dokument_areal", 
+        "f_aktivita", 
+        "komponenta_dokument_poznamka",
+        "komponenta_nalez_objekt_poznamka",
+        "komponenta_nalez_predmet_poznamka",
+
+        "nalez_dokumentu_typ_nalezu", 
+        "nalez_dokumentu_druh_nalezu", 
+        "nalez_dokumentu_kategorie", 
+        "nalez_dokumentu_specifikace", 
+        "nalez_dokumentu_poznamka",
+
+        "pian_id",
+
+        "extra_data_region",
+        "extra_data_cislo_objektu",
+        "extra_data_format", 
+        "extra_data_zachovalost", 
+        "extra_data_nahrada", 
+        "extra_data_odkaz",
+        "extra_data_datum_vzniku",
+        "extra_data_udalost_typ",
+        "extra_data_udalost",
+        "extra_data_zeme", 
+
+        "let_ident_cely",
+        "let_datum",
+        "let_pozorovatel",
+        "let_organizace",
+        "let_fotoaparat",
+        "let_pilot",
+        "let_typ_letounu",
+        "let_ucel_letu",
+        "let_letiste_start", 
+        "let_letiste_cil", 
+        "let_pocasi", 
+        "let_dohlednost", 
+        "let_uzivatelske_oznaceni",
+
+        "tvar_tvar", 
+        "tvar_poznamka",
+
+        "neident_akce_okres",
+        "neident_akce_katastr",
+        "neident_akce_vedouci",
+        "neident_akce_rok_zahajeni",
+        "neident_akce_rok_ukonceni",
+        "neident_akce_lokalizace",
+        "neident_akce_popis",
+        "neident_akce_poznamka",
+        "neident_akce_pian",
+
+        "parent_akce_okres",
+        "parent_akce_katastr"
     ]
   },
   "archeologicky_zaznam": {

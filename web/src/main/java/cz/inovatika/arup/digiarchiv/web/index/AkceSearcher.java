@@ -215,12 +215,23 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public String[] getChildSearchFields(String pristupnost) {
-        //  return getSearchFields(pristupnost);
-        return new String[]{"ident_cely,entity,pristupnost,okres,hlavni_vedouci,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dokument",
-            "akce_chranene_udaje:[json]",
-            "lokalizace:lokalizace_okolnosti_" + pristupnost,
-            "katastr:f_katastr_" + pristupnost,
-            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+        //List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("header").toList();
+        //List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("detail").toList();
+
+        fields.addAll(azHeaderFields);
+        //fields.addAll(azDetailFields);
+        fields.addAll(headerFields);
+        //fields.addAll(detailFields);
+
+        fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("katastr:f_katastr_" + pristupnost);
+
+        String[] ret = fields.toArray(new String[0]);
+        return ret;
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

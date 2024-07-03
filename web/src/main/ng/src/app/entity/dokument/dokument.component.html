@@ -11,12 +11,12 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="result.autor">
-          <ng-container *ngFor="let a of result.autor; let last = last;">
+        <ng-container *ngIf="result.dokument_autor">
+          <ng-container *ngFor="let a of result.dokument_autor; let last = last;">
             <app-inline-filter [isChild]="isChild" [field]="'f_autor'" [value]="a"></app-inline-filter><span *ngIf="!last">; </span>
           </ng-container><span class="app-pipe"></span>
         </ng-container>
-        <app-inline-filter [isChild]="isChild" [field]="'f_rok_vzniku'" [value]="result.rok_vzniku" [isYear]="true"></app-inline-filter>
+        <app-inline-filter [isChild]="isChild" [field]="'f_rok_vzniku'" [value]="result.dokument_rok_vzniku" [isYear]="true"></app-inline-filter>
         <span class="app-pipe"></span>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
@@ -36,20 +36,20 @@
         <mat-icon>image_not_supported</mat-icon>
       </div>
       <div fxFlex *ngIf="mapDetail || state.isMapaCollapsed" class="app-metadata">
-        <div *ngIf="result.typ_dokumentu || result.material_originalu || result.rada || result.pristupnost">
-          <ng-container *ngIf="result.typ_dokumentu">
+        <div *ngIf="result.dokument_typ_dokumentu || result.dokument_material_originalu || result.dokument_rada || result.pristupnost">
+          <ng-container *ngIf="result.dokument_typ_dokumentu">
             <label class="app-label">{{ 'card.desc.Dokument - typ' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_typ_dokumentu'" [value]="result.typ_dokumentu" [heslar]="'typ_dokumentu'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_typ_dokumentu'" [value]="result.dokument_typ_dokumentu" [heslar]="'typ_dokumentu'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
-          <ng-container *ngIf="result.material_originalu">
+          <ng-container *ngIf="result.dokument_material_originalu">
             <label class="app-label">{{ 'card.desc.Materiál' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_material_dokumentu'" [value]="result.material_originalu" [heslar]="'material_dokumentu'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_material_dokumentu'" [value]="result.dokument_material_originalu" [heslar]="'material_dokumentu'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
-          <ng-container *ngIf="result.rada">
+          <ng-container *ngIf="result.dokument_rada">
             <label class="app-label">{{ 'card.desc.Dokument - řada' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'rada'" [value]="result.rada" [heslar]="'rada'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'rada'" [value]="result.dokument_rada" [heslar]="'rada'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.pristupnost">
@@ -57,10 +57,10 @@
             <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
           </ng-container>
         </div>
-        <div *ngIf="result.organizace">
+        <div *ngIf="result.dokument_organizace">
           <ng-container>
             <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.dokument_organizace" [heslar]="'organizace'"></app-inline-filter>
           </ng-container>
         </div>
         <div *ngIf="result.location_info && result.location_info.length > 0">
@@ -70,14 +70,10 @@
             <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">, </span>
           </ng-container>
-          <!-- <ng-container *ngFor="let item of result.neident_akce">
-            <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
-           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)
-          </ng-container> -->
         </div>
-        <div *ngIf="result.popis" class="app-truncate-text">
+        <div *ngIf="result.dokument_popis" class="app-truncate-text">
           <ng-container>
-            <label class="app-label">{{ 'card.desc.Popis' | translate }}:</label>&#160;{{ result.popis }}
+            <label class="app-label">{{ 'card.desc.Popis' | translate }}:</label>&#160;{{ result.dokument_popis }}
           </ng-container>
         </div>
       </div>
@@ -111,119 +107,119 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.jazyk_dokumentu?.length > 0">
+              <tr *ngIf="result.dokument_jazyk_dokumentu?.length > 0">
                 <th class="app-label">{{ 'card.desc.Jazyk' | translate }}:</th>
-                <td><app-inline-filter *ngFor="let jazyk of result.jazyk_dokumentu" [isChild]="isChild" [field]="'f_jazyk_dokumentu'" [value]="jazyk" [heslar]="'jazyk_dokumentu'"></app-inline-filter></td>
+                <td><app-inline-filter *ngFor="let jazyk of result.dokument_jazyk_dokumentu" [isChild]="isChild" [field]="'f_jazyk_dokumentu'" [value]="jazyk" [heslar]="'jazyk_dokumentu'"></app-inline-filter></td>
               </tr>
-              <tr *ngIf="result.popis">
+              <tr *ngIf="result.dokument_popis">
                 <th class="app-label">{{ 'card.desc.Popis obsahu' | translate }}:</th>
-                <td>{{ result.popis }}</td>
+                <td>{{ result.dokument_popis }}</td>
               </tr>
-              <tr *ngIf="result.poznamka">
+              <tr *ngIf="result.dokument_poznamka">
                 <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
-                <td>{{ result.poznamka }}</td>
+                <td>{{ result.dokument_poznamka }}</td>
               </tr>
-              <tr *ngIf="result.posudek">
+              <tr *ngIf="result.dokument_posudek">
                 <th class="app-label">{{ 'card.desc.Zahrnuje posudky' | translate }}:</th>
-                <td><ng-container *ngFor="let p of result.posudek; let last = last;">
+                <td><ng-container *ngFor="let p of result.dokument_posudek; let last = last;">
                   <app-inline-filter [isChild]="isChild" [field]="'f_typ_dokumentu_posudek'" [value]="p" [heslar]="'posudek'"></app-inline-filter>
                   <span *ngIf="!last">, </span>
                 </ng-container></td>
               </tr>
-              <tr *ngIf="result.ulozeni_originalu">
+              <tr *ngIf="result.dokument_ulozeni_originalu">
                 <th class="app-label">{{ 'card.desc.Dokument - uložení originálu' | translate }}:</th>
-                <td><app-inline-filter [isChild]="isChild" [field]="'f_ulozeni_originalu'" [value]="result.ulozeni_originalu" [heslar]="'ulozeni_originalu'"></app-inline-filter></td>
+                <td><app-inline-filter [isChild]="isChild" [field]="'f_ulozeni_originalu'" [value]="result.dokument_ulozeni_originalu" [heslar]="'ulozeni_originalu'"></app-inline-filter></td>
               </tr>
-              <tr *ngIf="result.oznaceni_originalu">
+              <tr *ngIf="result.dokument_oznaceni_originalu">
                 <th class="app-label">{{ 'card.desc.Původní označení' | translate }}:</th>
-                <td>{{ result.oznaceni_originalu }}</td>
+                <td>{{ result.dokument_oznaceni_originalu }}</td>
               </tr>
-              <tr *ngIf="result.datum_zverejneni">
+              <tr *ngIf="result.dokument_datum_zverejneni">
                 <th class="app-label">{{ 'card.desc.Dokument - datum zveřejnění' | translate }}:</th>
-                <td>{{ result.datum_zverejneni | date : 'yyyy-MM-dd' }}</td>
-              <ng-container *ngIf="result.extra_data">
-                <tr *ngIf="result.extra_data[0].cislo_objektu">
+                <td>{{ result.dokument_datum_zverejneni | date : 'yyyy-MM-dd' }}</td>
+              <ng-container *ngIf="result.dokument_extra_data">
+                <tr *ngIf="result.dokument_extra_data.cislo_objektu">
                   <th class="app-label">{{ 'card.desc.Objekt/kontext' | translate }}:</th>
-                  <td>{{ result.extra_data[0].cislo_objektu }}</td>
+                  <td>{{ result.dokument_extra_data.cislo_objektu }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].geom_gml">
+                <tr *ngIf="result.dokument_extra_data.geom_gml">
                   <th class="app-label">{{ 'card.desc.Poloha (WGS-84)' | translate }}:</th>
-                  <td>{{ result.extra_data[0].geom_gml | json }}</td>
+                  <td>{{ result.dokument_extra_data.geom_gml | json }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].geom_wkt">
+                <tr *ngIf="result.dokument_extra_data.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
-                  <td>{{ result.extra_data[0].geom_wkt | json }}</td>
+                  <td>{{ result.dokument_extra_data.geom_wkt | json }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].format">
+                <tr *ngIf="result.dokument_extra_data.format">
                   <th class="app-label">{{ 'card.desc.Dokument - formát' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'f_format'" [value]="result.extra_data[0].format.id" [heslar]="'format'"></app-inline-filter></td>
+                  <td><app-inline-filter [isChild]="isChild" [field]="'f_format'" [value]="result.dokument_extra_data.format.id" [heslar]="'format'"></app-inline-filter></td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].vyska">
+                <tr *ngIf="result.dokument_extra_data.vyska">
                   <th class="app-label">{{ 'card.desc.Výška (cm)' | translate }}:</th>
-                  <td>{{ result.extra_data[0].vyska }}</td>
+                  <td>{{ result.dokument_extra_data.vyska }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].sirka">
+                <tr *ngIf="result.dokument_extra_data.sirka">
                   <th class="app-label">{{ 'card.desc.Šířka (cm)' | translate }}:</th>
-                  <td>{{ result.extra_data[0].sirka }}</td>
+                  <td>{{ result.dokument_extra_data.sirka }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].meritko">
+                <tr *ngIf="result.dokument_extra_data.meritko">
                   <th class="app-label">{{ 'card.desc.Měřítko' | translate }}:</th>
-                  <td>{{ result.extra_data[0].meritko }}</td>
+                  <td>{{ result.dokument_extra_data.meritko }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].zachovalost">
+                <tr *ngIf="result.dokument_extra_data.zachovalost">
                   <th class="app-label">{{ 'card.desc.Dokument - zachovalost' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'f_zachovalost'" [value]="result.extra_data[0].zachovalost.id" [heslar]="'zachovalost'"></app-inline-filter></td>
+                  <td><app-inline-filter [isChild]="isChild" [field]="'f_zachovalost'" [value]="result.dokument_extra_data.zachovalost.id" [heslar]="'zachovalost'"></app-inline-filter></td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].nahrada">
+                <tr *ngIf="result.dokument_extra_data.nahrada">
                   <th class="app-label">{{ 'card.desc.Náhrada' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'f_nahrada'" [value]="result.extra_data[0].nahrada.id" [heslar]="'nahrada'"></app-inline-filter></td>
+                  <td><app-inline-filter [isChild]="isChild" [field]="'f_nahrada'" [value]="result.dokument_extra_data.nahrada.id" [heslar]="'nahrada'"></app-inline-filter></td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].pocet_variant_originalu">
+                <tr *ngIf="result.dokument_extra_data.pocet_variant_originalu">
                   <th class="app-label">{{ 'card.desc.Počet variant' | translate }}:</th>
-                  <td>{{ result.extra_data[0].pocet_variant_originalu }}</td>
+                  <td>{{ result.dokument_extra_data.pocet_variant_originalu }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].odkaz">
+                <tr *ngIf="result.dokument_extra_data.odkaz">
                   <th class="app-label">{{ 'card.desc.Odkaz' | translate }}:</th>
-                  <td><a [href]="result.extra_data[0].odkaz" target="_blank">{{result.extra_data[0].odkaz}}</a></td>
+                  <td><a [href]="result.dokument_extra_data.odkaz" target="_blank">{{result.dokument_extra_data.odkaz}}</a></td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].datum_vzniku">
+                <tr *ngIf="result.dokument_extra_data.datum_vzniku">
                   <th class="app-label">{{ 'card.desc.Dokument - datum vzniku' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'extra_data[0].datum_vzniku'" [value]="result.extra_data[0].datum_vzniku | date : 'yyyy-MM-dd'" [isDate]="true"></app-inline-filter></td>
+                  <td><app-inline-filter [isChild]="isChild" [field]="'extra_data.datum_vzniku'" [value]="result.dokument_extra_data.datum_vzniku | date : 'yyyy-MM-dd'" [isDate]="true"></app-inline-filter></td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].zeme">
+                <tr *ngIf="result.dokument_extra_data.zeme">
                   <th class="app-label">{{ 'card.desc.Země' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'f_zeme'" [value]="result.extra_data[0].zeme.id" [heslar]="'zeme'"></app-inline-filter></td>
+                  <td><app-inline-filter [isChild]="isChild" [field]="'f_zeme'" [value]="result.dokument_extra_data.zeme.id" [heslar]="'zeme'"></app-inline-filter></td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].region">
+                <tr *ngIf="result.dokument_extra_data.region">
                   <th class="app-label">{{ 'card.desc.Region' | translate }}:</th>
-                  <td>{{ result.extra_data[0].region }}</td>
+                  <td>{{ result.dokument_extra_data.region }}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].udalost_typ">
+                <tr *ngIf="result.dokument_extra_data.udalost_typ">
                   <th class="app-label">{{ 'card.desc.Typ události' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'f_udalost_typ'" [value]="result.extra_data[0].udalost_typ.id" [heslar]="'udalost_typ'"></app-inline-filter></td>
+                  <td><app-inline-filter [isChild]="isChild" [field]="'f_udalost_typ'" [value]="result.dokument_extra_data.udalost_typ.id" [heslar]="'udalost_typ'"></app-inline-filter></td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].udalost">
-                  <td>{{ result.extra_data[0].udalost}}</td>
+                <tr *ngIf="result.dokument_extra_data.udalost">
+                  <td>{{ result.dokument_extra_data.udalost}}</td>
                 </tr>
-                <tr *ngIf="result.extra_data[0].rok_od || result.extra_data[0].rok_do">
+                <tr *ngIf="result.dokument_extra_data.rok_od || result.dokument_extra_data.rok_do">
                   <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
-                  <td>{{ result.extra_data[0].rok_od }}-{{ result.extra_data[0].rok_do }}</td>
+                  <td>{{ result.dokument_extra_data.rok_od }}-{{ result.dokument_extra_data.rok_do }}</td>
                 </tr>
               </ng-container>
-              <tr *ngIf="result.osoba">
+              <tr *ngIf="result.dokument_osoba">
                 <th class="app-label">{{ 'card.desc.Osoby' | translate }}:</th>
-                <td>{{ result.osoba }}</td>
+                <td>{{ result.dokument_osoba }}</td>
               </tr>
-              <tr *ngIf="result.extra_data && result.extra_data[0].duveryhodnost">
+              <tr *ngIf="result.dokument_extra_data && result.dokument_extra_data.duveryhodnost">
                 <th class="app-label">{{ 'card.desc.Důvěryhodnost' | translate }}:</th>
-                <td>{{ result.extra_data[0].duveryhodnost }}</td>
+                <td>{{ result.dokument_extra_data.duveryhodnost }}</td>
               </tr>
             </tbody>
           </table>
           
           <mat-accordion multi="true">
-            <app-let *ngIf="result.let" [result]="result.let"></app-let>
-            <mat-expansion-panel #panel *ngIf="result.tvar" [expanded]="true" hideToggle class="app-panel-inner">
+            <app-let *ngIf="result.dokument_let" [result]="result.dokument_let"></app-let>
+            <mat-expansion-panel #panel *ngIf="result.dokument_tvar" [expanded]="true" hideToggle class="app-panel-inner">
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                 <mat-panel-title>
                   <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
@@ -231,7 +227,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="app-list-inside">
-                <li *ngFor="let tvar of result.tvar">
+                <li *ngFor="let tvar of result.dokument_tvar">
                   <app-inline-filter [isChild]="isChild" [field]="'f_tvar'" [value]="tvar.tvar.id" [heslar]="'tvar'"></app-inline-filter>
                   <ng-container *ngIf="tvar.poznamka">({{ tvar.poznamka }})</ng-container>
                 </li>
@@ -253,7 +249,6 @@
               </ng-container>
 
               <mat-accordion multi="true">
-                <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [adbs]="result.adb"></app-dok-jednotka> -->
                 <mat-expansion-panel #panel *ngFor="let kd of result.komponenta" [expanded]="true" hideToggle class="app-panel-inner">
                   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
                     <mat-panel-title>

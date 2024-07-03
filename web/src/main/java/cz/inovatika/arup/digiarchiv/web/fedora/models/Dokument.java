@@ -35,82 +35,82 @@ public class Dokument implements FedoraModel {
     @Field
     public String ident_cely;
 
-//<xs:element name="let" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{let.ident_cely}" | "{let.ident_cely}" -->
-    @JacksonXmlProperty(localName = "let")
-    public Vocab let;
-
 //<xs:element name="stav" minOccurs="1" maxOccurs="1" type="xs:integer"/> <!-- "{stav}" -->
     @Field
     public long stav;
-
-//<xs:element name="typ_dokumentu" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ_dokumentu.ident_cely}" | "{typ_dokumentu.heslo}" -->
-    @JacksonXmlProperty(localName = "typ_dokumentu")
-    public Vocab typ_dokumentu;
-
-//<xs:element name="material_originalu" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{material_originalu.ident_cely}" | "{material_originalu.heslo}" -->
-    @JacksonXmlProperty(localName = "material_originalu")
-    public Vocab material_originalu;
-
-//<xs:element name="rada" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{rada.ident_cely}" | "{rada.heslo}" -->
-    @JacksonXmlProperty(localName = "rada")
-    public Vocab rada;
-
-//<xs:element name="posudek" minOccurs="0" maxOccurs="unbounded" type="amcr:vocabType"/> <!-- "{posudky.ident_cely}" | "{posudky.heslo}" -->
-    @JacksonXmlProperty(localName = "posudek")
-    public List<Vocab> posudek = new ArrayList();
-
-//<xs:element name="autor" minOccurs="0" maxOccurs="unbounded" type="amcr:autorType"/> <!-- "{dokumentautor_set.autor.ident_cely}"  | "{dokumentautor_set.poradi}" | "{dokumentautor_set.autor.vypis_cely}" -->
-    @JacksonXmlProperty(localName = "autor")
-    public List<Vocab> autor = new ArrayList();
-
-//<xs:element name="rok_vzniku" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{rok_vzniku}" -->
-    @JacksonXmlProperty(localName = "rok_vzniku")
-    @Field
-    public int rok_vzniku;
-
-//<xs:element name="organizace" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{organizace.ident_cely}" | "{organizace.nazev}" -->
-    @JacksonXmlProperty(localName = "organizace")
-    public Vocab organizace;
 
 //<xs:element name="pristupnost" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost.ident_cely}" | "{pristupnost.heslo}" -->
     @JacksonXmlProperty(localName = "pristupnost")
     public Vocab pristupnost;
 
+//<xs:element name="let" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{let.ident_cely}" | "{let.ident_cely}" -->
+    @JacksonXmlProperty(localName = "let")
+    public Vocab dokument_let;
+
+//<xs:element name="typ_dokumentu" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ_dokumentu.ident_cely}" | "{typ_dokumentu.heslo}" -->
+    @JacksonXmlProperty(localName = "typ_dokumentu")
+    public Vocab dokument_typ_dokumentu;
+
+//<xs:element name="material_originalu" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{material_originalu.ident_cely}" | "{material_originalu.heslo}" -->
+    @JacksonXmlProperty(localName = "material_originalu")
+    public Vocab dokument_material_originalu;
+
+//<xs:element name="rada" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{rada.ident_cely}" | "{rada.heslo}" -->
+    @JacksonXmlProperty(localName = "rada")
+    public Vocab dokument_rada;
+
+//<xs:element name="posudek" minOccurs="0" maxOccurs="unbounded" type="amcr:vocabType"/> <!-- "{posudky.ident_cely}" | "{posudky.heslo}" -->
+    @JacksonXmlProperty(localName = "posudek")
+    public List<Vocab> dokument_posudek = new ArrayList();
+
+//<xs:element name="autor" minOccurs="0" maxOccurs="unbounded" type="amcr:autorType"/> <!-- "{dokumentautor_set.autor.ident_cely}"  | "{dokumentautor_set.poradi}" | "{dokumentautor_set.autor.vypis_cely}" -->
+    @JacksonXmlProperty(localName = "autor")
+    public List<Vocab> dokument_autor = new ArrayList();
+
+//<xs:element name="rok_vzniku" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{rok_vzniku}" -->
+    @JacksonXmlProperty(localName = "rok_vzniku")
+    @Field
+    public int dokument_rok_vzniku;
+
+//<xs:element name="organizace" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{organizace.ident_cely}" | "{organizace.nazev}" -->
+    @JacksonXmlProperty(localName = "organizace")
+    public Vocab dokument_organizace;
+
 //<xs:element name="datum_zverejneni" minOccurs="0" maxOccurs="1" type="xs:date"/> <!-- "{datum_zverejneni}" -->
     @JacksonXmlProperty(localName = "datum_zverejneni")
     @Field
-    public Date datum_zverejneni;
+    public Date dokument_datum_zverejneni;
 
 //<xs:element name="jazyk_dokumentu" minOccurs="0" maxOccurs="unbounded" type="amcr:vocabType"/> <!-- "{jazyky.ident_cely}" | "{jazyky.heslo}" -->
     @JacksonXmlProperty(localName = "jazyk_dokumentu")
-    public List<Vocab> jazyk_dokumentu = new ArrayList();
+    public List<Vocab> dokument_jazyk_dokumentu = new ArrayList();
 
 //<xs:element name="ulozeni_originalu" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{ulozeni_originalu.ident_cely}" | "{ulozeni_originalu.heslo}" -->
     @JacksonXmlProperty(localName = "ulozeni_originalu")
-    public Vocab ulozeni_originalu;
+    public Vocab dokument_ulozeni_originalu;
 
 //<xs:element name="oznaceni_originalu" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{oznaceni_originalu}" -->
     @JacksonXmlProperty(localName = "oznaceni_originalu")
     @Field
-    public String oznaceni_originalu;
+    public String dokument_oznaceni_originalu;
 
 //<xs:element name="popis" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{popis}" -->
     @JacksonXmlProperty(localName = "popis")
     @Field
-    public String popis;
+    public String dokument_popis;
 
 //<xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
     @JacksonXmlProperty(localName = "poznamka")
     @Field
-    public String poznamka;
+    public String dokument_poznamka;
 
 //<xs:element name="licence" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{licence.ident_cely}" | "{licence.heslo}" -->
     @JacksonXmlProperty(localName = "licence")
-    public Vocab licence;
+    public Vocab dokument_licence;
 
 //<xs:element name="osoba" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{osoby.ident_cely}" | "{osoby.vypis_cely}" -->
     @JacksonXmlProperty(localName = "osoba")
-    public List<Vocab> osoba = new ArrayList();
+    public List<Vocab> dokument_osoba = new ArrayList();
 
 //<xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->  
     @JacksonXmlProperty(localName = "historie")
@@ -122,11 +122,11 @@ public class Dokument implements FedoraModel {
 
 //<xs:element name="extra_data" minOccurs="0" maxOccurs="1" type="amcr:extra_dataType"/> <!-- "{extra_data}" -->
     @JacksonXmlProperty(localName = "extra_data")
-    public ExtraData extra_data;
+    public ExtraData dokument_extra_data;
 
 //<xs:element name="tvar" minOccurs="0" maxOccurs="unbounded" type="amcr:tvarType"/> <!-- "{tvar_set}" -->
     @JacksonXmlProperty(localName = "tvar")
-    public List<Tvar> tvar = new ArrayList();
+    public List<Tvar> dokument_tvar = new ArrayList();
 
 //<xs:element name="dokument_cast" minOccurs="0" maxOccurs="unbounded" type="amcr:dokument_castType"/> <!-- "{casti}" -->
     @JacksonXmlProperty(localName = "dokument_cast")
@@ -145,33 +145,33 @@ public class Dokument implements FedoraModel {
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
 
-        entity = (rada.getId().toUpperCase().equals("HES-000870")) ? "knihovna_3d" : "dokument";
+        entity = (dokument_rada.getId().toUpperCase().equals("HES-000870")) ? "knihovna_3d" : "dokument";
         idoc.setField("entity", entity);
 
-        IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
-        String kategorie = Options.getInstance().getJSONObject("kategoriet").optString(typ_dokumentu.getValue());
-        SolrSearcher.addFieldNonRepeat(idoc, "kategorie_dokumentu", kategorie);
+        IndexUtils.addVocabField(idoc, "dokument_typ_dokumentu", dokument_typ_dokumentu);
+        String kategorie = Options.getInstance().getJSONObject("kategoriet").optString(dokument_typ_dokumentu.getValue());
+        SolrSearcher.addFieldNonRepeat(idoc, "dokument_kategorie_dokumentu", kategorie);
 
-        IndexUtils.addVocabField(idoc, "material_originalu", material_originalu);
-        IndexUtils.addVocabField(idoc, "rada", rada);
+        IndexUtils.addVocabField(idoc, "dokument_material_originalu", dokument_material_originalu);
+        IndexUtils.addVocabField(idoc, "dokument_rada", dokument_rada);
 
-        for (Vocab v : posudek) {
-            IndexUtils.addVocabField(idoc, "posudek", v);
+        for (Vocab v : dokument_posudek) {
+            IndexUtils.addVocabField(idoc, "dokument_posudek", v);
         }
 
-        for (Vocab v : autor) {
-            IndexUtils.addRefField(idoc, "autor", v);
+        for (Vocab v : dokument_autor) {
+            IndexUtils.addRefField(idoc, "dokument_autor", v); 
         }
-        IndexUtils.addVocabField(idoc, "organizace", organizace);
+        IndexUtils.addVocabField(idoc, "dokument_organizace", dokument_organizace);
 
-        for (Vocab v : jazyk_dokumentu) {
-            IndexUtils.addVocabField(idoc, "jazyk_dokumentu", v);
+        for (Vocab v : dokument_jazyk_dokumentu) {
+            IndexUtils.addVocabField(idoc, "dokument_jazyk_dokumentu", v);
         }
-        IndexUtils.addVocabField(idoc, "ulozeni_originalu", ulozeni_originalu);
-        IndexUtils.addVocabField(idoc, "licence", licence);
+        IndexUtils.addVocabField(idoc, "dokument_ulozeni_originalu", dokument_ulozeni_originalu);
+        IndexUtils.addVocabField(idoc, "dokument_licence", dokument_licence);
         
-        for (Vocab v : osoba) {
-            IndexUtils.addRefField(idoc, "osoba", v);
+        for (Vocab v : dokument_osoba) {
+            IndexUtils.addRefField(idoc, "dokument_osoba", v);
         }
 
         List<SolrInputDocument> idocs = new ArrayList<>();
@@ -190,14 +190,14 @@ public class Dokument implements FedoraModel {
             Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        for (Tvar tv : tvar) {
-            IndexUtils.addJSONField(idoc, "tvar", tv);
-            idoc.addField("tvar_poznamka", tv.poznamka);
-            IndexUtils.addVocabField(idoc, "tvar_tvar", tv.tvar);
+        for (Tvar tv : dokument_tvar) {
+            IndexUtils.addJSONField(idoc, "dokument_tvar", tv);
+            //idoc.addField("tvar_poznamka", tv.poznamka);
+            //IndexUtils.addVocabField(idoc, "tvar_tvar", tv.tvar);
         }
 
-        if (extra_data != null) {
-            extra_data.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+        if (dokument_extra_data != null) {
+            dokument_extra_data.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
 
         for (DokumentCast dc : dokument_cast) {
@@ -211,7 +211,7 @@ public class Dokument implements FedoraModel {
             }
         }
 
-        if (let != null) {
+        if (dokument_let != null) {
             addLet(idoc);
         }
 
@@ -236,54 +236,48 @@ public class Dokument implements FedoraModel {
 
     private void addLet(SolrInputDocument idoc) throws Exception {
 
-        IndexUtils.addVocabField(idoc, "let_ident_cely", let);
-        SolrQuery query = new SolrQuery("ident_cely:\"" + let.getId() + "\"");
-        JSONObject json = SearchUtils.searchOrIndex(query, "entities", let.getId());
+        IndexUtils.addVocabField(idoc, "let_ident_cely", dokument_let);
+        SolrQuery query = new SolrQuery("ident_cely:\"" + dokument_let.getId() + "\"");
+        JSONObject json = SearchUtils.searchOrIndex(query, "entities", dokument_let.getId());
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-                SolrSearcher.addFieldNonRepeat(idoc, "let", doc.toString());
-                for (String key : doc.keySet()) {
-                    SolrSearcher.addFieldNonRepeat(idoc, "let_" + key, doc.opt(key));
-                }
+                SolrSearcher.addFieldNonRepeat(idoc, "dokument_let", doc.toString());
+//                for (String key : doc.keySet()) {
+//                    SolrSearcher.addFieldNonRepeat(idoc, "let_" + key, doc.opt(key));
+//                }
             }
         }
     }
 
     public void setFullText(SolrInputDocument idoc) {
-        Object[] fields = idoc.getFieldNames().toArray();
-        List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("dokument").toList();
-        List<String> prSufix = new ArrayList<>();
-        prSufix.add("A");
-        prSufix.add("B");
-        prSufix.add("C");
-        prSufix.add("D");
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("full_text").toList();
 
-        for (Object f : fields) {
+        for (Object f : indexFields) {
             String s = (String) f;
-
-            // SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
-            if (indexFields.contains(s)) {
-                for (String sufix : prSufix) {
-                    SolrSearcher.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+            for (String sufix : SolrSearcher.prSufixAll) {
+                if (idoc.containsKey(s)) {
+                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                }
+                if (idoc.containsKey(s + "_" + sufix)) {
+                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
                 }
             }
-
-        }
-        for (String sufix : prSufix) {
-            IndexUtils.addRefField(idoc, "text_all_" + sufix, typ_dokumentu);
-            IndexUtils.addRefField(idoc, "text_all_" + sufix, material_originalu);
-            IndexUtils.addRefField(idoc, "text_all_" + sufix, rada);
-            IndexUtils.addRefField(idoc, "text_all_" + sufix, organizace);
-            for (Vocab v : osoba) {
+        } 
+        for (String sufix : SolrSearcher.prSufixAll) {
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, dokument_typ_dokumentu);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, dokument_material_originalu);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, dokument_rada);
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, dokument_organizace);
+            for (Vocab v : dokument_osoba) {
                 IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
             }
-            for (Vocab v : jazyk_dokumentu) {
+            for (Vocab v : dokument_jazyk_dokumentu) {
                 IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
             }
 
-            IndexUtils.addRefField(idoc, "text_all_" + sufix, ulozeni_originalu);
-            for (Vocab v : posudek) {
+            IndexUtils.addRefField(idoc, "text_all_" + sufix, dokument_ulozeni_originalu);
+            for (Vocab v : dokument_posudek) {
                 IndexUtils.addRefField(idoc, "text_all_" + sufix, v);
             }
             for (Soubor v : soubor) {

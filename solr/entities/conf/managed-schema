@@ -53,22 +53,39 @@
    <field name="lat_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="pian_id" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="pian_ident_cely" type="string" indexed="true" stored="true" multiValued="true" /> 
-   
-   <!-- Dokument fields -->
-   <field name="extra_data_rok_od" type="pint" indexed="true" stored="true"  multiValued="true" />
-   <field name="extra_data_rok_do" type="pint" indexed="true" stored="true"  multiValued="true" />
-   <field name="extra_data_duveryhodnost" type="pint" indexed="true" stored="true"  multiValued="true" />
-   
-   
-   <field name="jazyk_dokumentu" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="datum_zverejneni" type="pdate" indexed="true" stored="true" />
-   <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
-   <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
+   <field name="location_info" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="soubor" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    
    <field name="soubor_vytvoreno" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <field name="soubor_rozsah" type="pint" indexed="true" stored="true"  multiValued="true" />
-   <field name="soubor_size_bytes" type="pint" indexed="true" stored="true"  multiValued="true" />
+   <field name="soubor_size_bytes" type="pint" indexed="true" stored="true"  multiValued="true" />   
    
+   <!-- Dokument fields -->
+   <field name="dokument_let" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_typ_dokumentu" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_material_originalu" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_rada" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_posudek" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_autor" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_rok_vzniku" type="pint" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_organizace" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_datum_zverejneni" type="pdate" indexed="true" stored="true" />
+   <field name="dokument_jazyk_dokumentu" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_ulozeni_originalu" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_oznaceni_originalu" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_popis" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_poznamka" type="string_big" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_licence" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_osoba" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="dokument_extra_data" type="string_big" indexed="false" stored="true" multiValued="false"  /> 
+   <field name="dokument_tvar" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
+   <field name="dokument_cast" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
+   <field name="dokument_cast_akce" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_cast_archeologicky_zaznam" type="string" indexed="true" stored="true" multiValued="true" />
+<!--      
+   <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
    <field name="autor" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    <field name="typ_dokumentu_posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
    <field name="posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
@@ -77,29 +94,17 @@
    
    <field name="tvar" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="jednotka_dokumentu" type="string" indexed="false" stored="true" multiValued="true" docValues="false" />   
-   <field name="pian" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
+<field name="pian" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="pian_A" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="pian_B" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="pian_C" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="pian_D" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="odkaz" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="soubor" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="komponenta_dokument" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="komponenta" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    <field name="nalez_dokumentu" type="string" indexed="false" stored="true"  multiValued="true" />
    <field name="neident_akce" type="string" indexed="false" stored="true"  multiValued="true" />
-   <field name="dokument_cast" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   
-   <field name="child_soubor" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="parent_akce_katastr" type="string" indexed="false" stored="true" multiValued="true" /> 
-   <field name="parent_akce_okres" type="string" indexed="false" stored="true" multiValued="true" /> 
-   <field name="parent_lokalita_katastr" type="string" indexed="false" stored="true" multiValued="true" /> 
-   <field name="parent_lokalita_okres" type="string" indexed="false" stored="true" multiValued="true" /> 
-   <field name="location_info" type="string" indexed="false" stored="true" multiValued="true" /> 
-   
-   
-   <field name="aktivita" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   
+-->
   
    <!-- Archeologicky zaznam, akce and lokalita fields -->
    <field name="az_okres" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -318,12 +323,15 @@
    <field name="obdobi_poradi" type="pint" indexed="true" stored="true" multiValued="true" /> 
    
    <!-- pole pro stats -->
+   <field name="datum_zverejneni" type="pdate" indexed="true" stored="true" />
    <field name="datum_provedeni_od" type="pdate" indexed="true" stored="true" />
    <field name="datum_provedeni_do" type="pdate" indexed="true" stored="true" />
    <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="rok_vydani" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="extra_data_datum_vzniku" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <field name="let_datum" type="pdate" indexed="true" stored="true"  multiValued="true" />
+   <!--<str name="stats.field">samostatny_nalez_datum_nalezu</str>-->
+
    
    <!-- pole pro facety -->
    <field name="f_aktivita" type="string" indexed="false" stored="false" multiValued="true" />
