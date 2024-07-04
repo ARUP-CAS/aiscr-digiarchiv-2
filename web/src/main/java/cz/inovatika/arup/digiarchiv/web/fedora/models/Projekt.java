@@ -166,7 +166,7 @@ public class Projekt implements FedoraModel {
 
         for (Vocab v : projekt_archeologicky_zaznam) {
             idoc.addField("projekt_archeologicky_zaznam", v.getValue());
-            // addArch(idoc, v.getValue());
+            addArch(idoc, v.getValue());
         }
 
         for (Vocab v : projekt_samostatny_nalez) {
@@ -196,6 +196,7 @@ public class Projekt implements FedoraModel {
         }
         
         setSortFields(idoc);
+        setFacets(idoc, SolrSearcher.getSufixesByLevel((String) idoc.getFieldValue("pristupnost")));
         setFullText(idoc);
     }
     
@@ -217,14 +218,15 @@ public class Projekt implements FedoraModel {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
-            if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-            } 
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
-                }
-            }
+            IndexUtils.addByPath(idoc, orig, dest, prSufix);
+//            if (idoc.containsKey(orig)) {
+//                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
+//            } 
+//            for (String sufix : prSufix) {
+//                if (idoc.containsKey(orig + "_" + sufix)) {
+//                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
+//                }
+//            }
         }
     }
 
@@ -256,14 +258,16 @@ public class Projekt implements FedoraModel {
     }
 
     private void addArch(SolrInputDocument idoc, String az) throws Exception {
-        String[] facetFields = new String[]{"dokumentacni_jednotka_komponenta_areal", 
-            "dokumentacni_jednotka_komponenta_obdobi", 
+        
+        String[] facetFields = new String[]{"f_areal", 
+            "f_obdobi", 
             "f_aktivita", 
-            "dokumentacni_jednotka_komponenta_typ_nalezu", 
-            "dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
-            "dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
-            "dokumentacni_jednotka_komponenta_nalez_predmet_specifikace", 
-            "dokumentacni_jednotka_typ", 
+            "f_typ_nalezu", 
+            "f_druh_nalezu", 
+            //"dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
+            //"dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
+            "f_specifikace", 
+            "f_dj_typ", 
             "f_typ_vyzkumu"};
         SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
                 setFields("pian_id,pristupnost");
@@ -297,15 +301,15 @@ public class Projekt implements FedoraModel {
 
     private void addPian(SolrInputDocument idoc, String pristupnost, String pian_id) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian_id + "\"")
-                .setFields("typ,presnost,chranene_udaje:[json]");
+                .setFields("pian_typ,pian_presnost,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian_id);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pian_id);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_typ", doc.getJSONArray("typ").getString(0), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_presnost", doc.getString("presnost"), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", doc.getJSONObject("chranene_udaje").getString("zm10"), pristupnost);
+            IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", doc.getString("pian_typ"));
+            IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", doc.getString("pian_presnost"));
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", doc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
         }
 
     }

@@ -198,15 +198,11 @@ public class ArcheologickyZaznam implements FedoraModel {
             IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, az_chranene_udaje.uzivatelske_oznaceni);
         }
 
-        List<String> prSufixAll = new ArrayList<>();
-        prSufixAll.add("A");
-        prSufixAll.add("B");
-        prSufixAll.add("C");
-        prSufixAll.add("D");
+        
         // Fields allways searchable
         String[] defFields = new String[]{"ident_cely", "dokument",
             "projekt"};
-        for (String sufix : prSufixAll) {
+        for (String sufix : SolrSearcher.prSufixAll) {
             for (String field : defFields) {
                 IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(field));
             }

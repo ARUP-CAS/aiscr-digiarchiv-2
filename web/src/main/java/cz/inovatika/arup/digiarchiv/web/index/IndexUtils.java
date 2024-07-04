@@ -196,6 +196,7 @@ public class IndexUtils {
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
             
         if (vals == null) {
+                System.out.println(parts[0]);
             return;
         }
         if (parts.length > 1) {

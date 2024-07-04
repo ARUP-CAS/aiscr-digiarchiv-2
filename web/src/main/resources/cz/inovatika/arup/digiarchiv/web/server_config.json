@@ -471,9 +471,11 @@
       "f_vedouci:projekt_vedouci_projektu",
       "f_organizace:projekt_organizace",
       "f_typ_projektu:projekt_typ_projektu",
-      "f_okres:projekt_okres",
-      "f_katastr:projekt_chranene_udaje_hlavni_katastr",
-      "f_katastr:projekt_chranene_udaje_dalsi_katastr"
+      "f_okres:projekt_okres"
+    ],
+    "facets2": [
+      "f_katastr:projekt_chranene_udaje.hlavni_katastr.id",
+      "f_katastr:projekt_chranene_udaje.dalsi_katastr[*].id"
     ],
     "full_text": [
         "projekt_typ_projektu", 

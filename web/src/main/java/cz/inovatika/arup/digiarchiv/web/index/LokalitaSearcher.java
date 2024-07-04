@@ -79,9 +79,9 @@ public class LokalitaSearcher implements EntitySearcher {
             JSONObject doc = docs.getJSONObject(i);
 
             JSONArray valid_dokuments = new JSONArray();
-            if (doc.has("dokument")) {
+            if (doc.has("az_dokument")) {
                 SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=az_dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
                         .setRows(10000)
                         .setFields("ident_cely");
                 try {
@@ -93,10 +93,10 @@ public class LokalitaSearcher implements EntitySearcher {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
-            doc.put("dokument", valid_dokuments);
+            doc.put("az_dokument", valid_dokuments);
 
-            if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
-                doc.remove("projekt");
+            if (doc.has("az_projekt") && !SolrSearcher.existsById(client, doc.getString("az_projekt"))) {
+                doc.remove("az_projekt");
             }
         }
     }
@@ -155,7 +155,7 @@ public class LokalitaSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -163,6 +163,7 @@ public class LokalitaSearcher implements EntitySearcher {
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
                 addPians(jo, client, request);
             }
+            checkRelations(jo, client, request);
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
