@@ -38,7 +38,7 @@ public class ADB implements FedoraModel {
 //<xs:element name="stav_pom" minOccurs="1" maxOccurs="1" type="xs:integer"/> <!-- "{dokumentacni_jednotka.archeologicky_zaznam.stav}" -->
     @JacksonXmlProperty(localName = "stav_pom")
     @Field
-    public int stav_pom;
+    public int stav;
 
 //<xs:element name="typ_sondy" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ_sondy.ident_cely}" | "{typ_sondy.heslo}" -->
     @JacksonXmlProperty(localName = "typ_sondy")
@@ -93,7 +93,7 @@ public class ADB implements FedoraModel {
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         idoc.setField("searchable", true);
-        idoc.setField("stav", stav_pom);
+        idoc.setField("stav", stav);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.addVocabField(idoc, "adb_dokumentacni_jednotka", adb_dokumentacni_jednotka);
         IndexUtils.addVocabField(idoc, "adb_typ_sondy", adb_typ_sondy);
@@ -188,6 +188,8 @@ class ADBChraneneUdaje {
                 vbdoc.setField("entity", "vyskovy_bod");
                 vbdoc.setField("searchable", true);
                 vbdoc.setField("ident_cely", vb.ident_cely);
+                idoc.addField("vyskovy_bod_ident_cely", vb.ident_cely);
+                
                 vbdoc.setField("vyskovy_bod_parent", ident_cely);
                 vbdoc.setField("vyskovy_bod_typ", vb.typ);
                 vbdoc.setField("vyskovy_bod_geom_gml", objectMapper.writeValueAsString(vb.geom_gml));

@@ -8,52 +8,52 @@
     </mat-expansion-panel-header>
     <table>
       <tbody>
-        <tr *ngIf="result.datum || result.hodina_zacatek || result.hodina_konec">
+        <tr *ngIf="result.let_datum || result.let_hodina_zacatek || result.let_hodina_konec">
           <th class="app-label">{{ 'card.desc.Datum a čas' | translate }}:</th>
-          <td>{{ result.datum | date : 'yyyy-MM-dd' }} {{ result.hodina_zacatek }} - {{ result.hodina_konec }}</td>
+          <td>{{ result.let_datum | date : 'yyyy-MM-dd' }} {{ result.let_hodina_zacatek }} - {{ result.let_hodina_konec }}</td>
         </tr>
-        <tr *ngIf="result.letiste_start || result.letiste_cil">
+        <tr *ngIf="result.let_letiste_start || result.let_letiste_cil">
           <th class="app-label">{{ 'card.desc.Trasa' | translate }}:</th>
           <td>
-            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
-            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.letiste_cil" [heslar]="'a'"></app-inline-filter>
+            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
+            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil" [heslar]="'a'"></app-inline-filter>
           </td>
         </tr>
-        <tr *ngIf="result.ucel_letu">
+        <tr *ngIf="result.let_ucel_letu">
           <th class="app-label">{{ 'card.desc.Účel letu' | translate }}:</th>
-          <td>{{ result.ucel_letu }}</td>
+          <td>{{ result.let_ucel_letu }}</td>
         </tr>
-        <tr *ngIf="result.pozorovatel">
+        <tr *ngIf="result.let_pozorovatel">
           <th class="app-label">{{ 'card.desc.Let - pozorovatel' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_pozorovatel'" [value]="result.pozorovatel"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_pozorovatel'" [value]="result.let_pozorovatel"></app-inline-filter></td>
         </tr>
-        <tr *ngIf="result.pilot">
+        <tr *ngIf="result.let_pilot">
           <th class="app-label">{{ 'card.desc.Pilot' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_pilot'" [value]="result.pilot"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_pilot'" [value]="result.let_pilot"></app-inline-filter></td>
         </tr>
-        <tr *ngIf="result.organizace">
+        <tr *ngIf="result.let_organizace">
           <th class="app-label">{{ 'card.desc.Organizace' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_organizace'" [value]="result.let_organizace" [heslar]="'organizace'"></app-inline-filter></td>
         </tr>
-        <tr *ngIf="result.uzivatelske_oznaceni">
+        <tr *ngIf="result.let_uzivatelske_oznaceni">
           <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-          <td>{{ result.uzivatelske_oznaceni }}</td>
+          <td>{{ result.let_uzivatelske_oznaceni }}</td>
         </tr>
-        <tr *ngIf="result.fotoaparat">
+        <tr *ngIf="result.let_fotoaparat">
           <th class="app-label">{{ 'card.desc.Fotoaparát' | translate }}:</th>
-          <td>{{ result.fotoaparat }}</td>
+          <td>{{ result.let_fotoaparat }}</td>
         </tr>
-        <tr *ngIf="result.typ_letounu">
+        <tr *ngIf="result.let_typ_letounu">
           <th class="app-label">{{ 'card.desc.Typ letounu' | translate }}:</th>
-          <td>{{ result.typ_letounu}}</td>
+          <td>{{ result.let_typ_letounu}}</td>
         </tr>
-        <tr *ngIf="result.pocasi">
+        <tr *ngIf="result.let_pocasi">
           <th class="app-label">{{ 'card.desc.Počasí' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.let_pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
         </tr>
-        <tr *ngIf="result.dohlednost">
+        <tr *ngIf="result.let_dohlednost">
           <th class="app-label">{{ 'card.desc.Dohlednost' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.let_dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
         </tr>
       </tbody>
     </table>
@@ -65,40 +65,40 @@
     <mat-card-header>
       <mat-card-title>
         {{ 'card.title.Let' | translate }}&#160;{{ result.ident_cely }}
-        <span class="app-pipe"></span>{{ result.pozorovatel }}
-        <span class="app-pipe"></span>{{ result.datum | date : 'dd.MM.yyyy' }}
+        <span class="app-pipe"></span>{{ result.let_pozorovatel }}
+        <span class="app-pipe"></span>{{ result.let_datum | date : 'dd.MM.yyyy' }}
         <span class="app-pipe"></span>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="app-metadata app-row-gap-16">
-        <div *ngIf="result.hodina_zacatek || result.hodina_konec || result.letiste_start || result.letiste_cil">
-          <ng-container *ngIf="result.hodina_zacatek || result.hodina_konec">
+        <div *ngIf="result.let_hodina_zacatek || result.let_hodina_konec || result.let_letiste_start || result.let_letiste_cil">
+          <ng-container *ngIf="result.let_hodina_zacatek || result.let_hodina_konec">
             <label class="app-label">{{ 'card.desc.Čas' | translate }}:</label>&#160;
-            {{ result.hodina_zacatek }}-{{ result.hodina_konec }}
+            {{ result.let_hodina_zacatek }}-{{ result.let_hodina_konec }}
             <span class="app-pipe"></span>
           </ng-container>
-          <ng-container *ngIf="result.letiste_start || result.letiste_cil">
+          <ng-container *ngIf="result.let_letiste_start || result.let_letiste_cil">
             <label class="app-label">{{ 'card.desc.Trasa' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
-            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.letiste_cil" [heslar]="'a'"></app-inline-filter>
+            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
+            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil" [heslar]="'a'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
         </div>
-        <div *ngIf="result.organizace">
+        <div *ngIf="result.let_organizace">
           <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
-          <app-inline-filter [field]="'f_organizace'" [value]="result.organizace" [heslar]="'organizace'"></app-inline-filter>
+          <app-inline-filter [field]="'f_organizace'" [value]="result.let_organizace" [heslar]="'organizace'"></app-inline-filter>
         </div>
-        <div *ngIf="result.ucel_letu" class="app-truncate-text">
+        <div *ngIf="result.let_ucel_letu" class="app-truncate-text">
           <label class="app-label">{{ 'card.desc.Účel letu' | translate }}:</label>&#160;
-          {{ result.ucel_letu }}
+          {{ result.let_ucel_letu }}
         </div>
       </div>
     </mat-card-content>
     <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
       <div fxFlex class="app-metadata">
-        <ng-container *ngIf="result.dokument?.length > 0">
-          {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.dokument?.length}}</strong>
+        <ng-container *ngIf="result.let_dokument?.length > 0">
+          {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.let_dokument?.length}}</strong>
           <span class="app-pipe"></span>
         </ng-container>
       </div>
@@ -145,38 +145,38 @@
             </mat-expansion-panel-header>
             <table>
               <tbody>                
-                <tr *ngIf="result.ucel_letu">
+                <tr *ngIf="result.let_ucel_letu">
                   <th class="app-label">{{ 'card.desc.Účel letu' | translate }}:</th>
-                  <td>{{ result.ucel_letu }}</td>
+                  <td>{{ result.let_ucel_letu }}</td>
                 </tr>
-                <tr *ngIf="result.pilot">
+                <tr *ngIf="result.let_pilot">
                   <th class="app-label">{{ 'card.desc.Pilot' | translate }}:</th>
-                  <td>{{ result.pilot }}</td>
+                  <td>{{ result.let_pilot }}</td>
                 </tr>
-                <tr *ngIf="result.uzivatelske_oznaceni">
+                <tr *ngIf="result.let_uzivatelske_oznaceni">
                   <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                  <td>{{ result.uzivatelske_oznaceni }}</td>
+                  <td>{{ result.let_uzivatelske_oznaceni }}</td>
                 </tr>
-                <tr *ngIf="result.fotoaparat">
+                <tr *ngIf="result.let_fotoaparat">
                   <th class="app-label">{{ 'card.desc.Fotoaparát' | translate }}:</th>
-                  <td>{{ result.fotoaparat }}</td>
+                  <td>{{ result.let_fotoaparat }}</td>
                 </tr>
-                <tr *ngIf="result.typ_letounu">
+                <tr *ngIf="result.let_typ_letounu">
                   <th class="app-label">{{ 'card.desc.Typ letounu' | translate }}:</th>
-                  <td>{{ result.typ_letounu}}</td>
+                  <td>{{ result.let_typ_letounu}}</td>
                 </tr>
-                <tr *ngIf="result.pocasi">
+                <tr *ngIf="result.let_pocasi">
                   <th class="app-label">{{ 'card.desc.Počasí' | translate }}:</th>
-                  <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
+                  <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.let_pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
                 </tr>
-                <tr *ngIf="result.dohlednost">
+                <tr *ngIf="result.let_dohlednost">
                   <th class="app-label">{{ 'card.desc.Dohlednost' | translate }}:</th>
-                  <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
+                  <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.let_dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
                 </tr>
               </tbody>
             </table>
           </mat-expansion-panel>
-          <mat-expansion-panel *ngIf="result.dokument?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+          <mat-expansion-panel *ngIf="result.let_dokument?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy">
             <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
               <mat-panel-title>
                 {{ 'card.panelTitle.Související záznamy' | translate }}:

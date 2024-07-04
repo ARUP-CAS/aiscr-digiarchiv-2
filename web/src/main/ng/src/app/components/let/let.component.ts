@@ -32,10 +32,14 @@ export class LetComponent implements OnInit {
 
     const id = this.result.ident_cely ? this.result.ident_cely : this.result;
 
-    this.service.getIdAsChild([id], "let").subscribe((res: any) => {
-      this.result = res.response.docs[0];
+    if (this.result.ident_cely) {
       this.setData();
-    });
+    }
+
+    // this.service.getIdAsChild([id], "let").subscribe((res: any) => {
+    //   this.result = res.response.docs[0];
+    //   this.setData();
+    // });
 
 
   }

@@ -48,7 +48,6 @@ public class DokumentCast {
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) throws Exception {
 
-        IndexUtils.addJSONField(idoc, "dokument_cast", this);
         // idoc.addField("dokument_cast_ident_cely", ident_cely);
         IndexUtils.addVocabField(idoc, "dokument_cast_archeologicky_zaznam", archeologicky_zaznam);
         IndexUtils.addVocabField(idoc, "dokument_cast_projekt", projekt);
@@ -69,6 +68,7 @@ public class DokumentCast {
             // SolrSearcher.addFieldNonRepeat(idoc, "location_info", location_info);
             //idoc.addField("location_info", location_info);
         }
+        IndexUtils.addJSONField(idoc, "dokument_cast", this);
     }
 
     private void addLocation(SolrInputDocument idoc, String pristupnost) throws Exception {

@@ -212,11 +212,11 @@ public class SamostatnyNalez implements FedoraModel {
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(s));
+                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
             } 
             for (String sufix : prSufix) {
                 if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    IndexUtils.addFieldNonRepeat(idoc, dest + sufix, idoc.getFieldValues(orig + "_" + sufix));
                 }
             }
         }
@@ -339,7 +339,7 @@ class SnChraneneUdaje {
         IndexUtils.setSecuredJSONField(idoc, "samostatny_nalez_chranene_udaje", this);
 
         if (katastr != null) {
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "samostatny_nalez_katastr", katastr.getValue(), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
         }
 
         if (lokalizace != null) {

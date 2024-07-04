@@ -93,6 +93,7 @@ public class Komponenta {
 //      IndexUtils.addVocabField(kdoc, "komponenta_nalez_predmet_druh", np.druh);
 //      kdoc.addField("komponenta_nalez_predmet_poznamka", np.poznamka);
     }
+    kdoc.setField("komponenta_typ_nalezu", komponenta_typ_nalezu);
     
 //    for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
 //      idoc.setField(prefix + "_komponenta_" + entry.getKey(), entry.getValue().getValue());

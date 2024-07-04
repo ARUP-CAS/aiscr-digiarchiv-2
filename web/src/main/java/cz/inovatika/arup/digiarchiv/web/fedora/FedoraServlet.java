@@ -54,6 +54,9 @@ public class FedoraServlet extends HttpServlet {
               response.setContentType("application/xml;charset=UTF-8");
               out.println(json.getString("model"));
               
+//          } else if (actionToDo.equals(Actions.GET_ID_RAW)) {
+//              response.setContentType("plain/text;charset=UTF-8");
+//              out.println(json.getString("raw"));
           } else {
               out.println(json.toString(2));
           }
@@ -169,6 +172,20 @@ public class FedoraServlet extends HttpServlet {
         try {
           FedoraHarvester fh = new FedoraHarvester();
           json.put("model", fh.getId(req.getParameter("id")));
+        } catch (JSONException ex) {
+          json.put("error", ex.toString());
+        }
+        return json; 
+      }
+    },
+    GET_ID_RAW { 
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        JSONObject json = new JSONObject();
+        try {
+          FedoraHarvester fh = new FedoraHarvester();
+          String xml = FedoraUtils.requestXml("record/" + req.getParameter("id"));
+          json.put("raw", xml);
         } catch (JSONException ex) {
           json.put("error", ex.toString());
         }

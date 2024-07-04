@@ -41,14 +41,11 @@ public class DokumentSearcher implements EntitySearcher {
                 //getChilds(jo, client, request);
                 addPians(jo, client, request);
             }
-            LOGGER.log(Level.INFO, "addFavorites");
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             
-            LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            LOGGER.log(Level.INFO, "hotovo");
             return jo;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);

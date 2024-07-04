@@ -261,7 +261,7 @@
    <field name="adb_autor_revize" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_rok_revize" type="pint" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_sm5" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="adb_chranene_udaje" type="string" indexed="false" stored="true" multiValued="false" /> 
+   <field name="adb_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
    <field name="adb_chranene_udaje_uzivatelske_oznaceni_sondy" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_chranene_udaje_trat" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -276,6 +276,12 @@
    <field name="adb_chranene_udaje_vyskovy_bod_B" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="adb_chranene_udaje_vyskovy_bod_C" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="adb_chranene_udaje_vyskovy_bod_D" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
+   
+   <field name="vyskovy_bod_parent" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="vyskovy_bod_typ" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="vyskovy_bod_geom_gml" type="string_big" indexed="false" stored="true" multiValued="false" /> 
+   <field name="vyskovy_bod_geom_wkt" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
    <!-- PIAN fields -->
 <!--   <field name="pian_typ" type="string" indexed="false" stored="true" multiValued="false" /> 
@@ -324,6 +330,7 @@
    <field name="komponenta_poznamka" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="komponenta_nalez_objekt" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="komponenta_nalez_predmet" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="komponenta_typ_nalezu" type="string" indexed="true" stored="true" multiValued="false" /> 
    
    <!-- Let fields -->
    <field name="let_hodina_zacatek" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -527,13 +534,14 @@
    <field name="dok_jednotka_nazev" type="text_general" indexed="true" stored="true" multiValued="true" />
    <!-- <field name="pian_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" /> -->
    <field name="adb_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="adb_uzivatelske_oznaceni_sondy" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="adb_trat" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="adb_cislo_popisne" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="adb_parcelni_cislo" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="adb_poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_uzivatelske_oznaceni_sondy_*" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_trat_*" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_cislo_popisne_*" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_parcelni_cislo_*" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_poznamka_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="vyskovy_bod_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="f_adb_vyskovy_bod_typ_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    
    
    <field name="nalez_pocet" type="text_general" indexed="true" stored="true" multiValued="true" />

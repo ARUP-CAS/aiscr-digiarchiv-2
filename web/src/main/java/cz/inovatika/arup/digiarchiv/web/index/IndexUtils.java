@@ -196,33 +196,36 @@ public class IndexUtils {
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
             
         if (vals == null) {
-                System.out.println(parts[0]);
             return;
         }
         if (parts.length > 1) {
             
             for (Object o: vals) {
-                Object jpReturns = JsonPath.read((String)o, "$." + parts[1]);
-                if (jpReturns instanceof List) {
-                    List<String> svals = (List<String>)jpReturns;
-                    for (String val: svals) {
-                        if (secured) {
-                            for (String sufix : prSufix) {
-                                IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, val);
+                try {
+                    Object jpReturns = JsonPath.read((String)o, "$." + parts[1]);
+                    if (jpReturns instanceof List) {
+                        List<String> svals = (List<String>)jpReturns;
+                        for (String val: svals) {
+                            if (secured) {
+                                for (String sufix : prSufix) {
+                                    IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, val);
+                                }
+                            } else {
+                                addFieldNonRepeat(idoc, field, val);
                             }
-                        } else {
-                            addFieldNonRepeat(idoc, field, val);
-                        }
 
-                    }
-                } else {
-                    if (secured) {
-                        for (String sufix : prSufix) {
-                            IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, jpReturns);
                         }
                     } else {
-                        addFieldNonRepeat(idoc, field, jpReturns);
+                        if (secured) {
+                            for (String sufix : prSufix) {
+                                IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, jpReturns);
+                            }
+                        } else {
+                            addFieldNonRepeat(idoc, field, jpReturns);
+                        }
                     }
+                } catch (com.jayway.jsonpath.PathNotFoundException pnfex) {
+                    return;
                 }
                 
             }

@@ -203,6 +203,9 @@
         "3D – textura": "ddata3d",
         "3D – rekonstrukce": "ddata3d",
         "3D – dokumentace": "ddata3d",
+        "3D textura": "ddata3d",
+        "3D rekonstrukce": "ddata3d",
+        "3D dokumentace": "ddata3d",
 
         "-": "neuvedeno"
     },
@@ -259,21 +262,36 @@
                 
       "f_typ_dokumentu_posudek:dokument_posudek",
       "f_areal:dokument_cast.komponenta[*].komponenta_areal.id",
-      "f_pian_presnost:dokument_cast.neident_akce[*].pian_presnost"
+      "f_pian_presnost:dokument_cast.neident_akce[*].pian_presnost",
+      "f_pian_typ:dokument_cast.neident_akce[*].pian_typ",          
+      "f_typ_dokumentu:dokument_typ_dokumentu", "f_jazyk_dokumentu:dokument_jazyk_dokumentu",
+      "f_rada:dokument_rada",      
+      "f_organizace:dokument_organizace",
+      "f_ulozeni_originalu:dokument_ulozeni_originalu",
+      "f_material_dokumentu:dokument_material_originalu",    
+        "f_aktivita:dokument_cast.komponenta[*].komponenta_aktivita[*].id",
+        "f_typ_nalezu:dokument_cast.komponenta[*].komponenta_typ_nalezu",
+        "f_druh_nalezu:dokument_cast.komponenta[*].komponenta_nalez_objekt[*].druh.id",
+        "f_druh_nalezu:dokument_cast.komponenta[*].komponenta_nalez_predmet[*].druh.id",
+        "f_specifikace:dokument_cast.komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
+        "f_specifikace:dokument_cast.komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
+        "f_obdobi:dokument_cast.komponenta[*].komponenta_obdobi.id",
+      "f_format:dokument_extra_data.format.id", 
+      "f_tvar:dokument_tvar.id", 
+        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
+        "f_pian_presnost:pian_presnost",
+        "f_pian_typ:pian_typ",
+        "f_pian_zm10:pian_chranene_udaje.zm10",
+        "f_organizace:akce_organizace",
+        "f_zeme:dokument_extra_data.zeme.id"
     ],
     "facets2": [ 
         "f_vedouci:dokument_cast_neident_akce_vedouci,dokument_cast_akce_hlavni_vedouci",
       "f_okres",
       "f_katastr",
-      "pristupnost", "f_tvar", "dokument_kategorie_dokumentu", "f_rada",
-      "f_aktivita",
+      "dokument_kategorie_dokumentu", 
       "f_pian_zm10", "f_typ_vyzkumu", 
-      "f_typ_nalezu", "f_ulozeni_originalu",
-      "f_pian_typ", "f_material_dokumentu",
-      "f_druh_nalezu", "f_format", "f_organizace",
-      "f_specifikace",
-      "f_obdobi", "f_typ_dokumentu", "f_jazyk_dokumentu",
-      "f_kategorie", "f_zeme"
+      "f_kategorie"
     ],
     "full_text": [
         "ident_cely",
@@ -522,7 +540,9 @@
       "f_okres:samostatny_nalez_okres",
       "f_katastr:samostatny_nalez_chranene_udaje_katastr", 
       "f_druh_nalezu:samostatny_nalez_druh_nalezu",
-      "f_specifikace:samostatny_nalez_specifikace"
+      "f_specifikace:samostatny_nalez_specifikace",
+      "f_nalezce:samostatny_nalez_nalezce",
+      "f_nalezove_okolnosti:samostatny_nalez_okolnosti"
     ],
     "full_text": [
         "samostatny_nalez_evidencni_cislo",

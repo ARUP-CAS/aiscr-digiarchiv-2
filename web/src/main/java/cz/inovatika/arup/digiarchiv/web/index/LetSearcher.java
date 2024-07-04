@@ -49,8 +49,9 @@ public class LetSearcher implements EntitySearcher{
       if (LoginServlet.userId(request) != null) {
         SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
       }
-      String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
-      SolrSearcher.addChildField(client, doc, "child_dokument", "dokument", fields);
+      DokumentSearcher ds = new DokumentSearcher("dokument");
+      String dfs = String.join(",", ds.getChildSearchFields("D"));
+      SolrSearcher.addChildField(client, doc, "let_dokument", "dokument", dfs);
       
     }
   }
