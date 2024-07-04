@@ -71,10 +71,6 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.home;
     }
 
-    public get poleToHeslar() {
-        return this.config.poleToHeslar;
-    }
-
     public get sorts() {
         return this.config.sorts;
     }

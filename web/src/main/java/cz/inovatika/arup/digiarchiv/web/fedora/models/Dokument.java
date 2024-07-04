@@ -181,8 +181,11 @@ public class Dokument implements FedoraModel {
                 SolrInputDocument djdoc = s.createSolrDoc();
                 idocs.add(djdoc);
                 IndexUtils.addJSONField(idoc, "soubor", s);
-                // idoc.addField("soubor_nazev", s.nazev);
+                idoc.addField("soubor_nazev", s.nazev);
                 idoc.addField("soubor_filepath", s.path);
+                idoc.addField("soubor_rozsah", s.rozsah);
+                idoc.addField("soubor_size_bytes", s.size_mb);
+    
             }
             if (!idocs.isEmpty()) {
                 IndexUtils.getClientBin().add("soubor", idocs, 10);
@@ -193,7 +196,7 @@ public class Dokument implements FedoraModel {
 
         for (Tvar tv : dokument_tvar) {
             IndexUtils.addJSONField(idoc, "dokument_tvar", tv);
-            //idoc.addField("tvar_poznamka", tv.poznamka);
+            idoc.addField("tvar_poznamka", tv.poznamka);
             //IndexUtils.addVocabField(idoc, "tvar_tvar", tv.tvar);
         }
 

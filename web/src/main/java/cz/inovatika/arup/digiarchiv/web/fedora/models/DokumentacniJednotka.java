@@ -82,10 +82,13 @@ public class DokumentacniJednotka {
     try {
       ObjectMapper objectMapper = new ObjectMapper();
       idoc.addField("dokumentacni_jednotka", objectMapper.writeValueAsString(this));
-      // IndexUtils.addFieldNonRepeat(idoc, "dokumentacni_jednotka", objectMapper.writeValueAsString(this));
     } catch (JsonProcessingException ex) {
       Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
     }
+    
+    IndexUtils.addFieldNonRepeat(idoc, "dj_ident_cely", ident_cely);
+    IndexUtils.addFieldNonRepeat(idoc, "dj_nazev", dj_nazev);
+    IndexUtils.addFieldNonRepeat(idoc, "dj_negativni_jednotka", dj_negativni_jednotka);
     for (Komponenta k : dj_komponenta) {
       k.fillSolrFields(idoc, "dokumentacni_jednotka");
     }

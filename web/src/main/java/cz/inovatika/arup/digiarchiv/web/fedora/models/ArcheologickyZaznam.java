@@ -99,6 +99,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
         for (ExtOdkaz v : az_ext_odkaz) {
             IndexUtils.addJSONField(idoc, "az_ext_odkaz", v);
+            IndexUtils.addRefField(idoc, "az_ext_zdroj", v.ext_zdroj);
         }
 
         IndexUtils.setDateStamp(idoc, ident_cely);
@@ -114,6 +115,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                 // choose dokumentacni_jednotka fields to put in idoc for akce/lokalita
                 idoc.addField("az_dj", dj.ident_cely);
                 idoc.addField("az_dj_pian", djdoc.getFieldValue("dj_pian"));
+                idoc.addField("pian_ident_cely", djdoc.getFieldValue("dj_pian"));
                 idoc.addField("az_dj_adb", djdoc.getFieldValue("dj_adb"));
 //                idoc.addField("az_dj_nazev", djdoc.getFieldValue("dj_nazev"));
 //

@@ -127,13 +127,29 @@ public class ExtraData {
 //        } catch (JsonProcessingException ex) {
 //            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-//        IndexUtils.addVocabField(idoc, "extra_data_format", format);
-//        IndexUtils.addVocabField(idoc, "extra_data_zachovalost", zachovalost);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_cislo_objektu", cislo_objektu);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_meritko", meritko);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_vyska", vyska);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_sirka", sirka);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_pocet_variant_originalu", pocet_variant_originalu);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_odkaz", odkaz);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_datum_vzniku", datum_vzniku);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_udalost", udalost);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_region", region);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_rok_od", rok_od);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_rok_do", rok_do);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_duveryhodnost", duveryhodnost);
+        
+        
 //        IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
 //        IndexUtils.addVocabField(idoc, "extra_data_udalost_typ", udalost_typ);
 //        IndexUtils.addVocabField(idoc, "extra_data_zeme", zeme);
 //        IndexUtils.addJSONField(idoc, "extra_data_geom_gml", geom_gml);
 //        IndexUtils.addJSONField(idoc, "extra_data_geom_wkt", geom_wkt);
+        
+        
+    
+    
         if (geom_wkt != null) {
 
             String wktStr = geom_wkt.getValue();

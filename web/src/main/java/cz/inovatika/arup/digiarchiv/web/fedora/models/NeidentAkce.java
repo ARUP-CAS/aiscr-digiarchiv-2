@@ -81,9 +81,13 @@ public class NeidentAkce {
         
         //idoc.addField("location_info", li.toString());
         SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
-
-//        for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
-//            idoc.setField("dokument_cast_neident_akce_" + entry.getKey(), entry.getValue().getValue());
-//        }
+        
+        idoc.addField("neident_akce_rok_zahajeni", rok_zahajeni);
+        idoc.addField("neident_akce_rok_ukonceni", rok_ukonceni);
+        idoc.addField("neident_akce_lokalizace", lokalizace);
+        idoc.addField("neident_akce_popis", popis);
+        idoc.addField("neident_akce_poznamka", poznamka);
+        idoc.addField("neident_akce_pian", pian);
+        
     }
 }

@@ -80,24 +80,23 @@ public class Komponenta {
     }
     for (NalezObjekt no : komponenta_nalez_objekt) {
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_objekt", no);
-//      IndexUtils.addVocabField(kdoc, "komponenta_nalez_objekt_specifikace", no.specifikace);
-//      IndexUtils.addVocabField(kdoc, "komponenta_nalez_objekt_druh", no.druh);
-//      kdoc.addField("komponenta_nalez_objekt_poznamka", no.poznamka);
+        idoc.addField("nalez_dokumentu_pocet", no.pocet);
+        idoc.addField("nalez_dokumentu_poznamka", no.poznamka);
     }
     if (!komponenta_nalez_predmet.isEmpty()) {
       komponenta_typ_nalezu = "predmet";
     }
     for (NalezPredmet np : komponenta_nalez_predmet) {
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_predmet", np);
-//      IndexUtils.addVocabField(kdoc, "komponenta_nalez_predmet_specifikace", np.specifikace);
-//      IndexUtils.addVocabField(kdoc, "komponenta_nalez_predmet_druh", np.druh);
-//      kdoc.addField("komponenta_nalez_predmet_poznamka", np.poznamka);
+        idoc.addField("nalez_dokumentu_pocet", np.pocet);
+        idoc.addField("nalez_dokumentu_poznamka", np.poznamka);
     }
     kdoc.setField("komponenta_typ_nalezu", komponenta_typ_nalezu);
-    
-//    for (Map.Entry<String, SolrInputField> entry : kdoc.entrySet()) {
-//      idoc.setField(prefix + "_komponenta_" + entry.getKey(), entry.getValue().getValue());
-//    }
+
+    idoc.addField("komponenta_dokument_ident_cely", ident_cely);
+    idoc.addField("komponenta_dokument_jistota", komponenta_jistota);
+    idoc.addField("komponenta_dokument_presna_datace", komponenta_presna_datace);
+    idoc.addField("komponenta_dokument_poznamka", komponenta_poznamka);
     
     try {
         IndexUtils.getClientBin().add("entities", kdoc, 10);
