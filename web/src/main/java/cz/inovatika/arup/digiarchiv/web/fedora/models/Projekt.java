@@ -156,7 +156,7 @@ public class Projekt implements FedoraModel {
             String ukonceni = "*";
             if (projekt_datum_ukonceni != null) {
                 IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_provedeni_do", projekt_datum_ukonceni);
-                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_ukonceni_v", projekt_datum_ukonceni);
+                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_ukonceni", projekt_datum_ukonceni);
                 if (!projekt_datum_ukonceni.before(projekt_datum_zahajeni)) {
                     ukonceni = projekt_datum_ukonceni.toInstant().toString();
                 }

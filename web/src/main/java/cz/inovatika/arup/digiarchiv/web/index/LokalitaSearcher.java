@@ -110,7 +110,10 @@ public class LokalitaSearcher implements EntitySearcher {
                 if (LoginServlet.userId(request) != null) {
                     SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
                 }
-                String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
+                DokumentSearcher as = new DokumentSearcher("dokument"); 
+                String fields = String.join(",", as.getChildSearchFields("D"));
+                
+                //String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
                 SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
             }
         } else {

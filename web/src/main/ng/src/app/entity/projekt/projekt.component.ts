@@ -69,23 +69,6 @@ export class ProjektComponent implements OnInit, OnChanges {
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
-  // getAkce() {
-  //   this.result.akce = [];
-  //   console.log(this.result.archeologicky_zaznam,this.hasRights)
-  //   if (this.result.archeologicky_zaznam && this.hasRights) {
-  //     for (let i = 0; i < this.result.archeologicky_zaznam.length; i=i+10) {
-  //       const ids = this.result.archeologicky_zaznam.slice(i, i+10);
-  //       this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-  //         this.result.akce = this.result.akce.concat(res.response.docs);
-  //         this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-  //         this.state.documentProgress = (this.result.akce.length + this.result.samostatny_nalez.length) / this.numChildren *100;
-  //         this.state.loading = (this.result.akce.length + this.result.samostatny_nalez.length) < this.numChildren;
-
-  //       });
-  //     }
-  //   }
-  // }
-
   getSamostatnyNalez() {
     this.result.valid_samostatny_nalez = [];
     if (this.result.projekt_samostatny_nalez) {

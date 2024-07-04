@@ -353,7 +353,7 @@ public class SearchServlet extends HttpServlet {
                     String entity = "" + request.getParameter("entity");
                     EntitySearcher searcher = SearchUtils.getSearcher(entity);
                     if (searcher == null) {
-                        searcher = new DokumentSearcher();
+                        return new JSONObject().put("error", "unrecognized entity").toString();
                     }
                     JSONObject jo = searcher.search(request);
                     // searcher.checkRelations(jo, IndexUtils.getClientNoOp(), request);
@@ -383,7 +383,7 @@ public class SearchServlet extends HttpServlet {
                 String entity = "" + request.getParameter("entity");
                 EntitySearcher searcher = SearchUtils.getSearcher(entity);
                 if (searcher == null) {
-                    searcher = new DokumentSearcher();
+                    return new JSONObject().put("error", "unrecognized entity").toString();
                 }
                 return searcher.export(request);
             }

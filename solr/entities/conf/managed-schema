@@ -226,10 +226,13 @@
    <field name="projekt_datum_ukonceni" type="rdate" indexed="true" stored="true" />
    <field name="projekt_datum_ukonceni_od" type="pdate" indexed="true" stored="true" />
    <field name="projekt_datum_ukonceni_do" type="pdate" indexed="true" stored="true" />
+   <field name="projekt_datum_provedeni" type="rdate" indexed="true" stored="true" />
+   <field name="projekt_datum_provedeni_od" type="pdate" indexed="true" stored="true" />
+   <field name="projekt_datum_provedeni_do" type="pdate" indexed="true" stored="true" />
    
    <field name="projekt_termin_odevzdani_nz" type="pdate" indexed="true" stored="true" />
    
-   <field name="projekt_chranene_udaje" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_chranene_udaje" type="string" indexed="false" stored="true" multiValued="false" /> 
    <field name="projekt_oznamovatel" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_archeologicky_zaznam" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="projekt_samostatny_nalez" type="string" indexed="true" stored="true" multiValued="true" /> 
@@ -258,7 +261,7 @@
    <field name="adb_autor_revize" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_rok_revize" type="pint" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_sm5" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="adb_chranene_udaje" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="adb_chranene_udaje" type="string" indexed="false" stored="true" multiValued="false" /> 
    
    <field name="adb_chranene_udaje_uzivatelske_oznaceni_sondy" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_chranene_udaje_trat" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -266,7 +269,9 @@
    <field name="adb_chranene_udaje_parcelni_cislo" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_chranene_udaje_poznamka" type="string" indexed="true" stored="true" multiValued="false" /> 
    
+   <!--
    <field name="adb_chranene_udaje_vyskovy_bod" type="string" indexed="true" stored="true" multiValued="true" /> 
+   -->
    <field name="adb_chranene_udaje_vyskovy_bod_A" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="adb_chranene_udaje_vyskovy_bod_B" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="adb_chranene_udaje_vyskovy_bod_C" type="string" indexed="true" stored="true" multiValued="true" /> 
@@ -290,7 +295,9 @@
    
    <field name="f_pian_typ" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_pian_presnost" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <!--
    <field name="f_pian_chranene_udaje_zm10" type="lowercase_cs" indexed="false" stored="true" multiValued="true" /> 
+   -->
    <field name="f_pian_zm10_A" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_pian_zm10_B" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_pian_zm10_C" type="string" indexed="true" stored="true" multiValued="true" /> 
@@ -540,9 +547,9 @@
    <field name="text_all_D" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    <field name="text_all_E" type="text_general" indexed="true" stored="false" multiValued="true" /> 
   
-   <!-- secured fields -->
+   <!-- secured fields 
    <field name="chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false"/>
-   
+   -->
    <!-- For all other fields -->
    <!--<dynamicField name="*" type="lowercase_cs" multiValued="false"/>-->
    

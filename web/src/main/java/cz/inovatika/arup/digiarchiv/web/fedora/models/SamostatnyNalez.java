@@ -227,14 +227,16 @@ public class SamostatnyNalez implements FedoraModel {
 
         for (Object f : indexFields) {
             String s = (String) f;
-            String dest = s.split(":")[0];
-            String orig = s.split(":")[1];
-            if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-            } 
+            
+            if (idoc.containsKey(s)) {
+                for (String sufix : SolrSearcher.prSufixAll) {
+                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                }
+            }
+            
             for (String sufix : prSufix) {
-                if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
+                if (idoc.containsKey(s + "_" + sufix)) {
+                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
                 }
             }
         }

@@ -67,8 +67,8 @@
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.dokument?.length > 0">
-        {{'card.desc.Počet dokumentů' | translate}}: <strong>{{ result.dokument.length }}</strong>
+      <ng-container *ngIf="result.az_dokument?.length > 0">
+        {{'card.desc.Počet dokumentů' | translate}}: <strong>{{ result.az_dokument.length }}</strong>
         <span class="app-pipe"></span>
       </ng-container>
     </div>
@@ -116,7 +116,7 @@
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.dokument?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.az_dokument?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:

@@ -45,7 +45,7 @@ public class AkceSearcher implements EntitySearcher {
         String[] fs = ps.getSearchFields(pristupnost);
         String fields = String.join(",", fs);
 
-        DokumentSearcher ds = new DokumentSearcher();
+        DokumentSearcher ds = new DokumentSearcher("dokument");
         String dfs = String.join(",", ds.getChildSearchFields(pristupnost));
 
         ProjektSearcher prs = new ProjektSearcher();

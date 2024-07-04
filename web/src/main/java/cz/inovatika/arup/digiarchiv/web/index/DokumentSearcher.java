@@ -23,7 +23,11 @@ public class DokumentSearcher implements EntitySearcher {
 
     public static final Logger LOGGER = Logger.getLogger(DokumentSearcher.class.getName());
 
-    final String ENTITY = "dokument";
+    String ENTITY = "dokument";
+    
+    public DokumentSearcher(String entity) {
+        this.ENTITY = entity;
+    }
 
     @Override
     public JSONObject search(HttpServletRequest request) {
@@ -180,7 +184,17 @@ public class DokumentSearcher implements EntitySearcher {
 
     @Override
     public String[] getChildSearchFields(String pristupnost) {
-        return getSearchFields(pristupnost);
+        
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").toList();
+
+        fields.addAll(headerFields);
+
+        String[] ret = fields.toArray(new String[0]);
+        
+        return ret;
+        
+        // return getSearchFields(pristupnost);
     }
 
     @Override

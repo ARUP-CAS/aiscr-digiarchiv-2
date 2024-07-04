@@ -134,12 +134,12 @@
           
           <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
             [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
-            <app-akce *cdkVirtualFor="let akce of result.projekt_archeologicky_zaznam" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-samostatny-nalez *ngFor="let sn of result.valid_samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
           </cdk-virtual-scroll-viewport>
           
           <ng-container *ngIf="vsSize > 0 && state.printing" >
-            <app-akce *ngFor="let akce of result.projekt_archeologicky_zaznam" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-samostatny-nalez *ngFor="let sn of result.valid_samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
           </ng-container>
           

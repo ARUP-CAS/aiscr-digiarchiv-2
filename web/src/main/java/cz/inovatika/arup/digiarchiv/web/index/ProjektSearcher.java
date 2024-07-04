@@ -145,11 +145,14 @@ public class ProjektSearcher implements EntitySearcher {
             if (LoginServlet.userId(request) != null) {
                 SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
             }
-            String fields = "ident_cely,pristupnost,entity,"
-                    + "katastr,"
-                    + "okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,"
-                    + "organizace.dalsi_katastry,lokalizace,pian:[json]";
-            SolrSearcher.addChildFieldByEntity(client, doc, "archeologicky_zaznam", fields);
+            
+            AkceSearcher as = new AkceSearcher(); 
+            String fields = String.join(",", as.getSearchFields(pristupnost));
+//            String fields = "ident_cely,pristupnost,entity,"
+//                    + "katastr,"
+//                    + "okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,"
+//                    + "organizace.dalsi_katastry,lokalizace,pian:[json]";
+            SolrSearcher.addChildFieldByEntity(client, doc, "projekt_archeologicky_zaznam", fields);
 
             fields = "ident_cely,pristupnost,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
             SolrSearcher.addChildField(client, doc, "samostatny_nalez", "valid_samostatny_nalez", fields, "searchable:true");

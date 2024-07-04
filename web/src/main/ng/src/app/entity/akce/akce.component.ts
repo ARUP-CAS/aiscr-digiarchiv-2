@@ -21,7 +21,6 @@ export class AkceComponent implements OnInit, OnChanges {
   @Input() mapDetail: boolean = false;
   @Input() isDocumentDialogOpen: boolean;
   @Input() inDocument = false;
-  hasRights: boolean;
   hasDetail: boolean;
   bibTex: string;
 
@@ -42,7 +41,6 @@ export class AkceComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const sd = new Date(this.result.specifikace_data);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =

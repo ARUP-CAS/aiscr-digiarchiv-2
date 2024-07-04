@@ -249,47 +249,7 @@
               </ng-container>
 
               <mat-accordion multi="true">
-                <mat-expansion-panel #panel *ngFor="let kd of result.komponenta" [expanded]="true" hideToggle class="app-panel-inner">
-                  <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
-                    <mat-panel-title>
-                      <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                      {{ 'card.panelTitle.Komponenta' | translate }}&#160;<ng-container *ngIf="kd.ident_cely"><a [routerLink]="'/id/' + kd.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ kd.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
-                      <ng-container *ngIf="kd.obdobi">
-                        <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="kd.obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
-                      </ng-container>
-                      <ng-container *ngIf="!kd.jistota || kd.presna_datace">(<ng-container *ngIf="!kd.jistota">{{ 'komponenta_dokument_jistota_false' | translate }}
-                        <ng-container *ngIf="!result.jistota && result.presna_datace">;&#160;</ng-container>
-                        </ng-container>{{ kd.presna_datace }})</ng-container>
-                      <ng-container *ngIf="kd.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="kd.areal.id" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
-                      <ng-container *ngIf="kd.aktivita?.length > 0">
-                        &#160;(<ng-container *ngFor="let ak of kd.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak.id" [heslar]="'f_aktivita'"></app-inline-filter>
-                        <span *ngIf="!last">,&#160; </span></ng-container>)
-                      </ng-container>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <ng-container *ngIf="kd.poznamka">{{ kd.poznamka }}</ng-container>
-                  <mat-expansion-panel #panel *ngIf="kd.nalez_objekt?.length> 0 ||  kd.nalez_predmet?.length> 0" [expanded]="true" hideToggle class="app-panel-inner">
-                    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
-                      <mat-panel-title>
-                        <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                        {{ 'card.panelTitle.Nálezy' | translate }}:
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <ul class="app-list-inside">
-                        <li *ngFor="let nalez_objekt of kd.nalez_objekt">
-                          <app-nalez [result]="nalez_objekt"></app-nalez>
-                        </li>
-                        <li *ngFor="let nalez_predmet of kd.nalez_predmet">
-                          <app-nalez [result]="nalez_predmet"></app-nalez>
-                        </li>
-                      <!-- <ng-container *ngIf="!kd.nalez_dokumentu.length">
-                        <li>
-                          <app-nalez [result]="kd.nalez_dokumentu"></app-nalez>
-                        </li>
-                      </ng-container> -->
-                    </ul>
-                  </mat-expansion-panel>
-                </mat-expansion-panel>
+                <app-komponenta *ngFor="let kd of dokument_cast.komponenta"  [result]="kd"></app-komponenta>
                 <mat-expansion-panel #panel *ngIf="dokument_cast.neident_akce" [expanded]="true" hideToggle class="app-panel-inner">
                   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                     <mat-panel-title>

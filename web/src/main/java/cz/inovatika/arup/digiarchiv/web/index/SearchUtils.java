@@ -243,7 +243,8 @@ public class SearchUtils {
                 searcher = new SamostatnyNalezSearcher();
                 break;
             case "knihovna_3d":
-                searcher = new Library3DSearcher();
+                // searcher = new Library3DSearcher();
+                searcher = new DokumentSearcher("knihovna_3d");
                 break;
             case "let":
                 searcher = new LetSearcher();
@@ -261,7 +262,7 @@ public class SearchUtils {
                 searcher = new DokJednotkaSearcher();
                 break;
             case "dokument":
-                searcher = new DokumentSearcher();
+                searcher = new DokumentSearcher("dokument");
                 break;
 //            case "komponenta":
 //                searcher = new KomponentaSearcher();
