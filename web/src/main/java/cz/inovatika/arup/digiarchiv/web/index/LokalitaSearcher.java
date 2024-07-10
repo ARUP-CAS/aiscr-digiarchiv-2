@@ -37,8 +37,8 @@ public class LokalitaSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            doc.put("pian", doc.opt("pian_"+pristupnost));
-            doc.remove("pian_"+pristupnost);
+            doc.put("pian", doc.opt("pian_" + pristupnost));
+            doc.remove("pian_" + pristupnost);
             if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
                 if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
                     doc.remove("az_chranene_udaje");
@@ -111,9 +111,9 @@ public class LokalitaSearcher implements EntitySearcher {
                 if (LoginServlet.userId(request) != null) {
                     SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
                 }
-                DokumentSearcher as = new DokumentSearcher("dokument"); 
+                DokumentSearcher as = new DokumentSearcher("dokument");
                 String fields = String.join(",", as.getChildSearchFields("D"));
-                
+
                 //String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
                 SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
             }
@@ -126,7 +126,7 @@ public class LokalitaSearcher implements EntitySearcher {
             SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
         }
     }
-    
+
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -156,7 +156,8 @@ public class LokalitaSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try {Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -177,7 +178,8 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");
@@ -189,7 +191,7 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        
+
         List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
         List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
         List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
@@ -237,7 +239,7 @@ public class LokalitaSearcher implements EntitySearcher {
 
         if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
             query.setFields("ident_cely,entity,nazev,organizace,pristupnost,pian_id,pian:[json],okres,child_dokument",
-            "katastr:f_katastr_" + pristupnost,
+                    "katastr:f_katastr_" + pristupnost,
                     "loc_rpt:loc_rpt_" + pristupnost);
         } else {
             query.setFields(getSearchFields(pristupnost));

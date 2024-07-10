@@ -86,25 +86,25 @@ public class SearchUtils {
         }
     }
 
-    public static JSONObject json(SolrQuery query, String coreUrl) {
-        query.set("wt", "json");
-        query.setRequestHandler("/search");
-        String jsonResponse;
-        try (Http2SolrClient client = new Http2SolrClient.Builder(coreUrl).build()) {
-            QueryRequest qreq = new QueryRequest(query);
-            // qreq.setPath();
-            NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-            dontMessWithSolr.setWriterType("json");
-            client.setParser(dontMessWithSolr);
-            NamedList<Object> qresp = client.request(qreq);
-            jsonResponse = (String) qresp.get("response");
-            client.close();
-            return new JSONObject(jsonResponse);
-        } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return new JSONObject().put("error", ex);
-        }
-    }
+//    public static JSONObject json(SolrQuery query, String coreUrl) {
+//        query.set("wt", "json");
+//        query.setRequestHandler("/search");
+//        String jsonResponse;
+//        try (Http2SolrClient client = new Http2SolrClient.Builder(coreUrl).build()) {
+//            QueryRequest qreq = new QueryRequest(query);
+//            // qreq.setPath();
+//            NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
+//            dontMessWithSolr.setWriterType("json");
+//            client.setParser(dontMessWithSolr);
+//            NamedList<Object> qresp = client.request(qreq);
+//            jsonResponse = (String) qresp.get("response");
+//            client.close();
+//            return new JSONObject(jsonResponse);
+//        } catch (SolrServerException | IOException ex) {
+//            LOGGER.log(Level.SEVERE, null, ex);
+//            return new JSONObject().put("error", ex);
+//        }
+//    }
 
     public static SolrDocumentList docs(SolrQuery query, String coreUrl) {
         query.set("wt", "json");

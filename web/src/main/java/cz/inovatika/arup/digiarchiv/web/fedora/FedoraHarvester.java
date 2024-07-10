@@ -156,12 +156,12 @@ public class FedoraHarvester {
                 s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
                 json = new JSONObject(s);
                 records = json.getJSONArray("items");
-                checkLists(0, indexed, "update");
+                checkLists(0, indexed, "update", records.length());
             }
 
             ret.put("updated", indexed);
 
-            checkLists(0, indexed, "update");
+            checkLists(0, indexed, "update", indexed);
             ret.put("items", json);
             solr.commit("oai");
             solr.commit("entities");
@@ -304,7 +304,7 @@ public class FedoraHarvester {
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             processRecord(id);
-            checkLists(0, 1, id);
+            checkLists(0, 1, id, 1);
             solr.close();
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
@@ -407,6 +407,7 @@ public class FedoraHarvester {
 
         if (json.has(CONTAINS)) {
             JSONArray records = json.getJSONArray(CONTAINS);
+            int totalInModel = records.length();
 
             for (int i = offset; i < records.length(); i++) {
                 String id = records.getJSONObject(i).getString("@id");
@@ -418,10 +419,10 @@ public class FedoraHarvester {
                 }
 
                 ret.put(model, indexed++);
-                checkLists(batchSize, indexed, model);
+                checkLists(batchSize, indexed, model, totalInModel);
             }
 
-            checkLists(0, indexed, model);
+            checkLists(0, indexed, model, totalInModel);
             LOGGER.log(Level.INFO, "Index model {0} finished", model);
         }
     }
@@ -560,12 +561,12 @@ public class FedoraHarvester {
         return idoc;
     }
 
-    private void checkLists(int size, int indexed, String model) throws SolrServerException, IOException {
+    private void checkLists(int size, int indexed, String model, int totalInModel) throws SolrServerException, IOException {
         if (idocsEntities.size() > size) {
             solr.add("entities", idocsEntities);
             solr.commit("entities");
             idocsEntities.clear();
-            LOGGER.log(Level.INFO, "Indexed {0} -> {1}", new Object[]{indexed, model});
+            LOGGER.log(Level.INFO, "Indexed {0} -> {1} of (2)", new Object[]{indexed, model, totalInModel});
         }
         if (idocsOAI.size() > size) {
             solr.add("oai", idocsOAI);

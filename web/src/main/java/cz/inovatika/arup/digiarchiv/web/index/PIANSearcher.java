@@ -64,7 +64,7 @@ public class PIANSearcher implements EntitySearcher {
                 JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < cdjs.length(); j++) {
-                    JSONObject cdj = cdjs.getJSONObject(j); 
+                    JSONObject cdj = cdjs.getJSONObject(j);
                     doc.append("dokumentacni_jednotka", cdj);
                 }
             } catch (SolrServerException | IOException ex) {
@@ -76,7 +76,8 @@ public class PIANSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery()
                     .setFacet(true);
             setQuery(request, query);
@@ -101,7 +102,7 @@ public class PIANSearcher implements EntitySearcher {
             "loc_rpt:loc_rpt_" + pristupnost,
             "loc:loc_" + pristupnost};
     }
-    
+
     public String[] getMapaSearchFields(String pristupnost) {
 
         return new String[]{"ident_cely,entity,stav,typ,presnost,geom_system,geom_updated_at,geom_sjtsk_updated_at,pristupnost",
@@ -129,7 +130,8 @@ public class PIANSearcher implements EntitySearcher {
     public JSONObject getMapPians(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         // Menime entity
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             String entity = "" + request.getParameter("entity");
             if (entity == null || "null".equals(entity)) {
@@ -164,7 +166,8 @@ public class PIANSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");

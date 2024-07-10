@@ -82,21 +82,18 @@ public class ProjektSearcher implements EntitySearcher {
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
             JSONArray samostatny_nalez = new JSONArray();
-            
-            
+
             if (doc.has("projekt_samostatny_nalez")) {
 //                SolrQuery query = new SolrQuery("*")
 //                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
 //                        .setRows(10000)
 //                        .setFields("ident_cely");
-                
-                
-            SolrQuery query = new SolrQuery("*")
-                    .setRows(10000)
-                    .addFilterQuery("entity:samostatny_nalez")
-                    .addFilterQuery("samostatny_nalez_projekt:\"" + doc.getString("ident_cely") + "\"");
-            
-            
+
+                SolrQuery query = new SolrQuery("*")
+                        .setRows(10000)
+                        .addFilterQuery("entity:samostatny_nalez")
+                        .addFilterQuery("samostatny_nalez_projekt:\"" + doc.getString("ident_cely") + "\"");
+
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {
@@ -155,8 +152,8 @@ public class ProjektSearcher implements EntitySearcher {
             if (LoginServlet.userId(request) != null) {
                 SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
             }
-            
-            AkceSearcher as = new AkceSearcher(); 
+
+            AkceSearcher as = new AkceSearcher();
             String fields = String.join(",", as.getSearchFields(pristupnost));
 //            String fields = "ident_cely,pristupnost,entity,"
 //                    + "katastr,"
@@ -183,7 +180,8 @@ public class ProjektSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -216,8 +214,7 @@ public class ProjektSearcher implements EntitySearcher {
                 jaSn.put(ja2.getJSONObject(j).getString("ident_cely"));
             }
             doc.put("projekt_samostatny_nalez", jaSn);
-            
-            
+
             query = new SolrQuery("*")
                     .setRows(10000)
                     .addFilterQuery("akce_projekt:\"" + doc.getString("ident_cely") + "\"");
@@ -228,14 +225,14 @@ public class ProjektSearcher implements EntitySearcher {
                 jaAz.put(jaaz.getJSONObject(j).getString("ident_cely"));
             }
             doc.put("projekt_archeologicky_zaznam", jaAz);
-            
-            
+
         }
     }
 
     @Override
     public String export(HttpServletRequest request) {
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");
@@ -247,20 +244,20 @@ public class ProjektSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        
+
         List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
         List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("projekt").getJSONArray("header").toList();
         List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("projekt").getJSONArray("detail").toList();
 
         fields.addAll(headerFields);
         fields.addAll(detailFields);
-        
+
         fields.add("projekt_hlavni_katastr:projekt_hlavni_katastr_" + pristupnost);
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
 
         String[] ret = fields.toArray(new String[0]);
-        
+
         return ret;
         // return new String[]{"*,pian:[json]", "chranene_udaje:[json]", "okres", "hlavni_katastr:hlavni_katastr_" + pristupnost, "katastr:f_katastr_" + pristupnost, "f_okres:okres"};
     }
@@ -293,7 +290,7 @@ public class ProjektSearcher implements EntitySearcher {
         fields.add("projekt_hlavni_katastr:projekt_hlavni_katastr_" + pristupnost);
 
         String[] ret = fields.toArray(new String[0]);
-        
+
         return ret;
     }
 }

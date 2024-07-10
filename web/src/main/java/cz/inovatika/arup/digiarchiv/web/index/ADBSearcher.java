@@ -89,7 +89,8 @@ public class ADBSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -105,7 +106,8 @@ public class ADBSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");

@@ -89,28 +89,7 @@
    <field name="dokument_cast_lokalita" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_neident_akce" type="string_big" indexed="false" stored="true" multiValued="false"  /> 
    <field name="dokument_cast_projekt" type="text_general" indexed="true" stored="true" multiValued="true" />
-<!--      
-   <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
-   <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
-   <field name="autor" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
-   <field name="typ_dokumentu_posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
-   <field name="posudek" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
-   
-   <field name="extra_data" type="string_big" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   
-   <field name="tvar" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="jednotka_dokumentu" type="string" indexed="false" stored="true" multiValued="true" docValues="false" />   
-<field name="pian" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="pian_A" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="pian_B" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="pian_C" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="pian_D" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="odkaz" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="komponenta_dokument" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="komponenta" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
-   <field name="nalez_dokumentu" type="string" indexed="false" stored="true"  multiValued="true" />
-   <field name="neident_akce" type="string" indexed="false" stored="true"  multiValued="true" />
--->
+
   
    <!-- Archeologicky zaznam, akce and lokalita fields -->
    <field name="az_okres" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -125,26 +104,6 @@
    
    
 <!--   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="az_dj_komponenta_obdobi" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="az_dj_komponenta_presna_datace" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> 
-                idoc.addField("", djdoc.getFieldValue("komponenta_obdobi"));
-                idoc.addField("", djdoc.getFieldValue("komponenta_presna_datace"));
-                idoc.addField("az_dj_komponenta_areal", djdoc.getFieldValue("komponenta_areal"));
-                idoc.addField("az_dj_komponenta_aktivita", djdoc.getFieldValue("komponenta_aktivita"));
-
-                idoc.addField("az_dj_komponenta_typ_nalezu", djdoc.getFieldValue("komponenta_typ_nalezu"));
-                idoc.addField("az_dj_komponenta_nalez_objekt_druh", djdoc.getFieldValue("komponenta_nalez_objekt_druh"));
-                idoc.addField("az_dj_komponenta_nalez_objekt_specifikace", djdoc.getFieldValue("komponenta_nalez_objekt_specifikace"));
-                idoc.addField("az_dj_komponenta_nalez_predmet_druh", djdoc.getFieldValue("komponenta_nalez_predmet_druh"));
-                idoc.addField("az_dj_komponenta_nalez_predmet_specifikace", djdoc.getFieldValue("komponenta_nalez_predmet_specifikace"));
-
-                IndexUtils.addFieldNonRepeat(idoc, "az_dj_typ", djdoc.getFieldValue("typ"));
-                IndexUtils.addFieldNonRepeat(idoc, "f_typ_vyzkumu", djdoc.getFieldValue("typ"));-->
-   
 <!--   <field name="az_akce" type="string" indexed="false" stored="true" multiValued="true" /> -->
    <field name="akce_projekt" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    <field name="akce_typ" type="string" indexed="true" stored="true" multiValued="false" /> 
