@@ -235,7 +235,8 @@
       "dokument_cast_neident_akce_katastr",
       "archeologicky_zaznam_okres",
       "projekt_okres",
-      "dokument_cast_neident_akce_okres","dokument_cast_akce", "dokument_cast_lokalita"
+      "dokument_cast_neident_akce_okres","dokument_cast_akce", "dokument_cast_lokalita",
+      "soubor_filepath"
     ],
     "detail": [
       "dokument_jazyk_dokumentu",
@@ -477,7 +478,7 @@
         "projekt_archeologicky_zaznam",
         "projekt_dokument",
         "projekt_samostatny_nalez"
-            ],
+    ],
     "detail": [
                 "projekt_planovane_zahajeni",
                 "projekt_podnet",
@@ -521,7 +522,8 @@
       "samostatny_nalez_druh_nalezu",
       "samostatny_nalez_specifikace",
       "samostatny_nalez_chranene_udaje_katastr", 
-      "samostatny_nalez_okres"
+      "samostatny_nalez_okres",
+      "soubor_filepath"
     ],
     "detail": [
       "samostatny_nalez_pocet",

@@ -6,7 +6,7 @@
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
       <div fxFlex>    
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
-        <mat-icon class="app-entity-dokument" [matTooltip]="'entities.dokument.title' | translate">{{ config.entityIcons["dokument"] }}</mat-icon>
+        <mat-icon class="app-entity-dokument" [matTooltip]="'entities.dokument.title' | translate">{{ config.entityIcons[result.entity] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
@@ -89,8 +89,8 @@
         {{ 'card.desc.Počet projektu' | translate }}: <strong>{{result.dokument_cast_projekt?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
-      <ng-container *ngIf="result.soubor?.length > 0">
-        {{'card.desc.Počet souborů' | translate}}: <strong>{{result.soubor.length}}</strong>
+      <ng-container *ngIf="result.soubor_filepath?.length > 0">
+        {{'card.desc.Počet souborů' | translate}}: <strong>{{result.soubor_filepath.length}}</strong>
       </ng-container>
     </div>
     <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
@@ -137,6 +137,7 @@
               <tr *ngIf="result.dokument_datum_zverejneni">
                 <th class="app-label">{{ 'card.desc.Dokument - datum zveřejnění' | translate }}:</th>
                 <td>{{ result.dokument_datum_zverejneni | date : 'yyyy-MM-dd' }}</td>
+              </tr>
               <ng-container *ngIf="result.dokument_extra_data">
                 <tr *ngIf="result.dokument_extra_data.cislo_objektu">
                   <th class="app-label">{{ 'card.desc.Objekt/kontext' | translate }}:</th>

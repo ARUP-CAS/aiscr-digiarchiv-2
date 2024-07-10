@@ -82,11 +82,21 @@ public class ProjektSearcher implements EntitySearcher {
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
             JSONArray samostatny_nalez = new JSONArray();
+            
+            
             if (doc.has("projekt_samostatny_nalez")) {
-                SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-                        .setRows(10000)
-                        .setFields("ident_cely");
+//                SolrQuery query = new SolrQuery("*")
+//                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+//                        .setRows(10000)
+//                        .setFields("ident_cely");
+                
+                
+            SolrQuery query = new SolrQuery("*")
+                    .setRows(10000)
+                    .addFilterQuery("entity:samostatny_nalez")
+                    .addFilterQuery("samostatny_nalez_projekt:\"" + doc.getString("ident_cely") + "\"");
+            
+            
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {
@@ -198,14 +208,28 @@ public class ProjektSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery("*")
                     .setRows(10000)
                     .addFilterQuery("entity:samostatny_nalez")
-                    .addFilterQuery("projekt_id:\"" + doc.getString("ident_cely") + "\"");
+                    .addFilterQuery("samostatny_nalez_projekt:\"" + doc.getString("ident_cely") + "\"");
             JSONObject sn = SolrSearcher.json(client, "entities", query);
             JSONArray ja2 = sn.getJSONObject("response").getJSONArray("docs");
             JSONArray jaSn = new JSONArray();
             for (int j = 0; j < ja2.length(); j++) {
                 jaSn.put(ja2.getJSONObject(j).getString("ident_cely"));
             }
-            doc.put("child_samostatny_nalez", jaSn);
+            doc.put("projekt_samostatny_nalez", jaSn);
+            
+            
+            query = new SolrQuery("*")
+                    .setRows(10000)
+                    .addFilterQuery("akce_projekt:\"" + doc.getString("ident_cely") + "\"");
+            JSONObject snaz = SolrSearcher.json(client, "entities", query);
+            JSONArray jaaz = snaz.getJSONObject("response").getJSONArray("docs");
+            JSONArray jaAz = new JSONArray();
+            for (int j = 0; j < jaaz.length(); j++) {
+                jaAz.put(jaaz.getJSONObject(j).getString("ident_cely"));
+            }
+            doc.put("projekt_archeologicky_zaznam", jaAz);
+            
+            
         }
     }
 

@@ -128,7 +128,7 @@
         <mat-expansion-panel *ngIf="result.projekt_archeologicky_zaznam?.length > 0 || result.projekt_samostatny_nalez?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}: {{ vsSize }}
+              {{ 'card.panelTitle.Související záznamy' | translate }}: {{ numChildren }}
             </mat-panel-title>
           </mat-expansion-panel-header>
           

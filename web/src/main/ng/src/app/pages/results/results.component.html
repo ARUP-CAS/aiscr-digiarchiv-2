@@ -82,7 +82,8 @@
           <ng-container *ngFor="let result of docs">
             <ng-container [ngSwitch]="state.entity">
               <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-              <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
+              <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+              <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
               <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
               <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
               <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
@@ -118,7 +119,8 @@
               <ng-container *cdkVirtualFor="let result of docs">
                 <ng-container [ngSwitch]="state.entity">
                   <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-                  <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
+                  <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                  <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
                   <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
                   <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
                   <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>

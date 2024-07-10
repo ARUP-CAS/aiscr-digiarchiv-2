@@ -76,7 +76,7 @@ export class ProjektComponent implements OnInit, OnChanges {
         const ids = this.result.projekt_samostatny_nalez.slice(i, i+10);
         this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
           this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
-          if (res.response.docs.length < 10) {
+          if (res.response.docs.length < ids.length) {
             // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
             this.numChildren = this.numChildren - 10 + res.response.docs.length; 
             this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);

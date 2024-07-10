@@ -37,6 +37,7 @@ public class DokumentSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            checkRelations(jo, client, request);
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
                 //getChilds(jo, client, request);
                 addPians(jo, client, request);
@@ -76,7 +77,6 @@ public class DokumentSearcher implements EntitySearcher {
             if (doc.has("dokument_cast_archeologicky_zaznam")) {
                 // String fq = "{!join to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"";
                 String fq = "az_dokument:\"" + doc.getString("ident_cely") + "\"";
-                System.out.println(fq);
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery(fq)
                         .setRows(10000)

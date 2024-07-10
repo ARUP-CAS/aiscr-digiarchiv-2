@@ -77,8 +77,8 @@
         {{'Počet projektů' | translate}}: <strong>1</strong>
         <span class="app-pipe"></span>
       </ng-container>
-      <ng-container *ngIf="result.soubor?.length > 0">
-        {{'card.desc.Počet souborů' | translate}}: <strong>{{result.soubor.length}}</strong>
+      <ng-container *ngIf="result.soubor_filepath?.length > 0">
+        {{'card.desc.Počet souborů' | translate}}: <strong>{{result.soubor_filepath.length}}</strong>
       </ng-container>
     </div>
     <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 

@@ -141,6 +141,8 @@ public class DokumentCast {
             IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
             
+            
+            
                 for (String key : pianDoc.keySet()) {
                     switch (key) {
                         case "entity":
@@ -152,7 +154,11 @@ public class DokumentCast {
                         default:
                             // idoc.setField("dj_pian_" + key, pianDoc.opt(key));
                             if (key.startsWith("loc")) {
-                                SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.opt(key));
+                                //SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.opt(key));
+                                JSONArray val = pianDoc.optJSONArray(key);
+                                for (int i = 0; i < val.length(); i++) {
+                                    SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
+                                }
                             } else if (key.startsWith("lat") || key.startsWith("lng")) {
                                 // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
                                 JSONArray val = pianDoc.optJSONArray(key);

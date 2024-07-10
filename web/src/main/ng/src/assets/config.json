@@ -206,7 +206,7 @@
 
     {"type": "text", "field": "vyskovy_bod_ident_cely"},
 
-    {"type": "text", "field": "komponenta_ident_cely"},
+    {"type": "text", "field": "komponenta_dokument_ident_cely"},
     {"type": "text", "field": "komponenta_jistota"},
     {"type": "text", "field": "komponenta_presna_datace"},
     {"type": "text", "field": "komponenta_poznamka"},

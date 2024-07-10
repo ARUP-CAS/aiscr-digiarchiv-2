@@ -52,7 +52,7 @@
    <field name="lng_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="lat_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="pian_id" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="pian_ident_cely" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="pian_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" /> 
    <field name="location_info" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    
@@ -88,6 +88,7 @@
    <field name="dokument_cast_archeologicky_zaznam" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_lokalita" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_neident_akce" type="string_big" indexed="false" stored="true" multiValued="false"  /> 
+   <field name="dokument_cast_projekt" type="text_general" indexed="true" stored="true" multiValued="true" />
 <!--      
    <field name="datum_vlozeni" type="pdate" indexed="true" stored="true" />
    <field name="datum_archivace" type="pdate" indexed="true" stored="true" />
@@ -303,8 +304,6 @@
 <!--   <field name="pian_typ" type="string" indexed="false" stored="true" multiValued="false" /> 
    <field name="pian_presnost" type="string" indexed="false" stored="true" multiValued="false" /> -->
    
-   
-   
    <field name="pian_typ" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="pian_presnost" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="pian_zm10" type="string" indexed="true" stored="true" multiValued="false" />
@@ -381,7 +380,7 @@
    <field name="datum_provedeni_do" type="pdate" indexed="true" stored="true" />
    <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="rok_vydani" type="pint" indexed="true" stored="true"  multiValued="true" />
-   <field name="extra_data_datum_vzniku" type="pdate" indexed="true" stored="true"  multiValued="true" />
+   <!-- <field name="extra_data_datum_vzniku" type="pdate" indexed="true" stored="true"  multiValued="true" /> -->
    <field name="let_datum" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <!--<str name="stats.field">samostatny_nalez_datum_nalezu</str>-->
 
@@ -508,7 +507,6 @@
    <copyField source="dokument_poznamka" dest="poznamka" />
    
    <field name="uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <copyField source="projekt_dokument_poznamka" dest="uzivatelske_oznaceni" />
    
    <field name="oznaceni_originalu" type="text_general" indexed="true" stored="true" multiValued="true" />
    <copyField source="dokument_oznaceni_originalu" dest="oznaceni_originalu" />
@@ -530,8 +528,6 @@
    <field name="tvar_poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="dokument_cast_akce" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="dokument_cast_lokalita" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_dokument_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_dokument_jistota" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_dokument_presna_datace" type="text_general" indexed="true" stored="true" multiValued="true" />
@@ -557,33 +553,6 @@
    <dynamicField name="f_adb_vyskovy_bod_typ_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    
 
-
-    
-
-    
-    {"type": "text", "field": "pian_ident_cely"},
-
-    {"type": "text", "field": "adb_ident_cely"},
-    {"type": "text", "field": "adb_uzivatelske_oznaceni_sondy"},
-    {"type": "text", "field": "adb_trat"},
-    {"type": "text", "field": "adb_cislo_popisne"},
-    {"type": "text", "field": "adb_parcelni_cislo"},
-    {"type": "rok", "field": "adb_rok_popisu"},
-    {"type": "rok", "field": "adb_rok_revize"},
-    {"type": "text", "field": "adb_poznamka"},
-
-    {"type": "text", "field": "vyskovy_bod_ident_cely"},
-
-    {"type": "text", "field": "komponenta_ident_cely"},
-    {"type": "text", "field": "komponenta_jistota"},
-    {"type": "text", "field": "komponenta_presna_datace"},
-    {"type": "text", "field": "komponenta_poznamka"},
-
-    {"type": "text", "field": "nalez_pocet"},
-    {"type": "text", "field": "nalez_poznamka"}, 
-
-    {"type": "text", "field": "f_lokalita_zachovalost"}
-  ],
    
    
    <field name="nalez_pocet" type="text_general" indexed="true" stored="true" multiValued="true" />

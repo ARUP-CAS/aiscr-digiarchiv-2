@@ -111,9 +111,10 @@ public class AkceSearcher implements EntitySearcher {
         for (int i = 0; i < docs.length(); i++) {
         JSONObject doc = docs.getJSONObject(i);
         JSONArray valid_dokuments = new JSONArray();
-        if (doc.has("dokument")) {
+        if (doc.has("az_dokument")) {
             SolrQuery query = new SolrQuery("*")
-                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                    // .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                    .addFilterQuery("ident_cely:\"" + doc.getJSONArray("az_dokument").join("\" OR \"") + "\"")
                     .setRows(10000)
                     .setFields("ident_cely");
             try {
@@ -125,7 +126,7 @@ public class AkceSearcher implements EntitySearcher {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
-        doc.put("dokument", valid_dokuments);
+        doc.put("az_dokument", valid_dokuments);
 
         if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
             doc.remove("projekt");
@@ -141,6 +142,7 @@ public class AkceSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            checkRelations(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             
