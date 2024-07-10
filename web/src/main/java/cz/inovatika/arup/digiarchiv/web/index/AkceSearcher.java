@@ -128,8 +128,8 @@ public class AkceSearcher implements EntitySearcher {
         }
         doc.put("az_dokument", valid_dokuments);
 
-        if (doc.has("projekt") && !SolrSearcher.existsById(client, doc.getString("projekt"))) {
-            doc.remove("projekt");
+        if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
+            doc.remove("akce_projekt");
         }
         }
     }

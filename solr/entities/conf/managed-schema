@@ -312,7 +312,7 @@
    <field name="pian_geom_system" type="string" indexed="false" stored="true" multiValued="false" /> 
    <field name="pian_geom_updated_at" type="pdate" indexed="true" stored="true" />
    <field name="pian_geom_sjtsk_updated_at" type="pdate" indexed="true" stored="true" />
-   <field name="pian_chranene_udaje" type="string" indexed="false" stored="true" multiValued="false" /> 
+   <field name="pian_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
    <field name="f_pian_typ" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_pian_presnost" type="string" indexed="true" stored="true" multiValued="true" /> 

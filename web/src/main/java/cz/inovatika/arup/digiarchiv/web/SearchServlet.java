@@ -460,7 +460,7 @@ public class SearchServlet extends HttpServlet {
                             .getJSONObject("response").getJSONArray("docs");
                     // return (String) resp.get("response");
 
-                    JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
+                    // JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
                     for (int i = 0; i < docs.length(); i++) {
                         // ret.put(docs.getJSONObject(i).getString("id"), docs.getJSONObject(i).getInt("poradi"));
                         String heslar = docs.getJSONObject(i).getString("heslar");
@@ -468,18 +468,18 @@ public class SearchServlet extends HttpServlet {
                         // String pole = heslar;
                         ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
 
-                        if (heslarToPole.has(heslar)) {
-                            Object obj = heslarToPole.get(heslar);
-                            if (obj instanceof JSONArray) {
-                                JSONArray poli = (JSONArray) obj;
-                                for (int p = 0; p < poli.length(); p++) {
-                                    ret.put(poli.getString(p) + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
-                                }
-                            } else {
-                                heslar = (String) obj;
-                                ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
-                            }
-                        }
+//                        if (heslarToPole.has(heslar)) {
+//                            Object obj = heslarToPole.get(heslar);
+//                            if (obj instanceof JSONArray) {
+//                                JSONArray poli = (JSONArray) obj;
+//                                for (int p = 0; p < poli.length(); p++) {
+//                                    ret.put(poli.getString(p) + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
+//                                }
+//                            } else {
+//                                heslar = (String) obj;
+//                                ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
+//                            }
+//                        }
                     }
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
