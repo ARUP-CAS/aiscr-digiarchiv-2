@@ -325,8 +325,29 @@
    <field name="f_pian_zm10_D" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <!-- Externi zdroj -->
-   <field name="datum_rd" type="string" indexed="true" stored="true"  /> 
-   <field name="ext_odkaz" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="ext_zdroj_typ" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_sysno" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_nazev" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_edice_rada" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_rok_vydani_vzniku" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_isbn" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_issn" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_vydavatel" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_sbornik_nazev" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_misto" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_casopis_denik_nazev" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_casopis_rocnik" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_datum_rd" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_paginace_titulu" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_link" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_typ_dokumentu" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_organizace" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ext_zdroj_poznamka" type="string" indexed="true" stored="true" multiValued="false" /> 
+   
+   <field name="ext_zdroj_autor" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="ext_zdroj_editor" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="ext_zdroj_ext_odkaz" type="string" indexed="true" stored="true" multiValued="true" /> 
+   
    
    <!-- dokumentacni_jednotka fields -->
    <field name="dj_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />

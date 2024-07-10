@@ -35,99 +35,99 @@ public class ExtZdroj implements FedoraModel {
 
 //  <xs:element name="typ" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ.ident_cely}" | "{typ.heslo}" -->
     @JacksonXmlProperty(localName = "typ")
-    public Vocab typ;
+    public Vocab ext_zdroj_typ;
 
 //  <xs:element name="sysno" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{sysno}" -->
     @JacksonXmlProperty(localName = "sysno")
     @Field
-    public String sysno;
+    public String ext_zdroj_sysno;
 
 //  <xs:element name="autor" minOccurs="0" maxOccurs="unbounded" type="amcr:autorType"/> <!-- "{externizdrojautor_set.autor.ident_cely}" | "{externizdrojautor_set.poradi}" | "{externizdrojautor_set.autor.vypis_cely}" -->
     @JacksonXmlProperty(localName = "autor")
-    public List<Vocab> autor = new ArrayList();
+    public List<Vocab> ext_zdroj_autor = new ArrayList();
 
 //  <xs:element name="nazev" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{nazev}" -->
     @JacksonXmlProperty(localName = "nazev")
     @Field
-    public String nazev;
+    public String ext_zdroj_nazev;
 
 //  <xs:element name="edice_rada" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{edice_rada}" -->
     @JacksonXmlProperty(localName = "edice_rada")
     @Field
-    public String edice_rada;
+    public String ext_zdroj_edice_rada;
 
 //  <xs:element name="rok_vydani_vzniku" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{rok_vydani_vzniku}" -->
     @JacksonXmlProperty(localName = "rok_vydani_vzniku")
     @Field
-    public String rok_vydani_vzniku;
+    public String ext_zdroj_rok_vydani_vzniku;
 
 //  <xs:element name="isbn" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{isbn}" -->
     @JacksonXmlProperty(localName = "isbn")
     @Field
-    public String isbn;
+    public String ext_zdroj_isbn; 
 
 //  <xs:element name="issn" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{issn}" -->
     @JacksonXmlProperty(localName = "issn")
     @Field
-    public String issn;
+    public String ext_zdroj_issn; 
 
 //  <xs:element name="vydavatel" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{vydavatel}" -->
     @JacksonXmlProperty(localName = "vydavatel")
     @Field
-    public String vydavatel;
+    public String ext_zdroj_vydavatel;
 
 //  <xs:element name="editor" minOccurs="0" maxOccurs="unbounded" type="amcr:autorType"/> <!-- "{externizdrojeditor_set.editor.ident_cely}" | "{externizdrojeditor_set.poradi}" | "{externizdrojeditor_set.editor.vypis_cely}" -->
     @JacksonXmlProperty(localName = "editor")
-    public List<Vocab> editor = new ArrayList();
+    public List<Vocab> ext_zdroj_editor = new ArrayList();
 
 //  <xs:element name="sbornik_nazev" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{sbornik_nazev}" -->
     @JacksonXmlProperty(localName = "sbornik_nazev")
     @Field
-    public String sbornik_nazev;
+    public String ext_zdroj_sbornik_nazev;
 
 //  <xs:element name="misto" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{misto}" -->
     @JacksonXmlProperty(localName = "misto")
     @Field
-    public String misto;
+    public String ext_zdroj_misto;
 
 //  <xs:element name="casopis_denik_nazev" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{casopis_denik_nazev}" -->
     @JacksonXmlProperty(localName = "casopis_denik_nazev")
     @Field
-    public String casopis_denik_nazev;
+    public String ext_zdroj_casopis_denik_nazev;
 
 //  <xs:element name="casopis_rocnik" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{casopis_rocnik}" -->
     @JacksonXmlProperty(localName = "casopis_rocnik")
     @Field
-    public String casopis_rocnik;
+    public String ext_zdroj_casopis_rocnik;
 
 //  <xs:element name="datum_rd" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{datum_rd}" -->
     @JacksonXmlProperty(localName = "datum_rd")
     @Field
-    public String datum_rd;
+    public String ext_zdroj_datum_rd;
 
 //  <xs:element name="paginace_titulu" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{paginace_titulu}" -->
     @JacksonXmlProperty(localName = "paginace_titulu")
     @Field
-    public String paginace_titulu;
+    public String ext_zdroj_paginace_titulu;
 
 //  <xs:element name="link" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{link}" -->
     @JacksonXmlProperty(localName = "link")
     @Field
-    public String link;
+    public String ext_zdroj_link;
 
 //  <xs:element name="typ_dokumentu" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ_dokumentu.ident_cely}" | "{typ_dokumentu.heslo}" -->
     @JacksonXmlProperty(localName = "typ_dokumentu")
-    public Vocab typ_dokumentu;
+    public Vocab ext_zdroj_typ_dokumentu;
 
 //  <xs:element name="organizace" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{organizace.ident_cely}" | "{organizace.nazev}" -->
     @JacksonXmlProperty(localName = "organizace")
     @Field
-    public String organizace;
+    public String ext_zdroj_organizace;
 
 //  <xs:element name="poznamka" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{poznamka}" -->
     @JacksonXmlProperty(localName = "poznamka")
     @Field
-    public String poznamka;
+    public String ext_zdroj_poznamka;
 
 //  <xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
     @JacksonXmlProperty(localName = "historie")
@@ -136,7 +136,7 @@ public class ExtZdroj implements FedoraModel {
 //  <xs:element name="ext_odkaz" minOccurs="0" maxOccurs="unbounded" type="amcr:ez-ext_odkazType"/> <!-- "{externi_odkazy_zdroje}" -->
     @JacksonXmlProperty(localName = "ext_odkaz")
     //public List<Object> ext_odkaz = new ArrayList();
-    public List<Object> ext_odkaz = new ArrayList();
+    public List<Object> ext_zdroj_ext_odkaz = new ArrayList();
 
     @Override
     public String coreName() {
@@ -148,21 +148,20 @@ public class ExtZdroj implements FedoraModel {
         idoc.setField("searchable", true);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
-        for (Vocab v : autor) {
-            IndexUtils.addRefField(idoc, "autor", v);
+        for (Vocab v : ext_zdroj_autor) {
+            IndexUtils.addRefField(idoc, "ext_zdroj_autor", v);
         }
-        for (Vocab v : editor) {
-            IndexUtils.addRefField(idoc, "editor", v);
+        for (Vocab v : ext_zdroj_editor) {
+            IndexUtils.addRefField(idoc, "ext_zdroj_editor", v);
         }
-        IndexUtils.addVocabField(idoc, "typ_dokumentu", typ_dokumentu);
-        // IndexUtils.addVocabField(idoc, "organizace", organizace);
-        IndexUtils.addRefField(idoc, "typ", typ);
-        IndexUtils.addVocabField(idoc, "typ_id", typ);
+        IndexUtils.addVocabField(idoc, "ext_zdroj_typ_dokumentu", ext_zdroj_typ_dokumentu);
+        // IndexUtils.addRefField(idoc, "ext_zdroj_typ", ext_zdroj_typ);
+        IndexUtils.addVocabField(idoc, "ext_zdroj_typ", ext_zdroj_typ);
         //idoc.addField("ext_odkaz", objectMapper.writeValueAsString(ext_odkaz));
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            for (Object o: ext_odkaz) {
-                idoc.addField("ext_odkaz", objectMapper.writeValueAsString(o));
+            for (Object o: ext_zdroj_ext_odkaz) {
+                idoc.addField("ext_zdroj_ext_odkaz", objectMapper.writeValueAsString(o));
             }
             
         } catch (JsonProcessingException ex) {
