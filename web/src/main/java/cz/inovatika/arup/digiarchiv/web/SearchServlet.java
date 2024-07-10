@@ -167,9 +167,7 @@ public class SearchServlet extends HttpServlet {
                     if (searcher != null) {
                         query.setFields(searcher.getSearchFields(pristupnost));
                     } else {
-                        query.setFields("*,dok_jednotka:[json],pian:[json],adb:[json],jednotka_dokumentu:[json],nalez_dokumentu:[json],"
-                                + "ext_odkaz:[json],ext_zdroj:[json],vazba_projekt_akce:[json],akce:[json],soubor:[json],let:[json],nalez:[json],vyskovy_bod:[json],"
-                                + "dokument:[json],projekt:[json],samostatny_nalez:[json],obdobi:[json],komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]");
+                        query.setFields("*");
                     }
                     JSONObject jo = SearchUtils.json(query, IndexUtils.getClientNoOp(), "entities");
                     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {

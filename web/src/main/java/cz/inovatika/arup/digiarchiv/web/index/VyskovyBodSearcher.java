@@ -29,8 +29,8 @@ public class VyskovyBodSearcher implements ComponentSearcher {
     String fields = "*";
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      if (doc.has("parent")) {
-        String p = doc.getString("parent");
+      if (doc.has("vyskovy_bod_parent")) {
+        String p = doc.getString("vyskovy_bod_parent");
         JSONObject sub = SolrSearcher.getById(client, p, fields);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);
