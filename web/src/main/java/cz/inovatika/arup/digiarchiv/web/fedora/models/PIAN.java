@@ -76,6 +76,12 @@ public class PIAN implements FedoraModel {
   public String coreName() {
     return "entities";
   }
+  
+    
+    @Override
+    public boolean isSearchable(){
+        return !this.ident_cely.startsWith("N");
+    }
 
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {

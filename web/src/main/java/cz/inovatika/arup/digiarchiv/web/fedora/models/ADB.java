@@ -88,6 +88,11 @@ public class ADB implements FedoraModel {
     public String coreName() {
         return "entities";
     }
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {

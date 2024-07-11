@@ -69,6 +69,11 @@ public interface FedoraModel {
     public void fillSolrFields(SolrInputDocument idoc) throws Exception;
 
     /**
+     * @return true if record should be indexed
+     */
+    public boolean isSearchable();
+
+    /**
      * Filter oai record based on security
      *
      * @param user

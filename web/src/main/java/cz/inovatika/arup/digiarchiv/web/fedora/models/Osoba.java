@@ -65,6 +65,11 @@ public class Osoba implements FedoraModel {
     @JacksonXmlProperty(localName = "historie")
     public List<Historie> historie = new ArrayList();
     
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
+    
   @Override
   public void fillSolrFields(SolrInputDocument idoc) {
       IndexUtils.setDateStamp(idoc, ident_cely);

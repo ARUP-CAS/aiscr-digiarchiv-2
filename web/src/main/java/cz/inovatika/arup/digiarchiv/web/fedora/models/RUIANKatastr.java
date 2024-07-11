@@ -56,6 +56,11 @@ public class RUIANKatastr implements FedoraModel {
 //<xs:element name="hranice_wkt" minOccurs="1" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{hranice}") | ST_AsText("{hranice}") -->
     @JacksonXmlProperty(localName = "hranice_wkt")
     public Object hranice_wkt;
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {

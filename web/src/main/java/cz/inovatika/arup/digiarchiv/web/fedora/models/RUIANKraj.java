@@ -59,6 +59,11 @@ public class RUIANKraj implements FedoraModel {
         idoc.setField("ident_cely", kod);
         IndexUtils.setDateStamp(idoc, kod);
     }
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
 
     @Override
     public String coreName() {

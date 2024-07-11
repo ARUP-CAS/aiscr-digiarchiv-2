@@ -64,6 +64,11 @@ public class RUIANOkres implements FedoraModel {
         IndexUtils.addVocabField(idoc, "kraj", kraj);
         IndexUtils.setDateStamp(idoc, kod);
     }
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
 
     @Override
     public String coreName() {

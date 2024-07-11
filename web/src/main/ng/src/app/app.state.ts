@@ -149,9 +149,11 @@ export class AppState {
 
     this.resultsSubject.next({typ: 'results', pageChanged: this.pageChanged});
     this.pageChanged = false;
-    setTimeout(() => {
-      this.setFacets(resp);
-    }, 100);
+    if (resp.facet_counts) {
+      setTimeout(() => {
+        this.setFacets(resp);
+      }, 100);
+    }
   }
 
   setFacets(resp) {

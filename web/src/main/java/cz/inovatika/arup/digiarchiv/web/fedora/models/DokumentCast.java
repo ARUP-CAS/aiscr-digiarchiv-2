@@ -4,9 +4,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
@@ -48,19 +53,23 @@ public class DokumentCast {
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) throws Exception {
 
-        // idoc.addField("dokument_cast_ident_cely", ident_cely);
+        DocumentObjectBinder dob = new DocumentObjectBinder();
+        SolrInputDocument kdoc = dob.toSolrInputDocument(this);
+
+        IndexUtils.addVocabField(kdoc, "dokument_cast_archeologicky_zaznam", archeologicky_zaznam);
+        IndexUtils.addVocabField(kdoc, "dokument_cast_projekt", projekt);
         IndexUtils.addVocabField(idoc, "dokument_cast_archeologicky_zaznam", archeologicky_zaznam);
         IndexUtils.addVocabField(idoc, "dokument_cast_projekt", projekt);
-        // idoc.addField("dokument_cast_poznamka", poznamka);
 
         for (Komponenta k : komponenta) {
-            // IndexUtils.addJSONField(idoc, "komponenta", k);
-             k.fillSolrFields(idoc, "dokument_cast");
+            k.fillSolrFields(idoc, "dokument_cast");
+            IndexUtils.addJSONField(kdoc, "dokument_cast_komponenta", k);
         }
 
         if (neident_akce != null) {
-            IndexUtils.addJSONField(idoc, "dokument_cast_neident_akce", neident_akce);
             neident_akce.fillSolrFields(idoc, pristupnost.toUpperCase());
+            IndexUtils.addJSONField(kdoc, "dokument_cast_neident_akce", neident_akce);
+            IndexUtils.addJSONField(idoc, "dokument_cast_neident_akce", neident_akce);
         }
 
         if (archeologicky_zaznam != null) {
@@ -69,18 +78,25 @@ public class DokumentCast {
             //idoc.addField("location_info", location_info);
         }
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
+
+        try {
+            IndexUtils.getClientBin().add("entities", kdoc, 10);
+        } catch (SolrServerException | IOException ex) {
+            Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
+            Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void addLocation(SolrInputDocument idoc, String pristupnost) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
                 .setFields("*,katastr:hlavni_katastr_" + pristupnost, "az_okres,pristupnost");
-        
+
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", archeologicky_zaznam.getId());
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             idoc.addField("dokument_cast_" + doc.getString("entity"), archeologicky_zaznam.getId());
-            
+
             idoc.addField("f_vedouci", doc.optString("akce_hlavni_vedouci"));
 
             if (doc.has("katastr")) {
@@ -92,7 +108,7 @@ public class DokumentCast {
                         .put("pristupnost", doc.getString("pristupnost"))
                         .put("katastr", doc.getString("katastr"))
                         .put("okres", doc.getString("okres"));
-                
+
                 if (!location_info.contains(li.toString())) {
                     location_info.add(li.toString());
                     SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
@@ -125,24 +141,22 @@ public class DokumentCast {
             }
         }
     }
-    
+
     private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
                 .setFields("*,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
 
-        if (json.getJSONObject("response").getInt("numFound") > 0) { 
+        if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
 
-            // IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
-            IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
-            IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
-            
-            
-            
+                // IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
+                IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
+                IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
+
                 for (String key : pianDoc.keySet()) {
                     switch (key) {
                         case "entity":

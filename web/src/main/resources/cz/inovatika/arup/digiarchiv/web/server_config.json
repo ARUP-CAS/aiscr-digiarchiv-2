@@ -258,7 +258,7 @@
       "f_let_letiste_cil:dokument_let.let_letiste_cil", 
       "f_let_pilot:dokument_let.let_pilot", 
       "f_let_dohlednost:dokument_let.let_dohlednost",
-      "f_zachovalost:dokument_extra_data.zachovalost",
+      "f_zachovalost:dokument_extra_data.zachovalost.id",
       "f_autor:dokument_autor",      
                 
       "f_typ_dokumentu_posudek:dokument_posudek",
@@ -397,7 +397,6 @@
         "f_typ_vyzkumu:akce_hlavni_typ",
         "f_typ_vyzkumu:akce_vedlejsi_typ",
         "f_okres:az_okres",
-        "f_katastr:az_chranene_udaje.hlavni_katastr.id",
         "f_vedouci:akce_hlavni_vedouci",
         "f_vedouci:akce_vedouci_akce_ostatni",
         "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
@@ -411,6 +410,7 @@
         "f_organizace:akce_organizace"
     ],
     "facets2": [
+        "f_katastr:az_chranene_udaje.hlavni_katastr.id",
         "f_pian_presnost",
         "f_adb_podnet",
         "f_adb_typ_sondy",

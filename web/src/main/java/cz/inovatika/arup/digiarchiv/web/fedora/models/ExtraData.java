@@ -22,11 +22,6 @@ public class ExtraData {
     @Field
     public String entity = "extra_data";
 
-//<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
-    @JacksonXmlProperty(localName = "ident_cely")
-    @Field
-    public String ident_cely;
-
 //  <xs:element name="stav" minOccurs="1" maxOccurs="1" type="xs:integer"/> <!-- "{stav}" -->
     @JacksonXmlProperty(localName = "stav")
     @Field

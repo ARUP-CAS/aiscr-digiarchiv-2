@@ -84,6 +84,7 @@
    <field name="dokument_extra_data" type="string_big" indexed="false" stored="true" multiValued="false"  /> 
    <field name="dokument_tvar" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
    <field name="dokument_cast" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
+   <field name="dokument_cast_komponenta" type="string_big" indexed="false" stored="true" multiValued="true"  /> 
    <field name="dokument_cast_akce" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_archeologicky_zaznam" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_lokalita" type="text_general" indexed="true" stored="true" multiValued="true" />

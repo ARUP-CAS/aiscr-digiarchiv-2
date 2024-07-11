@@ -133,6 +133,11 @@ public class Projekt implements FedoraModel {
 //<xs:element name="dokument" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{casti_dokumentu.dokument.ident_cely}" | "{casti_dokumentu.dokument.ident_cely}" -->
     @JacksonXmlProperty(localName = "dokument")
     public List<Vocab> projekt_dokument = new ArrayList();
+    
+    @Override
+    public boolean isSearchable(){
+        return !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty();
+    }
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {

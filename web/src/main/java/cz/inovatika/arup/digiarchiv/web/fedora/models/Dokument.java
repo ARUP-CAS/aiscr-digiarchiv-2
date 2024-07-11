@@ -137,6 +137,11 @@ public class Dokument implements FedoraModel {
     public String coreName() {
         return "entities";
     }
+    
+    @Override
+    public boolean isSearchable(){
+        return stav == 3;
+    }
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
@@ -206,8 +211,8 @@ public class Dokument implements FedoraModel {
         }
 
         for (DokumentCast dc : dokument_cast) {
-            // IndexUtils.addJSONField(idoc, "dokument_cast", dc);
             dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+            // IndexUtils.addJSONField(idoc, "dokument_cast", dc);
             if (idoc.containsKey("dokument_cast_akce")) {
                 for (Object val : idoc.getFieldValues("dokument_cast_akce")) {
                     processAkce(idoc, (String) val);

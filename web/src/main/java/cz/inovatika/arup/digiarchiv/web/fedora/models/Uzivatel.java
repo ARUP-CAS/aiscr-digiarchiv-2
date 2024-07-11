@@ -107,6 +107,11 @@ public class Uzivatel implements FedoraModel {
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
     }
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
 
     @Override
     public String coreName() {

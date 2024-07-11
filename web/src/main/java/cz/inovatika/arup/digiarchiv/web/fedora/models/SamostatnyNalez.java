@@ -145,6 +145,11 @@ public class SamostatnyNalez implements FedoraModel {
     public String coreName() {
         return "entities";
     }
+    
+    @Override
+    public boolean isSearchable(){
+        return stav == 4;
+    }
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {

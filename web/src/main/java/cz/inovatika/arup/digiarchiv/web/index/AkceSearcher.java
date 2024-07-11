@@ -30,7 +30,9 @@ public class AkceSearcher implements EntitySearcher {
             JSONObject doc = ja.getJSONObject(i);
             if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
                 doc.remove("chranene_udaje");
-                doc.remove("akce_chranene_udaje");
+                doc.remove("az_chranene_udaje");
+//                doc.remove("loc");
+//                doc.remove("loc_rpt");
             }
         }
     }
@@ -141,15 +143,22 @@ public class AkceSearcher implements EntitySearcher {
             Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
+            //LOGGER.log(Level.INFO, "send request");
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            //LOGGER.log(Level.INFO, "checkRelations");
             checkRelations(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
+            //LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             
+            
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+            //LOGGER.log(Level.INFO, "addPians");
                 addPians(jo, client, request);
             }
+            //LOGGER.log(Level.INFO, "addFavorites");
             SolrSearcher.addFavorites(jo, client, request);
+            //LOGGER.log(Level.INFO, "hotovo");
             return jo;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);

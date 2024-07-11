@@ -174,6 +174,14 @@ public class SolrSearcher {
         query.add("stats.field", "{!key=lat}lat_" + pristupnost);
         query.add("stats.field", "{!key=lng}lng_" + pristupnost);
         query.add("echoParams", "all");
+        
+        if (Boolean.parseBoolean(request.getParameter("noFacets"))) {
+            query.setFacet(false);
+        }
+        
+        if (Boolean.parseBoolean(request.getParameter("onlyFacets"))) {
+            query.setRows(0);
+        }
 
         //LOGGER.log(Level.INFO, "query: {0}", query );
     }

@@ -506,20 +506,12 @@ public class FedoraHarvester {
 
                 DocumentObjectBinder dob = new DocumentObjectBinder();
                 SolrInputDocument idoc = dob.toSolrInputDocument(fm);
+                if (!fm.isSearchable()) {
+                    LOGGER.log(Level.INFO, "Skiping record {0}. Not searchable", idoc.getFieldValue("ident_cely"));
+                    return;
+                }
                 fm.fillSolrFields(idoc);
                 String entity = (String) idoc.getFieldValue("entity");
-//                if (Options.getInstance().getJSONObject("fields").has(entity)) {
-//                    JSONArray facets = Options.getInstance().getJSONObject("fields").getJSONObject(entity).getJSONArray("facets");
-//                    for (int i = 0; i < facets.length(); i++) {
-//                        String f = facets.getString(i);
-//                        if (f.contains(":")) {
-//                            String[] origins = f.split(":")[1].split(",");
-//                            for (String orig : origins) {
-//                                idoc.addField(f.split(":")[0], idoc.getFieldValues(orig));
-//                            }
-//                        }
-//                    }
-//                }
                 if (FedoraModel.isOAI(entity)) {
                     SolrInputDocument oaidoc = createOAIDocument(xml, idoc);
                     idocsOAI.add(oaidoc);
@@ -566,7 +558,7 @@ public class FedoraHarvester {
             solr.add("entities", idocsEntities);
             solr.commit("entities");
             idocsEntities.clear();
-            LOGGER.log(Level.INFO, "Indexed {0} -> {1} of (2)", new Object[]{indexed, model, totalInModel});
+            LOGGER.log(Level.INFO, "Indexed {0} of {1} -> {2}", new Object[]{indexed, totalInModel, model});
         }
         if (idocsOAI.size() > size) {
             solr.add("oai", idocsOAI);

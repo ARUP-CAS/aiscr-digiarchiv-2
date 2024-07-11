@@ -102,7 +102,7 @@ public class Komponenta {
         IndexUtils.getClientBin().add("entities", kdoc, 10);
     } catch (SolrServerException | IOException ex) {
         Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
-        Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
+        // Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
 

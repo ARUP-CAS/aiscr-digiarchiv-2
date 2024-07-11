@@ -88,6 +88,13 @@ public class Heslo implements FedoraModel {
 //      <xs:element name="dokument_typ_material_rada" minOccurs="0" maxOccurs="unbounded" type="amcr:dokument_typ_material_radaType"/> <!-- "{dokument_typ_material_rada}" -->
 //      <xs:element name="datace" minOccurs="0" maxOccurs="1" type="amcr:dataceType"/> <!-- "{datace_obdobi}" -->
 //      <xs:element name="odkaz" minOccurs="0" maxOccurs="unbounded" type="amcr:odkazType"/> <!-- "{heslar_odkaz}" -->
+    
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
+    
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("cs", heslo.getValue());
@@ -108,11 +115,6 @@ public class Heslo implements FedoraModel {
             idoc.setField("zkratka_en", zkratka_en.getValue());
         }
 
-//    if(hierarchie_nize != null) {
-//      for(HierarchieNize hz: hierarchie_nize) {
-//        idoc.setField("en", hz.);
-//      }
-//    }
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
     }
