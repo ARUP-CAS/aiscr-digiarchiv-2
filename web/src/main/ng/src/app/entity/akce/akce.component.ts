@@ -79,7 +79,7 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   setVsize() {
-      if (this.result.dokument) {
+      if (this.result.az_dokument) {
         this.numChildren += this.result.az_dokument.length;
         this.state.numImages = this.result.az_dokument.length;
       }

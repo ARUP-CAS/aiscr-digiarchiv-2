@@ -55,7 +55,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
 //      }
 
             String ident_cely = doc.getString("ident_cely");
-            SolrQuery query = new SolrQuery("*").addFilterQuery("dokumentacni_jednotka_ident_cely:\"" + ident_cely + "\"");
+            SolrQuery query = new SolrQuery("*").addFilterQuery("dj_ident_cely:\"" + ident_cely + "\"");
             AkceSearcher as = new AkceSearcher();
             query.setFields(as.getChildSearchFields("A"));
             try {
@@ -71,7 +71,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
                 Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            if (doc.has("dokumentacni_jednotka_pian")) {
+            if (doc.has("dj_pian")) {
                 JSONObject sub = SolrSearcher.getById(client, doc.getString("dokumentacni_jednotka_pian"), pfields);
                 if (sub != null) {
                     doc.append("pian", sub);
@@ -97,7 +97,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,dokumentacni_jednotka_komponenta:[json]"};
+        return new String[]{"*,dj_komponenta:[json]"};
     }
 
     @Override
@@ -117,7 +117,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public String[] getRelationsFields() {
-        return new String[]{"*,dokumentacni_jednotka_komponenta:[json]"};
+        return new String[]{"*,dj_komponenta:[json]"};
     }
 
     @Override

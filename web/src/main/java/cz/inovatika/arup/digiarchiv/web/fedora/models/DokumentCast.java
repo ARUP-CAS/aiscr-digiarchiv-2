@@ -23,6 +23,12 @@ import org.json.JSONObject;
  */
 public class DokumentCast {
 
+    @Field
+    public String entity = "dokument_cast";
+    
+    @Field
+    public boolean searchable= true;
+    
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
     @JacksonXmlProperty(localName = "ident_cely")
     @Field
@@ -60,6 +66,7 @@ public class DokumentCast {
         IndexUtils.addVocabField(kdoc, "dokument_cast_projekt", projekt);
         IndexUtils.addVocabField(idoc, "dokument_cast_archeologicky_zaznam", archeologicky_zaznam);
         IndexUtils.addVocabField(idoc, "dokument_cast_projekt", projekt);
+        IndexUtils.addFieldNonRepeat(idoc, "dokument_cast_ident_cely", ident_cely);
 
         for (Komponenta k : komponenta) {
             k.fillSolrFields(idoc, "dokument_cast");
@@ -69,7 +76,7 @@ public class DokumentCast {
         if (neident_akce != null) {
             neident_akce.fillSolrFields(idoc, pristupnost.toUpperCase());
             IndexUtils.addJSONField(kdoc, "dokument_cast_neident_akce", neident_akce);
-            IndexUtils.addJSONField(idoc, "dokument_cast_neident_akce", neident_akce);
+            //IndexUtils.addJSONField(idoc, "dokument_cast_neident_akce", neident_akce);
         }
 
         if (archeologicky_zaznam != null) {
@@ -82,8 +89,8 @@ public class DokumentCast {
         try {
             IndexUtils.getClientBin().add("entities", kdoc, 10);
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
-            Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing dokument_cast {0}", ident_cely);
+            // Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

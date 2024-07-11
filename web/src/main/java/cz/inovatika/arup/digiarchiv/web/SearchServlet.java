@@ -358,7 +358,7 @@ public class SearchServlet extends HttpServlet {
 
                     // Remove stats in case of one result, without access
                     int numFound = jo.getJSONObject("response").getInt("numFound");
-                    if (numFound == 1) {
+                    if (numFound == 1 && !Boolean.parseBoolean(request.getParameter("onlyFacets"))) {
                         String docPr = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("pristupnost");
                         String pristupnost = LoginServlet.pristupnost(request.getSession());
                         if (docPr.compareTo(pristupnost) > 0) {

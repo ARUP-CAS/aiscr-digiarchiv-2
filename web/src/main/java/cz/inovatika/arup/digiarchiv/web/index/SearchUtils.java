@@ -261,7 +261,10 @@ public class SearchUtils {
             case "dokumentacni_jednotka":
                 searcher = new DokJednotkaSearcher();
                 break;
-            case "dokument":
+            case "dokument_cast":
+                searcher = new DokumentCastSearcher();
+                break;
+            case "dokument": 
                 searcher = new DokumentSearcher("dokument");
                 break;
 //            case "komponenta":
@@ -281,6 +284,9 @@ public class SearchUtils {
                 break;
             case "jednotka_dokumentu":
                 searcher = new JednotkaDokumentuSearcher();
+                break;
+            case "dokument_cast":
+                searcher = new DokumentCastSearcher();
                 break;
             case "komponenta":
                 searcher = new KomponentaSearcher();

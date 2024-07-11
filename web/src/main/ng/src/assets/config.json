@@ -272,9 +272,9 @@
     "f_let_letiste_cil" 
   ], 
   
-  "urlFields": ["f_organizace", "f_rok_vzniku", "f_okres", "f_katastr", "f_obdobi",
+  "urlFields": ["f_organizace", "dokument_rok_vzniku", "f_okres", "f_katastr", "f_obdobi",
       "f_areal", "f_aktivita", "f_druh_lokality", "f_druh_nalezu", "f_autor", "f_vedlejsi_typ", "f_hlavni_typ",
-      "f_material_dokumentu", "f_jazyk_dokumentu", "rada", "dokument_kategorie_dokumentu",
+      "f_material_dokumentu", "f_jazyk_dokumentu", "f_rada", "dokument_kategorie_dokumentu",
       "pristupnost", "kategorie","f_typ_dokumentu", "pian_id", "obdobi_poradi",
       "extra_data_datum_vzniku", "datum_zverejneni", "rok_vzniku", "komponenta_dokument_obdobi",
       "vyskovy_bod_typ", "let_letiste_start", "let_letiste_cil", "extra_data_format", "let_organizace",

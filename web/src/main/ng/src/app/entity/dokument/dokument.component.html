@@ -16,7 +16,7 @@
             <app-inline-filter [isChild]="isChild" [field]="'f_autor'" [value]="a"></app-inline-filter><span *ngIf="!last">; </span>
           </ng-container><span class="app-pipe"></span>
         </ng-container>
-        <app-inline-filter [isChild]="isChild" [field]="'f_rok_vzniku'" [value]="result.dokument_rok_vzniku" [isYear]="true"></app-inline-filter>
+        <app-inline-filter [isChild]="isChild" [field]="'dokument_rok_vzniku'" [value]="result.dokument_rok_vzniku" [isYear]="true"></app-inline-filter>
         <span class="app-pipe"></span>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
@@ -49,7 +49,7 @@
           </ng-container>
           <ng-container *ngIf="result.dokument_rada">
             <label class="app-label">{{ 'card.desc.Dokument - řada' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'rada'" [value]="result.dokument_rada" [heslar]="'rada'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'f_rada'" [value]="result.dokument_rada" [heslar]="'f_rada'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.pristupnost">
