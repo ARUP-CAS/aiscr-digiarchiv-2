@@ -103,7 +103,7 @@
    <field name="az_dj_adb" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    
-<!--   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> 
+<!--   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> -->
 <!--   <field name="az_akce" type="string" indexed="false" stored="true" multiValued="true" /> -->
    <field name="akce_projekt" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    <field name="akce_typ" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -119,7 +119,7 @@
    <field name="akce_vedlejsi_typ" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="akce_ulozeni_nalezu" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    <field name="akce_ulozeni_dokumentace" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="akce_chranene_udaje" type="string" indexed="false" stored="true" multiValued="false" /> 
+   <field name="akce_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
    <field name="akce_lokalizace" type="text_general" indexed="true" stored="true" multiValued="true" />
    

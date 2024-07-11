@@ -396,7 +396,7 @@ class ProjektChraneneUdaje {
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
                 } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Can't parse string {0} as WKT", wktStr);
-                    throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
+                    // throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
                     
                 }
                 

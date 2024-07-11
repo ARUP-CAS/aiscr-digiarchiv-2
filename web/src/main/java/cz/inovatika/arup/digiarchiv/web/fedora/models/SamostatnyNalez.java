@@ -29,7 +29,7 @@ import org.locationtech.jts.io.WKTReader;
 public class SamostatnyNalez implements FedoraModel {
 
     public String fieldPrefix = "samostatny_nalez_";
-    
+
     @Field
     public String entity = "samostatny_nalez";
 
@@ -169,7 +169,7 @@ public class SamostatnyNalez implements FedoraModel {
                 SolrInputDocument djdoc = s.createSolrDoc();
                 idocs.add(djdoc);
                 IndexUtils.addJSONField(idoc, "soubor", s);
-                
+
                 idoc.addField("soubor_nazev", s.nazev);
                 idoc.addField("soubor_filepath", s.path);
                 idoc.addField("soubor_rozsah", s.rozsah);
@@ -180,12 +180,12 @@ public class SamostatnyNalez implements FedoraModel {
                 // IndexUtils.getClient().add("soubor", idocs, 10);
             }
         } catch (Exception ex) {
-            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex); 
+            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
-        
+
         String pr = (String) idoc.getFieldValue("pristupnost");
         List<String> prSufix = new ArrayList<>();
 
@@ -201,22 +201,22 @@ public class SamostatnyNalez implements FedoraModel {
         if ("D".compareTo(pr) >= 0) {
             prSufix.add("D");
         }
-        
+
         setFacets(idoc, prSufix);
         setFullText(idoc, prSufix);
     }
-    
+
     public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("facets").toList();
         // List<String> prSufixAll = new ArrayList<>();
-        
+
         for (Object f : indexFields) {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             if (idoc.containsKey(orig)) {
                 IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-            } 
+            }
             for (String sufix : prSufix) {
                 if (idoc.containsKey(orig + "_" + sufix)) {
                     IndexUtils.addFieldNonRepeat(idoc, dest + sufix, idoc.getFieldValues(orig + "_" + sufix));
@@ -230,20 +230,20 @@ public class SamostatnyNalez implements FedoraModel {
 
         for (Object f : indexFields) {
             String s = (String) f;
-            
+
             if (idoc.containsKey(s)) {
                 for (String sufix : SolrSearcher.prSufixAll) {
                     IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
                 }
             }
-            
+
             for (String sufix : prSufix) {
                 if (idoc.containsKey(s + "_" + sufix)) {
                     IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
                 }
             }
         }
-        
+
         // Add value of vocab fields
         for (String sufix : SolrSearcher.prSufixAll) {
             idoc.addField("text_all_" + sufix, ident_cely);
@@ -257,30 +257,28 @@ public class SamostatnyNalez implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        
+
 //-- A: stav = 4
 //-- B: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
 //-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace)
 //-- D-E: bez omezení
-        
-         
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
         String userId = user.optString("ident_cely", "A");
         String userOrg = "none";
         if (user.has("organizace")) {
-          userOrg = user.getJSONObject("organizace").optString("id", "");
+            userOrg = user.getJSONObject("organizace").optString("id", "");
         }
-        
+
         String projektId = (String) doc.getFieldValue("projekt");
-        
+
         SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
                 .setFields("projekt");
         JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
         if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
             projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt");
         }
-        
+
         String projektOrg = null;
         query = new SolrQuery("ident_cely:\"" + projektId + "\"")
                 .setFields("organizace");
@@ -289,19 +287,19 @@ public class SamostatnyNalez implements FedoraModel {
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");
         }
-        
+
         if (userPr.compareToIgnoreCase("C") > 0) {
             return true;
         } else if (st == 4) {
             return true;
-        } else if (userPr.equalsIgnoreCase("C") && 
-                (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
-                userId.equals((String) doc.getFieldValue("historie_uzivatel"))) || 
-                (userOrg.equals(projektOrg)) )) {
-            return true; 
-        } else if (userPr.equalsIgnoreCase("B") && 
-                "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny")) && 
-                userId.equals((String) doc.getFieldValue("historie_uzivatel"))) {
+        } else if (userPr.equalsIgnoreCase("C")
+                && (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
+                && userId.equals((String) doc.getFieldValue("historie_uzivatel")))
+                || (userOrg.equals(projektOrg)))) {
+            return true;
+        } else if (userPr.equalsIgnoreCase("B")
+                && "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
+                && userId.equals((String) doc.getFieldValue("historie_uzivatel"))) {
             // historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
             return true;
         } else {
@@ -312,6 +310,8 @@ public class SamostatnyNalez implements FedoraModel {
 }
 
 class SnChraneneUdaje {
+
+    public static final Logger LOGGER = Logger.getLogger(SnChraneneUdaje.class.getName());
 
 //<xs:element name="katastr" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "ruian-{katastr.kod}" | "{katastr.nazev}" -->
     @JacksonXmlProperty(localName = "katastr")
@@ -361,7 +361,9 @@ class SnChraneneUdaje {
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
             } catch (Exception e) {
-                throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
+
+                LOGGER.log(Level.WARNING, "Can't parse string {0} as WKT", wktStr);
+                // throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
             }
 
         }

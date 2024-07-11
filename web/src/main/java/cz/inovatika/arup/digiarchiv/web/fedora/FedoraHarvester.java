@@ -116,12 +116,12 @@ public class FedoraHarvester {
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
         String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*", "UTF8")
-                + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8");
+                + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
         update(baseQuery, false);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
         baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/", "UTF8")
-                + "&condition=" + URLEncoder.encode("modified>=" + lastDate, "UTF8");
+                + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
         update(baseQuery, true);
 
         Instant end = Instant.now();
@@ -471,7 +471,7 @@ public class FedoraHarvester {
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex);
+            // LOGGER.log(Level.SEVERE, null, ex);
             errors.put(id + ":  " + ex);
             throw ex;
         }
@@ -491,7 +491,7 @@ public class FedoraHarvester {
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex);
+            // LOGGER.log(Level.SEVERE, null, ex);
             errors.put(model + " " + id + ":  " + ex);
             // throw new Exception(ex);
         }
@@ -536,7 +536,7 @@ public class FedoraHarvester {
                         idocs.get(core).add(idoc);
                 }
             } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                // LOGGER.log(Level.SEVERE, null, ex);
                 throw ex;
             }
         }

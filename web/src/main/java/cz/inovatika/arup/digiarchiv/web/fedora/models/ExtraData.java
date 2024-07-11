@@ -1,7 +1,5 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.util.Date;
@@ -18,6 +16,8 @@ import org.locationtech.jts.io.WKTReader;
  * @author alberto
  */
 public class ExtraData {
+    
+    public static final Logger LOGGER = Logger.getLogger(ExtraData.class.getName());
 
     @Field
     public String entity = "extra_data";
@@ -121,12 +121,7 @@ public class ExtraData {
     public WKT geom_wkt;
 
     public void fillSolrFields(SolrInputDocument idoc, String prefix, String pristupnost) {
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            idoc.addField(prefix + "_" + "extra_data", objectMapper.writeValueAsString(this));
-//        } catch (JsonProcessingException ex) {
-//            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_cislo_objektu", cislo_objektu);
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_meritko", meritko);
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_vyska", vyska);
@@ -140,15 +135,11 @@ public class ExtraData {
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_rok_do", rok_do);
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_duveryhodnost", duveryhodnost);
         
-        
 //        IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
 //        IndexUtils.addVocabField(idoc, "extra_data_udalost_typ", udalost_typ);
 //        IndexUtils.addVocabField(idoc, "extra_data_zeme", zeme);
 //        IndexUtils.addJSONField(idoc, "extra_data_geom_gml", geom_gml);
 //        IndexUtils.addJSONField(idoc, "extra_data_geom_wkt", geom_wkt);
-        
-        
-    
     
         if (geom_wkt != null) {
 
@@ -162,7 +153,8 @@ public class ExtraData {
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
             } catch (Exception e) {
-                throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
+                LOGGER.log(Level.WARNING, "Can't parse string {0} as WKT", wktStr);
+                    // throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
             }
 
         } 

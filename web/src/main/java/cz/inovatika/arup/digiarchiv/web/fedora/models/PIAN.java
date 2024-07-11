@@ -8,6 +8,8 @@ import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -113,6 +115,8 @@ public class PIAN implements FedoraModel {
 }
 
 class PIANChraneneUdaje {
+    
+    public static final Logger LOGGER = Logger.getLogger(PIANChraneneUdaje.class.getName());
 
 //<xs:element name="zm10" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{zm10.cislo}" -->
   @JacksonXmlProperty(localName = "zm10")
@@ -150,7 +154,8 @@ class PIANChraneneUdaje {
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc_rpt", p.getY() + "," + p.getX(), pristupnost);
       } catch (Exception e) {
-        throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
+        LOGGER.log(Level.WARNING, "Can't parse string {0} as WKT", wktStr);
+                    // throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
       }
 
     }
