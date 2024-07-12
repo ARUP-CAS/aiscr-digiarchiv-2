@@ -35,27 +35,12 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
         String pfields = String.join(",", fs);
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        String fields = "ident_cely,entity,katastr,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
-                + ",nazev,typ_lokality,druh,popis";
+        
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-//      if (doc.has("parent_akce")) {
-//        JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_akce"), fields);
-//        if (sub != null) {
-//          doc.append(sub.getString("entity"), sub);
-//          parentSearchable = true;
-//        }
-//      }
-//      if (doc.has("parent_lokalita")) {
-//        JSONObject sub = SolrSearcher.getById(client, doc.getString("parent_lokalita"), fields);
-//        if (sub != null) {
-//          doc.append(sub.getString("entity"), sub);
-//          parentSearchable = true;
-//        }
-//      }
 
             String ident_cely = doc.getString("ident_cely");
-            SolrQuery query = new SolrQuery("*").addFilterQuery("dj_ident_cely:\"" + ident_cely + "\"");
+            SolrQuery query = new SolrQuery("*").addFilterQuery("az_dj:\"" + ident_cely + "\"");
             AkceSearcher as = new AkceSearcher();
             query.setFields(as.getChildSearchFields("A"));
             try {
@@ -72,7 +57,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             }
 
             if (doc.has("dj_pian")) {
-                JSONObject sub = SolrSearcher.getById(client, doc.getString("dokumentacni_jednotka_pian"), pfields);
+                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields);
                 if (sub != null) {
                     doc.append("pian", sub);
                 }

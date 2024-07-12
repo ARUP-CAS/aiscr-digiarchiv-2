@@ -454,7 +454,8 @@
         "f_pian_presnost:pian_presnost",
         "f_pian_typ:pian_typ",
         "f_pian_zm10:pian_chranene_udaje.zm10",
-        "f_organizace:akce_organizace"
+        "f_organizace:akce_organizace",
+        "f_jistota:lokalita_jistota"
     ],
     "facets2": [
       "f_kategorie"

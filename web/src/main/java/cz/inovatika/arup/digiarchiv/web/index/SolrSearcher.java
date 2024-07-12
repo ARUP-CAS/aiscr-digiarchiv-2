@@ -133,6 +133,8 @@ public class SolrSearcher {
                 query.addFacetField("{!key=" + f + "}" + f + "_" + pristupnost);
             }
         }
+        
+        // query.addFacetField("lokalita_jistota");
 
         if (request.getParameter("sort") != null) {
             query.setParam("sort", request.getParameter("sort"));

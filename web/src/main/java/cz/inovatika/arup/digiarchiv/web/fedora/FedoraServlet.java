@@ -158,7 +158,10 @@ public class FedoraServlet extends HttpServlet {
         JSONObject json = new JSONObject();
         try {
           FedoraHarvester fh = new FedoraHarvester();
-          json = fh.indexId(req.getParameter("id"));
+          for (String id: req.getParameterValues("id")) {
+              json.put(id, fh.indexId(id));
+          }
+          
         } catch (JSONException ex) {
           json.put("error", ex.toString());
         }

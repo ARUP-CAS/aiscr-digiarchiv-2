@@ -298,7 +298,7 @@ public class SearchServlet extends HttpServlet {
                     if (jo.has("geom_wkt")) {
                         jo.put("geom_wkt_c", jo.getString("geom_wkt"));
                         // jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
-                    } else {
+                    } else if (jo.has("chranene_udaje")) {
                         jo.put("geom_wkt_c", jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value"));
                         // jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value")));
                     }
