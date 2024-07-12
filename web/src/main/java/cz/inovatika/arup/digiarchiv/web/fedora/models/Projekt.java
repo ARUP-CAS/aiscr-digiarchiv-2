@@ -236,8 +236,7 @@ public class Projekt implements FedoraModel {
     }
 
     public void setFullText(SolrInputDocument idoc) {
-        List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("projekt").toList();
-        
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("projekt").getJSONArray("full_text").toList();
 
         Object[] fields = idoc.getFieldNames().toArray();
         for (Object f : fields) {

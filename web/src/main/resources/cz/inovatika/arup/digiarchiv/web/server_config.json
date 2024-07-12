@@ -2,11 +2,6 @@
     "solrhost": "http://localhost:8983/solr/",
     "solrRels": "http://localhost:8983/solr/",
 
-    "OAIHarvester": {
-        "url": "https://api.aiscr.cz/dapro/oai",
-        "sets": ["soubor", "adb", "dok_jednotka", "ext_zdroj", "pian", "let", "projekt", "akce", "lokalita", "samostatny_nalez", "dokument"]
-    },
-
     "OAI": {
         "baseUrl": "http://baseUrl", 
         "repositoryName": "repositoryName",
@@ -42,7 +37,6 @@
 
     "imagesDir": "/home/alberto/Projects/ARUP/data/",
     "thumbsDir": "/home/alberto/.amcr/thumbs/",
-    "thesauriDir": "/home/alberto/.amcr/thesauri/",
     "dynamicThumbs": false,
     "thumbWidth": 100,
     "thumbHeight": 100,
@@ -52,109 +46,9 @@
     "sessionTimeout": 3600,
     "indexSecLevel": "E",
 
-    "amcrapi": {
-        "url_old": "http://api.archeologickamapa.cz/xmlrpc/0/?t=600",
-        "url": "https://backend.aiscr.cz/xmlrpc/0/?t=600",
-        "user": "",
-        "pwd": ""
-    },
-
     "securedFacets": [
         "f_kategorie", "f_pian_zm10",
         "f_okres", "f_katastr"],
-    
-    "indexFieldsByType": {
-        
-
-        "archeologicky_zaznam": [
-            "ident_cely",
-            "okres",
-
-            "dokument",
-
-            "dokumentacni_jednotka_ident_cely",
-            "dokumentacni_jednotka_typ", 
-            "dokumentacni_jednotka_nazev",
-
-            "pian_id",
-
-            "dokumentacni_jednotka_komponenta_ident_cely",
-            "dokumentacni_jednotka_komponenta_obdobi", 
-            "dokumentacni_jednotka_komponenta_presna_datace",
-            "dokumentacni_jednotka_komponenta_areal", 
-            "f_aktivita", 
-            "dokumentacni_jednotka_komponenta_poznamka",
-
-            "dokumentacni_jednotka_adb_ident_cely",
-            "dokumentacni_jednotka_adb_typ_sondy", 
-            "dokumentacni_jednotka_adb_uzivatelske_oznaceni_sondy",
-            "dokumentacni_jednotka_adb_trat",
-            "dokumentacni_jednotka_adb_cislo_popisne",
-            "dokumentacni_jednotka_adb_parcelni_cislo",
-            "dokumentacni_jednotka_adb_podnet", 
-            "dokumentacni_jednotka_adb_autor_popisu",
-            "dokumentacni_jednotka_adb_rok_popisu",
-            "dokumentacni_jednotka_adb_autor_revize",
-            "dokumentacni_jednotka_adb_rok_revize",
-            "dokumentacni_jednotka_adb_poznamka",
-
-            "dokumentacni_jednotka_komponenta_typ_nalezu", 
-            "dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
-            "dokumentacni_jednotka_komponenta_nalez_objekt_specifikace", 
-            "dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
-            "dokumentacni_jednotka_komponenta_nalez_predmet_specifikace"
-        ],
-
-        
-
-        "lokalita": [
-            "nazev",
-            "popis",
-            "poznamka",
-            "uzivatelske_oznaceni"
-
-        ],
-
-        "projekt": [
-            "ident_cely",
-            "typ_projektu", 
-            "okres",
-            "katastr",
-            "dalsi_katastry",
-            "podnet",
-            "lokalita",
-            "parcelni_cislo",
-            "vedouci_projektu",
-            "organizace_prihlaseni", 
-            "uzivatelske_oznaceni", 
-            "nkp_cislo",
-            "nkp_popis",
-            "datum_zahajeni",
-            "datum_ukonceni",
-            "child_akce",
-            "child_samostatny_nalez"
-        ],
-
-        "samostatny_nalez": [
-            "ident_cely",
-                "evidencni_cislo",
-                "okolnosti", 
-                "presna_datace",
-                "poznamka",
-                "predano_organizace", 
-                "katastr",
-                "lokalizace",
-                "datum_nalezu",
-                "child_soubor",
-                "soubor_nazev",
-                "projekt",
-            
-                "okres",
-                "specifikace", 
-                "nalezce",
-                "obdobi", 
-                "druh_nalezu"]
-    },
 
     "kategoriet": {
         "HES-001075": "texty",
@@ -378,6 +272,14 @@
         "az_dj_adb"
     ],
     "facets": [
+    ],
+    "full_text": [
+        "ident_cely",
+        "az_okres",
+        "az_dokument",
+        "az_dj",
+        "pian_ident_cely",
+        "f_aktivita"
     ]
   },
   "akce": {
@@ -496,6 +398,7 @@
       "f_katastr:projekt_chranene_udaje.dalsi_katastr[*].id"
     ],
     "full_text": [
+        "ident_cely",
         "projekt_typ_projektu", 
         "projekt_okres",
         "projekt_hlavni_katastr",
@@ -508,7 +411,8 @@
         "projekt_datum_ukonceni",
         "projekt_archeologicky_zaznam",
         "projekt_dokument",
-        "projekt_samostatny_nalez"]
+        "projekt_samostatny_nalez"
+    ]
   },
   "samostatny_nalez": {
     "header": [

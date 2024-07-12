@@ -171,7 +171,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     }
 
     public void setFullText(SolrInputDocument idoc) {
-        List<Object> indexFields = Options.getInstance().getJSONObject("indexFieldsByType").getJSONArray("archeologicky_zaznam").toList();
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("full_text").toList();
 
         String pr = (String) idoc.getFieldValue("pristupnost");
         List<String> prSufix = new ArrayList<>();
@@ -193,7 +193,6 @@ public class ArcheologickyZaznam implements FedoraModel {
         for (Object f : fields) {
             String s = (String) f;
 
-            // SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
             if (indexFields.contains(s)) {
                 for (String sufix : prSufix) {
                     IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
