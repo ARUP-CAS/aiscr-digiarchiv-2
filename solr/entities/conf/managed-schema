@@ -61,6 +61,7 @@
    <field name="soubor_size_bytes" type="pint" indexed="true" stored="true"  multiValued="true" />   
    <field name="soubor_filepath" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_nazev" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="soubor_id" type="string" indexed="false" stored="true" multiValued="true" /> 
    
    <!-- Dokument fields -->
    <field name="dokument_let" type="string" indexed="true" stored="true" multiValued="false" />

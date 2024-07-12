@@ -7,9 +7,9 @@ package cz.incad.arup.thumbnailsgenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -287,23 +287,29 @@ public class Indexer {
     // String path = doc.getFirstValue("path").toString();
     String url = doc.getFirstValue("path").toString() + "/orig";
     url = url.substring(url.indexOf("record"));
+    
+    
     String mimetype = doc.getFirstValue("mimetype").toString();
     if (overwrite || !ImageSupport.thumbExists(path)) {
-      File f = FedoraUtils.requestFile(url, path).toFile();
-      //FileUtils.copyURLToFile(new URL(url), f);
-      // File f = new File(imagesDir + path);
-      if (!f.exists()) {
-        LOGGER.log(Level.FINE, "File {0} doesn't exists", f);
+      // File f = FedoraUtils.requestFile(url, imagesDir).toFile();
+      InputStream is = FedoraUtils.requestInputStream(url);
+      // byte[] is = FedoraUtils.requestBytes(url, imagesDir);
+      
+      
+      //if (!f.exists()) {
+     //   LOGGER.log(Level.FINE, "File {0} doesn't exists", path);
+      if (is == null) {
+        LOGGER.log(Level.FINE, "File {0} doesn't exists", path);
       } else {
         String msg = String.format("Currently Files processed: %1$d. Pdf thumbs: %2$d. Image thumbs: %3$d.",
                 totalDocs, pdfGen.generated, imgGenerated);
-        LOGGER.log(Level.INFO, "processing file {0}. {1}", new Object[]{f, msg});
+        LOGGER.log(Level.INFO, "processing file {0}. {1}", new Object[]{path, msg});
         if ("application/pdf".equals(mimetype)) {
-          pdfGen.processFile(f, force, onlyThumbs);
-//                            ImageSupport.thumbnailPdfPage(f, 0, nazev);
-//                            ImageSupport.mediumPdf(f, nazev);
+          // pdfGen.processFile(f, force, onlyThumbs);
+          // pdfGen.processBytes(is, path, force, onlyThumbs);
+          pdfGen.processInputStream(is, path, force, onlyThumbs);
         } else {
-          ImageSupport.thumbnailzeImg(f, path, onlyThumbs);
+          // ImageSupport.thumbnailzeImg(is, path, onlyThumbs);
           imgGenerated++;
         }
       }
@@ -342,19 +348,20 @@ public class Indexer {
     totalDocs++;
   }
 
-  public void createThumb(String nazev, boolean onlySmall, boolean force, boolean onlyThumbs) {
+  public void createThumb(String id, boolean onlySmall, boolean force, boolean onlyThumbs) {
     try {
 
       relationsClient = getClient("soubor/");
       SolrQuery query = new SolrQuery();
       //query.setRequestHandler(core);
-      query.setQuery("nazev:\"" + nazev + "\"");
+       // query.setQuery("nazev:\"" + nazev + "\"");
+      query.setQuery("id:\"" + id + "\"");
 
       Options opts = Options.getInstance();
 
       SolrDocumentList docs = relationsClient.query(query).getResults();
       if (docs.getNumFound() == 0) {
-        LOGGER.log(Level.WARNING, "{0} not found", nazev);
+        LOGGER.log(Level.WARNING, "{0} not found", id);
         return;
       }
       SolrDocument doc = docs.get(0);

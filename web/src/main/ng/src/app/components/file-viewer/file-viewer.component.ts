@@ -22,7 +22,7 @@ export class FileViewerComponent implements OnInit {
   // result: any;
 
   files: File[] = [];
-  selectedFile: File = null;
+  selectedFile: File = null; 
 
   currentPage = 1;
   currentPageDisplayed = 1;
@@ -139,15 +139,16 @@ export class FileViewerComponent implements OnInit {
 
       this.data.soubor.forEach(f => {
         const file = new File();
+        file.id = f.id;
         file.nazev = f.nazev;
         file.mimetype = f.mimetype;
         const rozsah = f.rozsah;
         // const rozsah = '20';
         file.rozsah = (rozsah != null) ? parseInt(rozsah, 10) : 1;
-        file.size_bytes = parseInt(f.size_bytes, 10);
+        file.size_mb = f.size_mb;
         file.pages = new Array(file.rozsah);
         file.filepath = f.filepath;
-        file.setSize(true);
+        // file.setSize(true);
         this.files.push(file);
         this.files.sort((a, b) => {
           return a.nazev.localeCompare(b.nazev);

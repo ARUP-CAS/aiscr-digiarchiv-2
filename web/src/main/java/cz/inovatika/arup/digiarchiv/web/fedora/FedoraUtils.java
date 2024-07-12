@@ -6,12 +6,16 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,4 +83,28 @@ public class FedoraUtils {
   public static JSONObject getJsonMetadataById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {
     return new JSONArray(request("record/" + id + "/metadata/fcr:metadata")).getJSONObject(0);
   }
+  
+  public static Path requestFile(String url, String filepath, String mime) throws URISyntaxException, IOException, InterruptedException {
+    HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(new URI(API_POINT + url))
+            .header("Authorization", auth_header())
+            .header("Content-Disposition", "attachment; filename=test.pdf")
+            .header("Content-Type", mime)
+            .build();
+    HttpResponse<Path> response = client.send(request, HttpResponse.BodyHandlers.ofFile(Paths.get(filepath), StandardOpenOption.WRITE, StandardOpenOption.CREATE));
+    // HttpResponse<Path> response = client.send(request, HttpResponse.BodyHandlers.ofFileDownload(Paths.get(filepath), StandardOpenOption.WRITE, StandardOpenOption.CREATE));
+    return response.body();
+  }
+  
+  public static InputStream requestInputStream(String url) throws URISyntaxException, IOException, InterruptedException {
+    HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(new URI(API_POINT + url))
+            .header("Authorization", auth_header())
+            .build();
+    HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+    return response.body();
+  }
+  
 }

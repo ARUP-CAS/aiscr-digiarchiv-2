@@ -60,6 +60,7 @@ export class AppState {
 
   solrResponse: SolrResponse;
   loading: boolean;
+  facetsLoading = false;
   imagesLoading: boolean;
   imagesLoaded = 0;
   numFound: number;

@@ -5,6 +5,7 @@
 package cz.incad.arup.thumbnailsgenerator;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -13,6 +14,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,8 +82,29 @@ public class FedoraUtils {
             .uri(new URI(API_POINT + url))
             .header("Authorization", auth_header())
             .build();
-    HttpResponse<Path> response = client.send(request, HttpResponse.BodyHandlers.ofFile(Paths.get(filepath)));
+    HttpResponse<Path> response = client.send(request, HttpResponse.BodyHandlers.ofFileDownload(Paths.get(filepath), StandardOpenOption.WRITE, StandardOpenOption.CREATE));
     return response.body();
+  }
+  
+  public static InputStream requestInputStream(String url) throws URISyntaxException, IOException, InterruptedException {
+    HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(new URI(API_POINT + url))
+            .header("Authorization", auth_header())
+            .build();
+    HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+    return response.body();
+  }
+  
+  public static byte[] requestBytes(String url, String filepath) throws URISyntaxException, IOException, InterruptedException {
+      System.out.println(API_POINT + url);
+    HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(new URI(API_POINT + url))
+            .header("Authorization", auth_header())
+            .build();
+    HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+    return response.body().readAllBytes();
   }
   
   public static JSONObject getJsonById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {

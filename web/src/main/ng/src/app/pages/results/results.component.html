@@ -11,6 +11,7 @@
     <div class="app-table-cell app-left">
       <div fxLayout="row" fxFlexFill>
         <div fxFlex class="app-facets">
+          <div *ngIf="state.facetsLoading" class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
           <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
           <app-facets></app-facets>
         </div>

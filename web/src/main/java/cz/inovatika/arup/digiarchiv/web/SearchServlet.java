@@ -292,15 +292,16 @@ public class SearchServlet extends HttpServlet {
                     SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                             .setFacet(false);
                     query.setRequestHandler("/search");
-                    query.setFields("geom_wkt,chranene_udaje:[json]");
+                    query.setFields("geom_wkt,chranene_udaje:[json],pian_chranene_udaje:[json]");
 
                     JSONObject jo = SearchUtils.json(query, client, "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
                     if (jo.has("geom_wkt")) {
                         jo.put("geom_wkt_c", jo.getString("geom_wkt"));
                         // jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getString("geom_wkt")));
+                    } else if (jo.has("pian_chranene_udaje")) {
+                        jo.put("geom_wkt_c", jo.getJSONObject("pian_chranene_udaje").getJSONObject("geom_wkt").getString("value"));
                     } else if (jo.has("chranene_udaje")) {
                         jo.put("geom_wkt_c", jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value"));
-                        // jo.put("geom_wkt_c", GPSconvertor.convertGeojson(jo.getJSONObject("chranene_udaje").getJSONObject("geom_wkt").getString("value")));
                     }
 
                     return jo.toString();

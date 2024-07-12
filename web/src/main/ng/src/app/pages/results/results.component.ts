@@ -130,6 +130,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   search(params: Params) {
     this.state.loading = true;
     this.loading = true;
+    this.state.facetsLoading = true;
     const p = Object.assign({}, params);
     
     if (!p['entity']) {
@@ -154,6 +155,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       p['onlyFacets'] = 'true';
       this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
         this.state.setFacets(resp);
+        this.state.facetsLoading = false;
       });
       
       // Math.min(9*itemSize, docs.length * itemSize)

@@ -430,24 +430,24 @@ public class SolrSearcher {
     public static JSONObject getDokBySoubor(String id) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
-            SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
-            QueryResponse rsp = client.query("soubor", query);
-            if (rsp.getResults().isEmpty()) {
-                return null;
-            } else {
-                String dok = (String) rsp.getResults().get(0).getFirstValue("dokument");
-                if (dok == null || "".equals(dok)) {
-                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
-                }
+//            SolrQuery query = new SolrQuery("*").addFilterQuery("soubor_id:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
+//            QueryResponse rsp = client.query("soubor", query);
+//            if (rsp.getResults().isEmpty()) {
+//                return null;
+//            } else {
+//                String dok = (String) rsp.getResults().get(0).getFirstValue("dokument");
+//                if (dok == null || "".equals(dok)) {
+//                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
+//                }
 
-                SolrQuery queryDok = new SolrQuery("*").addFilterQuery("ident_cely:\"" + dok + "\"").setRows(1).setFields("pristupnost,organizace,entity");
+                SolrQuery queryDok = new SolrQuery("*").addFilterQuery("soubor_id:\"" + id + "\"").setRows(1).setFields("pristupnost,organizace,entity");
                 JSONObject jo = json(client, "entities", queryDok);
                 if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                     return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
                 } else {
                     return null;
                 }
-            }
+//            }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;

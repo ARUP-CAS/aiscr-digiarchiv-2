@@ -44,9 +44,10 @@ public class PdfServlet extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
       
-    String id = request.getParameter("id");
+    String id = request.getParameter("nazev");
 
     if (!ImageAccess.isAllowed(request)) {
+      LOGGER.log(Level.WARNING, "insuficient rights!!");
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.getWriter().println("insuficient rights!!");
       return;
