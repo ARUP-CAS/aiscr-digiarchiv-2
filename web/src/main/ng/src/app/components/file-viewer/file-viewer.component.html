@@ -29,7 +29,7 @@
   
   <ngu-carousel #carousel [inputs]="carouselConfig" [dataSource]="selectedFile.pages">
     <div *nguCarouselDef="let item; let idx = index" class="item">
-      <img [src]="imgPoint(selectedFile) + '?size=medium&id='+ selectedFile.id + '&nazev='+ selectedFile.nazev + '&page=' + idx" />
+      <img [src]="imgPoint(selectedFile, 'medium') + '?size=medium&id='+ selectedFile.id + '&nazev='+ selectedFile.nazev + '&page=' + idx" />
     </div>
   </ngu-carousel>
 </div>

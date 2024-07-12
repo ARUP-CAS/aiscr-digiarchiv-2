@@ -28,7 +28,11 @@ public class AkceSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
+            String organizace = doc.optString("organizace");
+            String docPr = doc.getString("pristupnost");
+
+            boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
+            if (docPr.compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
                 doc.remove("chranene_udaje");
                 doc.remove("az_chranene_udaje");
 //                doc.remove("loc");

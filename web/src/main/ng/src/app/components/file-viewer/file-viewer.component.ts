@@ -70,18 +70,18 @@ export class FileViewerComponent implements OnInit {
   }
 
   downloadUrl() {
-    return this.imgPoint(this.selectedFile) + '?full=true&id=' + this.selectedFile.filepath;
+    return this.imgPoint(this.selectedFile, 'full') + '?id=' + this.selectedFile.id;
   }
 
-  imgPoint(doc: any) {
+  imgPoint(doc: any, size: string) {
     if (doc.hasOwnProperty('mimetype')) {
       if (doc.mimetype.indexOf('pdf') > 0) {
         return this.config.context + '/api/pdf';
       } else {
-        return this.config.context + '/api/img';
+        return this.config.context + '/api/img/' + size;
       }
     } else {
-      return this.config.context + '/api/img';
+      return this.config.context + '/api/img/' + size;
     }
   }
 

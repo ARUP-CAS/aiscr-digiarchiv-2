@@ -426,6 +426,7 @@
       "samostatny_nalez_specifikace",
       "samostatny_nalez_chranene_udaje_katastr", 
       "samostatny_nalez_okres",
+      "soubor:[json]",
       "soubor_filepath"
     ],
     "detail": [

@@ -1,12 +1,9 @@
 
 package cz.inovatika.arup.digiarchiv.web;
 
-import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
-import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Instant;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -16,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONObject;
 
 /**
