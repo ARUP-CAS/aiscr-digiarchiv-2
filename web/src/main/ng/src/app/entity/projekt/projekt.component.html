@@ -99,7 +99,7 @@
               </tr>
               <tr *ngIf="result.projekt_planovane_zahajeni">
                 <th class="app-label">{{ 'card.desc.Plánované zahájení' | translate }}:</th>
-                <td>{{ result.projekt_planovane_zahajeni }}</td>
+                <td>{{ formatDate(result.projekt_planovane_zahajeni) }}</td>
               </tr>
               <tr *ngIf="result.projekt_uzivatelske_oznaceni">
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>

@@ -186,5 +186,12 @@ export class ProjektComponent implements OnInit, OnChanges {
       panelClass: 'app-feedback-dialog'
     });
   } 
+
+  formatDate(s: string) {
+    // [2023-05-26, 2023-05-26]
+    // (d)d.(m)m.rrrr - (d)d.(m)m.rrrr
+    let parts = s.replace('[','').replace(']','').split(',');
+    return this.datePipe.transform(parts[0].trim()), 'd.M.yyyy' + ' - ' + this.datePipe.transform(parts[1].trim(), 'd.M.yyyy');
+  }
   
 }
