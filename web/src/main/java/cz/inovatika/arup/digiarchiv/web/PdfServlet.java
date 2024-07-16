@@ -46,7 +46,8 @@ public class PdfServlet extends HttpServlet {
       
     String id = request.getParameter("nazev");
 
-    if (!ImageAccess.isAllowed(request)) {
+      boolean full = Boolean.parseBoolean(request.getParameter("full"));
+    if (!ImageAccess.isAllowed(request, full)) {
       LOGGER.log(Level.WARNING, "insuficient rights!!");
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.getWriter().println("insuficient rights!!");
@@ -55,7 +56,6 @@ public class PdfServlet extends HttpServlet {
     
     try (OutputStream out = response.getOutputStream()) {
       String page = request.getParameter("page");
-      boolean full = Boolean.parseBoolean(request.getParameter("full"));
       Options opts = Options.getInstance();
       if (id != null && !id.equals("")) {
         try {

@@ -35,7 +35,7 @@ export function app(): express.Express {
   server.set('views', distFolder);
 
     // Example Express Rest API endpoints
-    server.get('/api/img', (req, res) => {
+    server.get('/api/img/**', (req, res) => {
       res.redirect(apiServer + req.url);
     });
   

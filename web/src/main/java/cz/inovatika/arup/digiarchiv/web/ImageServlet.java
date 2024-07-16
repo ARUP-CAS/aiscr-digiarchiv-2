@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cz.inovatika.arup.digiarchiv.web;
 
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
@@ -16,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -78,14 +73,14 @@ public class ImageServlet extends HttpServlet {
         }
 
         String id = request.getParameter("id");
+        boolean full = Boolean.parseBoolean(request.getParameter("full"));
 
-        if (!ImageAccess.isAllowed(request)) {
+        if (!ImageAccess.isAllowed(request, full)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().println("insuficient rights!!");
             return;
         }
 
-        boolean full = Boolean.parseBoolean(request.getParameter("full"));
         Options opts = Options.getInstance();
         if (full) {
             String imagesDir = opts.getString("imagesDir");
@@ -271,6 +266,11 @@ public class ImageServlet extends HttpServlet {
         FULL {
             @Override
             void doPerform(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws Exception {
+                if (!ImageAccess.isAllowed(request, true)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().println("insuficient rights!!");
+                    return;
+                }
                 String id = request.getParameter("id");
                 if (id != null && !id.equals("")) {
                     try {
