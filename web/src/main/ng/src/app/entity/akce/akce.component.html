@@ -129,6 +129,10 @@
                 <th class="app-label">{{ 'card.desc.Uložení nálezů' | translate }}:</th>
                 <td>{{ result.akce_ulozeni_nalezu }}</td>
               </tr>
+              <tr *ngIf="result.akce_ulozeni_dokumentace">
+                <th class="app-label">{{ 'card.desc.Uložení dokumentace' | translate }}:</th>
+                <td>{{ result.akce_ulozeni_dokumentace }}</td>
+              </tr>
               <tr *ngIf="result.akce_chranene_udaje?.lokalizace_okolnosti">
                 <th class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</th>
                 <td class="app-split-text">

@@ -200,6 +200,7 @@
                   <td><app-inline-filter [isChild]="isChild" [field]="'f_udalost_typ'" [value]="result.dokument_extra_data.udalost_typ.id" [heslar]="'udalost_typ'"></app-inline-filter></td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.udalost">
+                  <th class="app-label">{{ 'card.desc.Událost' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.udalost}}</td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.rok_od || result.dokument_extra_data.rok_do">
@@ -214,6 +215,10 @@
               <tr *ngIf="result.dokument_extra_data && result.dokument_extra_data.duveryhodnost">
                 <th class="app-label">{{ 'card.desc.Důvěryhodnost' | translate }}:</th>
                 <td>{{ result.dokument_extra_data.duveryhodnost }}</td>
+              </tr>
+              <tr *ngIf="result.dokument_licence">
+                <th class="app-label">{{ 'card.desc.Licence' | translate }}:</th>
+                <td><app-inline-filter [isChild]="isChild" [field]="'dokument_licence'" [value]="result.dokument_licence" [heslar]="'dokument_licence'"></app-inline-filter></td>
               </tr>
             </tbody>
           </table>

@@ -9,7 +9,7 @@
   </mat-expansion-panel-header>
   <ng-container><!--*ngIf="result.dj_negativni_jednotka"-->
     <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
-    {{ result.dj_negativni_jednotka === '1'  ? ('Ano' | translate) : ('Ne' | translate) }}
+    {{ result.dj_negativni_jednotka  ? ('negativní' | translate) : ('pozitivní' | translate) }}
   </ng-container>
   
   <mat-accordion multi="true">

@@ -167,6 +167,8 @@ public class SamostatnyNalez implements FedoraModel {
         IndexUtils.addVocabField(idoc, fieldPrefix + "specifikace", specifikace);
         IndexUtils.addVocabField(idoc, fieldPrefix + "predano_organizace", predano_organizace);
         IndexUtils.addRefField(idoc, fieldPrefix + "nalezce", nalezce);
+        IndexUtils.addRefField(idoc, "okres_sort", okres);
+        IndexUtils.addRefField(idoc, "autor_sort", nalezce);
 
         List<SolrInputDocument> idocs = new ArrayList<>();
         try {
@@ -350,6 +352,7 @@ class SnChraneneUdaje {
         if (katastr != null) {
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
         }
+        IndexUtils.addRefField(idoc, "katastr_sort", katastr);
 
         if (lokalizace != null) {
             IndexUtils.addSecuredFieldNonRepeat(idoc, "samostatny_nalez_lokalizace", lokalizace, pristupnost);

@@ -62,6 +62,10 @@
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
+      <ng-container *ngIf="result.projekt_dokument?.length > 0">
+        {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.projekt_dokument?.length}}</strong>
+        <span class="app-pipe"></span>
+      </ng-container> 
       <ng-container *ngIf="result.projekt_archeologicky_zaznam?.length > 0">
         {{ 'card.desc.Počet archeologickych zaznamu' | translate }}: <strong>{{result.projekt_archeologicky_zaznam?.length}}</strong>
         <span class="app-pipe"></span>
@@ -135,10 +139,12 @@
           <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
             [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
             <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-dokument *ngFor="let dok of result.valid_projekt_dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
             <app-samostatny-nalez *ngFor="let sn of result.valid_samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
           </cdk-virtual-scroll-viewport>
           
           <ng-container *ngIf="vsSize > 0 && state.printing" >
+            <app-dokument *ngFor="let dok of result.valid_projekt_dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
             <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-samostatny-nalez *ngFor="let sn of result.valid_samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
           </ng-container>

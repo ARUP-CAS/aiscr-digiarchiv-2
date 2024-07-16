@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import static cz.inovatika.arup.digiarchiv.web.index.AkceSearcher.LOGGER;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -81,8 +82,11 @@ public class ProjektSearcher implements EntitySearcher {
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
+            
+            
+        
+        
             JSONArray samostatny_nalez = new JSONArray();
-
             if (doc.has("projekt_samostatny_nalez")) {
 //                SolrQuery query = new SolrQuery("*")
 //                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
@@ -225,7 +229,25 @@ public class ProjektSearcher implements EntitySearcher {
                 jaAz.put(jaaz.getJSONObject(j).getString("ident_cely"));
             }
             doc.put("projekt_archeologicky_zaznam", jaAz);
-
+            
+            JSONArray valid_dokuments = new JSONArray();
+            if (doc.has("projekt_dokument")) {
+                query = new SolrQuery("*")
+                        // .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                        .addFilterQuery("ident_cely:" + doc.getJSONArray("projekt_dokument").join("\" OR \""))
+                        .setRows(10000)
+                        .setFields("ident_cely");
+                try {
+                    JSONObject j = SolrSearcher.json(client, "entities", query);
+                    JSONArray jad = j.getJSONObject("response").getJSONArray("docs");
+                    for (int a = 0; a < jad.length(); a++) {
+                        valid_dokuments.put(jad.getJSONObject(a).getString("ident_cely"));
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+            doc.put("projekt_dokument", valid_dokuments);
         }
     }
 

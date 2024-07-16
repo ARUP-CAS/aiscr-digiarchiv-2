@@ -128,7 +128,8 @@
       "projekt_okres",
       "dokument_cast_neident_akce_okres","dokument_cast_akce", "dokument_cast_lokalita",
       "soubor:[json]",
-      "soubor_filepath"
+      "soubor_filepath",
+      "location_info:[json]"
     ],
     "detail": [
       "dokument_jazyk_dokumentu",
@@ -140,7 +141,8 @@
       "dokument_cast:[json]",
       "dokument_extra_data:[json]",
       "dokument_let:[json]","dokument_tvar:[json]",
-      "dokument_osoba"
+      "dokument_osoba",
+      "dokument_licence"
     ],
     "facets": [
       "f_pozorovatel:dokument_let.let_pozorovatel", 
@@ -227,7 +229,7 @@
         "extra_data_udalost",
         "extra_data_zeme", 
 
-        "let_ident_cely",
+        "dokument_let_ident_cely",
         "let_datum",
         "let_pozorovatel",
         "let_organizace",
@@ -286,7 +288,7 @@
     "header": [
         "akce_hlavni_vedouci", "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "odlozena_nz", "pristupnost",
         "akce_projekt", "akce_typ","akce_je_nz","akce_odlozena_nz","akce_hlavni_vedouci",
-        "akce_organizace","akce_vedouci_akce_ostatni","akce_specifikace_data","akce_datum_zahajeni", 
+        "akce_organizace","akce_vedouci_akce_ostatni:[json]","akce_specifikace_data","akce_datum_zahajeni", 
         "akce_datum_ukonceni" ,"akce_hlavni_typ","akce_vedlejsi_typ","akce_ulozeni_nalezu",
         "akce_ulozeni_dokumentace","akce_chranene_udaje:[json]"
     ],
@@ -374,6 +376,7 @@
         "projekt_organizace",
         "projekt_typ_projektu",
         "projekt_datum_zahajeni",
+        "projekt_datum_ukonceni",
         "projekt_podnet",
         "projekt_chranene_udaje:[json]",
         "projekt_archeologicky_zaznam",

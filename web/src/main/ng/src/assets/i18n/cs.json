@@ -7,6 +7,8 @@
   "nebo": "nebo",
   "from": "od",
   "to": "do",
+  "negativní": "negativní",
+  "pozitivní": "pozitivní",
 
 
   "navbar": {
@@ -372,6 +374,8 @@
       "Země": "Země",
       "Region": "Region",
       "Typ události": "Typ události",
+      "Událost": "Událost",
+      "Licence": "Licence",
       "Rok od-do": "Rok události (od-do)",
       "Osoby": "Osoby",
       "Důvěryhodnost": "Důvěryhodnost",
@@ -391,6 +395,7 @@
       "Ostatní organizace": "Ostatní organizace",
       "Uživatelské označení": "Uživatelské označení",
       "Uložení nálezů": "Uložení nálezů",
+      "Uložení dokumentace": "Uložení dokumentace",
       "Datum výzkumu": "Datum",
       "Komponenta - areál": "Areál",
       "Období": "Období",

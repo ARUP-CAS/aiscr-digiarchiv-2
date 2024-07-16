@@ -90,7 +90,7 @@ public class I18n {
     solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
     docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < docs.length(); i++) {
-      heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getString(field));
+      heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
     }
     
     //Pristupnost indexujeme zkratky

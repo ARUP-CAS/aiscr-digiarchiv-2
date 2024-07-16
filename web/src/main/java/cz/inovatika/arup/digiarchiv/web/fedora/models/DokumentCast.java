@@ -82,7 +82,7 @@ public class DokumentCast {
         if (archeologicky_zaznam != null) {
             addLocation(idoc, pristupnost.toUpperCase());
             // SolrSearcher.addFieldNonRepeat(idoc, "location_info", location_info);
-            //idoc.addField("location_info", location_info);
+            idoc.addField("location_info", location_info);
         }
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
 
@@ -96,7 +96,7 @@ public class DokumentCast {
 
     private void addLocation(SolrInputDocument idoc, String pristupnost) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
-                .setFields("*,katastr:hlavni_katastr_" + pristupnost, "az_okres,pristupnost");
+                .setFields("*,katastr:f_katastr_" + pristupnost, "az_okres,pristupnost");
 
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", archeologicky_zaznam.getId());
 
@@ -108,17 +108,16 @@ public class DokumentCast {
 
             if (doc.has("katastr")) {
                 // SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_katastr", doc.getString("katastr"));
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.getString("katastr"), pristupnost);
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.get("katastr"), pristupnost);
                 // SolrSearcher.addFieldNonRepeat(idoc, "dokument_cast_okres", doc.getString("az_okres"));
                 IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("az_okres"));
                 JSONObject li = new JSONObject()
                         .put("pristupnost", doc.getString("pristupnost"))
-                        .put("katastr", doc.getString("katastr"))
-                        .put("okres", doc.getString("okres"));
+                        .put("katastr", doc.get("katastr"))
+                        .put("okres", doc.getString("az_okres"));
 
                 if (!location_info.contains(li.toString())) {
                     location_info.add(li.toString());
-                    SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
                 }
             }
 

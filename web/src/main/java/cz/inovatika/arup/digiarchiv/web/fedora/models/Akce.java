@@ -96,7 +96,9 @@ public class Akce {
         //akceDoc.setField("pristupnost", pristupnost);
         IndexUtils.addVocabField(akceDoc, "akce_projekt", akce_projekt);
         IndexUtils.addRefField(akceDoc, "akce_hlavni_vedouci", akce_hlavni_vedouci);
+        IndexUtils.addRefField(idoc, "autor_sort", akce_hlavni_vedouci);
         IndexUtils.addVocabField(akceDoc, "akce_organizace", akce_organizace);
+        IndexUtils.addRefField(idoc, "organizace_sort", akce_organizace);
         IndexUtils.addVocabField(akceDoc, "akce_specifikace_data", akce_specifikace_data);
         IndexUtils.addVocabField(akceDoc, "akce_hlavni_typ", akce_hlavni_typ);
         IndexUtils.addVocabField(akceDoc, "akce_vedlejsi_typ", akce_vedlejsi_typ);

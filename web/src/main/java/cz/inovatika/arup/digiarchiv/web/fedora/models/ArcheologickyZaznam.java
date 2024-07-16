@@ -93,6 +93,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         idoc.setField("searchable", searchable);
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         IndexUtils.addRefField(idoc, "az_okres", az_okres);
+        IndexUtils.addRefField(idoc, "okres_sort", az_okres);
 
         if (az_chranene_udaje != null) {
             az_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -320,6 +321,7 @@ class AZChraneneUdaje {
         IndexUtils.setSecuredJSONField(idoc, "az_chranene_udaje", this);
         // IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
+        IndexUtils.addRefField(idoc, "katastr_sort", hlavni_katastr);
 
         for (Vocab v : dalsi_katastr) {
             // IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);

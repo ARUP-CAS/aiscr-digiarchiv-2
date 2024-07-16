@@ -4,7 +4,7 @@
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
       {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
       <app-inline-filter [field]="'f_obdobi'" [value]="result.komponenta_obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
-      <ng-container *ngIf="!result.komponenta_jistota || result.komponenta_presna_datace">&#160;(<ng-container *ngIf="!result.komponenta_jistota">{{ 'komponenta_dokument_jistota_false' | translate }}</ng-container><ng-container *ngIf="!result.komponenta_jistota && result.komponenta_presna_datace">;&#160;</ng-container><ng-container *ngIf="result.komponenta_presna_datace">{{result.komponenta_presna_datace}}</ng-container>)</ng-container>
+      <ng-container *ngIf="!result.komponenta_jistota || result.komponenta_presna_datace">&#160;(<ng-container *ngIf="!result.komponenta_jistota">{{ 'facet.field.komponenta_dokument_jistota_false' | translate }}</ng-container><ng-container *ngIf="!result.komponenta_jistota && result.komponenta_presna_datace">;</ng-container><ng-container *ngIf="result.komponenta_presna_datace">&#160;{{result.komponenta_presna_datace}}</ng-container>)</ng-container>
       <ng-container *ngIf="result.komponenta_areal">&#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="result.komponenta_areal.id" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
       <!-- <ng-container *ngIf="aktivity.length > 0"> 
         &#160;(<ng-container *ngFor="let aktivita of aktivity; let last = last">

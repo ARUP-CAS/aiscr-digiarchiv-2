@@ -168,7 +168,14 @@ public class Dokument implements FedoraModel {
         for (Vocab v : dokument_autor) {
             IndexUtils.addRefField(idoc, "dokument_autor", v); 
         }
+        
+        if (!dokument_autor.isEmpty()) {
+            IndexUtils.addRefField(idoc, "autor_sort", dokument_autor.get(0));
+        }
+        
+        
         IndexUtils.addVocabField(idoc, "dokument_organizace", dokument_organizace);
+        IndexUtils.addRefField(idoc, "organizace_sort", dokument_organizace);
 
         for (Vocab v : dokument_jazyk_dokumentu) {
             IndexUtils.addVocabField(idoc, "dokument_jazyk_dokumentu", v);
@@ -232,7 +239,7 @@ public class Dokument implements FedoraModel {
 
         SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
                 //.addFilterQuery("searchable:true")
-                .setFields("searchable,katastr,okres,pristupnost,f_typ_vyzkumu");
+                .setFields("searchable,az_chranene_udaje,az_okres,pristupnost,f_typ_vyzkumu");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", id);
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
@@ -240,22 +247,28 @@ public class Dokument implements FedoraModel {
                 if (doc.has("f_typ_vyzkumu")) {
                     SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", doc.get("f_typ_vyzkumu"));
                 }
+//                String pr = doc.getString("pristupnost");
+//                SolrSearcher.addFieldNonRepeat(idoc, "az_okres", doc.get("az_okres"));
+//                SolrSearcher.addSecuredFieldNonRepeat(idoc, "az_chranene_udaje", doc.get("az_chranene_udaje"), pr);
             }
         }
     }
 
     private void addLet(SolrInputDocument idoc) throws Exception {
 
-//        IndexUtils.addVocabField(idoc, "dokument_let", dokument_let);
+        IndexUtils.addVocabField(idoc, "dokument_let_ident_cely", dokument_let);
         SolrQuery query = new SolrQuery("ident_cely:\"" + dokument_let.getId() + "\"");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", dokument_let.getId());
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
                 SolrSearcher.addFieldNonRepeat(idoc, "dokument_let", doc.toString());
-//                for (String key : doc.keySet()) {
-//                    SolrSearcher.addFieldNonRepeat(idoc, "let_" + key, doc.opt(key));
-//                }
+                for (String key : doc.keySet()) {
+                    if (key.startsWith("let_")) {
+                        SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
+                    }
+                    
+                }
             }
         }
     }

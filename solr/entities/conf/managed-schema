@@ -65,6 +65,7 @@
    
    <!-- Dokument fields -->
    <field name="dokument_let" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_let_ident_cely" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_typ_dokumentu" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_material_originalu" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_rada" type="string" indexed="true" stored="true" multiValued="false" />

@@ -7,6 +7,8 @@
   "nebo":"or",
   "from": "from",
   "to": "to",
+  "negativní": "negativ",
+  "pozitivní": "pozitiv",
 
 
   "navbar": {
@@ -369,6 +371,8 @@
       "Země": "Country",
       "Region": "Region",
       "Typ události": "Type of event",
+      "Událost": "Event",
+      "Licence": "Licence",
       "Rok od-do": "Year of event (from-to)",
       "Osoby": "Persons",
       "Důvěryhodnost": "Credibility",
@@ -388,6 +392,7 @@
       "Ostatní organizace": "Other organisations",
       "Uživatelské označení": "User label",
       "Uložení nálezů": "Finds repository",
+      "Uložení dokumentace": "Documentation repository",
       "Datum výzkumu": "Date",
       "Komponenta - areál": "Activity area",
       "Období": "Period",
