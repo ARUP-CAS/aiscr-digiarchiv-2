@@ -25,7 +25,7 @@
     <dependency>
       <groupId>com.twelvemonkeys.imageio</groupId>
       <artifactId>imageio-jpeg</artifactId>
-      <version>3.5</version> <!-- Alternatively, build your own version -->
+      <version>3.11.0</version> <!-- Alternatively, build your own version -->
     </dependency>
     
     <dependency>
