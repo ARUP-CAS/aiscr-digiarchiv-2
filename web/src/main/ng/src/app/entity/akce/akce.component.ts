@@ -61,7 +61,8 @@ export class AkceComponent implements OnInit, OnChanges {
           this.result.valid_dokument = [];
           this.result.valid_projekt = [];
           this.getDokuments();
-          this.getProjekts();
+          this.getProjekts(); 
+          this.getExtEzdroj();
         }, 100);
       }
     }  
@@ -94,6 +95,17 @@ export class AkceComponent implements OnInit, OnChanges {
     this.state.loading = (this.dokLoaded + this.result.valid_projekt.length) < this.numChildren;
     if (!this.state.loading) {
       this.result.valid_dokument = this.result.dokumentTemp.concat([]);
+    }
+  }
+
+  getExtEzdroj() {
+    if (this.result.az_ext_zdroj) {
+      for (let i = 0; i < this.result.az_ext_zdroj.length; i = i + 20) {
+        const ids = this.result.az_ext_zdroj.slice(i, i + 20);
+        this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
+            this.result.az_ext_zdroj = res.response.docs;
+        });
+      }
     }
   }
 
@@ -142,8 +154,7 @@ export class AkceComponent implements OnInit, OnChanges {
       this.result.valid_projekt = [];
       this.getDokuments();
       this.getProjekts();
-      // this.result.akce = res.response.docs[0].akce;
-      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.getExtEzdroj();
       this.hasDetail = true;
     //});
   }

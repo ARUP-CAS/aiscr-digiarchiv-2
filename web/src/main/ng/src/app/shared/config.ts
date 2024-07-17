@@ -69,6 +69,6 @@ export class Configuration {
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};
 
-  choiceApi: {label: string, metadataPrefix: string}[];
+  choiceApi: {label: string, metadataPrefix: string, url: string}[];
   feedBackMaxLength: number;
 }

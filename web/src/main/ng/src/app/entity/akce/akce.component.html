@@ -152,27 +152,27 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.ext_odkaz?.length > 0" [expanded]="true">
+        <mat-expansion-panel *ngIf="result.az_ext_zdroj?.length > 0" [expanded]="true">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Externí zdroje' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ul class="app-clean-mg">
-            <app-externi-zdroj *ngFor="let eo of result.ext_odkaz" [result]="eo.ext_zdroj"></app-externi-zdroj>  
+            <app-externi-zdroj *ngFor="let eo of result.az_ext_zdroj" [result]="eo"></app-externi-zdroj>  
           </ul>
         </mat-expansion-panel> 
         
         <mat-expansion-panel *ngIf="(result.valid_dokument?.length > 0 || result.valid_projekt?.length > 0)" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}:
+              {{ 'card.panelTitle.Související záznamy' | translate }}: {{vsSize}}
             </mat-panel-title>
           </mat-expansion-panel-header>
           <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
             [minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
-            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
             <app-dokument *cdkVirtualFor="let dok of result.valid_dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
+            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
           </cdk-virtual-scroll-viewport>
           <ng-container *ngIf="vsSize > 0 && state.printing">
             <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>

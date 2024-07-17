@@ -79,7 +79,7 @@ public class AkceSearcher implements EntitySearcher {
             SolrSearcher.addChildField(client, doc, "akce_projekt", "valid_projekt", fields);
         }
     }
-    
+
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -113,31 +113,31 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-        
+
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
-        JSONObject doc = docs.getJSONObject(i);
-        JSONArray valid_dokuments = new JSONArray();
-        if (doc.has("az_dokument")) {
-            SolrQuery query = new SolrQuery("*")
-                    // .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-                    .addFilterQuery("ident_cely:\"" + doc.getJSONArray("az_dokument").join("\" OR \"") + "\"")
-                    .setRows(10000)
-                    .setFields("ident_cely");
-            try {
-                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
-                for (int a = 0; a < ja.length(); a++) {
-                    valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
+            JSONObject doc = docs.getJSONObject(i);
+            JSONArray valid_dokuments = new JSONArray();
+            if (doc.has("az_dokument")) {
+                SolrQuery query = new SolrQuery("*")
+                        // .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
+                        .addFilterQuery("ident_cely:" + doc.getJSONArray("az_dokument").join("\" OR \""))
+                        .setRows(10000)
+                        .setFields("ident_cely");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    for (int a = 0; a < ja.length(); a++) {
+                        valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
                 }
-            } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
             }
-        }
-        doc.put("az_dokument", valid_dokuments);
+            doc.put("az_dokument", valid_dokuments);
 
-        if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
-            doc.remove("akce_projekt");
-        }
+            if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
+                doc.remove("akce_projekt");
+            }
         }
     }
 
@@ -150,16 +150,15 @@ public class AkceSearcher implements EntitySearcher {
             setQuery(request, query);
             //LOGGER.log(Level.INFO, "send request");
             JSONObject jo = SearchUtils.json(query, client, "entities");
-            
+
             //LOGGER.log(Level.INFO, "checkRelations");
             checkRelations(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             //LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            
-            
+
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-            //LOGGER.log(Level.INFO, "addPians");
+                //LOGGER.log(Level.INFO, "addPians");
                 addPians(jo, client, request);
             }
             //LOGGER.log(Level.INFO, "addFavorites");
@@ -188,7 +187,7 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        
+
         List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
         List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
         List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
@@ -206,7 +205,7 @@ public class AkceSearcher implements EntitySearcher {
 
         String[] ret = fields.toArray(new String[0]);
         return ret;
-        
+
 //        return new String[]{"ident_cely", "okres", "f_okres:okres", "hlavni_vedouci", "loc", "entity", "datestamp",
 //            "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "odlozena_nz", "pristupnost",
 //            "organizace", "f_organizace:organizace", "projekt", "dokument",

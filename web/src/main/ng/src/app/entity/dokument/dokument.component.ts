@@ -21,7 +21,10 @@ export class DokumentComponent implements OnInit, OnChanges {
 
   @Input() set result(value: any) {
     this._result = value;
-    this.setImg();
+    if (this._result) {
+      this.setImg();
+    }
+    
   }
 
   get result(): any {
@@ -67,6 +70,10 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    console.log(this.result)
+    if (!this.result) {
+      return;
+    }
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     if (this.result.pian) {
       this.result.pian.forEach(pian => {
@@ -142,13 +149,13 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   setBibTex() {
-    const organizace = this.service.getHeslarTranslation(this.result.organizace, 'organizace');
-    const autor = this.result.autor ? this.result.autor.join(' and ') : '';
+    const organizace = this.service.getHeslarTranslation(this.result.dokument_organizace, 'organizace');
+    const autor = this.result.dokument_autor ? this.result.dokument_autor.join(' and ') : '';
     this.bibTex = `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
       author = {${autor}}, 
       title = {Dokument ${this.result.ident_cely}},
       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-      year = {${this.result.rok_vzniku}},
+      year = {${this.result.dokument_rok_vzniku}},
       note = {${organizace}}
     }`;
   }

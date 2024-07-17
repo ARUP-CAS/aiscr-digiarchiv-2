@@ -46,10 +46,13 @@ public class ExtZdrojSearcher implements EntitySearcher {
         if ("E".equals(pristupnost)) {
             pristupnost = "D";
         }
-        String[] f = new String[]{
-            "chranene_udaje:[json]",
-            "ident_cely,entity,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
-        };
+        
+        AkceSearcher as = new AkceSearcher();
+            
+//        String[] f = new String[]{
+//            "chranene_udaje:[json]",
+//            "ident_cely,entity,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
+//        };
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             try {
@@ -57,10 +60,11 @@ public class ExtZdrojSearcher implements EntitySearcher {
                 if (LoginServlet.userId(request) != null) {
                     SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
                 }
-                String arch = doc.getJSONArray("ext_odkaz").getJSONObject(0).getJSONObject("archeologicky_zaznam").getString("id");
+                String arch = doc.getJSONArray("ext_zdroj_ext_odkaz").getJSONObject(0).getJSONObject("archeologicky_zaznam").getString("id");
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery("ident_cely:\"" + arch + "\"")
-                        .setFields(f);
+                        .setFields(as.getChildSearchFields(pristupnost));
+                        //.setFields(f);
                 JSONObject r = SolrSearcher.json(client, "entities", query);
                 JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
                 
@@ -107,7 +111,7 @@ public class ExtZdrojSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,ext_odkaz:[json]"};
+        return new String[]{"*,ext_zdroj_ext_odkaz:[json]"};
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {

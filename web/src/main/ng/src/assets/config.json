@@ -50,8 +50,8 @@
 	[
 		{ "label": "datestamp", "field": "datestamp", "dir": "desc", "entity": ["dokument", "projekt", "akce", "lokalita", "samostatny_nalez", "knihovna_3d"] },
 		{ "label": "datestamp", "field": "datestamp", "dir": "asc", "entity": ["dokument", "projekt", "akce", "lokalita", "samostatny_nalez", "knihovna_3d"] },
-		{ "label": "datum_nalezu", "field": "datum_nalezu", "dir": "desc", "entity": ["samostatny_nalez"] },
-		{ "label": "datum_nalezu", "field": "datum_nalezu", "dir": "asc", "entity": ["samostatny_nalez"] },
+		{ "label": "datum_nalezu", "field": "samostatny_nalez_datum_nalezu", "dir": "desc", "entity": ["samostatny_nalez"] },
+		{ "label": "datum_nalezu", "field": "samostatny_nalez_datum_nalezu", "dir": "asc", "entity": ["samostatny_nalez"] },
 		{ "label": "rok_vzniku", "field": "dokument_rok_vzniku", "dir": "desc", "entity": ["dokument", "knihovna_3d"] },
 		{ "label": "rok_vzniku", "field": "dokument_rok_vzniku", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },
 		{ "label": "katastr", "field": "katastr_sort", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
@@ -375,8 +375,11 @@
     },
 
   "choiceApi": [
-    {"label": "(prefix: oai_amcr)", "metadataPrefix": "oai_amcr"}
+    {"label": "api_prefix", "url": "https://digiarchiv-test.aiscr.cz/api/oai?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api-test.aiscr.cz/id/"},
+    {"label": "show_in_AMCR", "url": "https://api-test.aiscr.cz/id/"}
   ],
 
   "feedBackMaxLength": 4000
 }
+
+

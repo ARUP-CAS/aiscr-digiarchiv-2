@@ -81,8 +81,7 @@ public class LokalitaSearcher implements EntitySearcher {
             JSONArray valid_dokuments = new JSONArray();
             if (doc.has("az_dokument")) {
                 SolrQuery query = new SolrQuery("*")
-                        // .addFilterQuery("{!join fromIndex=entities to=ident_cely from=az_dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-                        .addFilterQuery("ident_cely:\"" + doc.getJSONArray("az_dokument").join("\" OR \"") + "\"")
+                        .addFilterQuery("ident_cely:" + doc.getJSONArray("az_dokument").join("\" OR \""))
                         .setRows(10000)
                         .setFields("ident_cely");
                 try {

@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,7 +64,7 @@ public class OAIRequest {
             emptyTransformer.setOutputProperty("omit-xml-declaration", "yes");
         }
         return emptyTransformer;
-    }
+    } 
 
     public static String headerOAI() {
         return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
@@ -81,7 +80,7 @@ public class OAIRequest {
         for (String p : req.getParameterMap().keySet()) {
             ret.append(p).append("=\"").append(req.getParameter(p)).append("\" ");
         }
-        ret.append(">").append(req.getRequestURL()).append("</request>");
+        ret.append(">").append(Options.getInstance().getJSONObject("OAI").getString("baseUrl")).append("/oai</request>");
         return ret.toString();
     }
 
@@ -149,6 +148,7 @@ public class OAIRequest {
             data.put("expires", d);
             idoc.setField("data", data.toString());
             idoc.setField("expiration", d);
+            data.put("expiration", d);
             IndexUtils.getClientBin().add("work", idoc);
             IndexUtils.getClientBin().commit("work");
         } catch (Exception ex) {
@@ -208,7 +208,7 @@ public class OAIRequest {
         if ("akce".equals(set) || "lokalita".equals(set)) {
             return false;
         }
-        return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set); 
+        return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set);
     }
 
     public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers) {
@@ -371,10 +371,14 @@ public class OAIRequest {
                         .append("completeListSize=\"")
                         .append(docs.getNumFound())
                         .append("\" ")
+                        .append("expirationDate=\"")
+                        .append(rt.getString("expiration"))
+                        .append("\" ")
                         .append(oaiCursor)
                         .append(">")
                         .append(md5Hex)
                         .append("</resumptionToken>");
+
             }
 
         } catch (IllegalArgumentException ex) {
@@ -386,7 +390,7 @@ public class OAIRequest {
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
             return badArgument(req);
-        } 
+        }
         if (onlyIdentifiers) {
             ret.append("</ListIdentifiers>");
         } else {
@@ -430,10 +434,10 @@ public class OAIRequest {
         ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req));
-        
+
         ret.append("<GetRecord>");
         try {
-            String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";            
+            String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             if (req.getParameter("identifier").length() < prefix.length()) {
                 return idDoesNotExist(req);
             }
@@ -454,7 +458,7 @@ public class OAIRequest {
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
             return badArgument(req);
-        } 
+        }
         ret.append("</GetRecord></OAI-PMH>");
         return ret.toString();
     }
@@ -466,14 +470,14 @@ public class OAIRequest {
         if (doc.containsKey("is_deleted")) {
             isDeleted = (boolean) doc.getFieldValue("is_deleted");
         }
-        String status = isDeleted ? " status=\"deleted\"" : "";
+        String status = isDeleted ? " status=\"deleted\" " : "";
 
         String model = (String) doc.getFieldValue("model");
         if (model.equals("akce") || model.equals("lokalita")) {
             model = "archeologicky_zaznam:" + model;
         }
         ret.append("<record>");
-        ret.append("<header").append(status).append(" >")
+        ret.append("<header").append(status).append(">")
                 .append("<identifier>")
                 .append(Options.getInstance().getJSONObject("OAI").getString("baseUrl"))
                 .append("/id/")
@@ -506,30 +510,51 @@ public class OAIRequest {
         ret.append("</record>");
     }
 
-    private static final String ERROR_404_MSG = "<amcr:amcr xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:gml=\"https://www.opengis.net/gml/3.2\" xmlns:amcr=\"https://api.aiscr.cz/schema/amcr/2.0/\" xsi:schemaLocation=\"https://api.aiscr.cz/schema/amcr/2.0/ https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd\">\n" +
-"    HTTP/1.1 403 Forbidden\n" +
-"  </amcr:amcr>";
+    private static final String ERROR_404_MSG = "<amcr:amcr xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:gml=\"https://www.opengis.net/gml/3.2\" xmlns:amcr=\"https://api.aiscr.cz/schema/amcr/2.0/\" xsi:schemaLocation=\"https://api.aiscr.cz/schema/amcr/2.0/ https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd\">\n"
+            + "    HTTP/1.1 403 Forbidden\n"
+            + "  </amcr:amcr>";
 
     private static String filter(HttpServletRequest req, SolrDocument doc) {
         // LoginServlet.organizace(req.getSession())
         String userPristupnost = LoginServlet.user(req).optString("pristupnost", "A");
+        String userOrg = LoginServlet.organizace(req.getSession());
+
         String docPristupnost = (String) doc.getFieldValue("pristupnost");
+        String projektOrg = (String) doc.getFieldValue("organizace");
         String model = (String) doc.getFieldValue("model");
         FedoraModel fm = FedoraModel.getFedoraModel(model);
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
             String xml = (String) doc.getFieldValue("xml");
-            if (xml.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
-                String ret = xml;
+            String ret = xml;
+            if (ret.contains("<amcr:oznamovatel>") && "C".compareToIgnoreCase(userPristupnost) > 0 &&
+                    ("C".compareToIgnoreCase(userPristupnost) < 0 || !userOrg.equals(projektOrg))) {
+
+//projekt/oznamovatel
+//-- A-B: nikdy
+//-- C: projekt/organizace = {user}.organizace
+//-- D-E: bez omezení
+                while (ret.contains("<amcr:oznamovatel")) {
+                    int pos1 = ret.indexOf("<amcr:oznamovatel>");
+                    String s = ret.substring(0, pos1) + "<####>HTTP/1.1 403 Forbidden</####>";
+                    int pos2 = ret.lastIndexOf("</amcr:oznamovatel>");
+                    s += ret.substring(pos2 + "</amcr:oznamovatel>".length());
+                    ret = s;
+                }
+                ret = ret.replaceAll("####", "amcr:oznamovatel");
+            }
+
+            if (ret.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
+
                 while (ret.contains("<amcr:chranene_udaje>")) {
                     int pos1 = ret.indexOf("<amcr:chranene_udaje>");
-                    String s = ret.substring(0, pos1);
+                    String s = ret.substring(0, pos1) + "<####>HTTP/1.1 403 Forbidden</####>";
                     int pos2 = ret.indexOf("</amcr:chranene_udaje>");
                     s += ret.substring(pos2 + "</amcr:chranene_udaje>".length());
                     ret = s;
                 }
-                return ret;
+                return ret.replaceAll("####", "amcr:chranene_udaje");
             } else {
-                return xml;
+                return ret;
             }
         } else {
             return ERROR_404_MSG;

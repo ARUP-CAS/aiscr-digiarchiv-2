@@ -75,7 +75,7 @@
     <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
   </mat-card-actions>
-  <mat-card-content *ngIf="detailExpanded && !isChild && hasDetail">
+  <mat-card-content *ngIf="detailExpanded && !isChild">
     <div class="app-card-detail">
       <mat-accordion multi="true">
         <mat-expansion-panel [expanded]="true">
