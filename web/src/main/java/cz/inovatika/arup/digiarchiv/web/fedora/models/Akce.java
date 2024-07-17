@@ -133,6 +133,7 @@ public class Akce {
         
         setFacets(idoc, prSufix);
         setFullText(idoc, prSufix);
+            System.out.println(idoc.getFieldValues("f_vedouci"));
 
     }
     
@@ -145,15 +146,20 @@ public class Akce {
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             IndexUtils.addByPath(idoc, orig, dest, prSufix);
-            if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-            } 
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
-                }
-            }
+//            if (idoc.containsKey(orig)) {
+//                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
+//            } 
+//            for (String sufix : prSufix) {
+//                if (idoc.containsKey(orig + "_" + sufix)) {
+//                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
+//                }
+//            }
         }
+        
+//        for (VedouciAkceOstatni o : akce_vedouci_akce_ostatni) {
+//            IndexUtils.addVocabField(idoc, "f_organizace", o.organizace);
+//            IndexUtils.addRefField(idoc, "f_vedouci",o.vedouci);
+//        }
     }
 
     private void setFullText(SolrInputDocument idoc, List<String> prSufix) {
@@ -174,10 +180,10 @@ public class Akce {
         for (String sufix : prSufix) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_hlavni_typ);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_vedlejsi_typ);
-            for (VedouciAkceOstatni o : akce_vedouci_akce_ostatni) {
-                IndexUtils.addRefField(idoc, "text_all_" + sufix, o.organizace);
-                IndexUtils.addRefField(idoc, "text_all_" + sufix, o.vedouci);
-            }
+//            for (VedouciAkceOstatni o : akce_vedouci_akce_ostatni) {
+//                IndexUtils.addRefField(idoc, "text_all_" + sufix, o.organizace);
+//                IndexUtils.addRefField(idoc, "text_all_" + sufix, o.vedouci);
+//            }
         }
         
         for (String sufix : SolrSearcher.prSufixAll) {

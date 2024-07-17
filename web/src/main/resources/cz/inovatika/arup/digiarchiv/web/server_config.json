@@ -300,7 +300,7 @@
         "f_typ_vyzkumu:akce_vedlejsi_typ",
         "f_okres:az_okres",
         "f_vedouci:akce_hlavni_vedouci",
-        "f_vedouci:akce_vedouci_akce_ostatni",
+        "f_vedouci:akce_vedouci_akce_ostatni.vedouci.value",
         "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
@@ -309,7 +309,8 @@
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
         "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
-        "f_organizace:akce_organizace"
+        "f_organizace:akce_organizace",
+        "f_organizace:akce_vedouci_akce_ostatni.organizace.id"
     ],
     "facets2": [
         "f_katastr:az_chranene_udaje.hlavni_katastr.id",
@@ -322,7 +323,6 @@
         "f_kategorie"
     ],
     "full_text": [
-        "akce_vedouci_akce_ostatni",
         "akce_ulozeni_nalezu",
         "akce_projekt",
         "vyskovy_bod_ident_cely",

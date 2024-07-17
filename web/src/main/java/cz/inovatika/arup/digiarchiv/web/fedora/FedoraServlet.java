@@ -178,6 +178,22 @@ String path = InitServlet.CONFIG_DIR + File.separator + "1.pdf";
                 return json;
             }
         },
+        REINDEX_FILTER {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    FedoraHarvester fh = new FedoraHarvester();
+                    json = fh.reindexByFilter(req.getParameter("fq"));
+
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
+        },
+        
+        
         GET_ID {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {

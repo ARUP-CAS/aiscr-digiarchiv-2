@@ -194,7 +194,6 @@ public class IndexUtils {
         boolean secured = path.contains("chranene_udaje");
         String[] parts = path.split("\\.", 2);
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
-            
         if (vals == null) {
             return;
         }

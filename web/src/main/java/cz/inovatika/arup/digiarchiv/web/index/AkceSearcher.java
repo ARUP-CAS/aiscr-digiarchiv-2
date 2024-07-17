@@ -113,6 +113,7 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
         JSONObject doc = docs.getJSONObject(i);
@@ -149,6 +150,7 @@ public class AkceSearcher implements EntitySearcher {
             setQuery(request, query);
             //LOGGER.log(Level.INFO, "send request");
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            
             //LOGGER.log(Level.INFO, "checkRelations");
             checkRelations(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());

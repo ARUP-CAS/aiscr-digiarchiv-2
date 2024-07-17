@@ -3,9 +3,11 @@ package cz.inovatika.arup.digiarchiv.web.fedora;
 import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.InitServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import cz.inovatika.arup.digiarchiv.web.RESTHelper;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -21,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
@@ -289,6 +292,20 @@ public class FedoraHarvester {
             }
         }
         writeRetToFile("models", start);
+        return ret;
+    }
+    
+    public JSONObject reindexByFilter(String fq) throws Exception {
+        JSONObject ret = new JSONObject();
+        String url = Options.getInstance().getString("solrhost", "http://localhost:8983/solr/")
+                + "entities/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely&fq=" + fq;
+        InputStream inputStream = RESTHelper.inputStream(url);
+        String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
+        JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < docs.length(); i++) {
+            String id = docs.getJSONObject(i).getString("ident_cely");
+            ret.put(id , indexId(id));
+        }
         return ret;
     }
 
