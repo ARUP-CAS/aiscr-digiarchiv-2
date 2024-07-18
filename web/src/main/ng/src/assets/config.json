@@ -4,8 +4,8 @@
   "defaultLang": "cs",
   "serverUrl": "https://digiarchiv.aiscr.cz/",
   "amcr": "http://localhost:8080/amcr/",
-  "registrationUrl": "http://api.archeologickamapa.cz/registrace/0/",
-  "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/digiarchiv.html",
+  "registrationUrl": "https://amcr-test.aiscr.cz/accounts/register/",
+  "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/",
 
   "mapOptions": {
     "docsForMarker": 500,
