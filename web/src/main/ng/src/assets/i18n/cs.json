@@ -270,7 +270,7 @@
       "f_typ_lokality": "Lokalita - typ",
       "f_druh_lokality": "Lokalita - druh",
       "f_lokalita_zachovalost": "Lokalita - stav dochování",
-      "lokalita_jistota": "Lokalita - jistota určení",
+      "f_jistota": "Lokalita - jistota určení",
       "f_nalezce": "Sam. nález - nálezce",
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
       "loc_rpt": "Mapový výběr",
