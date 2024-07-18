@@ -160,7 +160,7 @@ public class SearchUtils {
         } else {
             query.setRequestHandler("/select");
         }
-            System.out.println(query);
+        //    System.out.println(query);
         String qt = query.get("qt");
         String jsonResponse;
         try {

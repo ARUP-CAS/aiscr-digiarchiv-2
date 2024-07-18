@@ -155,7 +155,7 @@ export class DokumentComponent implements OnInit, OnChanges {
     this.bibTex = `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
       author = {${autor}}, 
       title = {Dokument ${this.result.ident_cely}},
-      url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+      howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
       year = {${this.result.dokument_rok_vzniku}},
       note = {${organizace}}
     }`;
