@@ -267,7 +267,7 @@
       "f_dokumentacni_jednotka_typ": "Fieldwork/Site - documentation unit type",
       "f_typ_lokality": "Site - type",
       "f_druh_lokality": "Site - class",
-      "f_jistota": "Site - Level of confidence",
+      "lokalita_jistota": "Site - Level of confidence",
       "f_nalezce": "Ind. find - finder",
       "f_nalezove_okolnosti": "Ind. find - context",
       "loc_rpt": "Map selection",
