@@ -375,8 +375,8 @@
     },
 
   "choiceApi": [
-    {"label": "api_prefix", "url": "https://digiarchiv-test.aiscr.cz/api/oai?verb=GetRecord&metadataPrefix=oai_amcr&identifier=https://api-test.aiscr.cz/id/"},
-    {"label": "show_in_AMCR", "url": "https://api-test.aiscr.cz/id/"}
+    {"label": "api_prefix", "url": "https://api-test.aiscr.cz/id/"},
+    {"label": "show_in_AMCR", "url": "https://amcr-test.aiscr.cz/id/"}
   ],
 
   "feedBackMaxLength": 4000
