@@ -57,7 +57,7 @@
 		{ "label": "katastr", "field": "katastr_sort asc", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
 		{ "label": "katastr", "field": "katastr_sort desc", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
 		{ "label": "ident_cely", "field": "ident_cely asc", "dir": "asc" },
-		{ "label": "ident_cely", "field": "ident_cely adesc", "dir": "desc" },
+		{ "label": "ident_cely", "field": "ident_cely desc", "dir": "desc" },
 		{ "label": "okres", "field": "okres_sort asc, katastr_sort asc", "dir": "asc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
 		{ "label": "okres", "field": "okres_sort desc, katastr_sort desc", "dir": "desc", "entity": ["projekt", "akce", "lokalita", "samostatny_nalez"] },
 		{ "label": "autor", "field": "autor_sort asc", "dir": "asc", "entity": ["dokument", "knihovna_3d"] },

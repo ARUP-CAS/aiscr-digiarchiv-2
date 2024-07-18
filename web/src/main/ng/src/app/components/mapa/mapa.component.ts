@@ -786,6 +786,9 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   addShape(ident_cely: string, presnost: string, pocet: number) {
     this.service.getWKT(ident_cely).subscribe((resp: any) => {
+      if (!resp.geom_wkt_c) {
+        return;
+      }
       const wkt = new Wkt.Wkt();
       wkt.read(resp.geom_wkt_c);
       

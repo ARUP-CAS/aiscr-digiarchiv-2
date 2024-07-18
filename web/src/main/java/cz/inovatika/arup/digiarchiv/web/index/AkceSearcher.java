@@ -262,23 +262,23 @@ public class AkceSearcher implements EntitySearcher {
         if (Boolean.parseBoolean(request.getParameter("mapa"))) {
             SolrSearcher.addLocationParams(request, query);
         }
-
-        if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-            query.setFields("ident_cely,entity,hlavni_vedouci,organizace,pristupnost,pian:[json],katastr,okres,child_dokument,vazba_projekt,pian_id",
-                    "dokumentacni_jednotka_pian",
-                    "dokumentacni_jednotka:[json]",
-                    "chranene_udaje:[json]",
-                    "akce_chranene_udaje:[json]",
-                    "lat:lat_" + pristupnost,
-                    "lng:lng_" + pristupnost,
-                    "loc_rpt:loc_rpt_" + pristupnost,
-                    "loc:loc_" + pristupnost,
-                    "lokalizace:lokalizace_okolnosti_" + pristupnost,
-                    "dalsi_katastry:f_dalsi_katastry_" + pristupnost);
-
-        } else {
-            query.setFields(getSearchFields(pristupnost));
-        }
+        query.setFields(getSearchFields(pristupnost));
+//        if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
+//            query.setFields("ident_cely,entity,hlavni_vedouci,organizace,pristupnost,pian:[json],katastr,okres,child_dokument,vazba_projekt,pian_id",
+//                    "dokumentacni_jednotka_pian",
+//                    "dokumentacni_jednotka:[json]",
+//                    "chranene_udaje:[json]",
+//                    "akce_chranene_udaje:[json]",
+//                    "lat:lat_" + pristupnost,
+//                    "lng:lng_" + pristupnost,
+//                    "loc_rpt:loc_rpt_" + pristupnost,
+//                    "loc:loc_" + pristupnost,
+//                    "lokalizace:lokalizace_okolnosti_" + pristupnost,
+//                    "dalsi_katastry:f_dalsi_katastry_" + pristupnost);
+//            query.setFields(getSearchFields(pristupnost));
+//        } else {
+//            query.setFields(getSearchFields(pristupnost));
+//        }
     }
 
 }

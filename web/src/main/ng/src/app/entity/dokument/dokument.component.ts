@@ -70,7 +70,6 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log(this.result)
     if (!this.result) {
       return;
     }
@@ -112,13 +111,15 @@ export class DokumentComponent implements OnInit, OnChanges {
   getArchZaznam() {
     this.result.akce = [];
     this.result.lokalita = [];
+    this.numChildren = this.result.dokument_cast_archeologicky_zaznam.length;
+    this.state.documentProgress = 0;
     if (this.result.dokument_cast_akce) {
       for (let i = 0; i < this.result.dokument_cast_akce.length; i = i + 10) {
         const ids = this.result.dokument_cast_akce.slice(i, i + 10);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          //this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
         });
@@ -130,7 +131,7 @@ export class DokumentComponent implements OnInit, OnChanges {
         this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          //this.numChildren = this.numChildren - ids.length + res.response.docs.length;
           this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
         });

@@ -129,6 +129,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   search(params: Params) {
     this.state.loading = true;
+    this.state.documentProgress = 0;
     this.loading = true;
     this.state.facetsLoading = true;
     const p = Object.assign({}, params);
