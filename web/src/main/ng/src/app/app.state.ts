@@ -274,7 +274,7 @@ export class AppState {
 
     this.sort = null;
     if (params.has('sort')) {
-      this.sort = this.sorts.find(s => (s.field + ' ' + s.dir) === params.get('sort'));
+      this.sort = this.sorts.find(s => (s.field) === params.get('sort'));
     }
     if (!this.sort) {
       this.sort = this.sorts[0];

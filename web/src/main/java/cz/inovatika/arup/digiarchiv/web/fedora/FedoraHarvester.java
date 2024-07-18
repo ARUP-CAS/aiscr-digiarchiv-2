@@ -294,7 +294,7 @@ public class FedoraHarvester {
         writeRetToFile("models", start);
         return ret;
     }
-    
+
     public JSONObject reindexByFilter(String fq) throws Exception {
         JSONObject ret = new JSONObject();
         String url = Options.getInstance().getString("solrhost", "http://localhost:8983/solr/")
@@ -302,10 +302,14 @@ public class FedoraHarvester {
         InputStream inputStream = RESTHelper.inputStream(url);
         String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
         JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
+        solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
         for (int i = 0; i < docs.length(); i++) {
             String id = docs.getJSONObject(i).getString("ident_cely");
-            ret.put(id , indexId(id));
+            ret.put(id, indexId(id, false));
+            LOGGER.log(Level.INFO, "Index by ID {0} finished. {1} of {2}", new Object[]{id, i + 1, docs.length()});
         }
+        checkLists(0, docs.length(), fq, docs.length());
+        solr.close();
         return ret;
     }
 
@@ -317,16 +321,23 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexId(String id) throws Exception {
+        solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+        JSONObject j = indexId(id, true);
+        solr.close();
+        return j;
+    }
+
+    public JSONObject indexId(String id, boolean commit) throws Exception {
         Instant start = Instant.now();
         try {
-            solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             processRecord(id);
-            checkLists(0, 1, id, 1);
-            solr.close();
+            if (commit) {
+                checkLists(0, 1, id, 1);
+            }
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
             ret.put("ellapsed time", interval);
-            LOGGER.log(Level.INFO, "Index by ID {0} finished in {1}", new Object[]{id, interval});
+            LOGGER.log(Level.FINE, "Index by ID {0} finished in {1}", new Object[]{id, interval});
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             errors.put(ex);

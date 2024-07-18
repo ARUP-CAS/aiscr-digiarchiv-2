@@ -143,11 +143,11 @@ public class SolrSearcher {
             for (Object s : sorts) {
                 JSONObject sort = (JSONObject) s;
                 if (!sort.has("entity")) {
-                    query.setParam("sort", sort.getString("field") + " " + sort.getString("dir"));
+                    query.setParam("sort", sort.getString("field"));
                     break;
                 }
                 if (sort.has("entity") && sort.getJSONArray("entity").join(",").contains(entity)) {
-                    query.setParam("sort", sort.getString("field") + " " + sort.getString("dir"));
+                    query.setParam("sort", sort.getString("field"));
                     break;
                 }
 

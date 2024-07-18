@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.common.SolrInputDocument;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**

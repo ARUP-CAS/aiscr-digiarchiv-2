@@ -1,124 +1,814 @@
 {
-  "common": [
-    "ident_cely",
-    "pristupnost",
-    "entity"
-  ],
-  "samostatny_nalez": "location_on",
-  "knihovna_3d": "3d_rotation",
-  "projekt": "dynamic_feed",
-  "akce": "brush",
-  "dokument": {
-    "header": [
-      "autor",
-      "rok_vzniku",
-      "typ_dokumentu",
-      "material_originalu",
-      "rada",
-      "organizace",
-      "okres",
-      "archeologicky_zaznam_chranene_udaje_hlavni_katastr",
-      "projekt_chranene_udaje_hlavni_katastr",
-      "projekt_chranene_udaje_dalsi_katastr",
-      "archeologicky_zaznam_chranene_udaje_dalsi_katastr",
-      "dokument_cast_neident_akce_katastr",
-      "archeologicky_zaznam_okres",
-      "projekt_okres",
-      "dokument_cast_neident_akce_okres",
-      "popis"
-    ],
-    "detail": [
-      "jazyk_dokumentu",
-      "poznamka",
-      "posudek",
-      "ulozeni_originalu",
-      "oznaceni_originalu",
-      "datum_zverejneni",
-      "extra_data_cislo_objektu",
-      "extra_data_geom_gml",
-      "extra_data_geom_wkt",
-      "extra_data_geom_wkt[@EPSG]",
-      "extra_data_format",
-      "extra_data_vyska",
-      "extra_data_sirka",
-      "extra_data_meritko",
-      "extra_data_zachovalost",
-      "extra_data_nahrada",
-      "extra_data_pocet_variant_originalu",
-      "extra_data_odkaz",
-      "extra_data_datum_vzniku",
-      "extra_data_zeme",
-      "extra_data_region",
-      "extra_data_udalost_typ",
-      "extra_data_udalost",
-      "extra_data_rok_od",
-      "extra_data_rok_do",
-      "extra_data_osoba",
-      "extra_data_duveryhodnost"
-    ],
-    "facets": [
-      "f_areal",
-      "f_pian_presnost",
-      "f_typ_lokality",
-      "f_okres",
-      "f_katastr",
-      "pristupnost",
-      "f_druh_lokality",
-      "f_aktivita",
-      "f_pian_zm10",
-      "f_typ_nalezu",
-      "f_dok_jednotka_typ",
-      "f_pian_typ",
-      "f_druh_nalezu",
-      "f_specifikace",
-      "f_obdobi",
-      "f_kategorie"
+  "responseHeader": {
+    "status": 0,
+    "QTime": 20,
+    "params": {
+      "q": "*:*",
+      "indent": "true",
+      "fl": "*,dokument_cast:[json]",
+      "start": "0",
+      "q.op": "OR",
+      "fq": "ident_cely:\"C-TX-202400162\"",
+      "sort": "ident_cely desc",
+      "useParams": ""
+    }
+  },
+  "response": {
+    "numFound": 1,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "entity": "dokument",
+        "ident_cely": "C-TX-202400162",
+        "stav": 3,
+        "dokument_rok_vzniku": 2024,
+        "dokument_datum_zverejneni": "2027-05-27T00:00:00Z",
+        "dokument_oznaceni_originalu": "NZ test 011",
+        "oznaceni_originalu": [
+          "NZ test 011"
+        ],
+        "dokument_popis": "popis dokumentu test",
+        "popis": [
+          "popis dokumentu test"
+        ],
+        "dokument_poznamka": "poznámka test dokumentu",
+        "poznamka": [
+          "poznámka test dokumentu"
+        ],
+        "pristupnost": "A",
+        "searchable": true,
+        "datestamp": "2024-07-15T08:49:59.038Z",
+        "historie_typ_zmeny": "D23",
+        "historie_uzivatel": "U-000454",
+        "dokument_typ_dokumentu": "HES-001075",
+        "dokument_kategorie_dokumentu": "texty",
+        "dokument_material_originalu": "HES-000217",
+        "dokument_rada": "HES-000883",
+        "dokument_posudek": [
+          "HES-000634",
+          "HES-000609",
+          "HES-000608"
+        ],
+        "dokument_autor": [
+          "Švejcar, Ondřej"
+        ],
+        "autor_sort": "Švejcar, Ondřej",
+        "dokument_organizace": "ORG-000091",
+        "organizace_sort": "Archeologický ústav AV ČR, Praha, v.v.i.",
+        "dokument_jazyk_dokumentu": [
+          "HES-000167"
+        ],
+        "dokument_ulozeni_originalu": "HES-001166",
+        "dokument_licence": "HES-001457",
+        "soubor": [
+          "{\"id\":\"soub-646377\",\"path\":\"rest/AMCR/record/C-TX-202400162/file/40cb3e51-4f93-4a93-8909-dee81accad74\",\"nazev\":\"CTX202400162A.pdf\",\"mimetype\":\"application/pdf\",\"rozsah\":2,\"size_mb\":0.049936295,\"sha_512\":\"e57c82f62cc4da59438078dfcf1bbc48750116426a95003c06d270bf1152bb43a42bda801d9395920d620146a9a3c658a58aebc31d7e537d0146d5b19abef405\",\"historie\":[{\"id\":\"hist-2803837\",\"datum_zmeny\":1716807547076,\"uzivatel\":{\"id\":\"U-000454\",\"value\":\"U-000454\"},\"poznamka\":\"Projektova_dokumentace_test.pdf\",\"typ_zmeny\":\"SBR0\"}],\"searchable\":true}",
+          "{\"id\":\"soub-646376\",\"path\":\"rest/AMCR/record/C-TX-202400162/file/416e0b5e-0c3e-4c00-95ac-17f1d8b92c67\",\"nazev\":\"CTX202400162.pdf\",\"mimetype\":\"application/pdf\",\"rozsah\":1,\"size_mb\":15.551501,\"sha_512\":\"ea015218555d90b8af83bbd61b9cd53d7750268bdf830a22b244bb03b78d18ceae576dadee2a961985c6e9e08856873ad5e0bbfb573a194a8fb8a117cdc871d9\",\"historie\":[{\"id\":\"hist-2803836\",\"datum_zmeny\":1716807514999,\"uzivatel\":{\"id\":\"U-000454\",\"value\":\"U-000454\"},\"poznamka\":\"corel1.pdf\",\"typ_zmeny\":\"SBR0\"}],\"searchable\":true}"
+        ],
+        "soubor_id": [
+          "soub-646377",
+          "soub-646376"
+        ],
+        "soubor_nazev": [
+          "CTX202400162A.pdf",
+          "CTX202400162.pdf"
+        ],
+        "soubor_filepath": [
+          "rest/AMCR/record/C-TX-202400162/file/40cb3e51-4f93-4a93-8909-dee81accad74",
+          "rest/AMCR/record/C-TX-202400162/file/416e0b5e-0c3e-4c00-95ac-17f1d8b92c67"
+        ],
+        "soubor_rozsah": [
+          2,
+          1
+        ],
+        "soubor_size_bytes": [
+          0,
+          15
+        ],
+        "dokument_extra_data": "{\"entity\":\"extra_data\",\"stav\":0,\"cislo_objektu\":null,\"format\":null,\"meritko\":null,\"vyska\":0,\"sirka\":0,\"zachovalost\":null,\"nahrada\":null,\"pocet_variant_originalu\":0,\"odkaz\":null,\"datum_vzniku\":null,\"udalost_typ\":null,\"udalost\":null,\"zeme\":null,\"region\":null,\"rok_od\":0,\"rok_do\":0,\"duveryhodnost\":0,\"geom_gml\":null,\"geom_wkt\":null}",
+        "extra_data_vyska": [
+          0
+        ],
+        "extra_data_sirka": [
+          0
+        ],
+        "extra_data_pocet_variant_originalu": [
+          0
+        ],
+        "extra_data_rok_od": [
+          0
+        ],
+        "extra_data_rok_do": [
+          0
+        ],
+        "extra_data_duveryhodnost": [
+          0
+        ],
+        "dokument_cast_ident_cely": [
+          "C-TX-202400162-D001",
+          "C-TX-202400162-D002",
+          "C-TX-202400162-D003",
+          "C-TX-202400162-D004",
+          "C-TX-202400162-D005"
+        ],
+        "nalez_dokumentu_pocet": [
+          "12",
+          "3",
+          "3",
+          "2",
+          "3",
+          "2",
+          "3",
+          "33"
+        ],
+        "nalez_dokumentu_poznamka": [
+          "objekt dokument poznámka",
+          "předmět dokument poznámka",
+          "objekty poznámka",
+          "předměty poznámka",
+          "hioeghgqw",
+          "meč sklo sklo",
+          "poznámka objekt",
+          "poznámka objekt"
+        ],
+        "komponenta_dokument_ident_cely": [
+          "C-TX-202400162-K001",
+          "C-TX-202400162-K002",
+          "C-TX-202400162-K003",
+          "C-TX-202400162-K004"
+        ],
+        "komponenta_dokument_jistota": [
+          "true",
+          "false",
+          "true",
+          "false"
+        ],
+        "komponenta_dokument_presna_datace": [
+          "15000",
+          "12000",
+          "11000"
+        ],
+        "komponenta_dokument_poznamka": [
+          "komponenta dokument poznámka",
+          "poznámka akce u dokumentu",
+          "komponenta dokument poznámka",
+          "test poznámka"
+        ],
+        "dokument_cast_archeologicky_zaznam": [
+          "C-202401869A",
+          "C-9120270A",
+          "C-N9000233",
+          "C-9004592A"
+        ],
+        "dokument_cast_akce": [
+          "C-202401869A",
+          "C-9120270A",
+          "C-9004592A"
+        ],
+        "f_vedouci": [
+          "Unger, Jiří",
+          "anonym",
+          "",
+          "Švejcar, Ondřej"
+        ],
+        "f_katastr_A": [
+          "[Tužín]",
+          "Březno u Chomutova",
+          "Malé Kyšice",
+          "Doksy u Kladna",
+          "Družec",
+          "Velká Dobrá"
+        ],
+        "f_katastr_B": [
+          "[Tužín]",
+          "Březno u Chomutova",
+          "Malé Kyšice",
+          "Doksy u Kladna",
+          "Družec",
+          "Velká Dobrá"
+        ],
+        "f_katastr_C": [
+          "[Tužín]",
+          "Březno u Chomutova",
+          "Malé Kyšice",
+          "Doksy u Kladna",
+          "Družec",
+          "Velká Dobrá"
+        ],
+        "f_katastr_D": [
+          "[Tužín]",
+          "Březno u Chomutova",
+          "Malé Kyšice",
+          "Doksy u Kladna",
+          "Družec",
+          "Velká Dobrá"
+        ],
+        "f_okres": [
+          "Jičín",
+          "Chomutov",
+          "Kladno"
+        ],
+        "lng_A": [
+          15.444864,
+          13.4011965,
+          14.065712,
+          14.055995
+        ],
+        "lng_C": [
+          15.444864,
+          13.4011965,
+          14.065712,
+          14.055995
+        ],
+        "lng_B": [
+          15.444864,
+          13.4011965,
+          14.065712,
+          14.055995
+        ],
+        "lng_D": [
+          15.444864,
+          13.4011965,
+          14.065712,
+          14.055995
+        ],
+        "lat_D": [
+          50.459976,
+          50.38624,
+          50.059067,
+          50.11243
+        ],
+        "lat_C": [
+          50.459976,
+          50.38624,
+          50.059067,
+          50.11243
+        ],
+        "lat_B": [
+          50.459976,
+          50.38624,
+          50.059067,
+          50.11243
+        ],
+        "lat_A": [
+          50.459976,
+          50.38624,
+          50.059067,
+          50.11243
+        ],
+        "pian_id": [
+          "P-0343-101640",
+          "P-0233-900004",
+          "P-1223-010067",
+          "P-1223-101283"
+        ],
+        "f_pian_typ": [
+          "HES-001135"
+        ],
+        "f_pian_presnost": [
+          "HES-000861",
+          "HES-000864"
+        ],
+        "f_pian_zm10_A": [
+          "03-43-12",
+          "02-33-22",
+          "12-23-22",
+          "12-23-17"
+        ],
+        "f_pian_zm10_B": [
+          "03-43-12",
+          "02-33-22",
+          "12-23-22",
+          "12-23-17"
+        ],
+        "f_pian_zm10_C": [
+          "03-43-12",
+          "02-33-22",
+          "12-23-22",
+          "12-23-17"
+        ],
+        "f_pian_zm10_D": [
+          "03-43-12",
+          "02-33-22",
+          "12-23-22",
+          "12-23-17"
+        ],
+        "loc_rpt_A": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "loc_rpt_C": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "loc_rpt_B": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "loc_rpt_D": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "loc_D": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "loc_C": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "loc_B": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "loc_A": [
+          "50.4599775259524,15.444864192861012",
+          "50.386237,13.4011965",
+          "50.059068057571324,14.065712100088293",
+          "50.112430231226845,14.055994575762039"
+        ],
+        "location_info": [
+          "{\"pristupnost\":\"A\",\"okres\":\"Jičín\",\"katastr\":[\"Tužín\"]}",
+          "{\"pristupnost\":\"A\",\"okres\":\"Chomutov\",\"katastr\":[\"Březno u Chomutova\"]}",
+          "{\"pristupnost\":\"A\",\"okres\":\"Kladno\",\"katastr\":[\"Malé Kyšice\"]}",
+          "{\"pristupnost\":\"A\",\"okres\":\"Kladno\",\"katastr\":[\"Doksy u Kladna\",\"Družec\",\"Velká Dobrá\"]}"
+        ],
+        "dokument_cast_lokalita": [
+          "C-N9000233"
+        ],
+        "f_autor": [
+          "Švejcar, Ondřej"
+        ],
+        "f_typ_dokumentu_posudek": [
+          "HES-000634",
+          "HES-000609",
+          "HES-000608"
+        ],
+        "f_typ_dokumentu": "HES-001075",
+        "f_jazyk_dokumentu": [
+          "HES-000167"
+        ],
+        "f_rada": [
+          "HES-000883"
+        ],
+        "f_organizace": [
+          "ORG-000091"
+        ],
+        "f_ulozeni_originalu": [
+          "HES-001166"
+        ],
+        "f_material_dokumentu": [
+          "HES-000217"
+        ],
+        "indextime": "2024-07-18T05:59:36.071Z",
+        "is_deleted": false,
+        "f_areal": [
+          "HES-000011",
+          "HES-000072",
+          "HES-000073"
+        ],
+        "_version_": 1804895388771024896,
+        "f_druh_nalezu": [
+          "HES-000465",
+          "HES-000485",
+          "HES-000487",
+          "HES-000555",
+          "HES-000714",
+          "HES-000750",
+          "HES-000786",
+          "HES-000821"
+        ],
+        "f_typ_vyzkumu": [
+          "HES-001044",
+          "HES-001046",
+          "HES-001056",
+          "HES-001062",
+          "HES-001070",
+          "HES-001072",
+          "HES-001073",
+          "[HES-001056, HES-001072]"
+        ],
+        "f_specifikace": [
+          "HES-000893",
+          "HES-000894",
+          "HES-000899",
+          "HES-001011",
+          "HES-001026"
+        ],
+        "f_obdobi": [
+          "HES-000260",
+          "HES-000292",
+          "HES-000314",
+          "HES-000358"
+        ],
+        "f_typ_nalezu": [
+          "predmet"
+        ],
+        "f_aktivita": [
+          "HES-000001",
+          "HES-000005",
+          "HES-000008"
+        ],
+        "dokument_cast": [
+          {
+            "entity": "dokument_cast",
+            "searchable": true,
+            "ident_cely": "C-TX-202400162-D001",
+            "archeologicky_zaznam": null,
+            "projekt": null,
+            "poznamka": "část dokumentu poznámka",
+            "komponenta": [
+              {
+                "entity": "komponenta",
+                "searchable": true,
+                "ident_cely": "C-TX-202400162-K001",
+                "komponenta_obdobi": {
+                  "id": "HES-000314",
+                  "value": "krumlovien"
+                },
+                "komponenta_jistota": true,
+                "komponenta_presna_datace": "15000",
+                "komponenta_areal": {
+                  "id": "HES-000072",
+                  "value": "hradiště"
+                },
+                "komponenta_aktivita": [
+                  {
+                    "id": "HES-000001",
+                    "value": "obývání"
+                  }
+                ],
+                "komponenta_poznamka": "komponenta dokument poznámka",
+                "komponenta_nalez_objekt": [
+                  {
+                    "id": "nalo-180510",
+                    "druh": {
+                      "id": "HES-000485",
+                      "value": "zvonice"
+                    },
+                    "specifikace": {
+                      "id": "HES-000893",
+                      "value": "konstrukce zděná"
+                    },
+                    "pocet": "12",
+                    "poznamka": "objekt dokument poznámka"
+                  }
+                ],
+                "komponenta_nalez_predmet": [
+                  {
+                    "id": "nalp-175777",
+                    "druh": {
+                      "id": "HES-000750",
+                      "value": "plastika/soška"
+                    },
+                    "specifikace": {
+                      "id": "HES-001026",
+                      "value": "železo"
+                    },
+                    "pocet": "3",
+                    "poznamka": "předmět dokument poznámka"
+                  }
+                ],
+                "komponenta_typ_nalezu": "predmet"
+              }
+            ],
+            "neident_akce": null,
+            "location_info": []
+          },
+          {
+            "entity": "dokument_cast",
+            "searchable": true,
+            "ident_cely": "C-TX-202400162-D002",
+            "archeologicky_zaznam": {
+              "id": "C-202401869A",
+              "value": "C-202401869A"
+            },
+            "projekt": null,
+            "poznamka": "přidat část dokumentu poznámka",
+            "komponenta": [
+              {
+                "entity": "komponenta",
+                "searchable": true,
+                "ident_cely": "C-TX-202400162-K002",
+                "komponenta_obdobi": {
+                  "id": "HES-000292",
+                  "value": "micoquien"
+                },
+                "komponenta_jistota": false,
+                "komponenta_presna_datace": "12000",
+                "komponenta_areal": {
+                  "id": "HES-000011",
+                  "value": "nadkomunitní areál"
+                },
+                "komponenta_aktivita": [
+                  {
+                    "id": "HES-000008",
+                    "value": "boj"
+                  }
+                ],
+                "komponenta_poznamka": "poznámka akce u dokumentu",
+                "komponenta_nalez_objekt": [
+                  {
+                    "id": "nalo-180511",
+                    "druh": {
+                      "id": "HES-000465",
+                      "value": "kostel"
+                    },
+                    "specifikace": {
+                      "id": "HES-000899",
+                      "value": "konstrukce roubená"
+                    },
+                    "pocet": "3",
+                    "poznamka": "objekty poznámka"
+                  }
+                ],
+                "komponenta_nalez_predmet": [
+                  {
+                    "id": "nalp-175778",
+                    "druh": {
+                      "id": "HES-000821",
+                      "value": "kopí/hrot kopí"
+                    },
+                    "specifikace": {
+                      "id": "HES-001011",
+                      "value": "sklo"
+                    },
+                    "pocet": "2",
+                    "poznamka": "předměty poznámka"
+                  }
+                ],
+                "komponenta_typ_nalezu": "predmet"
+              }
+            ],
+            "neident_akce": null,
+            "location_info": [
+              "{\"pristupnost\":\"A\",\"okres\":\"Jičín\",\"katastr\":[\"Tužín\"]}"
+            ]
+          },
+          {
+            "entity": "dokument_cast",
+            "searchable": true,
+            "ident_cely": "C-TX-202400162-D003",
+            "archeologicky_zaznam": {
+              "id": "C-9120270A",
+              "value": "C-9120270A"
+            },
+            "projekt": null,
+            "poznamka": "část dokumentu poznámka",
+            "komponenta": [
+              {
+                "entity": "komponenta",
+                "searchable": true,
+                "ident_cely": "C-TX-202400162-K003",
+                "komponenta_obdobi": {
+                  "id": "HES-000260",
+                  "value": "szeletien"
+                },
+                "komponenta_jistota": true,
+                "komponenta_presna_datace": "11000",
+                "komponenta_areal": {
+                  "id": "HES-000072",
+                  "value": "hradiště"
+                },
+                "komponenta_aktivita": [
+                  {
+                    "id": "HES-000001",
+                    "value": "obývání"
+                  },
+                  {
+                    "id": "HES-000005",
+                    "value": "kult"
+                  }
+                ],
+                "komponenta_poznamka": "komponenta dokument poznámka",
+                "komponenta_nalez_objekt": [
+                  {
+                    "id": "nalo-180512",
+                    "druh": {
+                      "id": "HES-000487",
+                      "value": "loch"
+                    },
+                    "specifikace": {
+                      "id": "HES-000894",
+                      "value": "konstrukce cihlová"
+                    },
+                    "pocet": "3",
+                    "poznamka": "hioeghgqw"
+                  }
+                ],
+                "komponenta_nalez_predmet": [
+                  {
+                    "id": "nalp-175779",
+                    "druh": {
+                      "id": "HES-000786",
+                      "value": "meč"
+                    },
+                    "specifikace": {
+                      "id": "HES-001011",
+                      "value": "sklo"
+                    },
+                    "pocet": "2",
+                    "poznamka": "meč sklo sklo"
+                  }
+                ],
+                "komponenta_typ_nalezu": "predmet"
+              }
+            ],
+            "neident_akce": null,
+            "location_info": [
+              "{\"pristupnost\":\"A\",\"okres\":\"Chomutov\",\"katastr\":[\"Březno u Chomutova\"]}"
+            ]
+          },
+          {
+            "entity": "dokument_cast",
+            "searchable": true,
+            "ident_cely": "C-TX-202400162-D004",
+            "archeologicky_zaznam": {
+              "id": "C-N9000233",
+              "value": "C-N9000233"
+            },
+            "projekt": null,
+            "poznamka": "část dokumentu poznámka",
+            "komponenta": [],
+            "neident_akce": null,
+            "location_info": [
+              "{\"pristupnost\":\"A\",\"okres\":\"Kladno\",\"katastr\":[\"Malé Kyšice\"]}"
+            ]
+          },
+          {
+            "entity": "dokument_cast",
+            "searchable": true,
+            "ident_cely": "C-TX-202400162-D005",
+            "archeologicky_zaznam": {
+              "id": "C-9004592A",
+              "value": "C-9004592A"
+            },
+            "projekt": null,
+            "poznamka": "část dokumentu poznámka",
+            "komponenta": [
+              {
+                "entity": "komponenta",
+                "searchable": true,
+                "ident_cely": "C-TX-202400162-K004",
+                "komponenta_obdobi": {
+                  "id": "HES-000358",
+                  "value": "únětická kultura"
+                },
+                "komponenta_jistota": false,
+                "komponenta_presna_datace": null,
+                "komponenta_areal": {
+                  "id": "HES-000073",
+                  "value": "klášter"
+                },
+                "komponenta_aktivita": [
+                  {
+                    "id": "HES-000001",
+                    "value": "obývání"
+                  },
+                  {
+                    "id": "HES-000005",
+                    "value": "kult"
+                  }
+                ],
+                "komponenta_poznamka": "test poznámka",
+                "komponenta_nalez_objekt": [
+                  {
+                    "id": "nalo-180535",
+                    "druh": {
+                      "id": "HES-000555",
+                      "value": "pec sklářská"
+                    },
+                    "specifikace": {
+                      "id": "HES-000893",
+                      "value": "konstrukce zděná"
+                    },
+                    "pocet": "3",
+                    "poznamka": "poznámka objekt"
+                  }
+                ],
+                "komponenta_nalez_predmet": [
+                  {
+                    "id": "nalp-175800",
+                    "druh": {
+                      "id": "HES-000714",
+                      "value": "nádoba"
+                    },
+                    "specifikace": {
+                      "id": "HES-001011",
+                      "value": "sklo"
+                    },
+                    "pocet": "33",
+                    "poznamka": "poznámka objekt"
+                  }
+                ],
+                "komponenta_typ_nalezu": "predmet"
+              }
+            ],
+            "neident_akce": null,
+            "location_info": [
+              "{\"pristupnost\":\"A\",\"okres\":\"Kladno\",\"katastr\":[\"Doksy u Kladna\",\"Družec\",\"Velká Dobrá\"]}"
+            ]
+          }
+        ]
+      }
     ]
   },
-  "lokalita": {
-    "header": [
-      "chranene_udaje_hlavni_katastr",
-      "okres",
-      "lokalita_chranene_udaje_nazev",
-      "lokalita_typ_lokality",
-      "lokalita_druh",
-      "lokalita_zachovalost",
-      "lokalita_jistota",
-      "chranene_udaje_dalsi_katastry",
-      "lokalita_chranene_udaje_popis"
-    ],
-    "detail": [
-      "chranene_udaje_uzivatelske_oznaceni",
-      "lokalita_chranene_udaje_popis",
-      "lokalita_chranene_udaje_poznamka",
-      "dokumentacni_jednotka_ident_cely",
-      "dokumentacni_jednotka_typ",
-      "dokumentacni_jednotka_nazev",
-      "dokumentacni_jednotka_negativni_jednotka",
-      "dokumentacni_jednotka_pian_ident_cely",
-      "dokumentacni_jednotka_pian_typ",
-      "dokumentacni_jednotka_pian_presnost",
-      "dokumentacni_jednotka_pian_chranene_udaje_zm10",
-      "dokumentacni_jednotka_pian_chranene_udaje_geom_wkt_centroid_n",
-      "dokumentacni_jednotka_pian_chranene_udaje_geom_wkt_centroid_e"
-    ],
-    "facets": [
-      "f_areal",
-      "f_pian_presnost",
-      "f_typ_lokality",
-      "f_okres",
-      "f_katastr",
-      "pristupnost",
-      "f_druh_lokality",
-      "f_aktivita",
-      "f_pian_zm10",
-      "f_typ_nalezu",
-      "f_dok_jednotka_typ",
-      "f_pian_typ",
-      "f_druh_nalezu",
-      "f_specifikace",
-      "f_obdobi",
-      "f_kategorie"
-    ]
+  "stats": {
+    "stats_fields": {
+      "datum_zverejneni": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "mean": null,
+        "sumOfSquares": 0.0,
+        "stddev": 0.0
+      },
+      "samostatny_nalez_datum_nalezu": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "mean": null,
+        "sumOfSquares": 0.0,
+        "stddev": 0.0
+      },
+      "datum_provedeni_od": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "mean": null,
+        "sumOfSquares": 0.0,
+        "stddev": 0.0
+      },
+      "datum_provedeni_do": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "mean": null,
+        "sumOfSquares": 0.0,
+        "stddev": 0.0
+      },
+      "extra_data_datum_vzniku": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "mean": null,
+        "sumOfSquares": 0.0,
+        "stddev": 0.0
+      },
+      "let_datum": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "mean": null,
+        "sumOfSquares": 0.0,
+        "stddev": 0.0
+      },
+      "rok_vzniku": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "sumOfSquares": 0.0,
+        "mean": "NaN",
+        "stddev": 0.0
+      },
+      "rok_vydani": {
+        "min": null,
+        "max": null,
+        "count": 0,
+        "missing": 1,
+        "sum": 0.0,
+        "sumOfSquares": 0.0,
+        "mean": "NaN",
+        "stddev": 0.0
+      }
+    }
   }
 }
