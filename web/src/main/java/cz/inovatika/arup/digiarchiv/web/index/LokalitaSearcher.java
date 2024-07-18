@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
@@ -81,9 +77,11 @@ public class LokalitaSearcher implements EntitySearcher {
             JSONArray valid_dokuments = new JSONArray();
             if (doc.has("az_dokument")) {
                 SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("ident_cely:" + doc.getJSONArray("az_dokument").join("\" OR \""))
+                        .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
                         .setRows(10000)
-                        .setFields("ident_cely");
+                        .setFields("ident_cely")
+                        .setParam("df", "ident_cely");
+                System.out.println(query);
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {

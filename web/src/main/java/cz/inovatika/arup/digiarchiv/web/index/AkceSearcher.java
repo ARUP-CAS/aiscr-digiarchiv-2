@@ -120,10 +120,10 @@ public class AkceSearcher implements EntitySearcher {
             JSONArray valid_dokuments = new JSONArray();
             if (doc.has("az_dokument")) {
                 SolrQuery query = new SolrQuery("*")
-                        // .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-                        .addFilterQuery("ident_cely:" + doc.getJSONArray("az_dokument").join("\" OR \""))
+                        .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
                         .setRows(10000)
-                        .setFields("ident_cely");
+                        .setFields("ident_cely")
+                        .setParam("df", "ident_cely");
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {

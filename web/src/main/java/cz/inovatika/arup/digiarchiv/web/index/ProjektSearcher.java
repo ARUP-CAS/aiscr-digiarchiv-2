@@ -88,11 +88,6 @@ public class ProjektSearcher implements EntitySearcher {
         
             JSONArray samostatny_nalez = new JSONArray();
             if (doc.has("projekt_samostatny_nalez")) {
-//                SolrQuery query = new SolrQuery("*")
-//                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_samostatny_nalez}ident_cely:\"" + doc.getString("ident_cely") + "\"")
-//                        .setRows(10000)
-//                        .setFields("ident_cely");
-
                 SolrQuery query = new SolrQuery("*")
                         .setRows(10000)
                         .addFilterQuery("entity:samostatny_nalez")
