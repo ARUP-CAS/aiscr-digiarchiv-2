@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -168,6 +169,20 @@ public class IndexUtils {
                     .getJSONObject(0).getString("@value");
             idoc.setField("datestamp", d);
         } catch (Exception ex) {
+            idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
+        }
+    }
+
+    public static void setDateStampFromDeleted(SolrInputDocument idoc, String id) {
+        try {
+            String s = FedoraUtils.request("model/deleted/member/" + id);
+            JSONArray ja = new JSONArray(s);
+            JSONObject j2 = ja.getJSONObject(0);
+            String d = j2.getJSONArray("http://fedora.info/definitions/v4/repository#lastModified")
+                    .getJSONObject(0).getString("@value");
+            idoc.setField("datestamp", d);
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, ex.toString());
             idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
         }
     }

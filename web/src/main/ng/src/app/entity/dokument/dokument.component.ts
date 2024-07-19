@@ -94,7 +94,7 @@ export class DokumentComponent implements OnInit, OnChanges {
     });
     this.setVsize();
     if (this.inDocument) {
-      this.state.loading = true;
+      this.state.loading = this.result.dokument_cast_archeologicky_zaznam.length > 0;
       this.state.documentProgress = 0;
       this.getArchZaznam();
     }

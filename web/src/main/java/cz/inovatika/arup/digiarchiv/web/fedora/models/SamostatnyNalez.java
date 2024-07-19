@@ -281,28 +281,27 @@ public class SamostatnyNalez implements FedoraModel {
         String projektId = (String) doc.getFieldValue("projekt");
 
         SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
-                .setFields("projekt");
+                .setFields("samostatny_nalez_projekt");
         JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
         if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
-            projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt");
+            projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("samostatny_nalez_projekt");
         }
 
         String projektOrg = null;
         query = new SolrQuery("ident_cely:\"" + projektId + "\"")
-                .setFields("organizace");
+                .setFields("projekt_organizace");
         JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
-            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");
+            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt_organizace");
         }
-
         if (userPr.compareToIgnoreCase("C") > 0) {
             return true;
         } else if (st == 4) {
             return true;
         } else if (userPr.equalsIgnoreCase("C")
                 && (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
-                && userId.equals((String) doc.getFieldValue("historie_uzivatel")))
+                && userId.equals((String) doc.getFieldValue("historie_uzivatel"))) 
                 || (userOrg.equals(projektOrg)))) {
             return true;
         } else if (userPr.equalsIgnoreCase("B")

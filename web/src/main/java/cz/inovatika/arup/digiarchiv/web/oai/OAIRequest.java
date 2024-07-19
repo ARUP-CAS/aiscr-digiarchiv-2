@@ -178,28 +178,28 @@ public class OAIRequest {
 
     private static String idDoesNotExist(HttpServletRequest req) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + req.getRequestURL() + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"idDoesNotExist\" />"
                 + "</OAI-PMH>";
     }
 
     private static String noRecordsMatch(HttpServletRequest req) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + req.getRequestURL() + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"noRecordsMatch\" />"
                 + "</OAI-PMH>";
     }
 
     private static String badArgument(HttpServletRequest req) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + req.getRequestURL() + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">Invalid arguments</error>"
                 + "</OAI-PMH>";
     }
 
     private static String badArgument(HttpServletRequest req, String msg) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + req.getRequestURL() + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">" + msg + "</error>"
                 + "</OAI-PMH>";
     }
@@ -244,7 +244,7 @@ public class OAIRequest {
                 metadataPrefix = solrRt.getString("metadataPrefix");
             } else {
                 String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                        + "<request>" + req.getRequestURL() + "</request>"
+                        + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                         + "<error code=\"badResumptionToken\"/>"
                         + "</OAI-PMH>";
                 return xml;
@@ -261,7 +261,7 @@ public class OAIRequest {
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (resumptionToken == null && !metadataPrefixes.contains(metadataPrefix)) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                    + "<request>" + req.getRequestURL() + "</request>"
+                    + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
@@ -317,7 +317,7 @@ public class OAIRequest {
 
                 } else {
                     String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                            + "<request>" + req.getRequestURL() + "</request>"
+                            + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                             + "<error code=\"badResumptionToken\"/>"
                             + "</OAI-PMH>";
                     return xml;
@@ -425,7 +425,7 @@ public class OAIRequest {
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (!metadataPrefixes.contains(metadataPrefix)) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                    + "<request>" + req.getRequestURL() + "</request>"
+                    + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
@@ -473,7 +473,7 @@ public class OAIRequest {
         String status = isDeleted ? " status=\"deleted\" " : "";
 
         String model = (String) doc.getFieldValue("model");
-        if (model.equals("akce") || model.equals("lokalita")) {
+        if ("akce".equals(model) || "lokalita".equals(model)) {
             model = "archeologicky_zaznam:" + model;
         }
         ret.append("<record>");
@@ -485,10 +485,12 @@ public class OAIRequest {
                 .append("</identifier>")
                 .append("<datestamp>")
                 .append(datestamp.toInstant().toString())
-                .append("</datestamp>")
-                .append("<setSpec>")
+                .append("</datestamp>");
+        if (model != null) {
+            ret.append("<setSpec>")
                 .append(model)
                 .append("</setSpec>");
+        }
 
         // <setSpec>projekt</setSpec> <!-- "projekt" | "archeologicky_zaznam" | "let" | "adb" | "dokument" | "ext_zdroj" | "pian" | "samostatny_nalez" | "uzivatel" | "heslo" | "ruian_kraj" | "ruian_okres" | "ruian_katastr" | "organizace | "osoba -->
         ret.append("</header>");

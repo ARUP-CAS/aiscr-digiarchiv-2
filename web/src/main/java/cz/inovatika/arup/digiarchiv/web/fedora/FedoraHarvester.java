@@ -4,6 +4,7 @@ import cz.inovatika.arup.digiarchiv.web.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web.InitServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.RESTHelper;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.File;
 import java.io.IOException;
@@ -114,7 +115,7 @@ public class FedoraHarvester {
         Instant start = Instant.now();
         String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
         String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
-        //lastDate = "2023-08-17T00:00:00.000Z";
+        lastDate = "2023-08-17T00:00:00.000Z";
         ret.put("lastDate", lastDate);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
@@ -460,11 +461,11 @@ public class FedoraHarvester {
         idoc.setField("ident_cely", id);
         if (datestamp == null) {
             try {
-                JSONObject json = FedoraUtils.getJsonById(id);
-
-                String d = json.getJSONArray("http://fedora.info/definitions/v4/repository#lastModified")
-                        .getJSONObject(0).getString("@value");
-                idoc.setField("datestamp", d);
+//                JSONObject json = FedoraUtils.getJsonById(id);
+//                String d = json.getJSONArray("http://fedora.info/definitions/v4/repository#lastModified")
+//                        .getJSONObject(0).getString("@value");
+//                idoc.setField("datestamp", d);
+                IndexUtils.setDateStampFromDeleted(idoc, id);
             } catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "Deleted id {0} error", id);
                 idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
@@ -570,6 +571,12 @@ public class FedoraHarvester {
             model = "archeologicky_zaznam:" + model;
         }
         idoc.setField("model", model);
+        if (edoc.containsKey("projekt_organizace")) {
+         idoc.setField("organizace", edoc.getFieldValue("projekt_organizace"));
+        }
+        if (edoc.containsKey("samostatny_nalez_predano_organizace")) {
+         idoc.setField("organizace", edoc.getFieldValue("samostatny_nalez_predano_organizace"));
+        }
         // idoc.setField("organizace", edoc.getFieldValue("organizace"));
         idoc.setField("stav", edoc.getFieldValue("stav"));
         idoc.setField("pristupnost", edoc.getFieldValue("pristupnost"));
