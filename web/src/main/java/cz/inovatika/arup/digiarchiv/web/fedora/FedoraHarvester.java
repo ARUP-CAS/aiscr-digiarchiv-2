@@ -536,7 +536,7 @@ public class FedoraHarvester {
                 DocumentObjectBinder dob = new DocumentObjectBinder();
                 SolrInputDocument idoc = dob.toSolrInputDocument(fm);
                 if (!fm.isSearchable()) {
-                    LOGGER.log(Level.INFO, "Skiping record {0}. Not searchable", idoc.getFieldValue("ident_cely"));
+                    LOGGER.log(Level.FINE, "Skiping record {0}. Not searchable", idoc.getFieldValue("ident_cely"));
                     return;
                 }
                 fm.fillSolrFields(idoc);

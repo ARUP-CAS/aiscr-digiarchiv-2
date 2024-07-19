@@ -522,7 +522,7 @@ public class OAIRequest {
         String userOrg = LoginServlet.organizace(req.getSession());
 
         String docPristupnost = (String) doc.getFieldValue("pristupnost");
-        String projektOrg = (String) doc.getFieldValue("organizace");
+        String projektOrg = (String) doc.getFirstValue("organizace");
         String model = (String) doc.getFieldValue("model");
         FedoraModel fm = FedoraModel.getFedoraModel(model);
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
