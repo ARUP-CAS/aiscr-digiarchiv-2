@@ -119,6 +119,19 @@ String path = InitServlet.CONFIG_DIR + File.separator + "1.pdf";
                 return json;
             }
         },
+        STOP_INDEX {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    FedoraHarvester fh = new FedoraHarvester();
+                    json = fh.stopIndex();
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
+        },
         INDEX_UPDATE {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -126,6 +139,19 @@ String path = InitServlet.CONFIG_DIR + File.separator + "1.pdf";
                 try {
                     FedoraHarvester fh = new FedoraHarvester();
                     json = fh.update();
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
+        },
+        STOP_UPDATE {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    FedoraHarvester fh = new FedoraHarvester();
+                    json = fh.stopUpdate();
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }

@@ -81,7 +81,7 @@ public class LokalitaSearcher implements EntitySearcher {
                         .setRows(10000)
                         .setFields("ident_cely")
                         .setParam("df", "ident_cely");
-                System.out.println(query);
+                //System.out.println(query);
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {

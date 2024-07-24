@@ -133,7 +133,7 @@ public class Akce {
         
         setFacets(idoc, prSufix);
         setFullText(idoc, prSufix);
-            System.out.println(idoc.getFieldValues("f_vedouci"));
+        
 
     }
     

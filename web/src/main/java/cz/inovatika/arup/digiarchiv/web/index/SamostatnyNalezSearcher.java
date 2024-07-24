@@ -64,7 +64,6 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery("*");
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
-
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);

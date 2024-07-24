@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
@@ -38,8 +37,12 @@ import org.json.JSONObject;
  */
 public class FedoraHarvester {
 
+    
     public static final Logger LOGGER = Logger.getLogger(FedoraHarvester.class.getName());
 
+    private static final String STATUS_RUNNING = "runing";
+    private static final String STATUS_FINISHED = "finished";
+    private static final String STATUS_STOPPED = "stoped";
     private static final String CONTAINS = "http://www.w3.org/ns/ldp#contains";
 
     JSONObject ret = new JSONObject();
@@ -65,6 +68,45 @@ public class FedoraHarvester {
         FileUtils.writeStringToFile(f, ret.toString(2), "UTF-8");
     }
 
+    private String readStatusFile(String type) throws IOException {
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_"  + "status.txt");
+        if (f.exists() && f.canRead()) {
+            return FileUtils.readFileToString(f, "UTF-8");
+        } else {
+            return "none";
+        }
+        
+    }
+
+    private void writeStatusFile(String type, String status) throws IOException {
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_"  + "status.txt");
+        FileUtils.writeStringToFile(f, status, "UTF-8");
+    }
+    
+
+    /**
+     * Stop fedora index process
+     *
+     * @return
+     * @throws IOException
+     */
+    public JSONObject stopIndex() throws Exception {
+        writeStatusFile("index", STATUS_STOPPED);
+        return new JSONObject().put("msg", "Index process stopped");
+    }
+    
+
+    /**
+     * Stop fedora update process
+     *
+     * @return
+     * @throws IOException
+     */
+    public JSONObject stopUpdate() throws Exception {
+        writeStatusFile("update", STATUS_STOPPED);
+        return new JSONObject().put("msg", "Update process stopped");
+    }
+
     /**
      * Full fedora harvest and index
      *
@@ -74,6 +116,7 @@ public class FedoraHarvester {
     public JSONObject harvest() throws IOException {
         Instant start = Instant.now();
         try {
+            ret = new JSONObject();
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             getModels();
             solr.commit("oai");
@@ -101,7 +144,7 @@ public class FedoraHarvester {
                 solr.close();
             }
         }
-        writeRetToFile("harvest", start);
+        writeRetToFile("index", start);
         return ret;
     }
 
@@ -112,10 +155,17 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject update() throws Exception {
+        ret = new JSONObject();
+        String status = readStatusFile("update");
+        if (STATUS_RUNNING.equals(status)) {
+            LOGGER.log(Level.INFO, "Update is still running");
+            ret.put("msg", "Update is still running");
+            return ret;
+        }
+        writeStatusFile("update", STATUS_RUNNING);
         Instant start = Instant.now();
         String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
         String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
-        lastDate = "2023-08-17T00:00:00.000Z";
         ret.put("lastDate", lastDate);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
@@ -137,6 +187,7 @@ public class FedoraHarvester {
         LOGGER.log(Level.INFO, "Update finished in {0}", interval);
 
         writeRetToFile("update", start);
+        writeStatusFile("update", STATUS_FINISHED);
         return ret;
     }
 
@@ -161,6 +212,13 @@ public class FedoraHarvester {
                 json = new JSONObject(s);
                 records = json.getJSONArray("items");
                 checkLists(0, indexed, "update", records.length());
+                String status = readStatusFile("update");
+                if (STATUS_STOPPED.equals(status)) {
+                    LOGGER.log(Level.INFO, "Update stopped at {0}", formatter.format(Instant.now()));
+                    ret.put("msg", "Update stopped at " + formatter.format(Instant.now()));
+                    solr.close();
+                    return ret;
+                }
             }
 
             ret.put("updated", indexed);
@@ -420,6 +478,13 @@ public class FedoraHarvester {
     }
 
     private void processModel(String model) throws Exception {
+        
+        String status = readStatusFile("index");
+        if (STATUS_STOPPED.equals(status)) {
+            LOGGER.log(Level.INFO, "Index stopped at {0}", formatter.format(Instant.now()));
+            ret.put("msg", "Index stopped at " + formatter.format(Instant.now()));
+            return;
+        }
         LOGGER.log(Level.INFO, "Processing model {0}", model);
         ret.put(model, 0);
         int indexed = 0;
@@ -449,6 +514,13 @@ public class FedoraHarvester {
 
                 ret.put(model, indexed++);
                 checkLists(batchSize, indexed, model, totalInModel);
+                
+                if (STATUS_STOPPED.equals(readStatusFile("index"))) {
+                    checkLists(0, indexed, model, totalInModel);
+                    LOGGER.log(Level.INFO, "Index stopped at {0}", formatter.format(Instant.now()));
+                    ret.put("msg", "Index stopped at " + formatter.format(Instant.now()));
+                    return;
+                }
             }
 
             checkLists(0, indexed, model, totalInModel);
