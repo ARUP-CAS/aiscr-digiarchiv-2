@@ -103,7 +103,17 @@ export class AkceComponent implements OnInit, OnChanges {
       for (let i = 0; i < this.result.az_ext_zdroj.length; i = i + 20) {
         const ids = this.result.az_ext_zdroj.slice(i, i + 20);
         this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
-            this.result.az_ext_zdroj = res.response.docs;
+          this.result.az_ext_zdroj = [];
+          this.result.az_ext_odkaz.forEach(eo => {
+            const ez = res.response.docs.find(ez => eo.ext_zdroj.id === ez.ident_cely);
+            ez.ext_odkaz_paginace = eo.paginace;
+            this.result.az_ext_zdroj.push(ez);
+          })
+
+            // this.result.az_ext_zdroj = res.response.docs;
+            // this.result.az_ext_zdroj.forEach(ez => {
+            //   ez.ext_odkaz_paginace = this.result.az_ext_odkaz.find(eo => eo.ext_zdroj.id === ez.ident_cely).paginace
+            // });
         });
       }
     }

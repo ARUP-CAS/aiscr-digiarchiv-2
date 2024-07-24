@@ -23,7 +23,9 @@ export class ExterniZdrojComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.result.ident_cely ? this.result.ident_cely : this.result;
+
+
+    // const id = this.result.ident_cely ? this.result.ident_cely : this.result;
 
       // this.service.getIdAsChild([id], "ext_zdroj").subscribe((res: any) => {
       //   this.result = res.response.docs[0]; 
