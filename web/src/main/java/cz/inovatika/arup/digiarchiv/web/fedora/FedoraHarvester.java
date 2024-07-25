@@ -166,15 +166,16 @@ public class FedoraHarvester {
         Instant start = Instant.now();
         String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
         String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
+        // lastDate = "2023-08-01T00:00:00.000Z";
         ret.put("lastDate", lastDate);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
-        String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*", "UTF8")
+        String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
         update(baseQuery, false);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
-        baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/", "UTF8")
+        baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
         update(baseQuery, true);
 
@@ -613,6 +614,9 @@ public class FedoraHarvester {
                 }
                 fm.fillSolrFields(idoc);
                 String entity = (String) idoc.getFieldValue("entity");
+                if (xml.contains("<amcr:geom_gml>")) {
+                    
+                }
                 if (FedoraModel.isOAI(entity)) {
                     SolrInputDocument oaidoc = createOAIDocument(xml, idoc);
                     idocsOAI.add(oaidoc);

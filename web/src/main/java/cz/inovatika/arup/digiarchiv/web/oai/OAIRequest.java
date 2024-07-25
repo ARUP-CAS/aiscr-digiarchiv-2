@@ -52,8 +52,9 @@ public class OAIRequest {
             Source xslt = new StreamSource(Options.getInstance().getDCXslt());
             dcTransformer = factory.newTransformer(xslt);
             dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
+            dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
         }
-        return dcTransformer;
+        return dcTransformer; 
     }
 
     private static Transformer getTransformer2() throws TransformerConfigurationException {
@@ -568,6 +569,8 @@ public class OAIRequest {
 
         Source text = new StreamSource(new StringReader(xml));
         StringWriter sw = new StringWriter();
+        
+        System.out.println(Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
         getTransformer().transform(text, new StreamResult(sw));
 
         Pattern emptyValueTag = Pattern.compile("\\s*<dc:\\w+.*/>");

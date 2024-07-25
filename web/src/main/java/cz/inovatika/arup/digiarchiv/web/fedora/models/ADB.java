@@ -1,6 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
@@ -203,6 +204,8 @@ class ADBChraneneUdaje {
                 idocs.add(vbdoc);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_vyskovy_bod", vb.ident_cely, pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ", vb.typ, pristupnost);
+                
+    
             }
             if (!idocs.isEmpty()) {
                 IndexUtils.getClientBin().add("entities", idocs, 10);

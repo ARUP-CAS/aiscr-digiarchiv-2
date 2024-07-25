@@ -3,7 +3,7 @@
     "solrRels": "http://localhost:8983/solr/",
 
     "OAI": {
-        "baseUrl": "http://baseUrl", 
+        "baseUrl": "http://baseUrl/", 
         "repositoryName": "repositoryName",
         "adminEmail": "mail@oai",
         "metadataPrefixes": ["oai_dc", "oai_amcr"],

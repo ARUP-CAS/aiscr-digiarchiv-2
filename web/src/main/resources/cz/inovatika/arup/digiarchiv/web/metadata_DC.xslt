@@ -7,7 +7,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         
     <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
-    <xsl:variable name="base_url">http://base_url/</xsl:variable>
+    <xsl:param name="base_url">http://base_url/</xsl:param>
     <xsl:variable name="base_url_id"><xsl:value-of select="$base_url"/>id/</xsl:variable>
     <xsl:template match="/">
         <oai_dc:dc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">

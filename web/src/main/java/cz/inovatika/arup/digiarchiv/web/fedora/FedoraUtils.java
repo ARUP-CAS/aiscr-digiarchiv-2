@@ -44,7 +44,7 @@ public class FedoraUtils {
     
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
-            .uri(new URI(API_POINT + url))
+            .uri(new URI(API_POINT + url)) 
             .header("Authorization", auth_header())
             .header("Accept", "application/ld+json")
             .build();
