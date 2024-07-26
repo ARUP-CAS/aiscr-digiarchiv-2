@@ -164,7 +164,7 @@ public class FedoraHarvester {
         }
         writeStatusFile("update", STATUS_RUNNING);
         Instant start = Instant.now();
-        String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
+        String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
         String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
         // lastDate = "2023-08-01T00:00:00.000Z";
         ret.put("lastDate", lastDate);
@@ -320,6 +320,7 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexModels(String[] models) throws IOException {
+        writeStatusFile("index", STATUS_RUNNING);
         Instant start = Instant.now();
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
@@ -615,7 +616,7 @@ public class FedoraHarvester {
                 fm.fillSolrFields(idoc);
                 String entity = (String) idoc.getFieldValue("entity");
                 if (xml.contains("<amcr:geom_gml>")) {
-                    
+                    // tady bychom meli nechat vsechny 
                 }
                 if (FedoraModel.isOAI(entity)) {
                     SolrInputDocument oaidoc = createOAIDocument(xml, idoc);

@@ -145,11 +145,13 @@
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.geom_gml">
                   <th class="app-label">{{ 'card.desc.Poloha (WGS-84)' | translate }}:</th>
-                  <td>{{ result.dokument_extra_data.geom_gml | json }}</td>
+                  <td>{{ result.dokument_extra_data.geom_gml }}</td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
-                  <td>{{ result.dokument_extra_data.geom_wkt | json }}</td>
+                  <td>
+                    {{ result.dokument_extra_data.geom_wkt.value }}, EPSG: {{ result.dokument_extra_data.geom_wkt.epsg }}
+                  </td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.format">
                   <th class="app-label">{{ 'card.desc.Dokument - formát' | translate }}:</th>

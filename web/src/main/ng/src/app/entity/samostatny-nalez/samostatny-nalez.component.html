@@ -121,8 +121,8 @@
               </tr>
               <tr *ngIf="result.samostatny_nalez_chranene_udaje?.geom_gml">
                 <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
-                <td>{{ result.samostatny_nalez_chranene_udaje?.geom_gml | json }}<br/>
-                  <ng-container *ngIf="result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml">{{ result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml | json }}</ng-container>
+                <td>{{ result.samostatny_nalez_chranene_udaje?.geom_gml }}<br/>
+                  <ng-container *ngIf="result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml">{{ result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml }}</ng-container>
                 </td>
               </tr>
               <tr *ngIf="result.samostatny_nalez_chranene_udaje?.geom_wkt">

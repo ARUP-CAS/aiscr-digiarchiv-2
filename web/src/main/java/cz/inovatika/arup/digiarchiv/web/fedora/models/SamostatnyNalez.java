@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import cz.inovatika.arup.digiarchiv.web.Options;
@@ -345,6 +346,14 @@ class SnChraneneUdaje {
     public WKT geom_sjtsk_wkt;
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+        
+        try {
+            geom_gml = FedoraModel.getAsXml(geom_gml); 
+            geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml); 
+            // System.out.println(xml);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         IndexUtils.setSecuredJSONField(idoc, "samostatny_nalez_chranene_udaje", this);
 

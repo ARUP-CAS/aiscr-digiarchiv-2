@@ -57,8 +57,10 @@
           <li *ngFor="let vb of result.adb_chranene_udaje.vyskovy_bod">
             <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
             (<app-inline-filter [field]="'f_adb_vyskovy_bod_typ'" [value]="vb.typ"></app-inline-filter>)
-            <div *ngIf="vb.geom_gml"><label class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</label>{{ vb.geom_gml | json }}</div>
-            <div *ngIf="vb.geom_wkt"><label class="app-label">{{ 'card.desc.Geometrie WKT' | translate }}:</label>{{ vb.geom_wkt | json }}</div>
+            <div *ngIf="vb.geom_gml"><label class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</label>{{ vb.geom_gml }}</div>
+            <div *ngIf="vb.geom_wkt"><label class="app-label">{{ 'card.desc.Geometrie WKT' | translate }}:</label>
+              {{ vb.geom_wkt.value }}{{ vb.geom_wkt.value }}, EPSG: {{ vb.geom_wkt.epsg }}
+            </div>
           </li>
         </ul>
       </mat-expansion-panel>

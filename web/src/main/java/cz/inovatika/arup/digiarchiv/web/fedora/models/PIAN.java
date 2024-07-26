@@ -1,5 +1,8 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
@@ -143,8 +146,17 @@ class PIANChraneneUdaje {
 //<xs:element name="geom_sjtsk_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom_sjtsk}") | ST_AsText("{geom_sjtsk}") -->
   @JacksonXmlProperty(localName = "geom_sjtsk_wkt")
   public WKT geom_sjtsk_wkt;
-
+  
   public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+    
+        try {
+            geom_gml = FedoraModel.getAsXml(geom_gml); 
+            geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml); 
+            // System.out.println(xml);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
     IndexUtils.setSecuredJSONField(idoc, "pian_chranene_udaje", this);
 

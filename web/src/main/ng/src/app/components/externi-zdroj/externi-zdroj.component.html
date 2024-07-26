@@ -7,7 +7,7 @@
 			<mat-card-title>
 				<span class="app-ident-format">{{ result.ident_cely }}</span>
 				<span class="app-pipe"></span>
-				<app-inline-filter [field]="'ext_zdroj_typ'" [value]="result.ext_zdroj_typ"></app-inline-filter>
+				<app-inline-filter [field]="'ext_zdroj_typ'" [value]="result.ext_zdroj_typ" [heslar]="'pristupnost'"></app-inline-filter>
 				<span class="app-pipe"></span>
 			</mat-card-title>
 		</mat-card-header>
@@ -123,6 +123,7 @@
 		<ng-container *ngIf="result.ext_zdroj_autor">{{ result.ext_zdroj_autor.join(' – ') }}&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_rok_vydani_vzniku">{{ result.ext_zdroj_rok_vydani_vzniku }}:&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_oznaceni">{{ result.ext_zdroj_oznaceni }}&#160;</ng-container>
+		<ng-container *ngIf="result.ext_zdroj_nazev">{{ result.ext_zdroj_nazev }}&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_typ_dokumentu">({{ result.ext_zdroj_typ_dokumentu | translateHeslar : 'f_typ' }}).&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_organizace">{{ result.ext_zdroj_organizace }}&#160;</ng-container>
 		<ng-container *ngIf="!inDocument">(<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link">,&#160;</ng-container></ng-container>

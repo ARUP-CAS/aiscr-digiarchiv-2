@@ -274,7 +274,8 @@
     "detail": [
         "az_dokumentacni_jednotka:[json]",
         "az_dj_pian",
-        "az_dj_adb"
+        "az_dj_adb",
+        "az_ext_zdroj:[json]"
     ],
     "facets": [
     ],
@@ -296,7 +297,7 @@
         "akce_ulozeni_dokumentace","akce_chranene_udaje:[json]"
     ],
     "detail": [
-        "az_ext_zdroj:[json]"
+        
     ],
     "facets": [
         "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",

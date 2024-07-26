@@ -22,7 +22,7 @@ public class VyskovyBod {
     
 //<xs:element name="geom_wkt" minOccurs="1" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom}") | ST_AsText("{geom}") -->
     @JacksonXmlProperty(localName = "geom_wkt")
-    public Object geom_wkt;
+    public WKT geom_wkt;
     
     
 }

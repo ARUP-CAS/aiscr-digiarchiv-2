@@ -59,7 +59,7 @@ public class PIANSearcher implements EntitySearcher {
 
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery("entity:dokumentacni_jednotka")
-                        .addFilterQuery("pian:\"" + doc.getString("ident_cely") + "\"");
+                        .addFilterQuery("dj_pian:\"" + doc.getString("ident_cely") + "\"");
                 JSONObject r = SolrSearcher.json(client, "entities", query);
                 JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
 

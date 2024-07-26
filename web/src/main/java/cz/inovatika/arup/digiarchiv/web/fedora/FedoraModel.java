@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Projekt;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
@@ -37,6 +38,24 @@ import org.json.JSONObject;
  * @author alberto
  */
 public interface FedoraModel {
+            
+    
+    public static XmlMapper xmlMapper = new XmlMapper(); 
+        
+    /**
+     *
+     * @param val
+     * @return xml 
+     * @throws com.fasterxml.jackson.core.JsonProcessingException 
+     */
+    public static Object getAsXml(Object val) throws JsonProcessingException {
+        if (val == null) {
+            return val;
+        }
+        String xml = xmlMapper.writeValueAsString(val);
+        xml = xml.replaceAll("><srsName>", " srsName=\"");
+        return xml.replaceAll("</srsName>", "\">");
+    }
 
     /**
      *

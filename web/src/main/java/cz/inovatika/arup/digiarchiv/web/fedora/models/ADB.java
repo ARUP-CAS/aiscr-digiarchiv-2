@@ -1,6 +1,8 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
@@ -178,7 +180,6 @@ class ADBChraneneUdaje {
         IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_parcelni_cislo", parcelni_cislo, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_poznamka", poznamka, pristupnost);
 
-        IndexUtils.setSecuredJSONField(idoc, "adb_chranene_udaje", this);
         
         // Add value of vocab fields
         for (String sufix : SolrSearcher.prSufixAll) {
@@ -198,13 +199,19 @@ class ADBChraneneUdaje {
                 
                 vbdoc.setField("vyskovy_bod_parent", ident_cely);
                 vbdoc.setField("vyskovy_bod_typ", vb.typ);
-                vbdoc.setField("vyskovy_bod_geom_gml", objectMapper.writeValueAsString(vb.geom_gml));
+                // vbdoc.setField("vyskovy_bod_geom_gml", objectMapper.writeValueAsString(vb.geom_gml));
                 vbdoc.setField("vyskovy_bod_geom_wkt", objectMapper.writeValueAsString(vb.geom_wkt));
 
                 idocs.add(vbdoc);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_vyskovy_bod", vb.ident_cely, pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ", vb.typ, pristupnost);
                 
+                try {
+                    vb.geom_gml = FedoraModel.getAsXml(vb.geom_gml);
+                    vbdoc.setField("vyskovy_bod_geom_gml", vb.geom_gml); 
+                } catch (JsonProcessingException ex) {
+                    Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+                }
     
             }
             if (!idocs.isEmpty()) {
@@ -213,14 +220,6 @@ class ADBChraneneUdaje {
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-//      for (VyskovyBod v: vyskovy_bod) {
-//        try {
-//          ObjectMapper objectMapper = new ObjectMapper();
-//          idoc.addField("sec_vyskovy_bod", objectMapper.writeValueAsString(v));
-//        } catch (JsonProcessingException ex) {
-//          Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//      }
+        IndexUtils.setSecuredJSONField(idoc, "adb_chranene_udaje", this);
     }
 }

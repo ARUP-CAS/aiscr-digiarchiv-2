@@ -14,7 +14,7 @@
         <ng-container *ngIf="result.az_chranene_udaje">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
         </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.az_okres"></app-inline-filter>)
-        <span class="app-pipe"></span><ng-container *ngIf="result.az_chranene_udaje?.nazev">{{ result.az_chranene_udaje.nazev }}<span class="app-pipe"></span></ng-container>
+        <span class="app-pipe"></span><ng-container *ngIf="result.lokalita_chranene_udaje?.nazev">{{ result.lokalita_chranene_udaje.nazev }}<span class="app-pipe"></span></ng-container>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
     </mat-card-title>
