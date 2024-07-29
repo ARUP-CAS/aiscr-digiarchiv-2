@@ -62,7 +62,7 @@ export class AkceComponent implements OnInit, OnChanges {
           this.result.valid_projekt = [];
           this.getDokuments();
           this.getProjekts(); 
-          this.getExtEzdroj();
+          this.getExtZdroj();
         }, 100);
       }
     }  
@@ -98,7 +98,7 @@ export class AkceComponent implements OnInit, OnChanges {
     }
   }
 
-  getExtEzdroj() {
+  getExtZdroj() {
     if (this.result.az_ext_zdroj) {
       for (let i = 0; i < this.result.az_ext_zdroj.length; i = i + 20) {
         const ids = this.result.az_ext_zdroj.slice(i, i + 20);
@@ -164,7 +164,7 @@ export class AkceComponent implements OnInit, OnChanges {
       this.result.valid_projekt = [];
       this.getDokuments();
       this.getProjekts();
-      this.getExtEzdroj();
+      this.getExtZdroj();
       this.hasDetail = true;
     //});
   }

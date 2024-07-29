@@ -23,7 +23,7 @@ export class ExterniZdrojComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.setData();
 
     // const id = this.result.ident_cely ? this.result.ident_cely : this.result;
 
@@ -35,67 +35,67 @@ export class ExterniZdrojComponent implements OnInit {
     }
 
   setData(){  
-    const autor = this.result.autor ? this.result.autor.join(' – ') : '';
-    switch (this.result.typ) {
-      case 'kniha':
+    const autor = this.result.ext_zdroj_autor ? this.result.ext_zdroj_autor.join(' – ') : '';
+    switch (this.result.ext_zdroj_typ) {
+      case 'HES-001117': // 'kniha'
         this.bibTex = `@book{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
           author = {${autor}}, 
-          title = {${this.result.nazev} ${this.result.podnazev ? this.result.podnazev : ''}},
-          ${this.result.vydavatel ? `publisher = {${this.result.vydavatel}},` : ''}
-          year = {${this.result.rok_vydani_vzniku}},
-          ${this.result.edice_rada ? `series = {${this.result.edice_rada}},` : ''}
-          ${this.result.link ? `url = {${this.result.link}},` : ''}
-          ${this.result.isbn ? `isbn = {${this.result.isbn}},` : ''}
-          ${this.result.issn ? `issn = {${this.result.issn}},` : ''}
-          address = {${this.result.misto}}
+          title = {${this.result.ext_zdroj_nazev} ${this.result.ext_zdroj_podnazev ? this.result.ext_zdroj_podnazev : ''}},
+          ${this.result.ext_zdroj_vydavatel ? `publisher = {${this.result.ext_zdroj_vydavatel}},` : ''}
+          year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
+          ${this.result.ext_zdroj_edice_rada ? `series = {${this.result.ext_zdroj_edice_rada}},` : ''}
+          ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
+          ${this.result.ext_zdroj_isbn ? `isbn = {${this.result.ext_zdroj_isbn}},` : ''}
+          ${this.result.ext_zdroj_issn ? `issn = {${this.result.ext_zdroj_issn}},` : ''}
+          address = {${this.result.ext_zdroj_misto}}
         }`;
         break;
-      case 'část knihy':
+      case 'HES-001118': // 'část knihy':
         this.bibTex = `@inproceedings{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
             author = {${autor}}, 
-            title = {${this.result.nazev} ${this.result.podnazev ? this.result.podnazev : ''}},
-            booktitle = {${this.result.sbornik_nazev}},
-            year = {${this.result.rok_vydani_vzniku}},
-            editor = {${this.result.sbornik_editor}},
-            ${this.result.vydavatel ? `publisher = {${this.result.vydavatel}},` : ''}
-            ${this.result.edice_rada ? `series = {${this.result.edice_rada}},` : ''}
-            address = {${this.result.misto}},
-            ${this.result.issn ? `issn = {${this.result.issn}},` : ''}
-            ${this.result.isbn ? `isbn = {${this.result.isbn}},` : ''}
-            ${this.result.link ? `url = {${this.result.link}},` : ''}
-            pages = {${this.result.paginace_titulu}}
+            title = {${this.result.ext_zdroj_nazev} ${this.result.ext_zdroj_podnazev ? this.result.ext_zdroj_podnazev : ''}},
+            booktitle = {${this.result.ext_zdroj_sbornik_nazev}},
+            year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
+            editor = {${this.result.ext_zdroj_sbornik_editor}},
+            ${this.result.ext_zdroj_vydavatel ? `publisher = {${this.result.ext_zdroj_vydavatel}},` : ''}
+            ${this.result.ext_zdroj_edice_rada ? `series = {${this.result.ext_zdroj_edice_rada}},` : ''}
+            address = {${this.result.ext_zdroj_misto}},
+            ${this.result.ext_zdroj_issn ? `issn = {${this.result.ext_zdroj_issn}},` : ''}
+            ${this.result.ext_zdroj_isbn ? `isbn = {${this.result.ext_zdroj_isbn}},` : ''}
+            ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
+            pages = {${this.result.ext_zdroj_paginace_titulu}}
           }`;
         break;
-      case 'článek v časopise':
+      case 'HES-001119': // 'článek v časopise':
         this.bibTex = `@article{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
               author = {${autor}},
-              title = {${this.result.nazev} ${this.result.podnazev ? this.result.podnazev : ''}},
-              journal = {${this.result.casopis_denik_nazev}},
-              year = {${this.result.rok_vydani_vzniku}},
-              ${this.result.issn ? `issn = {${this.result.issn}},` : ''}
-              ${this.result.link ? `url = {${this.result.link}},` : ''}
-              ${this.result.paginace_titulu ? `pages = {${this.result.paginace_titulu}},` : ''}
-              volume = {${this.result.casopis_rocnik}}
+              title = {${this.result.ext_zdroj_nazev} ${this.result.ext_zdroj_podnazev ? this.result.ext_zdroj_podnazev : ''}},
+              journal = {${this.result.ext_zdroj_casopis_denik_nazev}},
+              year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
+              ${this.result.ext_zdroj_issn ? `issn = {${this.result.ext_zdroj_issn}},` : ''}
+              ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
+              ${this.result.ext_zdroj_paginace_titulu ? `pages = {${this.result.ext_zdroj_paginace_titulu}},` : ''}
+              volume = {${this.result.ext_zdroj_casopis_rocnik}}
             }`;
         break;
-      case 'článek v novinách':
+      case 'HES-001120': // 'článek v novinách':
         this.bibTex = `@article{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
                 author = {${autor}},
-                title = {${this.result.nazev} ${this.result.podnazev ? this.result.podnazev : ''}},
-                journal = {${this.result.casopis_denik_nazev}},
-                year = {${this.result.rok_vydani_vzniku}},
-                ${this.result.link ? `url = {${this.result.link}},` : ''}
-                ${this.result.paginace_titulu ? `pages = {${this.result.paginace_titulu}},` : ''}
-                volume = {${this.result.datum_rd}}
+                title = {${this.result.ext_zdroj_nazev} ${this.result.ext_zdroj_podnazev ? this.result.ext_zdroj_podnazev : ''}},
+                journal = {${this.result.ext_zdroj_casopis_denik_nazev}},
+                year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
+                ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
+                ${this.result.ext_zdroj_paginace_titulu ? `pages = {${this.result.ext_zdroj_paginace_titulu}},` : ''}
+                volume = {${this.result.ext_zdroj_datum_rd}}
               }`;
         break;
-      case 'nepublikovaná zpráva':
+      case 'HES-001121': // 'nepublikovaná zpráva':
         this.bibTex = `@unpublished{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
                   author = {${autor}},
-                  title = {${this.result.oznaceni}},
-                  year = {{this.result.rok_vydani_vzniku}},
-                  ${this.result.link ? `url = {${this.result.link}},` : ''}
-                  publisher = {${this.result.organizace}}
+                  title = {${this.result.ext_zdroj_oznaceni}},
+                  year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
+                  ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
+                  publisher = {${this.result.ext_zdroj_organizace}}
                 }`;
         break;
     }

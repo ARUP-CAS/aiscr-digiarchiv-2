@@ -10,7 +10,8 @@
         <ng-container [ngSwitch]="isChild">
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
-        </ng-container><span class="app-pipe"></span>{{ result.samostatny_nalez_nalezce }}<span class="app-pipe"></span>{{ result.samostatny_nalez_datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
+        </ng-container><span class="app-pipe"></span>
+        <app-inline-filter [isChild]="isChild" [field]="'f_nalezce'" [value]="result.samostatny_nalez_nalezce"></app-inline-filter><span class="app-pipe"></span>{{ result.samostatny_nalez_datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
       </div>
       <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd hh:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
     </mat-card-title>
@@ -51,9 +52,8 @@
             <label class="app-label">{{ 'card.desc.Nález' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild" [field]="'f_druh_nalezu'" [value]="result.samostatny_nalez_druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
             <ng-container *ngIf="result.samostatny_nalez_specifikace">
-              (
-                <app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" [value]="result.samostatny_nalez_specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>
-                )
+              (<app-inline-filter [isChild]="isChild" [field]="'f_specifikace'" 
+              [value]="result.samostatny_nalez_specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>)
             </ng-container>
           </ng-container>
         </div>

@@ -129,6 +129,7 @@ class LokalitaChraneneUdaje {
         IndexUtils.addSecuredFieldNonRepeat(idoc, "text_all", popis, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "text_all", poznamka, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lokalita_nazev", nazev, pristupnost);
+        idoc.addField("nazev_sort", nazev);  
     }
 
 }

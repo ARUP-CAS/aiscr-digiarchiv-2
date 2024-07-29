@@ -48,13 +48,14 @@ export class LokalitaComponent implements OnInit, OnChanges {
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       publisher = {Archeologická mapa České republiky [cit. ${now}]}
+       note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
      if (this.inDocument) {
       this.setVsize();
       this.state.documentProgress = 0;
       this.state.loading = true;
       this.getDokuments();
+      this.getExtZdroj();
      }
   }
 
@@ -90,11 +91,28 @@ export class LokalitaComponent implements OnInit, OnChanges {
     this.state.loading = false;
   }
 
+  getExtZdroj() {
+    if (this.result.az_ext_zdroj) {
+      for (let i = 0; i < this.result.az_ext_zdroj.length; i = i + 20) {
+        const ids = this.result.az_ext_zdroj.slice(i, i + 20);
+        this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
+          this.result.az_ext_zdroj = [];
+          this.result.az_ext_odkaz.forEach(eo => {
+            const ez = res.response.docs.find(ez => eo.ext_zdroj.id === ez.ident_cely);
+            ez.ext_odkaz_paginace = eo.paginace;
+            this.result.az_ext_zdroj.push(ez);
+          })
+        });
+      }
+    }
+  }
+
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       this.setVsize();
       this.getDokuments();
+      this.getExtZdroj();
       this.hasDetail = true;
     });
   }
