@@ -19,7 +19,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>HandleServlet</servlet-name>
-        <url-pattern>/id/*</url-pattern>
+        <url-pattern>/id2/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>StaticServlet</servlet-name>
@@ -30,7 +30,7 @@
         <url-pattern>/export/*</url-pattern>
         <url-pattern>/export-mapa/*</url-pattern>
         <url-pattern>/home</url-pattern>
-        <url-pattern>/id2/*</url-pattern>
+        <url-pattern>/id/*</url-pattern>
         <url-pattern>/registrace</url-pattern>
         <url-pattern>/results/*</url-pattern>
         <url-pattern>/print/*</url-pattern>

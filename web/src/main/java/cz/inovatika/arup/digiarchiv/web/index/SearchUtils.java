@@ -190,7 +190,7 @@ public class SearchUtils {
             }
             NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
             dontMessWithSolr.setWriterType("csv");
-            client.setParser(dontMessWithSolr);
+            // client.setParser(dontMessWithSolr);
             NamedList<Object> qresp = client.request(qreq, core);
             return (String) qresp.get("response");
         } catch (Exception ex) {
