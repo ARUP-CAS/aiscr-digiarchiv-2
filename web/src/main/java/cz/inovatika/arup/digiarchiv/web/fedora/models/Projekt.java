@@ -31,9 +31,8 @@ import org.locationtech.jts.io.WKTReader;
 @JacksonXmlRootElement(localName = "projekt")
 public class Projekt implements FedoraModel {
 
-
     public String fieldPrefix = "projekt_";
-    
+
     @Field
     public String entity = "projekt";
 
@@ -133,9 +132,9 @@ public class Projekt implements FedoraModel {
 //<xs:element name="dokument" minOccurs="0" maxOccurs="unbounded" type="amcr:refType"/> <!-- "{casti_dokumentu.dokument.ident_cely}" | "{casti_dokumentu.dokument.ident_cely}" -->
     @JacksonXmlProperty(localName = "dokument")
     public List<Vocab> projekt_dokument = new ArrayList();
-    
+
     @Override
-    public boolean isSearchable(){
+    public boolean isSearchable() {
         return !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty();
     }
 
@@ -148,13 +147,13 @@ public class Projekt implements FedoraModel {
         IndexUtils.setDateStampFromHistory(idoc, historie);
 
         IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
-        
+
         IndexUtils.addRefField(idoc, "projekt_okres", projekt_okres);
         IndexUtils.addVocabField(idoc, "projekt_typ_projektu", projekt_typ_projektu);
         IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
         IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
         IndexUtils.addVocabField(idoc, "projekt_kulturni_pamatka", projekt_kulturni_pamatka);
-
+        
         if (projekt_datum_zahajeni != null) {
             IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_od", projekt_datum_zahajeni);
             IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_do", projekt_datum_zahajeni);
@@ -166,7 +165,7 @@ public class Projekt implements FedoraModel {
                     ukonceni = projekt_datum_ukonceni.toInstant().toString();
                 }
             }
-            IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_provedeni", "[" + projekt_datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
+            IndexUtils.addFieldNonRepeat(idoc, "datum_provedeni", "[" + projekt_datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
         }
 
         for (Vocab v : projekt_archeologicky_zaznam) {
@@ -199,39 +198,32 @@ public class Projekt implements FedoraModel {
         if (projekt_chranene_udaje != null) {
             projekt_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
-        
+
         setSortFields(idoc);
         setFacets(idoc, SolrSearcher.getSufixesByLevel((String) idoc.getFieldValue("pristupnost")));
         setFullText(idoc);
     }
-    
+
     private void setSortFields(SolrInputDocument idoc) {
-        
+
         IndexUtils.addRefField(idoc, "autor_sort", projekt_vedouci_projektu);
         IndexUtils.addRefField(idoc, "organizace_sort", projekt_organizace);
         IndexUtils.addRefField(idoc, "okres_sort", projekt_okres);
-        if (projekt_chranene_udaje != null && projekt_chranene_udaje.hlavni_katastr != null)
-        IndexUtils.addRefField(idoc, "katastr_sort", projekt_chranene_udaje.hlavni_katastr);
-        
+        if (projekt_chranene_udaje != null && projekt_chranene_udaje.hlavni_katastr != null) {
+            IndexUtils.addRefField(idoc, "katastr_sort", projekt_chranene_udaje.hlavni_katastr);
+        }
+
     }
-    
+
     public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("projekt").getJSONArray("facets").toList();
         // List<String> prSufixAll = new ArrayList<>();
-        
+
         for (Object f : indexFields) {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             IndexUtils.addByPath(idoc, orig, dest, prSufix);
-//            if (idoc.containsKey(orig)) {
-//                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-//            } 
-//            for (String sufix : prSufix) {
-//                if (idoc.containsKey(orig + "_" + sufix)) {
-//                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
-//                }
-//            }
         }
     }
 
@@ -249,7 +241,7 @@ public class Projekt implements FedoraModel {
                 }
             }
         }
-        
+
         // Add value of vocab fields
         for (String sufix : SolrSearcher.prSufixAll) {
             idoc.addField("text_all_" + sufix, ident_cely);
@@ -262,16 +254,16 @@ public class Projekt implements FedoraModel {
     }
 
     private void addArch(SolrInputDocument idoc, String az) throws Exception {
-        
-        String[] facetFields = new String[]{"f_areal", 
-            "f_obdobi", 
-            "f_aktivita", 
-            "f_typ_nalezu", 
-            "f_druh_nalezu", 
+
+        String[] facetFields = new String[]{"f_areal",
+            "f_obdobi",
+            "f_aktivita",
+            "f_typ_nalezu",
+            "f_druh_nalezu",
             //"dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
             //"dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
-            "f_specifikace", 
-            "f_dj_typ", 
+            "f_specifikace",
+            "f_dj_typ",
             "f_typ_vyzkumu"};
         SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
                 setFields("pian_id,pristupnost");
@@ -343,7 +335,7 @@ public class Projekt implements FedoraModel {
 }
 
 class ProjektChraneneUdaje {
-    
+
     public static final Logger LOGGER = Logger.getLogger(ProjektChraneneUdaje.class.getName());
 
 //<xs:element name="hlavni_katastr" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "ruian-{hlavni_katastr.kod}" | "{hlavni_katastr.nazev}" -->
@@ -401,9 +393,9 @@ class ProjektChraneneUdaje {
                 } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Can't parse string {0} as WKT", wktStr);
                     // throw new RuntimeException(String.format("Can't parse string %s as WKT", wktStr));
-                    
+
                 }
-                
+
             }
 
         }

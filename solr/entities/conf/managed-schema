@@ -359,6 +359,7 @@
    
    <!-- pole pro stats -->
    <field name="datum_zverejneni" type="pdate" indexed="true" stored="true" />
+   <field name="datum_provedeni" type="rdate" indexed="true" stored="true" />
    <field name="datum_provedeni_od" type="pdate" indexed="true" stored="true" />
    <field name="datum_provedeni_do" type="pdate" indexed="true" stored="true" />
    <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />

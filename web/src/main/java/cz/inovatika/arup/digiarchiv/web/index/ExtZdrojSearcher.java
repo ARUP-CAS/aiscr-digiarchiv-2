@@ -60,17 +60,21 @@ public class ExtZdrojSearcher implements EntitySearcher {
                 if (LoginServlet.userId(request) != null) {
                     SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
                 }
-                String arch = doc.getJSONArray("ext_zdroj_ext_odkaz").getJSONObject(0).getJSONObject("archeologicky_zaznam").getString("id");
-                SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("ident_cely:\"" + arch + "\"")
-                        .setFields(as.getChildSearchFields(pristupnost));
-                        //.setFields(f);
-                JSONObject r = SolrSearcher.json(client, "entities", query);
-                JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
-                
-                for (int j = 0; j < cdjs.length(); j++) {
-                    JSONObject cdj = cdjs.getJSONObject(j);
-                    doc.append(cdj.getString("entity"), cdj);
+                if (doc.has("ext_zdroj_ext_odkaz")) {
+                    
+                    String arch = doc.getJSONArray("ext_zdroj_ext_odkaz").getJSONObject(0).getJSONObject("archeologicky_zaznam").getString("id");
+                    SolrQuery query = new SolrQuery("*")
+                            .addFilterQuery("ident_cely:\"" + arch + "\"")
+                            .setFields(as.getChildSearchFields(pristupnost));
+                            //.setFields(f);
+                    JSONObject r = SolrSearcher.json(client, "entities", query);
+                    JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
+
+                    for (int j = 0; j < cdjs.length(); j++) {
+                        JSONObject cdj = cdjs.getJSONObject(j);
+                        doc.append(cdj.getString("entity"), cdj);
+                    }
+                    
                 }
             } catch (SolrServerException ex) {
                 Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);

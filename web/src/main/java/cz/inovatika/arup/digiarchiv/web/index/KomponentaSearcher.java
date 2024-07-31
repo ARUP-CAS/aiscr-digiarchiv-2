@@ -64,7 +64,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,komponenta_aktivita:[json],komponenta_obdobi:[json]"};
+        return new String[]{"*,komponenta_aktivita:[json],komponenta_obdobi:[json],komponenta_nalez_objekt:[json],komponenta_nalez_predmet:[json]"};
     }
 
     @Override

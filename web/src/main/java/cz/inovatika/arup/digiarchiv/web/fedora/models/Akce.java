@@ -114,7 +114,19 @@ public class Akce {
         for (Entry<String, SolrInputField> entry : akceDoc.entrySet()) {
             idoc.setField(entry.getKey(), entry.getValue().getValue());
         }
-        
+
+        if (akce_datum_zahajeni != null) {
+            SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", akce_datum_zahajeni);
+            String ukonceni = "*";
+            if (akce_datum_ukonceni != null) {
+                SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", akce_datum_ukonceni);
+                if (!akce_datum_ukonceni.before(akce_datum_zahajeni)) {
+                    ukonceni = akce_datum_ukonceni.toInstant().toString();
+                }
+            }
+            SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni", "[" + akce_datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
+        }
+
         String pr = (String) idoc.getFieldValue("pristupnost");
         List<String> prSufix = new ArrayList<>();
 
@@ -130,36 +142,23 @@ public class Akce {
         if ("D".compareTo(pr) >= 0) {
             prSufix.add("D");
         }
-        
+
         setFacets(idoc, prSufix);
         setFullText(idoc, prSufix);
-        
 
     }
-    
+
     public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("facets").toList();
         // List<String> prSufixAll = new ArrayList<>();
-        
+
         for (Object f : indexFields) {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             IndexUtils.addByPath(idoc, orig, dest, prSufix);
-//            if (idoc.containsKey(orig)) {
-//                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-//            } 
-//            for (String sufix : prSufix) {
-//                if (idoc.containsKey(orig + "_" + sufix)) {
-//                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
-//                }
-//            }
         }
-        
-//        for (VedouciAkceOstatni o : akce_vedouci_akce_ostatni) {
-//            IndexUtils.addVocabField(idoc, "f_organizace", o.organizace);
-//            IndexUtils.addRefField(idoc, "f_vedouci",o.vedouci);
-//        }
+
     }
 
     private void setFullText(SolrInputDocument idoc, List<String> prSufix) {
@@ -175,8 +174,8 @@ public class Akce {
                     IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
                 }
             }
-        } 
-        
+        }
+
         for (String sufix : prSufix) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_hlavni_typ);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_vedlejsi_typ);
@@ -185,13 +184,12 @@ public class Akce {
 //                IndexUtils.addRefField(idoc, "text_all_" + sufix, o.vedouci);
 //            }
         }
-        
+
         for (String sufix : SolrSearcher.prSufixAll) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_organizace);
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_specifikace_data);
         }
-        
-        
+
     }
 
 }

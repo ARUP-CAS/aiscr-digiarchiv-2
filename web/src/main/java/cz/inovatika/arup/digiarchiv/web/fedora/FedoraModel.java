@@ -53,6 +53,8 @@ public interface FedoraModel {
             return val;
         }
         String xml = xmlMapper.writeValueAsString(val);
+        xml = xml.replaceAll("<LinkedHashMap>", "");
+        xml = xml.replaceAll("</LinkedHashMap>", "");
         xml = xml.replaceAll("><srsName>", " srsName=\"");
         return xml.replaceAll("</srsName>", "\">");
     }

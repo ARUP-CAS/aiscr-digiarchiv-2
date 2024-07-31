@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
@@ -88,6 +89,28 @@ public class NeidentAkce {
         idoc.addField("neident_akce_popis", popis);
         idoc.addField("neident_akce_poznamka", poznamka);
         idoc.addField("neident_akce_pian", pian);
+       
+        int datum_provedeni_od = 10000;
+        int datum_provedeni_do = 0;
+        if (rok_zahajeni != 0) {
+          datum_provedeni_od = Math.min(datum_provedeni_od, rok_zahajeni);
+          String ukonceni = "*";
+          Calendar c1 = Calendar.getInstance();
+          c1.set(datum_provedeni_od, 0, 1);
+          SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_od", c1.toInstant().toString());
+          idoc.setField("datum_provedeni_od", c1.toInstant().toString());
+          if (rok_ukonceni != 0) {
+            datum_provedeni_do = Math.max(datum_provedeni_do, rok_ukonceni);
+            Calendar c2 = Calendar.getInstance();
+            c2.set(datum_provedeni_do, 11, 31);
+            SolrSearcher.addFieldNonRepeat(idoc, "datum_provedeni_do", c2.toInstant().toString());
+            idoc.setField("datum_provedeni_do", c2.toInstant().toString());
+            if (!c2.before(c1)) {
+              ukonceni = c2.toInstant().toString();
+            }
+          }
+          idoc.setField("datum_provedeni", "[" + c1.toInstant().toString() + " TO " + ukonceni + "]");
+        }
         
     }
 }

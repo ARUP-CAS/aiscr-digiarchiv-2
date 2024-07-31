@@ -10,6 +10,7 @@ import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -282,15 +283,8 @@ public class Dokument implements FedoraModel {
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
             IndexUtils.addByPath(idoc, orig, dest, Arrays.asList(SolrSearcher.prSufixAll));
-//            if (idoc.containsKey(orig)) {
-//                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-//            } 
-//            for (String sufix : prSufix) {
-//                if (idoc.containsKey(orig + "_" + sufix)) {
-//                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, idoc.getFieldValues(orig + "_" + sufix));
-//                }
-//            }
         }
+        
     }
 
     public void setFullText(SolrInputDocument idoc) {
@@ -327,7 +321,7 @@ public class Dokument implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, v.nazev);
             }
         }
-    }
+    }  
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
