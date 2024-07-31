@@ -103,6 +103,17 @@ export class LokalitaComponent implements OnInit, OnChanges {
             this.result.az_ext_zdroj.push(ez);
           })
         });
+        this.result.az_ext_zdroj.sort((ez1, ez2) => {
+          let res = 0;
+          res = ez1.ext_zdroj_autor[0].localeCompare(ez2.ext_zdroj_autor[0], 'cs');
+          if (res === 0) {
+            res = ez1.ext_zdroj_rok_vydani_vzniku = ez2.ext_zdroj_rok_vydani_vzniku;
+          }
+          if (res === 0) {
+            res = ez1.ext_zdroj_nazev.localeCompare(ez2.ext_zdroj_nazev);
+          }
+          return res;
+        })
       }
     }
   }

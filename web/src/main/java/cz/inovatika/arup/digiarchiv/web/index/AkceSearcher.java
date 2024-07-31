@@ -35,6 +35,7 @@ public class AkceSearcher implements EntitySearcher {
             if (docPr.compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
                 doc.remove("chranene_udaje");
                 doc.remove("az_chranene_udaje");
+                doc.remove("akce_chranene_udaje");
 //                doc.remove("loc");
 //                doc.remove("loc_rpt");
             }

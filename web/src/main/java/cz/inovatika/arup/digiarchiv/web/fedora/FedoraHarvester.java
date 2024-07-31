@@ -166,7 +166,7 @@ public class FedoraHarvester {
         Instant start = Instant.now();
         String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
         String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
-        // lastDate = "2023-08-01T00:00:00.000Z";
+        // lastDate = "2024-07-30T15:37:05.633Z";
         ret.put("lastDate", lastDate);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
@@ -600,10 +600,10 @@ public class FedoraHarvester {
 
                 DocumentObjectBinder dob = new DocumentObjectBinder();
                 SolrInputDocument idoc = dob.toSolrInputDocument(fm);
-                if (!fm.isSearchable()) {
-                    LOGGER.log(Level.FINE, "Skiping record {0}. Not searchable", idoc.getFieldValue("ident_cely"));
-                    return;
-                }
+//                if (!fm.isSearchable()) {
+//                    LOGGER.log(Level.FINE, "Skiping record {0}. Not searchable", idoc.getFieldValue("ident_cely"));
+//                    return;
+//                }
                 fm.fillSolrFields(idoc);
                 String entity = (String) idoc.getFieldValue("entity");
                 if (xml.contains("<amcr:geom_gml>")) {

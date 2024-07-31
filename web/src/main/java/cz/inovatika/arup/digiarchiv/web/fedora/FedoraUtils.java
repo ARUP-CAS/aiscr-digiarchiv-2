@@ -60,7 +60,7 @@ public class FedoraUtils {
             .build();
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
     
-    return response.body();
+    return response.body(); 
   }
   
   public static String requestXml(String url) throws URISyntaxException, IOException, InterruptedException {
