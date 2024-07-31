@@ -413,12 +413,12 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.state.solrResponse.response.docs.forEach(doc => {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
-          if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
+          if (this.state.hasRights(pian.pristupnost, doc.organizace) || doc.entity === 'dokument') {
             this.addMarker(pian.ident_cely, true, pian.centroid_n, pian.centroid_e, pian.presnost, pian.typ, doc);
           }
         });
       } else if (doc.loc_rpt) {
-        if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
+        if (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument') {
           const coords = doc.loc_rpt[0].split(',');
           this.addMarker(doc.ident_cely, false, coords[0], coords[1], '', '', doc);
         }
