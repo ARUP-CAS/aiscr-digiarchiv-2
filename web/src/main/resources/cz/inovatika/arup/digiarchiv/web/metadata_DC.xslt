@@ -616,7 +616,7 @@
     </xsl:template>
 
 
-<!-- ext_zdroj -->
+<!-- !!! ZDE POKRAČOVAT V REVIZI !!! ext_zdroj -->
       <xsl:template match="amcr:ext_zdroj">
         <dc:title xml:lang="cs">AMČR - externí zdroj <xsl:value-of select="amcr:ident_cely"/></dc:title> <!-- AMČR - externí zdroj {amcr:ext_zdroj/amcr:ident_cely} -->
         <dc:identifier>
