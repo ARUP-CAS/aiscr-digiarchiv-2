@@ -64,21 +64,21 @@ export class MapaComponent implements OnInit, OnDestroy {
     iconUrl: 'assets/img/pin.png',
     //shadowUrl: 'assets/img/marker-shadow.png'
   });
-  
+
   iconPoint = L.icon({
     iconSize: [16, 26],
     iconAnchor: [8, 26],
     iconUrl: 'assets/img/pin-point.png',
     //shadowUrl: 'assets/img/marker-shadow.png'
   });
-  
+
   hitIcon = L.icon({
     iconSize: [12, 20],
     iconAnchor: [6, 20],
     iconUrl: 'assets/img/pin-hit.png',
     //shadowUrl: 'assets/img/marker-shadow.png'
   });
-  
+
   hitIconPoint = L.icon({
     iconSize: [16, 26],
     iconAnchor: [8, 26],
@@ -108,7 +108,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   firstChange = true;
   firstZoom = true;
 
-  layersControl = {baseLayers:{}, overlays:{}};
+  layersControl = { baseLayers: {}, overlays: {} };
 
   osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: this.config.mapOptions.maxZoom,
@@ -216,14 +216,14 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   initLayers() {
     this.baseLayers = {};
-    this.baseLayers[this.service.getTranslation('map.layer.cuzk_zakladni')]= this.cuzkZM,
-    this.baseLayers[this.service.getTranslation('map.layer.cuzk_orto')]= this.cuzkOrt,
-    this.baseLayers[this.service.getTranslation('map.layer.cuzk_stin')]= this.cuzkEL,
-    this.baseLayers[this.service.getTranslation('map.layer.openstreet')]= this.osm;
+    this.baseLayers[this.service.getTranslation('map.layer.cuzk_zakladni')] = this.cuzkZM,
+      this.baseLayers[this.service.getTranslation('map.layer.cuzk_orto')] = this.cuzkOrt,
+      this.baseLayers[this.service.getTranslation('map.layer.cuzk_stin')] = this.cuzkEL,
+      this.baseLayers[this.service.getTranslation('map.layer.openstreet')] = this.osm;
     this.overlays = {};
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_mapa')] = this.cuzkWMS;
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_uzemi')] = this.cuzkWMS2;
-    
+
     this.options.layers = [this.osm];
 
     this.layersControl = {
@@ -269,7 +269,6 @@ export class MapaComponent implements OnInit, OnDestroy {
 
       this.markers = new L.markerClusterGroup();
       this.markersList = [];
-      
       switch (this.showType) {
         case 'cluster': {
           this.state.loading = true;
@@ -282,6 +281,12 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.setClusterDataByPian(res.response.docs);
             }
             this.state.loading = false;
+            setTimeout(() => {
+              if (this.state.mapResult) {
+                this.hitMarker(this.state.mapResult);
+              } 
+      
+            }, 100);
           });
           break;
         }
@@ -289,17 +294,31 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.setMarkersData();
           if (!byLoc) {
             this.markersList.forEach(m => {
-              if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
+              if (m.pianPresnost !== 'HES-000864' && m.pianTyp !== 'bod') {
+              //if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
                 this.addShape(m.pianId, m.pianPresnost, m.docId.length);
               }
             });
           }
           this.state.loading = false;
+          setTimeout(() => {
+            if (this.state.mapResult) {
+              this.hitMarker(this.state.mapResult);
+            } else {
+              // this.fitOnMarkers();
+            }
+
+          }, 100);
           break;
         }
         case 'heat': {
           this.setMarkersData();
           this.state.loading = false;
+          setTimeout(() => {
+            if (this.state.mapResult) {
+              this.hitMarker(this.state.mapResult);
+            } 
+          }, 100);
           break;
         }
       }
@@ -311,14 +330,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else {
         this.locationFilter.disable();
       }
-      setTimeout(() => {
-        if (this.state.mapResult) {
-          this.hitMarker(this.state.mapResult);
-        } else {
-          // this.fitOnMarkers();
-        }
-
-      }, 100);
 
       if ((this.showDetail || this.isInit) && this.state.solrResponse.response.docs.length === 1) {
         this.state.setMapResult(this.state.solrResponse.response.docs[0], false);
@@ -348,6 +359,18 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
   }
 
+  addMarkerByResult(doc: any) {
+    if (doc.pian && doc.pian.length > 0) {
+      doc.pian.forEach(pian => {
+          const coords = pian.loc_rpt[0].split(',');
+          this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, doc);
+      });
+    } else if (doc.loc_rpt) {
+        const coords = doc.loc_rpt[0].split(',');
+        this.addMarker(doc.ident_cely, false, coords[0], coords[1], '', '', doc);
+    }
+  }
+
   addMarker(id: string, isPian: boolean, lat: string, lng: string, presnost: string, typ: string, doc: any) {
     let mrk = this.markerExists(id);
     if (!mrk) {
@@ -358,9 +381,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       mrk.pianTyp = typ;
       mrk.docId = [doc.ident_cely];
       mrk.doc = doc;
-      if(isPian) {
+      if (isPian) {
         mrk.on('click', (e) => {
-            this.setPianId(e.target.pianId);
+          this.setPianId(e.target.pianId);
         });
         mrk.bindTooltip(this.popUpHtml(id, presnost, mrk.docId)).openTooltip();
       } else {
@@ -378,14 +401,15 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setClusterDataByPian(docs: any[]) {
     this.markers = new L.markerClusterGroup();
-    docs.forEach(doc => {
-      if (doc.pian && doc.pian.length > 0) {
-        doc.pian.forEach(pian => {
-          if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
-            this.addMarker(pian.ident_cely, true, pian.centroid_n, pian.centroid_e, pian.presnost, pian.typ, doc);
-          }
-        });
+    docs.forEach(pian => {
+      //if (doc.pian && doc.pian.length > 0) {
+      //  doc.pian.forEach(pian => {
+      if (this.state.hasRights(pian.pristupnost, pian.organizace)) {
+        const coords = pian.loc_rpt[0].split(',');
+        this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, pian);
       }
+      //  });
+      //}
     });
     this.markers.addLayers(this.markersList);
     this.currentZoom = this.map.getZoom();
@@ -406,6 +430,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.currentZoom = this.map.getZoom();
   }
 
+
+
   setMarkersData() {
     this.markersList = [];
     this.markers = new L.featureGroup();
@@ -413,8 +439,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.state.solrResponse.response.docs.forEach(doc => {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
-          if (this.state.hasRights(pian.pristupnost, doc.organizace) || doc.entity === 'dokument') {
-            this.addMarker(pian.ident_cely, true, pian.centroid_n, pian.centroid_e, pian.presnost, pian.typ, doc);
+          if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
+            const coords = pian.loc_rpt[0].split(',');
+            this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, doc);
           }
         });
       } else if (doc.loc_rpt) {
@@ -462,10 +489,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   hitMarker(res) {
     if (!res) {
       this.clearSelectedMarker();
-      //if (this.showType === 'heat') {
-        // this.markers = new L.featureGroup();
-        this.updateBounds(this.map.getBounds(), false, 'hitMarker');
-      //}
+      this.updateBounds(this.map.getBounds(), false, 'hitMarker');
       return;
     }
     const docId = res.ident_cely;
@@ -474,8 +498,24 @@ export class MapaComponent implements OnInit, OnDestroy {
       // the same or document
       changed = false;
     }
-    const ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
-    this.clearSelectedMarker();
+    let ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
+    if (changed) {
+      this.clearSelectedMarker();
+    }
+    
+    if (!ms || ms.length === 0) {
+      this.addMarkerByResult(res);
+
+      if (this.showType !== 'heat') {
+        this.markersList.forEach(mrk => {
+          mrk.addTo(this.markers);
+        });
+      }
+
+
+      ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
+    }
+    
     ms.forEach(m => {
       m.setIcon(m.pianTyp === 'bod' ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
@@ -486,6 +526,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         }
       }
     });
+
     if (changed && ms.length > 0) {
       this.zoomingOnMarker = true;
       if (this.map.getZoom() < this.config.mapOptions.hitZoomLevel) {
@@ -496,7 +537,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     }
     if (!ms || ms.length === 0) {
-      this.state.mapResult = null;
+      //this.state.mapResult = null;
     }
     this.selectedMarker = ms;
   }
@@ -549,7 +590,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       // if (this.state.locationFilterEnabled) {
       //   this.locationFilter.setBounds(bounds);
       // }
-      
+
       this.map.fitBounds(bounds);
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
@@ -591,11 +632,11 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     this.locationFilter.on('change', (e) => {
-      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds())  && !this.firstChange) {
+      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds()) && !this.firstChange) {
         this.updateBounds(null, true, 'locChange');
       }
       this.firstChange = false;
-      
+
     });
 
     this.locationFilter.on('enabled', () => {
@@ -625,7 +666,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   debounce(func, wait, immediate) {
     var timeout;
-    return  () => {
+    return () => {
       var context = this, args = arguments;
       clearTimeout(timeout);
       timeout = setTimeout(function () {
@@ -649,17 +690,17 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (this.locationFilter.isEnabled() && isLocation) {
       // bounds = this.locationFilter.getBounds();
       this.state.locationFilterBounds = this.locationFilter.getBounds();
-    } 
+    }
 
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
 
-    const queryParams: any =  { loc_rpt: value, page: 0 };
+    const queryParams: any = { loc_rpt: value, page: 0 };
     if (this.state.locationFilterEnabled) {
-      queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' + 
-                          this.state.locationFilterBounds.getSouthWest().lng + ',' + 
-                          this.state.locationFilterBounds.getNorthEast().lat + ',' + 
-                          this.state.locationFilterBounds.getNorthEast().lng;
+      queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' +
+        this.state.locationFilterBounds.getSouthWest().lng + ',' +
+        this.state.locationFilterBounds.getNorthEast().lat + ',' +
+        this.state.locationFilterBounds.getNorthEast().lng;
     } else {
       queryParams.vyber = null;
     }
@@ -745,8 +786,12 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   addShape(ident_cely: string, presnost: string, pocet: number) {
     this.service.getWKT(ident_cely).subscribe((resp: any) => {
+      if (!resp.geom_wkt_c) {
+        return;
+      }
       const wkt = new Wkt.Wkt();
       wkt.read(resp.geom_wkt_c);
+      
       if (wkt.toJson().type !== 'Point') {
         const layer = geoJSON((wkt.toJson() as any), {
           style: () => ({

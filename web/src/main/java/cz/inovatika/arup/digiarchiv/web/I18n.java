@@ -66,15 +66,53 @@ public class I18n {
 
     }
 
-    //Load Solr keys
     Options opts = Options.getInstance();
-    String url = opts.getString("solrhost", "http://localhost:8983/solr/")
-            + "translations/export?q=*:*&wt=json&sort=id%20asc&fl=id,heslo,heslar," + locale;
-
-    LOGGER.log(Level.FINE, "requesting url {0}", url);
-    InputStream inputStream = RESTHelper.inputStream(url);
+    
+    //Load Solr keys
+    JSONObject heslarDoc = new JSONObject();
+    String urlHeslar = opts.getString("solrhost", "http://localhost:8983/solr/")
+            + "heslar/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + locale;
+    InputStream inputStream = RESTHelper.inputStream(urlHeslar);
     String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
     JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < docs.length(); i++) {
+      heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getString(locale));
+    }
+    
+    // Organizace
+    String field = "nazev"; 
+    if ("en".equals(locale)) {
+      field += "_en";
+    } 
+    String urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/")
+            + "organizations/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + field;
+    inputStream = RESTHelper.inputStream(urlOrg);
+    solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
+    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < docs.length(); i++) {
+      heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
+    }
+    
+    //Pristupnost indexujeme zkratky
+    String urlPr = opts.getString("solrhost", "http://localhost:8983/solr/")
+            + "heslar/select?q=nazev_heslare:pristupnost&wt=json&fl=ident_cely,zkratka," + locale;
+    inputStream = RESTHelper.inputStream(urlPr);
+    solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
+    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < docs.length(); i++) {
+      // heslarDoc.put("pristupnost_" + docs.getJSONObject(i).getString("zkratka").toUpperCase(), docs.getJSONObject(i).getString(locale));
+      heslarDoc.put(docs.getJSONObject(i).getString("zkratka"), docs.getJSONObject(i).getString(locale));
+    }
+
+    def.put("heslar", heslarDoc);
+    
+    String url = opts.getString("solrhost", "http://localhost:8983/solr/")
+            + "translations/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + locale;
+
+    LOGGER.log(Level.FINE, "requesting url {0}", url);
+    inputStream = RESTHelper.inputStream(url);
+    solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
+    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
     
     for (int i = 0; i < docs.length(); i++) {
       def.put(docs.getJSONObject(i).getString("id"), docs.getJSONObject(i).getString(locale));

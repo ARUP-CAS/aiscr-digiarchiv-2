@@ -11,7 +11,8 @@ export class SolrDocument {
     presnost: string, 
     typ: string, 
     parent_doctype: string, 
-    centroid_n: string
+    centroid_n: string,
+    loc_rpt: any[]
   }[];
   [prop: string]: any;
 }

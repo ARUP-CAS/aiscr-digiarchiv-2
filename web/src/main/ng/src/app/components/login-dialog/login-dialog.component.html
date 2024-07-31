@@ -21,8 +21,8 @@
 
     <ng-container *ngIf="state.logged">
       <span class="app-label">{{ 'dialog.desc.Přihlášený uživatel' | translate }}:</span>&#160;<strong>{{ state.user.jmeno}} {{state.user.prijmeni }}</strong><br />
-      <span class="app-label">{{ 'dialog.desc.Uživatelská role' | translate }}:</span>&#160;<strong>{{ 'pristupnost_' + state.user.pristupnost | translate }}</strong><br />
-      <span class="app-label">{{ 'dialog.desc.Organizace' | translate }}:</span>&#160;<strong>{{ state.user.organizaceNazev }}</strong>
+      <span class="app-label">{{ 'dialog.desc.Uživatelská role' | translate }}:</span>&#160;<strong>{{ state.user.skupina[0].value | translate }}</strong><br />
+      <span class="app-label">{{ 'dialog.desc.Organizace' | translate }}:</span>&#160;<strong>{{ state.user.organizace.id | translateHeslar  : 'organizace' }}</strong>
     </ng-container>
 </div>
 <div mat-dialog-actions>

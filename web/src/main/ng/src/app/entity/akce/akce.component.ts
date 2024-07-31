@@ -18,10 +18,9 @@ export class AkceComponent implements OnInit, OnChanges {
   @Input() result: any;
   @Input() detailExpanded: boolean;
   @Input() isChild: boolean;
-  @Input() mapDetail: boolean;
+  @Input() mapDetail: boolean = false;
   @Input() isDocumentDialogOpen: boolean;
   @Input() inDocument = false;
-  hasRights: boolean;
   hasDetail: boolean;
   bibTex: string;
 
@@ -42,15 +41,14 @@ export class AkceComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const sd = new Date(this.result.specifikace_data);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
       `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR},
        title = {Záznam ${this.result.ident_cely}},
-       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       publisher = {Archeologická mapa České republiky [cit. ${now}]}
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
     this.result.dokumentTemp = [];
     if (this.inDocument) {
@@ -60,13 +58,14 @@ export class AkceComponent implements OnInit, OnChanges {
         setTimeout(() => {
           this.state.loading = true;
           this.state.imagesLoading = true;
-          this.result.dokument = [];
-          this.result.projekt = [];
+          this.result.valid_dokument = [];
+          this.result.valid_projekt = [];
           this.getDokuments();
-          this.getProjekts();
+          this.getProjekts(); 
+          this.getExtZdroj();
         }, 100);
       }
-    }
+    }  
   }
 
   ngOnChanges(c) {
@@ -81,47 +80,73 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   setVsize() {
-    if (this.result.child_dokument) {
-      this.numChildren += this.result.child_dokument.length;
-      this.state.numImages = this.result.child_dokument.length;
-    }
-    if (this.result.vazba_projekt) {
-      this.numChildren += this.result.vazba_projekt.length;
-    }
-    this.state.numChildren = this.numChildren;
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+      if (this.result.az_dokument) {
+        this.numChildren += this.result.az_dokument.length;
+        this.state.numImages = this.result.az_dokument.length;
+      }
+      if (this.result.akce_projekt) {
+        this.numChildren += 1;
+      }
+      this.state.numChildren = this.numChildren;
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   checkLoading() {
-    this.state.loading = (this.dokLoaded + this.result.projekt.length) < this.numChildren;
+    this.state.loading = (this.dokLoaded + this.result.valid_projekt.length) < this.numChildren;
     if (!this.state.loading) {
-      this.result.dokument = this.result.dokumentTemp.concat([]);
+      this.result.valid_dokument = this.result.dokumentTemp.concat([]);
+    }
+  }
+
+  getExtZdroj() {
+    if (this.result.az_ext_zdroj) {
+      for (let i = 0; i < this.result.az_ext_zdroj.length; i = i + 20) {
+        const ids = this.result.az_ext_zdroj.slice(i, i + 20);
+        this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
+          this.result.az_ext_zdroj = [];
+          this.result.az_ext_odkaz.forEach(eo => {
+            const ez = res.response.docs.find(ez => eo.ext_zdroj.id === ez.ident_cely);
+            ez.ext_odkaz_paginace = eo.paginace;
+            this.result.az_ext_zdroj.push(ez);
+          });
+
+          this.result.az_ext_zdroj.sort((ez1, ez2) => {
+            let res = 0;
+            res = ez1.ext_zdroj_autor[0].localeCompare(ez2.ext_zdroj_autor[0], 'cs');
+            if (res === 0) {
+              res = ez1.ext_zdroj_rok_vydani_vzniku = ez2.ext_zdroj_rok_vydani_vzniku;
+            }
+            if (res === 0) {
+              res = ez1.ext_zdroj_nazev.localeCompare(ez2.ext_zdroj_nazev);
+            }
+            return res;
+          })
+        });
+      }
     }
   }
 
 
   getDokuments() {
-    if (this.result.child_dokument && this.hasRights) {
-      for (let i = 0; i < this.result.child_dokument.length; i++) {
+    if (this.result.az_dokument) {
+      for (let i = 0; i < this.result.az_dokument.length; i++) {
         this.result.dokumentTemp.push({});
       }
-      for (let i = 0; i < this.result.child_dokument.length; i = i + 20) {
-        const ids = this.result.child_dokument.slice(i, i + 20);
+      for (let i = 0; i < this.result.az_dokument.length; i = i + 20) {
+        const ids = this.result.az_dokument.slice(i, i + 20);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
           // Odpoved ma jine serazeni.
           const sorted: any[] = [];
           ids.forEach(id => {
             const doc = res.response.docs.find(d => d.ident_cely === id);
             // sorted.push(doc);
-            const idx = this.result.child_dokument.findIndex(d => d === id);
+            const idx = this.result.az_dokument.findIndex(d => d === id);
             this.result.dokumentTemp[idx] = doc;
             this.dokLoaded++;
           });
-          // this.result.dokument = this.result.dokument.concat(res.response.docs);
-          // this.result.dokument = this.result.dokument.concat(sorted);
           this.state.documentProgress = this.dokLoaded / this.numChildren * 100;
           this.checkLoading();
-          
+
         });
       }
     }
@@ -129,30 +154,26 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   getProjekts() {
-    if (this.result.vazba_projekt) {
-      for (let i = 0; i < this.result.vazba_projekt.length; i = i + 10) {
-        const ids = this.result.vazba_projekt.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
-          this.result.projekt = this.result.projekt.concat(res.response.docs);
+    if (this.result.akce_projekt) {
+        this.service.getIdAsChild([this.result.akce_projekt], "projekt").subscribe((res: any) => {
+          this.result.valid_projekt = res.response.docs;
           this.checkLoading();
         });
-      }
     }
   }
 
   getFullId() {
-    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-      this.result = res.response.docs[0];
+    //this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+      //this.result = res.response.docs[0];
       this.setVsize();
-      this.result.dokument = [];
+      this.result.valid_dokument = [];
       this.result.dokumentTemp = [];
-      this.result.projekt = [];
+      this.result.valid_projekt = [];
       this.getDokuments();
       this.getProjekts();
-      // this.result.akce = res.response.docs[0].akce;
-      // this.result.lokalita = res.response.docs[0].lokalita;
+      this.getExtZdroj();
       this.hasDetail = true;
-    });
+    //});
   }
 
   toggleDetail() {

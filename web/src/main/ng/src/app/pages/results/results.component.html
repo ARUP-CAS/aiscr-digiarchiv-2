@@ -1,9 +1,9 @@
-<div class="app-display-table app-loading" *ngIf="state.loading">
+<div class="app-display-table app-loading" *ngIf="state.loading" style="position: absolute; z-index:1000;">
   <div class="app-table-cell app-clean-pd">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
+  <div *ngIf="state.documentProgress" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 </div>
-<div *ngIf="state.loading && state.documentProgress" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 
 <div #leftElement class="app-display-table app-container" *ngIf="!loading || !state.isMapaCollapsed">
 
@@ -11,6 +11,7 @@
     <div class="app-table-cell app-left">
       <div fxLayout="row" fxFlexFill>
         <div fxFlex class="app-facets">
+          <div *ngIf="state.facetsLoading" class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
           <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
           <app-facets></app-facets>
         </div>
@@ -82,7 +83,8 @@
           <ng-container *ngFor="let result of docs">
             <ng-container [ngSwitch]="state.entity">
               <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-              <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
+              <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+              <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
               <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
               <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
               <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
@@ -118,7 +120,8 @@
               <ng-container *cdkVirtualFor="let result of docs">
                 <ng-container [ngSwitch]="state.entity">
                   <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-                  <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
+                  <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                  <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
                   <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
                   <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
                   <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>

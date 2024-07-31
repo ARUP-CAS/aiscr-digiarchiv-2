@@ -1,17 +1,19 @@
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 
-import {APP_BASE_HREF} from '@angular/common';
-import {ngExpressEngine} from '@nguniversal/express-engine';
+import { APP_BASE_HREF } from '@angular/common';
+import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
-import {existsSync} from 'fs';
-import {join} from 'path';
-
-import {AppServerModule} from './src/main.server';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { AppServerModule } from './src/main.server';
 const request = require('request');
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
+  // const distFolder = join(process.cwd(), 'dist/ng/browser');
+  // const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+
   const distFolder = join(process.cwd(), '.');
   const indexHtml = existsSync(join(distFolder, 'index.ssr.html')) ? 'index.ssr.html' : 'index';
   const args = process.argv;
@@ -23,29 +25,32 @@ export function app(): express.Express {
     process.exit();
   }
 
+
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
   server.engine('html', ngExpressEngine({
-    bootstrap: AppServerModule,
+    bootstrap: AppServerModule
   }));
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
-
-  // Example Express Rest API endpoints
-  server.get('/api/img', (req, res) => {
-    res.redirect(apiServer + req.url);
-  });
-
-  server.get('/api/**', (req, res) => {
-    request(apiServer + req.url, function (error, response, body) {
+    // Example Express Rest API endpoints
+    server.get('/api/img/**', (req, res) => {
+      res.redirect(apiServer + req.url);
+    });
+  
+    server.get('/api/**', (req, res) => {
+      request(apiServer + req.url, function (error, response, body) {
+        if (error) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-          res.send(body)
+        }
+        res.send(body)
+      });
+      // res.render('http://localhost:8080/amcr' + req.url);
     });
-    // res.render('http://localhost:8080/amcr' + req.url);
-  });
 
+  // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
   server.get('*.*', express.static(distFolder, {

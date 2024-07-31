@@ -60,6 +60,7 @@ export class AppState {
 
   solrResponse: SolrResponse;
   loading: boolean;
+  facetsLoading = false;
   imagesLoading: boolean;
   imagesLoaded = 0;
   numFound: number;
@@ -149,9 +150,11 @@ export class AppState {
 
     this.resultsSubject.next({typ: 'results', pageChanged: this.pageChanged});
     this.pageChanged = false;
-    setTimeout(() => {
-      this.setFacets(resp);
-    }, 100);
+    if (resp.facet_counts) {
+      setTimeout(() => {
+        this.setFacets(resp);
+      }, 100);
+    }
   }
 
   setFacets(resp) {
@@ -218,7 +221,7 @@ export class AppState {
       keys.forEach(f => {
         const field = f.split(',')[0];
         switch (field) {
-          case 'kategorie_dokumentu':
+          case 'dokument_kategorie_dokumentu':
             const fp = { field, values: [], count: -1 };
             pivots[f].forEach(f1 => {
               fp.values.push(f1);
@@ -271,7 +274,7 @@ export class AppState {
 
     this.sort = null;
     if (params.has('sort')) {
-      this.sort = this.sorts.find(s => (s.field + ' ' + s.dir) === params.get('sort'));
+      this.sort = this.sorts.find(s => (s.field) === params.get('sort'));
     }
     if (!this.sort) {
       this.sort = this.sorts[0];
@@ -288,11 +291,11 @@ export class AppState {
   }
 
   hasRights(pristupnost: string, organizace: string) {
-    if (pristupnost === 'A') {
+    if (pristupnost.toUpperCase() === 'A') {
       return true;
     } else if (this.logged) {
       const sameOrg = this.user.organizaceNazev === organizace;
-      return this.user.pristupnost.localeCompare(pristupnost) > -1 || ((this.user.pristupnost.localeCompare('C') > -1 && sameOrg));
+      return this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
     } else {
       return false;
     }
@@ -329,15 +332,15 @@ export class AppState {
       this.logged = false;
       this.user = null;
     } else {
-      this.logged = false;
-      this.user = null;
-      for (const first in res) {
-        if (res[first]) {
-          this.user = res[first];
-          this.logged = true;
-          break;
-        }
-      }
+      this.logged = true;
+      this.user = res;
+      // for (const first in res) {
+      //   if (res[first]) {
+      //     this.user = res[first];
+      //     this.logged = true;
+      //     break;
+      //   }
+      // }
     }
     this.loggedSubject.next(changed === this.logged);
   }

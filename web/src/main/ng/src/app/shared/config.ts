@@ -4,7 +4,10 @@ export interface Sort { label: string; field: string; dir: string; entity?: stri
 export class Configuration {
   context: string;
   serverUrl: string;
+  registrationUrl: string;
+  helpUrl: string;
   amcr: string;
+  amcr_server: string;
   isIndexing: boolean;
   defaultLang: string;
   facets: string[];
@@ -25,8 +28,6 @@ export class Configuration {
       typy: any[]
     }[]
   };
-
-  poleToHeslar: { [key: string]: string };
 
   mapOptions: {
     docsForMarker: number,
@@ -68,6 +69,6 @@ export class Configuration {
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};
 
-  choiceApi: {label: string, metadataPrefix: string}[];
+  choiceApi: {label: string, metadataPrefix: string, url: string}[];
   feedBackMaxLength: number;
 }

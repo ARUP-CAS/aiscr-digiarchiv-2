@@ -73,6 +73,7 @@ import { KomponentaDokumentComponent } from './components/komponenta-dokument/ko
 import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
 import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 import { CitationComponent } from './components/citation/citation.component';
+import { ResultActionsComponent } from './components/result-actions/result-actions.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -170,11 +171,12 @@ const providers: any[] = [
     BibtextDialogComponent,
     FeedbackDialogComponent,
     KomponentaDokumentComponent,
-    CitationComponent
+    CitationComponent,
+    ResultActionsComponent
   ],
   imports: [
     CommonModule,
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    // BrowserModule.withServerTransition({ appId: 'serverApp' }),
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
@@ -193,9 +195,9 @@ const providers: any[] = [
     RecaptchaModule,
     RecaptchaFormsModule
   ],
-  entryComponents: [
-    FileViewerComponent
-  ],
+  // entryComponents: [
+  //   FileViewerComponent
+  // ],
   providers
 })
 export class AppSsrModule { }

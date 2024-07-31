@@ -129,10 +129,17 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   search(params: Params) {
     this.state.loading = true;
+    this.state.documentProgress = 0;
     this.loading = true;
+    this.state.facetsLoading = true;
     const p = Object.assign({}, params);
+    
+    if (!p['entity']) {
+      p['entity'] = 'dokument';
+    }
     // p.mapa = !this.state.isMapaCollapsed;
     this.docs = [];
+    p['noFacets'] = 'true';
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       this.state.setSearchResponse(resp);
       this.docs = resp.response.docs;
@@ -144,6 +151,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
       }, 100);
+
+      p['noFacets'] = 'false';
+      p['onlyFacets'] = 'true';
+      this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+        this.state.setFacets(resp);
+        this.state.facetsLoading = false;
+      });
       
       // Math.min(9*itemSize, docs.length * itemSize)
     });

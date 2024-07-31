@@ -9,6 +9,9 @@ import javax.imageio.ImageIO;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
@@ -59,7 +62,7 @@ public class ImageSupport {
 
       //new File(destDir + sb.toString()).mkdirs();
       return destDir + sb.toString();
-    } catch (IOException | JSONException ex) {
+    } catch (JSONException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
       return null;
     }
@@ -93,6 +96,36 @@ public class ImageSupport {
       if (!onlyThumbs) {
         int max = opts.getInt("mediumHeight", 1000);
         resizeWithThumbnailator(srcImage, max, max, new File(outputFile + "_medium.jpg"), getImageType(f, srcImage));
+      }
+
+      return outputFile;
+    } catch (Exception ex) {
+
+      LOGGER.log(Level.SEVERE, "Error creating thumb {0}, ", outputFile);
+      LOGGER.log(Level.SEVERE, null, ex);
+      return null;
+    }
+  }
+  
+  public static String thumbnailzeImg(InputStream is, String id, boolean onlyThumbs) {
+
+    String outputFile = getDestDir(id) + id;
+
+    try {
+      BufferedImage srcImage = ImageIO.read(is);
+      Options opts = Options.getInstance();
+
+      makeDestDir(id);
+      int t_width = opts.getInt("thumbWidth", 100);
+      int t_height = opts.getInt("thumbHeight", 100);
+
+      // Podle https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/111
+      // resizeAndCropWithThumbnailator(srcImage, t_width, t_height, new File(outputFile + "_thumb.jpg"), getImageType(f, srcImage));
+      resizeWithThumbnailator(srcImage, t_width, t_height, new File(outputFile + "_thumb.jpg"), getImageType(is, srcImage));
+
+      if (!onlyThumbs) {
+        int max = opts.getInt("mediumHeight", 1000);
+        resizeWithThumbnailator(srcImage, max, max, new File(outputFile + "_medium.jpg"), getImageType(is, srcImage));
       }
 
       return outputFile;
@@ -163,39 +196,36 @@ public class ImageSupport {
     return (img.getColorModel().getPixelSize() == 8) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
   }
 
-  private static int getImageType(File f, BufferedImage img) {
+  private static int getImageType(File f, BufferedImage img) throws FileNotFoundException {
 
     // https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/132
     // zmena z BufferedImage.TYPE_INT_RGB --> ThumbnailParameter.ORIGINAL_IMAGE_TYPE
     // return (isGray(f, img)) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_INT_RGB;
     
-    return (isGray(f, img)) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
+    return (isGray(new FileInputStream(f), img)) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
   }
 
-  private static boolean isGray(File f, BufferedImage img) {
+  private static int getImageType(InputStream is, BufferedImage img) {
+
+    // https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/132
+    // zmena z BufferedImage.TYPE_INT_RGB --> ThumbnailParameter.ORIGINAL_IMAGE_TYPE
+    // return (isGray(f, img)) ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_INT_RGB;
+    
+    return (isGray(is, img)) ? BufferedImage.TYPE_BYTE_GRAY : ThumbnailParameter.ORIGINAL_IMAGE_TYPE;
+  }
+
+  private static boolean isGray(InputStream is, BufferedImage img) {
     if (img.getColorModel().getPixelSize() > 8) {
       return false;
     }
-    try (ImageInputStream input = ImageIO.createImageInputStream(new FileInputStream(f))) {
+    try (ImageInputStream input = ImageIO.createImageInputStream(is)) {
       ImageReader reader = ImageIO.getImageReaders(input).next(); // Assumes PNGImageReader is always there
       reader.setInput(input);
 
       IIOMetadata metadata = reader.getImageMetadata(0);
 //      Node nativeTree = metadata.getAsTree(metadata.getNativeMetadataFormatName());
       Node standardTree = metadata.getAsTree(IIOMetadataFormatImpl.standardMetadataFormatName);
-
-//      StringWriter writer = new StringWriter();
-//      Transformer transformer = TransformerFactory.newInstance().newTransformer();
-//      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//
-//      transformer.transform(new DOMSource(nativeTree), new StreamResult(writer));
-//      String xml = writer.toString();
-//      System.out.println(xml);
-//      
-//      writer = new StringWriter();
-//      transformer.transform(new DOMSource(standardTree), new StreamResult(writer));
-//      xml = writer.toString();
-//      System.out.println(xml);
+      
       NodeList nodes = standardTree.getFirstChild().getChildNodes();
       for (int i = 0; i < nodes.getLength(); i++) {
         Node n = nodes.item(i);

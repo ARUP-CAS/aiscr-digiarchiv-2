@@ -97,10 +97,8 @@ export class AppService {
   }
 
   getHeslarTranslation(value: string, heslar: string): any {
-    // if (this.config.poleToHeslar.hasOwnProperty(heslar)) {
-    //   heslar = this.config.poleToHeslar[heslar];
-    // }
-    const hkey = heslar + '_' + value;
+    // const hkey = heslar + '_' + value;
+    const hkey = 'heslar.' + value;
     const t = this.translate.instant(hkey);
     if (t === hkey) {
       return value;
@@ -145,6 +143,12 @@ export class AppService {
   getDokument(id: string) {
     const params: HttpParams = new HttpParams().set('id', id);
     return this.get(`/search/dokument`, params);
+  }
+
+  checkRelations(id: string): Observable<SolrResponse> {
+    const params: HttpParams = new HttpParams()
+      .set('id', id);
+    return this.get(`/search/check_relations`, params);
   }
 
   getId(id: string): Observable<SolrResponse> {
@@ -367,11 +371,11 @@ export class AppService {
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
             break;
           }
-          case 'kategorie_dokumentu': {
+          case 'dokument_kategorie_dokumentu': {
             const values = params.getAll(field);
             values.forEach(value => {
               const parts = value.split(':');
-              display = this.translate.instant('kategorie_dokumentu.' + parts[0]);
+              display = this.translate.instant('dokument_kategorie_dokumentu.' + parts[0]);
               this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
             });
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));

@@ -26,4 +26,8 @@ export class Utils {
       return false;
     }
   }
+
+  public static formatJSON(o: any): string {
+    return JSON.stringify(o);
+  }
 }
