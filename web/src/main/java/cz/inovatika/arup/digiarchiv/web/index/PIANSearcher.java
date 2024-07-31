@@ -50,22 +50,39 @@ public class PIANSearcher implements EntitySearcher {
     @Override
     public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        AkceSearcher as = new AkceSearcher();
+        String[] af = as.getChildSearchFields(LoginServlet.pristupnost(request.getSession()));
+        LokalitaSearcher ls = new LokalitaSearcher();
+        String[] lf = ls.getChildSearchFields(LoginServlet.pristupnost(request.getSession()));
         for (int i = 0; i < ja.length(); i++) {
             try {
                 JSONObject doc = ja.getJSONObject(i);
                 if (LoginServlet.userId(request) != null) {
                     SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
                 }
-
+                
                 SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("entity:dokumentacni_jednotka")
-                        .addFilterQuery("dj_pian:\"" + doc.getString("ident_cely") + "\"");
+                        .addFilterQuery("entity:akce")
+                        .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
+                query.setFields(af);
                 JSONObject r = SolrSearcher.json(client, "entities", query);
                 JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < cdjs.length(); j++) {
                     JSONObject cdj = cdjs.getJSONObject(j);
-                    doc.append("dokumentacni_jednotka", cdj);
+                    doc.append("akce", cdj);
+                }
+                
+                query = new SolrQuery("*")
+                        .addFilterQuery("entity:lokalita")
+                        .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
+                query.setFields(lf);
+                r = SolrSearcher.json(client, "entities", query);
+                cdjs = r.getJSONObject("response").getJSONArray("docs");
+
+                for (int j = 0; j < cdjs.length(); j++) {
+                    JSONObject cdj = cdjs.getJSONObject(j);
+                    doc.append("lokalita", cdj);
                 }
             } catch (SolrServerException | IOException ex) {
                 Logger.getLogger(PIANSearcher.class.getName()).log(Level.SEVERE, null, ex);

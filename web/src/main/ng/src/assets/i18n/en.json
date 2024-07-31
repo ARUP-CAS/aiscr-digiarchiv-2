@@ -222,6 +222,7 @@
       "planovane_zahajeni": "Project - scheduled launch",
       "nkp_cislo": "Project - monument registration number",
       "nkp_popis": "Project - monument description",
+      "projekt_datum_provedeni": "Project - realization date",
       "datum_zahajeni_v": "Fieldwork - starting date",
       "datum_ukonceni_v": "Fieldwork - ending date",
       "child_akce": "Project - related fieldwork",

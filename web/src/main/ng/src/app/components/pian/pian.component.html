@@ -48,8 +48,8 @@
     </mat-card-content>
     <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
       <div fxFlex class="app-metadata">
-        <ng-container *ngIf="result.dokument?.length > 0">
-          {{'card.desc.Počet dokumentů' | translate}}: <strong>{{result.dokument?.length}}</strong>
+        <ng-container *ngIf="result.akce?.length > 0 || result.lokalita?.length > 0 ">
+          {{'card.desc.Počet archeologickych zaznamu' | translate}}: <strong>{{result.akce?.length + result.lokalita?.length }}</strong>
           <span class="app-pipe"></span>
         </ng-container>
       </div>
@@ -123,13 +123,16 @@
               </tbody>
             </table>
           </mat-expansion-panel>
-          <mat-expansion-panel *ngIf="result.dokumentacni_jednotka" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+          <mat-expansion-panel *ngIf="result.akce?.length > 0 || result.lokalita?.length > 0 " [expanded]="true" class="app-panel-souvisejici-zaznamy">
             <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
               <mat-panel-title>
                 {{ 'card.panelTitle.Související záznamy' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <app-dok-jednotka *ngFor="let dok_jednotka of result.dokumentacni_jednotka" [isChild]="true" [result]="dok_jednotka"  class="app-related-item"></app-dok-jednotka> 
+            <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dokumentacni_jednotka" [isChild]="true" [result]="dok_jednotka"  class="app-related-item"></app-dok-jednotka>  -->
+            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+            <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+            
           </mat-expansion-panel> 
         </mat-accordion>
       </div>
