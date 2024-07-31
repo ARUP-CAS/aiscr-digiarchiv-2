@@ -178,7 +178,7 @@
     {"type": "text", "field": "akce_ulozeni_nalezu"},
     {"type": "text", "field": "akce_projekt"},
 
-    {"type": "date", "field": "projekt_datum_provedeni"},
+    {"type": "date", "field": "datum_provedeni"},
     
     {"type": "text", "field": "samostatny_nalez_evidencni_cislo"},
     {"type": "number", "field": "samostatny_nalez_hloubka"},
