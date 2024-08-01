@@ -57,7 +57,31 @@
             <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
           </ng-container>
         </div>
-        <div *ngIf="result.dokument_organizace">
+
+        
+
+        <ng-container *ngIf="result.entity === 'knihovna_3d'">
+
+        <div *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_obdobi || result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace || result.dokument_cast?.[0].komponenta?.[0].komponenta_areal">
+          <ng-container *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_obdobi || result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace">
+            <label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.dokument_cast?.[0].komponenta?.[0].komponenta_obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
+            <ng-container *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace">&#160;({{ result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace }})</ng-container> 
+          </ng-container><span class="app-pipe"></span>
+          <ng-container *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_areal">
+            <label class="app-label">{{ 'card.desc.Komponenta - areál' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.dokument_cast?.[0].komponenta?.[0].komponenta_areal.id" [heslar]="'areal_druha'"></app-inline-filter>
+          </ng-container><span class="app-pipe"></span>
+        </div>
+        
+        <div *ngIf="result.dokument_extra_data.odkaz">
+          <label class="app-label">{{'card.desc.Odkaz' | translate}}:</label>&#160;
+            <a [href]="result.dokument_extra_data.odkaz" target="_blank">{{ result.dokument_extra_data.odkaz }}</a> 
+        </div>
+        </ng-container>
+
+
+        <div *ngIf="result.entity !== 'knihovna_3d' && result.dokument_organizace">
           <ng-container>
             <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.dokument_organizace" [heslar]="'organizace'"></app-inline-filter>
@@ -107,7 +131,7 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.dokument_jazyk_dokumentu?.length > 0">
+              <tr *ngIf="result.dokument_jazyk_dokumentu?.length > 0 && result.entity !== 'knihovna_3d'">
                 <th class="app-label">{{ 'card.desc.Jazyk' | translate }}:</th>
                 <td><app-inline-filter *ngFor="let jazyk of result.dokument_jazyk_dokumentu" [isChild]="isChild" [field]="'f_jazyk_dokumentu'" [value]="jazyk" [heslar]="'jazyk_dokumentu'"></app-inline-filter></td>
               </tr>
@@ -134,7 +158,7 @@
                 <th class="app-label">{{ 'card.desc.Původní označení' | translate }}:</th>
                 <td>{{ result.dokument_oznaceni_originalu }}</td>
               </tr>
-              <tr *ngIf="result.dokument_datum_zverejneni">
+              <tr *ngIf="result.dokument_datum_zverejneni && result.entity !== 'knihovna_3d'">
                 <th class="app-label">{{ 'card.desc.Dokument - datum zveřejnění' | translate }}:</th>
                 <td>{{ result.dokument_datum_zverejneni | date : 'yyyy-MM-dd' }}</td>
               </tr>
@@ -181,7 +205,7 @@
                   <th class="app-label">{{ 'card.desc.Počet variant' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.pocet_variant_originalu }}</td>
                 </tr>
-                <tr *ngIf="result.dokument_extra_data.odkaz">
+                <tr *ngIf="result.dokument_extra_data.odkaz && result.entity !== 'knihovna_3d'">
                   <th class="app-label">{{ 'card.desc.Odkaz' | translate }}:</th>
                   <td><a [href]="result.dokument_extra_data.odkaz" target="_blank">{{result.dokument_extra_data.odkaz}}</a></td>
                 </tr>

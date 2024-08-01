@@ -28,7 +28,8 @@
       </mat-card>
       <ng-container *ngIf="!isResultEmpty(result)">
         <app-dokument *ngIf="result.entity === 'dokument'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument>
-        <app-knihovna3d *ngIf="result.entity === 'knihovna_3d'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-knihovna3d>
+        <app-dokument *ngIf="result.entity === 'knihovna_3d'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument>
+        <!-- <app-knihovna3d *ngIf="result.entity === 'knihovna_3d'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-knihovna3d> -->
         <app-akce *ngIf="result.entity === 'akce'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-akce>
         <app-lokalita *ngIf="result.entity === 'lokalita'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-lokalita>
         <app-projekt *ngIf="result.entity === 'projekt'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-projekt>

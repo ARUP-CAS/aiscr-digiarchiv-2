@@ -1,6 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web.oai;
 
 import cz.inovatika.arup.digiarchiv.web.AuthService;
+import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -62,7 +63,7 @@ public class OAIServlet extends HttpServlet {
                 out.println(xml);
             } else {
                 String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                        + "<request>" + request.getRequestURL() + "</request>"
+                        + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                         + "<error code=\"badVerb\">verb is absent</error>"
                         + "</OAI-PMH>";
                 out.print(xml);
@@ -70,7 +71,7 @@ public class OAIServlet extends HttpServlet {
         } catch (IllegalArgumentException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                    + "<request>" + request.getRequestURL() + "</request>"
+                    + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"badVerb\">Illegal OAI verb</error>"
                     + "</OAI-PMH>";
             out.print(xml);

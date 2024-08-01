@@ -216,8 +216,8 @@ public class Dokument implements FedoraModel {
         }
 
         if (dokument_extra_data != null) {
-            IndexUtils.addJSONField(idoc, "dokument_extra_data", dokument_extra_data);
             dokument_extra_data.fillSolrFields(idoc, "dukument", (String) idoc.getFieldValue("pristupnost"));
+            IndexUtils.addJSONField(idoc, "dokument_extra_data", dokument_extra_data);
         }
 
         for (DokumentCast dc : dokument_cast) {
