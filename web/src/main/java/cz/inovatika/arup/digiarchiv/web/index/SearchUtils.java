@@ -182,7 +182,6 @@ public class SearchUtils {
     public static String csv(SolrQuery query, Http2SolrClient client, String core) {
         query.set("wt", "csv");
         String qt = query.get("qt");
-        String jsonResponse;
         try {
             QueryRequest qreq = new QueryRequest(query);
             if (qt != null) {

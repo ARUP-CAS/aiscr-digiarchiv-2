@@ -135,10 +135,10 @@ public class Projekt implements FedoraModel {
 
     @Override
     public boolean isSearchable() {
-        return !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty();
+        return !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty(); 
     }
 
-    @Override
+    @Override 
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty();
