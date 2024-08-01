@@ -33,8 +33,8 @@ public class LokalitaSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            doc.put("pian", doc.opt("pian_" + pristupnost));
-            doc.remove("pian_" + pristupnost);
+//            doc.put("pian", doc.opt("pian_" + pristupnost));
+//            doc.remove("pian_" + pristupnost);
             if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
                 if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
                     doc.remove("az_chranene_udaje");

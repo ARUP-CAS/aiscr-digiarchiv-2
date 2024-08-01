@@ -49,6 +49,7 @@ export class LoginDialogComponent implements OnInit {
       this.state.logged = false;
       this.state.user = null;
       this.dialogRef.close();
+      document.location.reload();
     });
   }
 

@@ -263,7 +263,7 @@ public class Projekt implements FedoraModel {
             //"dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
             //"dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
             "f_specifikace",
-            "f_dj_typ",
+            // "f_dj_typ",
             "f_typ_vyzkumu"};
         SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
                 setFields("pian_id,pristupnost");
@@ -287,7 +287,16 @@ public class Projekt implements FedoraModel {
 
                 for (String f : facetFields) {
                     if (azDoc.has(f)) {
-                        SolrSearcher.addFieldNonRepeat(idoc, f, azDoc.get(f));
+                        Object val = azDoc.get(f);
+                        if (val instanceof JSONArray) {
+                            JSONArray ja = (JSONArray) val;
+                            for (int j = 0; j < ja.length(); j++) {
+                                 SolrSearcher.addFieldNonRepeat(idoc, f, ja.get(j));
+                            }
+                        } else {
+                            SolrSearcher.addFieldNonRepeat(idoc, f, val);
+                        }
+                        
                     }
                 }
 

@@ -48,7 +48,7 @@
 
     "securedFacets": [
         "f_kategorie", "f_pian_zm10",
-        "f_okres", "f_katastr"],
+        "f_okres", "f_katastr", "f_adb_vyskovy_bod_typ"],
 
     "kategoriet": {
         "HES-001075": "texty",
@@ -184,7 +184,8 @@
         "f_zeme:dokument_extra_data.zeme.id"
     ],
     "facets2": [ 
-        "f_vedouci:dokument_cast_neident_akce_vedouci,dokument_cast_akce_hlavni_vedouci",
+      "f_vedouci:dokument_cast_neident_akce_vedouci",
+      "f_vedouci:dokument_cast_akce_hlavni_vedouci",
       "f_okres",
       "f_katastr",
       "dokument_kategorie_dokumentu", 
@@ -319,9 +320,9 @@
     ],
     "facets2": [
         "f_katastr:az_chranene_udaje.hlavni_katastr.id",
+        "f_adb_typ_sondy:adb_typ_sondy",
         "f_pian_presnost",
         "f_adb_podnet",
-        "f_adb_typ_sondy",
         "f_pian_zm10",
         "f_autor",
         "f_pian_typ",

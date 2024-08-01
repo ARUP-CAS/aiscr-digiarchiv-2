@@ -362,16 +362,21 @@ public class FedoraHarvester {
         int batchSize = 500;
         int indexed = 0;
         String url = Options.getInstance().getString("solrhost", "http://localhost:8983/solr/")
-                + "entities/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely&fq=" + fq;
+                + "entities/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely&fq=" + URLEncoder.encode(fq, "UTF8");
         InputStream inputStream = RESTHelper.inputStream(url);
         String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
         JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
         solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
         for (int i = 0; i < docs.length(); i++) {
             String id = docs.getJSONObject(i).getString("ident_cely");
-            ret.put(id, indexId(id, false));
-            checkLists(batchSize, indexed++, fq, docs.length());
-            LOGGER.log(Level.FINE, "Index by ID {0} finished. {1} of {2}", new Object[]{id, i + 1, docs.length()});
+            try {
+                ret.put(id, indexId(id, false));
+                checkLists(batchSize, indexed++, fq, docs.length());
+                LOGGER.log(Level.FINE, "Index by ID {0} finished. {1} of {2}", new Object[]{id, i + 1, docs.length()});
+            } catch (Exception e) {
+                // LOGGER.log(Level.WARNING, "Error indexing {0}, -> {1}", new Object[]{id, e.toString()});
+                ret.put(id, e.toString());
+            }
         }
         checkLists(0, docs.length(), fq, docs.length());
         solr.close();
