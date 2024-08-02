@@ -154,7 +154,7 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    public JSONObject update() throws Exception {
+    public JSONObject update(String from) throws Exception {
         ret = new JSONObject();
         String status = readStatusFile("update");
         if (STATUS_RUNNING.equals(status)) {
@@ -165,7 +165,10 @@ public class FedoraHarvester {
         writeStatusFile("update", STATUS_RUNNING);
         Instant start = Instant.now();
         String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
-        String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
+        String lastDate = from;
+        if (lastDate == null) {
+            lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
+        }
         // lastDate = "2024-07-30T15:37:05.633Z";
         ret.put("lastDate", lastDate);
 
@@ -485,7 +488,7 @@ public class FedoraHarvester {
         }
         LOGGER.log(Level.INFO, "Processing model {0}", model);
         ret.put(model, 0);
-        int indexed = 0;
+        int indexed = offset;
         int batchSize = 500;
         //http://192.168.8.33:8080/rest/AMCR-test/model/projekt/member
         // returns list of records in CONTAINS

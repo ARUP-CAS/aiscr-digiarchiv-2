@@ -253,54 +253,58 @@ public class Projekt implements FedoraModel {
         }
     }
 
-    private void addArch(SolrInputDocument idoc, String az) throws Exception {
+    private void addArch(SolrInputDocument idoc, String az) {
 
-        String[] facetFields = new String[]{"f_areal",
-            "f_obdobi",
-            "f_aktivita",
-            "f_typ_nalezu",
-            "f_druh_nalezu",
-            //"dokumentacni_jednotka_komponenta_nalez_objekt_druh", 
-            //"dokumentacni_jednotka_komponenta_nalez_predmet_druh", 
-            "f_specifikace",
-            // "f_dj_typ",
-            "f_typ_vyzkumu"};
-        SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
-                setFields("pian_id,pristupnost");
-        for (String f : facetFields) {
-            query.addField(f);
-        }
-        JSONObject json = SearchUtils.searchOrIndex(query, "entities", az);
-
-        if (json.getJSONObject("response").getInt("numFound") > 0) {
-
-            for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
-                JSONObject azDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-                String pristupnost = azDoc.getString("pristupnost");
-                if (azDoc.has("pian_id")) {
-                    JSONArray pians = azDoc.getJSONArray("pian_id");
-                    for (int j = 0; j < pians.length(); j++) {
-                        // idoc.addField("pian_id", pians.optString(j));
-                        addPian(idoc, pristupnost, pians.optString(j));
-                    }
-                }
-
-                for (String f : facetFields) {
-                    if (azDoc.has(f)) {
-                        Object val = azDoc.get(f);
-                        if (val instanceof JSONArray) {
-                            JSONArray ja = (JSONArray) val;
-                            for (int j = 0; j < ja.length(); j++) {
-                                 SolrSearcher.addFieldNonRepeat(idoc, f, ja.get(j));
-                            }
-                        } else {
-                            SolrSearcher.addFieldNonRepeat(idoc, f, val);
-                        }
-                        
-                    }
-                }
-
+        try {
+            String[] facetFields = new String[]{"f_areal",
+                "f_obdobi",
+                "f_aktivita",
+                "f_typ_nalezu",
+                "f_druh_nalezu",
+                //"dokumentacni_jednotka_komponenta_nalez_objekt_druh",
+                //"dokumentacni_jednotka_komponenta_nalez_predmet_druh",
+                "f_specifikace",
+                // "f_dj_typ",
+                "f_typ_vyzkumu"};
+            SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
+                    setFields("pian_id,pristupnost");
+            for (String f : facetFields) {
+                query.addField(f);
             }
+            JSONObject json = SearchUtils.searchOrIndex(query, "entities", az);
+            
+            if (json.getJSONObject("response").getInt("numFound") > 0) {
+                
+                for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
+                    JSONObject azDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
+                    String pristupnost = azDoc.getString("pristupnost");
+                    if (azDoc.has("pian_id")) {
+                        JSONArray pians = azDoc.getJSONArray("pian_id");
+                        for (int j = 0; j < pians.length(); j++) {
+                            // idoc.addField("pian_id", pians.optString(j));
+                            addPian(idoc, pristupnost, pians.optString(j));
+                        }
+                    }
+                    
+                    for (String f : facetFields) {
+                        if (azDoc.has(f)) {
+                            Object val = azDoc.get(f);
+                            if (val instanceof JSONArray) {
+                                JSONArray ja = (JSONArray) val;
+                                for (int j = 0; j < ja.length(); j++) {
+                                    SolrSearcher.addFieldNonRepeat(idoc, f, ja.get(j));
+                                }
+                            } else {
+                                SolrSearcher.addFieldNonRepeat(idoc, f, val);
+                            }
+
+                        }
+                    }
+                    
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

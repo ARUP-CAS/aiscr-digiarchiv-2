@@ -100,10 +100,7 @@ public class AkceSearcher implements EntitySearcher {
                     JSONObject sub = SolrSearcher.getById(client, cdj, fields);
                     if (sub != null) {
                         String docPr = sub.getString("pristupnost");
-                            System.out.println(docPr);
-                            System.out.println(pristupnost);
                         if (docPr.compareToIgnoreCase(pristupnost) > 0) {
-                            System.out.println("KKKK");
                             sub.remove("pian_chranene_udaje");
                         }
                         doc.append("pian", sub);

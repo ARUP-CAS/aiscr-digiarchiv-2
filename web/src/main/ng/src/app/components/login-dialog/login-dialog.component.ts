@@ -39,6 +39,7 @@ export class LoginDialogComponent implements OnInit {
         this.user = '';
         this.pwd = '';
         this.dialogRef.close();
+        document.location.reload();
       }
     });
   }

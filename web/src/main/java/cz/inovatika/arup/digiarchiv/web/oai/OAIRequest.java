@@ -525,9 +525,13 @@ public class OAIRequest {
         String docPristupnost = (String) doc.getFieldValue("pristupnost");
         String projektOrg = (String) doc.getFirstValue("organizace");
         String model = (String) doc.getFieldValue("model"); 
-        long stav = (long) doc.getFieldValue("stav");
+        
         FedoraModel fm = FedoraModel.getFedoraModel(model);
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
+            long stav = 0; 
+            if (doc.containsKey("stav")) {
+                stav = (long) doc.getFieldValue("stav");
+            }
             String xml = (String) doc.getFieldValue("xml");
             String ret = xml;
             if (ret.contains("<amcr:oznamovatel>") && 
