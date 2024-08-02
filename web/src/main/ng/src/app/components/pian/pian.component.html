@@ -118,9 +118,9 @@
                 <tr *ngIf="result.pian_chranene_udaje?.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
                   <td>
-                    <div>{{ result.pian_chranene_udaje.geom_wkt.value }}, EPSG: {{ result.pian_chranene_udaje.geom_wkt.epsg }}</div>
-                    <div *ngIf="result.pian_chranene_udaje?.geom_sjtsk_wkt">{{ result.pian_chranene_udaje.geom_sjtsk_wkt.value }},
-                      EPSG: {{ result.pian_chranene_udaje.geom_sjtsk_wkt.epsg }}</div> 
+                    <div>EPSG: {{ result.pian_chranene_udaje.geom_wkt.epsg }}, {{ result.pian_chranene_udaje.geom_wkt.value }}</div>
+                    <div *ngIf="result.pian_chranene_udaje?.geom_sjtsk_wkt">EPSG: {{ result.pian_chranene_udaje.geom_sjtsk_wkt.epsg }},
+                      {{ result.pian_chranene_udaje.geom_sjtsk_wkt.value }}</div> 
                   </td>
                 </tr>
               </tbody>
