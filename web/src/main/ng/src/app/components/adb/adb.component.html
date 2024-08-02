@@ -59,7 +59,7 @@
             (<app-inline-filter [field]="'f_adb_vyskovy_bod_typ'" [value]="vb.typ"></app-inline-filter>)
             <div *ngIf="vb.geom_gml"><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ vb.geom_gml }}</div>
             <div *ngIf="vb.geom_wkt"><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
-              {{ vb.geom_wkt.value }}, EPSG: {{ vb.geom_wkt.epsg }}
+              EPSG: {{ vb.geom_wkt.epsg }}, {{ vb.geom_wkt.value }}
             </div>
           </li>
         </ul>
