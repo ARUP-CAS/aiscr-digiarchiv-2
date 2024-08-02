@@ -3,7 +3,6 @@
   "isTest": false,
   "defaultLang": "cs",
   "serverUrl": "https://digiarchiv.aiscr.cz/",
-  "amcr": "http://localhost:8080/amcr/",
   "registrationUrl": "https://amcr-test.aiscr.cz/accounts/register/",
   "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/",
 
