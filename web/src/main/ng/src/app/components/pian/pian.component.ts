@@ -84,4 +84,8 @@ export class PianComponent implements OnInit {
       panelClass: 'app-feedback-dialog'
     });
   } 
+
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
 }

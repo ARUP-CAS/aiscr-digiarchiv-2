@@ -53,7 +53,10 @@
           <span class="app-pipe"></span>
         </ng-container>
       </div>
-      <div>
+        <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+      [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
+      <!-- <div>
+
         <button *ngIf="!mapDetail" mat-flat-button (click)="service.showInMap(result, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
           <mat-icon>map</mat-icon>
         </button>
@@ -86,7 +89,7 @@
         <button mat-flat-button *ngIf="!isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
           {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
         </button>
-      </div>
+      </div> -->
     </mat-card-actions>
     <mat-card-content *ngIf="detailExpanded">
       <div class="app-card-detail">

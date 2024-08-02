@@ -55,6 +55,7 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
 import { AdbComponent } from './components/adb/adb.component';
 import { PianComponent } from './components/pian/pian.component';
 import { LetComponent } from './components/let/let.component';
+import { DokumentCastComponent } from './components/dokument-cast/dokument-cast.component';
 import { SidenavListComponent } from './components/sidenav-list/sidenav-list.component';
 import { KontaktDialogComponent } from './components/footer/kontakt-dialog/kontakt-dialog.component';
 import { LicenceDialogComponent } from './components/footer/licence-dialog/licence-dialog.component';
@@ -173,6 +174,7 @@ const providers: any[] =[
     LoginDialogComponent,
     AdbComponent,
     PianComponent,
+    DokumentCastComponent, 
     LetComponent,
     SidenavListComponent,
     KontaktDialogComponent,

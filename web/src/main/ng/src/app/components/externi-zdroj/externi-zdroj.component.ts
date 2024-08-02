@@ -56,7 +56,7 @@ export class ExterniZdrojComponent implements OnInit {
             title = {${this.result.ext_zdroj_nazev} ${this.result.ext_zdroj_podnazev ? this.result.ext_zdroj_podnazev : ''}},
             booktitle = {${this.result.ext_zdroj_sbornik_nazev}},
             year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
-            ${this.result.ext_zdroj_sbornik_editor ? `editor = {${this.result.ext_zdroj_sbornik_editor}},` : ''}
+            ${this.result.ext_zdroj_editor ? `editor = {${this.result.ext_zdroj_editor}},` : ''}
             ${this.result.ext_zdroj_vydavatel ? `publisher = {${this.result.ext_zdroj_vydavatel}},` : ''}
             ${this.result.ext_zdroj_edice_rada ? `series = {${this.result.ext_zdroj_edice_rada}},` : ''}
             ${this.result.ext_zdroj_misto ? `address = {${this.result.ext_zdroj_misto}},` : ''}

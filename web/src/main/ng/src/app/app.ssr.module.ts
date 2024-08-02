@@ -74,6 +74,7 @@ import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
 import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 import { CitationComponent } from './components/citation/citation.component';
 import { ResultActionsComponent } from './components/result-actions/result-actions.component';
+import { DokumentCastComponent } from './components/dokument-cast/dokument-cast.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -156,6 +157,7 @@ const providers: any[] = [
     LoginDialogComponent,
     AdbComponent,
     PianComponent,
+    DokumentCastComponent, 
     LetComponent,
     SidenavListComponent,
     KontaktDialogComponent,
