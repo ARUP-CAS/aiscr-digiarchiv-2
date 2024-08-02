@@ -111,12 +111,12 @@
                   <td>{{ result.pian_geom_system }}</td>
                 </tr>
                 <tr *ngIf="result.pian_chranene_udaje?.geom_gml">
-                  <th class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
                   <td>{{ result.pian_chranene_udaje.geom_gml }} 
                     <ng-container *ngIf="result.pian_chranene_udaje?.geom_sjtsk_gml"><br/> {{ result.pian_chranene_udaje.geom_sjtsk_gml }}</ng-container> </td>
                 </tr>
                 <tr *ngIf="result.pian_chranene_udaje?.geom_wkt">
-                  <th class="app-label">{{ 'card.desc.Geometrie WKT' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
                   <td>
                     <div>{{ result.pian_chranene_udaje.geom_wkt.value }}, EPSG: {{ result.pian_chranene_udaje.geom_wkt.epsg }}</div>
                     <div *ngIf="result.pian_chranene_udaje?.geom_sjtsk_wkt">{{ result.pian_chranene_udaje.geom_sjtsk_wkt.value }},
