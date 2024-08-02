@@ -91,9 +91,15 @@
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
           <ng-container *ngFor="let item of result.location_info; let last = last">
-            <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
-           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">, </span>
+            <ng-container *ngIf="isArray(item.katastr)">
+              <app-inline-filter *ngFor="let k of item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="k"></app-inline-filter>
+            </ng-container>
+            <ng-container *ngIf="!isArray(item.katastr)">
+              <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
+            </ng-container>
+           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">,&#160;</span>
           </ng-container>
+
         </div>
         <div *ngIf="result.dokument_popis" class="app-truncate-text">
           <ng-container>
@@ -110,7 +116,7 @@
         <span class="app-pipe"></span>
       </ng-container> 
       <ng-container *ngIf="result.dokument_cast_projekt?.length > 0">
-        {{ 'card.desc.Počet projektu' | translate }}: <strong>{{result.dokument_cast_projekt?.length}}</strong>
+        {{'card.desc.Počet projektů' | translate}}: <strong>{{result.dokument_cast_projekt?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
       <ng-container *ngIf="result.soubor_filepath?.length > 0">
@@ -329,7 +335,7 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0 || result.dokument_cast_projekt?.length > 0 " [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:
@@ -340,11 +346,13 @@
             [minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
             <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
             <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
           </cdk-virtual-scroll-viewport>
           
           <ng-container *ngIf="vsSize > 0 && state.printing" >
             <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
             <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
           </ng-container>
           
         </mat-expansion-panel>

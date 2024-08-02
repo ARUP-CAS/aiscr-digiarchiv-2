@@ -249,14 +249,14 @@ public class Dokument implements FedoraModel {
                 if (doc.has("f_typ_vyzkumu")) {
                     
                     Object val = doc.get("f_typ_vyzkumu");
-                        if (val instanceof JSONArray) {
-                            JSONArray ja = (JSONArray) val;
-                            for (int j = 0; j < ja.length(); j++) {
-                                 SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", ja.get(j));
-                            }
-                        } else {
-                            SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", val);
+                    if (val instanceof JSONArray) {
+                        JSONArray ja = (JSONArray) val;
+                        for (int j = 0; j < ja.length(); j++) {
+                             SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", ja.get(j));
                         }
+                    } else {
+                        SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", val);
+                    }
                         
                     // SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", doc.get("f_typ_vyzkumu"));
                 }

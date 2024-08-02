@@ -122,6 +122,7 @@
       "dokument_okres",
       "dokument_popis", 
       "dokument_cast_archeologicky_zaznam",
+      "dokument_cast_projekt",
       "archeologicky_zaznam_chranene_udaje_hlavni_katastr",
       "projekt_chranene_udaje_hlavni_katastr",
       "projekt_chranene_udaje_dalsi_katastr",

@@ -97,15 +97,35 @@ export class DokumentComponent implements OnInit, OnChanges {
       this.state.loading = this.result.dokument_cast_archeologicky_zaznam.length > 0;
       this.state.documentProgress = 0;
       this.getArchZaznam();
+      this.getProjekts();
     }
   }
+
+  isArray(obj : any ) {
+    return Array.isArray(obj)
+ }
 
   setVsize() {
 
     if (this.result.dokument_cast_archeologicky_zaznam) {
       this.numChildren += this.result.dokument_cast_archeologicky_zaznam.length;
     }
+
+    if (this.result.dokument_cast_projekt) {
+      this.numChildren += this.result.dokument_cast_projekt.length;
+    }
+
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  }
+
+  getProjekts() {
+      console.log(this.result.dokument_cast_projekt)
+    if (this.result.dokument_cast_projekt) {
+        this.service.getIdAsChild(this.result.dokument_cast_projekt, "projekt").subscribe((res: any) => {
+          this.result.valid_projekt = res.response.docs;
+          this.checkLoading();
+        });
+    }
   }
 
   getArchZaznam() {
@@ -120,8 +140,8 @@ export class DokumentComponent implements OnInit, OnChanges {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
           //this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
         });
       }
     }
@@ -132,8 +152,8 @@ export class DokumentComponent implements OnInit, OnChanges {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
           //this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
         });
       }
     }
@@ -146,7 +166,7 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   checkLoading() {
-    this.state.loading =  (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+    this.state.loading =  (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
   }
 
   setBibTex() {
@@ -176,6 +196,7 @@ export class DokumentComponent implements OnInit, OnChanges {
       }
       // this.setVsize();
       this.getArchZaznam();
+      this.getProjekts();
       this.hasDetail = true;
     });
   }
