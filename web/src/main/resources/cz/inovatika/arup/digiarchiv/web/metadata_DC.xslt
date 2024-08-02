@@ -303,7 +303,7 @@
         <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
         <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
         <dc:source>
-            <xsl:value-of select="$base_url_id"/><xsl:value-of select="ident_cely"/>
+            <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:ident_cely"/>
         </dc:source> <!-- [base_url]"/id/"{amcr:let/amcr:ident_cely} -->
 
         <xsl:for-each select="amcr:dokument">
@@ -810,7 +810,7 @@
         <xsl:for-each select="amcr:soubor">
             <dc:relation>
                 <xsl:value-of select="./amcr:url"/>
-            </dc:relation> <!-- [base_url]"/id/"{amcr:samostatny_nalez/amcr:soubor/amcr:url} -->
+            </dc:relation> <!-- {amcr:samostatny_nalez/amcr:soubor/amcr:url} -->
         </xsl:for-each>
       </xsl:template>
 
@@ -827,7 +827,7 @@
             <xsl:if test="amcr:telefon"><xsl:variable name="nl" select="'&#xA;'"/>Telefon: <xsl:value-of select="amcr:telefon"/></xsl:if> <!-- Telefon: {amcr:uzivatel/amcr:telefon} -->
         </dc:description>
         <xsl:for-each select="amcr:skupina">
-            <dc:type>
+            <dc:type xml:lang="cs">
                 <xsl:value-of select="."/>
             </dc:type> <!-- {amcr:uzivatel/amcr:skupina} -->
         </xsl:for-each>
@@ -836,8 +836,8 @@
         <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
         <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
         <dc:source>
-            <xsl:value-of select="amcr:ident_cely"/>
-        </dc:source> <!-- {amcr:uzivatel/amcr:ident_cely} -->
+            <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:ident_cely"/>
+        </dc:source> <!-- [base_url]"/id/"{amcr:uzivatel/amcr:ident_cely} -->
 
         <xsl:for-each select="amcr:osoba">
             <dc:relation>
@@ -854,11 +854,16 @@
                 <xsl:value-of select="$base_url_id"/><xsl:value-of select="./@id"/>
             </dc:relation> <!-- [base_url]"/id/"{amcr:uzivatel/amcr:vedouci[@id]} -->
         </xsl:for-each>
-        <xsl:for-each select="amcr:spolupracovnik">
+        <xsl:for-each select="amcr:spoluprace_podrizeni/amcr:spolupracovnik">
             <dc:relation>
                 <xsl:value-of select="$base_url_id"/><xsl:value-of select="./@id"/>
-            </dc:relation> <!-- [base_url]"/id/"{amcr:uzivatel/amcr:spolupracovnik[@id]} -->
-        </xsl:for-each>        
+            </dc:relation> <!-- [base_url]"/id/"{amcr:uzivatel/amcr:spoluprace_podrizeni/amcr:spolupracovnik[@id]} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:spoluprace_nadrizeni/amcr:vedouci">
+            <dc:relation>
+                <xsl:value-of select="$base_url_id"/><xsl:value-of select="./@id"/>
+            </dc:relation> <!-- [base_url]"/id/"{amcr:uzivatel/amcr:spoluprace_nadrizeni/amcr:vedouci[@id]} -->
+        </xsl:for-each>   
       </xsl:template>
       
   
@@ -881,8 +886,8 @@
         <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
         <dc:publisher>https://www.aiscr.cz/</dc:publisher> <!-- "https://www.aiscr.cz/" -->
         <dc:source>
-            <xsl:value-of select="amcr:ident_cely"/>
-        </dc:source> <!-- {amcr:heslo/amcr:ident_cely} -->
+            <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:ident_cely"/>
+        </dc:source> <!-- [base_url]"/id/"{amcr:heslo/amcr:ident_cely} -->
 
         <xsl:for-each select="amcr:odkaz/amcr:uri">
             <dc:relation>
