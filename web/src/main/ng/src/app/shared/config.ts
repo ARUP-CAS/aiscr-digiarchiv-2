@@ -11,6 +11,7 @@ export class Configuration {
   isIndexing: boolean;
   defaultLang: string;
   facets: string[];
+  noPoradiFacets: {[key: string]: boolean};
   // dateFacets: string[];
   // numberFacets: string[];
 

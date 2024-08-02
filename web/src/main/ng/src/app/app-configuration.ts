@@ -119,6 +119,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.feedBackMaxLength;
     }
 
+    public get noPoradiFacets() {
+        return this.config.noPoradiFacets;
+    }
+
     server = '';
 
     constructor(

@@ -215,6 +215,19 @@
 
     {"type": "text", "field": "f_lokalita_zachovalost"}
   ],
+
+  "noPoradiFacets": {
+    "f_vedouci": true,
+    "f_katastr": true,
+    "f_okres": true,
+    "f_let_organizace": true,
+    "f_let_pozorovatel": true,
+    "f_let_pilot": true,
+    "f_pian_zm10": true,
+    "dokument_kategorie_dokumentu": true,
+    "f_autor": true,
+    "f_organizace": true
+  },
   
   "facets": [
     "pristupnost",

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -39,6 +40,9 @@ public class FedoraServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //        List<Object> allowedIP = Options.getInstance().getJSONArray("allowedIP").toList();
+        //        boolean isAllowedIP = allowedIP.contains(request.getRemoteAddr());
+        boolean isAllowedIP = false;
         PrintWriter out = response.getWriter();
         try {
             String action = request.getPathInfo().substring(1);
@@ -47,9 +51,9 @@ public class FedoraServlet extends HttpServlet {
                 String pristupnost = LoginServlet.pristupnost(request.getSession());
                 String confLevel = Options.getInstance().getString("indexSecLevel", "E");
                 LOGGER.log(Level.INFO,
-                        "pristupnost -> {0}. confLevel -> {1}. isLocalhost -> {2}. request -> {3}",
-                        new Object[]{pristupnost, confLevel, isLocalhost, request.getRequestURL().toString()});
-                if (isLocalhost || pristupnost.compareTo(confLevel) >= 0) {
+                        "pristupnost -> {0}. confLevel -> {1}. isLocalhost -> {2}. isAllowedIP -> {3}. request -> {4}",
+                        new Object[]{pristupnost, confLevel, isLocalhost, isAllowedIP, request.getRequestURL().toString()});
+                if (isAllowedIP || isLocalhost || pristupnost.compareTo(confLevel) >= 0) {
                     Actions actionToDo = Actions.valueOf(action.toUpperCase());
                     if (actionToDo.equals(Actions.REQUEST_RAW)) {
                         // FedoraUtils.requestFile(request.getParameter("file"), InitServlet.CONFIG_DIR + File.separator + request.getParameter("file"), "application/pdf");

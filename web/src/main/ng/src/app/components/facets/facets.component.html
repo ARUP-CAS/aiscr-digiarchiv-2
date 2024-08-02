@@ -77,7 +77,7 @@
           <mat-menu #sortBy="matMenu">
             <button mat-menu-item (click)="setFacetSort(facetField.field, 'count')" [class.active]="state.facetSort[facetField.field] === 'count'">{{ 'facet.menu.count' | translate }}</button>
             <button mat-menu-item (click)="setFacetSort(facetField.field, 'name')" [class.active]="state.facetSort[facetField.field] === 'name'">{{ 'facet.menu.name' | translate }}</button>
-            <button mat-menu-item (click)="setFacetSort(facetField.field, 'poradi')" [class.active]="state.facetSort[facetField.field] === 'poradi'">{{ 'facet.menu.poradi' | translate }}</button>
+            <button mat-menu-item *ngIf="!config.noPoradiFacets[facetField.field]" (click)="setFacetSort(facetField.field, 'poradi')" [class.active]="state.facetSort[facetField.field] === 'poradi'">{{ 'facet.menu.poradi' | translate }}</button>
           </mat-menu>
         </mat-list>
       </ng-template>
