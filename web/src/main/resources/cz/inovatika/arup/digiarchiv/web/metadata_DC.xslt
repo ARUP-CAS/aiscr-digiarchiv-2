@@ -17,11 +17,10 @@
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:projekt/amcr:ident_cely} -->
         <dc:subject xml:lang="cs">projekt</dc:subject> <!-- "projekt" -->
-        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/> <!-- "Stav: "{amcr:projekt/amcr:stav} -->
-            <xsl:variable name="nl" select="'&#xA;'"/>Podnět: <xsl:value-of select="amcr:podnet"/> <!-- Podnět: {amcr:projekt/amcr:podnet} -->
-            <xsl:if test="amcr:uzivatelske_oznaceni"><xsl:variable name="nl" select="'&#xA;'"/>Označení projektu: <xsl:value-of select="amcr:uzivatelske_oznaceni"/></xsl:if> <!-- Označení projektu: {amcr:projekt/amcr:uzivatelske_oznaceni} -->
-            <xsl:if test="amcr:oznaceni_stavby"><xsl:variable name="nl" select="'&#xA;'"/>Označení stavby: <xsl:value-of select="amcr:oznaceni_stavby"/></xsl:if> <!-- Označení stavby: {amcr:projekt/amcr:oznaceni_stavby} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:projekt/amcr:stav} -->
+        <dc:description xml:lang="cs">Podnět: <xsl:value-of select="amcr:podnet"/></dc:description> <!-- Podnět: {amcr:projekt/amcr:podnet} -->
+        <xsl:if test="amcr:uzivatelske_oznaceni"><dc:description xml:lang="cs">Označení projektu: <xsl:value-of select="amcr:uzivatelske_oznaceni"/></dc:description></xsl:if> <!-- Označení projektu: {amcr:projekt/amcr:uzivatelske_oznaceni} -->
+        <xsl:if test="amcr:oznaceni_stavby"><dc:description xml:lang="cs">Označení stavby: <xsl:value-of select="amcr:oznaceni_stavby"/></dc:description></xsl:if> <!-- Označení stavby: {amcr:projekt/amcr:oznaceni_stavby} -->
         <dc:type>
             <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:pristupnost_pom/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:projekt/amcr:pristupnost_pom[@id]} -->
@@ -124,13 +123,12 @@
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:archeologicky_zaznam/amcr:ident_cely} -->
         <dc:subject xml:lang="cs">archeologický záznam</dc:subject> <!-- archeologický záznam -->
-        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/> <!-- Stav: {amcr:archeologicky_zaznam/amcr:stav} -->
-            <xsl:if test="amcr:chranene_udaje/amcr:uzivatelske_oznaceni"><xsl:variable name="nl" select="'&#xA;'"/>Označení: <xsl:value-of select="amcr:chranene_udaje/amcr:uzivatelske_oznaceni"/></xsl:if> <!-- Označení: {amcr:archeologicky_zaznam/amcr:chranene_udaje/amcr:uzivatelske_oznaceni} -->
-            <xsl:if test="amcr:akce/amcr:chranene_udaje/amcr:lokalizace_okolnosti"><xsl:variable name="nl" select="'&#xA;'"/>Lokalizace/okolnosti: <xsl:value-of select="amcr:akce/amcr:chranene_udaje/amcr:lokalizace_okolnosti"/></xsl:if> <!-- Lokalizace/okolnosti: {amcr:archeologicky_zaznam/amcr:akce/amcr:chranene_udaje/amcr:lokalizace_okolnosti} -->
-            <xsl:if test="amcr:akce/amcr:chranene_udaje/amcr:souhrn_upresneni"><xsl:variable name="nl" select="'&#xA;'"/>Souhrn/upřesnění: <xsl:value-of select="amcr:akce/amcr:chranene_udaje/amcr:souhrn_upresneni"/></xsl:if> <!-- Souhrn/upřesnění: {amcr:archeologicky_zaznam/amcr:akce/amcr:chranene_udaje/amcr:souhrn_upresneni} -->
-            <xsl:if test="amcr:lokalita/amcr:chranene_udaje/amcr:popis"><xsl:variable name="nl" select="'&#xA;'"/>Popis: <xsl:value-of select="amcr:lokalita/amcr:chranene_udaje/amcr:popis"/></xsl:if> <!-- Popis: {amcr:archeologicky_zaznam/amcr:lokalita/amcr:chranene_udaje/amcr:popis} -->
-            <xsl:if test="amcr:lokalita/amcr:chranene_udaje/amcr:poznamka"><xsl:variable name="nl" select="'&#xA;'"/>Poznámka: <xsl:value-of select="amcr:lokalita/amcr:chranene_udaje/amcr:poznamka"/></xsl:if> <!-- Poznámka: {amcr:archeologicky_zaznam/amcr:lokalita/amcr:chranene_udaje/amcr:poznamka} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- Stav: {amcr:archeologicky_zaznam/amcr:stav} -->
+        <xsl:if test="amcr:chranene_udaje/amcr:uzivatelske_oznaceni"><dc:description xml:lang="cs">Označení: <xsl:value-of select="amcr:chranene_udaje/amcr:uzivatelske_oznaceni"/></dc:description></xsl:if> <!-- Označení: {amcr:archeologicky_zaznam/amcr:chranene_udaje/amcr:uzivatelske_oznaceni} -->
+        <xsl:if test="amcr:akce/amcr:chranene_udaje/amcr:lokalizace_okolnosti"><dc:description xml:lang="cs">Lokalizace/okolnosti: <xsl:value-of select="amcr:akce/amcr:chranene_udaje/amcr:lokalizace_okolnosti"/></dc:description></xsl:if> <!-- Lokalizace/okolnosti: {amcr:archeologicky_zaznam/amcr:akce/amcr:chranene_udaje/amcr:lokalizace_okolnosti} -->
+        <xsl:if test="amcr:akce/amcr:chranene_udaje/amcr:souhrn_upresneni"><dc:description xml:lang="cs">Souhrn/upřesnění: <xsl:value-of select="amcr:akce/amcr:chranene_udaje/amcr:souhrn_upresneni"/></dc:description></xsl:if> <!-- Souhrn/upřesnění: {amcr:archeologicky_zaznam/amcr:akce/amcr:chranene_udaje/amcr:souhrn_upresneni} -->
+        <xsl:if test="amcr:lokalita/amcr:chranene_udaje/amcr:popis"><dc:description xml:lang="cs">Popis: <xsl:value-of select="amcr:lokalita/amcr:chranene_udaje/amcr:popis"/></dc:description></xsl:if> <!-- Popis: {amcr:archeologicky_zaznam/amcr:lokalita/amcr:chranene_udaje/amcr:popis} -->
+        <xsl:if test="amcr:lokalita/amcr:chranene_udaje/amcr:poznamka"><dc:description xml:lang="cs">Poznámka: <xsl:value-of select="amcr:lokalita/amcr:chranene_udaje/amcr:poznamka"/></dc:description></xsl:if> <!-- Poznámka: {amcr:archeologicky_zaznam/amcr:lokalita/amcr:chranene_udaje/amcr:poznamka} -->
         <dc:type>
             <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:pristupnost/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:archeologicky_zaznam/amcr:pristupnost[@id]} -->
@@ -292,12 +290,11 @@
                 <xsl:value-of select="$base_url_id"/><xsl:value-of select="./@id"/>
             </dc:contributor> <!-- [base_url]"/id/"{amcr:let/amcr:organizace[@id]} -->
         </xsl:for-each>        
-        <dc:description xml:lang="cs">Letiště - start: <xsl:value-of select="amcr:letiste_start"/> <!-- Letiště - start: {amcr:let/amcr:letiste_start} -->
-            <xsl:variable name="nl" select="'&#xA;'"/>Letiště - cíl: <xsl:value-of select="amcr:letiste_cil"/> <!-- Letiště - cíl: {amcr:let/amcr:letiste_cil} -->
-            <xsl:if test="amcr:ucel_letu"><xsl:variable name="nl" select="'&#xA;'"/>Účel letu: <xsl:value-of select="amcr:ucel_letu"/></xsl:if> <!-- Účel letu: {amcr:let/amcr:ucel_letu} -->
-            <xsl:if test="amcr:pocasi"><xsl:variable name="nl" select="'&#xA;'"/>Počasí: <xsl:value-of select="amcr:pocasi"/></xsl:if> <!-- Počasí: {amcr:let/amcr:pocasi} -->
-            <xsl:if test="amcr:dohlednost"><xsl:variable name="nl" select="'&#xA;'"/>Dohlednost: <xsl:value-of select="amcr:dohlednost"/></xsl:if> <!-- Dohlednost: {amcr:let/amcr:dohlednost} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Letiště - start: <xsl:value-of select="amcr:letiste_start"/></dc:description> <!-- Letiště - start: {amcr:let/amcr:letiste_start} -->
+        <dc:description xml:lang="cs">Letiště - cíl: <xsl:value-of select="amcr:letiste_cil"/></dc:description> <!-- Letiště - cíl: {amcr:let/amcr:letiste_cil} -->
+        <xsl:if test="amcr:ucel_letu"><dc:description xml:lang="cs">Účel letu: <xsl:value-of select="amcr:ucel_letu"/></dc:description></xsl:if> <!-- Účel letu: {amcr:let/amcr:ucel_letu} -->
+        <xsl:if test="amcr:pocasi"><dc:description xml:lang="cs">Počasí: <xsl:value-of select="amcr:pocasi"/></dc:description></xsl:if> <!-- Počasí: {amcr:let/amcr:pocasi} -->
+        <xsl:if test="amcr:dohlednost"><dc:description xml:lang="cs">Dohlednost: <xsl:value-of select="amcr:dohlednost"/></dc:description></xsl:if> <!-- Dohlednost: {amcr:let/amcr:dohlednost} -->
 
         <dc:format>application/xml</dc:format> <!-- "application/xml" -->
         <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights> <!-- "https://creativecommons.org/licenses/by-nc/4.0/" -->
@@ -321,10 +318,9 @@
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:adb/amcr:ident_cely} -->
         <dc:subject xml:lang="cs">archeologický dokumentační bod</dc:subject> 
-        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav_pom"/> <!-- "Stav: "{amcr:adb/amcr:stav_pom} -->
-            <xsl:if test="amcr:chranene_udaje/amcr:uzivatelske_oznaceni_sondy"><xsl:variable name="nl" select="'&#xA;'"/>Označení sondy: <xsl:value-of select="amcr:chranene_udaje/amcr:uzivatelske_oznaceni_sondy"/></xsl:if> <!-- Označení sondy: {amcr:adb/amcr:chranene_udaje/amcr:uzivatelske_oznaceni_sondy} -->
-            <xsl:if test="amcr:chranene_udaje/amcr:poznamka"><xsl:variable name="nl" select="'&#xA;'"/>Poznámka: <xsl:value-of select="amcr:chranene_udaje/amcr:poznamka"/></xsl:if> <!-- {amcr:adb/amcr:chranene_udaje/amcr:poznamka} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav_pom"/></dc:description> <!-- "Stav: "{amcr:adb/amcr:stav_pom} -->
+        <xsl:if test="amcr:chranene_udaje/amcr:uzivatelske_oznaceni_sondy"><dc:description xml:lang="cs">Označení sondy: <xsl:value-of select="amcr:chranene_udaje/amcr:uzivatelske_oznaceni_sondy"/></dc:description></xsl:if> <!-- Označení sondy: {amcr:adb/amcr:chranene_udaje/amcr:uzivatelske_oznaceni_sondy} -->
+        <xsl:if test="amcr:chranene_udaje/amcr:poznamka"><dc:description xml:lang="cs">Poznámka: <xsl:value-of select="amcr:chranene_udaje/amcr:poznamka"/></dc:description></xsl:if> <!-- {amcr:adb/amcr:chranene_udaje/amcr:poznamka} -->
         <dc:type>
             <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:pristupnost_pom/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:adb/amcr:pristupnost_pom[@id]} -->
@@ -338,11 +334,10 @@
                 <xsl:value-of select="$base_url_id"/><xsl:value-of select="./@id"/>
             </dc:subject> <!-- [base_url]"/id/"{amcr:adb/amcr:tpodnet[@id]} -->
         </xsl:for-each>
-        <dc:coverage>Mapa SM5: <xsl:value-of select="amcr:sm5"/> <!-- Mapa SM5: {amcr:adb/amcr:sm5} -->
-            <xsl:if test="amcr:chranene_udaje/amcr:trat"><xsl:variable name="nl" select="'&#xA;'"/>Ulice/trať: <xsl:value-of select="amcr:chranene_udaje/amcr:trat"/></xsl:if> <!-- Ulice/trať: {amcr:adb/amcr:chranene_udaje/amcr:trat} -->
-            <xsl:if test="amcr:chranene_udaje/amcr:cislo_popisne"><xsl:variable name="nl" select="'&#xA;'"/>Číslo popisné: <xsl:value-of select="amcr:chranene_udaje/amcr:cislo_popisne"/></xsl:if> <!-- Číslo popisné: {amcr:adb/amcr:chranene_udaje/amcr:cislo_popisne} -->
-            <xsl:if test="amcr:chranene_udaje/amcr:parcelni_cislo"><xsl:variable name="nl" select="'&#xA;'"/>Parcelní číslo: <xsl:value-of select="amcr:chranene_udaje/amcr:parcelni_cislo"/></xsl:if> <!-- Parcelní číslo: {amcr:adb/amcr:chranene_udaje/amcr:parcelni_cislo} -->
-        </dc:coverage>
+        <dc:coverage xml:lang="cs">Mapa SM5: <xsl:value-of select="amcr:sm5"/></dc:coverage> <!-- Mapa SM5: {amcr:adb/amcr:sm5} -->
+            <xsl:if test="amcr:chranene_udaje/amcr:trat"><dc:coverage xml:lang="cs">Ulice/trať: <xsl:value-of select="amcr:chranene_udaje/amcr:trat"/></dc:coverage></xsl:if> <!-- Ulice/trať: {amcr:adb/amcr:chranene_udaje/amcr:trat} -->
+            <xsl:if test="amcr:chranene_udaje/amcr:cislo_popisne"><dc:coverage xml:lang="cs">Číslo popisné: <xsl:value-of select="amcr:chranene_udaje/amcr:cislo_popisne"/></dc:coverage></xsl:if> <!-- Číslo popisné: {amcr:adb/amcr:chranene_udaje/amcr:cislo_popisne} -->
+            <xsl:if test="amcr:chranene_udaje/amcr:parcelni_cislo"><dc:coverage xml:lang="cs">Parcelní číslo: <xsl:value-of select="amcr:chranene_udaje/amcr:parcelni_cislo"/></dc:coverage></xsl:if> <!-- Parcelní číslo: {amcr:adb/amcr:chranene_udaje/amcr:parcelni_cislo} -->
         <xsl:for-each select="amcr:chranene_udaje/amcr:vyskovy_bod">
             <dc:subject>
                 <xsl:value-of select="$base_url_id"/><xsl:value-of select="./amcr:typ/@id"/>
@@ -378,19 +373,18 @@
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:dokument/amcr:ident_cely} -->
         <dc:subject xml:lang="cs">dokument</dc:subject> <!-- "dokument" -->
-        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/> <!-- "Stav: "{amcr:dokument/amcr:stav} -->
-            <xsl:if test="amcr:oznaceni_originalu"><xsl:variable name="nl" select="'&#xA;'"/>Označení: <xsl:value-of select="amcr:oznaceni_originalu"/></xsl:if> <!-- Označení: {amcr:dokument/amcr:oznaceni_originalu} -->
-            <xsl:if test="amcr:popis"><xsl:variable name="nl" select="'&#xA;'"/>Popis: <xsl:value-of select="amcr:popis"/></xsl:if> <!-- Popis: {amcr:dokument/amcr:popis} -->
-            <xsl:if test="amcr:poznamka"><xsl:variable name="nl" select="'&#xA;'"/>Poznámka: <xsl:value-of select="amcr:poznamka"/></xsl:if> <!-- Poznámka: {amcr:dokument/amcr:poznamka} -->
-            <xsl:if test="amcr:extra_data/amcr:cislo_objektu"><xsl:variable name="nl" select="'&#xA;'"/>Objekt/kontext: <xsl:value-of select="amcr:extra_data/amcr:cislo_objektu"/></xsl:if> <!-- Objekt/kontext: {amcr:dokument/amcr:extra_data/amcr:cislo_objektu} -->
-            <xsl:if test="amcr:extra_data/amcr:udalost"><xsl:variable name="nl" select="'&#xA;'"/>Událost: <xsl:value-of select="amcr:extra_data/amcr:udalost"/></xsl:if> <!-- {amcr:dokument/amcr:extra_data/amcr:udalost -->
-            <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:popis"><xsl:variable name="nl" select="'&#xA;'"/>Popis akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:popis"/></xsl:if> <!-- Popis akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:popis} -->
-            <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace"><xsl:variable name="nl" select="'&#xA;'"/>Lokalizace akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace"/></xsl:if> <!-- Lokalizace akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace} -->
-            <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:poznamka"><xsl:variable name="nl" select="'&#xA;'"/>Poznámka k akci: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:poznamka"/></xsl:if> <!-- Poznámka k akci: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:poznamka} -->
-            <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni"><xsl:variable name="nl" select="'&#xA;'"/>Rok zahájení akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni"/></xsl:if> <!-- Rok zahájení akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni} -->
-            <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni"><xsl:variable name="nl" select="'&#xA;'"/>Rok ukončení akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni"/></xsl:if> <!-- Rok ukončení akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni} -->
-            <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:pian"><xsl:variable name="nl" select="'&#xA;'"/>Související PIAN: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:pian"/></xsl:if> <!-- Související PIAN: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:pian} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:dokument/amcr:stav} -->
+        <xsl:if test="amcr:oznaceni_originalu"><dc:description xml:lang="cs">Označení: <xsl:value-of select="amcr:oznaceni_originalu"/></dc:description></xsl:if> <!-- Označení: {amcr:dokument/amcr:oznaceni_originalu} -->
+        <xsl:if test="amcr:popis"><dc:description xml:lang="cs">Popis: <xsl:value-of select="amcr:popis"/></dc:description></xsl:if> <!-- Popis: {amcr:dokument/amcr:popis} -->
+        <xsl:if test="amcr:poznamka"><dc:description xml:lang="cs">Poznámka: <xsl:value-of select="amcr:poznamka"/></dc:description></xsl:if> <!-- Poznámka: {amcr:dokument/amcr:poznamka} -->
+        <xsl:if test="amcr:extra_data/amcr:cislo_objektu"><dc:description xml:lang="cs">Objekt/kontext: <xsl:value-of select="amcr:extra_data/amcr:cislo_objektu"/></dc:description></xsl:if> <!-- Objekt/kontext: {amcr:dokument/amcr:extra_data/amcr:cislo_objektu} -->
+        <xsl:if test="amcr:extra_data/amcr:udalost"><dc:description xml:lang="cs">Událost: <xsl:value-of select="amcr:extra_data/amcr:udalost"/></dc:description></xsl:if> <!-- {amcr:dokument/amcr:extra_data/amcr:udalost -->
+        <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:popis"><dc:description xml:lang="cs">Popis akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:popis"/></dc:description></xsl:if> <!-- Popis akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:popis} -->
+        <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace"><dc:description xml:lang="cs">Lokalizace akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace"/></dc:description></xsl:if> <!-- Lokalizace akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:lokalizace} -->
+        <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:poznamka"><dc:description xml:lang="cs">Poznámka k akci: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:poznamka"/></dc:description></xsl:if> <!-- Poznámka k akci: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:poznamka} -->
+        <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni"><dc:description xml:lang="cs">Rok zahájení akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni"/></dc:description></xsl:if> <!-- Rok zahájení akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_zahajeni} -->
+        <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni"><dc:description xml:lang="cs">Rok ukončení akce: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni"/></dc:description></xsl:if> <!-- Rok ukončení akce: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:rok_ukonceni} -->
+        <xsl:if test="amcr:dokument_cast/amcr:neident_akce/amcr:pian"><dc:description xml:lang="cs">Související PIAN: <xsl:value-of select="amcr:dokument_cast/amcr:neident_akce/amcr:pian"/></dc:description></xsl:if> <!-- Související PIAN: {amcr:archeologicky_zaznam/amcr:dokument_cast/amcr:neident_akce/amcr:pian} -->
         <dc:type>
             <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:pristupnost/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:dokument/amcr:pristupnost[@id]} -->
@@ -602,10 +596,9 @@
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:ext_zdroj/amcr:ident_cely} -->
         <dc:subject xml:lang="cs">externí zdroj</dc:subject> 
-        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/> <!-- "Stav: "{amcr:ext_zdroj/amcr:stav_pom} -->
-            <xsl:if test="amcr:misto"><xsl:variable name="nl" select="'&#xA;'"/>Místo vydání: <xsl:value-of select="amcr:misto"/></xsl:if> <!-- Místo vydání: {amcr:ext_zdroj/amcr:misto} -->
-            <xsl:if test="amcr:poznamka"><xsl:variable name="nl" select="'&#xA;'"/>Poznámka: <xsl:value-of select="amcr:poznamka"/></xsl:if> <!-- Poznámka: {amcr:ext_zdroj/amcr:poznamka} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:ext_zdroj/amcr:stav_pom} -->
+        <xsl:if test="amcr:misto"><dc:description xml:lang="cs">Místo vydání: <xsl:value-of select="amcr:misto"/></dc:description></xsl:if> <!-- Místo vydání: {amcr:ext_zdroj/amcr:misto} -->
+        <xsl:if test="amcr:poznamka"><dc:description xml:lang="cs">Poznámka: <xsl:value-of select="amcr:poznamka"/></dc:description></xsl:if> <!-- Poznámka: {amcr:ext_zdroj/amcr:poznamka} -->
         <dc:type>
             <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:typ/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:ext_zdroj/amcr:typ[@id]} -->
@@ -727,10 +720,9 @@
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:samostatny_nalez/amcr:ident_cely} -->
         <dc:subject xml:lang="cs">samostatný nález</dc:subject> 
-        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/> <!-- "Stav: "{amcr:samostatny_nalez/amcr:stav_pom} -->
-            <xsl:if test="amcr:evidencni_cislo"><xsl:variable name="nl" select="'&#xA;'"/>Evideční číslo: <xsl:value-of select="amcr:evidencni_cislo"/></xsl:if> <!-- Evideční číslo: {amcr:samostatny_nalez/amcr:evidencni_cislo} -->
-            <xsl:if test="amcr:poznamka"><xsl:variable name="nl" select="'&#xA;'"/>Poznámka: <xsl:value-of select="amcr:poznamka"/></xsl:if> <!-- Poznámka: {amcr:samostatny_nalez/amcr:poznamka} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:samostatny_nalez/amcr:stav_pom} -->
+        <xsl:if test="amcr:evidencni_cislo"><dc:description xml:lang="cs">Evideční číslo: <xsl:value-of select="amcr:evidencni_cislo"/></dc:description></xsl:if> <!-- Evideční číslo: {amcr:samostatny_nalez/amcr:evidencni_cislo} -->
+        <xsl:if test="amcr:poznamka"><dc:description xml:lang="cs">Poznámka: <xsl:value-of select="amcr:poznamka"/></dc:description></xsl:if> <!-- Poznámka: {amcr:samostatny_nalez/amcr:poznamka} -->
         <dc:type>
             <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:pristupnost/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:samostatny_nalez/amcr:pristupnost[@id]} -->
@@ -823,9 +815,8 @@
         </dc:identifier> <!-- {amcr:uzivatel/amcr:ident_cely} -->
         <dc:subject xml:lang="cs">uživatel</dc:subject>
         <dc:title><xsl:value-of select="amcr:prijmeni"/>, <xsl:value-of select="amcr:jmeno"/></dc:title>
-        <dc:description xml:lang="cs">Email: <xsl:value-of select="amcr:email"/> <!-- Email: {amcr:uzivatel/amcr:email} -->
-            <xsl:if test="amcr:telefon"><xsl:variable name="nl" select="'&#xA;'"/>Telefon: <xsl:value-of select="amcr:telefon"/></xsl:if> <!-- Telefon: {amcr:uzivatel/amcr:telefon} -->
-        </dc:description>
+        <dc:description xml:lang="cs">Email: <xsl:value-of select="amcr:email"/></dc:description> <!-- Email: {amcr:uzivatel/amcr:email} -->
+        <xsl:if test="amcr:telefon"><dc:description xml:lang="cs">Telefon: <xsl:value-of select="amcr:telefon"/></dc:description></xsl:if> <!-- Telefon: {amcr:uzivatel/amcr:telefon} -->
         <xsl:for-each select="amcr:skupina">
             <dc:type xml:lang="cs">
                 <xsl:value-of select="."/>
@@ -999,10 +990,9 @@
         <dc:type>
             <xsl:value-of select="$base_url_id"/><xsl:value-of select="amcr:typ_organizace/@id"/>
         </dc:type> <!-- [base_url]"/id/"{amcr:organizace/amcr:typ_organizace[@id]} -->
-        <dc:description xml:lang="cs"><xsl:if test="amcr:adresa">Adresa: <xsl:value-of select="amcr:adresa"/></xsl:if> <!-- Adresa: {amcr:organizace/amcr:adresa} -->
-            <xsl:if test="amcr:email"><xsl:variable name="nl" select="'&#xA;'"/>Email: <xsl:value-of select="amcr:email"/></xsl:if> <!-- Email: {amcr:organizace/amcr:email} -->
-            <xsl:if test="amcr:telefon"><xsl:variable name="nl" select="'&#xA;'"/>Telefon: <xsl:value-of select="amcr:telefon"/></xsl:if> <!-- Telefon: {amcr:organizace/amcr:telefon} -->
-        </dc:description>
+        <xsl:if test="amcr:adresa"><dc:description xml:lang="cs">Adresa: <xsl:value-of select="amcr:adresa"/></dc:description></xsl:if> <!-- Adresa: {amcr:organizace/amcr:adresa} -->
+        <xsl:if test="amcr:email"><dc:description xml:lang="cs">Email: <xsl:value-of select="amcr:email"/></dc:description></xsl:if> <!-- Email: {amcr:organizace/amcr:email} -->
+        <xsl:if test="amcr:telefon"><dc:description xml:lang="cs">Telefon: <xsl:value-of select="amcr:telefon"/></dc:description></xsl:if> <!-- Telefon: {amcr:organizace/amcr:telefon} -->
         <xsl:if test="amcr:ico"><dc:identifier xml:lang="cs">IČO: <xsl:value-of select="amcr:ico"/></dc:identifier></xsl:if> <!-- {amcr:organizace/amcr:ico} -->
 
         <dc:format>application/xml</dc:format> <!-- "application/xml" -->
