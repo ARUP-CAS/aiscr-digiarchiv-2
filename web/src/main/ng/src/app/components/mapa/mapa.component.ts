@@ -363,7 +363,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (doc.pian && doc.pian.length > 0) {
       doc.pian.forEach(pian => {
           const coords = pian.loc_rpt[0].split(',');
-          this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, doc);
+          this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.pian_presnost, pian.typ, doc);
       });
     } else if (doc.loc_rpt) {
         const coords = doc.loc_rpt[0].split(',');
@@ -441,7 +441,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         doc.pian.forEach(pian => {
           if (this.state.hasRights(pian.pristupnost, doc.organizace)) {
             const coords = pian.loc_rpt[0].split(',');
-            this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, doc);
+            this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.pian_presnost, pian.typ, doc);
           }
         });
       } else if (doc.loc_rpt) {

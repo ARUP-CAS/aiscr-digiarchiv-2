@@ -276,7 +276,7 @@
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
                 <mat-panel-title>
                   <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                  {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }} <mat-icon>link</mat-icon></a><ng-container *ngIf="dokument_cast.poznamka"> ({{ dokument_cast.poznamka }})</ng-container> 
+                  {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }} <mat-icon>link</mat-icon></a>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
