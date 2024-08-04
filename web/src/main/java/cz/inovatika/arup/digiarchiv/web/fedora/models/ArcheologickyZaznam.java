@@ -126,22 +126,8 @@ public class ArcheologickyZaznam implements FedoraModel {
                 for (Komponenta k : dj.dj_komponenta) {
                     idoc.addField("komponenta_ident_cely", k.ident_cely);
                 }
-
-//                idoc.addField("az_dj_nazev", djdoc.getFieldValue("dj_nazev"));
-//
-//                idoc.addField("az_dj_komponenta_obdobi", djdoc.getFieldValue("dj_komponenta_obdobi"));
-//                idoc.addField("az_dj_komponenta_presna_datace", djdoc.getFieldValue("dj_komponenta_presna_datace"));
-//                idoc.addField("az_dj_komponenta_areal", djdoc.getFieldValue("dj_komponenta_areal"));
-//                idoc.addField("az_dj_komponenta_aktivita", djdoc.getFieldValue("dj_komponenta_aktivita"));
-//
-//                idoc.addField("az_dj_komponenta_typ_nalezu", djdoc.getFieldValue("dj_komponenta_typ_nalezu"));
-//                idoc.addField("az_dj_komponenta_nalez_objekt_druh", djdoc.getFieldValue("dj_komponenta_nalez_objekt_druh"));
-//                idoc.addField("az_dj_komponenta_nalez_objekt_specifikace", djdoc.getFieldValue("dj_komponenta_nalez_objekt_specifikace"));
-//                idoc.addField("az_dj_komponenta_nalez_predmet_druh", djdoc.getFieldValue("dj_komponenta_nalez_predmet_druh"));
-//                idoc.addField("az_dj_komponenta_nalez_predmet_specifikace", djdoc.getFieldValue("dj_komponenta_nalez_predmet_specifikace"));
-//                IndexUtils.addFieldNonRepeat(idoc, "az_dj_typ", djdoc.getFieldValue("dj_typ"));
                 if (az_akce != null) {
-                    IndexUtils.addFieldNonRepeat(idoc, "f_typ_vyzkumu", djdoc.getFieldValue("dj_typ"));
+                    IndexUtils.addFieldNonRepeat(idoc, "f_dj_typ", djdoc.getFieldValue("dj_typ")); 
                 }
 
                 // add loc field by pian
@@ -235,10 +221,11 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "f_adb_typ_sondy", doc.optString("adb_typ_sondy", null));
                 IndexUtils.addFieldNonRepeat(idoc, "f_adb_podnet", doc.optString("adb_podnet", null));
                 IndexUtils.addFieldNonRepeat(idoc, "f_autor", doc.optString("adb_autor_revize", null));
-                IndexUtils.addFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ_A", doc.optString("f_adb_vyskovy_bod_typ_A", null));
-                IndexUtils.addFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ_B", doc.optString("f_adb_vyskovy_bod_typ_B", null));
-                IndexUtils.addFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ_C", doc.optString("f_adb_vyskovy_bod_typ_C", null));
-                IndexUtils.addFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ_D", doc.optString("f_adb_vyskovy_bod_typ_D", null));
+                
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_A", doc.opt("f_adb_vyskovy_bod_typ_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_B", doc.opt("f_adb_vyskovy_bod_typ_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_C", doc.opt("f_adb_vyskovy_bod_typ_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_D", doc.opt("f_adb_vyskovy_bod_typ_D"));
             }
         }
     }

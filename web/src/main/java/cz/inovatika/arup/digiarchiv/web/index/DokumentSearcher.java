@@ -149,7 +149,7 @@ public class DokumentSearcher implements EntitySearcher {
             pristupnost = "D";
         }
         PIANSearcher ps = new PIANSearcher();
-        String[] fs = ps.getMapaSearchFields(pristupnost);
+        String[] fs = ps.getSearchFields(pristupnost);
         String fields = String.join(",", fs);
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
@@ -161,6 +161,10 @@ public class DokumentSearcher implements EntitySearcher {
                     String cdj = cdjs.getString(j);
                     JSONObject sub = SolrSearcher.getById(client, cdj, fields);
                     if (sub != null) {
+                        String docPr = sub.getString("pristupnost");
+                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+                            sub.remove("pian_chranene_udaje");
+                        }
                         doc.append("pian", sub);
                     }
 

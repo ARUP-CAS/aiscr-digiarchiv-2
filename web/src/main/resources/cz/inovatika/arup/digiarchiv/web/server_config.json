@@ -137,6 +137,7 @@
       "location_info:[json]"
     ],
     "detail": [
+      "pian_id",
       "dokument_jazyk_dokumentu",
       "dokument_poznamka",
       "dokument_posudek",

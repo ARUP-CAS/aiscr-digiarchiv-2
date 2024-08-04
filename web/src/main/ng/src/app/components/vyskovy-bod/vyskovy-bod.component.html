@@ -3,7 +3,7 @@
   <mat-card-header>
     <mat-card-title>
       <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
-      (<app-inline-filter [field]="'typ'" [value]="result.vyskovy_bod_typ"></app-inline-filter>) – {{result.vyskovy_bod_niveleta}} m n. m. ({{result.vyskovy_bod_easting}} : {{result.vyskovy_bod_northing}})
+      (<app-inline-filter [field]="'typ'" [value]="result.vyskovy_bod_typ.id" [heslar]="'f_adb_vyskovy_bod_typ'"></app-inline-filter>) – {{result.vyskovy_bod_niveleta}} m n. m. ({{result.vyskovy_bod_easting}} : {{result.vyskovy_bod_northing}})
     </mat-card-title>
   </mat-card-header>
 </mat-card>

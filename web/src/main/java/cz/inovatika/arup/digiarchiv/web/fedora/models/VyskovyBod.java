@@ -14,7 +14,7 @@ public class VyskovyBod {
   
 //<xs:element name="typ" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{typ.ident_cely}" | "{typ.heslo}" -->
     @JacksonXmlProperty(localName = "typ")
-    public String typ;
+    public Vocab typ;
     
 //<xs:element name="geom_gml" minOccurs="1" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{geom}") -->
     @JacksonXmlProperty(localName = "geom_gml")
