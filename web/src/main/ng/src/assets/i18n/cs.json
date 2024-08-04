@@ -280,7 +280,8 @@
       "predmet_kategorie": "Nález - kategorie",
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
-      "f_udalost_typ": "Dokument - typ události"
+      "f_udalost_typ": "Dokument - typ události",
+      "f_adb_vyskovy_bod_typ": "ADB - typ výškového bodu"
     }
   },
 
