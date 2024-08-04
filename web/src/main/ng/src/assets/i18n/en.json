@@ -281,7 +281,7 @@
       "vyber": "Map selection",
       "f_nahrada": "Document - replacement copy",
       "f_udalost_typ": "Document - type of event",
-      "f_adb_vyskovy_bod_typ": "ADP - type of elevation point"
+      "adb_vyskovy_bod_typ": "ADP - type of elevation point"
     }
   },
 

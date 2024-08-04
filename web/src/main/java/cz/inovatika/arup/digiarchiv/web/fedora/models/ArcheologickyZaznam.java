@@ -209,7 +209,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
     private void addAdbFields(SolrInputDocument idoc, String ident_cely) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + ident_cely + "\"")
-                .setFields("ident_cely,adb_podnet,adb_typ_sondy,adb_autor_popisu,adb_autor_revize,f_adb_vyskovy_bod_typ_A,f_adb_vyskovy_bod_typ_B,f_adb_vyskovy_bod_typ_C,f_adb_vyskovy_bod_typ_D");
+                .setFields("ident_cely,adb_podnet,adb_typ_sondy,adb_autor_popisu,adb_autor_revize,adb_vyskovy_bod_typ_A,adb_vyskovy_bod_typ_B,adb_vyskovy_bod_typ_C,adb_vyskovy_bod_typ_D");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", ident_cely);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -222,10 +222,10 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "f_adb_podnet", doc.optString("adb_podnet", null));
                 IndexUtils.addFieldNonRepeat(idoc, "f_autor", doc.optString("adb_autor_revize", null));
                 
-                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_A", doc.opt("f_adb_vyskovy_bod_typ_A"));
-                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_B", doc.opt("f_adb_vyskovy_bod_typ_B"));
-                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_C", doc.opt("f_adb_vyskovy_bod_typ_C"));
-                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "f_adb_vyskovy_bod_typ_D", doc.opt("f_adb_vyskovy_bod_typ_D"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_A", doc.opt("adb_vyskovy_bod_typ_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_B", doc.opt("adb_vyskovy_bod_typ_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_C", doc.opt("adb_vyskovy_bod_typ_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_D", doc.opt("adb_vyskovy_bod_typ_D"));
             }
         }
     }

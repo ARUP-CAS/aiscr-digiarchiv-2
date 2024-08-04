@@ -45,11 +45,11 @@
     "watermark.alpha": 0,
     "sessionTimeout": 3600,
     "indexSecLevel": "E",
-    "allowedIP": ["192.168.254.37"],
+    "allowedIP": ["192.168.254.37", "192.168.28.142"],
 
     "securedFacets": [
         "f_kategorie", "f_pian_zm10",
-        "f_okres", "f_katastr", "f_adb_vyskovy_bod_typ"],
+        "f_okres", "f_katastr", "adb_vyskovy_bod_typ"],
 
     "kategoriet": {
         "HES-001075": "texty",

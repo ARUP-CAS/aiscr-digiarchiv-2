@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
@@ -40,14 +41,16 @@ public class FedoraServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //        List<Object> allowedIP = Options.getInstance().getJSONArray("allowedIP").toList();
-        //        boolean isAllowedIP = allowedIP.contains(request.getRemoteAddr());
-        boolean isAllowedIP = false;
+        List<Object> allowedIP = Options.getInstance().getJSONArray("allowedIP").toList();
+        // System.out.println(request.getRemoteAddr());
+        // System.out.println(request.getHeader("X-Forwarded-For"));
+        boolean isAllowedIP = allowedIP.contains(request.getRemoteAddr());
+        // boolean isAllowedIP = false;
         PrintWriter out = response.getWriter();
         try {
             String action = request.getPathInfo().substring(1);
             if (action != null) {
-                boolean isLocalhost = request.getRequestURL().toString().startsWith("http://digiarchiv:8080");
+                boolean isLocalhost = request.getRemoteAddr().startsWith("127.0.0.1");
                 String pristupnost = LoginServlet.pristupnost(request.getSession());
                 String confLevel = Options.getInstance().getString("indexSecLevel", "E");
                 LOGGER.log(Level.INFO,

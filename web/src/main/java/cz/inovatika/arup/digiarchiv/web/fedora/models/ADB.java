@@ -202,7 +202,7 @@ class ADBChraneneUdaje {
 
                 idocs.add(vbdoc);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_vyskovy_bod", vb.ident_cely, pristupnost);
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ", vb.typ.getId(), pristupnost);
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_vyskovy_bod_typ", vb.typ.getId(), pristupnost);
                 
                 try {
                     vb.geom_gml = FedoraModel.getAsXml(vb.geom_gml);

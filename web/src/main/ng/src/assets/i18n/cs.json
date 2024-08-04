@@ -281,7 +281,7 @@
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
       "f_udalost_typ": "Dokument - typ události",
-      "f_adb_vyskovy_bod_typ": "ADB - typ výškového bodu"
+      "adb_vyskovy_bod_typ": "ADB - typ výškového bodu"
     }
   },
 

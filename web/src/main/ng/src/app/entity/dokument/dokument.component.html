@@ -217,7 +217,8 @@
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.datum_vzniku">
                   <th class="app-label">{{ 'card.desc.Dokument - datum vzniku' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'extra_data.datum_vzniku'" [value]="result.dokument_extra_data.datum_vzniku | date : 'yyyy-MM-dd'" [isDate]="true"></app-inline-filter></td>
+                  <td>
+                    {{ result.dokument_extra_data.datum_vzniku | date : 'yyyy-MM-dd' }}</td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.zeme">
                   <th class="app-label">{{ 'card.desc.Země' | translate }}:</th>

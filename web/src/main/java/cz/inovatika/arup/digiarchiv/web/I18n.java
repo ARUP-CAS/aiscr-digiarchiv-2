@@ -106,35 +106,8 @@ public class I18n {
 
     def.put("heslar", heslarDoc);
     
-    String url = opts.getString("solrhost", "http://localhost:8983/solr/")
-            + "translations/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + locale;
-
-    LOGGER.log(Level.FINE, "requesting url {0}", url);
-    inputStream = RESTHelper.inputStream(url);
-    solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
-    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
     
-    for (int i = 0; i < docs.length(); i++) {
-      def.put(docs.getJSONObject(i).getString("id"), docs.getJSONObject(i).getString(locale));
-      String heslar = docs.getJSONObject(i).getString("heslar");
-      LOGGER.log(Level.FINE, heslar);
-      String pole = heslar;
-      def.put(pole + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getString(locale)); 
-
-      if (opts.getClientConf().getJSONObject("heslarToPole").has(heslar)) {
-        Object obj = opts.getClientConf().getJSONObject("heslarToPole").get(heslar);
-        if (obj instanceof JSONArray) {
-          JSONArray poli = (JSONArray) obj;
-          for (int p = 0; p < poli.length(); p++) {
-            def.put(poli.getString(p) + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getString(locale));
-          }
-        } else {
-          pole = (String) obj;
-          def.put(pole + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getString(locale));
-        }
-
-      }
-    }
+    
 
     locales.put(locale, def);
 

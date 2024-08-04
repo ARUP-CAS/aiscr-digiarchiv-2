@@ -536,6 +536,7 @@
    <field name="vyskovy_bod_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="f_adb_vyskovy_bod_typ_*" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_vyskovy_bod_typ_*" type="string" indexed="true" stored="true" multiValued="true" />
    
 
    
