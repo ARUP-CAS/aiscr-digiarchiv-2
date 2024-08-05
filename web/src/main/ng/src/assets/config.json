@@ -248,7 +248,7 @@
     "f_typ_vyzkumu",
     "f_adb_typ_sondy",
     "f_adb_podnet",    
-    "f_adb_vyskovy_bod", 
+    "adb_vyskovy_bod_typ", 
     "f_nalezce",
     "f_nalezove_okolnosti",    
     "f_typ_lokality",    
@@ -289,7 +289,7 @@
       "f_material_dokumentu", "f_jazyk_dokumentu", "f_rada", "dokument_kategorie_dokumentu",
       "pristupnost", "kategorie","f_typ_dokumentu", "pian_id", "obdobi_poradi",
       "extra_data_datum_vzniku", "datum_zverejneni", "rok_vzniku", "komponenta_dokument_obdobi",
-      "f_adb_vyskovy_bod", "let_letiste_start", "let_letiste_cil", "extra_data_format", "let_organizace",
+      "adb_vyskovy_bod_typ", "let_letiste_start", "let_letiste_cil", "extra_data_format", "let_organizace",
       "let_pocasi", "let_dohlednost", "tvar_tvar", "typ", "f_zachovalost", "f_nahrada", "f_zeme", "f_typ_lokality",
       "f_typ_projektu", "inv_cislo", "predano_organizace", "predmet_kategorie"
     ],
