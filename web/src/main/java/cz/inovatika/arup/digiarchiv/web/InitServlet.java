@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cz.inovatika.arup.digiarchiv.web;
 
+import cz.inovatika.arup.digiarchiv.web.fedora.FedoraHarvester;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -69,8 +67,21 @@ public class InitServlet extends HttpServlet {
       CONFIG_DIR = System.getProperty("user.home") + File.separator + CONFIG_DIR;
     }
     
+    // clear index status. In case of restart while running
+    writeStatusFile("index",  "inited");
+    writeStatusFile("update",  "inited");
+    
     LOGGER.log(Level.INFO, "CONFIG_DIR is -> {0}", CONFIG_DIR);
   }
+  
+  private static void writeStatusFile(String type, String status)  {
+      try {
+          File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_"  + "status.txt");
+          FileUtils.writeStringToFile(f, status, "UTF-8");
+      } catch (IOException ex) {
+          Logger.getLogger(InitServlet.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
   
   @Override
   public void destroy() {

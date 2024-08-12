@@ -31,6 +31,7 @@ import org.locationtech.jts.io.WKTReader;
 @JacksonXmlRootElement(localName = "projekt")
 public class Projekt implements FedoraModel {
 
+    public static final Logger LOGGER = Logger.getLogger(Projekt.class.getName());
     public String fieldPrefix = "projekt_";
 
     @Field
@@ -141,7 +142,38 @@ public class Projekt implements FedoraModel {
     @Override 
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
-        boolean searchable = !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty();
+        boolean searchable = false;
+        if (!projekt_samostatny_nalez.isEmpty()) {
+            // check if related are searchable
+            SolrQuery query = new SolrQuery("*")
+                        .setRows(1)
+                        .addFilterQuery("entity:samostatny_nalez")
+                        .addFilterQuery("samostatny_nalez_projekt:\"" + ident_cely + "\"");
+            try {
+                    JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs"); 
+                    if (!ja.isEmpty()) {
+                        searchable = true;
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+        }
+        
+        if (!searchable && !projekt_archeologicky_zaznam.isEmpty()) {
+            SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
+                        .setRows(1)
+                        .setFields("ident_cely,entity");
+            try {
+                    JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
+                    if (!ja.isEmpty()) {
+                        searchable = true;
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+        }
+        
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);

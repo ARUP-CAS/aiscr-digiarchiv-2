@@ -205,6 +205,9 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
                 JSONObject json = new JSONObject();
+                if (request.getParameter("id") == null) {
+                    return json.put("error", "no id").toString();
+                }
                 try {
                     Http2SolrClient client = IndexUtils.getClientNoOp();
                     String entity = request.getParameter("entity");

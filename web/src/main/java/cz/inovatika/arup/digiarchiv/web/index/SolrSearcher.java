@@ -66,10 +66,10 @@ public class SolrSearcher {
             String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
             String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
 
-            double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
+            double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .05, .5);
             query.setParam("facet.heatmap.geom", geom)
                     .setParam("facet.heatmap.distErr", dist + "")
-                    .addFilterQuery(fq);
+                    .addFilterQuery(fq);  
 
         } else {
             query.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
@@ -86,7 +86,7 @@ public class SolrSearcher {
         }
 
         query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
-                .setParam("facet.heatmap.maxCells", "400000");
+                .setParam("facet.heatmap.maxCells", "1000000");
     }
 
     public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {
