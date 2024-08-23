@@ -197,7 +197,7 @@ class ADBChraneneUdaje {
                 
                 vbdoc.setField("vyskovy_bod_parent", ident_cely);
                 // vbdoc.setField("vyskovy_bod_typ", vb.typ.getId());
-                IndexUtils.addVocabField(vbdoc, "adb_podnet", vb.typ);
+                IndexUtils.addVocabField(vbdoc, "vyskovy_bod_typ", vb.typ);
                 vbdoc.setField("vyskovy_bod_geom_wkt", objectMapper.writeValueAsString(vb.geom_wkt));
 
                 idocs.add(vbdoc);
