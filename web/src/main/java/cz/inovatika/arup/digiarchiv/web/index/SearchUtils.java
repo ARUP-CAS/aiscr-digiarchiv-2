@@ -297,6 +297,9 @@ public class SearchUtils {
             case "vyskovy_bod":
                 searcher = new VyskovyBodSearcher();
                 break;
+            case "adb":
+                searcher = new ADBSearcher();
+                break;
             default:
                 searcher = null;
         }
