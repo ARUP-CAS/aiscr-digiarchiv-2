@@ -203,15 +203,14 @@ public class ImageServlet extends HttpServlet {
         }
 
         String mime = doc.optString("mimetype", "image/jpeg");
+        if (!mime.startsWith("image")) {
+            mime = "image/jpeg";
+        }
         InputStream is = getFromFedora(id, imgSize);
 
         if (is != null) {
             // String mime = getServletContext().getMimeType(f.getName());
-            if (mime != null) {
-                response.setContentType(mime);
-            } else {
-                response.setContentType("image/jpeg");
-            }
+            response.setContentType("image/jpeg");
             response.setHeader("Content-Disposition", "filename=" + id);
 
             // BufferedImage bi = ImageIO.read(f);
