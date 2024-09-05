@@ -277,7 +277,7 @@ public class DokumentSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            String organizace = doc.optString("organizace");
+            String organizace = doc.optString("dokument_organizace");
             String docPr = doc.getString("pristupnost");
 
             boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
