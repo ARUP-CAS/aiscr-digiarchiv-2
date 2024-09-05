@@ -294,7 +294,8 @@ export class AppState {
     if (pristupnost.toUpperCase() === 'A') {
       return true;
     } else if (this.logged) {
-      const sameOrg = this.user.organizaceNazev === organizace;
+      console.log(this.user)
+      const sameOrg = this.user.organizace.id === organizace;
       return this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
     } else {
       return false;

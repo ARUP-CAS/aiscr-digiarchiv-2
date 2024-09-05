@@ -303,7 +303,7 @@ export class DokumentComponent implements OnInit, OnChanges {
       this.gotoDoc();
       return;
     }
-    const canView = this.state.hasRights(this.result.pristupnost, this.result.organizace);
+    const canView = this.state.hasRights(this.result.pristupnost, this.result.dokument_organizace);
     // const canView = true;
     if (canView) {
       this.state.dialogRef = this.dialog.open(FileViewerComponent, {

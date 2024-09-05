@@ -36,24 +36,18 @@ public class DokumentSearcher implements EntitySearcher {
             Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            //LOGGER.log(Level.INFO, "query");
             JSONObject jo = SearchUtils.json(query, client, "entities");
-            //LOGGER.log(Level.INFO, "checkRelations");
             // checkRelations(jo, client, request);
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
                 //getChilds(jo, client, request);
-            //LOGGER.log(Level.INFO, "addPians");
                 addPians(jo, client, request);
             }
-            //LOGGER.log(Level.INFO, "addFavorites");
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             
-            //LOGGER.log(Level.INFO, "filter");
             addProjekt(jo, client, request);
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            //LOGGER.log(Level.INFO, "hotovo");
             return jo;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
