@@ -524,17 +524,24 @@ public class OAIRequest {
 
         String docPristupnost = (String) doc.getFieldValue("pristupnost");
         String projektOrg = (String) doc.getFirstValue("organizace");
-        String model = (String) doc.getFieldValue("model");
+        String model = (String) doc.getFieldValue("model"); 
+        
         FedoraModel fm = FedoraModel.getFedoraModel(model);
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
+            long stav = 0; 
+            if (doc.containsKey("stav")) {
+                stav = (long) doc.getFieldValue("stav");
+            }
             String xml = (String) doc.getFieldValue("xml");
             String ret = xml;
-            if (ret.contains("<amcr:oznamovatel>") && "C".compareToIgnoreCase(userPristupnost) > 0 &&
-                    ("C".compareToIgnoreCase(userPristupnost) < 0 || !userOrg.equals(projektOrg))) {
-
+            if (ret.contains("<amcr:oznamovatel>") && 
+                    ("C".compareToIgnoreCase(userPristupnost) > 0 || // A-B
+                    ("C".equalsIgnoreCase(userPristupnost) && !(stav == 1 || userOrg.equals(projektOrg))))
+                ) {
+// M-202204636
 //projekt/oznamovatel
 //-- A-B: nikdy
-//-- C: projekt/organizace = {user}.organizace
+//-- C: stav = 1 OR projekt/organizace = {user}.organizace
 //-- D-E: bez omezení
                 while (ret.contains("<amcr:oznamovatel")) {
                     int pos1 = ret.indexOf("<amcr:oznamovatel>");
@@ -570,7 +577,6 @@ public class OAIRequest {
         Source text = new StreamSource(new StringReader(xml));
         StringWriter sw = new StringWriter();
         
-        System.out.println(Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
         getTransformer().transform(text, new StreamResult(sw));
 
         Pattern emptyValueTag = Pattern.compile("\\s*<dc:\\w+.*/>");

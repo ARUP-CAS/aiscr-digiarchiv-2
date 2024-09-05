@@ -67,8 +67,7 @@
       <div *ngIf="result.az_chranene_udaje?.dalsi_katastr.length > 0">
         <label class="app-label">{{ 'card.desc.dalsi_katastry' | translate }}:</label>&#160;
         <ng-container *ngFor="let k of result.az_chranene_udaje.dalsi_katastr; let last = last">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>&#160;
-          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="k.value"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter><span *ngIf="!last">;&#160;</span>
         </ng-container>
       </div>
       <div *ngIf="result.akce_chranene_udaje?.lokalizace_okolnosti" class="app-w-max-1 app-w-min-100 app-d-inline-flex">

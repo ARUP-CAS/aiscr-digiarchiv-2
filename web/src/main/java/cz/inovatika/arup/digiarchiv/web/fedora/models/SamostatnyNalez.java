@@ -186,7 +186,7 @@ public class SamostatnyNalez implements FedoraModel {
 
             }
             if (!idocs.isEmpty()) {
-                // IndexUtils.getClient().add("soubor", idocs, 10);
+                IndexUtils.getClientBin().add("soubor", idocs, 10);
             }
         } catch (Exception ex) {
             Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);

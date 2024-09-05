@@ -119,6 +119,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.feedBackMaxLength;
     }
 
+    public get noPoradiFacets() {
+        return this.config.noPoradiFacets;
+    }
+
     server = '';
 
     constructor(
@@ -142,8 +146,9 @@ import { isPlatformBrowser } from '@angular/common';
                 this.config = cfg as Configuration;
                 this.config.amcr = this.server;
                 return this.http.get(this.server + 'api/search/thesauri').pipe(tap((res: any) => {
-                    this.obdobi = res.response.docs;
-                    this.obdobiStats = res.stats.stats_fields.poradi;
+                    // this.obdobi = res.response.docs;
+                    // this.obdobiStats = res.stats.stats_fields.poradi;
+                    this.thesauri = res;
                 }));
             }),
             catchError((err) => {
@@ -178,13 +183,13 @@ import { isPlatformBrowser } from '@angular/common';
     //         });
     // }
 
-    // getThesauri() {
-    //     const url = this.server + 'api/search/thesauri';
-    //     return this.http.get(url)
-    //         .toPromise()
-    //         .then((res: any) => {
-    //             this.thesauri = res;
-    //         });
-    // }
+    getThesauri() {
+        const url = this.server + 'api/search/thesauri';
+        return this.http.get(url)
+            .toPromise()
+            .then((res: any) => {
+                this.thesauri = res;
+            });
+    }
 
 }

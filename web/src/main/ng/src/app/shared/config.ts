@@ -11,6 +11,7 @@ export class Configuration {
   isIndexing: boolean;
   defaultLang: string;
   facets: string[];
+  noPoradiFacets: {[key: string]: boolean};
   // dateFacets: string[];
   // numberFacets: string[];
 
@@ -64,7 +65,7 @@ export class Configuration {
   selRows: number[];
   defaultRows: number;
   exportRowsLimit: number;
-  exportFields: {[entity: string]: {name: string, heslar?: string, secured?: boolean, type: string}[]};
+  exportFields: {[entity: string]: {name: string, label?: string, heslar?: string, secured?: boolean, byPath?: boolean, type: string}[]};
   urlFields: string[];
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};

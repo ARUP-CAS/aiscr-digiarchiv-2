@@ -127,9 +127,9 @@
               </tr>
               <tr *ngIf="result.samostatny_nalez_chranene_udaje?.geom_wkt">
                 <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
-                <td>{{ result.samostatny_nalez_chranene_udaje?.geom_wkt.value }}, EPSG:{{ result.samostatny_nalez_chranene_udaje.geom_wkt.epsg }}<br/>
-                  <ng-container *ngIf="result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt">{{ result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt.value }}, 
-                    EPSG:{{ result.samostatny_nalez_chranene_udaje.geom_sjtsk_wkt.epsg }}</ng-container>
+                <td>EPSG:{{ result.samostatny_nalez_chranene_udaje.geom_wkt.epsg }}, {{ result.samostatny_nalez_chranene_udaje?.geom_wkt.value }}<br/>
+                  <ng-container *ngIf="result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt">EPSG:{{ result.samostatny_nalez_chranene_udaje.geom_sjtsk_wkt.epsg }}, 
+                    {{ result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt.value }}</ng-container>
                   </td>
               </tr>
               </tbody>

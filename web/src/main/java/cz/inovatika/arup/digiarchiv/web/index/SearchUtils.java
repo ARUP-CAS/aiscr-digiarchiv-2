@@ -182,7 +182,6 @@ public class SearchUtils {
     public static String csv(SolrQuery query, Http2SolrClient client, String core) {
         query.set("wt", "csv");
         String qt = query.get("qt");
-        String jsonResponse;
         try {
             QueryRequest qreq = new QueryRequest(query);
             if (qt != null) {
@@ -297,6 +296,9 @@ public class SearchUtils {
                 break;
             case "vyskovy_bod":
                 searcher = new VyskovyBodSearcher();
+                break;
+            case "adb":
+                searcher = new ADBSearcher();
                 break;
             default:
                 searcher = null;

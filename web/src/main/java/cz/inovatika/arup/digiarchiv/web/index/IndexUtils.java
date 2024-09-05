@@ -71,7 +71,23 @@ public class IndexUtils {
             _solrNoOp = null;
         }
     }
+    
+                            
+                            
 
+    public static void addFieldNonRepeatByJSONVal(SolrInputDocument idoc, String field, Object val) {
+        if (val != null) {
+            if (val instanceof JSONArray) {
+                JSONArray ja = (JSONArray) val;
+                for (int j = 0; j < ja.length(); j++) {
+                    SolrSearcher.addFieldNonRepeat(idoc, field, ja.get(j));
+                }
+            } else {
+                SolrSearcher.addFieldNonRepeat(idoc, field, val);
+            }
+        }
+    }
+    
     public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
         if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
             idoc.addField(field, value);

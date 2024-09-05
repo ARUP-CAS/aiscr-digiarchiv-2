@@ -205,6 +205,9 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
                 JSONObject json = new JSONObject();
+                if (request.getParameter("id") == null) {
+                    return json.put("error", "no id").toString();
+                }
                 try {
                     Http2SolrClient client = IndexUtils.getClientNoOp();
                     String entity = request.getParameter("entity");
@@ -445,7 +448,7 @@ public class SearchServlet extends HttpServlet {
                     Http2SolrClient client = IndexUtils.getClientNoOp();
                     String pristupnost = LoginServlet.pristupnost(request.getSession());
                     SolrQuery query = new SolrQuery("*")
-                            .setFields("id,heslar,pole,heslo,poradi")
+                            .setFields("id,ident_cely,razeni")
                             .setRows(5000);
 
                     QueryRequest req = new QueryRequest(query);
@@ -454,31 +457,15 @@ public class SearchServlet extends HttpServlet {
                     rawJsonResponseParser.setWriterType("json");
                     req.setResponseParser(rawJsonResponseParser);
 
-                    NamedList<Object> resp = client.request(req, "translations");
+                    NamedList<Object> resp = client.request(req, "heslar");
                     JSONArray docs = new JSONObject((String) resp.get("response"))
                             .getJSONObject("response").getJSONArray("docs");
                     // return (String) resp.get("response");
 
                     // JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
                     for (int i = 0; i < docs.length(); i++) {
-                        // ret.put(docs.getJSONObject(i).getString("id"), docs.getJSONObject(i).getInt("poradi"));
-                        String heslar = docs.getJSONObject(i).getString("heslar");
-                        LOGGER.log(Level.FINE, heslar);
-                        // String pole = heslar;
-                        ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
+                        ret.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getInt("razeni"));
 
-//                        if (heslarToPole.has(heslar)) {
-//                            Object obj = heslarToPole.get(heslar);
-//                            if (obj instanceof JSONArray) {
-//                                JSONArray poli = (JSONArray) obj;
-//                                for (int p = 0; p < poli.length(); p++) {
-//                                    ret.put(poli.getString(p) + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
-//                                }
-//                            } else {
-//                                heslar = (String) obj;
-//                                ret.put(heslar + "_" + docs.getJSONObject(i).getString("heslo"), docs.getJSONObject(i).getInt("poradi"));
-//                            }
-//                        }
                     }
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);

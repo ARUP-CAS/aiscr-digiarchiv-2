@@ -154,7 +154,7 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    public JSONObject update() throws Exception {
+    public JSONObject update(String from) throws Exception {
         ret = new JSONObject();
         String status = readStatusFile("update");
         if (STATUS_RUNNING.equals(status)) {
@@ -165,7 +165,10 @@ public class FedoraHarvester {
         writeStatusFile("update", STATUS_RUNNING);
         Instant start = Instant.now();
         String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
-        String lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
+        String lastDate = from;
+        if (lastDate == null) {
+            lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
+        }
         // lastDate = "2024-07-30T15:37:05.633Z";
         ret.put("lastDate", lastDate);
 
@@ -362,16 +365,21 @@ public class FedoraHarvester {
         int batchSize = 500;
         int indexed = 0;
         String url = Options.getInstance().getString("solrhost", "http://localhost:8983/solr/")
-                + "entities/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely&fq=" + fq;
+                + "entities/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely&fq=" + URLEncoder.encode(fq, "UTF8");
         InputStream inputStream = RESTHelper.inputStream(url);
         String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
         JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
         solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
         for (int i = 0; i < docs.length(); i++) {
             String id = docs.getJSONObject(i).getString("ident_cely");
-            ret.put(id, indexId(id, false));
-            checkLists(batchSize, indexed++, fq, docs.length());
-            LOGGER.log(Level.FINE, "Index by ID {0} finished. {1} of {2}", new Object[]{id, i + 1, docs.length()});
+            try {
+                ret.put(id, indexId(id, false));
+                checkLists(batchSize, indexed++, fq, docs.length());
+                LOGGER.log(Level.FINE, "Index by ID {0} finished. {1} of {2}", new Object[]{id, i + 1, docs.length()});
+            } catch (Exception e) {
+                // LOGGER.log(Level.WARNING, "Error indexing {0}, -> {1}", new Object[]{id, e.toString()});
+                ret.put(id, e.toString());
+            }
         }
         checkLists(0, docs.length(), fq, docs.length());
         solr.close();
@@ -480,7 +488,7 @@ public class FedoraHarvester {
         }
         LOGGER.log(Level.INFO, "Processing model {0}", model);
         ret.put(model, 0);
-        int indexed = 0;
+        int indexed = offset;
         int batchSize = 500;
         //http://192.168.8.33:8080/rest/AMCR-test/model/projekt/member
         // returns list of records in CONTAINS
@@ -600,6 +608,11 @@ public class FedoraHarvester {
 
                 DocumentObjectBinder dob = new DocumentObjectBinder();
                 SolrInputDocument idoc = dob.toSolrInputDocument(fm);
+                
+                if (idoc.containsKey("stav") && Integer.parseInt(idoc.getFieldValue("stav").toString()) == -1) {
+                    LOGGER.log(Level.FINE, "Skiping record {0}. Stav = -1", idoc.getFieldValue("ident_cely"));
+                    return;
+                }
 //                if (!fm.isSearchable()) {
 //                    LOGGER.log(Level.FINE, "Skiping record {0}. Not searchable", idoc.getFieldValue("ident_cely"));
 //                    return;

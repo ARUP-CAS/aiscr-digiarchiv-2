@@ -36,23 +36,18 @@ public class DokumentSearcher implements EntitySearcher {
             Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            //LOGGER.log(Level.INFO, "query");
             JSONObject jo = SearchUtils.json(query, client, "entities");
-            //LOGGER.log(Level.INFO, "checkRelations");
             // checkRelations(jo, client, request);
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
                 //getChilds(jo, client, request);
-            //LOGGER.log(Level.INFO, "addPians");
                 addPians(jo, client, request);
             }
-            //LOGGER.log(Level.INFO, "addFavorites");
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             
-            //LOGGER.log(Level.INFO, "filter");
+            addProjekt(jo, client, request);
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            //LOGGER.log(Level.INFO, "hotovo");
             return jo;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -97,6 +92,26 @@ public class DokumentSearcher implements EntitySearcher {
                 }
             }
             doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
+            
+            if (doc.has("dokument_cast_projekt")) {
+                // String fq = "{!join to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"";
+                String fq = "ident_cely:\"" + doc.getJSONArray("dokument_cast_projekt").getString(0) + "\"";
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery(fq)
+                        .setRows(10000)
+                        .setFields("ident_cely");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    for (int a = 0; a < ja.length(); a++) {
+                        dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+            doc.put("dokument_cast_projekt", dokument_cast_archeologicky_zaznam);
+            
+            // dokument_cast_projekt
         }
     }
 
@@ -128,7 +143,7 @@ public class DokumentSearcher implements EntitySearcher {
             pristupnost = "D";
         }
         PIANSearcher ps = new PIANSearcher();
-        String[] fs = ps.getMapaSearchFields(pristupnost);
+        String[] fs = ps.getSearchFields(pristupnost);
         String fields = String.join(",", fs);
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
@@ -140,7 +155,41 @@ public class DokumentSearcher implements EntitySearcher {
                     String cdj = cdjs.getString(j);
                     JSONObject sub = SolrSearcher.getById(client, cdj, fields);
                     if (sub != null) {
+                        String docPr = sub.getString("pristupnost");
+                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+                            sub.remove("pian_chranene_udaje");
+                        }
                         doc.append("pian", sub);
+                    }
+
+                }
+            }
+        }
+    }
+    
+    public void addProjekt(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        ProjektSearcher ps = new ProjektSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("dokument_cast_projekt")) {
+                JSONArray cdjs = doc.getJSONArray("dokument_cast_projekt");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    String cdj = cdjs.getString(j);
+                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                    if (sub != null) {
+                        String docPr = sub.getString("pristupnost");
+                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+                            sub.remove("projekt_chranene_udaje");
+                        }
+                        doc.append("projekt", sub);
                     }
 
                 }
@@ -222,7 +271,7 @@ public class DokumentSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            String organizace = doc.optString("organizace");
+            String organizace = doc.optString("dokument_organizace");
             String docPr = doc.getString("pristupnost");
 
             boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;

@@ -57,7 +57,31 @@
             <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
           </ng-container>
         </div>
-        <div *ngIf="result.dokument_organizace">
+
+        
+
+        <ng-container *ngIf="result.entity === 'knihovna_3d'">
+
+        <div *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_obdobi || result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace || result.dokument_cast?.[0].komponenta?.[0].komponenta_areal">
+          <ng-container *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_obdobi || result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace">
+            <label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.dokument_cast?.[0].komponenta?.[0].komponenta_obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
+            <ng-container *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace">&#160;({{ result.dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace }})</ng-container> 
+          </ng-container><span class="app-pipe"></span>
+          <ng-container *ngIf="result.dokument_cast?.[0].komponenta?.[0].komponenta_areal">
+            <label class="app-label">{{ 'card.desc.Komponenta - areál' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.dokument_cast?.[0].komponenta?.[0].komponenta_areal.id" [heslar]="'areal_druha'"></app-inline-filter>
+          </ng-container><span class="app-pipe"></span>
+        </div>
+        
+        <div *ngIf="result.dokument_extra_data.odkaz">
+          <label class="app-label">{{'card.desc.Odkaz' | translate}}:</label>&#160;
+            <a [href]="result.dokument_extra_data.odkaz" target="_blank">{{ result.dokument_extra_data.odkaz }}</a> 
+        </div>
+        </ng-container>
+
+
+        <div *ngIf="result.entity !== 'knihovna_3d' && result.dokument_organizace">
           <ng-container>
             <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.dokument_organizace" [heslar]="'organizace'"></app-inline-filter>
@@ -67,9 +91,15 @@
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
           <ng-container *ngFor="let item of result.location_info; let last = last">
-            <app-inline-filter *ngIf="item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>&#160;
-           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">, </span>
+            <ng-container *ngIf="isArray(item.katastr)">
+              <app-inline-filter *ngFor="let k of item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="k"></app-inline-filter>
+            </ng-container>
+            <ng-container *ngIf="!isArray(item.katastr)">
+              <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
+            </ng-container>
+           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">,&#160;</span>
           </ng-container>
+
         </div>
         <div *ngIf="result.dokument_popis" class="app-truncate-text">
           <ng-container>
@@ -86,7 +116,7 @@
         <span class="app-pipe"></span>
       </ng-container> 
       <ng-container *ngIf="result.dokument_cast_projekt?.length > 0">
-        {{ 'card.desc.Počet projektu' | translate }}: <strong>{{result.dokument_cast_projekt?.length}}</strong>
+        {{'card.desc.Počet projektů' | translate}}: <strong>{{result.dokument_cast_projekt?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
       <ng-container *ngIf="result.soubor_filepath?.length > 0">
@@ -107,7 +137,7 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.dokument_jazyk_dokumentu?.length > 0">
+              <tr *ngIf="result.dokument_jazyk_dokumentu?.length > 0 && result.entity !== 'knihovna_3d'">
                 <th class="app-label">{{ 'card.desc.Jazyk' | translate }}:</th>
                 <td><app-inline-filter *ngFor="let jazyk of result.dokument_jazyk_dokumentu" [isChild]="isChild" [field]="'f_jazyk_dokumentu'" [value]="jazyk" [heslar]="'jazyk_dokumentu'"></app-inline-filter></td>
               </tr>
@@ -134,7 +164,7 @@
                 <th class="app-label">{{ 'card.desc.Původní označení' | translate }}:</th>
                 <td>{{ result.dokument_oznaceni_originalu }}</td>
               </tr>
-              <tr *ngIf="result.dokument_datum_zverejneni">
+              <tr *ngIf="result.dokument_datum_zverejneni && result.entity !== 'knihovna_3d'">
                 <th class="app-label">{{ 'card.desc.Dokument - datum zveřejnění' | translate }}:</th>
                 <td>{{ result.dokument_datum_zverejneni | date : 'yyyy-MM-dd' }}</td>
               </tr>
@@ -144,13 +174,13 @@
                   <td>{{ result.dokument_extra_data.cislo_objektu }}</td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.geom_gml">
-                  <th class="app-label">{{ 'card.desc.Poloha (WGS-84)' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.geom_gml }}</td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
                   <td>
-                    {{ result.dokument_extra_data.geom_wkt.value }}, EPSG: {{ result.dokument_extra_data.geom_wkt.epsg }}
+                    EPSG:{{ result.dokument_extra_data.geom_wkt.epsg }}, {{ result.dokument_extra_data.geom_wkt.value }}
                   </td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.format">
@@ -181,13 +211,14 @@
                   <th class="app-label">{{ 'card.desc.Počet variant' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.pocet_variant_originalu }}</td>
                 </tr>
-                <tr *ngIf="result.dokument_extra_data.odkaz">
+                <tr *ngIf="result.dokument_extra_data.odkaz && result.entity !== 'knihovna_3d'">
                   <th class="app-label">{{ 'card.desc.Odkaz' | translate }}:</th>
                   <td><a [href]="result.dokument_extra_data.odkaz" target="_blank">{{result.dokument_extra_data.odkaz}}</a></td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.datum_vzniku">
                   <th class="app-label">{{ 'card.desc.Dokument - datum vzniku' | translate }}:</th>
-                  <td><app-inline-filter [isChild]="isChild" [field]="'extra_data.datum_vzniku'" [value]="result.dokument_extra_data.datum_vzniku | date : 'yyyy-MM-dd'" [isDate]="true"></app-inline-filter></td>
+                  <td>
+                    {{ result.dokument_extra_data.datum_vzniku | date : 'yyyy-MM-dd' }}</td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.zeme">
                   <th class="app-label">{{ 'card.desc.Země' | translate }}:</th>
@@ -246,7 +277,7 @@
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
                 <mat-panel-title>
                   <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                  {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }} <mat-icon>link</mat-icon></a><ng-container *ngIf="dokument_cast.poznamka"> ({{ dokument_cast.poznamka }})</ng-container> 
+                  {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }} <mat-icon>link</mat-icon></a>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
@@ -305,7 +336,7 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0 || result.dokument_cast_projekt?.length > 0 " [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:
@@ -316,11 +347,13 @@
             [minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
             <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
             <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
           </cdk-virtual-scroll-viewport>
           
           <ng-container *ngIf="vsSize > 0 && state.printing" >
             <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
             <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
           </ng-container>
           
         </mat-expansion-panel>

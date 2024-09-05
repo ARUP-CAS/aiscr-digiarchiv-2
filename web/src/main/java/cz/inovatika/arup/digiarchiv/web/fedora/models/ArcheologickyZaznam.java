@@ -77,9 +77,9 @@ public class ArcheologickyZaznam implements FedoraModel {
     public String coreName() {
         return "entities";
     }
-    
+
     @Override
-    public boolean isSearchable(){
+    public boolean isSearchable() {
         return stav == 3;
     }
 
@@ -123,39 +123,26 @@ public class ArcheologickyZaznam implements FedoraModel {
                 idoc.addField("az_dj_pian", djdoc.getFieldValue("dj_pian"));
                 idoc.addField("pian_ident_cely", djdoc.getFieldValue("dj_pian"));
                 idoc.addField("az_dj_adb", djdoc.getFieldValue("dj_adb"));
-                for (Komponenta k: dj.dj_komponenta){
+                for (Komponenta k : dj.dj_komponenta) {
                     idoc.addField("komponenta_ident_cely", k.ident_cely);
                 }
-                
-//                idoc.addField("az_dj_nazev", djdoc.getFieldValue("dj_nazev"));
-//
-//                idoc.addField("az_dj_komponenta_obdobi", djdoc.getFieldValue("dj_komponenta_obdobi"));
-//                idoc.addField("az_dj_komponenta_presna_datace", djdoc.getFieldValue("dj_komponenta_presna_datace"));
-//                idoc.addField("az_dj_komponenta_areal", djdoc.getFieldValue("dj_komponenta_areal"));
-//                idoc.addField("az_dj_komponenta_aktivita", djdoc.getFieldValue("dj_komponenta_aktivita"));
-//
-//                idoc.addField("az_dj_komponenta_typ_nalezu", djdoc.getFieldValue("dj_komponenta_typ_nalezu"));
-//                idoc.addField("az_dj_komponenta_nalez_objekt_druh", djdoc.getFieldValue("dj_komponenta_nalez_objekt_druh"));
-//                idoc.addField("az_dj_komponenta_nalez_objekt_specifikace", djdoc.getFieldValue("dj_komponenta_nalez_objekt_specifikace"));
-//                idoc.addField("az_dj_komponenta_nalez_predmet_druh", djdoc.getFieldValue("dj_komponenta_nalez_predmet_druh"));
-//                idoc.addField("az_dj_komponenta_nalez_predmet_specifikace", djdoc.getFieldValue("dj_komponenta_nalez_predmet_specifikace"));
-
-//                IndexUtils.addFieldNonRepeat(idoc, "az_dj_typ", djdoc.getFieldValue("dj_typ"));
-                IndexUtils.addFieldNonRepeat(idoc, "f_typ_vyzkumu", djdoc.getFieldValue("dj_typ"));
+                if (az_akce != null) {
+                    IndexUtils.addFieldNonRepeat(idoc, "f_dj_typ", djdoc.getFieldValue("dj_typ")); 
+                }
 
                 // add loc field by pian
-                if (djdoc.getFieldValue("dj_pian") != null ) {
+                if (djdoc.getFieldValue("dj_pian") != null) {
                     addPian(idoc, (String) djdoc.getFieldValue("dj_pian"), (String) idoc.getFieldValue("pristupnost"));
                 }
 
                 //add adb fields
-                if (idoc.getFieldValue("dj_adb") != null ) {
+                if (djdoc.getFieldValue("dj_adb") != null) {
                     addAdbFields(idoc, (String) djdoc.getFieldValue("dj_adb"));
                 }
             }
             if (!djdocs.isEmpty()) {
                 IndexUtils.getClientBin().add("entities", djdocs, 10);
-            } 
+            }
         } catch (Exception ex) {
             Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -209,7 +196,6 @@ public class ArcheologickyZaznam implements FedoraModel {
             IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, az_chranene_udaje.uzivatelske_oznaceni);
         }
 
-        
         // Fields allways searchable
         String[] defFields = new String[]{"ident_cely", "dokument",
             "projekt"};
@@ -223,19 +209,26 @@ public class ArcheologickyZaznam implements FedoraModel {
 
     private void addAdbFields(SolrInputDocument idoc, String ident_cely) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + ident_cely + "\"")
-                .setFields("ident_cely,adb_podnet,adb_typ_sondy,adb_autor_popisu,adb_autor_revize");
+                .setFields("ident_cely,adb_podnet,adb_typ_sondy,adb_autor_popisu,adb_autor_revize,adb_vyskovy_bod_typ_A,adb_vyskovy_bod_typ_B,adb_vyskovy_bod_typ_C,adb_vyskovy_bod_typ_D");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", ident_cely);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-
-                for (String key : doc.keySet()) {
-                    SolrSearcher.addFieldNonRepeat(idoc, "dj_adb_" + key, doc.opt(key));
-                }
+//                for (String key : doc.keySet()) {
+//                    SolrSearcher.addFieldNonRepeat(idoc, "az_dj_" + key, doc.opt(key));
+//                }
+                IndexUtils.addFieldNonRepeat(idoc, "f_adb_typ_sondy", doc.optString("adb_typ_sondy", null));
+                IndexUtils.addFieldNonRepeat(idoc, "f_adb_podnet", doc.optString("adb_podnet", null));
+                IndexUtils.addFieldNonRepeat(idoc, "f_autor", doc.optString("adb_autor_revize", null));
+                
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_A", doc.opt("adb_vyskovy_bod_typ_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_B", doc.opt("adb_vyskovy_bod_typ_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_C", doc.opt("adb_vyskovy_bod_typ_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_D", doc.opt("adb_vyskovy_bod_typ_D"));
             }
         }
-    } 
+    }
 
     private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
@@ -243,15 +236,15 @@ public class ArcheologickyZaznam implements FedoraModel {
                 .setFields("*,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
 
-        if (json.getJSONObject("response").getInt("numFound") > 0) { 
+        if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
 
-            // IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
-            IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
-            IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
-            
+                // IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
+                IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
+                IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
+
                 for (String key : pianDoc.keySet()) {
                     switch (key) {
                         case "entity":
@@ -264,14 +257,12 @@ public class ArcheologickyZaznam implements FedoraModel {
                             // idoc.setField("dj_pian_" + key, pianDoc.opt(key));
                             if (key.startsWith("loc")) {
                                 //SolrSearcher.addFieldNonRepeat(idoc, key, pianDoc.opt(key));
-                                
-                                
+
                                 JSONArray val = pianDoc.optJSONArray(key);
                                 for (int i = 0; i < val.length(); i++) {
                                     SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
                                 }
-                                
-                                
+
                             } else if (key.startsWith("lat") || key.startsWith("lng")) {
                                 // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
                                 JSONArray val = pianDoc.optJSONArray(key);
@@ -287,11 +278,10 @@ public class ArcheologickyZaznam implements FedoraModel {
             }
         }
     }
-    
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        
+
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("A") > 0 || st == 3) {

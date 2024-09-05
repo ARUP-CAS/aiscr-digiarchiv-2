@@ -28,7 +28,7 @@ public class PIANSearcher implements EntitySearcher {
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
             if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
-                doc.remove("chranene_udaje");
+                doc.remove("pian_chranene_udaje");
             }
         }
     }
@@ -64,10 +64,10 @@ public class PIANSearcher implements EntitySearcher {
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery("entity:akce")
                         .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
-                query.setFields(af);
+                query.setFields(af); 
                 JSONObject r = SolrSearcher.json(client, "entities", query);
+                as.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
                 JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
-
                 for (int j = 0; j < cdjs.length(); j++) {
                     JSONObject cdj = cdjs.getJSONObject(j);
                     doc.append("akce", cdj);
@@ -78,6 +78,7 @@ public class PIANSearcher implements EntitySearcher {
                         .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
                 query.setFields(lf);
                 r = SolrSearcher.json(client, "entities", query);
+                ls.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
                 cdjs = r.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < cdjs.length(); j++) {

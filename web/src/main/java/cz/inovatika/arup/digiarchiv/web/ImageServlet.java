@@ -72,76 +72,76 @@ public class ImageServlet extends HttpServlet {
             response.getWriter().print(e1.toString());
         }
 
-        String id = request.getParameter("id");
-        boolean full = Boolean.parseBoolean(request.getParameter("full"));
-
-        if (!ImageAccess.isAllowed(request, full)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println("insuficient rights!!");
-            return;
-        }
-
-        Options opts = Options.getInstance();
-        if (full) {
-            String imagesDir = opts.getString("imagesDir");
-            File f = new File(imagesDir + id);
-            String mime = getServletContext().getMimeType(f.getName());
-            if (mime != null) {
-                response.setContentType(mime);
-            } else {
-                response.setContentType("image/jpeg");
-            }
-            response.setHeader("Content-Disposition", "filename=" + f.getName());
-            IOUtils.copy(new FileInputStream(f), response.getOutputStream());
-            return;
-        }
-
-        if (id != null && !id.equals("")) {
-            String size = request.getParameter("size");
-            if (size == null) {
-                size = "thumb";
-            }
-
-            try {
-                //String fname = Options.getInstance().getString("thumbsDir") + id + ".jpg";
-                String dest = ImageSupport.getDestDir(id);
-                String fname = dest + id + "_" + size + ".jpg";
-                File f = new File(fname);
-                if (!f.exists() && size.equals("thumb")) {
-                    //a bug in PDFThumbsGenerator write name of thumb without id
-                    // check if exists _thumb.jpg in that directory
-                    if (new File(dest + "_thumb.jpg").exists()) {
-                        fname = dest + "_thumb.jpg";
-                        f = new File(fname);
-                    }
-                }
-                if (f.exists()) {
-                    String mime = getServletContext().getMimeType(f.getName());
-                    if (mime != null) {
-                        response.setContentType(mime);
-                    } else {
-                        response.setContentType("image/jpeg");
-                    }
-                    response.setHeader("Content-Disposition", "filename=" + f.getName());
-
-                    BufferedImage bi = ImageIO.read(f);
-                    ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), getServletContext()), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
-                    ImageIO.write(bi, "jpg", response.getOutputStream());
-                } else {
-                    //LOG to file
-                    File file = new File(opts.getString("thumbsDir") + File.separator + "missed.txt");
-                    FileUtils.writeStringToFile(file, fname + System.getProperty("line.separator"), "UTF-8", true);
-                    LOGGER.log(Level.WARNING, "File does not exist in {0}. ", fname);
-                    emptyImg(response, response.getOutputStream(), getServletContext());
-                }
-            } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-                emptyImg(response, response.getOutputStream(), getServletContext());
-            }
-        } else {
-            LOGGER.info("no id");
-            emptyImg(response, response.getOutputStream(), getServletContext());
-        }
+//        String id = request.getParameter("id");
+//        boolean full = Boolean.parseBoolean(request.getParameter("full"));
+//
+//        if (!ImageAccess.isAllowed(request, full)) {
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.getWriter().println("insuficient rights!!");
+//            return;
+//        }
+//
+//        Options opts = Options.getInstance();
+//        if (full) {
+//            String imagesDir = opts.getString("imagesDir");
+//            File f = new File(imagesDir + id);
+//            String mime = getServletContext().getMimeType(f.getName());
+//            if (mime != null) {
+//                response.setContentType(mime);
+//            } else {
+//                response.setContentType("image/jpeg");
+//            }
+//            response.setHeader("Content-Disposition", "filename=" + f.getName());
+//            IOUtils.copy(new FileInputStream(f), response.getOutputStream());
+//            return;
+//        }
+//
+//        if (id != null && !id.equals("")) {
+//            String size = request.getParameter("size");
+//            if (size == null) {
+//                size = "thumb";
+//            }
+//
+//            try {
+//                //String fname = Options.getInstance().getString("thumbsDir") + id + ".jpg";
+//                String dest = ImageSupport.getDestDir(id);
+//                String fname = dest + id + "_" + size + ".jpg";
+//                File f = new File(fname);
+//                if (!f.exists() && size.equals("thumb")) {
+//                    //a bug in PDFThumbsGenerator write name of thumb without id
+//                    // check if exists _thumb.jpg in that directory
+//                    if (new File(dest + "_thumb.jpg").exists()) {
+//                        fname = dest + "_thumb.jpg";
+//                        f = new File(fname);
+//                    }
+//                }
+//                if (f.exists()) {
+//                    String mime = getServletContext().getMimeType(f.getName());
+//                    if (mime != null) {
+//                        response.setContentType(mime);
+//                    } else {
+//                        response.setContentType("image/jpeg");
+//                    }
+//                    response.setHeader("Content-Disposition", "filename=" + f.getName());
+//
+//                    BufferedImage bi = ImageIO.read(f);
+//                    ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), getServletContext()), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
+//                    ImageIO.write(bi, "jpg", response.getOutputStream());
+//                } else {
+//                    //LOG to file
+//                    File file = new File(opts.getString("thumbsDir") + File.separator + "missed.txt");
+//                    FileUtils.writeStringToFile(file, fname + System.getProperty("line.separator"), "UTF-8", true);
+//                    LOGGER.log(Level.WARNING, "File does not exist in {0}. ", fname);
+//                    emptyImg(response, response.getOutputStream(), getServletContext());
+//                }
+//            } catch (Exception ex) {
+//                LOGGER.log(Level.SEVERE, null, ex);
+//                emptyImg(response, response.getOutputStream(), getServletContext());
+//            }
+//        } else {
+//            LOGGER.info("no id");
+//            emptyImg(response, response.getOutputStream(), getServletContext());
+//        }
 
     }
 
@@ -185,17 +185,25 @@ public class ImageServlet extends HttpServlet {
         url = url.substring(url.indexOf("record"));
 
         //String mime = doc.getString("mimetype");
-        String mime = "image/jpeg";
+        LOGGER.log(Level.FINE, "Requesting from {0}. ", url); 
         return FedoraUtils.requestInputStream(url);
 
     }
 
     private static void writeImg(HttpServletResponse response, String id, String imgSize, ServletContext ctx) throws Exception {
+        
+        
+        SolrQuery query = new SolrQuery();
+        query.setQuery("id:\"" + id + "\"");
+        
+        JSONObject doc = getDocument(id);
+        if (doc == null) {
+            emptyImg(response, response.getOutputStream(), ctx);
+            return;
+        }
 
-        //String mime = doc.getString("mimetype");
-        //InputStream is = FedoraUtils.requestInputStream(url);
+        String mime = doc.optString("mimetype", "image/jpeg");
         InputStream is = getFromFedora(id, imgSize);
-        String mime = "image/jpeg";
 
         if (is != null) {
             // String mime = getServletContext().getMimeType(f.getName());
@@ -210,7 +218,7 @@ public class ImageServlet extends HttpServlet {
             BufferedImage bi = ImageIO.read(is);
             if (bi != null) {
                 ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
-                ImageIO.write(bi, "jpg", response.getOutputStream());
+                ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
             } else {
                 LOGGER.log(Level.WARNING, "Response is not image {0}. ", id);
                 emptyImg(response, response.getOutputStream(), ctx);
@@ -302,7 +310,7 @@ public class ImageServlet extends HttpServlet {
 
             }
         };
-
+ 
         abstract void doPerform(HttpServletRequest req, HttpServletResponse resp, ServletContext ctx) throws Exception;
     }
 

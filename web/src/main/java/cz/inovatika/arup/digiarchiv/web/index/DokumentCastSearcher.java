@@ -57,7 +57,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,ident_cely,entity,dokument_cast_archeologicky_zaznam,dokument_cast_neident_akce:[json]"};
+        return new String[]{"*,ident_cely,entity,dokument_cast_archeologicky_zaznam,dokument_cast_neident_akce:[json],dokument_cast_komponenta:[json]"};
     }
 
     @Override

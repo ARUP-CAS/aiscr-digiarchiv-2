@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,11 +15,12 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public class ADBSearcher implements EntitySearcher {
+public class ADBSearcher implements ComponentSearcher, EntitySearcher {
 
     public static final Logger LOGGER = Logger.getLogger(ADBSearcher.class.getName());
 
     final String ENTITY = "adb";
+    private boolean parentSearchable;
 
     @Override
     public String[] getRelationsFields() {
@@ -35,7 +37,7 @@ public class ADBSearcher implements EntitySearcher {
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
             if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
-                doc.remove("chranene_udaje");
+                doc.remove("adb_chranene_udaje"); 
             }
 
             Object[] keys = doc.keySet().toArray();
@@ -134,6 +136,53 @@ public class ADBSearcher implements EntitySearcher {
         }
 
         SolrSearcher.addFilters(request, query, pristupnost);
+    }
+
+    @Override
+    public void getRelated(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+
+        PIANSearcher ps = new PIANSearcher();
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        String[] fs = ps.getSearchFields(pristupnost);
+        String pfields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+
+            String ident_cely = doc.getString("ident_cely");
+            SolrQuery query = new SolrQuery("*").addFilterQuery("az_dj_adb:\"" + ident_cely + "\"");
+            AkceSearcher as = new AkceSearcher();
+            query.setFields(as.getChildSearchFields("A"));
+            try {
+                JSONObject sub = SolrSearcher.json(client, "entities", query);
+                JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
+
+                for (int j = 0; j < subs.length(); j++) {
+                    doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
+                }
+                parentSearchable = true;
+
+            } catch (SolrServerException | IOException ex) {
+                Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (doc.has("dj_pian")) {
+                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields);
+                if (sub != null) {
+                    doc.append("pian", sub);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean isRelatedSearchable() {
+        return parentSearchable;
     }
 
 }

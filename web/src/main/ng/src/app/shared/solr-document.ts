@@ -8,7 +8,7 @@ export class SolrDocument {
     parent: string, 
     ident_cely: string, 
     centroid_e: string, 
-    presnost: string, 
+    pian_presnost: string, 
     typ: string, 
     parent_doctype: string, 
     centroid_n: string,

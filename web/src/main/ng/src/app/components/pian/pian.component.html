@@ -53,7 +53,10 @@
           <span class="app-pipe"></span>
         </ng-container>
       </div>
-      <div>
+        <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+      [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
+      <!-- <div>
+
         <button *ngIf="!mapDetail" mat-flat-button (click)="service.showInMap(result, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
           <mat-icon>map</mat-icon>
         </button>
@@ -86,7 +89,7 @@
         <button mat-flat-button *ngIf="!isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
           {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
         </button>
-      </div>
+      </div> -->
     </mat-card-actions>
     <mat-card-content *ngIf="detailExpanded">
       <div class="app-card-detail">
@@ -108,16 +111,16 @@
                   <td>{{ result.pian_geom_system }}</td>
                 </tr>
                 <tr *ngIf="result.pian_chranene_udaje?.geom_gml">
-                  <th class="app-label">{{ 'card.desc.Geometrie GML' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
                   <td>{{ result.pian_chranene_udaje.geom_gml }} 
                     <ng-container *ngIf="result.pian_chranene_udaje?.geom_sjtsk_gml"><br/> {{ result.pian_chranene_udaje.geom_sjtsk_gml }}</ng-container> </td>
                 </tr>
                 <tr *ngIf="result.pian_chranene_udaje?.geom_wkt">
-                  <th class="app-label">{{ 'card.desc.Geometrie WKT' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
                   <td>
-                    <div>{{ result.pian_chranene_udaje.geom_wkt.value }}, EPSG: {{ result.pian_chranene_udaje.geom_wkt.epsg }}</div>
-                    <div *ngIf="result.pian_chranene_udaje?.geom_sjtsk_wkt">{{ result.pian_chranene_udaje.geom_sjtsk_wkt.value }},
-                      EPSG: {{ result.pian_chranene_udaje.geom_sjtsk_wkt.epsg }}</div> 
+                    <div>EPSG:{{ result.pian_chranene_udaje.geom_wkt.epsg }}, {{ result.pian_chranene_udaje.geom_wkt.value }}</div>
+                    <div *ngIf="result.pian_chranene_udaje?.geom_sjtsk_wkt">EPSG:{{ result.pian_chranene_udaje.geom_sjtsk_wkt.epsg }},
+                      {{ result.pian_chranene_udaje.geom_sjtsk_wkt.value }}</div> 
                   </td>
                 </tr>
               </tbody>

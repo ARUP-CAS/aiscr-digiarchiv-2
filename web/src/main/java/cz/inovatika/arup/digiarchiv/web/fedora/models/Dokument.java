@@ -20,6 +20,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -215,8 +216,8 @@ public class Dokument implements FedoraModel {
         }
 
         if (dokument_extra_data != null) {
-            IndexUtils.addJSONField(idoc, "dokument_extra_data", dokument_extra_data);
             dokument_extra_data.fillSolrFields(idoc, "dukument", (String) idoc.getFieldValue("pristupnost"));
+            IndexUtils.addJSONField(idoc, "dokument_extra_data", dokument_extra_data);
         }
 
         for (DokumentCast dc : dokument_cast) {
@@ -246,7 +247,18 @@ public class Dokument implements FedoraModel {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             if (doc.optBoolean("searchable")) {
                 if (doc.has("f_typ_vyzkumu")) {
-                    SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", doc.get("f_typ_vyzkumu"));
+                    
+                    Object val = doc.get("f_typ_vyzkumu");
+                    if (val instanceof JSONArray) {
+                        JSONArray ja = (JSONArray) val;
+                        for (int j = 0; j < ja.length(); j++) {
+                             SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", ja.get(j));
+                        }
+                    } else {
+                        SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", val);
+                    }
+                        
+                    // SolrSearcher.addFieldNonRepeat(idoc, "f_typ_vyzkumu", doc.get("f_typ_vyzkumu"));
                 }
 //                String pr = doc.getString("pristupnost");
 //                SolrSearcher.addFieldNonRepeat(idoc, "az_okres", doc.get("az_okres"));

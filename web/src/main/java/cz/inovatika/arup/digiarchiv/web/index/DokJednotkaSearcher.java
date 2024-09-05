@@ -1,7 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
-import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

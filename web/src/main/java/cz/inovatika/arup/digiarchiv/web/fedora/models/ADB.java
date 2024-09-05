@@ -2,8 +2,6 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
@@ -198,13 +196,13 @@ class ADBChraneneUdaje {
                 idoc.addField("vyskovy_bod_ident_cely", vb.ident_cely);
                 
                 vbdoc.setField("vyskovy_bod_parent", ident_cely);
-                vbdoc.setField("vyskovy_bod_typ", vb.typ);
-                // vbdoc.setField("vyskovy_bod_geom_gml", objectMapper.writeValueAsString(vb.geom_gml));
+                // vbdoc.setField("vyskovy_bod_typ", vb.typ.getId());
+                IndexUtils.addVocabField(vbdoc, "vyskovy_bod_typ", vb.typ);
                 vbdoc.setField("vyskovy_bod_geom_wkt", objectMapper.writeValueAsString(vb.geom_wkt));
 
                 idocs.add(vbdoc);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_chranene_udaje_vyskovy_bod", vb.ident_cely, pristupnost);
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "f_adb_vyskovy_bod_typ", vb.typ, pristupnost);
+                IndexUtils.addSecuredFieldNonRepeat(idoc, "adb_vyskovy_bod_typ", vb.typ.getId(), pristupnost);
                 
                 try {
                     vb.geom_gml = FedoraModel.getAsXml(vb.geom_gml);
