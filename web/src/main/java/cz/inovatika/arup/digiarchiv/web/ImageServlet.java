@@ -203,19 +203,21 @@ public class ImageServlet extends HttpServlet {
         }
 
         String mime = doc.optString("mimetype", "image/jpeg");
+        if (imgSize.equals("thumb")) {
+            mime = "image/png";
+        } else {
+            mime = "image/jpeg";
+        }
         InputStream is = getFromFedora(id, imgSize);
 
         if (is != null) {
             // String mime = getServletContext().getMimeType(f.getName());
-            if (mime != null) {
-                response.setContentType(mime);
-            } else {
-                response.setContentType("image/jpeg");
-            }
+            response.setContentType(mime);
+            
             response.setHeader("Content-Disposition", "filename=" + id);
 
             // BufferedImage bi = ImageIO.read(f);
-            BufferedImage bi = ImageIO.read(is);
+            BufferedImage bi = ImageIO.read(is); 
             if (bi != null) {
                 ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
                 ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
