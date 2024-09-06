@@ -399,7 +399,9 @@ export class AppService {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
               } else {
-                display = this.getHeslarTranslation(parts[0], field);
+                // display = this.getHeslarTranslation(parts[0], field);
+                display = null;
+
               }
               this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
             });
