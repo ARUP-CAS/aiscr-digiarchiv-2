@@ -72,9 +72,10 @@ public class SolrSearcher {
                     .addFilterQuery(fq);  
 
         } else {
-            query.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
-                    .addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]")
+            query
                     .setParam("facet.heatmap.distErr", "0.04");
+                    //.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
+                    //.addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]");
         }
 
         if (request.getParameter("vyber") != null) {

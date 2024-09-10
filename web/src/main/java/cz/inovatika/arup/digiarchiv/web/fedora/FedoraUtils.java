@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -103,6 +104,7 @@ public class FedoraUtils {
             .GET()
             .uri(new URI(API_POINT + url))
             .header("Authorization", auth_header())
+            .version(HttpClient.Version.HTTP_1_1)
             .build();
     HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
     return response.body();

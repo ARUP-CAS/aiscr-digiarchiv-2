@@ -286,7 +286,6 @@ public class ImageServlet extends HttpServlet {
 
                         JSONObject doc = getDocument(id);
                         if (doc == null) {
-                        LOGGER.info("null");
                             return;
                         }
 
@@ -301,9 +300,14 @@ public class ImageServlet extends HttpServlet {
                         String url = doc.getString("path") + "/orig";
                         url = url.substring(url.indexOf("record"));
                         InputStream is = FedoraUtils.requestInputStream(url);
+                        File f = File.createTempFile("img-", "-orig");
+                        FileUtils.copyInputStreamToFile(is, f);
+                        LOGGER.log(Level.INFO, "bytes received: {0}", f.length());
+                        IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                         // InputStream is = getFromFedora(id, "orig");
-                        IOUtils.copy(is, response.getOutputStream());
+                        // IOUtils.copy(is, response.getOutputStream());
                         is.close();
+                        f.deleteOnExit();
 
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
