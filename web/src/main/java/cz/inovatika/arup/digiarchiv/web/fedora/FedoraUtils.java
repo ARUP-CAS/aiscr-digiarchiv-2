@@ -1,6 +1,7 @@
 
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
+import static cz.inovatika.arup.digiarchiv.web.ImageServlet.LOGGER;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ public class FedoraUtils {
   
   private static final String API_POINT = Options.getInstance().getJSONObject("fedora").getString("api.point");
   private static final String SEARCH_POINT = Options.getInstance().getJSONObject("fedora").getString("search.point");
-  private static final HttpClient client = HttpClient.newHttpClient();
+  // private static final HttpClient client = HttpClient.newHttpClient();
   
   
   public static final String auth_header() {
@@ -38,7 +39,7 @@ public class FedoraUtils {
   }
 
   public static String request(String url) throws URISyntaxException, IOException, InterruptedException {
-    
+    HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url)) 
@@ -52,6 +53,7 @@ public class FedoraUtils {
   }
 
   public static String search(String urlQuery) throws URISyntaxException, IOException, InterruptedException {
+    HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(SEARCH_POINT + urlQuery))
@@ -59,11 +61,11 @@ public class FedoraUtils {
             //.header("Accept", "application/ld+json")
             .build();
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    
     return response.body(); 
   }
   
   public static String requestXml(String url) throws URISyntaxException, IOException, InterruptedException {
+    HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))
@@ -82,6 +84,7 @@ public class FedoraUtils {
   }
   
   public static Path requestFile(String url, String filepath, String mime) throws URISyntaxException, IOException, InterruptedException {
+    HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))
@@ -95,6 +98,7 @@ public class FedoraUtils {
   }
   
   public static InputStream requestInputStream(String url) throws URISyntaxException, IOException, InterruptedException {
+    HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))

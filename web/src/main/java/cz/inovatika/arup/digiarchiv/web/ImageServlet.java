@@ -1,4 +1,3 @@
-
 package cz.inovatika.arup.digiarchiv.web;
 
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
@@ -142,7 +141,6 @@ public class ImageServlet extends HttpServlet {
 //            LOGGER.info("no id");
 //            emptyImg(response, response.getOutputStream(), getServletContext());
 //        }
-
     }
 
     private static BufferedImage logoImg(HttpServletResponse response, OutputStream out, ServletContext ctx) throws IOException {
@@ -157,7 +155,7 @@ public class ImageServlet extends HttpServlet {
         BufferedImage bi = ImageIO.read(new File(empty));
         ImageIO.write(bi, "png", out);
     }
-    
+
     private static JSONObject getDocument(String id) throws Exception {
         SolrQuery query = new SolrQuery();
         query.setQuery("id:\"" + id + "\"");
@@ -168,34 +166,33 @@ public class ImageServlet extends HttpServlet {
             return null;
         }
         return json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-        
-    }
-
-    private static InputStream getFromFedora(String id, String imgSize) throws Exception {
-        SolrQuery query = new SolrQuery();
-        query.setQuery("id:\"" + id + "\"");
-        
-        JSONObject doc = getDocument(id);
-        if (doc == null) {
-            return null;
-        }
-                
-        String path = doc.getString("nazev");
-        String url = doc.getString("path") + "/" + imgSize;
-        url = url.substring(url.indexOf("record"));
-
-        //String mime = doc.getString("mimetype");
-        LOGGER.log(Level.FINE, "Requesting from {0}. ", url); 
-        return FedoraUtils.requestInputStream(url);
 
     }
+
+//    private static InputStream getFromFedora(String id, String imgSize) throws Exception {
+//        SolrQuery query = new SolrQuery();
+//        query.setQuery("id:\"" + id + "\"");
+//
+//        JSONObject doc = getDocument(id);
+//        if (doc == null) {
+//            return null;
+//        }
+//
+//        String path = doc.getString("nazev");
+//        String url = doc.getString("path") + "/" + imgSize;
+//        url = url.substring(url.indexOf("record"));
+//
+//        //String mime = doc.getString("mimetype");
+//        LOGGER.log(Level.FINE, "Requesting from {0}. ", url);
+//        return FedoraUtils.requestInputStream(url);
+//
+//    }
 
     private static void writeImg(HttpServletResponse response, String id, String imgSize, ServletContext ctx) throws Exception {
-        
-        
+
         SolrQuery query = new SolrQuery();
         query.setQuery("id:\"" + id + "\"");
-        
+
         JSONObject doc = getDocument(id);
         if (doc == null) {
             emptyImg(response, response.getOutputStream(), ctx);
@@ -208,16 +205,17 @@ public class ImageServlet extends HttpServlet {
         } else {
             mime = "image/jpeg";
         }
-        InputStream is = getFromFedora(id, imgSize);
+        String url = doc.getString("path") + "/" + imgSize;
+        InputStream is = FedoraUtils.requestInputStream(url);
 
         if (is != null) {
             // String mime = getServletContext().getMimeType(f.getName());
             response.setContentType(mime);
-            
+
             response.setHeader("Content-Disposition", "filename=" + id);
 
             // BufferedImage bi = ImageIO.read(f);
-            BufferedImage bi = ImageIO.read(is); 
+            BufferedImage bi = ImageIO.read(is);
             if (bi != null) {
                 ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
                 ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
@@ -225,8 +223,9 @@ public class ImageServlet extends HttpServlet {
                 LOGGER.log(Level.WARNING, "Response is not image {0}. ", id);
                 emptyImg(response, response.getOutputStream(), ctx);
             }
+            is.close();
 
-        } else { 
+        } else {
             //LOG to file
             //File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "missed.txt");
             //FileUtils.writeStringToFile(file, id + System.getProperty("line.separator"), "UTF-8", true);
@@ -284,13 +283,12 @@ public class ImageServlet extends HttpServlet {
                 String id = request.getParameter("id");
                 if (id != null && !id.equals("")) {
                     try {
-                        
+
                         JSONObject doc = getDocument(id);
                         if (doc == null) {
+                        LOGGER.info("null");
                             return;
                         }
-        
-                        InputStream is = getFromFedora(id, "orig");
 
                         String mime = doc.getString("mimetype");
                         if (mime != null) {
@@ -299,7 +297,13 @@ public class ImageServlet extends HttpServlet {
                             response.setContentType("image/jpeg");
                         }
                         response.setHeader("Content-Disposition", "filename=" + doc.getString("nazev"));
+                        
+                        String url = doc.getString("path") + "/orig";
+                        url = url.substring(url.indexOf("record"));
+                        InputStream is = FedoraUtils.requestInputStream(url);
+                        // InputStream is = getFromFedora(id, "orig");
                         IOUtils.copy(is, response.getOutputStream());
+                        is.close();
 
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
@@ -312,7 +316,7 @@ public class ImageServlet extends HttpServlet {
 
             }
         };
- 
+
         abstract void doPerform(HttpServletRequest req, HttpServletResponse resp, ServletContext ctx) throws Exception;
     }
 

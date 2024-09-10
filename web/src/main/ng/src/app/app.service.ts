@@ -96,6 +96,44 @@ export class AppService {
     });
   }
 
+  getTranslationByField(value: string, field: string): any {
+    switch (field) {
+      case 'obdobi_poradi': {
+        return this.formatObdobi(value);
+      }
+      case 'dokument_kategorie_dokumentu': {
+        
+        const hkey = 'dokument_kategorie_dokumentu.' + value;
+        const t = this.translate.instant(hkey);
+        if (t === hkey) {
+          return value;
+        } else {
+          return t;
+        }
+      }
+      case 'pian_id': {
+        break;
+      }
+      case 'loc_rpt': {
+        break;
+      }
+      case 'vyber': {
+        break;
+      }
+      default: {
+        const hkey = 'heslar.' + value;
+        const t = this.translate.instant(hkey);
+        if (t === hkey) {
+          return value;
+        } else {
+          return t;
+        }
+      }
+    }
+    
+
+  }
+
   getHeslarTranslation(value: string, heslar: string): any {
     // const hkey = heslar + '_' + value;
     const hkey = 'heslar.' + value;

@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit {
 
     this.service.getLogged(true).subscribe((res: any) => {
       this.state.setLogged(res);
-      if (this.state.logged) {
+      if (this.state.logged && !this.loggedChecker) {
         this.loggedChecker = setInterval(() => {
           this.checkLogged();
         }, this.intervalMilis);
