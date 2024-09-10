@@ -19,7 +19,7 @@ export class LoginDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private config: AppConfiguration,
+    public config: AppConfiguration,
     public state: AppState,
     private service: AppService
   ) { }
