@@ -282,6 +282,7 @@ public class ImageServlet extends HttpServlet {
                 }
                 String id = request.getParameter("id");
                 if (id != null && !id.equals("")) {
+                        File f = File.createTempFile("img-", "-orig");
                     try {
 
                         JSONObject doc = getDocument(id);
@@ -300,18 +301,18 @@ public class ImageServlet extends HttpServlet {
                         String url = doc.getString("path") + "/orig";
                         url = url.substring(url.indexOf("record"));
                         InputStream is = FedoraUtils.requestInputStream(url);
-                        File f = File.createTempFile("img-", "-orig");
                         FileUtils.copyInputStreamToFile(is, f);
                         LOGGER.log(Level.INFO, "bytes received: {0}", f.length());
                         IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                         // InputStream is = getFromFedora(id, "orig");
                         // IOUtils.copy(is, response.getOutputStream());
                         is.close();
-                        f.deleteOnExit();
 
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
                         emptyImg(response, response.getOutputStream(), ctx);
+                    } finally {
+                        f.delete(); 
                     }
                 } else {
                     LOGGER.info("no id");
