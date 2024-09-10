@@ -5,6 +5,7 @@
   "serverUrl": "https://digiarchiv.aiscr.cz/",
   "registrationUrl": "https://amcr-test.aiscr.cz/accounts/register/",
   "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/",
+  "restorePassword": "https://amcr-test.aiscr.cz/accounts/password_reset",
 
   "mapOptions": {
     "docsForMarker": 500,

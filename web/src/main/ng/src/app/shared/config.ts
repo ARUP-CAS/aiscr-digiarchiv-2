@@ -5,6 +5,7 @@ export class Configuration {
   context: string;
   serverUrl: string;
   registrationUrl: string;
+  restorePassword: string;
   helpUrl: string;
   amcr: string;
   amcr_server: string;

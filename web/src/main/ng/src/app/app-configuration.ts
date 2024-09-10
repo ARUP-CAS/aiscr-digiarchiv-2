@@ -27,6 +27,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.registrationUrl;
     }
 
+    public get restorePassword() {
+        return this.config.restorePassword;
+    }
+    
     public get helpUrl() {
         return this.config.helpUrl;
     }
