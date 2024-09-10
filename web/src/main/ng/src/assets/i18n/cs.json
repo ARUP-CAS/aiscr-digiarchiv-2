@@ -177,7 +177,7 @@
       "datum_provedeni": "Datum výzkumu",
       "rok_vzniku": "Dokument - rok vzniku",
       "dokument_datum_zverejneni": "Dokument - datum zveřejnění",
-      "oznaceni_originalu": "Dokument - označení originálu",
+      "oznaceni_originalu": "Dokument - původní označení",
       "extra_data_cislo_objektu": "Dokument - objekt/kontext",
       "extra_data_meritko": "Dokument - měřítko",
       "extra_data_vyska": "Dokument - výška",
@@ -631,7 +631,7 @@
       "dokument_rok_vzniku": "Dokument - rok vzniku",
       "dokument_typ_dokumentu": "Typ dokumentu",
       "dokument_material_originalu": "Materiál originálu",
-      "dokument_oznaceni_originalu": "Dokument - označení originálu",
+      "dokument_oznaceni_originalu": "Dokument - původní označení",
 
       "projekt_typ_projektu": "Projekt - typ",
       "projekt_datum_zahajeni": "Projekt - datum zahájeni",
