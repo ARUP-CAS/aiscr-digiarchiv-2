@@ -215,7 +215,7 @@
       "neident_akce_poznamka": "Unident. fieldwork - note",
       "neident_akce_pian": "Unident. fieldwork - spatial unit",
       "soubor_rozsah": "File - number of pages",
-      "soubor_size_bytes": "File - size (B)",
+      "soubor_size_bytes": "File - size (MB)",
       "projekt_podnet": "Project - motivation",
       "projekt_lokalita": "Project - location",
       "projekt_parcelni_cislo": "Project - parcel number",
