@@ -97,7 +97,6 @@ public class FedoraUtils {
   }
   
   public static byte[] requestBytes(String url, String filepath) throws URISyntaxException, IOException, InterruptedException {
-      System.out.println(API_POINT + url);
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))

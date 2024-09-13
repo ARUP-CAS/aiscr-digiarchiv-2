@@ -292,10 +292,8 @@ public class Indexer {
     String mimetype = doc.getFirstValue("mimetype").toString();
     if (overwrite || !ImageSupport.thumbExists(path)) {
       // File f = FedoraUtils.requestFile(url, imagesDir).toFile();
-      InputStream is = FedoraUtils.requestInputStream(url);
-      // byte[] is = FedoraUtils.requestBytes(url, imagesDir);
-      
-      
+      // InputStream is = FedoraUtils.requestInputStream(url);
+      byte[] is = FedoraUtils.requestBytes(url, imagesDir);
       //if (!f.exists()) {
      //   LOGGER.log(Level.FINE, "File {0} doesn't exists", path);
       if (is == null) {
@@ -306,8 +304,8 @@ public class Indexer {
         LOGGER.log(Level.INFO, "processing file {0}. {1}", new Object[]{path, msg});
         if ("application/pdf".equals(mimetype)) {
           // pdfGen.processFile(f, force, onlyThumbs);
-          // pdfGen.processBytes(is, path, force, onlyThumbs);
-          pdfGen.processInputStream(is, path, force, onlyThumbs);
+          pdfGen.processBytes(is, path, force, onlyThumbs);
+          // pdfGen.processInputStream(is, path, force, onlyThumbs);
         } else {
           // ImageSupport.thumbnailzeImg(is, path, onlyThumbs);
           imgGenerated++;

@@ -282,7 +282,7 @@ public class ImageServlet extends HttpServlet {
                 }
                 String id = request.getParameter("id");
                 if (id != null && !id.equals("")) {
-                        File f = File.createTempFile("img-", "-orig");
+                        File f = File.createTempFile("img-", "-orig", new File(InitServlet.CONFIG_DIR));
                     try {
 
                         JSONObject doc = getDocument(id);
