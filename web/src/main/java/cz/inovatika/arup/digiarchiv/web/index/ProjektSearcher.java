@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
-import static cz.inovatika.arup.digiarchiv.web.index.AkceSearcher.LOGGER;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -82,9 +81,6 @@ public class ProjektSearcher implements EntitySearcher {
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
-            
-            
-        
         
             JSONArray samostatny_nalez = new JSONArray();
             if (doc.has("projekt_samostatny_nalez")) {

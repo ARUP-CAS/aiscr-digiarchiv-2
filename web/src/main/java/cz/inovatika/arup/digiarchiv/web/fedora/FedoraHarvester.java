@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,7 +41,6 @@ import org.json.JSONObject;
  */
 public class FedoraHarvester {
 
-    
     public static final Logger LOGGER = Logger.getLogger(FedoraHarvester.class.getName());
 
     private static final String STATUS_RUNNING = "runing";
@@ -69,20 +72,19 @@ public class FedoraHarvester {
     }
 
     private String readStatusFile(String type) throws IOException {
-        File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_"  + "status.txt");
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_" + "status.txt");
         if (f.exists() && f.canRead()) {
             return FileUtils.readFileToString(f, "UTF-8");
         } else {
             return "none";
         }
-        
+
     }
 
     private void writeStatusFile(String type, String status) throws IOException {
-        File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_"  + "status.txt");
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_" + "status.txt");
         FileUtils.writeStringToFile(f, status, "UTF-8");
     }
-    
 
     /**
      * Stop fedora index process
@@ -94,7 +96,6 @@ public class FedoraHarvester {
         writeStatusFile("index", STATUS_STOPPED);
         return new JSONObject().put("msg", "Index process stopped");
     }
-    
 
     /**
      * Stop fedora update process
@@ -164,7 +165,7 @@ public class FedoraHarvester {
         }
         writeStatusFile("update", STATUS_RUNNING);
         Instant start = Instant.now();
-        String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
+        String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
         String lastDate = from;
         if (lastDate == null) {
             lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
@@ -199,7 +200,6 @@ public class FedoraHarvester {
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             int indexed = 0;
-
             int batchSize = 100;
             int pOffset = 0;
 
@@ -264,7 +264,7 @@ public class FedoraHarvester {
                     id = id.substring(0, id.indexOf("/metadata"));
                 }
                 id = id.split("/")[0];
-                processRecord(id);
+                processRecord(id, true);
             }
         }
     }
@@ -361,7 +361,7 @@ public class FedoraHarvester {
 
     public JSONObject reindexByFilter(String fq) throws Exception {
         JSONObject ret = new JSONObject();
-        LOGGER.log(Level.INFO, "Reindex by filter {0} started", fq); 
+        LOGGER.log(Level.INFO, "Reindex by filter {0} started", fq);
         int batchSize = 500;
         int indexed = 0;
         String url = Options.getInstance().getString("solrhost", "http://localhost:8983/solr/")
@@ -402,15 +402,15 @@ public class FedoraHarvester {
 
     public JSONObject indexId(String id, boolean commit) throws Exception {
         Instant start = Instant.now();
-            processRecord(id);
-            if (commit) {
-                checkLists(0, 1, id, 1);
-            }
-            Instant end = Instant.now();
-            String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
-            ret.put("ellapsed time", interval);
-            LOGGER.log(Level.FINE, "Index by ID {0} finished in {1}", new Object[]{id, interval});
-        
+        processRecord(id, false);
+        if (commit) {
+            checkLists(0, 1, id, 1);
+        }
+        Instant end = Instant.now();
+        String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
+        ret.put("ellapsed time", interval);
+        LOGGER.log(Level.FINE, "Index by ID {0} finished in {1}", new Object[]{id, interval});
+
         return ret;
     }
 
@@ -479,7 +479,7 @@ public class FedoraHarvester {
     }
 
     private void processModel(String model) throws Exception {
-        
+
         String status = readStatusFile("index");
         if (STATUS_STOPPED.equals(status)) {
             LOGGER.log(Level.INFO, "Index stopped at {0}", formatter.format(Instant.now()));
@@ -515,7 +515,7 @@ public class FedoraHarvester {
 
                 ret.put(model, indexed++);
                 checkLists(batchSize, indexed, model, totalInModel);
-                
+
                 if (STATUS_STOPPED.equals(readStatusFile("index"))) {
                     checkLists(0, indexed, model, totalInModel);
                     LOGGER.log(Level.INFO, "Index stopped at {0}", formatter.format(Instant.now()));
@@ -559,7 +559,7 @@ public class FedoraHarvester {
 
     }
 
-    private void processRecord(String id) throws Exception {
+    private void processRecord(String id, boolean processRelated) throws Exception {
         try {
             // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
             // returns xml
@@ -570,12 +570,68 @@ public class FedoraHarvester {
             String model = FedoraModel.getModel(xml);
             start = Instant.now().toEpochMilli();
             indexXml(xml, model);
+            if (processRelated) {
+                processRelated(id, model);
+            }
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
             // LOGGER.log(Level.SEVERE, null, ex);
             errors.put(id + ":  " + ex);
             throw ex;
+        }
+    }
+
+    private void processRelated(String id, String model) {
+        //https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/350#issuecomment-2340668709
+        SolrQuery query = new SolrQuery("*");
+        List<String> fields = new ArrayList<>();
+        boolean hasRelated = true;
+        switch (model) {
+            case "projekt":
+                query.addFilterQuery("ident_cely:\"" + id + "\"")
+                        .setFields("projekt_dokument");
+                fields.add("projekt_dokument");
+                break;
+            case "archeologicky_zaznam":
+                fields.add("az_dokument");
+                fields.add("akce_projekt");
+                query.addFilterQuery("ident_cely:\"" + id + "\"")
+                        .setFields((String[]) fields.toArray());
+                break;
+            case "pian":
+                fields.add("ident_cely");
+                fields.add("az_dokument");
+                query.addFilterQuery("az_dj_pian:\"" + id + "\"")
+                        .setFields((String[]) fields.toArray());
+                break;
+            case "samostatny_nalez":
+                fields.add("samostatny_nalez_projekt");
+                query.addFilterQuery("ident_cely:\"" + id + "\"")
+                        .setFields((String[]) fields.toArray());
+                break;
+            default:
+                hasRelated = false;
+        }
+        if (hasRelated) {
+            LOGGER.log(Level.INFO, "Updating related for {0} of model {1}", new Object[]{id, model});
+            try {
+                SolrDocumentList docs = solr.query("entities", query).getResults();
+                for (SolrDocument doc : docs) {
+                    for (String f : fields) {
+                        Collection<Object> ids = doc.getFieldValues(f);
+                        if (ids != null) {
+                            for (Object o : ids) {
+                                LOGGER.log(Level.INFO, "Process related  {0} ", new Object[]{o});
+                                processRecord((String) o, false);
+                            }
+                        }
+                    }
+
+                }
+            } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -608,7 +664,7 @@ public class FedoraHarvester {
 
                 DocumentObjectBinder dob = new DocumentObjectBinder();
                 SolrInputDocument idoc = dob.toSolrInputDocument(fm);
-                
+
                 if (idoc.containsKey("stav") && Integer.parseInt(idoc.getFieldValue("stav").toString()) == -1) {
                     LOGGER.log(Level.FINE, "Skiping record {0}. Stav = -1", idoc.getFieldValue("ident_cely"));
                     return;
@@ -653,10 +709,10 @@ public class FedoraHarvester {
         }
         idoc.setField("model", model);
         if (edoc.containsKey("projekt_organizace")) {
-         idoc.setField("organizace", edoc.getFieldValue("projekt_organizace"));
+            idoc.setField("organizace", edoc.getFieldValue("projekt_organizace"));
         }
         if (edoc.containsKey("samostatny_nalez_predano_organizace")) {
-         idoc.setField("organizace", edoc.getFieldValue("samostatny_nalez_predano_organizace"));
+            idoc.setField("organizace", edoc.getFieldValue("samostatny_nalez_predano_organizace"));
         }
         // idoc.setField("organizace", edoc.getFieldValue("organizace"));
         idoc.setField("stav", edoc.getFieldValue("stav"));
