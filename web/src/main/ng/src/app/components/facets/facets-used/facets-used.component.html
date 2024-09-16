@@ -21,7 +21,10 @@
       </span>
       <ng-container *ngIf="facet.field !== 'q'">{{ 'facet.field.' + facet.field | translate}}:&#160;</ng-container>
       <span *ngIf="facet.display" class="app-font-bold">{{ facet.display }}</span> 
-      <span *ngIf="!facet.display" class="app-font-bold">{{ facet.value | translateHeslar : facet.field}}</span> 
+      <span *ngIf="!facet.display && facet.field === 'az_dj_negativni_jednotka'" class="app-font-bold">
+        {{ facet.value ? ('negativní' | translate) : ('pozitivní' | translate) }}
+      </span> 
+      <span *ngIf="!facet.display && facet.field !== 'az_dj_negativni_jednotka'" class="app-font-bold">{{ facet.value | translateHeslar : facet.field}}</span> 
     </span> 
   </div>
   </mat-list-item>

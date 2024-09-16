@@ -428,6 +428,12 @@ export class AppService {
           case 'vyber': {
             break;
           }
+          // case 'az_dj_negativni_jednotka': {
+          //   const value = params.get(field);
+          //   display = 'a' + value;
+          //   this.state.breadcrumbs.push(new Crumb(field, value, display));
+          //   break;
+          // }
           default: {
             const values = params.getAll(field);
             const filterField = this.config.filterFields.find(ff => ff.field === field);

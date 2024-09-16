@@ -245,7 +245,7 @@
       "lokalita_nazev": "Lokalita - název",
       "dj_ident_cely": "Dok. jednotka - identifikátor",
       "dj_nazev": "Dok. jednotka - název",
-      "dj_negativni_jednotka": "Dok. jednotka - typ zjištění",
+      "az_dj_negativni_jednotka": "Dok. jednotka - typ zjištění",
       "pian_ident_cely": "Dok. jednotka - související PIAN",
       "adb_ident_cely": "ADB - identifikátor",
       "adb_uzivatelske_oznaceni_sondy": "ADB - uživatelské označení",

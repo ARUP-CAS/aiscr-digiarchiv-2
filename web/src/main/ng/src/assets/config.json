@@ -189,7 +189,7 @@
     {"type": "text", "field": "lokalita_nazev"},
 
     {"type": "text", "field": "dj_ident_cely"},
-    {"type": "boolean", "field": "dj_negativni_jednotka"},
+    {"type": "boolean", "field": "az_dj_negativni_jednotka"},
     {"type": "text", "field": "dj_nazev"},
     
     {"type": "text", "field": "pian_ident_cely"},

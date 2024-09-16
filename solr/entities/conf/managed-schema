@@ -104,6 +104,7 @@
    <field name="az_dj" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="az_dj_pian" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="az_dj_adb" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="az_dj_negativni_jednotka" type="boolean" indexed="true" stored="true" multiValued="true" /> 
    
    
 <!--   <field name="az_dj_nazev" type="string" indexed="true" stored="true" multiValued="true" /> -->

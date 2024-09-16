@@ -245,7 +245,7 @@
       "lokalita_nazev": "Site - name",
       "dj_ident_cely": "Doc. unit - identifier",
       "dj_nazev": "Doc. unit - label",
-      "dj_negativni_jednotka": "Doc. unit - type of evidence",
+      "az_dj_negativni_jednotka": "Doc. unit - type of evidence",
       "pian_ident_cely": "Doc. unit - related spatial unit",
       "adb_ident_cely": "ADP - identifier",
       "adb_uzivatelske_oznaceni_sondy": "ADP - user label",
