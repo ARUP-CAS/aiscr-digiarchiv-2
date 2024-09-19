@@ -1,15 +1,14 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, catchError, finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppState } from 'src/app/app.state';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { Crumb } from 'src/app/shared/crumb';
-import { Condition } from 'src/app/shared/condition';
 import { ParamMap, Router } from '@angular/router';
 import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
@@ -150,14 +149,55 @@ export class AppService {
     return this.translate.instant(s);
   }
 
-  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<T> {
+  stopLoading() {
+    this.state.loading = false;
+  }
+
+  private handleError(error: HttpErrorResponse, me: any) {
+    //  console.log(error);
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else if (error.status === 503 || error.status === 504) {
+      // Forbiden. Redirect to login
+      console.log("Service Unavailable");
+      const url = me.router.routerState.snapshot.url;
+      if (me.router) {
+        me.router.navigate(['/login'], { url: url, err: '503' });
+      }
+    } else if (error.status === 403) {
+      // Forbiden. Redirect to login
+      console.log("Forbiden");
+      // const url = me.router.routerState.snapshot.url;
+      // if (me.router) {
+      //   me.router.navigate(['/login'], {url: url});
+      // }
+    } else {
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    // return throwError({'status':error.status, 'message': error.message});
+    return of({ response: { 'status': error.status, 'message': error.message, 'errors': [error.error] } });
+  }
+
+  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<Object> {
     // const r = re ? re : 'json';
     const options = { params, responseType, withCredentials: true };
     if (environment.mocked) {
       return this.http.get<T>(`api${url}`, options);
     } else {
       const server = isPlatformBrowser(this.platformId) ? '' : this.config.amcr;
-      return this.http.get<T>(`${server}api${url}`, options);
+      return this.http.get<T>(`${server}api${url}`, options)
+      .pipe(map((r: any) => {
+        if (r.response?.status === -1) {
+          r.response.errors = { path: [{ errorMessage: r.response.errorMessage }] };
+        }
+        return r;
+
+      }))
+      .pipe(finalize(() => this.stopLoading()))
+      .pipe(catchError(err => this.handleError(err, this)));
     }
 
   }
@@ -170,7 +210,7 @@ export class AppService {
    * Fired for main search in results page
    * @param params the params
    */
-  search(params: HttpParams): Observable<SolrResponse> {
+  search(params: HttpParams): Observable<any> {
     return this.get(`/search/query`, params);
   }
 
@@ -183,13 +223,13 @@ export class AppService {
     return this.get(`/search/dokument`, params);
   }
 
-  checkRelations(id: string): Observable<SolrResponse> {
+  checkRelations(id: string): Observable<any> {
     const params: HttpParams = new HttpParams()
       .set('id', id);
     return this.get(`/search/check_relations`, params);
   }
 
-  getId(id: string): Observable<SolrResponse> {
+  getId(id: string): Observable<any > {
     const params: HttpParams = new HttpParams()
       .set('id', id);
     return this.get(`/search/id`, params);
@@ -244,7 +284,8 @@ export class AppService {
 
   getText(id: string): Observable<string> {
     const params: HttpParams = new HttpParams().set('id', id).set('lang', this.state.currentLang);
-    return this.get(`/texts/get`, params, 'text');
+    return this.get(`/texts/get`, params, 'text')
+    .pipe(map((response: any) => response));
   }
 
   getAkce(id: string) {
