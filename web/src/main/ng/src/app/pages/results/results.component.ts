@@ -141,6 +141,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.docs = [];
     p['noFacets'] = 'true';
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+      if (resp.error) {
+        this.state.loading = false;
+        this.loading = false;
+        return;
+      }
       this.state.setSearchResponse(resp);
       this.docs = resp.response.docs;
       if (this.state.isMapaCollapsed) {

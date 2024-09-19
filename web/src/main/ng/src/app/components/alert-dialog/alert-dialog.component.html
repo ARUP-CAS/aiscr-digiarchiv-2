@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+  <mat-card class="app-alert" [ngClass]="data.type === 'error' ? 'app-warn' : 'app-info' "  *ngFor="let message of data.message">
+    <mat-icon>{{ data.type === 'error' ? 'warning' : 'info' }}</mat-icon>
+    <div class="app-text">
+      {{ message }}
+    </div>
+  </mat-card>
+</div>
+<div mat-dialog-actions cdkFocusRegionstart>
+  <button mat-stroked-button mat-dialog-close="close" >{{ 'dialog.button.Zavřít' | translate }}</button>
+</div>

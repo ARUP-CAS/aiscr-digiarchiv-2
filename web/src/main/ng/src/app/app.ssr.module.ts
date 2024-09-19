@@ -75,6 +75,7 @@ import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SET
 import { CitationComponent } from './components/citation/citation.component';
 import { ResultActionsComponent } from './components/result-actions/result-actions.component';
 import { DokumentCastComponent } from './components/dokument-cast/dokument-cast.component';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -172,6 +173,7 @@ const providers: any[] = [
     VyskovyBodComponent,
     BibtextDialogComponent,
     FeedbackDialogComponent,
+    AlertDialogComponent,
     KomponentaDokumentComponent,
     CitationComponent,
     ResultActionsComponent

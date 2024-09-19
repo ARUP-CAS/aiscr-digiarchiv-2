@@ -12,6 +12,7 @@ import { Crumb } from 'src/app/shared/crumb';
 import { ParamMap, Router } from '@angular/router';
 import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 declare var L;
 
 @Injectable({
@@ -153,32 +154,47 @@ export class AppService {
     this.state.loading = false;
   }
 
+  public showInfoDialog(message: string, duration: number = 2000) {
+    const data = {
+      type: 'success',
+      title: 'Info',
+      message: [message]
+    };
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+         data,
+         width: '400px',
+         panelClass: 'app-alert-dialog'
+    });
+    
+    // dialogRef.afterOpened().subscribe(_ => {
+    //   setTimeout(() => {
+    //      dialogRef.close();
+    //   }, duration)
+    // })
+  }
+
   private handleError(error: HttpErrorResponse, me: any) {
     //  console.log(error);
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
+      this.showInfoDialog('An error occurred: ' + error.error);
     } else if (error.status === 503 || error.status === 504) {
       // Forbiden. Redirect to login
       console.log("Service Unavailable");
-      const url = me.router.routerState.snapshot.url;
-      if (me.router) {
-        me.router.navigate(['/login'], { url: url, err: '503' });
-      }
+      this.showInfoDialog("Service Unavailable");
+      
     } else if (error.status === 403) {
       // Forbiden. Redirect to login
       console.log("Forbiden");
-      // const url = me.router.routerState.snapshot.url;
-      // if (me.router) {
-      //   me.router.navigate(['/login'], {url: url});
-      // }
+      this.showInfoDialog("Forbiden");
     } else {
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
+      console.error(`Backend returned code ${error.status}, body was: `, error.error);
+      this.showInfoDialog(`Backend returned code ${error.status}, body was: ` + error.error);
     }
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
-    return of({ response: { 'status': error.status, 'message': error.message, 'errors': [error.error] } });
+    return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }
 
   private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<Object> {

@@ -53,6 +53,11 @@ export class ExportMapaComponent implements OnInit {
     p.rows = this.config.exportRowsLimit;
     p.mapa = true;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+      
+      if (resp.error) {
+        this.state.loading = false;
+        return;
+      }
       if (this.state.entity === 'samostatny_nalez' || this.state.entity === 'knihovna_3d') {
         this.docs = resp.response.docs;
         this.hasPian = false;

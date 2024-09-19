@@ -70,6 +70,11 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.loading = true;
     this.state.imagesLoaded = 0;
     this.service.getId(id).subscribe((resp: SolrResponse) => {
+      if (resp.error) {
+        this.state.loading = false;
+        this.loading = false;
+        return;
+      }
       this.state.setSearchResponse(resp);
       if (resp.response.numFound > 0) {
         this.result = resp.response.docs[0];
