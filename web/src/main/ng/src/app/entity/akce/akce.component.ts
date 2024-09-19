@@ -114,7 +114,7 @@ export class AkceComponent implements OnInit, OnChanges {
             let res = 0;
             res = ez1.ext_zdroj_autor[0].localeCompare(ez2.ext_zdroj_autor[0], 'cs');
             if (res === 0) {
-              res = ez1.ext_zdroj_rok_vydani_vzniku = ez2.ext_zdroj_rok_vydani_vzniku;
+              res = ez1.ext_zdroj_rok_vydani_vzniku - ez2.ext_zdroj_rok_vydani_vzniku;
             }
             if (res === 0) {
               res = ez1.ext_zdroj_nazev.localeCompare(ez2.ext_zdroj_nazev);
