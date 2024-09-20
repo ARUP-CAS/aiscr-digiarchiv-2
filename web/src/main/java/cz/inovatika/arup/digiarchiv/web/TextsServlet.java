@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
  *
@@ -41,7 +42,7 @@ public class TextsServlet extends HttpServlet {
         if (f.exists()) {
           FileUtils.copyFile(f, response.getOutputStream());
         } else {
-          response.getWriter().println("Text not found in <h1>" + filename + ".html</h1>");
+          response.getWriter().println("Text not found in <h1>" + StringEscapeUtils.escapeHtml4(filename) + ".html</h1>");
         }
       }
     } else {
@@ -49,7 +50,7 @@ public class TextsServlet extends HttpServlet {
       if (f.exists()) {
         FileUtils.copyFile(f, response.getOutputStream());
       } else {
-        response.getWriter().println("Text not found in <h1>" + filename + ".html</h1>");
+        response.getWriter().println("Text not found in <h1>" + StringEscapeUtils.escapeHtml4(filename) + ".html</h1>");
       }
     }
   }
