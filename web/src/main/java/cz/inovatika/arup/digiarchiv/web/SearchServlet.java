@@ -239,20 +239,19 @@ public class SearchServlet extends HttpServlet {
                     if (searcher != null) {
                         searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
                     }
-                    if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
-//            String entityById = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
-//            if (!entityById.equals(entity)) {
-//              return new JSONObject().put("error", "invalid request").toString();
-//            }
-
-                        ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
-                        if (cs != null) {
-                            cs.getRelated(jo, client, request);
-                            if (!cs.isRelatedSearchable()) {
-                                jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
-                            }
-                        }
-                    }
+                    
+//                    if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+//                        
+//
+//                        ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);
+//                        if (cs != null) {
+//                            cs.getRelated(jo, client, request);
+//                            if (!cs.isRelatedSearchable()) {
+//                                jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
+//                            }
+//                        }
+//                    }
+                    
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
                     return jo.toString();

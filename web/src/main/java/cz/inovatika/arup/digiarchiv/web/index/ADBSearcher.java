@@ -168,7 +168,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
                 parentSearchable = true;
 
             } catch (SolrServerException | IOException ex) {
-                Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
 
             if (doc.has("dj_pian")) {
@@ -177,6 +177,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
                     doc.append("pian", sub);
                 }
             }
+            parentSearchable = true;
         }
     }
 
