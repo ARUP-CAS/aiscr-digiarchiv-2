@@ -12,6 +12,7 @@ import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.SolrInputField;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -68,13 +69,13 @@ public class NeidentAkce {
         IndexUtils.addRefField(kdoc, "okres", okres);
         IndexUtils.addRefField(kdoc, "katastr", katastr);
         IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres.getValue());
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), "A");
 
         for (Vocab v : vedouci) {
             IndexUtils.addRefField(kdoc, "vedouci", v);
             IndexUtils.addRefField(idoc, "f_vedouci", v);
         }
-
+        
         JSONObject li = new JSONObject()
                 .put("pristupnost", "A")
                 .put("katastr", kdoc.getFieldValue("katastr"))

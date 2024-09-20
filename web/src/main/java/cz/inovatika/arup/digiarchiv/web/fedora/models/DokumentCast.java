@@ -85,7 +85,7 @@ public class DokumentCast {
         if (projekt != null) {
             addProjekt(idoc, pristupnost.toUpperCase());
         }
-            idoc.addField("location_info", location_info);
+        idoc.addField("location_info", location_info);
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
 
         try {
@@ -109,6 +109,8 @@ public class DokumentCast {
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.get("f_katastr_D"), pristupnost);
                     IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("projekt_okres"));
                     JSONObject li = new JSONObject()
+                            .put("dc", ident_cely)
+                            .put("projekt", projekt.getId())
                             .put("pristupnost", doc.getString("pristupnost"))
                             .put("katastr", pcu.getJSONObject("hlavni_katastr").getString("value"))
                             .put("okres", doc.getString("projekt_okres"));
@@ -135,8 +137,8 @@ public class DokumentCast {
 
             idoc.addField("f_vedouci", doc.optString("akce_hlavni_vedouci", null));
 
+            String k = null;
             if (doc.has("katastr")) {
-                String k;
                 Object val = doc.get("katastr");
                 if (val instanceof JSONArray) {
                     JSONArray ja = (JSONArray) val;
@@ -151,14 +153,14 @@ public class DokumentCast {
                     
                 // IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.get("katastr"), pristupnost);
                 IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("az_okres"));
-                JSONObject li = new JSONObject()
-                        .put("pristupnost", doc.getString("pristupnost"))
-                        .put("katastr", k)
-                        .put("okres", doc.getString("az_okres"));
+            }
+            JSONObject li = new JSONObject()
+                    .put("pristupnost", doc.getString("pristupnost"))
+                    .put("katastr", k)
+                    .put("okres", doc.getString("az_okres"));
 
-                if (!location_info.contains(li.toString())) {
-                    location_info.add(li.toString());
-                }
+            if (!location_info.contains(li.toString())) {
+                location_info.add(li.toString());
             }
 
             for (String key : doc.keySet()) {
