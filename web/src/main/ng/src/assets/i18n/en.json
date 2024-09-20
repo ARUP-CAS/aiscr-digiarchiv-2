@@ -594,7 +594,8 @@
       "Prosím zadejte jmeno": "Please enter a name",
       "Prosím zadejte platnou emailovou adresu": " Please enter a valid email address",
       "feedback_success": "Comment has been successfully submitted",
-      "feedback_failed": "Error submitting comment"
+      "feedback_failed": "Error submitting comment",
+      "search_error": "Error searching"
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",

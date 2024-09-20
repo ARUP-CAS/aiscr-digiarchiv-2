@@ -62,6 +62,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.state.hasError = false;
     this.subs.push(this.service.currentLang.subscribe(res => {
       this.setTitle();
       const parts = this.router.url.split('?');
@@ -132,6 +133,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.state.documentProgress = 0;
     this.loading = true;
     this.state.facetsLoading = true;
+    this.state.hasError = false;
     const p = Object.assign({}, params);
     
     if (!p['entity']) {
@@ -143,7 +145,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       if (resp.error) {
         this.state.loading = false;
+        this.state.facetsLoading = false;
         this.loading = false;
+        this.state.hasError = true;
+        this.service.showErrorDialog('An error occurred: ' + resp.error);
         return;
       }
       this.state.setSearchResponse(resp);

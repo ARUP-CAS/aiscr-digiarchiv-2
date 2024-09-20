@@ -33,6 +33,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });
@@ -69,10 +70,13 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   search(id: string) {
     this.loading = true;
     this.state.imagesLoaded = 0;
+    this.state.hasError = false;
     this.service.getId(id).subscribe((resp: SolrResponse) => {
       if (resp.error) {
         this.state.loading = false;
         this.loading = false;
+        this.state.hasError = true;
+        this.service.showErrorDialog('An error occurred: ' + resp.error);
         return;
       }
       this.state.setSearchResponse(resp);

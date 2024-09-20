@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppState } from 'src/app/app.state';
 
 @Component({
   selector: 'app-napoveda',
@@ -9,9 +10,10 @@ export class NapovedaComponent implements OnInit {
 
   loading: boolean;
 
-  constructor() { }
+  constructor(public state: AppState) { }
 
   ngOnInit(): void {
+    this.state.hasError = false;
   }
 
 }

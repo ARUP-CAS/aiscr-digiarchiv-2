@@ -33,6 +33,7 @@ export class ExportMapaComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
       this.ref.detectChanges();

@@ -152,6 +152,7 @@ export class AppService {
 
   stopLoading() {
     this.state.loading = false;
+    this.state.facetsLoading = false;
   }
 
   public showInfoDialog(message: string, duration: number = 2000) {
@@ -166,11 +167,25 @@ export class AppService {
          panelClass: 'app-alert-dialog'
     });
     
-    // dialogRef.afterOpened().subscribe(_ => {
-    //   setTimeout(() => {
-    //      dialogRef.close();
-    //   }, duration)
-    // })
+    dialogRef.afterOpened().subscribe(_ => {
+      setTimeout(() => {
+         dialogRef.close();
+      }, duration)
+    })
+  }
+
+  public showErrorDialog(message: string) {
+    const data = {
+      type: 'error',
+      title: 'Info',
+      message: [message]
+    };
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+         data,
+         width: '400px',
+         panelClass: 'app-alert-dialog'
+    });
+    
   }
 
   private handleError(error: HttpErrorResponse, me: any) {
@@ -178,27 +193,29 @@ export class AppService {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
-      this.showInfoDialog('An error occurred: ' + error.error);
+      this.showErrorDialog('An error occurred: ' + error.error);
     } else if (error.status === 503 || error.status === 504) {
       // Forbiden. Redirect to login
       console.log("Service Unavailable");
-      this.showInfoDialog("Service Unavailable");
+      this.showErrorDialog("Service Unavailable");
       
     } else if (error.status === 403) {
       // Forbiden. Redirect to login
       console.log("Forbiden");
-      this.showInfoDialog("Forbiden");
+      this.showErrorDialog("Forbiden");
     } else {
       console.error(`Backend returned code ${error.status}, body was: `, error.error);
-      this.showInfoDialog(`Backend returned code ${error.status}, body was: ` + error.error);
+      this.showErrorDialog(`Backend returned code ${error.status}, body was: ` + error.error);
     }
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
+    this.state.hasError = true;
     return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }
 
   private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<Object> {
     // const r = re ? re : 'json';
+    this.state.hasError = false;
     const options = { params, responseType, withCredentials: true };
     if (environment.mocked) {
       return this.http.get<T>(`api${url}`, options);
@@ -227,6 +244,7 @@ export class AppService {
    * @param params the params
    */
   search(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
     return this.get(`/search/query`, params);
   }
 

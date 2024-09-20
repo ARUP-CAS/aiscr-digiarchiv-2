@@ -594,7 +594,8 @@
       "Prosím zadejte jmeno": "Prosím zadejte jmeno",
       "Prosím zadejte platnou emailovou adresu": "Prosím zadejte platnou emailovou adresu",
       "feedback_success": "Komentář byl úspěšně odeslán",
-      "feedback_failed": "Chyba při odeslání komentáře"
+      "feedback_failed": "Chyba při odeslání komentáře",
+      "search_error": "Chyba při odeslání dotazu"
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",

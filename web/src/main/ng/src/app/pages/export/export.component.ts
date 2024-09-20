@@ -30,6 +30,7 @@ export class ExportComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
       this.ref.detectChanges();

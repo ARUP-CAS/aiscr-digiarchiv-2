@@ -51,6 +51,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });

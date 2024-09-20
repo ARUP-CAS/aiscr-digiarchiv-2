@@ -61,6 +61,7 @@ export class AppState {
   solrResponse: SolrResponse;
   loading: boolean;
   facetsLoading = false;
+  hasError = false;
   imagesLoading: boolean;
   imagesLoaded = 0;
   numFound: number;
