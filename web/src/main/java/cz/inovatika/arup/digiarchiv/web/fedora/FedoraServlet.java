@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,7 +84,7 @@ public class FedoraServlet extends HttpServlet {
                     out.print("Insuficient rights");
                 }
             } else {
-                out.print("action -> " + action);
+                out.print("action -> " + StringEscapeUtils.escapeHtml4(action));
             }
         } catch (IOException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);

@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
@@ -58,7 +59,7 @@ public class SearchServlet extends HttpServlet {
                 String json = actionToDo.doPerform(request, response);
                 out.println(json);
             } else {
-                out.print("action -> " + action);
+                out.print("action -> " + StringEscapeUtils.escapeHtml4(action));
             }
         } catch (IOException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);

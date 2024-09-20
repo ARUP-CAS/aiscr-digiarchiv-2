@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONObject;
 
 /**
@@ -48,7 +49,7 @@ public class LoginServlet extends HttpServlet {
                 JSONObject json = actionToDo.doPerform(request, response);
                 out.println(json);
             } else {
-                out.print("action -> " + action);
+                out.print("action -> " + StringEscapeUtils.escapeHtml4(action));
             }
         } catch (IOException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
