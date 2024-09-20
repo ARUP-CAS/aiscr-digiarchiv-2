@@ -108,7 +108,13 @@
             <artifactId>jts-io-common</artifactId>
             <version>1.19.0</version>
         </dependency>
-        <dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>1.8</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>8.0.1</version>

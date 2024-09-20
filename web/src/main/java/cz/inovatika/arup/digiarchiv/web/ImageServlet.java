@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.json.JSONObject;
 
@@ -51,10 +52,8 @@ public class ImageServlet extends HttpServlet {
             if (action != null) {
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
                 actionToDo.doPerform(request, response, getServletContext());
-                return;
             } else {
-                response.getWriter().print("action -> " + action);
-                return;
+                response.getWriter().print("action -> " + StringEscapeUtils.escapeHtml4(action));
             }
         } catch (IOException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
