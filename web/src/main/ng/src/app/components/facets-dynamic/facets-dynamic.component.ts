@@ -41,8 +41,11 @@ export class FacetsDynamicComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.state.stats) {
-      this.rokod = this.state.stats['rok_vzniku'].min;
-      this.rokdo = this.state.stats['rok_vzniku'].max;
+      // Zaciname letoskem
+      // this.rokod = this.state.stats['dokument_rok_vzniku'].min;
+      // this.rokdo = this.state.stats['dokument_rok_vzniku'].max;
+      this.rokod = new Date().getFullYear();
+      this.rokdo = new Date().getFullYear();
       this.rokoddate.setValue(new Date(this.rokoddate.value.setFullYear(this.rokod)));
       this.rokdodate.setValue(new Date(this.rokdodate.value.setFullYear(this.rokdo)));
     }

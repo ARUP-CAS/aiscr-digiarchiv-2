@@ -58,7 +58,8 @@
    
    <field name="soubor_vytvoreno" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <field name="soubor_rozsah" type="pint" indexed="true" stored="true"  multiValued="true" />
-   <field name="soubor_size_bytes" type="pint" indexed="true" stored="true"  multiValued="true" />   
+   <field name="soubor_size_bytes" type="pint" indexed="true" stored="true"  multiValued="true" />  
+   <field name="soubor_size_mbytes" type="pfloat" indexed="true" stored="true"  multiValued="true" />   
    <field name="soubor_filepath" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_nazev" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_id" type="string" indexed="false" stored="true" multiValued="true" /> 
@@ -465,6 +466,7 @@
    <field name="f_let_letiste_cil" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_let_pocasi" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_let_dohlednost" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_let_uzivatelske_oznaceni" type="string" indexed="true" stored="true" multiValued="true" />
    
    <field name="f_tvar" type="string" indexed="true" stored="true" multiValued="true" />
    

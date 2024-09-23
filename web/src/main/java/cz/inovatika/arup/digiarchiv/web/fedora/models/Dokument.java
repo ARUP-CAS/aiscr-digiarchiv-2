@@ -198,7 +198,7 @@ public class Dokument implements FedoraModel {
                 idoc.addField("soubor_nazev", s.nazev);
                 idoc.addField("soubor_filepath", s.path);
                 idoc.addField("soubor_rozsah", s.rozsah);
-                idoc.addField("soubor_size_bytes", s.size_mb);
+                idoc.addField("soubor_size_mbytes", s.size_mb);
     
             }
             if (!idocs.isEmpty()) {

@@ -514,6 +514,8 @@ export class AppService {
             const filterField = this.config.filterFields.find(ff => ff.field === field);
             values.forEach(value => {
               const parts = value.split(':');
+              const op = parts[parts.length - 1];
+              const val = value.substring(0,value.lastIndexOf(':'));
               if (filterField && filterField.type === 'number') {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
@@ -522,7 +524,7 @@ export class AppService {
                 display = null;
 
               }
-              this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
+              this.state.breadcrumbs.push(new Crumb(field, val, display, op));
             });
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
           }

@@ -158,6 +158,7 @@
       "f_let_letiste_cil:dokument_let.let_letiste_cil", 
       "f_let_pilot:dokument_let.let_pilot", 
       "f_let_dohlednost:dokument_let.let_dohlednost",
+      "f_let_uzivatelske_oznaceni:dokument_let.let_uzivatelske_oznaceni", 
       "f_zachovalost:dokument_extra_data.zachovalost.id",
       "f_autor:dokument_autor",      
                 

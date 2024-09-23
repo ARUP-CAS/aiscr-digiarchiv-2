@@ -104,11 +104,11 @@
     {"type": "text", "field": "ident_cely"},
     {"type": "text", "field": "popis"},
     {"type": "text", "field": "poznamka"},
-    {"type": "text", "field": "uzivatelske_oznaceni"},
+    {"type": "text", "field": "let_uzivatelske_oznaceni"},
     {"type": "date", "field": "dokument_datum_zverejneni"},
     
     
-    {"type": "rok", "field": "rok_vzniku"},
+    {"type": "rok", "field": "dokument_rok_vzniku"},
     {"type": "text", "field": "oznaceni_originalu"},
 
     {"type": "text", "field": "extra_data_cislo_objektu"},
@@ -124,7 +124,7 @@
     {"type": "rok", "field": "extra_data_rok_do"},
     {"type": "number", "field": "extra_data_duveryhodnost"},
 
-    {"type": "text", "field": "let_ident_cely"},
+    {"type": "text", "field": "dokument_let_ident_cely"},
     {"type": "date", "field": "let_datum"},
     {"type": "text", "field": "let_fotoaparat"},
     {"type": "text", "field": "let_typ_letounu"},
@@ -154,7 +154,7 @@
     {"type": "text", "field": "neident_akce_pian"},
 
     {"type": "number", "field": "soubor_rozsah"},
-    {"type": "number", "field": "soubor_size_bytes"},
+    {"type": "number", "field": "soubor_size_mbytes"},
 
     {"type": "text", "field": "projekt_podnet"},
     {"type": "text", "field": "projekt_lokalita"},

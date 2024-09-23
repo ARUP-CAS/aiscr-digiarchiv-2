@@ -785,7 +785,7 @@
        <str name="stats.field">datum_provedeni_do</str>
        <str name="stats.field">extra_data_datum_vzniku</str>
        <str name="stats.field">let_datum</str>
-       <str name="stats.field">rok_vzniku</str>
+       <str name="stats.field">dokument_rok_vzniku</str>
        <str name="stats.field">rok_vydani</str>
        
        <str name="fq">searchable:true</str>
@@ -844,6 +844,7 @@
        <str name="facet.field">f_let_letiste_cil</str>
        <str name="facet.field">f_let_pocasi</str>
        <str name="facet.field">f_let_dohlednost</str>
+       <str name="facet.field">f_let_uzivatelske_oznaceni</str>
 	   
        <str name="facet.field">f_tvar</str>
 

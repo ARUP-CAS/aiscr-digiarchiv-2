@@ -23,7 +23,7 @@
       <span *ngIf="facet.display" class="app-font-bold">{{ facet.display }}</span> 
       <span *ngIf="facet.field === 'az_dj_negativni_jednotka'" class="app-font-bold">
         {{ facet.value === '1' ? ('negativní' | translate) : ('pozitivní' | translate) }}
-      </span> 
+      </span>
       <span *ngIf="!facet.display && facet.field !== 'az_dj_negativni_jednotka'" class="app-font-bold">{{ facet.value | translateHeslar : facet.field}}</span> 
     </span> 
   </div>

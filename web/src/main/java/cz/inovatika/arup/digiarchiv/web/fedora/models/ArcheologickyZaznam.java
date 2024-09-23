@@ -126,6 +126,8 @@ public class ArcheologickyZaznam implements FedoraModel {
                 idoc.addField("az_dj_negativni_jednotka", djdoc.getFieldValue("dj_negativni_jednotka")); 
                 for (Komponenta k : dj.dj_komponenta) {
                     idoc.addField("komponenta_ident_cely", k.ident_cely);
+                    idoc.addField("komponenta_dokument_presna_datace", k.komponenta_presna_datace);
+                    
                 }
                 if (az_akce != null) {
                     IndexUtils.addFieldNonRepeat(idoc, "f_dj_typ", djdoc.getFieldValue("dj_typ")); 

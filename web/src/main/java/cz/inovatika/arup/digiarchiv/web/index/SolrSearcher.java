@@ -4,6 +4,7 @@ import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -192,10 +193,20 @@ public class SolrSearcher {
     private static void addFilterNoQuotes(SolrQuery query, String field, String[] values) {
         String fq = field + ":(";
         for (int i = 0; i < values.length; i++) {
+            String val = values[i];
             String[] parts = values[i].split(":");
-            fq += (parts.length == 2 ? ops.get(parts[1]) : "") + parts[0] + " ";
+            String op = ops.get(parts[parts.length - 1]);
+            if (op != null) {
+                val = val.substring(0, values[i].lastIndexOf(":"));
+                fq += op + "\"" + val + "\" ";
+                //fq += op + val + " ";
+            } else {
+                fq += val + " ";
+            }
+            //fq += (parts.length > 1 ? ops.get(parts[parts.length - 1]) : "") + parts[0] + " ";
         }
         fq = fq.trim() + ")";
+            System.out.println("fq is -> " + fq);
         query.addFilterQuery(fq);
         // query.addFilterQuery("{!tag=" + field + "F}" + field + ":(" + String.join(" OR ", values) + ")");
     }
@@ -256,7 +267,14 @@ public class SolrSearcher {
                     String[] parts = request.getParameter(field).split(",");
                     String fq = "obdobi_poradi:[" + parts[0] + " TO " + parts[1] + "]";
                     query.addFilterQuery(fq);
-                } else if (field.equals("rok_vzniku")) {
+//                } else if (field.equals("extra_data_meritko")) {
+//                    String[] parts = request.getParameter(field).split(":");
+//                    
+//                    String val = request.getParameter(field);
+//                    
+//                    String fq = "extra_data_meritko:\"" + val + "\"";
+//                    query.addFilterQuery(fq);
+                } else if (field.equals("dokument_rok_vzniku")) {
                     String[] parts = request.getParameter(field).split(":")[0].split(",");
                     String end = "*";
                     if ("".equals(parts[0])) {
@@ -265,7 +283,7 @@ public class SolrSearcher {
                     if (parts.length > 1) {
                         end = parts[1];
                     }
-                    String fq = "rok_vzniku:[" + parts[0] + " TO " + end + "]";
+                    String fq = "dokument_rok_vzniku:[" + parts[0] + " TO " + end + "]";
                     query.addFilterQuery(fq);
                 } else if (dateFacets.contains(field)) {
                     String[] parts = request.getParameter(field).split(":")[0].split(",");
