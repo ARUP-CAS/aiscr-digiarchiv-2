@@ -157,17 +157,17 @@
     {"type": "number", "field": "soubor_size_mbytes"},
 
     {"type": "text", "field": "projekt_podnet"},
-    {"type": "text", "field": "projekt_lokalita"},
+    {"type": "text", "field": "projekt_chu_lokalizace"},
     {"type": "text", "field": "projekt_parcelni_cislo"},
     {"type": "text", "field": "projekt_planovane_zahajeni"},
-    {"type": "text", "field": "projekt_nkp_cislo"},
-    {"type": "text", "field": "projekt_nkp_popis"},
+    {"type": "text", "field": "projekt_kulturni_pamatka_cislo"},
+    {"type": "text", "field": "projekt_kulturni_pamatka_popis"},
     {"type": "date", "field": "projekt_datum_zahajeni"},
     {"type": "date", "field": "projekt_datum_ukonceni"},
-    {"type": "text", "field": "projekt_akce"},
+    {"type": "text", "field": "projekt_archeologicky_zaznam"},
     {"type": "text", "field": "projekt_samostatny_nalez"},
 
-    {"type": "text", "field": "akce_lokalizace"},
+    {"type": "text", "field": "akce_lokalizace_okolnosti"},
     {"type": "text", "field": "az_dokument"},
     {"type": "text", "field": "az_ext_zdroj"},
     

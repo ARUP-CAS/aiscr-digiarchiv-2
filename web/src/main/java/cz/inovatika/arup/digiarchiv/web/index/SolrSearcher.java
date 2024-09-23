@@ -1,6 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
-import cz.inovatika.arup.digiarchiv.web.LoginServlet; 
+import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ import org.json.JSONObject;
 public class SolrSearcher {
 
     public static final Logger LOGGER = Logger.getLogger(SolrSearcher.class.getName());
-    
+
     public static String[] prSufixAll = new String[]{"A", "B", "C", "D"};
 
     public static List<String> getSufixesByLevel(String pr) {
@@ -70,13 +70,13 @@ public class SolrSearcher {
             double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .05, .5);
             query.setParam("facet.heatmap.geom", geom)
                     .setParam("facet.heatmap.distErr", dist + "")
-                    .addFilterQuery(fq);  
+                    .addFilterQuery(fq);
 
         } else {
             query
                     .setParam("facet.heatmap.distErr", "0.04");
-                    //.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
-                    //.addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]");
+            //.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
+            //.addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]");
         }
 
         if (request.getParameter("vyber") != null) {
@@ -135,9 +135,8 @@ public class SolrSearcher {
                 query.addFacetField("{!key=" + f + "}" + f + "_" + pristupnost);
             }
         }
-        
-        // query.addFacetField("lokalita_jistota");
 
+        // query.addFacetField("lokalita_jistota");
         if (request.getParameter("sort") != null) {
             query.setParam("sort", request.getParameter("sort"));
         } else {
@@ -178,11 +177,11 @@ public class SolrSearcher {
         query.add("stats.field", "{!key=lat}lat_" + pristupnost);
         query.add("stats.field", "{!key=lng}lng_" + pristupnost);
         query.add("echoParams", "all");
-        
+
         if (Boolean.parseBoolean(request.getParameter("noFacets"))) {
             query.setFacet(false);
         }
-        
+
         if (Boolean.parseBoolean(request.getParameter("onlyFacets"))) {
             query.setRows(0);
         }
@@ -190,8 +189,12 @@ public class SolrSearcher {
         //LOGGER.log(Level.INFO, "query: {0}", query );
     }
 
-    private static void addFilterNoQuotes(SolrQuery query, String field, String[] values) {
-        String fq = field + ":(";
+    private static void addFilterNoQuotes(SolrQuery query, String field, String[] values, String pristupnost) {
+        String fq = field;
+        if (Options.getInstance().getJSONArray("securedFacets").toList().contains(field)) {
+            fq += "_" + pristupnost;
+        }
+        fq += ":(";
         for (int i = 0; i < values.length; i++) {
             String val = values[i];
             String[] parts = values[i].split(":");
@@ -206,7 +209,7 @@ public class SolrSearcher {
             //fq += (parts.length > 1 ? ops.get(parts[parts.length - 1]) : "") + parts[0] + " ";
         }
         fq = fq.trim() + ")";
-            System.out.println("fq is -> " + fq);
+        System.out.println("fq is -> " + fq);
         query.addFilterQuery(fq);
         // query.addFilterQuery("{!tag=" + field + "F}" + field + ":(" + String.join(" OR ", values) + ")");
     }
@@ -328,7 +331,7 @@ public class SolrSearcher {
 //          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
 //                } else if (field.startsWith("f_typ_vyzkumu")) {
 //                    addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-                } else if (field.startsWith("f_dok_jednotka_typ")) {  
+                } else if (field.startsWith("f_dok_jednotka_typ")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
 //        } else if (field.startsWith("f_adb_typ_sondy")) {
 //          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
@@ -339,7 +342,7 @@ public class SolrSearcher {
 //        } else if (field.equals("f_obdobi")) {
 //          addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
                 } else if (filterFields.contains(field)) {
-                    addFilterNoQuotes(query, field, request.getParameterValues(field));
+                    addFilterNoQuotes(query, field, request.getParameterValues(field), pristupnost);
                 } else {
                     addFilter(query, field, request.getParameterValues(field));
                 }
@@ -466,14 +469,13 @@ public class SolrSearcher {
 //                if (dok == null || "".equals(dok)) {
 //                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
 //                }
-
-                SolrQuery queryDok = new SolrQuery("*").addFilterQuery("soubor_id:\"" + id + "\"").setRows(1).setFields("pristupnost,organizace,entity");
-                JSONObject jo = json(client, "entities", queryDok);
-                if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
-                    return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-                } else {
-                    return null;
-                }
+            SolrQuery queryDok = new SolrQuery("*").addFilterQuery("soubor_id:\"" + id + "\"").setRows(1).setFields("pristupnost,organizace,entity");
+            JSONObject jo = json(client, "entities", queryDok);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            } else {
+                return null;
+            }
 //            }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -768,9 +770,9 @@ public class SolrSearcher {
             }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-                Date d = new Date();
-                d.setTime(0);
-                return d;
+            Date d = new Date();
+            d.setTime(0);
+            return d;
         }
     }
 

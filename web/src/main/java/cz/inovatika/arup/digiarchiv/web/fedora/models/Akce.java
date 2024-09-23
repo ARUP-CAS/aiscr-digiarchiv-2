@@ -206,7 +206,7 @@ class AkceChraneneUdaje {
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
         IndexUtils.setSecuredJSONFieldPrefix(idoc, "akce", this);
-//        IndexUtils.setSecuredField(idoc, "akce_chranene_udaje_lokalizace_okolnosti", lokalizace_okolnosti, pristupnost);
+        IndexUtils.setSecuredField(idoc, "akce_lokalizace_okolnosti", lokalizace_okolnosti, pristupnost);
 //        IndexUtils.setSecuredField(idoc, "akce_chranene_udaje_souhrn_upresneni", souhrn_upresneni, pristupnost);
     }
 

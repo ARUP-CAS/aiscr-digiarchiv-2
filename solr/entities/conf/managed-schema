@@ -126,7 +126,7 @@
    <field name="akce_ulozeni_dokumentace" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="akce_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
-   <field name="akce_lokalizace" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="akce_lokalizace_okolnosti_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    
 	
 
@@ -189,7 +189,7 @@
    <field name="projekt_okres" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_podnet" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_lokalita" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="projekt_planovane_zahajeni" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_planovane_zahajeni" type="text_general_std" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_vedouci_projektu" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_organizace" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_uzivatelske_oznaceni" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -215,6 +215,16 @@
    <field name="projekt_samostatny_nalez" type="text_general" indexed="true" stored="true" multiValued="true" /> 
    <field name="projekt_dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
    
+   <field name="projekt_chu_lokalizace_A" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_chu_lokalizace_B" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_chu_lokalizace_C" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_chu_lokalizace_D" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   
+   <field name="projekt_parcelni_cislo_A" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_parcelni_cislo_B" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_parcelni_cislo_C" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="projekt_parcelni_cislo_D" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   
    <field name="projekt_hlavni_katastr_A" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_hlavni_katastr_B" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_hlavni_katastr_C" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -229,6 +239,9 @@
    
    <field name="projekt_kulturni_pamatka_cislo" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="projekt_kulturni_pamatka_popis" type="text_general" indexed="true" stored="true" multiValued="true" />
+   
+   <dynamicField name="projekt_kulturni_pamatka_cislo_*" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <dynamicField name="projekt_kulturni_pamatka_popis_*" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    
    
    <!-- ADB fields -->
@@ -808,6 +821,32 @@
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+		<filter class="solr.PatternReplaceFilterFactory" pattern="[\p{Punct}&amp;&amp;[^_-]]+" replacement=""/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- A general text field that has reasonable, generic
+         cross-language defaults: it tokenizes with StandardTokenizer,
+	       removes stop words from case-insensitive "stopwords.txt"
+	       (empty by default), and down cases.  At query time only, it
+	       also applies synonyms.
+	  -->
+    <fieldType name="text_general_std" class="solr.TextField" positionIncrementGap="100" multiValued="true">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+		<filter class="solr.PatternReplaceFilterFactory" pattern="[\p{Punct}&amp;&amp;[^_-]]+" replacement=""/>
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
+        -->
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
 		<filter class="solr.PatternReplaceFilterFactory" pattern="[\p{Punct}&amp;&amp;[^_-]]+" replacement=""/>
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>

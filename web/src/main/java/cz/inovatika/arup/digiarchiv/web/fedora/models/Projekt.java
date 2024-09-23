@@ -415,6 +415,10 @@ class ProjektChraneneUdaje {
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
         IndexUtils.setSecuredJSONField(idoc, "projekt_chranene_udaje", this);
 
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chu_lokalizace", lokalizace, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_parcelni_cislo", parcelni_cislo, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
 
