@@ -148,7 +148,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
         this.state.facetsLoading = false;
         this.loading = false;
         this.state.hasError = true;
-        this.service.showErrorDialog('An error occurred: ' + resp.error);
+        this.service.showErrorDialog('error', 'search_error');
         return;
       }
       this.state.setSearchResponse(resp);

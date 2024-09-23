@@ -174,10 +174,10 @@ export class AppService {
     })
   }
 
-  public showErrorDialog(message: string) {
+  public showErrorDialog(title: string, message: string) {
     const data = {
       type: 'error',
-      title: 'Info',
+      title: title,
       message: [message]
     };
     const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -193,19 +193,19 @@ export class AppService {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
-      this.showErrorDialog('An error occurred: ' + error.error);
+      this.showErrorDialog('error', 'An error occurred: ' + error.error);
     } else if (error.status === 503 || error.status === 504) {
       // Forbiden. Redirect to login
       console.log("Service Unavailable");
-      this.showErrorDialog("Service Unavailable");
+      this.showErrorDialog('error', "Service Unavailable");
       
     } else if (error.status === 403) {
       // Forbiden. Redirect to login
       console.log("Forbiden");
-      this.showErrorDialog("Forbiden");
+      this.showErrorDialog('error', "Forbiden");
     } else {
       console.error(`Backend returned code ${error.status}, body was: `, error.error);
-      this.showErrorDialog(`Backend returned code ${error.status}, body was: ` + error.error);
+      this.showErrorDialog('error', `Backend returned code ${error.status}, body was: ` + error.error);
     }
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
