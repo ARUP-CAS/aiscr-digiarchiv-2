@@ -597,18 +597,18 @@ public class FedoraHarvester {
                 fields.add("az_dokument");
                 fields.add("akce_projekt");
                 query.addFilterQuery("ident_cely:\"" + id + "\"")
-                        .setFields((String[]) fields.toArray());
+                        .setFields((String[]) fields.toArray(String[]::new));
                 break;
             case "pian":
                 fields.add("ident_cely");
                 fields.add("az_dokument");
                 query.addFilterQuery("az_dj_pian:\"" + id + "\"")
-                        .setFields((String[]) fields.toArray());
+                        .setFields((String[]) fields.toArray(String[]::new));
                 break;
             case "samostatny_nalez":
                 fields.add("samostatny_nalez_projekt");
                 query.addFilterQuery("ident_cely:\"" + id + "\"")
-                        .setFields((String[]) fields.toArray());
+                        .setFields((String[]) fields.toArray(String[]::new));
                 break;
             default:
                 hasRelated = false;

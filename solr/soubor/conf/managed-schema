@@ -32,6 +32,7 @@
    <field name="size_bytes" type="pint" indexed="true" stored="true" /> 
    <field name="rozsah" type="pint" indexed="true" stored="true" /> 
    <field name="vytvoreno" type="pdate" indexed="true" stored="true" /> 
+   <field name="datestamp" type="pdate" indexed="true" stored="true" /> 
    
    <field name="text_all" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    
