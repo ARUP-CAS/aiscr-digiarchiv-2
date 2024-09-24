@@ -641,6 +641,8 @@
       "dokument_oznaceni_originalu": "Document - original label",
 
       "projekt_typ_projektu": "Project - type",
+      "akce_datum_zahajeni": "Starting date",
+      "akce_datum_ukonceni": "Ending date",
       "projekt_datum_zahajeni": "Project - starting date",
       "projekt_datum_ukonceni": "Project - ending date",
       "projekt_podnet": "Project - motivation",

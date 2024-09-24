@@ -641,6 +641,8 @@
       "dokument_oznaceni_originalu": "Dokument - původní označení",
 
       "projekt_typ_projektu": "Projekt - typ",
+      "akce_datum_zahajeni": "Datum zahájeni",
+      "akce_datum_ukonceni": "Datum ukončení",
       "projekt_datum_zahajeni": "Projekt - datum zahájeni",
       "projekt_datum_ukonceni": "Projekt - datum ukončení",
       "projekt_podnet": "Projekt - podnět",

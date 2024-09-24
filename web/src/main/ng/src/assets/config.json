@@ -327,12 +327,12 @@
         {"name": "akce_hlavni_vedouci"},
         {"name": "akce_organizace", "heslar": "organizace", "label": "organizace"},
         {"name": "akce_specifikace_data", "heslar": "f_specifikace"},
-        {"name": "akce_datum_zahajeni", "label": "projekt_datum_zahajeni"},
-        {"name": "akce_datum_ukonceni", "label": "projekt_datum_ukonceni"},
+        {"name": "akce_datum_zahajeni", "label": "akce_datum_zahajeni", "type": "date"},
+        {"name": "akce_datum_ukonceni", "label": "akce_datum_ukonceni", "type": "date"},
         {"name": "akce_hlavni_typ", "heslar": "typ_akce_druha"},
         {"name": "akce_vedlejsi_typ", "heslar": "typ_akce_druha"},
         {"name": "akce_chranene_udaje.lokalizace_okolnosti", "byPath": true, "label": "lokalizace"},
-        {"name": "akce_je_nz"},
+        {"name": "akce_je_nz", "type": "boolean"},
         {"name": "pristupnost", "heslar": "pristupnost"}
       ],
       "lokalita": [

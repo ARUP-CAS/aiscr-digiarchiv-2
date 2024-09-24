@@ -22,13 +22,16 @@
             </ng-container>
           </ng-container>      
           <ng-container *ngIf="!field.byPath">
+            <ng-container *ngIf="field.type === 'boolean'">
+             {{r[field.name] + '' | translate}}
+            </ng-container>
             <ng-container *ngIf="field.heslar">
               {{r[field.name] | translateHeslar : field.heslar}}
             </ng-container>
             <ng-container *ngIf="!field.heslar && field.type === 'date'">
               {{r[field.name] | date : 'yyyy-MM-dd'}}
             </ng-container>
-            <ng-container *ngIf="!field.heslar && field.type !== 'date'">
+            <ng-container *ngIf="!field.heslar && field.type !== 'date' && field.type !== 'boolean'">
               {{r[field.name]}}
             </ng-container>
           </ng-container>      
