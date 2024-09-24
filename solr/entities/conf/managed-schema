@@ -340,6 +340,7 @@
    <field name="dj_typ" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="dj_negativni_jednotka" type="boolean" indexed="true" stored="true" multiValued="false" /> 
    <field name="dj_nazev" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <field name="az_dj_nazev" type="text_general" indexed="true" stored="true" multiValued="true" /> 
    <field name="dj_adb" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="dj_komponenta" type="string" indexed="false" stored="true" multiValued="true" /> 
 	

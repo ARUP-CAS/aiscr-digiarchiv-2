@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
  *
@@ -68,7 +69,7 @@ public class PdfServlet extends HttpServlet {
             } else {
               response.setContentType("image/jpeg"); 
             }
-            response.setHeader("Content-Disposition", "filename=" + f.getName());
+            response.setHeader("Content-Disposition", "filename=" + StringEscapeUtils.escapeHtml4(f.getName()));
             IOUtils.copy(new FileInputStream(f), out);
           } else {
             String size = request.getParameter("size");
