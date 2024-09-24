@@ -262,6 +262,14 @@
    <field name="adb_chranene_udaje_cislo_popisne" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_chranene_udaje_parcelni_cislo" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_chranene_udaje_poznamka" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <dynamicField name="adb_uzivatelske_oznaceni_sondy_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_trat_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_cislo_popisne_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_parcelni_cislo_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <field name="az_adb_rok_popisu" type="pint" indexed="true" stored="true" multiValued="true" /> 
+   <field name="az_adb_rok_revize" type="pint" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_poznamka_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   
    
    <!--
    <field name="adb_chranene_udaje_vyskovy_bod" type="string" indexed="true" stored="true" multiValued="true" /> 
@@ -426,6 +434,7 @@
    <field name="f_druh_lokality" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_typ_lokality" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_lokalita_zachovalost" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="lokalita_zachovalost_human" type="text_general" indexed="true" stored="true" multiValued="true" /> 
    
    
    <field name="f_typ_nalezu" type="string" indexed="false" stored="false" multiValued="true" />
@@ -553,6 +562,7 @@
    <field name="komponenta_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="f_adb_vyskovy_bod_typ_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="adb_vyskovy_bod_typ_*" type="string" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="vyskovy_bod_ident_cely_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    
 
    

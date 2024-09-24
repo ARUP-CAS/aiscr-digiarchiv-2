@@ -162,6 +162,9 @@ public class LokalitaSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            if (jo.has("error")) {
+                return jo;
+            }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             if (Boolean.parseBoolean(request.getParameter("mapa"))) {
                 addPians(jo, client, request);

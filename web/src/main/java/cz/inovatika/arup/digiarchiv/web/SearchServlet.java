@@ -359,7 +359,9 @@ public class SearchServlet extends HttpServlet {
                     }
                     JSONObject jo = searcher.search(request);
                     // searcher.checkRelations(jo, IndexUtils.getClientNoOp(), request);
-
+                    if (jo.has("error")) {
+                        return jo.toString();
+                    }
                     // Remove stats in case of one result, without access
                     int numFound = jo.getJSONObject("response").getInt("numFound");
                     if (numFound == 1 && !Boolean.parseBoolean(request.getParameter("onlyFacets"))) {

@@ -209,7 +209,6 @@ public class SolrSearcher {
             //fq += (parts.length > 1 ? ops.get(parts[parts.length - 1]) : "") + parts[0] + " ";
         }
         fq = fq.trim() + ")";
-        System.out.println("fq is -> " + fq);
         query.addFilterQuery(fq);
         // query.addFilterQuery("{!tag=" + field + "F}" + field + ":(" + String.join(" OR ", values) + ")");
     }

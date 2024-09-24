@@ -188,32 +188,24 @@
 
     {"type": "text", "field": "lokalita_nazev"},
 
-    {"type": "text", "field": "dj_ident_cely"},
+    {"type": "text", "field": "az_dj"},
     {"type": "boolean", "field": "az_dj_negativni_jednotka"},
     {"type": "text", "field": "dj_nazev"},
     
     {"type": "text", "field": "pian_ident_cely"},
 
-    {"type": "text", "field": "adb_ident_cely"},
+    {"type": "text", "field": "az_dj_adb"},
     {"type": "text", "field": "adb_uzivatelske_oznaceni_sondy"},
-    {"type": "text", "field": "adb_trat"},
-    {"type": "text", "field": "adb_cislo_popisne"},
-    {"type": "text", "field": "adb_parcelni_cislo"},
-    {"type": "rok", "field": "adb_rok_popisu"},
-    {"type": "rok", "field": "adb_rok_revize"},
-    {"type": "text", "field": "adb_poznamka"},
+      {"type": "text", "field": "adb_trat"},
+      {"type": "text", "field": "adb_cislo_popisne"},
+      {"type": "text", "field": "adb_parcelni_cislo"},
+      {"type": "rok", "field": "az_adb_rok_popisu"},
+      {"type": "rok", "field": "az_adb_rok_revize"},
+      {"type": "text", "field": "adb_poznamka"},
 
     {"type": "text", "field": "vyskovy_bod_ident_cely"},
 
-    {"type": "text", "field": "komponenta_dokument_ident_cely"},
-    {"type": "text", "field": "komponenta_jistota"},
-    {"type": "text", "field": "komponenta_presna_datace"},
-    {"type": "text", "field": "komponenta_poznamka"},
-
-    {"type": "text", "field": "nalez_pocet"},
-    {"type": "text", "field": "nalez_poznamka"}, 
-
-    {"type": "text", "field": "f_lokalita_zachovalost"}
+    {"type": "text", "field": "lokalita_zachovalost_human"}
   ],
 
   "noPoradiFacets": {
@@ -288,7 +280,7 @@
   "urlFields": ["f_organizace", "dokument_rok_vzniku", "f_okres", "f_katastr", "f_obdobi",
       "f_areal", "f_aktivita", "f_druh_lokality", "f_druh_nalezu", "f_autor", "f_vedlejsi_typ", "f_hlavni_typ",
       "f_material_dokumentu", "f_jazyk_dokumentu", "f_rada", "dokument_kategorie_dokumentu",
-      "pristupnost", "kategorie","f_typ_dokumentu", "pian_id", "obdobi_poradi",
+      "pristupnost", "kategorie","f_typ_dokumentu", "pian_id", "obdobi_poradi", "lokalita_zachovalost", 
       "extra_data_datum_vzniku", "datum_zverejneni", "rok_vzniku", "komponenta_dokument_obdobi",
       "adb_vyskovy_bod_typ", "let_letiste_start", "let_letiste_cil", "extra_data_format", "let_organizace",
       "let_pocasi", "let_dohlednost", "tvar_tvar", "typ", "f_zachovalost", "f_nahrada", "f_zeme", "f_typ_lokality",

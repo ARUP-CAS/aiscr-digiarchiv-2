@@ -40,6 +40,7 @@ public class Lokalita {
         IndexUtils.addVocabField(idoc, "lokalita_druh", lokalita_druh);
         IndexUtils.addVocabField(idoc, "f_druh_lokality", lokalita_druh);
         IndexUtils.addVocabField(idoc, "lokalita_zachovalost", lokalita_zachovalost);
+        IndexUtils.addRefField(idoc, "lokalita_zachovalost_human", lokalita_zachovalost);
         IndexUtils.addVocabField(idoc, "lokalita_jistota", lokalita_jistota);
 
         if (lokalita_chranene_udaje != null) {

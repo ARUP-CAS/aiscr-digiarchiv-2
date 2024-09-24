@@ -124,10 +124,11 @@ public class ArcheologickyZaznam implements FedoraModel {
                 idoc.addField("pian_ident_cely", djdoc.getFieldValue("dj_pian"));
                 idoc.addField("az_dj_adb", djdoc.getFieldValue("dj_adb"));
                 idoc.addField("az_dj_negativni_jednotka", djdoc.getFieldValue("dj_negativni_jednotka")); 
+                idoc.addField("dj_nazev", dj.dj_nazev);
+                
                 for (Komponenta k : dj.dj_komponenta) {
                     idoc.addField("komponenta_ident_cely", k.ident_cely);
                     idoc.addField("komponenta_dokument_presna_datace", k.komponenta_presna_datace);
-                    
                 }
                 if (az_akce != null) {
                     IndexUtils.addFieldNonRepeat(idoc, "f_dj_typ", djdoc.getFieldValue("dj_typ")); 
@@ -212,7 +213,8 @@ public class ArcheologickyZaznam implements FedoraModel {
 
     private void addAdbFields(SolrInputDocument idoc, String ident_cely) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + ident_cely + "\"")
-                .setFields("ident_cely,adb_podnet,adb_typ_sondy,adb_autor_popisu,adb_autor_revize,adb_vyskovy_bod_typ_A,adb_vyskovy_bod_typ_B,adb_vyskovy_bod_typ_C,adb_vyskovy_bod_typ_D");
+                //.setFields("ident_cely,adb_podnet,adb_typ_sondy,adb_autor_popisu,adb_autor_revize,adb_vyskovy_bod_typ_A,adb_vyskovy_bod_typ_B,adb_vyskovy_bod_typ_C,adb_vyskovy_bod_typ_D");
+                .setFields("*");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", ident_cely);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -224,6 +226,34 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "f_adb_typ_sondy", doc.optString("adb_typ_sondy", null));
                 IndexUtils.addFieldNonRepeat(idoc, "f_adb_podnet", doc.optString("adb_podnet", null));
                 IndexUtils.addFieldNonRepeat(idoc, "f_autor", doc.optString("adb_autor_revize", null));
+                IndexUtils.addFieldNonRepeat(idoc, "az_adb_rok_popisu", doc.optIntegerObject("adb_rok_popisu", null));
+                IndexUtils.addFieldNonRepeat(idoc, "az_adb_rok_revize", doc.optIntegerObject("adb_rok_revize", null));
+                IndexUtils.addFieldNonRepeat(idoc, "vyskovy_bod_ident_cely", doc.opt("vyskovy_bod_ident_cely"));
+                
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_A", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_B", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_C", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_D", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_D"));
+                
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_A", doc.opt("adb_chranene_udaje_trat_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_B", doc.opt("adb_chranene_udaje_trat_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_C", doc.opt("adb_chranene_udaje_trat_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_D", doc.opt("adb_chranene_udaje_trat_D"));
+                
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_A", doc.opt("adb_chranene_udaje_cislo_popisne_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_B", doc.opt("adb_chranene_udaje_cislo_popisne_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_C", doc.opt("adb_chranene_udaje_cislo_popisne_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_D", doc.opt("adb_chranene_udaje_cislo_popisne_D"));
+           
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_A", doc.opt("adb_chranene_udaje_parcelni_cislo_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_B", doc.opt("adb_chranene_udaje_parcelni_cislo_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_C", doc.opt("adb_chranene_udaje_parcelni_cislo_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_D", doc.opt("adb_chranene_udaje_parcelni_cislo_D"));
+           
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_A", doc.opt("adb_chranene_udaje_poznamka_A"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_B", doc.opt("adb_chranene_udaje_poznamka_B"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_C", doc.opt("adb_chranene_udaje_poznamka_C"));
+                IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_D", doc.opt("adb_chranene_udaje_poznamka_D"));
                 
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_A", doc.opt("adb_vyskovy_bod_typ_A"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_B", doc.opt("adb_vyskovy_bod_typ_B"));
