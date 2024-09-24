@@ -103,6 +103,7 @@ export class FileViewerComponent implements OnInit {
           link.href = this.downloadUrl();
           link.download = this.selectedFile.nazev;
           link.click();
+          this.service.showInfoDialog(this.service.getTranslation('dialog.desc.download_started'), 2000);
         }
 
       }

@@ -247,6 +247,7 @@
       "lokalita_nazev": "Site - name",
       "az_dj": "Doc. unit - identifier",
       "dj_nazev": "Doc. unit - label",
+      "az_dj_nazev": "Doc. unit - label",
       "az_dj_negativni_jednotka": "Doc. unit - type of evidence",
       "pian_ident_cely": "Doc. unit - related spatial unit",
       "az_dj_adb": "ADP - identifier",
@@ -577,7 +578,8 @@
       "Velikost souboru": "File size",
       "Typ souboru": "File type",
       "Jméno": "Name",
-      "Komentář": "Comment"
+      "Komentář": "Comment",
+      "download_started": "Download started"
     },
     "input": {
       "Jméno": "Name",

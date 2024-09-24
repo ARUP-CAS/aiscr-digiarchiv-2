@@ -247,6 +247,7 @@
       "lokalita_nazev": "Lokalita - název",
       "az_dj": "Dok. jednotka - identifikátor",
       "dj_nazev": "Dok. jednotka - název",
+      "az_dj_nazev": "Dok. jednotka - název",
       "az_dj_negativni_jednotka": "Dok. jednotka - typ zjištění",
       "pian_ident_cely": "Dok. jednotka - související PIAN",
       "az_dj_adb": "ADB - identifikátor",
@@ -577,7 +578,8 @@
       "Velikost souboru": "Velikost souboru",
       "Typ souboru": "Typ souboru",
       "Jméno": "Jméno",
-      "Komentář": "Komentář"
+      "Komentář": "Komentář",
+      "download_started": "Stažení souboru spuštěno"
     },
     "input": {
       "Jméno": "Jméno",
