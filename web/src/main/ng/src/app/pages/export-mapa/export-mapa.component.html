@@ -11,7 +11,7 @@
           <th>{{'export.desc.Definiční bod (WGS-84)' | translate}}</th>
           <th *ngIf="hasPian">{{'export.desc.' + format | translate}}</th>
         </ng-container>
-        <th *ngFor="let field of config.exportFields[state.entity]">{{ 'export.field.' + field.name | translate }}</th>
+        <th *ngFor="let field of config.exportFields[state.entity]">{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +25,35 @@
           <td>{{ r.lat }} : {{ r.lng }}</td>
           <td *ngIf="hasPian">{{r.geometrie}}</td>
         </ng-container>
+
+        <td *ngFor="let field of config.exportFields[state.entity]">
+          <ng-container *ngIf="field.byPath">
+            <ng-container *ngIf="field.heslar">
+              {{ getByPath(r, field.name) | translateHeslar : field.heslar}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type === 'date'">
+              {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type !== 'date'">
+              {{ getByPath(r, field.name) }}
+            </ng-container>
+          </ng-container>      
+          <ng-container *ngIf="!field.byPath">
+            <ng-container *ngIf="field.type === 'boolean'">
+             {{r[field.name] + '' | translate}}
+            </ng-container>
+            <ng-container *ngIf="field.heslar">
+              {{r[field.name] | translateHeslar : field.heslar}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type === 'date'">
+              {{r[field.name] | date : 'yyyy-MM-dd'}}
+            </ng-container>
+            <ng-container *ngIf="!field.heslar && field.type !== 'date' && field.type !== 'boolean'">
+              {{r[field.name]}}
+            </ng-container>
+          </ng-container>      
+        </td>
+<!--         
         <td *ngFor="let field of config.exportFields[state.entity]">
           <ng-container *ngIf="!field.secured || hasRights(r)">
             <ng-container *ngIf="field.heslar">
@@ -38,7 +67,7 @@
             </ng-container>
           </ng-container>
           
-        </td>
+        </td> -->
       </tr>
     </tbody>
   </table>

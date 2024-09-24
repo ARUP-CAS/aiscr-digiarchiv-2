@@ -183,6 +183,7 @@ public class AkceSearcher implements EntitySearcher {
             Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
+            System.out.println(query);
             return SearchUtils.csv(query, client, "entities");
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);

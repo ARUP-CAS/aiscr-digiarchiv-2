@@ -324,21 +324,31 @@ public class SearchServlet extends HttpServlet {
                 try {
                     SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
                             .setFacet(false);
-                    query.setRequestHandler("/search");
+                    query.setRequestHandler("/search").setFields("pian_chranene_udaje:[json]");
                     String format = request.getParameter("format");
-                    switch (format) {
-                        case "GML":
-                            query.setFields("geometrie:geom_gml");
-                            break;
-                        default:
-                            query.setFields("geometrie:geom_wkt");
-                    }
 
                     JSONObject jo = SearchUtils.json(query, IndexUtils.getClientNoOp(), "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-
-                    if ("GeoJSON".equals(format)) {
-                        jo.put("geometrie", GPSconvertor.convertGeojson(jo.getString("geometrie")));
+                    
+                    
+                    switch (format) {
+                        case "GML":
+                            jo.put("geometrie", jo.getJSONObject("pian_chranene_udaje").getString("geom_gml"));
+                            //query.setFields("geometrie:geom_gml");
+                            break;
+                        case "GeoJSON":
+                            jo.put("geometrie", GPSconvertor.convertGeojson(jo.getJSONObject("pian_chranene_udaje").getJSONObject(  "geom_wkt").getString("value")));
+                            //query.setFields("geometrie:geom_gml");
+                            break;
+                        default:
+                            jo.put("geometrie", jo.getJSONObject("pian_chranene_udaje").getJSONObject(  "geom_wkt").getString("value"));
+                            // query.setFields("geometrie:geom_wkt");
                     }
+                    
+                    jo.remove("pian_chranene_udaje");
+
+//                    if ("GeoJSON".equals(format)) {
+//                        jo.put("geometrie", GPSconvertor.convertGeojson(jo.getString("geometrie")));
+//                    }
                     return jo.toString();
 
                 } catch (Exception ex) {

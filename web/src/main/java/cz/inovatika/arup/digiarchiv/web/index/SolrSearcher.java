@@ -74,7 +74,7 @@ public class SolrSearcher {
 
         } else {
             query
-                    .setParam("facet.heatmap.distErr", "0.04");
+                    .setParam("facet.heatmap.distErr", "10.9");
             //.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
             //.addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]");
         }
@@ -184,6 +184,10 @@ public class SolrSearcher {
 
         if (Boolean.parseBoolean(request.getParameter("onlyFacets"))) {
             query.setRows(0);
+        }
+
+        if (Boolean.parseBoolean(request.getParameter("noStats"))) {
+            query.set("stats", "false");
         }
 
         //LOGGER.log(Level.INFO, "query: {0}", query );

@@ -49,10 +49,25 @@ export class ExportMapaComponent implements OnInit {
     this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Export');
   }
 
+  getByPath(doc: any, path: string) {
+    // let res = path.split('.').reduce(function(o, k) {
+    //   return o && o[k];
+    // }, doc);
+    // return res;
+    try {
+      return eval('doc.' + path)
+    } catch (e: any) {
+      return '';
+    }
+    
+  }
+
   search(params: Params) {
     const p = Object.assign({}, params);
     p.rows = this.config.exportRowsLimit;
     p.mapa = true;
+    p.noFacets = true;
+    p.noStats = true;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       
       if (resp.error) {
