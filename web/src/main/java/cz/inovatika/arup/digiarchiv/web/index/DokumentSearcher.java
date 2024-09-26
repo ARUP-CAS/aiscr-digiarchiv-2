@@ -209,6 +209,7 @@ public class DokumentSearcher implements EntitySearcher {
         
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("dokument_az_chranene_udaje_" + pristupnost + ":[json]");
 
         String[] ret = fields.toArray(new String[0]);
         
@@ -273,6 +274,9 @@ public class DokumentSearcher implements EntitySearcher {
             JSONObject doc = ja.getJSONObject(i);
             String organizace = doc.optString("dokument_organizace");
             String docPr = doc.getString("pristupnost");
+            
+            doc.put("dokument_az_chranene_udaje", doc.opt("dokument_az_chranene_udaje_" + pristupnost));
+            doc.remove("dokument_az_chranene_udaje_" + pristupnost);
 
             boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
             if (docPr.compareTo(pristupnost) > 0 && !sameOrg) {

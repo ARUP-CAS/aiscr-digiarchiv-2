@@ -225,8 +225,12 @@ public class FedoraHarvester {
                 }
             }
 
-            ret.put("updated", indexed);
-
+                if (isDeleted) {
+                    ret.put("deleted", indexed);
+                } else {
+                    ret.put("updated", indexed);
+                }
+            
             checkLists(0, indexed, "update", indexed);
             ret.put("items", json);
             solr.commit("oai");

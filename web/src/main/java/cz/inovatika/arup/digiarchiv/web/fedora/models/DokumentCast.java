@@ -25,10 +25,10 @@ public class DokumentCast {
 
     @Field
     public String entity = "dokument_cast";
-    
+
     @Field
-    public boolean searchable= true;
-    
+    public boolean searchable = true;
+
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
     @JacksonXmlProperty(localName = "ident_cely")
     @Field
@@ -55,7 +55,7 @@ public class DokumentCast {
     @JacksonXmlProperty(localName = "neident_akce")
     public NeidentAkce neident_akce;
 
-    public List<String> location_info = new ArrayList();
+    // public List<String> location_info = new ArrayList();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) throws Exception {
 
@@ -85,7 +85,7 @@ public class DokumentCast {
         if (projekt != null) {
             addProjekt(idoc, pristupnost.toUpperCase());
         }
-        idoc.addField("location_info", location_info);
+        // IndexUtils.addFieldNonRepeat(idoc, "location_info", location_info);
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
 
         try {
@@ -95,7 +95,7 @@ public class DokumentCast {
             // Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void addProjekt(SolrInputDocument idoc, String pristupnost) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + projekt.getId() + "\"")
                 .setFields("*,projekt_chranene_udaje:[json]");
@@ -105,7 +105,7 @@ public class DokumentCast {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
                 if (doc.has("projekt_chranene_udaje")) {
                     JSONObject pcu = doc.getJSONObject("projekt_chranene_udaje");
-                    
+
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.get("f_katastr_D"), pristupnost);
                     IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("projekt_okres"));
                     JSONObject li = new JSONObject()
@@ -114,10 +114,10 @@ public class DokumentCast {
                             .put("pristupnost", doc.getString("pristupnost"))
                             .put("katastr", pcu.getJSONObject("hlavni_katastr").getString("value"))
                             .put("okres", doc.getString("projekt_okres"));
-
-                    if (!location_info.contains(li.toString())) {
-                        location_info.add(li.toString());
-                    }
+IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
+//                    if (!location_info.contains(li.toString())) {
+//                        location_info.add(li.toString());
+//                    }
                 }
             }
         } catch (Exception ex) {
@@ -127,7 +127,7 @@ public class DokumentCast {
 
     private void addLocation(SolrInputDocument idoc, String pristupnost) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
-                .setFields("*,katastr:f_katastr_" + pristupnost, "az_okres,pristupnost,az_chranene_udaje:[json] ");
+                .setFields("*,az_okres,pristupnost,az_chranene_udaje:[json] ");
 
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", archeologicky_zaznam.getId());
 
@@ -136,31 +136,46 @@ public class DokumentCast {
             idoc.addField("dokument_cast_" + doc.getString("entity"), archeologicky_zaznam.getId());
 
             idoc.addField("f_vedouci", doc.optString("akce_hlavni_vedouci", null));
+            IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("az_okres"));
 
             String k = null;
-            if (doc.has("katastr")) {
-                Object val = doc.get("katastr");
-                if (val instanceof JSONArray) {
-                    JSONArray ja = (JSONArray) val;
-                    for (int j = 0; j < ja.length(); j++) {
-                         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", ja.get(j), pristupnost);
-                    }
-                    k = ja.getString(0);
-                } else {
-                    SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", val, pristupnost);
-                    k = (String) val;
-                }
-                    
-                // IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.get("katastr"), pristupnost);
-                IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("az_okres"));
-            }
-            JSONObject li = new JSONObject()
-                    .put("pristupnost", doc.getString("pristupnost"))
-                    .put("katastr", k)
-                    .put("okres", doc.getString("az_okres"));
+            JSONArray dalsi_katastr = new JSONArray();
+            if (doc.has("az_chranene_udaje")) {
 
-            if (!location_info.contains(li.toString())) {
-                location_info.add(li.toString());
+                JSONObject az_chranene_udaje = doc.getJSONObject("az_chranene_udaje");
+                k = az_chranene_udaje.getJSONObject("hlavni_katastr").optString("value");
+                IndexUtils.addSecuredFieldNonRepeat(idoc,
+                        "f_katastr",
+                        k,
+                        doc.getString("pristupnost"));
+
+                JSONObject li = new JSONObject()
+                        .put("pristupnost", doc.getString("pristupnost"))
+                        .put("katastr", k)
+                        .put("okres", doc.getString("az_okres"));
+IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
+//                if (!location_info.contains(li.toString())) {
+//                    location_info.add(li.toString());
+//                }
+
+                dalsi_katastr = az_chranene_udaje.getJSONArray("dalsi_katastr");
+                for (int j = 0; j < dalsi_katastr.length(); j++) {
+                    k = dalsi_katastr.getJSONObject(j).optString("value");
+                    if (k != null) {
+
+                        SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
+                        JSONObject li2 = new JSONObject()
+                                .put("pristupnost", doc.getString("pristupnost"))
+                                .put("katastr", k)
+                                .put("okres", doc.getString("az_okres"));
+IndexUtils.addFieldNonRepeat(idoc, "location_info", li2.toString());
+//                        if (!location_info.contains(li2.toString())) {
+//                            location_info.add(li2.toString());
+//                        }
+                    }
+                }
+
+
             }
 
             for (String key : doc.keySet()) {

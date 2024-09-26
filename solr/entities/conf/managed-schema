@@ -93,6 +93,8 @@
    <field name="dokument_cast_lokalita" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_cast_neident_akce" type="string_big" indexed="false" stored="true" multiValued="false"  /> 
    <field name="dokument_cast_projekt" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_az_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="true" /> 
+   <dynamicField name="dokument_az_chranene_udaje_*" type="string_big" indexed="false" stored="true" multiValued="true" /> 
 
   
    <!-- Archeologicky zaznam, akce and lokalita fields -->

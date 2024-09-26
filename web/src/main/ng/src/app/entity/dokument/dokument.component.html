@@ -87,7 +87,8 @@
             <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.dokument_organizace" [heslar]="'organizace'"></app-inline-filter>
           </ng-container>
         </div>
-        <div *ngIf="result.location_info && result.location_info.length > 0">
+
+        <!-- <div *ngIf="result.location_info && result.location_info.length > 0">
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
           <ng-container *ngFor="let item of result.location_info; let last = last">
@@ -97,6 +98,18 @@
             <ng-container *ngIf="!isArray(item.katastr)">
               <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
             </ng-container>
+           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">,&#160;</span>
+          </ng-container>
+
+        </div> -->
+
+        <div *ngIf="result.location_info && result.location_info.length > 0">
+          <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
+          
+          <ng-container *ngFor="let item of result.location_info; let last = last">
+
+              <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
+
            (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">,&#160;</span>
           </ng-container>
 

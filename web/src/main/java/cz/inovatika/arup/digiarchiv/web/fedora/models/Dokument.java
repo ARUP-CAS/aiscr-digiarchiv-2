@@ -244,6 +244,7 @@ public class Dokument implements FedoraModel {
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", id);
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            
             if (doc.optBoolean("searchable")) {
                 if (doc.has("f_typ_vyzkumu")) {
                     
@@ -261,7 +262,7 @@ public class Dokument implements FedoraModel {
                 }
 //                String pr = doc.getString("pristupnost");
 //                SolrSearcher.addFieldNonRepeat(idoc, "az_okres", doc.get("az_okres"));
-//                SolrSearcher.addSecuredFieldNonRepeat(idoc, "az_chranene_udaje", doc.get("az_chranene_udaje"), pr);
+//                SolrSearcher.addSecuredFieldNonRepeat(idoc, "dokument_az_chranene_udaje", doc.get("az_chranene_udaje"), pr);
             }
         }
     }
