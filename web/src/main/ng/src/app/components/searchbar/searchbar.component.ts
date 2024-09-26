@@ -79,6 +79,21 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     const p: any = {};
     p.mapa = !this.state.isMapaCollapsed;
     p.loc_rpt = null;
+
+
+    const lat = this.state.stats.lat;
+    const lng = this.state.stats.lng;
+    if (lat.max === lat.min) {
+      lat.min = lat.min - 0.05;
+      lat.max = lat.max + 0.05;
+      lng.min = lng.min - 0.05;
+      lng.max = lng.max + 0.05;
+    }
+    p.loc_rpt = lat.min + ',' + lng.min +
+      ',' + lat.max + ',' + lng.max;
+
+
+
     if (!p.mapa) {
       // p.loc_rpt = null;
       p.pian_id = null;
@@ -98,6 +113,6 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   }
 
   exportMapa(format: string) {
-    
+
   }
 }

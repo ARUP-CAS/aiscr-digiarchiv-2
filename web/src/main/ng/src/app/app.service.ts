@@ -151,8 +151,8 @@ export class AppService {
   }
 
   stopLoading() {
-    this.state.loading = false;
-    this.state.facetsLoading = false;
+    // this.state.loading = false;
+    // this.state.facetsLoading = false;
   }
 
   public showInfoDialog(message: string, duration: number = 2000) {
@@ -210,6 +210,8 @@ export class AppService {
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
     this.state.hasError = true;
+    this.state.loading = false;
+    this.state.facetsLoading = false;
     return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }
 

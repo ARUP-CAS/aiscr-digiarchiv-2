@@ -162,8 +162,8 @@ public class AkceSearcher implements EntitySearcher {
             //LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
 
-            if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-                //LOGGER.log(Level.INFO, "addPians");
+            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
+                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
                 addPians(jo, client, request);
             }
             //LOGGER.log(Level.INFO, "addFavorites");

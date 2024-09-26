@@ -180,7 +180,7 @@ public class ProjektSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
-            removeInvalid(client, jo);
+            // removeInvalid(client, jo);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);

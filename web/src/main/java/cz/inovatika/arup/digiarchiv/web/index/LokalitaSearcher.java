@@ -166,10 +166,13 @@ public class LokalitaSearcher implements EntitySearcher {
                 return jo;
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
+                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
                 addPians(jo, client, request);
             }
-            checkRelations(jo, client, request);
+            if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+                checkRelations(jo, client, request);
+            }
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
