@@ -302,7 +302,6 @@ public class ProjektSearcher implements EntitySearcher {
         fields.add("projekt_hlavni_katastr:projekt_hlavni_katastr_" + pristupnost);
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
-        fields.add("loc:loc_rpt_" + pristupnost);
 
         String[] ret = fields.toArray(new String[0]);
 

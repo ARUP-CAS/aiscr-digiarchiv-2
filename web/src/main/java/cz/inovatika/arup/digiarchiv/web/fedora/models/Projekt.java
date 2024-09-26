@@ -136,44 +136,64 @@ public class Projekt implements FedoraModel {
 
     @Override
     public boolean isSearchable() {
-        return !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty(); 
+        return !projekt_archeologicky_zaznam.isEmpty() || !projekt_samostatny_nalez.isEmpty();
     }
 
-    @Override 
+    @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         boolean searchable = false;
+        if (!projekt_dokument.isEmpty()) {
+            // check if related are searchable
+            String fq = "";
+            for (Vocab pd : projekt_dokument) {
+                fq += "\"" + pd.getId() + "\",";
+            }
+            fq += "KKK";
+            SolrQuery query = new SolrQuery("*")
+                    .setRows(1)
+                    .addFilterQuery("entity:dokument")
+                    .addFilterQuery("ident_cely:(" + fq + ")");
+            try {
+                JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
+                if (!ja.isEmpty()) {
+                    searchable = true;
+                }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
         if (!projekt_samostatny_nalez.isEmpty()) {
             // check if related are searchable
             SolrQuery query = new SolrQuery("*")
-                        .setRows(1)
-                        .addFilterQuery("entity:samostatny_nalez")
-                        .addFilterQuery("samostatny_nalez_projekt:\"" + ident_cely + "\"");
+                    .setRows(1)
+                    .addFilterQuery("entity:samostatny_nalez")
+                    .addFilterQuery("samostatny_nalez_projekt:\"" + ident_cely + "\"");
             try {
-                    JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs"); 
-                    if (!ja.isEmpty()) {
-                        searchable = true;
-                    }
-                } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
+                if (!ja.isEmpty()) {
+                    searchable = true;
                 }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
         }
-        
+
         if (!searchable && !projekt_archeologicky_zaznam.isEmpty()) {
             SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
-                        .setRows(1)
-                        .setFields("ident_cely,entity");
+                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
+                    .setRows(1)
+                    .setFields("ident_cely,entity");
             try {
-                    JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
-                    if (!ja.isEmpty()) {
-                        searchable = true;
-                    }
-                } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
+                if (!ja.isEmpty()) {
+                    searchable = true;
                 }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
         }
-        
+
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
@@ -185,7 +205,7 @@ public class Projekt implements FedoraModel {
         IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
         IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
         IndexUtils.addVocabField(idoc, "projekt_kulturni_pamatka", projekt_kulturni_pamatka);
-        
+
         if (projekt_datum_zahajeni != null) {
             IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_od", projekt_datum_zahajeni);
             IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_do", projekt_datum_zahajeni);
@@ -304,9 +324,9 @@ public class Projekt implements FedoraModel {
                 query.addField(f);
             }
             JSONObject json = SearchUtils.searchOrIndex(query, "entities", az);
-            
+
             if (json.getJSONObject("response").getInt("numFound") > 0) {
-                
+
                 for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                     JSONObject azDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
                     String pristupnost = azDoc.getString("pristupnost");
@@ -317,7 +337,7 @@ public class Projekt implements FedoraModel {
                             addPian(idoc, pristupnost, pians.optString(j));
                         }
                     }
-                    
+
                     for (String f : facetFields) {
                         if (azDoc.has(f)) {
                             Object val = azDoc.get(f);
@@ -332,7 +352,7 @@ public class Projekt implements FedoraModel {
 
                         }
                     }
-                    
+
                 }
             }
         } catch (Exception ex) {
