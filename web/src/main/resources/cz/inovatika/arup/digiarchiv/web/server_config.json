@@ -401,7 +401,8 @@
                 "projekt_podnet",
                 "projekt_uzivatelske_oznaceni",
                 "projekt_kulturni_pamatka",
-                "projekt_oznaceni_stavby"
+                "projekt_oznaceni_stavby",
+                "pian_id"
             ],
     "facets": [
       "f_vedouci:projekt_vedouci_projektu",

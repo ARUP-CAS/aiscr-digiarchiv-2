@@ -26,7 +26,7 @@
           <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>
         </button> -->
         <button mat-flat-button color="primary" [matMenuTriggerFor]="exports" 
-          *ngIf="!state.isMapaCollapsed && state.entity !== 'samostatny_nalez' && state.entity !== 'knihovna_3d'">
+          *ngIf="!state.isMapaCollapsed">
           <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
           <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
           <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>

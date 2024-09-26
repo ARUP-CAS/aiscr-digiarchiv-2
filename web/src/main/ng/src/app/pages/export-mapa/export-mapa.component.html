@@ -19,10 +19,10 @@
         <td>{{idx + 1}}</td>
         <ng-container *ngIf="format">
           <td *ngIf="hasPian">{{r.pian.ident_cely}}</td>
-          <td *ngIf="hasPian">{{r.pian.presnost | translateHeslar : 'presnost'}}</td>
-          <td *ngIf="hasPian">{{r.pian.typ | translateHeslar : 'typ_pian'}}</td>
-          <td *ngIf="hasPian">{{r.pian.zm10}}</td>
-          <td>{{ r.lat }} : {{ r.lng }}</td>
+          <td *ngIf="hasPian">{{r.pian.pian_presnost | translateHeslar : 'presnost'}}</td>
+          <td *ngIf="hasPian">{{r.pian.pian_typ | translateHeslar : 'typ_pian'}}</td>
+          <td *ngIf="hasPian">{{r.pian.pian_chranene_udaje.zm10}}</td>
+          <td *ngIf="hasPian">{{ r.pian.lat }} : {{ r.pian.lng }}</td>
           <td *ngIf="hasPian">{{r.geometrie}}</td>
         </ng-container>
 
@@ -53,21 +53,6 @@
             </ng-container>
           </ng-container>      
         </td>
-<!--         
-        <td *ngFor="let field of config.exportFields[state.entity]">
-          <ng-container *ngIf="!field.secured || hasRights(r)">
-            <ng-container *ngIf="field.heslar">
-              {{r[field.name] | translateHeslar : field.heslar}}
-            </ng-container>
-            <ng-container *ngIf="!field.heslar && field.type === 'date'">
-              {{r[field.name] | date : 'yyyy-MM-dd'}}
-            </ng-container>
-            <ng-container *ngIf="!field.heslar && field.type !== 'date'">
-              {{r[field.name]}}
-            </ng-container>
-          </ng-container>
-          
-        </td> -->
       </tr>
     </tbody>
   </table>

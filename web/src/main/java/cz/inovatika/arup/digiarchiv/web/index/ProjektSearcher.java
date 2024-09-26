@@ -171,6 +171,36 @@ public class ProjektSearcher implements EntitySearcher {
             }
         }
     }
+    
+    public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("pian_id")) {
+                JSONArray cdjs = doc.getJSONArray("pian_id");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    String cdj = cdjs.getString(j);
+                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                    if (sub != null) {
+                        String docPr = sub.getString("pristupnost");
+                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+                            sub.remove("pian_chranene_udaje");
+                        }
+                        doc.append("pian", sub);
+                    }
+
+                }
+            }
+        }
+    }
 
     @Override
     public JSONObject search(HttpServletRequest request) {
@@ -181,6 +211,10 @@ public class ProjektSearcher implements EntitySearcher {
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             // removeInvalid(client, jo);
+            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
+                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+                addPians(jo, client, request);
+            }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);
@@ -267,6 +301,7 @@ public class ProjektSearcher implements EntitySearcher {
 
         fields.add("projekt_hlavni_katastr:projekt_hlavni_katastr_" + pristupnost);
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
 
         String[] ret = fields.toArray(new String[0]);

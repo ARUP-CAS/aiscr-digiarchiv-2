@@ -154,7 +154,6 @@ public class DokumentSearcher implements EntitySearcher {
                 for (int j = 0; j < cdjs.length(); j++) {
                     String cdj = cdjs.getString(j);
                     JSONObject sub = SolrSearcher.getById(client, cdj, fields);
-                    System.out.println(sub);
                     if (sub != null) {
                         String docPr = sub.getString("pristupnost");
                         if (docPr.compareToIgnoreCase(pristupnost) > 0) {
