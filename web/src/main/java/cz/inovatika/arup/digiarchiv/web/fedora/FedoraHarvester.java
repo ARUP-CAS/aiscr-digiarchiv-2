@@ -575,6 +575,7 @@ public class FedoraHarvester {
             start = Instant.now().toEpochMilli();
             indexXml(xml, model);
             if (processRelated) {
+                solr.commit("entities");
                 processRelated(id, model);
             }
             processTime += Instant.now().toEpochMilli() - start;
@@ -592,6 +593,11 @@ public class FedoraHarvester {
         List<String> fields = new ArrayList<>();
         boolean hasRelated = true;
         switch (model) {
+            case "dokument":
+                query.addFilterQuery("ident_cely:\"" + id + "\"")
+                        .setFields("dokument_cast_projekt");
+                fields.add("dokument_cast_projekt");
+                break;
             case "projekt":
                 query.addFilterQuery("ident_cely:\"" + id + "\"")
                         .setFields("projekt_dokument");
