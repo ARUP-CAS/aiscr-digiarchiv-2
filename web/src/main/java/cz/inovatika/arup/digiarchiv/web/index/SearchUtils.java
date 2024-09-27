@@ -270,6 +270,9 @@ public class SearchUtils {
             case "komponenta":
                 searcher = new KomponentaSearcher();
                 break;
+            case "vyskovy_bod":
+                searcher = new VyskovyBodSearcher();
+                break;
             default:
                 searcher = null;
         }

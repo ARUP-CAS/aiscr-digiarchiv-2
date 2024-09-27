@@ -51,6 +51,8 @@ export class DokumentComponent implements OnInit, OnChanges {
   numChildren = 0;
   math = Math;
 
+  okresy: string[] = [];
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
@@ -72,6 +74,13 @@ export class DokumentComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (!this.result) {
       return;
+    }
+    if (this.result.location_info) {
+      this.result.location_info.forEach(li => {
+        if (!this.okresy.includes(li.okres)) {
+          this.okresy.push(li.okres);
+        }
+      });
     }
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     if (this.result.pian) {

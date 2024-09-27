@@ -88,30 +88,17 @@
           </ng-container>
         </div>
 
-        <!-- <div *ngIf="result.location_info && result.location_info.length > 0">
-          <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
-          
-          <ng-container *ngFor="let item of result.location_info; let last = last">
-            <ng-container *ngIf="isArray(item.katastr)">
-              <app-inline-filter *ngFor="let k of item.katastr" [isChild]="isChild" [field]="'f_katastr'" [value]="k"></app-inline-filter>
-            </ng-container>
-            <ng-container *ngIf="!isArray(item.katastr)">
-              <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
-            </ng-container>
-           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">,&#160;</span>
-          </ng-container>
-
-        </div> -->
-
         <div *ngIf="result.location_info && result.location_info.length > 0">
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
           <ng-container *ngFor="let item of result.location_info; let last = last">
-
               <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
-
-           (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="item.okres"></app-inline-filter>)<span *ngIf="!last">,&#160;</span>
+           <span *ngIf="!last">,&#160;</span>
           </ng-container>
+
+          (<ng-container *ngFor="let okres of okresy; let last = last">
+          <app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="okres"></app-inline-filter><span *ngIf="!last">,&#160;</span>
+          </ng-container>)
 
         </div>
         <div *ngIf="result.dokument_popis" class="app-truncate-text">
@@ -291,12 +278,16 @@
                 <mat-panel-title>
                   <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
                   {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }} <mat-icon>link</mat-icon></a>
+
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
+              <ng-container *ngIf="dokument_cast.archeologicky_zaznam || dokument_cast.projekt">
                 <label class="app-label">{{ 'card.desc.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
                 <ng-container *ngIf="dokument_cast.archeologicky_zaznam">
                   <a [routerLink]="'/id/' + dokument_cast.archeologicky_zaznam.id" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.archeologicky_zaznam.id }} <mat-icon>link</mat-icon></a>
+                </ng-container>
+                <ng-container *ngIf="dokument_cast.projekt">
+                  <a [routerLink]="'/id/' + dokument_cast.projekt.id" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.projekt.id }} <mat-icon>link</mat-icon></a>
                 </ng-container>
               </ng-container>
 
