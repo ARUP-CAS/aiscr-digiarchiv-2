@@ -295,13 +295,13 @@ public class SolrSearcher {
                     String fq = field + ":[" + parts[0] + "T00:00:00Z TO " + parts[1] + "T23:59:59Z]";
                     query.addFilterQuery(fq);
                 } else if (numberFacets.contains(field)) {
-                    String[] parts = request.getParameter(field).split(":")[0].split(",");
+                    String[] parts = request.getParameter(field).split(":")[0].split(",", 2);
                     String end = "*";
                     if ("".equals(parts[0]) || !isInteger(parts[0])) {
                         parts[0] = "*";
                     }
-                    if (parts.length > 1 && isInteger(parts[1])) {
-                        end = parts[1];
+                    if (parts.length > 1 && (isInteger(parts[1]) || isFloat(parts[1].replaceAll(",", ".")))) {
+                        end = parts[1].replaceAll(",", ".");
                     }
                     String fq = field + ":[" + parts[0] + " TO " + end + "]";
                     query.addFilterQuery(fq);
@@ -749,6 +749,15 @@ public class SolrSearcher {
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    public static boolean isFloat(String s) {
+        try {
+            Float.valueOf(s);
             return true;
         } catch (NumberFormatException ex) {
             return false;

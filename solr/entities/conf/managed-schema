@@ -543,6 +543,7 @@
    <field name="dokument_cast_poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_dokument_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_dokument_jistota" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="dokument_cast_komponenta_dokument_jistota" type="boolean" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_dokument_presna_datace" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_dokument_poznamka" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="nalez_dokumentu_pocet" type="text_general" indexed="true" stored="true" multiValued="true" />

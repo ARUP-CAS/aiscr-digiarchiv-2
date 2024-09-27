@@ -95,6 +95,7 @@ public class Komponenta {
 
     idoc.addField("komponenta_dokument_ident_cely", ident_cely);
     idoc.addField("komponenta_dokument_jistota", komponenta_jistota);
+    idoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
     idoc.addField("komponenta_dokument_presna_datace", komponenta_presna_datace);
     idoc.addField("komponenta_dokument_poznamka", komponenta_poznamka);
     

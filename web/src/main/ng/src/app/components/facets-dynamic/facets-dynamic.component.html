@@ -69,11 +69,11 @@
         <ng-container *ngSwitchCase="'number'">
           <mat-form-field fxFlex appearance="fill">
             <input matInput type="number" [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue"
-              [(ngModel)]="numberod" (keyup.enter)="addFilter()" />
+              [(ngModel)]="numberod" step="0.01" (keyup.enter)="addFilter()" />
           </mat-form-field>
           <mat-form-field fxFlex appearance="fill">
             <input matInput type="number" [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue"
-              [(ngModel)]="numberdo" (keyup.enter)="addFilter()" />
+              [(ngModel)]="numberdo" step="0.01" (keyup.enter)="addFilter()" />
           </mat-form-field>
         </ng-container>
 

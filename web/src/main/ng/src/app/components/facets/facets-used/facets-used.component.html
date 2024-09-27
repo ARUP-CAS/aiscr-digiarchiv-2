@@ -24,7 +24,10 @@
       <span *ngIf="facet.field === 'az_dj_negativni_jednotka'" class="app-font-bold">
         {{ facet.value === '1' ? ('negativní' | translate) : ('pozitivní' | translate) }}
       </span>
-      <span *ngIf="!facet.display && facet.field !== 'az_dj_negativni_jednotka'" class="app-font-bold">{{ facet.value | translateHeslar : facet.field}}</span> 
+      <span *ngIf="facet.field === 'dokument_cast_komponenta_dokument_jistota'" class="app-font-bold">
+        {{ facet.value === '1' ? ('Ano' | translate) : ('Ne' | translate) }}
+      </span>
+      <span *ngIf="!facet.display && facet.field !== 'az_dj_negativni_jednotka' && facet.field !== 'dokument_cast_komponenta_dokument_jistota'" class="app-font-bold">{{ facet.value | translateHeslar : facet.field}}</span> 
     </span> 
   </div>
   </mat-list-item>

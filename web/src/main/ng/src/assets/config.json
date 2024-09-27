@@ -139,7 +139,7 @@
     {"type": "text", "field": "dokument_cast_lokalita"},
 
     {"type": "text", "field": "komponenta_dokument_ident_cely"},
-    {"type": "text", "field": "komponenta_dokument_jistota"},
+    {"type": "boolean", "field": "dokument_cast_komponenta_dokument_jistota"},
     {"type": "text", "field": "komponenta_dokument_presna_datace"},
     {"type": "text", "field": "komponenta_dokument_poznamka"},
 
