@@ -123,7 +123,7 @@
 		<ng-container *ngIf="result.ext_zdroj_nazev">{{ result.ext_zdroj_nazev }}.&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_podnazev">{{ result.ext_zdroj_podnazev }}.&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_casopis_denik_nazev">{{ result.ext_zdroj_casopis_denik_nazev }}&#160;</ng-container>
-		<ng-container *ngIf="result.ext_zdroj_datum_rd">{{ result.ext_zdroj_datum_rd | date : 'dd.MM.yyyy' }}&#160;</ng-container>
+		<ng-container *ngIf="result.ext_zdroj_datum_rd">{{ result.ext_zdroj_datum_rd | date : 'dd.MM.yyyy' }},&#160;</ng-container>
 		<ng-container *ngIf="!inDocument">(<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>)</ng-container>
 		<ng-container *ngIf="result.ext_odkaz_paginace">,&#160;{{ result.ext_odkaz_paginace }}.&#160;</ng-container> 
 		<ng-container *ngIf="inDocument && result.ext_zdroj_paginace_titulu">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
