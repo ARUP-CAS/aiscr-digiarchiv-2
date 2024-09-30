@@ -46,7 +46,7 @@ public class ExtraData {
 //<xs:element name="vyska" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{vyska}" -->
     @JacksonXmlProperty(localName = "vyska")
     @Field
-    public long vyska;
+    public Long vyska = null;
 
 //<xs:element name="sirka" minOccurs="0" maxOccurs="1" type="xs:integer"/> <!-- "{sirka}" -->
     @JacksonXmlProperty(localName = "sirka")
@@ -120,7 +120,10 @@ public class ExtraData {
     public void fillSolrFields(SolrInputDocument idoc, String prefix, String pristupnost) {
 
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_cislo_objektu", cislo_objektu);
-        IndexUtils.addFieldNonRepeat(idoc, "extra_data_meritko", meritko);
+        if (meritko != null) {
+            IndexUtils.addFieldNonRepeat(idoc, "extra_data_meritko", meritko.replaceAll(" ", ""));
+        }
+        
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_vyska", vyska);
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_sirka", sirka);
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_pocet_variant_originalu", pocet_variant_originalu);
@@ -130,7 +133,7 @@ public class ExtraData {
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_region", region);
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_rok_od", rok_od);
         IndexUtils.addFieldNonRepeat(idoc, "extra_data_rok_do", rok_do);
-        IndexUtils.addFieldNonRepeat(idoc, "extra_data_duveryhodnost", duveryhodnost);
+        IndexUtils.addFieldNonRepeat(idoc, "extra_data_duveryhodnost", duveryhodnost); 
 
 //        IndexUtils.addVocabField(idoc, "extra_data_nahrada", nahrada);
 //        IndexUtils.addVocabField(idoc, "extra_data_udalost_typ", udalost_typ);

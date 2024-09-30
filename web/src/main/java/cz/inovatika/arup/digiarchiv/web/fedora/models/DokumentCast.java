@@ -56,7 +56,6 @@ public class DokumentCast {
     public NeidentAkce neident_akce;
 
     // public List<String> location_info = new ArrayList();
-
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) throws Exception {
 
         DocumentObjectBinder dob = new DocumentObjectBinder();
@@ -104,20 +103,41 @@ public class DokumentCast {
             if (json.getJSONObject("response").getInt("numFound") > 0) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
                 if (doc.has("projekt_chranene_udaje")) {
-                    JSONObject pcu = doc.getJSONObject("projekt_chranene_udaje");
 
-                    IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", doc.get("f_katastr_D"), pristupnost);
-                    IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("projekt_okres"));
+                    JSONObject az_chranene_udaje = doc.getJSONObject("projekt_chranene_udaje");
+                    String k = az_chranene_udaje.getJSONObject("hlavni_katastr").optString("value");
+                    IndexUtils.addSecuredFieldNonRepeat(idoc,
+                            "f_katastr",
+                            k,
+                            doc.getString("pristupnost"));
+
                     JSONObject li = new JSONObject()
-                            .put("dc", ident_cely)
-                            .put("projekt", projekt.getId())
                             .put("pristupnost", doc.getString("pristupnost"))
-                            .put("katastr", pcu.getJSONObject("hlavni_katastr").getString("value"))
+                            .put("katastr", k)
                             .put("okres", doc.getString("projekt_okres"));
-IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
-//                    if (!location_info.contains(li.toString())) {
-//                        location_info.add(li.toString());
-//                    }
+                    IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
+//                if (!location_info.contains(li.toString())) {
+//                    location_info.add(li.toString());
+//                }
+
+                    JSONArray dalsi_katastr = az_chranene_udaje.getJSONArray("dalsi_katastr");
+                    
+                    System.out.println(dalsi_katastr);
+                    for (int j = 0; j < dalsi_katastr.length(); j++) {
+                        k = dalsi_katastr.getJSONObject(j).optString("value");
+                        if (k != null) {
+
+                            SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
+                            JSONObject li2 = new JSONObject()
+                                    .put("pristupnost", doc.getString("pristupnost"))
+                                    .put("katastr", k)
+                                    .put("okres", doc.getString("projekt_okres"));
+                            IndexUtils.addFieldNonRepeat(idoc, "location_info", li2.toString());
+//                        if (!location_info.contains(li2.toString())) {
+//                            location_info.add(li2.toString());
+//                        }
+                        }
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -153,7 +173,7 @@ IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
                         .put("pristupnost", doc.getString("pristupnost"))
                         .put("katastr", k)
                         .put("okres", doc.getString("az_okres"));
-IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
+                IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
 //                if (!location_info.contains(li.toString())) {
 //                    location_info.add(li.toString());
 //                }
@@ -168,13 +188,12 @@ IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
                                 .put("pristupnost", doc.getString("pristupnost"))
                                 .put("katastr", k)
                                 .put("okres", doc.getString("az_okres"));
-IndexUtils.addFieldNonRepeat(idoc, "location_info", li2.toString());
+                        IndexUtils.addFieldNonRepeat(idoc, "location_info", li2.toString());
 //                        if (!location_info.contains(li2.toString())) {
 //                            location_info.add(li2.toString());
 //                        }
                     }
                 }
-
 
             }
 

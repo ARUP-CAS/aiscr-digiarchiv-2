@@ -93,8 +93,8 @@ public class DokumentSearcher implements EntitySearcher {
             }
             doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
             
+            JSONArray dokument_cast_projekt = new JSONArray();
             if (doc.has("dokument_cast_projekt")) {
-                // String fq = "{!join to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"";
                 String fq = "ident_cely:\"" + doc.getJSONArray("dokument_cast_projekt").getString(0) + "\"";
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery(fq)
@@ -103,13 +103,13 @@ public class DokumentSearcher implements EntitySearcher {
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {
-                        dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+                        dokument_cast_projekt.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
-            doc.put("dokument_cast_projekt", dokument_cast_archeologicky_zaznam);
+            doc.put("dokument_cast_projekt", dokument_cast_projekt);
             
             // dokument_cast_projekt
         }

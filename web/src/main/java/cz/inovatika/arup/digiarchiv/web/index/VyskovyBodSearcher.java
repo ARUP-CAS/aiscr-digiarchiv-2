@@ -81,7 +81,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*"};
+        return new String[]{"*,vyskovy_bod_geom_wkt:[json]"};
     }
 
     @Override
