@@ -65,6 +65,7 @@ public class Options {
         }
 
         String path = CONFIG_DIR + File.separator + "config.json";
+        LOGGER.log(Level.INFO, "Config dir is {0}", CONFIG_DIR);
 
         //Get server options
         File fserver = new File(getClass().getResource("server_config.json").getPath());
