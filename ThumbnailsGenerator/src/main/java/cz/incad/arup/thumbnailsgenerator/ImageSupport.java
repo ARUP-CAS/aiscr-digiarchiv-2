@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Date;
 import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
@@ -49,7 +48,7 @@ public class ImageSupport {
     try {
       Options opts = Options.getInstance();
       String destDir = opts.getString("thumbsDir");
-      String filename = f.substring(Math.max(0, f.lastIndexOf("/")), f.lastIndexOf("."));
+      String filename = f.substring(f.lastIndexOf("/") + 1);
       int period = 2;
       int levels = 3;
       int l = filename.length();

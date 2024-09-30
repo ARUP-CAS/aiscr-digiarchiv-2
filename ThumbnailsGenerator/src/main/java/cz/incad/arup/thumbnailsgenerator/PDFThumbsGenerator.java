@@ -162,12 +162,11 @@ public class PDFThumbsGenerator {
         for (PDPage page : document.getPages()) {
           LOGGER.log(Level.FINE, "page {0}", pageCounter + 1);
 
-//                        getImagesFromResources(page.getResources());
           BufferedImage bim = getImageFromPage(pdfRenderer, page.getMediaBox(), pageCounter, name);
           if (bim != null) {
-            if (pageCounter == 0) {
-              thumbnailPdfPage(bim, name);
-            }
+//            if (pageCounter == 0) {
+//              thumbnailPdfPage(bim, name);
+//            }
 
             if (onlyThumbs) {
               break;

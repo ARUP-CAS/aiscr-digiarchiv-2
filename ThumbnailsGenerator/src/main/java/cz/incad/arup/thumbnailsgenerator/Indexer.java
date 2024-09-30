@@ -98,8 +98,8 @@ public class Indexer {
       String sort = "path";
       int rows = 200;
       SolrQuery query = new SolrQuery();
-      query.addFilterQuery("entity:dokument");
-      query.setQuery("soubor:[* TO *]");
+      query.addFilterQuery("searchable:true");
+      query.setQuery("soubor_id:*");
       query.setFields("soubor");
       query.set("wt", "json");
       query.setRows(rows);
@@ -129,12 +129,11 @@ public class Indexer {
           jo.put("total docs", totalDocs);
           jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.getTime()));
           return jo;
-
         }
 
         SolrDocumentList docs = rsp.getResults();
         for (SolrDocument doc : docs) {
-          JSONArray ja = new JSONArray(doc.getFirstValue("soubor").toString());
+          JSONArray ja = new JSONArray(doc.getFieldValues("soubor"));
           for (int i = 0; i < ja.length(); i++) {
             JSONObject json = ja.getJSONObject(i);
             createThumbFromJSON(json, overwrite, false, onlyThumbs);
@@ -150,6 +149,85 @@ public class Indexer {
           cursorMark = nextCursorMark;
         }
       }
+
+      Date end = new Date();
+      String msg = String.format("Generate thumbs finished. Files processed: %1$d. Pdf thumbs: %2$d. Image thumbs: %3$d. Time: %4$tF",
+              totalDocs, pdfGen.generated, imgGenerated, end);
+      FileUtils.writeStringToFile(file, msg + System.getProperty("line.separator"), "UTF-8", true);
+      LOGGER.log(Level.INFO, msg);
+      JSONObject jo = new JSONObject();
+      jo.put("result", "Update success");
+      jo.put("total thumbs", totalDocs);
+      jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.getTime()));
+      dokumentClient.close();
+      return jo;
+
+    } catch (IOException | JSONException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+
+      Date end = new Date();
+
+      String msg = String.format("Generate thumbs finished with errors. Thumbs: %1$d", totalDocs);
+      File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "skipped.txt");
+      FileUtils.writeStringToFile(file, msg + System.getProperty("line.separator"), "UTF-8", true);
+      LOGGER.log(Level.INFO, msg);
+
+      JSONObject jo = new JSONObject();
+      jo.put("result", "error");
+      jo.put("error", ex.toString());
+      jo.put("total docs", totalDocs);
+      jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.getTime()));
+      return jo;
+    }
+  }
+
+  public JSONObject createForEntityRecord(String ident_cely) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
+    Date start = new Date();
+    totalDocs = 0;
+
+    try {
+      File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "skipped.txt");
+      FileUtils.writeStringToFile(file, "Create thums started at " + start.toString() + System.getProperty("line.separator"), "UTF-8", true);
+      dokumentClient = getClient("entities/");
+      int rows = 200;
+      SolrQuery query = new SolrQuery();
+      // query.addFilterQuery("entity:dokument");
+      query.setQuery("ident_cely:\"" + ident_cely + "\"");
+      query.setFields("soubor");
+      query.set("wt", "json");
+      query.setRows(rows);
+
+      QueryResponse rsp = null;
+
+        try {
+          rsp = dokumentClient.query(query);
+        } catch (SolrServerException e) {
+          LOGGER.log(Level.SEVERE, null, e);
+
+          Date end = new Date();
+
+          String msg = String.format("Generate thumbs finished with error. Thumbs :%1$d", totalDocs);
+          LOGGER.log(Level.INFO, msg);
+
+          JSONObject jo = new JSONObject();
+          jo.put("result", "error");
+          jo.put("error", e.toString());
+          jo.put("total docs", totalDocs);
+          jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.getTime()));
+          return jo;
+        }
+
+        SolrDocumentList docs = rsp.getResults();
+        for (SolrDocument doc : docs) {
+          JSONArray ja = new JSONArray(doc.getFieldValues("soubor"));
+          for (int i = 0; i < ja.length(); i++) {
+            JSONObject json = new JSONObject(ja.getString(i));
+            createThumbFromJSON(json, true, false, false);
+          }
+        }
+        //totalDocs += rsp.getResults().size();
+        LOGGER.log(Level.INFO, "Currently {0} files processed", totalDocs);
+
 
       Date end = new Date();
       String msg = String.format("Generate thumbs finished. Files processed: %1$d. Pdf thumbs: %2$d. Image thumbs: %3$d. Time: %4$tF",
@@ -317,28 +395,25 @@ public class Indexer {
 
   private void createThumbFromJSON(JSONObject json, boolean overwrite, boolean force, boolean onlyThumbs) throws MalformedURLException, IOException, URISyntaxException, InterruptedException {
 
-    String imagesDir = opts.getString("imagesDir");
-    String nazev = json.getJSONArray("nazev").getString(0);
-    String path = json.getJSONArray("path").getString(0);
-    String url = opts.getString("fedoraServer") + json.getJSONArray("path").getString(0) + "/orig";
-    String mimetype = json.getJSONArray("mimetype").getString(0);
-    if (overwrite || !ImageSupport.thumbExists(path)) {
-      File f = FedoraUtils.requestFile(url, path).toFile();
-      //FileUtils.copyURLToFile(new URL(url), f);
-      // File f = new File(imagesDir + path);
-      if (!f.exists()) {
-        LOGGER.log(Level.FINE, "File {0} doesn't exists", f);
+    String thumbsDir = opts.getString("thumbsDir");
+    String path = json.getString("path");
+    String id = json.getString("id");
+    String url = path + "/orig";
+    url = url.substring(url.indexOf("record"));
+    String mimetype = json.getString("mimetype");
+    if (overwrite || !ImageSupport.folderExists(id)) {
+      byte[] is = FedoraUtils.requestBytes(url, thumbsDir);
+      if (is == null) {
+        LOGGER.log(Level.INFO, "File {0} doesn't exists", path);
       } else {
         String msg = String.format("Currently Files processed: %1$d. Pdf thumbs: %2$d. Image thumbs: %3$d.",
                 totalDocs, pdfGen.generated, imgGenerated);
-        LOGGER.log(Level.INFO, "processing file {0}. {1}", new Object[]{f, msg});
+        LOGGER.log(Level.INFO, "processing file {0}. {1}", new Object[]{id, msg});
         if ("application/pdf".equals(mimetype)) {
-          pdfGen.processFile(f, force, onlyThumbs);
-//                            ImageSupport.thumbnailPdfPage(f, 0, nazev);
-//                            ImageSupport.mediumPdf(f, nazev);
+          // pdfGen.processFile(f, force, onlyThumbs);
+          pdfGen.processBytes(is, id, force, onlyThumbs);
         } else {
-          //ImageSupport.thumbnailzeImg(f, path, onlyThumbs);
-          ImageSupport.thumbnailzeImg(f, path, onlyThumbs);
+          // ImageSupport.thumbnailzeImg(is, path, onlyThumbs);
           imgGenerated++;
         }
       }
