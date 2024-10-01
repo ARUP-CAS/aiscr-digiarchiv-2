@@ -92,8 +92,9 @@
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           
           <ng-container *ngFor="let item of result.location_info; let last = last">
+            
               <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
-           <span *ngIf="!last">,&#160;</span>
+           <span *ngIf="!last && item.katastr">,&#160;</span>
           </ng-container>
 
           (<ng-container *ngFor="let okres of okresy; let last = last">
