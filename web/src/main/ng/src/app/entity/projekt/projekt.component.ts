@@ -82,7 +82,7 @@ export class ProjektComponent implements OnInit, OnChanges {
           this.result.valid_projekt_dokument = this.result.valid_projekt_dokument.concat(res.response.docs);
           if (res.response.docs.length < ids.length) {
             // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - 10 + res.response.docs.length; 
+            this.numChildren = this.numChildren - ids.length + res.response.docs.length; 
             this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
           }
           this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
@@ -104,7 +104,7 @@ export class ProjektComponent implements OnInit, OnChanges {
           this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
           if (res.response.docs.length < ids.length) {
             // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - 10 + res.response.docs.length; 
+            this.numChildren = this.numChildren - ids.length + res.response.docs.length; 
             this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
           }
           this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
