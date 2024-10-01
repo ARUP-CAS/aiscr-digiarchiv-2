@@ -602,6 +602,7 @@
       "Prosím zadejte platnou emailovou adresu": " Please enter a valid email address",
       "feedback_success": "Comment has been successfully submitted",
       "feedback_failed": "Error submitting comment",
+      "error": "Error",
       "search_error": "Error searching"
     },
     "license": {

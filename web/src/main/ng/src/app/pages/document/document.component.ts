@@ -76,7 +76,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.state.loading = false;
         this.loading = false;
         this.state.hasError = true;
-        this.service.showErrorDialog('error', 'search_error');
+        this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.search_error');
         return;
       }
       this.state.setSearchResponse(resp);

@@ -1,9 +1,9 @@
-<h1 mat-dialog-title>{{ data.title }}</h1>
+<h1 mat-dialog-title>{{ data.title | translate }}</h1>
 <div mat-dialog-content>
   <mat-card class="app-alert" [ngClass]="data.type === 'error' ? 'app-warn' : 'app-info' "  *ngFor="let message of data.message">
     <mat-icon>{{ data.type === 'error' ? 'warning' : 'info' }}</mat-icon>
     <div class="app-text">
-      {{ message }}
+      {{ message | translate }}
     </div>
   </mat-card>
 </div>

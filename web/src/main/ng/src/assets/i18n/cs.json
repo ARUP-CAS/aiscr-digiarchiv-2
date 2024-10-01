@@ -602,6 +602,7 @@
       "Prosím zadejte platnou emailovou adresu": "Prosím zadejte platnou emailovou adresu",
       "feedback_success": "Komentář byl úspěšně odeslán",
       "feedback_failed": "Chyba při odeslání komentáře",
+      "error": "Chyba",
       "search_error": "Chyba při odeslání dotazu"
     },
     "license": {
