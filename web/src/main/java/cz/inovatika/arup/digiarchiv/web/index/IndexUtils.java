@@ -61,6 +61,18 @@ public class IndexUtils {
         return _solrBin;
     }
 
+    public static void commitClientNoOp(String collection) {
+        try {
+            if (_solrNoOp != null) {
+                _solrNoOp.commit(collection);
+                _solrNoOp.close();
+                _solrNoOp = null;
+            }
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static void closeClient() {
         if (_solrBin != null) {
             _solrBin.close();
@@ -71,9 +83,6 @@ public class IndexUtils {
             _solrNoOp = null;
         }
     }
-    
-                            
-                            
 
     public static void addFieldNonRepeatByJSONVal(SolrInputDocument idoc, String field, Object val) {
         if (val != null) {
@@ -87,7 +96,7 @@ public class IndexUtils {
             }
         }
     }
-    
+
     public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
         if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
             idoc.addField(field, value);
@@ -219,7 +228,7 @@ public class IndexUtils {
             // idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
         }
     }
-    
+
     public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix) {
         boolean secured = path.contains("chranene_udaje");
         String[] parts = path.split("\\.", 2);
@@ -228,13 +237,13 @@ public class IndexUtils {
             return;
         }
         if (parts.length > 1) {
-            
-            for (Object o: vals) {
+
+            for (Object o : vals) {
                 try {
-                    Object jpReturns = JsonPath.read((String)o, "$." + parts[1]);
+                    Object jpReturns = JsonPath.read((String) o, "$." + parts[1]);
                     if (jpReturns instanceof List) {
-                        List<String> svals = (List<String>)jpReturns;
-                        for (String val: svals) {
+                        List<String> svals = (List<String>) jpReturns;
+                        for (String val : svals) {
                             if (secured) {
                                 for (String sufix : prSufix) {
                                     IndexUtils.addFieldNonRepeat(idoc, field + "_" + sufix, val);
@@ -256,9 +265,9 @@ public class IndexUtils {
                 } catch (com.jayway.jsonpath.PathNotFoundException pnfex) {
                     return;
                 }
-                
+
             }
-            
+
         } else {
             if (secured) {
                 for (String sufix : prSufix) {
@@ -268,7 +277,7 @@ public class IndexUtils {
                 addFieldNonRepeat(idoc, field, vals);
             }
         }
-        
+
     }
 
 //  public static void addSecuredJSONField(SolrInputDocument idoc, Object o) {

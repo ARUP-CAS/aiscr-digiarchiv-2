@@ -110,6 +110,7 @@ public class DokumentCast {
                             "f_katastr",
                             k,
                             doc.getString("pristupnost"));
+                    IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("projekt_okres"));
 
                     JSONObject li = new JSONObject()
                             .put("pristupnost", doc.getString("pristupnost"))
@@ -122,7 +123,6 @@ public class DokumentCast {
 
                     JSONArray dalsi_katastr = az_chranene_udaje.getJSONArray("dalsi_katastr");
                     
-                    System.out.println(dalsi_katastr);
                     for (int j = 0; j < dalsi_katastr.length(); j++) {
                         k = dalsi_katastr.getJSONObject(j).optString("value");
                         if (k != null) {

@@ -202,7 +202,6 @@ public class FedoraHarvester {
             int indexed = 0;
             int batchSize = 100;
             int pOffset = 0;
-
             String s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
             JSONObject json = new JSONObject(s);
             // getModels(); 
@@ -268,6 +267,7 @@ public class FedoraHarvester {
                     id = id.substring(0, id.indexOf("/metadata"));
                 }
                 id = id.split("/")[0];
+                LOGGER.log(Level.INFO, "Updating item  {0} ", id);
                 processRecord(id, true);
             }
         }
@@ -575,7 +575,7 @@ public class FedoraHarvester {
             start = Instant.now().toEpochMilli();
             indexXml(xml, model);
             if (processRelated) {
-                solr.commit("entities");
+                checkLists(0, 1, id, 1);
                 processRelated(id, model);
             }
             processTime += Instant.now().toEpochMilli() - start;
