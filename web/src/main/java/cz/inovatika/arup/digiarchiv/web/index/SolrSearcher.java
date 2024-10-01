@@ -427,6 +427,25 @@ public class SolrSearcher {
         }
     }
 
+    public static String getOkresByKatastr(String ruian) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("{!join fromIndex=ruian to=kod from=okres}kod:\"" + ruian + "\"")
+                    // .addFilterQuery("kod:\"" + ruian + "\"")
+                    .setRows(1).setFields("nazev");
+            JSONObject jo = json(client, "ruian", query);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("nazev");
+            } else {
+                return null;
+            }
+//            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     public static JSONObject getDokBySoubor(String id) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
