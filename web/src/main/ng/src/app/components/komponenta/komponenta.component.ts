@@ -1,6 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Komponenta } from 'src/app/shared/komponenta';
-import { Nalez } from 'src/app/shared/nalez';
 import { AppService } from 'src/app/app.service';
 import { Utils } from 'src/app/shared/utils';
 import { AppState } from 'src/app/app.state';
