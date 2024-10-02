@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,8 +37,6 @@ public class AkceSearcher implements EntitySearcher {
                 doc.remove("chranene_udaje");
                 doc.remove("az_chranene_udaje");
                 doc.remove("akce_chranene_udaje");
-//                doc.remove("loc");
-//                doc.remove("loc_rpt");
             }
         }
     }
@@ -78,6 +77,27 @@ public class AkceSearcher implements EntitySearcher {
 //      }
             SolrSearcher.addChildField(client, doc, "az_dokument", "valid_dokument", dfs);
             SolrSearcher.addChildField(client, doc, "akce_projekt", "valid_projekt", fields);
+        }
+    }
+    
+    public void addOkresy(JSONObject jo) {
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("az_chranene_udaje")) {
+                JSONArray cdjs = doc.getJSONObject("az_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
+                List<String> okresy = new ArrayList<>();
+                for (int j = 0; j < cdjs.length(); j++) {
+                    JSONObject dk = cdjs.getJSONObject(j);
+                    String ruian = dk.optString("id");
+                    String okres = SolrSearcher.getOkresByKatastr(ruian);
+                    if (!okresy.contains(okres)) {
+                        okresy.add(okres);
+                    }
+                }
+                doc.getJSONObject("az_chranene_udaje").put("okresy", okresy);
+            }
         }
     }
 
@@ -161,7 +181,7 @@ public class AkceSearcher implements EntitySearcher {
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             //LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-
+            addOkresy(jo);
             if (Boolean.parseBoolean(request.getParameter("mapa")) && 
                     jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
                 addPians(jo, client, request);

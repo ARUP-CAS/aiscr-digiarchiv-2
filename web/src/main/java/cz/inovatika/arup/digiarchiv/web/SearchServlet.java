@@ -1,7 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web;
 
 import cz.inovatika.arup.digiarchiv.web.index.ComponentSearcher;
-import cz.inovatika.arup.digiarchiv.web.index.DokumentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.PIANSearcher;

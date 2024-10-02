@@ -4,6 +4,7 @@ import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -172,6 +173,27 @@ public class ProjektSearcher implements EntitySearcher {
         }
     }
     
+    public void addOkresy(JSONObject jo) {
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("projekt_chranene_udaje")) {
+                JSONArray cdjs = doc.getJSONObject("projekt_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
+                List<String> okresy = new ArrayList<>();
+                for (int j = 0; j < cdjs.length(); j++) {
+                    JSONObject dk = cdjs.getJSONObject(j);
+                    String ruian = dk.optString("id");
+                    String okres = SolrSearcher.getOkresByKatastr(ruian);
+                    if (!okresy.contains(okres)) {
+                        okresy.add(okres);
+                    }
+                }
+                doc.getJSONObject("projekt_chranene_udaje").put("okresy", okresy);
+            }
+        }
+    }
+    
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -217,6 +239,7 @@ public class ProjektSearcher implements EntitySearcher {
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            addOkresy(jo);
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
 
