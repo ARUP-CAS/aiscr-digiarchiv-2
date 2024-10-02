@@ -348,8 +348,8 @@ class AZChraneneUdaje {
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
 
         for (Vocab v : dalsi_katastr) {
-            // IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
+            IndexUtils.addFieldNonRepeat(idoc, "f_okres", SolrSearcher.getOkresByKatastr(v.getId()));
         }
     }
 }

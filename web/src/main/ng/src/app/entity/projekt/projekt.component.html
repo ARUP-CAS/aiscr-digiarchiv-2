@@ -48,9 +48,12 @@
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
         <ng-container *ngFor="let k of result.projekt_chranene_udaje.dalsi_katastr; let last = last">
           <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
-          <!-- &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>) -->
           <span *ngIf="!last">;&#160;</span>
         </ng-container>
+        (<ng-container *ngFor="let k of result.projekt_chranene_udaje.okresy; let last = last">
+          <app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="k"></app-inline-filter>
+          <span *ngIf="!last">;&#160;</span>
+        </ng-container>)
       </div>
       <div *ngIf="result.projekt_podnet">
         <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;
