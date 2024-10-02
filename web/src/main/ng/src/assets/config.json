@@ -159,7 +159,6 @@
     {"type": "text", "field": "projekt_podnet"},
     {"type": "text", "field": "projekt_chu_lokalizace"},
     {"type": "text", "field": "projekt_parcelni_cislo"},
-    {"type": "text", "field": "projekt_planovane_zahajeni"},
     {"type": "text", "field": "projekt_kulturni_pamatka_cislo"},
     {"type": "text", "field": "projekt_kulturni_pamatka_popis"},
     {"type": "date", "field": "projekt_datum_zahajeni"},
