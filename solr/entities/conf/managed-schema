@@ -222,10 +222,7 @@
    <field name="projekt_chu_lokalizace_C" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_chu_lokalizace_D" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    
-   <field name="projekt_parcelni_cislo_A" type="text_general" indexed="true" stored="true" multiValued="false" /> 
-   <field name="projekt_parcelni_cislo_B" type="text_general" indexed="true" stored="true" multiValued="false" /> 
-   <field name="projekt_parcelni_cislo_C" type="text_general" indexed="true" stored="true" multiValued="false" /> 
-   <field name="projekt_parcelni_cislo_D" type="text_general" indexed="true" stored="true" multiValued="false" /> 
+   <dynamicField name="projekt_parcelni_cislo_*" type="text_general_std" indexed="true" stored="true" multiValued="false" /> 
    
    <field name="projekt_hlavni_katastr_A" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="projekt_hlavni_katastr_B" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -264,13 +261,13 @@
    <field name="adb_chranene_udaje_cislo_popisne" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_chranene_udaje_parcelni_cislo" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="adb_chranene_udaje_poznamka" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <dynamicField name="adb_uzivatelske_oznaceni_sondy_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
-   <dynamicField name="adb_trat_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
-   <dynamicField name="adb_cislo_popisne_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
-   <dynamicField name="adb_parcelni_cislo_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_uzivatelske_oznaceni_sondy_*" type="text_general_std" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_trat_*" type="text_general_std" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_cislo_popisne_*" type="text_general_std" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_parcelni_cislo_*" type="text_general_std" indexed="true" stored="true" multiValued="true" /> 
    <field name="az_adb_rok_popisu" type="pint" indexed="true" stored="true" multiValued="true" /> 
    <field name="az_adb_rok_revize" type="pint" indexed="true" stored="true" multiValued="true" /> 
-   <dynamicField name="adb_poznamka_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="adb_poznamka_*" type="text_general_std" indexed="true" stored="true" multiValued="true" /> 
    
    
    <!--
@@ -492,6 +489,7 @@
    <field name="f_let_pocasi" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_let_dohlednost" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="f_let_uzivatelske_oznaceni" type="string" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="f_uzivatelske_oznaceni_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    
    <field name="f_tvar" type="string" indexed="true" stored="true" multiValued="true" />
    
@@ -557,10 +555,10 @@
 	
 	
    <field name="adb_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <dynamicField name="adb_chranene_udaje_uzivatelske_oznaceni_sondy_*" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <dynamicField name="adb_chranene_udaje_trat_*" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <dynamicField name="adb_chranene_udaje_cislo_popisne_*" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <dynamicField name="adb_chranene_udaje_parcelni_cislo_*" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_uzivatelske_oznaceni_sondy_*" type="text_general_std" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_trat_*" type="text_general_std" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_cislo_popisne_*" type="text_general_std" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="adb_chranene_udaje_parcelni_cislo_*" type="text_general_std" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="adb_chranene_udaje_poznamka_*" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="vyskovy_bod_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="komponenta_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />

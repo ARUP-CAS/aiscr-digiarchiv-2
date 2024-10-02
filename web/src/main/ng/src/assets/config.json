@@ -104,7 +104,7 @@
     {"type": "text", "field": "ident_cely"},
     {"type": "text", "field": "popis"},
     {"type": "text", "field": "poznamka"},
-    {"type": "text", "field": "let_uzivatelske_oznaceni"},
+    {"type": "text", "field": "f_uzivatelske_oznaceni"},
     {"type": "date", "field": "dokument_datum_zverejneni"},
     
     

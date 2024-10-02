@@ -50,8 +50,8 @@
     "securedFacets": [
         "f_kategorie", "f_pian_zm10", "projekt_chu_lokalizace", "projekt_parcelni_cislo",
         "projekt_kulturni_pamatka_cislo", "projekt_kulturni_pamatka_popis",
-        "akce_lokalizace_okolnosti", "lokalita_nazev", 
-        "adb_uzivatelske_oznaceni_sondy", "adb_trat", "adb_cislo_popisne", "adb_parcelni_cislo", "adb_poznamka_A", 
+        "akce_lokalizace_okolnosti", "lokalita_nazev", "f_uzivatelske_oznaceni", 
+        "adb_uzivatelske_oznaceni_sondy", "adb_trat", "adb_cislo_popisne", "adb_parcelni_cislo", "adb_poznamka", 
         "f_okres", "f_katastr", "adb_vyskovy_bod_typ"],
 
     "kategoriet": {

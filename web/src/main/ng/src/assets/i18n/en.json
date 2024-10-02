@@ -175,7 +175,7 @@
       "ident_cely": "Identifier",
       "popis": "Description",
       "poznamka": "Note",
-      "f_let_uzivatelske_oznaceni": "User label",
+      "f_uzivatelske_oznaceni": "User label",
       "datum_provedeni": "Date of fieldwork",
       "dokument_rok_vzniku": "Document - year of creation",
       "dokument_datum_zverejneni": "Document - date of disclosure",

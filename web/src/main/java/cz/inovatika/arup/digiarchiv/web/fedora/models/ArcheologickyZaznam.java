@@ -345,11 +345,11 @@ class AZChraneneUdaje {
         // IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addRefField(idoc, "katastr_sort", hlavni_katastr);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
 
         for (Vocab v : dalsi_katastr) {
             // IndexUtils.addSecuredFieldNonRepeat(idoc, "dalsi_katastr", v.getValue(), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
         }
-        // IndexUtils.addSecuredFieldNonRepeat(idoc, "az_chranene_udaje_uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
     }
 }

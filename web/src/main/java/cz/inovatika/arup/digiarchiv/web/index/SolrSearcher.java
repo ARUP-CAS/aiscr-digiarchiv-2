@@ -193,8 +193,9 @@ public class SolrSearcher {
     }
 
     private static void addFilterNoQuotes(SolrQuery query, String field, String[] values, String pristupnost) {
-        String fq = field;
+        String fq = field; 
         if (Options.getInstance().getJSONArray("securedFacets").toList().contains(field)) {
+            System.out.println("KKKKKK");
             fq += "_" + pristupnost;
         }
         fq += ":(";
@@ -206,6 +207,9 @@ public class SolrSearcher {
                 val = val.substring(0, values[i].lastIndexOf(":"));
                 if (field.equals("extra_data_meritko")) {
                     val = val.replaceAll(" ", ""); 
+                    if (!val.startsWith("1:")) {
+                        val = "1:" + val;
+                    }
                 }
                 fq += op + "\"" + val + "\" ";
                 //fq += op + val + " ";
@@ -294,8 +298,9 @@ public class SolrSearcher {
                     query.addFilterQuery(fq);
                 } else if (numberFacets.contains(field)) {
                     String[] parts = request.getParameter(field).split(":")[0].split(",", 2);
+                    parts[0] = parts[0].replaceAll(",", ".");                    
                     String end = "*";
-                    if ("".equals(parts[0]) || !isInteger(parts[0])) {
+                    if ("".equals(parts[0]) || (!isInteger(parts[0]) && !isFloat(parts[0]))) {
                         parts[0] = "*";
                     }
                     if (parts.length > 1 && (isInteger(parts[1]) || isFloat(parts[1].replaceAll(",", ".")))) {

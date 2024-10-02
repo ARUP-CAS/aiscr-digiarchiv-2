@@ -205,6 +205,7 @@ public class Projekt implements FedoraModel {
         IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
         IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
         IndexUtils.addVocabField(idoc, "projekt_kulturni_pamatka", projekt_kulturni_pamatka);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_uzivatelske_oznaceni", projekt_uzivatelske_oznaceni, "A"); 
 
         if (projekt_datum_zahajeni != null) {
             IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_od", projekt_datum_zahajeni);
