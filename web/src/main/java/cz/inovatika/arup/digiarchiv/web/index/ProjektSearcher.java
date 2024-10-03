@@ -74,6 +74,7 @@ public class ProjektSearcher implements EntitySearcher {
             }
 
         }
+        addOkresy(jo);
 
     }
 
@@ -239,7 +240,6 @@ public class ProjektSearcher implements EntitySearcher {
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            addOkresy(jo);
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
 

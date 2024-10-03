@@ -39,6 +39,7 @@ public class AkceSearcher implements EntitySearcher {
                 doc.remove("akce_chranene_udaje");
             }
         }
+        addOkresy(jo);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class AkceSearcher implements EntitySearcher {
         }
     }
     
-    public void addOkresy(JSONObject jo) {
+    public void addOkresy(JSONObject jo) { 
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
@@ -181,7 +182,6 @@ public class AkceSearcher implements EntitySearcher {
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             //LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            addOkresy(jo);
             if (Boolean.parseBoolean(request.getParameter("mapa")) && 
                     jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
                 addPians(jo, client, request);

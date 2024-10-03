@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -85,36 +86,27 @@ public class ImageServlet extends HttpServlet {
     }
 
     private static JSONObject getDocument(String id) throws Exception {
-        SolrQuery query = new SolrQuery();
-        query.setQuery("id:\"" + id + "\"");
+        SolrQuery query = new SolrQuery("*") 
+                .addSort("datestamp", SolrQuery.ORDER.desc)
+                .setFields("soubor:[json]")
+                .addFilterQuery("soubor_id:\"" + id + "\"")
+                .addFilterQuery("searchable:true");
 
-        JSONObject json = SolrSearcher.json(IndexUtils.getClientNoOp(), "soubor", query);
+        JSONObject json = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query);
         if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
             LOGGER.log(Level.WARNING, "{0} not found", id);
             return null;
         }
-        return json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+        JSONArray soubor = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONArray("soubor");
+        for (int i = 0; i< soubor.length(); i++) {
+            JSONObject doc = soubor.getJSONObject(i);
+            if (id.equals(doc.optString("id"))) {
+                return doc;
+            }
+        }
+        return null;
 
     }
-
-//    private static InputStream getFromFedora(String id, String imgSize) throws Exception {
-//        SolrQuery query = new SolrQuery();
-//        query.setQuery("id:\"" + id + "\"");
-//
-//        JSONObject doc = getDocument(id);
-//        if (doc == null) {
-//            return null;
-//        }
-//
-//        String path = doc.getString("nazev");
-//        String url = doc.getString("path") + "/" + imgSize;
-//        url = url.substring(url.indexOf("record"));
-//
-//        //String mime = doc.getString("mimetype");
-//        LOGGER.log(Level.FINE, "Requesting from {0}. ", url);
-//        return FedoraUtils.requestInputStream(url);
-//
-//    }
 
     private static void writeImg(HttpServletResponse response, String id, String imgSize, ServletContext ctx) throws Exception {
 
@@ -134,6 +126,7 @@ public class ImageServlet extends HttpServlet {
             mime = "image/jpeg";
         }
         String url = doc.getString("path") + "/" + imgSize;
+        url = url.substring(url.indexOf("record"));
         InputStream is = FedoraUtils.requestInputStream(url);
 
         if (is != null) {

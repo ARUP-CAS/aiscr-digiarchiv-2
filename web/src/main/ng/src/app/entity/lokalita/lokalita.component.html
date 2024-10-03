@@ -59,6 +59,11 @@
           <!-- &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>) -->
           <span *ngIf="!last">;&#160;</span>
         </ng-container>
+
+        (<ng-container *ngFor="let k of result.az_chranene_udaje.okresy; let last = last">
+          <app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="k"></app-inline-filter>
+          <span *ngIf="!last">;&#160;</span>
+        </ng-container>)
       </div>
       <div *ngIf="result.lokalita_chranene_udaje?.popis" class="app-truncate-text">
         <label class="app-label">{{ 'card.desc.Popis' | translate }}:</label>&#160;{{ result.lokalita_chranene_udaje.popis }}<!-- {{ cropped(result.popis) }} -->
