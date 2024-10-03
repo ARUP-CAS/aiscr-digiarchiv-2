@@ -202,9 +202,7 @@
       {"type": "rok", "field": "az_adb_rok_revize"},
       {"type": "text", "field": "adb_poznamka"},
 
-    {"type": "text", "field": "vyskovy_bod_ident_cely"},
-
-    {"type": "text", "field": "lokalita_zachovalost_human"}
+    {"type": "text", "field": "vyskovy_bod_ident_cely"}
   ],
 
   "noPoradiFacets": {
