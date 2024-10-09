@@ -13,8 +13,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
@@ -54,6 +56,9 @@ public class Indexer {
     SolrClient dokumentClient;
     SolrClient exportClient;
     SolrClient relationsClient;
+    DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("YYYY-MM-dd'T'hh:mm:ss'Z'")
+            .withZone(ZoneId.systemDefault());
 
     public Indexer(boolean forced) {
 
@@ -86,9 +91,16 @@ public class Indexer {
                 core)).build();
         return server;
     }
+    
+    public JSONObject updateForUsed(boolean overwrite, boolean onlyThumbs) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
+        String lastUpdate = readUpdateTime();
+        String fq = "datestamp:[" + lastUpdate + " TO *]";
+        return createForUsed(overwrite, onlyThumbs, fq);
+    }
 
-    public JSONObject createForUsed(boolean overwrite, boolean onlyThumbs) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
-        Date start = new Date();
+    public JSONObject createForUsed(boolean overwrite, boolean onlyThumbs, String fq) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
+        Instant start = Instant.now();
+        // Date start = new Date();
         totalDocs = 0;
 
         try {
@@ -104,7 +116,10 @@ public class Indexer {
             query.set("wt", "json");
             query.setRows(rows);
             query.setSort(SolrQuery.SortClause.asc(sort));
-            // query.setTimeAllowed(0);
+            
+            if (fq != null) {
+                query.addFilterQuery(fq);
+            }
 
             String cursorMark = CursorMarkParams.CURSOR_MARK_START;
 
@@ -127,7 +142,7 @@ public class Indexer {
                     jo.put("result", "error");
                     jo.put("error", e.toString());
                     jo.put("total docs", totalDocs);
-                    jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.getTime()));
+                    jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.toEpochMilli()));
                     return jo;
                 }
 
@@ -159,8 +174,10 @@ public class Indexer {
             JSONObject jo = new JSONObject();
             jo.put("result", "Update success");
             jo.put("total thumbs", totalDocs);
-            jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.getTime()));
+            jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.toEpochMilli()));
             dokumentClient.close();
+            
+            writeUpdateTime(start);
             return jo;
 
         } catch (IOException | JSONException ex) {
@@ -177,7 +194,7 @@ public class Indexer {
             jo.put("result", "error");
             jo.put("error", ex.toString());
             jo.put("total docs", totalDocs);
-            jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.getTime()));
+            jo.put("ellapsed time", FormatUtils.formatInterval(end.getTime() - start.toEpochMilli()));
             return jo;
         }
     }
@@ -619,5 +636,31 @@ public class Indexer {
                 .forEach(File::delete);
 
     }
+    
+    private String readUpdateTime() {
+
+    try {
+      File file = new File(opts.getString("thumbsDir") + File.separator + "update.txt");
+      if (file.exists()) {
+        return FileUtils.readFileToString(file, "UTF-8");
+      } else {
+        return "*";
+      }
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return "*";
+    }
+  }
+
+  private void writeUpdateTime(Instant date) {
+    try {
+        
+        
+      File file = new File(opts.getString("thumbsDir") + File.separator + "update.txt");
+      FileUtils.writeStringToFile(file, formatter.format(date), "UTF-8", false);
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    }
+  }
 
 }

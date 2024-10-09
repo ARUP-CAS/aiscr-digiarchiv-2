@@ -45,7 +45,8 @@ public class PdfServlet extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
       
-    String id = request.getParameter("nazev");
+    //String id = request.getParameter("nazev");
+    String id = request.getParameter("id");
 
       boolean full = Boolean.parseBoolean(request.getParameter("full"));
     if (!ImageAccess.isAllowed(request, full)) {
@@ -72,10 +73,10 @@ public class PdfServlet extends HttpServlet {
             response.setHeader("Content-Disposition", "filename=" + StringEscapeUtils.escapeHtml4(f.getName()));
             IOUtils.copy(new FileInputStream(f), out);
           } else {
-            String size = request.getParameter("size");
-            if (size == null) {
-              size = "thumb";
-            }
+//            String size = request.getParameter("size");
+//            if (size == null) {
+//              size = "thumb";
+//            }
 
             //String fname = Options.getInstance().getString("thumbsDir") + id + ".jpg";
             String fname = ImageSupport.getDestDir(id) + id + File.separator + page + ".jpg";
