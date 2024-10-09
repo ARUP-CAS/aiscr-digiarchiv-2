@@ -106,7 +106,7 @@ public class Library3DSearcher implements EntitySearcher {
             "dokument_cast_neident_akce:[json],dok_jednotka:[json],pian:[json],adb:[json],soubor:[json],nalez_dokumentu:[json],location_info:[json]",
             // "dokument_cast:[json]",
             "komponenta:[json]",
-            "okres", "f_okres", "pian_id",
+            "okres", "f_okres", "pian_id", "f_areal", "f_obdobi",
             //            "f_pian_presnost:f_pian_presnost_" + pristupnost,
             //            "f_pian_typ:f_pian_typ_" + pristupnost,
             //            "f_pian_zm10:f_pian_zm10_" + pristupnost,

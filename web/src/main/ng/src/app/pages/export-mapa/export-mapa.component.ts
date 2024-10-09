@@ -68,14 +68,30 @@ export class ExportMapaComponent implements OnInit {
     p.mapa = true;
     p.noFacets = true;
     p.noStats = true;
+
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       
       if (resp.error) {
         this.state.loading = false;
         return;
       }
-      if (this.state.entity === 'samostatny_nalez' || this.state.entity === 'knihovna_3d') {
+      if (this.state.entity === 'knihovna_3d') {
         this.docs = resp.response.docs;
+        this.hasPian = false;
+      } else if (this.state.entity === 'samostatny_nalez') {
+        this.docs = resp.response.docs;
+        this.docs.forEach(doc => {
+          if (this.format === 'GeoJSON') {
+            // console.log(ident_cely, resp.geom_wkt_c);
+            const wkt = new Wkt.Wkt();
+            wkt.read(doc.samostatny_nalez_chranene_udaje.geom_wkt.value);
+            doc.geometrie = JSON.stringify(wkt.toJson());
+          } else if (this.format === 'GML') {
+            doc.geometrie = doc.samostatny_nalez_chranene_udaje.geom_gml;
+          } else {
+            doc.geometrie = doc.samostatny_nalez_chranene_udaje.geom_wkt.value;
+          }
+        });
         this.hasPian = false;
       } else {
         this.hasPian = true;
@@ -83,21 +99,23 @@ export class ExportMapaComponent implements OnInit {
         resp.response.docs.forEach(doc => {
           if(doc.pian) {
             
-            doc.pian.forEach(p => {
+            doc.pian.forEach(pian => {
               const d = JSON.parse(JSON.stringify(doc));
-              d.pian = p;
-              this.service.getGeometrie(p.ident_cely, this.format).subscribe((resp: any) => {
-                if (this.format === 'GeoJSON') {
-                  // console.log(ident_cely, resp.geom_wkt_c);
-                  const wkt = new Wkt.Wkt();
-                  wkt.read(resp.geometrie);
-                  d.geometrie = JSON.stringify(wkt.toJson());
-                } else {
-                  d.geometrie = resp.geometrie;
+              d.pian = pian;
+              this.service.getGeometrie(pian.ident_cely, this.format, p.loc_rpt).subscribe((resp: any) => {
+                if (resp.geometrie) {
+                  if (this.format === 'GeoJSON') {
+                    // console.log(ident_cely, resp.geom_wkt_c);
+                    const wkt = new Wkt.Wkt();
+                    wkt.read(resp.geometrie);
+                    d.geometrie = JSON.stringify(wkt.toJson());
+                  } else {
+                    d.geometrie = resp.geometrie;
+                  }
+                  // d.lat = p.centroid_n;
+                  // d.lng = p.centroid_e;
+                  this.docs.push(d);
                 }
-                // d.lat = p.centroid_n;
-                // d.lng = p.centroid_e;
-                this.docs.push(d);
               });
             });
           }

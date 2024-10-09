@@ -314,7 +314,7 @@
         {"name": "dokument_oznaceni_originalu"},
         {"name": "f_obdobi", "heslar": "obdobi_druha"},
         {"name": "f_areal", "heslar": "areal_druha"},
-        {"name": "dokument_extra_data_odkaz"}
+        {"name": "extra_data_odkaz", "heslar": "odkaz"}
       ],
       "akce": [
         {"name": "ident_cely"},

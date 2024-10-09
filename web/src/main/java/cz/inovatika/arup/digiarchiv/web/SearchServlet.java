@@ -239,7 +239,7 @@ public class SearchServlet extends HttpServlet {
                     if (searcher != null) {
                         searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
                     }
-                    
+
 //                    if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
 //                        
 //
@@ -251,7 +251,6 @@ public class SearchServlet extends HttpServlet {
 //                            }
 //                        }
 //                    }
-                    
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
                     return jo.toString();
@@ -315,7 +314,7 @@ public class SearchServlet extends HttpServlet {
                 return json.toString();
             }
         },
-        GEOMETRIE {
+        GEOMETRIE { 
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -325,24 +324,39 @@ public class SearchServlet extends HttpServlet {
                             .setFacet(false);
                     query.setRequestHandler("/search").setFields("pian_chranene_udaje:[json]");
                     String format = request.getParameter("format");
+                    String loc_rpt = request.getParameter("loc_rpt");
 
-                    JSONObject jo = SearchUtils.json(query, IndexUtils.getClientNoOp(), "entities").getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-                    
-                    
+                    if (loc_rpt != null) {
+                        String pristupnost = LoginServlet.pristupnost(request.getSession());
+                        if ("E".equals(pristupnost)) {
+                            pristupnost = "D";
+                        }
+                        String locField = "loc_rpt_" + pristupnost;
+                        String[] coords = request.getParameter("loc_rpt").split(",");
+                        String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+                        query.addFilterQuery(fq);
+                    }
+
+                    JSONArray docs = SearchUtils.json(query, IndexUtils.getClientNoOp(), "entities").getJSONObject("response").getJSONArray("docs");
+                    if (docs.length() == 0) {
+                        return json.toString();
+                    }
+                    JSONObject jo = docs.getJSONObject(0);
+
                     switch (format) {
                         case "GML":
                             jo.put("geometrie", jo.getJSONObject("pian_chranene_udaje").getString("geom_gml"));
                             //query.setFields("geometrie:geom_gml");
                             break;
-                        case "GeoJSON":
-                            jo.put("geometrie", GPSconvertor.convertGeojson(jo.getJSONObject("pian_chranene_udaje").getJSONObject(  "geom_wkt").getString("value")));
+                        case "GeoJSON": 
+                            jo.put("geometrie", GPSconvertor.convertGeojson(jo.getJSONObject("pian_chranene_udaje").getJSONObject("geom_wkt").getString("value")));
                             //query.setFields("geometrie:geom_gml");
                             break;
                         default:
-                            jo.put("geometrie", jo.getJSONObject("pian_chranene_udaje").getJSONObject(  "geom_wkt").getString("value"));
-                            // query.setFields("geometrie:geom_wkt");
+                            jo.put("geometrie", jo.getJSONObject("pian_chranene_udaje").getJSONObject("geom_wkt").getString("value"));
+                        // query.setFields("geometrie:geom_wkt");
                     }
-                    
+
                     jo.remove("pian_chranene_udaje");
 
 //                    if ("GeoJSON".equals(format)) {

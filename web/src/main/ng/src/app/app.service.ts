@@ -291,8 +291,12 @@ export class AppService {
     return this.get(`/search/wkt`, params);
   }
 
-  getGeometrie(id: string, format: string) {
-    const params: HttpParams = new HttpParams().set('id', id).set('format', format);
+  getGeometrie(id: string, format: string, loc_rpt: any) {
+    let params: HttpParams = new HttpParams().set('id', id).set('format', format)
+    if (loc_rpt) {
+      params = params.set('loc_rpt', loc_rpt);
+    }
+    
     return this.get(`/search/geometrie`, params);
   }
 

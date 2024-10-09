@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
-import static cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils.auth_header;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Uzivatel;
 import java.io.IOException;
 import java.net.URI;
@@ -10,10 +9,8 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 
 /**

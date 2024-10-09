@@ -24,7 +24,7 @@ public class DokumentSearcher implements EntitySearcher {
     public static final Logger LOGGER = Logger.getLogger(DokumentSearcher.class.getName());
 
     String ENTITY = "dokument";
-    
+
     public DokumentSearcher(String entity) {
         this.ENTITY = entity;
     }
@@ -38,14 +38,14 @@ public class DokumentSearcher implements EntitySearcher {
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             // checkRelations(jo, client, request);
-            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
-                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+            if (Boolean.parseBoolean(request.getParameter("mapa"))
+                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
                 addPians(jo, client, request);
             }
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            
+
             addProjekt(jo, client, request);
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             return jo;
@@ -92,7 +92,7 @@ public class DokumentSearcher implements EntitySearcher {
                 }
             }
             doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
-            
+
             JSONArray dokument_cast_projekt = new JSONArray();
             if (doc.has("dokument_cast_projekt")) {
                 String fq = "ident_cely:\"" + doc.getJSONArray("dokument_cast_projekt").getString(0) + "\"";
@@ -110,7 +110,7 @@ public class DokumentSearcher implements EntitySearcher {
                 }
             }
             doc.put("dokument_cast_projekt", dokument_cast_projekt);
-            
+
             // dokument_cast_projekt
         }
     }
@@ -134,9 +134,8 @@ public class DokumentSearcher implements EntitySearcher {
 //            JSONObject doc = ja.getJSONObject(i);
 //            SolrSearcher.addChildFieldByEntity(client, doc, "dokument_cast_archeologicky_zaznam", String.join(",", f));
 //        }
-
     }
-    
+
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -166,7 +165,7 @@ public class DokumentSearcher implements EntitySearcher {
             }
         }
     }
-    
+
     public void addProjekt(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -199,35 +198,38 @@ public class DokumentSearcher implements EntitySearcher {
 
     @Override
     public String[] getSearchFields(String pristupnost) {
-        
+
         List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
         List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").toList();
         List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("detail").toList();
 
         fields.addAll(headerFields);
         fields.addAll(detailFields);
-        
+
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
         fields.add("dokument_az_chranene_udaje_" + pristupnost + ":[json]");
+        fields.add("f_areal");
+        fields.add("f_obdobi");
+        fields.add("extra_data_odkaz");
 
         String[] ret = fields.toArray(new String[0]);
-        
+
         return ret;
     }
 
     @Override
     public String[] getChildSearchFields(String pristupnost) {
-        
+
         List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
         List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("dokument").getJSONArray("header").toList();
 
         fields.addAll(headerFields);
 
         String[] ret = fields.toArray(new String[0]);
-        
+
         return ret;
-        
+
         // return getSearchFields(pristupnost);
     }
 
@@ -274,7 +276,7 @@ public class DokumentSearcher implements EntitySearcher {
             JSONObject doc = ja.getJSONObject(i);
             String organizace = doc.optString("dokument_organizace");
             String docPr = doc.getString("pristupnost");
-            
+
             doc.put("dokument_az_chranene_udaje", doc.opt("dokument_az_chranene_udaje_" + pristupnost));
             doc.remove("dokument_az_chranene_udaje_" + pristupnost);
 
