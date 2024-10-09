@@ -844,7 +844,6 @@
        <str name="facet.field">f_let_letiste_cil</str>
        <str name="facet.field">f_let_pocasi</str>
        <str name="facet.field">f_let_dohlednost</str>
-       <str name="facet.field">f_let_uzivatelske_oznaceni</str>
 	   
        <str name="facet.field">f_tvar</str>
 
