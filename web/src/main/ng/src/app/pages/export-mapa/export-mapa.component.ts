@@ -77,6 +77,18 @@ export class ExportMapaComponent implements OnInit {
       }
       if (this.state.entity === 'knihovna_3d') {
         this.docs = resp.response.docs;
+        this.docs.forEach(doc => {
+          if (this.format === 'GeoJSON') {
+            // console.log(ident_cely, resp.geom_wkt_c);
+            const wkt = new Wkt.Wkt();
+            wkt.read(doc.dokument_extra_data.geom_wkt.value);
+            doc.geometrie = JSON.stringify(wkt.toJson());
+          } else if (this.format === 'GML') {
+            doc.geometrie = doc.dokument_extra_data.geom_gml;
+          } else {
+            doc.geometrie = doc.dokument_extra_data.geom_wkt.value;
+          }
+        });
         this.hasPian = false;
       } else if (this.state.entity === 'samostatny_nalez') {
         this.docs = resp.response.docs;

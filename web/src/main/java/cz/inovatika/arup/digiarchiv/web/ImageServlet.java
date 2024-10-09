@@ -123,7 +123,7 @@ public class ImageServlet extends HttpServlet {
         if (imgSize.equals("thumb")) {
             mime = "image/png";
         } else {
-            mime = "image/jpeg";
+            // mime = "image/jpeg"; 
         }
         String url = doc.getString("path") + "/" + imgSize;
         url = url.substring(url.indexOf("record"));

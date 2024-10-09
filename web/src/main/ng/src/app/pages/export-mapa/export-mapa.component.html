@@ -9,7 +9,7 @@
           <th *ngIf="hasPian">{{'export.desc.PIAN - typ'| translate}}</th>
           <th *ngIf="hasPian">{{'export.desc.PIAN - Základní mapa 1:10 000'| translate}}</th>
           <th *ngIf="hasPian">{{'export.desc.Definiční bod (WGS-84)' | translate}}</th>
-          <th *ngIf="state.entity !== 'knihovna_3d'" >{{'export.desc.' + format | translate}}</th>
+          <th >{{'export.desc.' + format | translate}}</th>
         </ng-container>
         <th *ngFor="let field of config.exportFields[state.entity]">{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
       </tr>
@@ -23,7 +23,7 @@
           <td *ngIf="hasPian">{{r.pian.pian_typ | translateHeslar : 'typ_pian'}}</td>
           <td *ngIf="hasPian">{{r.pian.pian_chranene_udaje.zm10}}</td>
           <td *ngIf="hasPian">{{ r.pian.lat }} : {{ r.pian.lng }}</td>
-          <td *ngIf="state.entity !== 'knihovna_3d'" >{{r.geometrie}}</td>
+          <td >{{r.geometrie}}</td>
         </ng-container>
 
         <td *ngFor="let field of config.exportFields[state.entity]">
