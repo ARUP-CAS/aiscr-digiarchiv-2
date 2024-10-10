@@ -3,11 +3,11 @@
     "solrRels": "http://localhost:8983/solr/",
 
     "OAI": {
-        "baseUrl": "http://baseUrl/", 
-        "repositoryName": "repositoryName",
-        "adminEmail": "mail@oai",
+        "baseUrl": "https://api.aiscr.cz", 
+        "repositoryName": "Archaeological Map of the Czech Republic (AMCR)",
+        "adminEmail": "info@amapa.cz",
         "metadataPrefixes": ["oai_dc", "oai_amcr"],
-        "recordsPerPage": 50,
+        "recordsPerPage": 100,
         "orderField": "datestamp",
         "orderDirection": "desc",
         "resumptionTokenExpires": 60,
@@ -15,11 +15,11 @@
             "osoba","uzivatel","let", "adb","knihovna_3d"]
     },
     
-    "auth": "http://192.168.254.30:8080/api/",
+    "auth": "https://amcr.aiscr.cz/api/",
 
     "fedora": {
-        "api.point": "https://fedora-test.aiscr.cz/rest/AMCR/",
-        "search.point": "https://fedora-test.aiscr.cz/rest/fcr:search?",
+        "api.point": "https://fedora.aiscr.cz/rest/AMCR/",
+        "search.point": "https://fedora.aiscr.cz/rest/fcr:search?",
         "models":["heslo", "ruian_kraj", "ruian_okres", "ruian_katastr", "organizace", "osoba", "uzivatel", "adb", "pian", "ext_zdroj", "let", "archeologicky_zaznam", "projekt", "samostatny_nalez", "dokument", "deleted"],
         "user": "",
         "pwd": "",
@@ -35,17 +35,17 @@
         "smtp.pwd": "heslo"
     },
 
-    "imagesDir": "/home/alberto/Projects/ARUP/data/",
-    "thumbsDir": "/home/alberto/.amcr/thumbs/",
+    "imagesDir": "/var/lib/digiarchiv/thumbs/",
+    "thumbsDir": "/var/lib/digiarchiv/data/",
     "dynamicThumbs": false,
     "thumbWidth": 100,
     "thumbHeight": 100,
     "mediumHeight": 1000,
-    "maxPixels": 5000000,
+    "maxPixels": 10000000,
     "watermark.alpha": 0,
     "sessionTimeout": 3600,
     "indexSecLevel": "E",
-    "allowedIP": ["192.168.254.37", "192.168.28.142"],
+    "allowedIP": [""],
 
     "securedFacets": [
         "f_kategorie", "f_pian_zm10", "projekt_chu_lokalizace", "projekt_parcelni_cislo",

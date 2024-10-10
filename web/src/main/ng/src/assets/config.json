@@ -3,9 +3,9 @@
   "isTest": false,
   "defaultLang": "cs",
   "serverUrl": "https://digiarchiv.aiscr.cz/",
-  "registrationUrl": "https://amcr-test.aiscr.cz/accounts/register/",
+  "registrationUrl": "https://amcr.aiscr.cz/accounts/register/",
   "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/",
-  "restorePassword": "https://amcr-test.aiscr.cz/accounts/password_reset",
+  "restorePassword": "https://amcr.aiscr.cz/accounts/password_reset",
 
   "mapOptions": {
     "docsForMarker": 500,
@@ -377,8 +377,8 @@
     },
 
   "choiceApi": [
-    {"label": "api_prefix", "url": "https://api-test.aiscr.cz/id/"},
-    {"label": "show_in_AMCR", "url": "https://amcr-test.aiscr.cz/id/"}
+    {"label": "api_prefix", "url": "https://api.aiscr.cz/id/"},
+    {"label": "show_in_AMCR", "url": "https://amcr.aiscr.cz/id/"}
   ],
 
   "feedBackMaxLength": 4000
