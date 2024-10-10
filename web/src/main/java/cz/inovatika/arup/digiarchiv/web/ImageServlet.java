@@ -119,12 +119,9 @@ public class ImageServlet extends HttpServlet {
             return;
         }
 
-        String mime = doc.optString("mimetype", "image/jpeg");
-        if (imgSize.equals("thumb")) {
-            mime = "image/png";
-        } else {
-            // mime = "image/jpeg"; 
-        }
+        // String mime = doc.optString("mimetype", "image/jpeg");
+        
+        String mime = "image/png";
         String url = doc.getString("path") + "/" + imgSize;
         url = url.substring(url.indexOf("record"));
         InputStream is = FedoraUtils.requestInputStream(url);

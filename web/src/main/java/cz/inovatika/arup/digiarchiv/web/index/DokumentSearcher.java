@@ -40,6 +40,7 @@ public class DokumentSearcher implements EntitySearcher {
             // checkRelations(jo, client, request);
             if (Boolean.parseBoolean(request.getParameter("mapa"))
                     && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+                
                 addPians(jo, client, request);
             }
             SolrSearcher.addFavorites(jo, client, request);
@@ -210,8 +211,8 @@ public class DokumentSearcher implements EntitySearcher {
         fields.add("loc:loc_rpt_" + pristupnost);
         fields.add("dokument_az_chranene_udaje_" + pristupnost + ":[json]");
         fields.add("f_areal");
-        fields.add("f_obdobi");
-        fields.add("extra_data_odkaz");
+        fields.add("f_obdobi"); 
+        fields.add("dokument_extra_data_odkaz:extra_data_odkaz");
 
         String[] ret = fields.toArray(new String[0]);
 
@@ -287,7 +288,6 @@ public class DokumentSearcher implements EntitySearcher {
                 doc.remove("loc");
                 doc.remove("lat");
                 doc.remove("lng");
-                doc.remove("pian");
                 doc.remove("parent_akce_katastr");
                 doc.remove("dok_jednotka");
 
