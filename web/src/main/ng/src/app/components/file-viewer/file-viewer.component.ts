@@ -71,7 +71,6 @@ export class FileViewerComponent implements OnInit {
 
   downloadUrl() {
     return this.config.context + '/api/img/full?id=' + this.selectedFile.id;
-    // return this.imgPoint(this.selectedFile, 'full') + '?id=' + this.selectedFile.id;
   }
 
   imgPoint(doc: any, size: string) {

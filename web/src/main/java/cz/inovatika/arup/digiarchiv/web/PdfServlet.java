@@ -48,37 +48,13 @@ public class PdfServlet extends HttpServlet {
     //String id = request.getParameter("nazev");
     String id = request.getParameter("id");
 
-      boolean full = Boolean.parseBoolean(request.getParameter("full"));
-    if (!ImageAccess.isAllowed(request, full)) {
-      LOGGER.log(Level.WARNING, "insuficient rights!!");
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().println("insuficient rights!!");
-      return;
-    }
+   
     
     try (OutputStream out = response.getOutputStream()) {
       String page = request.getParameter("page");
       Options opts = Options.getInstance();
       if (id != null && !id.equals("")) {
         try {
-          if (full) {
-            String imagesDir = opts.getString("imagesDir");
-            File f = new File(imagesDir + id);
-            String mime = getServletContext().getMimeType(f.getName());
-            if ( mime != null) {
-              response.setContentType(mime);
-            } else {
-              response.setContentType("image/jpeg"); 
-            }
-            response.setHeader("Content-Disposition", "filename=" + StringEscapeUtils.escapeHtml4(f.getName()));
-            IOUtils.copy(new FileInputStream(f), out);
-          } else {
-//            String size = request.getParameter("size");
-//            if (size == null) {
-//              size = "thumb";
-//            }
-
-            //String fname = Options.getInstance().getString("thumbsDir") + id + ".jpg";
             String fname = ImageSupport.getDestDir(id) + id + File.separator + page + ".jpg";
             File f = new File(fname);
             if (f.exists()) {
@@ -94,7 +70,7 @@ public class PdfServlet extends HttpServlet {
             LOGGER.log(Level.WARNING, "File does not exist in {0}. ",fname);
               emptyImg(response, out);
             }
-          }
+          
         } catch (Exception ex) {
           LOGGER.log(Level.SEVERE, null, ex);
           emptyImg(response, out);
