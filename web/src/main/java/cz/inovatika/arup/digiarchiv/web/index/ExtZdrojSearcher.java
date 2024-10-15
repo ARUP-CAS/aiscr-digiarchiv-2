@@ -54,7 +54,7 @@ public class ExtZdrojSearcher implements EntitySearcher {
 //            "ident_cely,entity,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
 //        };
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) {
+        for (int i = 0; i < ja.length(); i++) { 
             try {
                 JSONObject doc = ja.getJSONObject(i);
                 if (LoginServlet.userId(request) != null) {
@@ -62,7 +62,8 @@ public class ExtZdrojSearcher implements EntitySearcher {
                 }
                     SolrQuery query = new SolrQuery("*")
                             .addFilterQuery("az_ext_zdroj:\"" + doc.getString("ident_cely") + "\"")
-                            .setFields(as.getChildSearchFields(pristupnost));
+                            .setFields(as.getChildSearchFields(pristupnost))
+                            .setRows(1000);
                     JSONObject r = SolrSearcher.json(client, "entities", query);
                     JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
                     for (int j = 0; j < cdjs.length(); j++) {
