@@ -84,14 +84,23 @@ public class SearchServlet extends HttpServlet {
                 JSONObject json = new JSONObject();
                 try {
                     Http2SolrClient client = IndexUtils.getClientNoOp();
+                    String pristupnost = LoginServlet.pristupnost(request.getSession());
+                    if ("E".equals(pristupnost)) {
+                        pristupnost = "D";
+                    }
                     SolrQuery query = new SolrQuery("*")
+                            .addFilterQuery("{!tag=entityF}entity:dokument")
                             .setRequestHandler("/search")
                             .setRows(0)
                             .setFacet(true).addFacetField("dokument_kategorie_dokumentu", "dokument_rada")
                             .setParam("json.nl", "map");
+                    query.add("stats", "true");
+                    query.add("stats.field", "{!key=lat}lat_" + pristupnost);
+                    query.add("stats.field", "{!key=lng}lng_" + pristupnost);
                     JSONObject jo = SearchUtils.json(query, client, "entities");
                     json = jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("entity");
                     json.put("kategorie", jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("dokument_kategorie_dokumentu"));
+                    json.put("stats", jo.getJSONObject("stats")); 
 
                 } catch (Exception ex) {
                     json.put("error", ex);
@@ -314,7 +323,7 @@ public class SearchServlet extends HttpServlet {
                 return json.toString();
             }
         },
-        GEOMETRIE { 
+        GEOMETRIE {
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -348,7 +357,7 @@ public class SearchServlet extends HttpServlet {
                             jo.put("geometrie", jo.getJSONObject("pian_chranene_udaje").getString("geom_gml"));
                             //query.setFields("geometrie:geom_gml");
                             break;
-                        case "GeoJSON": 
+                        case "GeoJSON":
                             jo.put("geometrie", GPSconvertor.convertGeojson(jo.getJSONObject("pian_chranene_udaje").getJSONObject("geom_wkt").getString("value")));
                             //query.setFields("geometrie:geom_gml");
                             break;
