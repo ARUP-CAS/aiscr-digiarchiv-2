@@ -151,6 +151,10 @@ public class Dokument implements FedoraModel {
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
+        for (Historie h: historie) {
+            IndexUtils.addJSONField(idoc, "historie", h);
+        }
+        
 
         entity = (dokument_rada.getId().toUpperCase().equals("HES-000870")) ? "knihovna_3d" : "dokument";
         idoc.setField("entity", entity);

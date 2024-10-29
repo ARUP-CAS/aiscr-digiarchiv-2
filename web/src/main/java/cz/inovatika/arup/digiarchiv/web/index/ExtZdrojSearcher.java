@@ -46,30 +46,30 @@ public class ExtZdrojSearcher implements EntitySearcher {
         if ("E".equals(pristupnost)) {
             pristupnost = "D";
         }
-        
+
         AkceSearcher as = new AkceSearcher();
-            
+
 //        String[] f = new String[]{
 //            "chranene_udaje:[json]",
 //            "ident_cely,entity,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
 //        };
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) { 
+        for (int i = 0; i < ja.length(); i++) {
             try {
                 JSONObject doc = ja.getJSONObject(i);
-                if (LoginServlet.userId(request) != null) {
-                    SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+//                if (LoginServlet.userId(request) != null) {
+//                    SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+//                }
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("az_ext_zdroj:\"" + doc.getString("ident_cely") + "\"")
+                        .setFields(as.getChildSearchFields(pristupnost))
+                        .setRows(1000);
+                JSONObject r = SolrSearcher.json(client, "entities", query);
+                JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    JSONObject cdj = cdjs.getJSONObject(j);
+                    doc.append(cdj.getString("entity"), cdj);
                 }
-                    SolrQuery query = new SolrQuery("*")
-                            .addFilterQuery("az_ext_zdroj:\"" + doc.getString("ident_cely") + "\"")
-                            .setFields(as.getChildSearchFields(pristupnost))
-                            .setRows(1000);
-                    JSONObject r = SolrSearcher.json(client, "entities", query);
-                    JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
-                    for (int j = 0; j < cdjs.length(); j++) {
-                        JSONObject cdj = cdjs.getJSONObject(j);
-                        doc.append(cdj.getString("entity"), cdj);
-                    }
             } catch (SolrServerException ex) {
                 Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -81,7 +81,8 @@ public class ExtZdrojSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -97,7 +98,8 @@ public class ExtZdrojSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-                try {            Http2SolrClient client = IndexUtils.getClientNoOp();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");

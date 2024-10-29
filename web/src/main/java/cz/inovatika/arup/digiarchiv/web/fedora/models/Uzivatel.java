@@ -106,6 +106,7 @@ public class Uzivatel implements FedoraModel {
     public void fillSolrFields(SolrInputDocument idoc) {
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
+        IndexUtils.addVocabField(idoc, "organizace", organizace);
     }
     
     @Override

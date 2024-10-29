@@ -49,7 +49,9 @@ public class ImageServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            String action = request.getPathInfo().substring(1);
+            String action = request
+                    .getPathInfo()
+                    .substring(1);
             if (action != null) {
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
                 actionToDo.doPerform(request, response, getServletContext());

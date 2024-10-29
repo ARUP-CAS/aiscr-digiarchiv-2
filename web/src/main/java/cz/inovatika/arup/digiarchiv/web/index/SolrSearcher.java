@@ -451,6 +451,24 @@ public class SolrSearcher {
         }
     }
 
+    public static String getOrganizaceUzivatele(String ident_cely) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
+                    .setRows(1).setFields("organizace");
+            JSONObject jo = json(client, "uzivatel", query);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");
+            } else {
+                return null;
+            }
+//            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     public static JSONObject getDokBySoubor(String id) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 

@@ -45,7 +45,6 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     if (this.result.soubor_filepath?.length > 0) {
-      //this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
       this.imgSrc = this.config.context + '/api/img/thumb?id=' + this.result.soubor[0].id;
 
     }

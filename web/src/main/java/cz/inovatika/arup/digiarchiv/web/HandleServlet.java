@@ -5,15 +5,31 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
+import static cz.inovatika.arup.digiarchiv.web.ImageServlet.LOGGER;
+import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
+import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -37,8 +53,14 @@ public class HandleServlet extends HttpServlet {
         String id = request.getPathInfo().substring(1);
         if (id.contains("file")) {
             // response.getWriter().println(id);
-            RequestDispatcher rd=request.getRequestDispatcher("/img");  
-            rd.forward(request, response);
+            // RequestDispatcher rd = request.getRequestDispatcher("/img/" + request.getPathInfo());
+//            RequestDispatcher rd = request.getRequestDispatcher("/img");
+//            rd.include(request, response);
+            try {
+                getFile(id, request, response);
+            } catch (Exception ex) {
+                Logger.getLogger(HandleServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             try (PrintWriter out = response.getWriter()) {
                 response.setContentType("text/html;charset=UTF-8");
@@ -47,6 +69,226 @@ public class HandleServlet extends HttpServlet {
                 out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
             }
         }
+    }
+
+    private static void getFile(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        JSONObject user = new JSONObject();
+        final String authorization = request.getHeader("Authorization");
+        if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
+            // Authorization: Basic base64credentials
+            String base64Credentials = authorization.substring("Basic".length()).trim();
+            byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+            String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+            // credentials = username:password
+            final String[] values = credentials.split(":", 2);
+            user = AuthService.login(values[0], values[1]);
+            if (!user.has("error")) {
+                request.getSession().setAttribute("user", user);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().print("Invalid credentials");
+                return;
+            }
+
+        }
+
+        if (id != null && !id.equals("")) {
+            File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR));
+            try {
+
+                if (id.contains("page")) {
+
+                }
+                JSONObject doc = getDocument(id, user);
+                if (doc == null) {
+                    LOGGER.log(Level.WARNING, "{0} not found", id);
+                    return;
+                }
+
+                if (doc.optBoolean("not_allowed")) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().println("insuficient rights!!");
+                    return;
+                }
+
+                String mime = doc.getString("mimetype");
+                response.setContentType(mime);
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + doc.getString("nazev") + "\"");
+
+                String url = doc.getString("path");
+                if (id.endsWith("thumb")) {
+                    url += "/thumb";
+                } else {
+                    url += "/orig";
+                }
+                url = url.substring(url.indexOf("record"));
+                InputStream is = FedoraUtils.requestInputStream(url);
+                FileUtils.copyInputStreamToFile(is, f);
+                LOGGER.log(Level.INFO, "bytes received: {0}", f.length());
+                IOUtils.copy(new FileInputStream(f), response.getOutputStream());
+                is.close();
+
+            } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            } finally {
+                f.delete();
+            }
+        }
+    }
+
+    private static boolean isAllowed(JSONObject doc, JSONObject user) {
+        String entity = doc.optString("entity");
+        int stav = doc.optInt("stav");
+        String docPr = doc.getString("pristupnost");
+        String docOrg = doc.optString("dokument_organizace");
+
+        String userPr = user.optString("pristupnost", "A");
+        String userId = user.optString("ident_cely", "A");
+        String userOrg = "none";
+        if (user.has("organizace")) {
+            userOrg = user.getJSONObject("organizace").optString("id", "");
+        }
+        boolean sameOrg = userOrg.toLowerCase().equals(docOrg.toLowerCase()) && "C".compareTo(docPr) >= 0;
+
+        switch (entity) {
+            case "projekt":
+//-- A-B: nikdy
+//-- C: projekt/stav = 1 OR (projekt/stav >= 2 AND projekt/stav <= 6 AND projekt/organizace = {user}.organizace)
+//-- D-E: bez omezení
+                if (userPr.equalsIgnoreCase("C")
+                        && ((stav == 1) || (sameOrg && stav <= 6))) {
+                    return true;
+                } else {
+                    return userPr.compareToIgnoreCase("D") >= 0;
+                }
+            case "dokument":
+//-- A: dokument/pristupnost = A AND dokument/stav = 3
+//-- B: (dokument/pristupnost <= B AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel = {user}
+//-- C: (dokument/pristupnost <= C AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel.organizace = {user}.organizace
+//-- D-E: bez omezení
+                if (userPr.equalsIgnoreCase("A") && stav == 3) {
+                    return true;
+                } else if (userPr.equalsIgnoreCase("B")) {
+                    if (docPr.compareToIgnoreCase("B") <= 0 && stav == 3) {
+                        return true;
+                    }
+
+                    JSONArray h = doc.getJSONArray("historie");
+                    String uzivatel = null;
+                    for (int i = 0; i < h.length(); i++) {
+                        JSONObject hi = h.getJSONObject(i);
+                        if ("D01".equals(hi.optString("typ_zmeny"))) {
+                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                        }
+                    }
+                    return (userId.equals(uzivatel));
+
+                } else if (userPr.equalsIgnoreCase("C")) {
+                    if (docPr.compareToIgnoreCase("C") <= 0 && stav == 3) {
+                        return true;
+                    }
+
+                    JSONArray h = doc.getJSONArray("historie");
+                    String uzivatel = "KKK";
+                    for (int i = 0; i < h.length(); i++) {
+                        JSONObject hi = h.getJSONObject(i);
+                        if ("D01".equals(hi.optString("typ_zmeny"))) {
+                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                        }
+                    }
+                    return (userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel)));
+
+                } else {
+                    return userPr.compareToIgnoreCase("D") >= 0;
+                }
+            case "samostatny_nalez":
+//-- A: samostatny_nalez/pristupnost = A AND samostatny_nalez/stav = 4
+//-- B: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user}
+//-- C: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} OR projekt/organizace = {user}.organizace
+//-- D-E: bez omezení
+                if (userPr.equalsIgnoreCase("A") && stav == 4) {
+                    return true;
+                } else if (userPr.equalsIgnoreCase("B")) {
+                    if (docPr.compareToIgnoreCase("B") <= 0 && stav == 4) {
+                        return true;
+                    }
+
+                    JSONArray h = doc.getJSONArray("historie");
+                    String uzivatel = null;
+                    for (int i = 0; i < h.length(); i++) {
+                        JSONObject hi = h.getJSONObject(i);
+                        if ("SN01".equals(hi.optString("typ_zmeny"))) {
+                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                        }
+                    }
+                    return (userId.equals(uzivatel));
+
+                } else if (userPr.equalsIgnoreCase("C")) {
+                    if (docPr.compareToIgnoreCase("C") <= 0 && stav == 4) {
+                        return true;
+                    }
+
+                    JSONArray h = doc.getJSONArray("historie");
+                    String uzivatel = "KKK";
+                    
+                    
+                    
+                    for (int i = 0; i < h.length(); i++) {
+                        JSONObject hi = h.getJSONObject(i);
+                        if ("D01".equals(hi.optString("typ_zmeny"))) {
+                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                        }
+                    }
+                    if (userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel))) {
+                        return true;
+                    }
+                    
+                    String projektId = doc.optString("samostatny_nalez_projekt");
+                    String projektOrg = null;
+                    SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
+                            .setFields("projekt_organizace");
+                    JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
+
+                    if (json.getJSONObject("response").getInt("numFound") > 0) {
+                        projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt_organizace");
+                    }
+
+                    return (userOrg.equals(projektOrg));
+
+                } else {
+                    return userPr.compareToIgnoreCase("D") >= 0;
+                }
+            default:
+                return false;
+        }
+    }
+
+    private static JSONObject getDocument(String id, JSONObject user) throws Exception {
+        String soubor_filepath = "rest/AMCR/record/" + id;
+        SolrQuery query = new SolrQuery("*")
+                .addSort("datestamp", SolrQuery.ORDER.desc)
+                .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,soubor:[json],historie:[json]")
+                .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"")
+                .addFilterQuery("searchable:true");
+
+        JSONObject json = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query);
+        if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
+            LOGGER.log(Level.WARNING, "{0} not found", id);
+            return null;
+        }
+        if (!isAllowed(json, user)) {
+            return new JSONObject().put("not_allowed", true);
+        }
+
+        JSONArray soubor = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONArray("soubor");
+        for (int i = 0; i < soubor.length(); i++) {
+            JSONObject doc = soubor.getJSONObject(i);
+            if (soubor_filepath.equals(doc.optString("path"))) {
+                return doc;
+            }
+        }
+        return null;
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
