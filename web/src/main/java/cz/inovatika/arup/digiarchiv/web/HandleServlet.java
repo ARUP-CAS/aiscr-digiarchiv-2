@@ -7,18 +7,22 @@ package cz.inovatika.arup.digiarchiv.web;
 
 import static cz.inovatika.arup.digiarchiv.web.ImageServlet.LOGGER;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
+import cz.inovatika.arup.digiarchiv.web.imagging.ImageSupport;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -71,6 +75,30 @@ public class HandleServlet extends HttpServlet {
         }
     }
 
+    private static void getPdfPage(JSONObject soubor, String page, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        try (OutputStream out = response.getOutputStream()) {
+            String id = soubor.getString("id");
+            if (id != null && !id.equals("")) {
+                try {
+                    String fname = ImageSupport.getDestDir(id) + id + File.separator + page + ".jpg";
+                    File f = new File(fname);
+                    if (f.exists()) {
+                        response.setContentType("image/jpeg");
+                        response.setHeader("Content-Disposition", "filename=" + id + "_" + f.getName());
+                        BufferedImage bi = ImageIO.read(f);
+                        ImageIO.write(bi, "jpg", out);
+                    } else {
+                        LOGGER.log(Level.WARNING, "File does not exist in {0}. ",fname);
+                    }
+
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
     private static void getFile(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject user = new JSONObject();
         final String authorization = request.getHeader("Authorization");
@@ -89,16 +117,11 @@ public class HandleServlet extends HttpServlet {
                 response.getWriter().print("Invalid credentials");
                 return;
             }
-
         }
 
         if (id != null && !id.equals("")) {
             File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR));
             try {
-
-                if (id.contains("page")) {
-
-                }
                 JSONObject doc = getDocument(id, user);
                 if (doc == null) {
                     LOGGER.log(Level.WARNING, "{0} not found", id);
@@ -111,20 +134,29 @@ public class HandleServlet extends HttpServlet {
                     return;
                 }
 
+                if (id.contains("page")) {
+                    String page = id.substring(id.lastIndexOf("/") + 1);
+                    getPdfPage(doc, page, request, response);
+                    return;
+                }
+
                 String mime = doc.getString("mimetype");
-                response.setContentType(mime);
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + doc.getString("nazev") + "\"");
+                String filename = doc.getString("nazev");
 
                 String url = doc.getString("path");
                 if (id.endsWith("thumb")) {
                     url += "/thumb";
+                    response.setContentType("image/png");
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
                 } else {
                     url += "/orig";
+                    response.setContentType(mime);
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
                 }
                 url = url.substring(url.indexOf("record"));
                 InputStream is = FedoraUtils.requestInputStream(url);
                 FileUtils.copyInputStreamToFile(is, f);
-                LOGGER.log(Level.INFO, "bytes received: {0}", f.length());
+                LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
                 IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                 is.close();
 
@@ -230,9 +262,7 @@ public class HandleServlet extends HttpServlet {
 
                     JSONArray h = doc.getJSONArray("historie");
                     String uzivatel = "KKK";
-                    
-                    
-                    
+
                     for (int i = 0; i < h.length(); i++) {
                         JSONObject hi = h.getJSONObject(i);
                         if ("D01".equals(hi.optString("typ_zmeny"))) {
@@ -242,7 +272,7 @@ public class HandleServlet extends HttpServlet {
                     if (userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel))) {
                         return true;
                     }
-                    
+
                     String projektId = doc.optString("samostatny_nalez_projekt");
                     String projektOrg = null;
                     SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
@@ -264,7 +294,15 @@ public class HandleServlet extends HttpServlet {
     }
 
     private static JSONObject getDocument(String id, JSONObject user) throws Exception {
+
+//-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2
         String soubor_filepath = "rest/AMCR/record/" + id;
+        if (id.contains("thumb")) {
+//-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb
+//-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/page/1            
+            soubor_filepath = soubor_filepath.substring(0, soubor_filepath.indexOf("/thumb"));
+        }
+
         SolrQuery query = new SolrQuery("*")
                 .addSort("datestamp", SolrQuery.ORDER.desc)
                 .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,soubor:[json],historie:[json]")
@@ -276,15 +314,20 @@ public class HandleServlet extends HttpServlet {
             LOGGER.log(Level.WARNING, "{0} not found", id);
             return null;
         }
-        if (!isAllowed(json, user)) {
+        JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+        if (!isAllowed(doc, user)) {
             return new JSONObject().put("not_allowed", true);
         }
 
-        JSONArray soubor = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONArray("soubor");
+        JSONArray soubor = doc.getJSONArray("soubor");
         for (int i = 0; i < soubor.length(); i++) {
-            JSONObject doc = soubor.getJSONObject(i);
-            if (soubor_filepath.equals(doc.optString("path"))) {
-                return doc;
+            JSONObject sdoc = soubor.getJSONObject(i);
+            if (soubor_filepath.equals(sdoc.optString("path"))) {
+//                doc.put("id", sdoc.optString("id"));
+//                doc.put("mimetype", sdoc.optString("mimetype"));
+//                doc.put("path", sdoc.optString("path"));
+//                doc.put("nazev", sdoc.optString("nazev"));
+                return sdoc;
             }
         }
         return null;
