@@ -5,7 +5,6 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
-import static cz.inovatika.arup.digiarchiv.web.ImageServlet.LOGGER;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web.imagging.ImageSupport;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
@@ -42,6 +41,8 @@ import org.json.JSONObject;
 @WebServlet(name = "HandleServlet", urlPatterns = {"/id/*"})
 public class HandleServlet extends HttpServlet {
 
+    public static final Logger LOGGER = Logger.getLogger(HandleServlet.class.getName());
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -61,7 +62,19 @@ public class HandleServlet extends HttpServlet {
 //            RequestDispatcher rd = request.getRequestDispatcher("/img");
 //            rd.include(request, response);
             try {
+                //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile started");
+                // Check if IP call could run by time limits
+                String ip = request.getRemoteAddr();
+                if (!AppState.canGetFile(ip)) {
+                    response.setStatus(HttpServletResponse.SC_CONFLICT);
+                    response.getWriter().print("Too soon. Try later");
+                    return;
+                }
+                AppState.writeGetFileStarted(ip);
                 getFile(id, request, response);
+                // Logs IP ends time
+                AppState.writeGetFileFinished(ip);
+                //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile end");
             } catch (Exception ex) {
                 Logger.getLogger(HandleServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -89,7 +102,7 @@ public class HandleServlet extends HttpServlet {
                         BufferedImage bi = ImageIO.read(f);
                         ImageIO.write(bi, "jpg", out);
                     } else {
-                        LOGGER.log(Level.WARNING, "File does not exist in {0}. ",fname);
+                        LOGGER.log(Level.WARNING, "File does not exist in {0}. ", fname);
                     }
 
                 } catch (Exception ex) {
