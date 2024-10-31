@@ -125,7 +125,10 @@ public class ImageServlet extends HttpServlet {
         
         String mime = "image/png";
         String url = doc.getString("path") + "/" + imgSize;
-        url = url.substring(url.indexOf("record"));
+        if (url.contains("record")) {
+            url = url.substring(url.indexOf("record"));
+        }
+        
         InputStream is = FedoraUtils.requestInputStream(url);
 
         if (is != null) {

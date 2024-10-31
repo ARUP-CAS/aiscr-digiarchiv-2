@@ -125,8 +125,7 @@ export class DokumentComponent implements OnInit, OnChanges {
   }
 
   getProjekts() {
-      console.log(this.result.dokument_cast_projekt)
-    if (this.result.dokument_cast_projekt) {
+    if (this.result.dokument_cast_projekt && this.result.dokument_cast_projekt.length > 0) {
         this.service.getIdAsChild(this.result.dokument_cast_projekt, "projekt").subscribe((res: any) => {
           this.result.valid_projekt = res.response.docs;
           this.checkLoading();
