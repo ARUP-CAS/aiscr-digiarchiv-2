@@ -303,6 +303,9 @@ export class MapaComponent implements OnInit, OnDestroy {
                   this.piansList.push(pian_id);
                   this.service.getId(pian_id).subscribe(resp => {
                     const pian = resp.response.docs[0];
+                    if (!this.state.mapResult.pian) {
+                      this.state.mapResult.pian = [];
+                    }
                     this.state.mapResult.pian.push(pian);
                     const coords = pian.loc_rpt[0].split(',');
                     const mrk = this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.pian_presnost, pian.typ, this.state.mapResult);
@@ -320,6 +323,9 @@ export class MapaComponent implements OnInit, OnDestroy {
                   });
                 }
               });
+            } else {
+              this.setMarkersData(true);
+              this.hitMarker(this.state.mapResult);
             }
           } else {
             this.setMarkersData(true);
@@ -336,7 +342,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
 
           this.state.loading = false;
-
+          // this.setMarkersData(true);
           // setTimeout(() => {
           //   if (this.state.mapResult) {
           //     this.hitMarker(this.state.mapResult);

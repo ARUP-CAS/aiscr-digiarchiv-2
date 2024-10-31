@@ -57,8 +57,10 @@ public class LokalitaSearcher implements EntitySearcher {
                 }
             }
         }
-        addOkresy(jo);
-    }public void addOkresy(JSONObject jo) { 
+        
+    }
+    
+    public void addOkresy(JSONObject jo) { 
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
@@ -189,12 +191,15 @@ public class LokalitaSearcher implements EntitySearcher {
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             if (Boolean.parseBoolean(request.getParameter("mapa")) && 
                     jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-                addPians(jo, client, request);
+                // addPians(jo, client, request);
             }
             if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
                 checkRelations(jo, client, request);
             }
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            if (!Boolean.parseBoolean(request.getParameter("mapa"))){
+                addOkresy(jo);
+            }
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
         } catch (Exception ex) {
@@ -231,6 +236,7 @@ public class LokalitaSearcher implements EntitySearcher {
         fields.addAll(headerFields);
         fields.addAll(detailFields);
 
+        fields.add("pian_id:az_dj_pian");
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
         fields.add("katastr:f_katastr_" + pristupnost);

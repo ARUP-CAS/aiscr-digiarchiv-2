@@ -39,7 +39,7 @@ public class AkceSearcher implements EntitySearcher {
                 doc.remove("akce_chranene_udaje");
             }
         }
-        addOkresy(jo);
+        
     }
 
     @Override
@@ -178,13 +178,19 @@ public class AkceSearcher implements EntitySearcher {
             JSONObject jo = SearchUtils.json(query, client, "entities");
 
             //LOGGER.log(Level.INFO, "checkRelations");
-            checkRelations(jo, client, request);
+            if (!Boolean.parseBoolean(request.getParameter("mapa"))){
+                checkRelations(jo, client, request);
+            }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             //LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            
             if (Boolean.parseBoolean(request.getParameter("mapa")) && 
                     jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-                addPians(jo, client, request);
+                // addPians(jo, client, request);
+            }
+            if (!Boolean.parseBoolean(request.getParameter("mapa"))){
+                addOkresy(jo);
             }
             //LOGGER.log(Level.INFO, "addFavorites");
             SolrSearcher.addFavorites(jo, client, request);
@@ -225,6 +231,7 @@ public class AkceSearcher implements EntitySearcher {
         fields.addAll(headerFields);
         fields.addAll(detailFields);
 
+        fields.add("pian_id:az_dj_pian");
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
         fields.add("katastr:f_katastr_" + pristupnost);
