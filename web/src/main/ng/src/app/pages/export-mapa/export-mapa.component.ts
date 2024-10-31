@@ -68,7 +68,7 @@ export class ExportMapaComponent implements OnInit {
     p.mapa = true;
     p.noFacets = true;
     p.noStats = true;
-
+this.state.loading = true;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       
       if (resp.error) {
