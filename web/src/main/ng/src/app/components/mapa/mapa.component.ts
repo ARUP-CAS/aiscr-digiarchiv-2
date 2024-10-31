@@ -582,7 +582,18 @@ export class MapaComponent implements OnInit, OnDestroy {
     map.on('enterFullscreen', () => map.invalidateSize());
     map.on('exitFullscreen', () => map.invalidateSize());
     let bounds = map.getBounds();
-    if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
+    if (this.route.snapshot.queryParamMap.has('vyber')) {
+      const loc_rpt = this.route.snapshot.queryParamMap.get('vyber').split(',');
+      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+      bounds = L.latLngBounds(southWest, northEast);
+      // if (this.state.locationFilterEnabled) {
+      //   this.locationFilter.setBounds(bounds);
+      // }
+
+      //this.map.fitBounds(bounds);
+      this.map.fitBounds(bounds.pad(.3));
+    } else if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('loc_rpt').split(',');
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
@@ -604,7 +615,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(lat.min, lng.min);
       const northEast = L.latLng(lat.max, lng.max);
       bounds = L.latLngBounds(southWest, northEast);
-      this.map.fitBounds(bounds.pad(.03));
+      this.map.fitBounds(bounds.pad(1.1));
+      //this.map.fitBounds(bounds);
       if (this.state.locationFilterEnabled) {
         this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
       }

@@ -61,7 +61,17 @@ public class SolrSearcher {
             pristupnost = "D";
         }
         String locField = "loc_rpt_" + pristupnost;
-        if (request.getParameter("loc_rpt") != null) {
+
+        if (request.getParameter("vyber") != null) {
+            String[] coords = request.getParameter("vyber").split(",");
+            String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
+            String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+
+            double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
+            query.setParam("facet.heatmap.geom", geom)
+                    .setParam("facet.heatmap.distErr", dist + "")
+                    .addFilterQuery(fq);
+        } else if (request.getParameter("loc_rpt") != null) {
             // loc_rpt=48.93993884224734,12.204711914062502,50.64177902497231,18.7877197265625
             String[] coords = request.getParameter("loc_rpt").split(",");
             String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
@@ -76,14 +86,6 @@ public class SolrSearcher {
                     .setParam("facet.heatmap.distErr", "0.04");
             //.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
             //.addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]");
-        }
-
-        if (request.getParameter("vyber") != null) {
-            String[] coords = request.getParameter("vyber").split(",");
-            String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
-
-            double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
-            query.addFilterQuery(fq);
         }
 
         query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
@@ -326,15 +328,14 @@ public class SolrSearcher {
         }
 
         String locField = "loc_rpt_" + pristupnost;
-        if (request.getParameter("loc_rpt") != null) {
-            String[] coords = request.getParameter("loc_rpt").split(",");
-            // String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
-            String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
-            query.addFilterQuery(fq);
-        }
 
         if (request.getParameter("vyber") != null) {
             String[] coords = request.getParameter("vyber").split(",");
+            String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+            query.addFilterQuery(fq);
+        } else if (request.getParameter("loc_rpt") != null) {
+            String[] coords = request.getParameter("loc_rpt").split(",");
+            // String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
             String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
             query.addFilterQuery(fq);
         }
