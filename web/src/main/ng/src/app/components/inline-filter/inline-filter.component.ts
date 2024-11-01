@@ -27,7 +27,7 @@ export class InlineFilterComponent implements OnInit {
     this.isDocument = this.router.isActive('id', false) || this.router.isActive('print', false);
   }
 
-  addFilter() {
+  addFilter(event: any) {
     let v = this.value + '';
     const filter = this.config.filterFields.find(ff => ff.field === this.field);
     if (filter && filter.type === 'date') {
@@ -35,6 +35,7 @@ export class InlineFilterComponent implements OnInit {
       v += ',' + v;
     }
     this.service.addFilter(this.field, v, 'and');
+    event.stopPropagation();
   }
 
 }
