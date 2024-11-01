@@ -63,6 +63,7 @@ export class DokumentComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
+      this.setVsize();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
     }
@@ -112,7 +113,7 @@ export class DokumentComponent implements OnInit, OnChanges {
  }
 
   setVsize() {
-
+    this.numChildren = 0;
     if (this.result.dokument_cast_archeologicky_zaznam) {
       this.numChildren += this.result.dokument_cast_archeologicky_zaznam.length;
     }
@@ -199,7 +200,7 @@ export class DokumentComponent implements OnInit, OnChanges {
       if (this.result.dokument_cast) {
         this.result.dokument_cast.sort((dc1, dc2) => dc1.ident_cely.localeCompare(dc2.ident_cely) );
       }
-      // this.setVsize();
+      this.setVsize();
       this.getArchZaznam();
       this.getProjekts();
       this.hasDetail = true;

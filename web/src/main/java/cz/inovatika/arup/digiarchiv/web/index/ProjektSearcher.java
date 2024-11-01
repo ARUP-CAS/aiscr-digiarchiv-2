@@ -36,15 +36,6 @@ public class ProjektSearcher implements EntitySearcher {
             JSONObject doc = ja.getJSONObject(i);
             String docPr = doc.getString("pristupnost");
 
-//            if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
-//                Object[] keys = doc.keySet().toArray();
-//                for (Object key : keys) {
-//                    if (!allowedFields.contains((String) key)) {
-//                        doc.remove((String) key);
-//                    }
-//
-//                }
-//            }
             if (docPr.compareToIgnoreCase(pristupnost) > 0) {
                 doc.remove("projekt_chranene_udaje");
             }
@@ -236,7 +227,7 @@ public class ProjektSearcher implements EntitySearcher {
             // removeInvalid(client, jo);
             if (Boolean.parseBoolean(request.getParameter("mapa")) && 
                     jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-                addPians(jo, client, request);
+                // addPians(jo, client, request);
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));

@@ -70,6 +70,7 @@ export class AkceComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
+      this.setVsize();
       this.hasDetail = false;
       this.result.dokumentTemp = [];
       this.detailExpanded = this.inDocument;
@@ -80,6 +81,7 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   setVsize() {
+    this.numChildren = 0;
       if (this.result.az_dokument) {
         this.numChildren += this.result.az_dokument.length;
         this.state.numImages = this.result.az_dokument.length;

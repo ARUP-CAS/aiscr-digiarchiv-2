@@ -630,8 +630,8 @@ export class AppService {
       const loc_rpt = result.loc_rpt[0].split(',');
       const lat =  parseFloat(loc_rpt[0]);
       const lng =  parseFloat(loc_rpt[1]);
-      p.loc_rpt = '' + (lat - 0.05) + ',' + (lng - 0.05) +
-        ',' + (lat + 0.05) + ',' + (lng + 0.05);
+      p.loc_rpt = '' + (lat - 0.003) + ',' + (lng - 0.003) +
+        ',' + (lat + 0.003) + ',' + (lng + 0.003);
       this.state.setMapResult(result, false);
     }
     

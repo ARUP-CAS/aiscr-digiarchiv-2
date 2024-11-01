@@ -90,6 +90,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
+      this.setVsize();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
     }
