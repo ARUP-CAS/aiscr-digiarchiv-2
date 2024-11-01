@@ -35,6 +35,7 @@ export class ExterniZdrojComponent implements OnInit {
     }
 
   setData(){  
+    console.log(this.result)
     const autor = this.result.ext_zdroj_autor ? this.result.ext_zdroj_autor.join(' – ') : '';
     switch (this.result.ext_zdroj_typ) {
       case 'HES-001117': // 'kniha'
