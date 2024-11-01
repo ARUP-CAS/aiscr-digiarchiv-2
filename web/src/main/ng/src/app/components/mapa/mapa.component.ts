@@ -315,7 +315,7 @@ export class MapaComponent implements OnInit, OnDestroy {
                       this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId.length);
                     }
                     this.hitMarker(this.state.mapResult);
-                    
+
                     setTimeout(() => {
                       this.setMarkersData(false);
                     }, 10);
@@ -340,7 +340,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
 
 
-          
+
           // this.setMarkersData(true);
           // setTimeout(() => {
           //   if (this.state.mapResult) {
@@ -353,7 +353,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           break;
         }
         case 'heat': {
-          this.setMarkersData(true);
+          // this.setMarkersData(true);
           this.state.loading = false;
           setTimeout(() => {
             if (this.state.mapResult) {
@@ -513,23 +513,23 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else if (doc.pian_id && doc.pian_id.length > 0) {
         doc.pian = [];
         doc.pian_id.forEach(pian_id => {
-          
-            if (!this.piansList.includes(pian_id)) {
-              this.piansList.push(pian_id);
+
+          if (!this.piansList.includes(pian_id)) {
+            this.piansList.push(pian_id);
+            if (this.showType !== 'heat') {
               this.service.getId(pian_id).subscribe(resp => {
                 const pian = resp.response.docs[0];
                 if (pian) {
                   doc.pian.push(pian);
                   const coords = pian.loc_rpt[0].split(',');
                   const mrk = this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.pian_presnost, pian.typ, doc);
-                  if (this.showType !== 'heat') {
-                    mrk.addTo(this.markers);
-                    this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId.length);
-                  }
+                  mrk.addTo(this.markers);
+                  this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId.length);
                 }
               });
             }
-          
+          }
+
         });
       } else if (doc.loc_rpt) {
         if (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument') {
@@ -781,7 +781,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       return;
     }
     let bounds = this.map.getBounds();
-    
+
     if (mapBounds) {
       bounds = mapBounds;
     }
