@@ -8,6 +8,7 @@ package cz.incad.arup.thumbnailsgenerator;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.apache.commons.io.FileUtils;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
@@ -71,7 +73,7 @@ public class PDFThumbsGenerator {
       }
 
       generated = 0;
-    } catch (IOException | JSONException ex) {
+    } catch (JSONException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
     }
   }
@@ -98,7 +100,7 @@ public class PDFThumbsGenerator {
 
     try {
       int pageCounter = 0;
-      try (PDDocument document = PDDocument.load(f)) {
+      try (PDDocument document = Loader.loadPDF(f)) {
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         for (PDPage page : document.getPages()) {
           LOGGER.log(Level.FINE, "page {0}", pageCounter + 1);
@@ -133,6 +135,62 @@ public class PDFThumbsGenerator {
     }
   }
 
+  public void processBytes(byte[] bytes, String name, boolean force, boolean onlyThumbs) {
+
+    if (!force) {
+      //Test if the file was last processed before crash;
+      String lastProcessed = readProcessing();
+      if (name.equals(lastProcessed)) {
+        LOGGER.log(Level.INFO, "Last attemp to generate file {0} failed. Writing to unprocessables.txt. Skipping it", name);
+        writeUnprocessable(name);
+        writeProcessing("");
+        return;
+      }
+
+      if (unprocessables.contains(name)) {
+        LOGGER.log(Level.INFO, "File {0} is in unprocessables.txt. Skipping it", name);
+        return;
+      }
+      writeProcessing(name);
+    }
+    LOGGER.log(Level.INFO, "Generating thumbs for pdf {0}", name);
+
+    try {
+      int pageCounter = 0;
+      try (PDDocument document = Loader.loadPDF(bytes)) {
+        PDFRenderer pdfRenderer = new PDFRenderer(document);
+        for (PDPage page : document.getPages()) {
+          LOGGER.log(Level.FINE, "page {0}", pageCounter + 1);
+
+          BufferedImage bim = getImageFromPage(pdfRenderer, page.getMediaBox(), pageCounter, name);
+          if (bim != null) {
+//            if (pageCounter == 0) {
+//              thumbnailPdfPage(bim, name);
+//            }
+
+            if (onlyThumbs) {
+              break;
+            }
+            processPage(bim, pageCounter, name);
+          }
+
+          pageCounter++;
+        }
+        writeProcessing("");
+      } catch (IOException ex) {
+        LOGGER.log(Level.SEVERE, name + " has error: {0}", ex);
+        LOGGER.log(Level.SEVERE, null, ex);
+        ImageSupport.writeSkipped(pageCounter, name, ex.toString());
+      } catch (Exception ex) {
+        LOGGER.log(Level.SEVERE, name + " has error: {0}", ex);
+        LOGGER.log(Level.SEVERE, null, ex);
+        ImageSupport.writeSkipped(pageCounter, name, ex.toString());
+      }
+    } catch (JSONException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+    }
+  }
+  
   private BufferedImage getImageFromPage(PDFRenderer pdfRenderer,
       PDRectangle mediaBox, int page, String id) throws Exception {
     float width = mediaBox.getWidth();

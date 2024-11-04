@@ -18,10 +18,14 @@
             Home
           </a>
           <span class="app-pipe"></span>
-          <a routerLink="napoveda" routerLinkActive="app-active">
+          <a [href]="config.helpUrl" target="_blank">
             <mat-icon>help_outline</mat-icon>
             {{ 'navbar.desc.Nápověda' | translate }}
           </a>
+          <!-- <a routerLink="napoveda" routerLinkActive="app-active">
+            <mat-icon>help_outline</mat-icon>
+            {{ 'navbar.desc.Nápověda' | translate }}
+          </a> -->
           <!-- <span class="app-pipe" *ngIf="state.logged"></span>
           <a *ngIf="state.logged" routerLink="favorites" routerLinkActive="app-active">
             <mat-icon>grade</mat-icon>
@@ -33,14 +37,15 @@
             {{ 'navbar.desc.Přihlásit uživatele' | translate }}
           </a>
           <span class="app-pipe"></span>
-          <a *ngIf="!state.logged" href="http://api.archeologickamapa.cz/registrace/0/" target="_blank">
+          <a *ngIf="!state.logged" [href]="config.registrationUrl" target="_blank">
             <mat-icon>how_to_reg</mat-icon>
             {{ 'navbar.desc.Registrovat uživatele' | translate }}
           </a>
           <a *ngIf="state.logged" (click)="showLogin()">
             <mat-icon>logout</mat-icon>
             {{state.user.jmeno}} {{state.user.prijmeni}}
-            ({{'pristupnost_' + state.user.pristupnost | translate}})
+            <!-- ({{'pristupnost_' + state.user.pristupnost | translate}}) -->
+            ({{state.user.skupina[0].value | translate}})
           </a>
           <span class="app-pipe"></span>
           <a *ngIf="state.currentLang !== 'en'" (click)="changeLang('en')">English</a>

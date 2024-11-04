@@ -3,10 +3,7 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "outDir": "./out-tsc/server",
-    "target": "es2019",
-    "types": [
-      "node"
-    ]
+    "types": ["node", "@types/hammerjs"]
   },
   "files": [
     "src/main.server.ts",

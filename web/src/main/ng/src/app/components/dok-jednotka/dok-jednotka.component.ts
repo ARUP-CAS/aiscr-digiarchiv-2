@@ -23,13 +23,14 @@ export class DokJednotkaComponent implements OnInit {
     public config: AppConfiguration
   ) {}
 
-  ngOnInit(): void {}
-
-  pian(id: string) {
-    if (this.pians) {
-      return this.pians.filter(p => p.ident_cely === id);
-    } else {
-      return [];
-    }
+  ngOnInit(): void {
   }
+
+  // pian(id: string) {
+  //   if (this.pians) {
+  //     return this.pians.filter(p => p.ident_cely === id);
+  //   } else {
+  //     return [];
+  //   }
+  // }
 }

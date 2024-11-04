@@ -3,49 +3,51 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-        {{ 'card.panelTitle.Archeologický dokumentační bod' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        {{ 'card.panelTitle.Archeologický dokumentační bod' | translate }}&#160;
+        <a *ngIf="isChild" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
         <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
+        <span *ngIf="!isChild" class="app-ident-format">{{ result.ident_cely }}</span>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <div *ngIf="result.typ_sondy">
+    <div *ngIf="result.adb_typ_sondy">
       <label class="app-label">{{ 'card.desc.Typ sondy' | translate }}:</label>&#160;
-      <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result.typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
+      <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result.adb_typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
     </div>
-    <div *ngIf="result.uzivatelske_oznaceni_sondy">
-      <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result.uzivatelske_oznaceni_sondy }}
+    <div *ngIf="result.adb_chranene_udaje?.uzivatelske_oznaceni_sondy">
+      <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.uzivatelske_oznaceni_sondy }}
     </div>
-    <div *ngIf="result.trat">
-      <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result.trat }}
+    <div *ngIf="result.adb_chranene_udaje?.trat">
+      <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.trat }}
     </div>
-    <div *ngIf="result.cislo_popisne">
-      <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result.cislo_popisne }}
+    <div *ngIf="result.adb_chranene_udaje?.cislo_popisne">
+      <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.cislo_popisne }}
     </div>
-    <div *ngIf="result.parcelni_cislo">
-      <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.parcelni_cislo }}
+    <div *ngIf="result.adb_chranene_udaje?.parcelni_cislo">
+      <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.parcelni_cislo }}
     </div>
-    <div *ngIf="result.podnet">
+    <div *ngIf="result.adb_podnet">
       <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;
-      <app-inline-filter [field]="'f_adb_podnet'" [value]="result.podnet" [heslar]="'podnet'"></app-inline-filter>
+      <app-inline-filter [field]="'f_adb_podnet'" [value]="result.adb_podnet" [heslar]="'podnet'"></app-inline-filter>
     </div>
-    <div *ngIf="result.stratigraficke_jednotky">
-      <label class="app-label">{{ 'card.desc.Počet SJ' | translate }}:</label>&#160;{{ result.stratigraficke_jednotky }}
+    <div *ngIf="result.adb_stratigraficke_jednotky">
+      <label class="app-label">{{ 'card.desc.Počet SJ' | translate }}:</label>&#160;{{ result.adb_stratigraficke_jednotky }}
     </div>
-    <div *ngIf="result.autor_popisu">
-      <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ result.autor_popisu }}
+    <div *ngIf="result.adb_autor_popisu">
+      <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ result.adb_autor_popisu }}
     </div>
-    <div *ngIf="result.rok_popisu">
-      <label class="app-label">{{ 'card.desc.Rok popisu' | translate }}:</label>&#160;{{ result.rok_popisu }}
+    <div *ngIf="result.adb_rok_popisu">
+      <label class="app-label">{{ 'card.desc.Rok popisu' | translate }}:</label>&#160;{{ result.adb_rok_popisu }}
     </div>
-    <div *ngIf="result.autor_revize">
-      <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ result.autor_revize }}
+    <div *ngIf="result.adb_autor_revize">
+      <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ result.adb_autor_revize }}
     </div>
-    <div *ngIf="result.rok_revize">
-      <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result.rok_revize }}
+    <div *ngIf="result.adb_rok_revize > 0">
+      <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result.adb_rok_revize }}
     </div>
-    <div *ngIf="result.poznamka">
-      <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.poznamka }}
+    <div *ngIf="result.adb_chranene_udaje?.poznamka">
+      <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.poznamka }}
     </div>
-    <mat-accordion *ngIf="result.vyskovy_bod" multi="true">
+    <mat-accordion *ngIf="result.adb_chranene_udaje?.vyskovy_bod && result.adb_chranene_udaje?.vyskovy_bod.length > 0" multi="true">
       <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
         <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
           <mat-panel-title>
@@ -54,9 +56,13 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul class="app-list-inside">
-          <li *ngFor="let vb of result.vyskovy_bod">
+          <li *ngFor="let vb of result.adb_chranene_udaje.vyskovy_bod">
             <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
-            (<app-inline-filter [field]="'typ'" [value]="vb.typ"></app-inline-filter>) – {{vb.niveleta}} m n. m. ({{vb.easting}} : {{vb.northing}})
+            (<app-inline-filter [field]="'adb_vyskovy_bod_typ'" [value]="vb.typ.id" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
+            <div *ngIf="vb.geom_gml"><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ vb.geom_gml }}</div>
+            <div *ngIf="vb.geom_wkt"><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
+              EPSG:{{ vb.geom_wkt.epsg }}, {{ vb.geom_wkt.value }}
+            </div>
           </li>
         </ul>
       </mat-expansion-panel>

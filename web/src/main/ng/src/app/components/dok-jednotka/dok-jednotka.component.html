@@ -3,19 +3,19 @@
     <mat-panel-title>
       <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
       {{ 'card.panelTitle.Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
-      <app-inline-filter [field]="'f_dok_jednotka_typ'" [value]="result.typ" [heslar]="'typ_dj'"></app-inline-filter>
-      <ng-container *ngIf="result.nazev">&#160;({{result.nazev}})</ng-container>
+      <app-inline-filter [field]="'f_dj_typ'" [value]="result.dj_typ.id" [heslar]="'typ_dj'"></app-inline-filter>
+      <ng-container *ngIf="result.dj_nazev">&#160;({{result.dj_nazev}})</ng-container>
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <ng-container><!--*ngIf="result.negativni_jednotka"-->
+  <ng-container><!--*ngIf="result.dj_negativni_jednotka"-->
     <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
-    {{ result.negativni_jednotka === '1'  ? ('Ano' | translate) : ('Ne' | translate) }}
+    {{ result.dj_negativni_jednotka  ? ('negativní' | translate) : ('pozitivní' | translate) }}
   </ng-container>
   
   <mat-accordion multi="true">
-    <app-pian *ngFor="let pian of result.pian" [result]="pian"></app-pian>
-    <app-adb *ngFor="let adb of result.adb" [result]="adb"></app-adb>
-    <app-komponenta *ngFor="let komponenta of result.komponenta" [result]="komponenta"></app-komponenta>
+    <app-pian *ngIf="result.dj_pian" [result]="result.dj_pian"></app-pian>
+    <app-adb *ngIf="result.dj_adb" [result]="result.dj_adb"></app-adb>
+    <app-komponenta *ngFor="let komponenta of result.dj_komponenta" [result]="komponenta"></app-komponenta>
   </mat-accordion>
 </mat-expansion-panel>
 

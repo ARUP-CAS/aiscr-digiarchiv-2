@@ -45,8 +45,9 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     if (this.result.soubor_filepath?.length > 0) {
-      //this.imgSrc = this.config.server + '/api/img?id=' + this.result.soubor_filepath[0];
-      this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
+      //this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
+      this.imgSrc = this.config.context + '/api/img/thumb?id=' + this.result.soubor[0].id;
+
     }
     if (this.result.loc_rpt) {
       const coords = this.result.loc_rpt[0].split(',');
@@ -58,8 +59,8 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
-       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       publisher = {Archeologická mapa České republiky [cit. ${now}]}
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
      if (this.inDocument) {
       this.setVsize();
@@ -70,23 +71,21 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   }  
 
   setVsize() {
-      if (this.result.projekt_id) {
-        this.numChildren += this.result.projekt_id.length;
+      if (this.result.samostatny_nalez_projekt) {
+        this.numChildren = 1;
       }
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getProjekts() {
-    if (this.result.projekt_id) {
-      this.result.projekt = [];
-      
-      for (let i = 0; i < this.result.projekt_id.length; i=i+10) {
-        const ids = this.result.projekt_id.slice(i, i+10);
-        this.service.getIdAsChild(ids, "projekt").subscribe((res: any) => {
-          this.result.projekt = this.result.projekt.concat(res.response.docs);
+    if (this.result.samostatny_nalez_projekt) {
+      this.result.valid_projekt = [];
+        this.service.getIdAsChild([this.result.samostatny_nalez_projekt], "projekt").subscribe((res: any) => {
+          this.result.valid_projekt = this.result.valid_projekt.concat(res.response.docs);
           this.state.loading = false;
         });
-      }
+    } else {
+      this.state.loading = false;
     }
   }
 
@@ -108,11 +107,11 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
       this.state.loading = true;
       this.getProjekts();
       this.hasDetail = true;
-      if (this.result.loc_rpt) {
-        const coords = this.result.loc_rpt[0].split(',');
-        this.result.centroid_e = coords[0];
-        this.result.centroid_n = coords[1];
-      }
+      // if (this.result.loc_rpt) {
+      //   const coords = this.result.loc_rpt[0].split(',');
+      //   this.result.centroid_e = coords[0];
+      //   this.result.centroid_n = coords[1];
+      // }
     });
   }
 
