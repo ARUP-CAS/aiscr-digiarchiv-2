@@ -1,13 +1,12 @@
 package cz.inovatika.arup.digiarchiv.web.index;
 
-import cz.inovatika.arup.digiarchiv.web.LoginServlet;
-import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,7 +14,7 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public class KomponentaSearcher implements ComponentSearcher {
+public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   public static final Logger LOGGER = Logger.getLogger(KomponentaSearcher.class.getName());
 
@@ -23,38 +22,74 @@ public class KomponentaSearcher implements ComponentSearcher {
   private boolean parentSearchable;
 
   @Override
-  public void getRelated(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
+  public void getRelated(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
 
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    String fields = "*";
     for (int i = 0; i < ja.length(); i++) {
-      JSONObject doc = ja.getJSONObject(i);
-      if (doc.has("parent")) {
-        JSONObject ch = SolrSearcher.getById(client, doc.getString("parent"), fields);
-        if (ch != null) {
-          if (ch.has("parent_akce")) {
-            JSONObject sub = SolrSearcher.getById(client, ch.getString("parent_akce"), fields);
-            if (sub != null) {
-              doc.append(sub.getString("entity"), sub);
-          parentSearchable = true;
-            }
-          }
-          if (ch.has("parent_lokalita")) {
-            JSONObject sub = SolrSearcher.getById(client, ch.getString("parent_lokalita"), fields);
-            if (sub != null) {
-              doc.append(sub.getString("entity"), sub);
-          parentSearchable = true;
-            }
-          }
+            JSONObject doc = ja.getJSONObject(i);
 
+            String ident_cely = doc.getString("ident_cely");
+            SolrQuery query = new SolrQuery("*").addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"");
+            AkceSearcher as = new AkceSearcher();
+            query.setFields(as.getChildSearchFields("A"));
+            try {
+                JSONObject sub = SolrSearcher.json(client, "entities", query);
+                JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
+
+                for (int j = 0; j < subs.length(); j++) {
+                    doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
+                }
+                parentSearchable = true;
+
+            } catch (SolrServerException | IOException ex) {
+                Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-      }
-    }
   }
 
   @Override
   public boolean isRelatedSearchable() {
     return parentSearchable;
   }
+
+    @Override
+    public JSONObject search(HttpServletRequest request) {
+        return new JSONObject();
+    }
+
+    @Override
+    public String export(HttpServletRequest request) {
+        return "";
+    }
+
+    @Override
+    public String[] getSearchFields(String pristupnost) {
+        return new String[]{"*,komponenta_aktivita:[json],komponenta_obdobi:[json],komponenta_nalez_objekt:[json],komponenta_nalez_predmet:[json]"};
+    }
+
+    @Override
+    public void filter(JSONObject jo, String pristupnost, String org) {
+        
+    }
+
+    @Override
+    public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        
+    }
+
+    @Override
+    public String[] getChildSearchFields(String pristupnost) {
+        return getSearchFields(pristupnost);
+    }
+
+    @Override
+    public String[] getRelationsFields() {
+        return new String[]{"*,komponenta_aktivita:[json],komponenta_obdobi:[json]"};
+    }
+
+    @Override
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        
+    }
 
 }

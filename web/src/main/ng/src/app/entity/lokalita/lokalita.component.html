@@ -11,12 +11,12 @@
           <a *ngSwitchCase="true" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
           <span *ngSwitchDefault class="app-ident-format">{{ result.ident_cely }}</span>
         </ng-container><span class="app-pipe"></span>
-        <ng-container *ngIf="hasRights">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.katastr"></app-inline-filter>
-        </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.okres"></app-inline-filter>)
-        <span class="app-pipe"></span><ng-container *ngIf="hasRights">{{ result.nazev }}<span class="app-pipe"></span></ng-container>
+        <ng-container *ngIf="result.az_chranene_udaje">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
+        </ng-container>&#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.az_okres"></app-inline-filter>)
+        <span class="app-pipe"></span><ng-container *ngIf="result.lokalita_chranene_udaje?.nazev">{{ result.lokalita_chranene_udaje.nazev }}<span class="app-pipe"></span></ng-container>
       </div>
-      <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
+      <div *ngIf="state.isMapaCollapsed && !isChild || mapDetail" class="app-last-change" [matTooltip]="result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ result.datestamp | date : 'yyyy-MM-dd' }}</div> 
     </mat-card-title>
   </mat-card-header>
   <mat-card-content [class.app-detail-closed]="!detailExpanded">
@@ -24,15 +24,26 @@
       <mat-icon>image_not_supported</mat-icon>
     </div>
     <div class="app-metadata app-row-gap-16">
-      <div *ngIf="result.typ_lokality">
-        <ng-container *ngIf="result.typ_lokality || result.druh || result.pristupnost">
+      <div>
+        <ng-container *ngIf="result.lokalita_typ_lokality || result.lokalita_druh || result.pristupnost">
           <label class="app-label">{{ 'card.desc.Dokument - typ' | translate }}:</label>&#160;
-          <app-inline-filter [isChild]="isChild" [field]="'f_typ_lokality'" [value]="result.typ_lokality" [heslar]="'typ_lokality'"></app-inline-filter>
+          <app-inline-filter [isChild]="isChild" [field]="'f_typ_lokality'" [value]="result.lokalita_typ_lokality" [heslar]="'typ_lokality'"></app-inline-filter>
           <span class="app-pipe"></span>
         </ng-container>
-        <ng-container *ngIf="result.druh">
+        <ng-container *ngIf="result.lokalita_druh">
           <label class="app-label">{{ 'card.desc.Druh lokality' | translate }}:</label>&#160;
-          <app-inline-filter [isChild]="isChild" [field]="'f_druh_lokality'" [value]="result.druh" [heslar]="'druh_lokality_druha'"></app-inline-filter>
+          <app-inline-filter [isChild]="isChild" [field]="'f_druh_lokality'" [value]="result.lokalita_druh" [heslar]="'druh_lokality_druha'"></app-inline-filter>
+          <span class="app-pipe"></span>
+        </ng-container>
+        <ng-container *ngIf="result.lokalita_zachovalost">
+          <label class="app-label">{{ 'card.desc.lokalita_zachovalost' | translate }}:</label>&#160;
+          <app-inline-filter [isChild]="isChild" [field]="'lokalita_zachovalost'" [value]="result.lokalita_zachovalost" [heslar]="'lokalita_zachovalost'"></app-inline-filter>
+          <!-- <span>{{ result.lokalita_zachovalost | translateHeslar : 'lokalita_zachovalost' }}</span>  -->
+          <span class="app-pipe"></span>
+        </ng-container>
+        <ng-container *ngIf="result.lokalita_jistota">
+          <label class="app-label">{{ 'card.desc.lokalita_jistota' | translate }}:</label>&#160;
+          <span>{{ result.lokalita_jistota | translateHeslar : 'f_jistota' }}</span> 
           <span class="app-pipe"></span>
         </ng-container>
         <ng-container *ngIf="result.pristupnost">
@@ -41,64 +52,35 @@
           <span class="app-pipe"></span>
         </ng-container>
       </div>
-      <div *ngIf="result.dalsi_katastry && hasRights">
+      <div *ngIf="result.az_chranene_udaje?.dalsi_katastr?.length > 0">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
-        <ng-container *ngFor="let k of result.dalsi_katastry; let last = last">
-          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="service.getKatastr(k)"></app-inline-filter>&#160;
-          (<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>)<span *ngIf="!last">;&#160;</span>
+        <ng-container *ngFor="let k of result.az_chranene_udaje.dalsi_katastr; let last = last">
+          <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
+          <!-- &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>) -->
+          <span *ngIf="!last">;&#160;</span>
         </ng-container>
+
+        (<ng-container *ngFor="let k of result.az_chranene_udaje.okresy; let last = last">
+          <app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="k"></app-inline-filter>
+          <span *ngIf="!last">;&#160;</span>
+        </ng-container>)
       </div>
-      <div *ngIf="result.popis && hasRights" class="app-truncate-text">
-        <label class="app-label">{{ 'card.desc.Popis' | translate }}:</label>&#160;{{ result.popis }}<!-- {{ cropped(result.popis) }} -->
+      <div *ngIf="result.lokalita_chranene_udaje?.popis" class="app-truncate-text">
+        <label class="app-label">{{ 'card.desc.Popis' | translate }}:</label>&#160;{{ result.lokalita_chranene_udaje.popis }}<!-- {{ cropped(result.popis) }} -->
       </div>
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.child_dokument?.length > 0">
-        {{'card.desc.Počet dokumentů' | translate}}: <strong>{{ result.child_dokument.length }}</strong>
+      <ng-container *ngIf="result.az_dokument?.length > 0">
+        {{'card.desc.Počet dokumentů' | translate}}: <strong>{{ result.az_dokument.length }}</strong>
         <span class="app-pipe"></span>
       </ng-container>
     </div>
-    <div>
-      <button *ngIf="!mapDetail && hasRights && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
-        <mat-icon>map</mat-icon>
-      </button>
-      <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
-        <mat-icon>link</mat-icon>
-      </button>
-      <mat-menu #links="matMenu">
-        <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
-          {{ 'card.menu.Persistentní odkaz' | translate }}
-        </a>
-        <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
-          {{ 'card.menu.api_prefix' | translate }} {{ item.label }}
-        </a>
-      </mat-menu>
-      <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
-        <mat-icon>menu_book</mat-icon>
-      </button>
-      <a mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
-        <mat-icon>print</mat-icon>
-      </a>
-      <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
-        <mat-icon>grade</mat-icon>
-      </button>
-      <button mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
-        <mat-icon>feedback</mat-icon>
-      </button>
-      <button mat-flat-button *ngIf="hasRights && !isDocumentDialogOpen" (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
-        {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
-      </button>
-      <button mat-flat-button class="app-col-detail" *ngIf="state.itemView === 'col' && !isDocumentDialogOpen" (click)="openDocument()">
-        {{ 'card.button.Zobrazit detail' | translate }}
-      </button>
-      <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false" *ngIf="state.itemView === 'col' && isDocumentDialogOpen">
-        {{ 'card.button.Skrýt detail' | translate }}
-      </button>
-    </div>
+    <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+      [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
   </mat-card-actions>
-  <mat-card-content *ngIf="detailExpanded && !isChild && hasRights">
+  <mat-card-content *ngIf="detailExpanded && !isChild">
     <div class="app-card-detail">
       <mat-accordion multi="true">
         <mat-expansion-panel [expanded]="true">
@@ -109,37 +91,37 @@
           </mat-expansion-panel-header>
           <table>
             <tbody>
-              <tr *ngIf="result.uzivatelske_oznaceni">
+              <tr *ngIf="result.az_chranene_udaje?.uzivatelske_oznaceni">
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                <td>{{ result.uzivatelske_oznaceni }}</td>
+                <td>{{ result.az_chranene_udaje?.uzivatelske_oznaceni }}</td>
               </tr>
-              <tr *ngIf="result.popis">
+              <tr *ngIf="result.lokalita_chranene_udaje?.popis">
                 <th class="app-label">{{ 'card.desc.Popis' | translate }}:</th>
-                <td>{{ result.popis }}</td>
+                <td>{{ result.lokalita_chranene_udaje?.popis }}</td>
               </tr>
-              <tr *ngIf="result.poznamka">
+              <tr *ngIf="result.lokalita_chranene_udaje?.poznamka">
                 <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
-                <td>{{ result.poznamka }}</td>
+                <td>{{ result.lokalita_chranene_udaje?.poznamka }}</td>
               </tr>
             </tbody>
           </table>
           <mat-accordion multi="true">
-            <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [pians]="result.pian" [adbs]="result.adb"></app-dok-jednotka>
+            <app-dok-jednotka *ngFor="let dok_jednotka of result.az_dokumentacni_jednotka" [result]="dok_jednotka" [pians]="result.az_dj_pian" [adbs]="result.az_dj_adb"></app-dok-jednotka> 
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.ext_zdroj?.length > 0" [expanded]="true">
+        <mat-expansion-panel *ngIf="result.az_ext_zdroj?.length > 0" [expanded]="true">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Externí zdroje' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ul class="app-clean-mg">
-            <app-externi-zdroj *ngFor="let extZdroj of result.ext_zdroj" [result]="extZdroj" ></app-externi-zdroj>
+            <app-externi-zdroj *ngFor="let extZdroj of result.az_ext_zdroj" [result]="extZdroj" ></app-externi-zdroj>
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.child_dokument?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+        <mat-expansion-panel *ngIf="result.az_dokument?.length > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:
@@ -148,10 +130,10 @@
           
           <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
             [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
-            <app-dokument *cdkVirtualFor="let dok of result.dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
+            <app-dokument *cdkVirtualFor="let dok of result.valid_dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
           </cdk-virtual-scroll-viewport>
           <ng-container *ngIf="state.printing">
-            <app-dokument *ngFor="let dok of result.dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
+            <app-dokument *ngFor="let dok of result.valid_dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
           </ng-container>
         </mat-expansion-panel>
       </mat-accordion>

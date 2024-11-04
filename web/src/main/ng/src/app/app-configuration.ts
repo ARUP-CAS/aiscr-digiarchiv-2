@@ -1,6 +1,6 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, forkJoin, of, tap, lastValueFrom, map, switchMap, catchError } from 'rxjs';
 import { Configuration } from './shared/config';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 
     public obdobi;
     public obdobiStats;
-    public thesauri: {[key: string]: number};
+    public thesauri: { [key: string]: number };
 
     public get context() {
         return this.config.context;
@@ -23,8 +23,24 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.serverUrl;
     }
 
+    public get registrationUrl() {
+        return this.config.registrationUrl;
+    }
+
+    public get restorePassword() {
+        return this.config.restorePassword;
+    }
+    
+    public get helpUrl() {
+        return this.config.helpUrl;
+    }
+
     public get amcr() {
         return this.config.amcr;
+    }
+
+    public get amcr_server() {
+        return this.config.amcr_server;
     }
 
     public get isIndexing() {
@@ -59,10 +75,6 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.home;
     }
 
-    public get poleToHeslar() {
-        return this.config.poleToHeslar;
-    }
-
     public get sorts() {
         return this.config.sorts;
     }
@@ -82,7 +94,7 @@ import { isPlatformBrowser } from '@angular/common';
     public get exportFields() {
         return this.config.exportFields;
     }
-    
+
     public get urlFields() {
         return this.config.urlFields;
     }
@@ -111,55 +123,69 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.feedBackMaxLength;
     }
 
-    
-
-    /**
-     * List the files holding section configuration in assets/configs folder
-     * ['search'] will look for /assets/configs/search.json
-     */
-    private configs: string[] = [];
+    public get noPoradiFacets() {
+        return this.config.noPoradiFacets;
+    }
 
     server = '';
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
         private http: HttpClient) {
-            if (!isPlatformBrowser(this.platformId)) {
-                const args = process.argv;
-                if (args.length > 2) {
-                    this.server = args[2];
-                }
+        if (!isPlatformBrowser(this.platformId)) {
+            const args = process.argv;
+            if (args.length > 2) {
+                this.server = args[2];
             }
         }
+    }
 
     public configLoaded() {
         return this.config && true;
     }
 
-    public load(): Promise<any> {
-        // console.log('loading config ...');
-        const promise = this.http.get(this.server + 'assets/config.json')
-            .toPromise()
-            .then(cfg => {
+    public load() {
+        return this.http.get(this.server + 'assets/config.json').pipe(
+            switchMap((cfg: any) => {
                 this.config = cfg as Configuration;
                 this.config.amcr = this.server;
-            }).then(() => {
-                return this.getObdobi();
-            }).then(() => {
-                return this.getThesauri();
-            });
-        return promise;
+                return this.http.get(this.server + 'api/search/thesauri').pipe(tap((res: any) => {
+                    // this.obdobi = res.response.docs;
+                    // this.obdobiStats = res.stats.stats_fields.poradi;
+                    this.thesauri = res;
+                }));
+            }),
+            catchError((err) => {
+                // this.alertSubject.next(err);
+                return of(err);
+            })
+        );
     }
 
-    getObdobi() {
-        const url = this.server + 'api/search/obdobi';
-        return this.http.get(url)
-            .toPromise()
-            .then((res: any) => {
-                this.obdobi = res.response.docs;
-                this.obdobiStats = res.stats.stats_fields.poradi;
-            });
-    }
+    // public loadOld(): Promise<any> {
+    //     // console.log('loading config ...');
+    //     const promise = this.http.get(this.server + 'assets/config.json')
+    //         .toPromise()
+    //         .then(cfg => {
+    //             this.config = cfg as Configuration;
+    //             this.config.amcr = this.server;
+    //             // }).then(() => {
+    //             //     return this.getObdobi();
+    //         }).then(() => {
+    //             return this.getThesauri();
+    //         });
+    //     return promise;
+    // }
+
+    // getObdobi() {
+    //     const url = this.server + 'api/search/obdobi';
+    //     return this.http.get(url)
+    //         .toPromise()
+    //         .then((res: any) => {
+    //             this.obdobi = res.response.docs;
+    //             this.obdobiStats = res.stats.stats_fields.poradi;
+    //         });
+    // }
 
     getThesauri() {
         const url = this.server + 'api/search/thesauri';
@@ -168,22 +194,6 @@ import { isPlatformBrowser } from '@angular/common';
             .then((res: any) => {
                 this.thesauri = res;
             });
-    }
-
-    mergeFile(url: string): Promise<any> {
-
-        return new Promise((resolve, reject) => {
-            this.http.get(url)
-                .subscribe(
-                    res => {
-                        resolve(res);
-                    },
-                    error => {
-                        resolve(false);
-                        return of(url + ' not found');
-                    }
-                );
-        });
     }
 
 }

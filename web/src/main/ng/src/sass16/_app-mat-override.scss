@@ -1,0 +1,450 @@
+// --- MAT OVERRIDE ---
+
+// toolbar
+.mat-mdc-toolbar {
+  font-size: inherit;
+}
+
+// card
+.mat-mdc-card {
+  @include setEntityColor(card);
+
+  .app-link-close {
+    position: absolute;
+    top: $app-gap;
+    right: $app-gap;
+
+    @include setLinkColor($app-color-darknes);
+  }
+
+  .mat-mdc-card-header {
+    .app-last-change {
+      font-size: 12px;
+      color: $app-gray-6;
+      font-weight: normal;
+    }
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+    .mat-mdc-card-header-text {
+      @extend .app-clean-mg, .app-w-100;
+
+      .mat-mdc-icon {
+        margin-right: $app-gap-icon;
+        vertical-align: bottom;
+      }
+
+      .mat-mdc-card-title {
+        font-size: $app-card-title-font-size;
+        font-weight: 700;
+
+        .app-count {
+          font-weight: normal;
+          color: $app-gray-5;
+        }
+      }
+    }
+  }
+
+  .mat-mdc-card-content {
+    .app-metadata {
+      .mat-mdc-icon {
+        @include setIcon(18);
+        @extend .app-clean-mg;
+      }
+    }
+
+    // specific behavior for expansion panel in first level of card
+    .app-card-detail {
+      margin-top: $app-gap-half;
+
+      &>.mat-mdc-accordion {
+        &> :not(.mat-mdc-expansion-panel-spacing) {
+          &:not(:last-child) {
+            margin-bottom: 2px;
+          }
+        }
+      }
+    }
+
+    // general expansion panel behavior of card
+    .mat-mdc-expansion-panel {
+      @extend .mat-mdc-elevation-z0 !optional;
+
+      &.app-panel-souvisejici-zaznamy {
+        .mat-mdc-expansion-panel-content {
+          max-height: 635px;
+          overflow-y: auto;
+
+          .mat-mdc-expansion-panel-body {
+            $val: calc(2 * #{$app-gap});
+
+            .app-related-item {
+              display: block;
+
+              &:last-child {
+                .app-card-child {
+                  border-bottom: none !important;
+                  margin-bottom: -16px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &.virtual {
+        .mat-mdc-expansion-panel-content {
+          .mat-mdc-expansion-panel-body {
+            padding: 16px 0;
+          }
+        }
+      }
+
+
+
+      &.mat-mdc-expansion-panel-spacing {
+        @extend .app-clean-mg;
+      }
+
+      &.app-panel-inner {
+        .mat-mdc-expansion-panel-header {
+          @extend .app-clean-bg, .app-clean-pd;
+          margin-top: 4px;
+
+          .mat-mdc-expansion-panel-header-title {
+            color: $app-gray-9;
+            flex-wrap: wrap;
+
+            .mat-mdc-icon {
+              @include setIcon($size: 20);
+            }
+          }
+        }
+
+        .mat-mdc-expansion-panel-content {
+          .mat-mdc-expansion-panel-body {
+            /* padding-top: 2px;
+            padding-bottom: 0; */
+            padding: 2px 20px 0px 20px; // issue #44
+          }
+        }
+      }
+
+      .mat-mdc-expansion-panel-header {
+        background-color: $app-gray-1  !important;
+        flex-direction: row-reverse;
+
+        .mat-mdc-expansion-indicator {
+          margin-right: $app-gap;
+        }
+      }
+
+      .mat-mdc-expansion-panel-content {
+        .mat-mdc-expansion-panel-body {
+          padding-top: $app-gap;
+
+          .mat-mdc-icon {
+            @include setIcon($size: 20, $position: text-bottom);
+          }
+
+          table {
+            border-spacing: 0;
+
+            th,
+            td {
+              vertical-align: top;
+            }
+
+            th {
+              padding-left: 0;
+              text-align: left;
+              padding-right: $app-gap-icon;
+              min-width: 130px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mat-mdc-card-actions {
+    @extend .app-clean-mg;
+    padding-top: 0;
+
+    .mat-mdc-button-base {
+      &:not(:first-child) {
+        margin: 0 0 0 $app-gap-button;
+      }
+
+      &.mat-mdc-unelevated-button {
+        background-color: $app-gray-1;
+
+        a {
+          display: inline-flex;
+          color: currentColor;
+        }
+      }
+
+      @media #{$lt-sm} {
+        margin-bottom: 8px !important;
+      }
+    }
+
+    @media #{$lt-sm} {
+      margin-bottom: -8px !important;
+    }
+
+    @media #{$lt-lg} {
+      flex-wrap: wrap;
+
+      .app-metadata {
+        margin-bottom: 8px;
+      }
+
+      &>div {
+        flex: 0 0 100%;
+      }
+    }
+  }
+
+  &.app-card-info {
+    background-color: $app-card-info-bg;
+
+    .mat-mdc-card-content {
+      color: $app-color-info;
+
+      .app-text {
+        vertical-align: super;
+        font-weight: bold;
+      }
+
+      .app-info-badge {
+        @include setEntityColor(cardInfoBadge);
+
+        .mat-mdc-icon {
+          margin-right: $app-gap-icon;
+          @include setIcon(18, inherit, bottom);
+        }
+      }
+    }
+  }
+
+  &.app-card-child {
+    @extend .app-clean-shadow, .app-clean-radius;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: 1px solid $app-gray-3;
+  }
+}
+
+// table
+.mat-mdc-table {
+  width: 100%;
+}
+
+
+// expansion panel
+.mat-mdc-expansion-panel {
+  .mat-mdc-expansion-panel-header {
+    font-weight: 700;
+  }
+  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+  .mat-mdc-list-item-content {
+    .mat-mdc-icon {
+      &:not(.app-icon-op) {
+        @include setIcon(18, $position: bottom);
+        color: $app-primary-color-darker;
+      }
+    }
+  }
+
+  .mat-mdc-expansion-panel-header,
+  .mat-mdc-expansion-panel-body {
+    .app-facets & {
+      padding-left: $app-gap;
+      padding-right: $app-gap;
+    }
+  }
+}
+
+
+// mat list
+.mat-mdc-list {
+  .mat-mdc-subheader {
+    font-size: 15px;
+  }
+
+  .mat-mdc-list-item {
+    .mat-mdc-icon {
+      &:not(.app-icon-op) {
+        margin-right: $app-gap-icon  !important;
+      }
+    }
+  }
+
+  .mat-mdc-icon {
+    &:not(.app-icon-op) {
+      @include setIcon(18, $position: text-top);
+    }
+  }
+
+  &.app-list-view-facet {
+    .mat-mdc-list-item {
+      height: $app-list-view-facet-item-height;
+      color: $app-list-view-facet-item-color;
+
+      a {
+        &:hover {
+          color: $app-primary-color-darker;
+        }
+      }
+    }
+  }
+
+  &.app-list-view-admin {
+    @extend .app-clean-pd;
+
+    .mat-mdc-list-item {
+      height: $app-list-view-facet-item-height;
+      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+      .mat-mdc-list-item-content {
+        @extend .app-clean-pd;
+
+        .mat-mdc-icon {
+          color: $app-color-warning;
+        }
+      }
+
+      &:hover {
+        color: $app-primary-color-darker;
+      }
+    }
+  }
+}
+
+
+// mat tree
+.mat-mdc-tree {
+  @extend .app-clean-bg;
+  margin-left: -5px;
+
+  .mat-mdc-tree-node {
+    min-height: $app-list-view-facet-item-height;
+    color: $app-list-view-facet-item-color;
+    font-size: initial;
+
+    a {
+      color: $app-list-view-facet-item-color;
+
+      &:hover {
+        color: $app-primary-color-darker;
+      }
+    }
+
+    .mat-mdc-icon-button {
+      width: $app-list-view-facet-item-height;
+      height: $app-list-view-facet-item-height;
+      line-height: $app-list-view-facet-item-height;
+      margin-right: $app-gap-icon;
+    }
+
+    .mat-mdc-checkbox {
+      margin-right: $app-gap-icon;
+    }
+  }
+}
+
+
+// dialog
+.cdk-overlay-container {
+  z-index: 1099;
+}
+
+
+// ident badge
+.app-ident-badge {
+  margin-right: 2px;
+  color: $app-gray-9;
+
+  .mat-mdc-icon {
+    $size: 18;
+    font-size: #{$size}px !important;
+    height: #{$size}px !important;
+    width: #{$size}px !important;
+    vertical-align: sub !important;
+    color: $app-badge-color;
+
+    .mat-mdc-card-title & {
+      @extend .app-clean-mg;
+    }
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: $app-badge-color;
+  }
+
+  &.app-inbody {
+    &:not(:hover) {
+      color: currentColor;
+    }
+  }
+}
+
+// ident format (in map view - result list)
+.app-ident-format {
+  word-break: break-all;
+}
+
+// filter badge
+.app-filter-badge {
+  color: currentColor;
+
+  .mat-mdc-icon {
+    $size: 18;
+    font-size: #{$size}px !important;
+    height: #{$size}px !important;
+    width: #{$size}px !important;
+    vertical-align: sub !important;
+    color: $app-badge-color;
+
+    .mat-mdc-card-title & {
+      @extend .app-clean-mg;
+    }
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: $app-badge-color;
+  }
+}
+
+// in facets used
+.app-and-separator {
+  span {
+    font-size: 13px;
+    color: $app-gray-5;
+    margin-left: 25px;
+  }
+}
+
+// mat-menu-panel
+.mat-mdc-menu-panel {
+  max-width: 320px !important;
+}
+
+// mat form field
+.mat-mdc-form-field {
+  &.mat-mdc-form-field-appearance-fill {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+    .mat-mdc-form-field-infix {
+      padding: 0.25em 0 0.75em 0;
+      padding: 0.1em 0 0.65em 0;
+    }
+  }
+}
+
+// tooltip
+.mat-mdc-tooltip {
+  font-size: 14px !important;
+}

@@ -117,14 +117,15 @@
    
    <field name="indextime" type="pdate" indexed="true" stored="true" default="NOW" /> 
    
-   <field name="uniqueid" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="ident_cely" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    
-   <field name="id" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="nazev_heslare" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="razeni" type="pint" indexed="true" stored="true" multiValued="false" /> 
    
-   <field name="heslar_name" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="poradi" type="pint" indexed="true" stored="true" multiValued="false" /> 
+   <field name="hierarchie_vyse" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="hierarchie_nize" type="string" indexed="true" stored="true" multiValued="true" /> 
    
-   <field name="text_all" type="text_general" indexed="true" stored="false" multiValued="true" /> 
+   <field name="text_all" type="lowercase_cs" indexed="true" stored="false" multiValued="true" /> 
    
    <dynamicField name="*" type="string" multiValued="false"/>
    
@@ -132,7 +133,7 @@
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
    -->
- <uniqueKey>uniqueid</uniqueKey>
+ <uniqueKey>ident_cely</uniqueKey>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
@@ -560,27 +561,13 @@
       </analyzer>
         -->
     </fieldType>
-
-    <fieldType name="text_general_cs" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"  />
-        <!-- in this example, we will only use synonyms at query time
-        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
-        -->
-        <filter class="solr.HunspellStemFilterFactory" dictionary="hunspell/cs_CZ.dic" affix="hunspell/cs_CZ.aff" ignoreCase="true" />
-        <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="false"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"  />
-        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.HunspellStemFilterFactory" dictionary="hunspell/cs_CZ.dic" affix="hunspell/cs_CZ.aff" ignoreCase="true" />
-        <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="false"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-    </fieldType>
+	
+	<fieldType name="lowercase_cs" class="solr.TextField" >
+		<analyzer>
+			<tokenizer class="solr.KeywordTokenizerFactory"/>
+			<filter class="solr.ICUFoldingFilterFactory"/>
+		</analyzer>
+	</fieldType>
     
     <fieldType name="text_prefix" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">

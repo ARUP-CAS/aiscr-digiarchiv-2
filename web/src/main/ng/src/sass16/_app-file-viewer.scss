@@ -1,0 +1,79 @@
+// --- FILE VIEWER ---
+
+app-file-viewer {
+  .mat-mdc-dialog-title {
+    position: relative;
+
+    .app-list-files-wrapper {
+      width: calc(100% - 40px);
+
+      a {
+        font-size: 16px !important;
+
+        &.active {
+          background-color: $app-primary-color;
+          color: $app-color-lightnes;
+          border-radius: $app-border-radius;
+          padding: $app-gap-icon $app-gap-half;
+        }
+      }
+    }
+
+    .app-close-icon {
+      position: absolute;
+      top: 5px;
+      right: 0;
+      color: $app-color-darknes;
+    }
+  }
+
+  .mat-mdc-dialog-content {
+    overflow: unset;
+
+    .app-toolbar-wrapper {
+      .app-controls {
+        .mat-mdc-icon {
+        @include setIcon($position: middle);  
+        }
+       
+        .mat-mdc-form-field {
+          width: 30px;
+          font-weight: bold;
+        }
+      }
+  
+      .app-metadata {
+        .mat-mdc-icon {
+          @include setIcon($position: middle);
+        }
+      }
+
+      @media #{$lt-md} {
+        flex-wrap: wrap;
+
+        .app-controls,
+        .app-metadata {
+          flex: 0 0 100%;
+        }
+      }
+    }
+
+    .ngucarousel {
+      & > .ngu-touch-container {
+        & > .ngucarousel-items {
+          & > .item {
+            text-align: center !important;
+
+            img {
+              max-width: 100%;
+
+              @media #{$lt-md} {
+                width: 100%;  
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
