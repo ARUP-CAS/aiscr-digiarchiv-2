@@ -101,7 +101,7 @@
 			</ng-container>
 			<ng-container *ngIf="inDocument">{{ result.ident_cely }}</ng-container> 
 			<a *ngIf="!inDocument" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon>
-			</a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link || result.ext_zdroj_paginace_titulu">,&#160;</ng-container>
+			</a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link || (inDocument && result.ext_zdroj_paginace_titulu)">,&#160;</ng-container>
 		<ng-container *ngIf="result.ext_odkaz_paginace">{{ result.ext_odkaz_paginace }}.&#160;</ng-container> 
 		<ng-container *ngIf="inDocument && result.ext_zdroj_paginace_titulu">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="result.ext_zdroj_link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.ext_zdroj_link" target="_blank">{{ result.ext_zdroj_link }}</a>.</ng-container>
@@ -118,9 +118,10 @@
 		 *ngIf="result.ext_zdroj_issn">{{ result.ext_zdroj_issn }}<ng-container *ngIf="!inDocument">,&#160;</ng-container>
 		</ng-container>
 		<ng-container *ngIf="inDocument">{{ result.ident_cely }}</ng-container>
-		<a *ngIf="!inDocument" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link || result.ext_odkaz_paginace || result.ext_zdroj_paginace_titulu">,&#160;</ng-container>
+		<a *ngIf="!inDocument" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon>
+		</a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link || result.ext_odkaz_paginace || result.ext_zdroj_paginace_titulu">,&#160;</ng-container>
 		<ng-container *ngIf="result.ext_odkaz_paginace">{{ result.ext_odkaz_paginace }}.&#160;</ng-container> 
-		<ng-container *ngIf="!result.ext_odkaz_paginace && result.ext_zdroj_paginace_titulu && !inDocument">,&#160;{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
+		<ng-container *ngIf="!result.ext_odkaz_paginace && result.ext_zdroj_paginace_titulu && !inDocument">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="inDocument && result.ext_zdroj_paginace_titulu">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="result.ext_zdroj_link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.ext_zdroj_link" target="_blank">{{ result.ext_zdroj_link }}</a>.</ng-container>
 	</ng-container>
