@@ -37,7 +37,7 @@ public class PDFImageExtractor {
       List<RenderedImage> images = new ArrayList<>();
       int i = 0;
       for (PDPage page : document.getPages()) {
-        System.out.println("page: " + i++);
+//        System.out.println("page: " + i++);
 //        if(i == 40){
         images.addAll(getImagesFromResources(page.getResources()));
 //        }

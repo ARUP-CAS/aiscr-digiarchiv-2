@@ -55,8 +55,36 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
     if (this.inDocument) {
       this.state.loading = true;
       this.state.documentProgress = 0;
-      this.getAkce();
-      this.getLokalita();
+      this.getArchZaznam();
+    }
+  }
+
+  getArchZaznam() {
+    this.result.akce = [];
+    this.result.lokalita = [];
+    if (this.result.dokument_cast_akce) {
+      for (let i = 0; i < this.result.dokument_cast_akce.length; i = i + 10) {
+        const ids = this.result.dokument_cast_akce.slice(i, i + 10);
+        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
+          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
+    }
+    if (this.result.dokument_cast_lokalita) {
+      for (let i = 0; i < this.result.dokument_cast_lokalita.length; i = i + 10) {
+        const ids = this.result.dokument_cast_lokalita.slice(i, i + 10);
+        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
+          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
+          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
     }
   }
 
@@ -77,53 +105,7 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
     this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
-  getAkce() {
-    this.result.akce = [];
-    if (this.result.jednotka_dokumentu_vazba_akce) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_akce.length; i=i+10) {
-        const ids = this.result.jednotka_dokumentu_vazba_akce.slice(i, i+10);
-        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs);
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
-        });
-      }
-    }
-    if (this.result.jednotka_dokumentu_vazba_druha_akce) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_druha_akce.length; i=i+10) {
-        const ids = this.result.jednotka_dokumentu_vazba_druha_akce.slice(i, i+10);
-        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs);
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
-        });
-      }
-    }
-  }
-
-  getLokalita() {
-    this.result.lokalita = [];
-    if (this.result.jednotka_dokumentu_vazba_lokalita) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_lokalita.length; i=i+10) {
-        const ids = this.result.jednotka_dokumentu_vazba_lokalita.slice(i, i+10);
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs);
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
-        });
-      }
-    }
-    if (this.result.jednotka_dokumentu_vazba_druha_lokalita) {
-      for (let i = 0; i < this.result.jednotka_dokumentu_vazba_druha_lokalita.length; i=i+10) {
-        const ids = this.result.jednotka_dokumentu_vazba_druha_lokalita.slice(i, i+10);
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs);
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
-        });
-      }
-    }
-  }
+  
 
   setBibTex() {
     const organizace = this.service.getHeslarTranslation(this.result.organizace, 'organizace');
@@ -158,8 +140,7 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      this.getAkce();
-      this.getLokalita();
+      this.getArchZaznam();
       this.hasDetail = true;
     });
   }

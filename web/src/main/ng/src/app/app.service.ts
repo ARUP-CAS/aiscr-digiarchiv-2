@@ -1,18 +1,18 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, catchError, finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppState } from 'src/app/app.state';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { Crumb } from 'src/app/shared/crumb';
-import { Condition } from 'src/app/shared/condition';
 import { ParamMap, Router } from '@angular/router';
 import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 declare var L;
 
 @Injectable({
@@ -96,11 +96,47 @@ export class AppService {
     });
   }
 
+  getTranslationByField(value: string, field: string): any {
+    switch (field) {
+      case 'obdobi_poradi': {
+        return this.formatObdobi(value);
+      }
+      case 'dokument_kategorie_dokumentu': {
+        
+        const hkey = 'dokument_kategorie_dokumentu.' + value;
+        const t = this.translate.instant(hkey);
+        if (t === hkey) {
+          return value;
+        } else {
+          return t;
+        }
+      }
+      case 'pian_id': {
+        break;
+      }
+      case 'loc_rpt': {
+        break;
+      }
+      case 'vyber': {
+        break;
+      }
+      default: {
+        const hkey = 'heslar.' + value;
+        const t = this.translate.instant(hkey);
+        if (t === hkey) {
+          return value;
+        } else {
+          return t;
+        }
+      }
+    }
+    
+
+  }
+
   getHeslarTranslation(value: string, heslar: string): any {
-    // if (this.config.poleToHeslar.hasOwnProperty(heslar)) {
-    //   heslar = this.config.poleToHeslar[heslar];
-    // }
-    const hkey = heslar + '_' + value;
+    // const hkey = heslar + '_' + value;
+    const hkey = 'heslar.' + value;
     const t = this.translate.instant(hkey);
     if (t === hkey) {
       return value;
@@ -114,14 +150,89 @@ export class AppService {
     return this.translate.instant(s);
   }
 
-  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<T> {
+  stopLoading() {
+    // this.state.loading = false;
+    // this.state.facetsLoading = false;
+  }
+
+  public showInfoDialog(message: string, duration: number = 2000) {
+    const data = {
+      type: 'success',
+      title: 'Info',
+      message: [message]
+    };
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+         data,
+         width: '400px',
+         panelClass: 'app-alert-dialog'
+    });
+    
+    dialogRef.afterOpened().subscribe(_ => {
+      setTimeout(() => {
+         dialogRef.close();
+      }, duration)
+    })
+  }
+
+  public showErrorDialog(title: string, message: string) {
+    const data = {
+      type: 'error',
+      title: title,
+      message: [message]
+    };
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+         data,
+         width: '400px',
+         panelClass: 'app-alert-dialog'
+    });
+    
+  }
+
+  private handleError(error: HttpErrorResponse, me: any) {
+    //  console.log(error);
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+      this.showErrorDialog('error', 'An error occurred: ' + error.error);
+    } else if (error.status === 503 || error.status === 504) {
+      // Forbiden. Redirect to login
+      console.log("Service Unavailable");
+      this.showErrorDialog('error', "Service Unavailable");
+      
+    } else if (error.status === 403) {
+      // Forbiden. Redirect to login
+      console.log("Forbiden");
+      this.showErrorDialog('error', "Forbiden");
+    } else {
+      console.error(`Backend returned code ${error.status}, body was: `, error.error);
+      this.showErrorDialog('error', `Backend returned code ${error.status}, body was: ` + error.error);
+    }
+    // Return an observable with a user-facing error message.
+    // return throwError({'status':error.status, 'message': error.message});
+    this.state.hasError = true;
+    this.state.loading = false;
+    this.state.facetsLoading = false;
+    return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
+  }
+
+  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<Object> {
     // const r = re ? re : 'json';
+    this.state.hasError = false;
     const options = { params, responseType, withCredentials: true };
     if (environment.mocked) {
       return this.http.get<T>(`api${url}`, options);
     } else {
       const server = isPlatformBrowser(this.platformId) ? '' : this.config.amcr;
-      return this.http.get<T>(`${server}api${url}`, options);
+      return this.http.get<T>(`${server}api${url}`, options)
+      .pipe(map((r: any) => {
+        if (r.response?.status === -1) {
+          r.response.errors = { path: [{ errorMessage: r.response.errorMessage }] };
+        }
+        return r;
+
+      }))
+      .pipe(finalize(() => this.stopLoading()))
+      .pipe(catchError(err => this.handleError(err, this)));
     }
 
   }
@@ -134,7 +245,8 @@ export class AppService {
    * Fired for main search in results page
    * @param params the params
    */
-  search(params: HttpParams): Observable<SolrResponse> {
+  search(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
     return this.get(`/search/query`, params);
   }
 
@@ -147,7 +259,13 @@ export class AppService {
     return this.get(`/search/dokument`, params);
   }
 
-  getId(id: string): Observable<SolrResponse> {
+  checkRelations(id: string): Observable<any> {
+    const params: HttpParams = new HttpParams()
+      .set('id', id);
+    return this.get(`/search/check_relations`, params);
+  }
+
+  getId(id: string): Observable<any > {
     const params: HttpParams = new HttpParams()
       .set('id', id);
     return this.get(`/search/id`, params);
@@ -173,8 +291,12 @@ export class AppService {
     return this.get(`/search/wkt`, params);
   }
 
-  getGeometrie(id: string, format: string) {
-    const params: HttpParams = new HttpParams().set('id', id).set('format', format);
+  getGeometrie(id: string, format: string, loc_rpt: any) {
+    let params: HttpParams = new HttpParams().set('id', id).set('format', format)
+    if (loc_rpt) {
+      params = params.set('loc_rpt', loc_rpt);
+    }
+    
     return this.get(`/search/geometrie`, params);
   }
 
@@ -202,7 +324,8 @@ export class AppService {
 
   getText(id: string): Observable<string> {
     const params: HttpParams = new HttpParams().set('id', id).set('lang', this.state.currentLang);
-    return this.get(`/texts/get`, params, 'text');
+    return this.get(`/texts/get`, params, 'text')
+    .pipe(map((response: any) => response));
   }
 
   getAkce(id: string) {
@@ -367,11 +490,11 @@ export class AppService {
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
             break;
           }
-          case 'kategorie_dokumentu': {
+          case 'dokument_kategorie_dokumentu': {
             const values = params.getAll(field);
             values.forEach(value => {
               const parts = value.split(':');
-              display = this.translate.instant('kategorie_dokumentu.' + parts[0]);
+              display = this.translate.instant('dokument_kategorie_dokumentu.' + parts[0]);
               this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
             });
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
@@ -386,18 +509,28 @@ export class AppService {
           case 'vyber': {
             break;
           }
+          // case 'az_dj_negativni_jednotka': {
+          //   const value = params.get(field);
+          //   display = 'a' + value;
+          //   this.state.breadcrumbs.push(new Crumb(field, value, display));
+          //   break;
+          // }
           default: {
             const values = params.getAll(field);
             const filterField = this.config.filterFields.find(ff => ff.field === field);
             values.forEach(value => {
               const parts = value.split(':');
+              const op = parts[parts.length - 1];
+              const val = value.substring(0,value.lastIndexOf(':'));
               if (filterField && filterField.type === 'number') {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
               } else {
-                display = this.getHeslarTranslation(parts[0], field);
+                // display = this.getHeslarTranslation(parts[0], field);
+                display = null;
+
               }
-              this.state.breadcrumbs.push(new Crumb(field, parts[0], display, parts[1]));
+              this.state.breadcrumbs.push(new Crumb(field, val, display, op));
             });
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
           }

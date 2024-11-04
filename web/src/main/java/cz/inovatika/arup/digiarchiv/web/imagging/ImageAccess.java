@@ -9,13 +9,10 @@ import org.json.JSONObject;
  * @author Inovatika
  */
 public class ImageAccess {
-  public static boolean isAllowed(HttpServletRequest request) {
-    boolean full = Boolean.parseBoolean(request.getParameter("full"));
+  public static boolean isAllowed(HttpServletRequest request, boolean isFull) {
     boolean allow;
       String userPr = LoginServlet.pristupnost(request.getSession());
-      String size = request.getParameter("size");
-      boolean isThumb = !full && ((size == null) || "thumb".equals(size));
-      if (isThumb) {
+      if (!isFull) {
         allow = true;
       } else {
         String id = request.getParameter("id");

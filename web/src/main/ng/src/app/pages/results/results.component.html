@@ -1,22 +1,30 @@
-<div class="app-display-table app-loading" *ngIf="state.loading">
+<div class="app-display-table app-loading" *ngIf="state.loading" style="position: absolute; z-index:1000;">
   <div class="app-table-cell app-clean-pd">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
+  <div *ngIf="state.documentProgress" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 </div>
-<div *ngIf="state.loading && state.documentProgress" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 
 <div #leftElement class="app-display-table app-container" *ngIf="!loading || !state.isMapaCollapsed">
-
   <ng-container *ngIf="state.isMapaCollapsed">
     <div class="app-table-cell app-left">
       <div fxLayout="row" fxFlexFill>
         <div fxFlex class="app-facets">
+          <div *ngIf="state.facetsLoading" class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
           <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
           <app-facets></app-facets>
         </div>
       </div>
     </div>
     <div class="app-table-cell app-right">
+      <mat-card *ngIf="state.hasError" class="app-card-info">
+        <mat-card-content>
+          {{ 'dialog.alert.search_error' | translate }}&#160;
+          <!-- <br />
+          {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }} -->
+        </mat-card-content>
+      </mat-card>
+      <ng-container  *ngIf="!state.hasError">
       <mat-card *ngIf="state.numFound === 0" class="app-card-info">
         <mat-card-content>
           <strong>{{ state.numFound }}</strong>
@@ -82,7 +90,8 @@
           <ng-container *ngFor="let result of docs">
             <ng-container [ngSwitch]="state.entity">
               <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-              <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
+              <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+              <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
               <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
               <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
               <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
@@ -96,6 +105,7 @@
           <app-paginator></app-paginator>
         </div>
       </div>
+      </ng-container>
     </div> 
   </ng-container>
   <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
@@ -118,7 +128,8 @@
               <ng-container *cdkVirtualFor="let result of docs">
                 <ng-container [ngSwitch]="state.entity">
                   <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-                  <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d>
+                  <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                  <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
                   <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
                   <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
                   <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>

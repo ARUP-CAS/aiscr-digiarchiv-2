@@ -23,33 +23,6 @@
   <app-facets-dynamic></app-facets-dynamic>
   <app-facets-search></app-facets-search>
 
-  <!-- <ng-container *ngFor="let facetPivot of state.facetPivots">
-    <mat-expansion-panel *ngIf="treeData.length > 0" [expanded]="true">
-      <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight">
-        <mat-panel-title>
-          {{ 'field.' + facetPivot.field | translate }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" #tree>
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding class="app-node-child">
-          <button mat-icon-button disabled></button><button mat-icon-button disabled></button>
-          <mat-checkbox [checked]="node.used" (change)="clickPivot('f_typ_dokumentu',node.field, node.used)"></mat-checkbox>
-          <a (click)="clickPivot('f_typ_dokumentu',node.field, node.used)">{{node.field | translateHeslar : 'f_typ_dokumentu'}}</a> 
-          <span>({{node.count}})</span>
-        </mat-tree-node>
-        <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding >
-          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.field">
-            <mat-icon class="mat-icon-rtl-mirror">
-              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-            </mat-icon>
-          </button>
-          <mat-checkbox [checked]="node.used" (change)="clickPivot('kategorie_dokumentu',node.field, node.used)"></mat-checkbox>
-          <a (click)="clickPivot('kategorie_dokumentu',node.field, node.used)">{{'kategorie_dokumentu.' + node.field | translate}}</a>
-          <span>({{node.count}})</span>
-        </mat-tree-node>
-      </mat-tree>
-    </mat-expansion-panel>
-  </ng-container> -->
 
   <ng-container *ngFor="let facetField of facetsSorted">
     <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered || expandedFacets[facetField.field]">
@@ -85,7 +58,7 @@
               <div class="app-list-content" [matTooltipPosition]="'right'" [matTooltip]="(facet.name | translateHeslar : facetField.field) + ' (' + facet.value + ')'">
                 <a (click)="clickFacet(facetField.field, facet)"> 
                   <ng-container [ngSwitch]="facetField.field">
-                    <ng-container *ngSwitchCase="'kategorie_dokumentu'">{{ 'kategorie_dokumentu.' + facet.name | translate }}</ng-container>
+                    <ng-container *ngSwitchCase="'dokument_kategorie_dokumentu'">{{ 'dokument_kategorie_dokumentu.' + facet.name | translate }}</ng-container>
                     <ng-container *ngSwitchDefault>{{ facet.name | translateHeslar : facetField.field }}</ng-container>
                   </ng-container>
                 </a>
@@ -104,7 +77,7 @@
           <mat-menu #sortBy="matMenu">
             <button mat-menu-item (click)="setFacetSort(facetField.field, 'count')" [class.active]="state.facetSort[facetField.field] === 'count'">{{ 'facet.menu.count' | translate }}</button>
             <button mat-menu-item (click)="setFacetSort(facetField.field, 'name')" [class.active]="state.facetSort[facetField.field] === 'name'">{{ 'facet.menu.name' | translate }}</button>
-            <button mat-menu-item (click)="setFacetSort(facetField.field, 'poradi')" [class.active]="state.facetSort[facetField.field] === 'poradi'">{{ 'facet.menu.poradi' | translate }}</button>
+            <button mat-menu-item *ngIf="!config.noPoradiFacets[facetField.field]" (click)="setFacetSort(facetField.field, 'poradi')" [class.active]="state.facetSort[facetField.field] === 'poradi'">{{ 'facet.menu.poradi' | translate }}</button>
           </mat-menu>
         </mat-list>
       </ng-template>

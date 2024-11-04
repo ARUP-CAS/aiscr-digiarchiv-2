@@ -5,14 +5,9 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
-import cz.inovatika.arup.digiarchiv.web.imagging.ImageAccess;
-import cz.inovatika.arup.digiarchiv.web.imagging.ImageSupport;
-import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
-import io.netty.handler.codec.base64.Base64Decoder;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -24,10 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.util.NamedList;
@@ -57,7 +50,7 @@ public class HeatImageServlet extends HttpServlet {
     try (OutputStream out = response.getOutputStream()) {
       response.setContentType("image/png");
 
-      try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("akceCore")).build()) {
+      try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("akceCore")).build()) {
         SolrQuery query = new SolrQuery("*:*")
                 .setFacet(true)
                 .setParam("facet.heatmap", "loc_rpt")
@@ -78,7 +71,6 @@ public class HeatImageServlet extends HttpServlet {
         
         //System.out.println(r.toString(2));
                 
-        System.out.println(r.getJSONObject("facet_counts"));
         String png = r.getJSONObject("facet_counts")
                 .getJSONObject("facet_heatmaps")
                 .getJSONObject("loc_rpt")

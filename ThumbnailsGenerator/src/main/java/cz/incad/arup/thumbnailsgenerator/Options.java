@@ -29,12 +29,16 @@ public class Options {
     private JSONObject client_conf;
     private JSONObject server_conf;
 
-    public synchronized static Options getInstance() throws IOException, JSONException {
-        if (_sharedInstance == null) {
-            _sharedInstance = new Options();
-        }
-        return _sharedInstance;
+    public synchronized static Options getInstance() {
+    try {
+      if (_sharedInstance == null) {
+        _sharedInstance = new Options();
+      }
+    } catch (IOException | JSONException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
     }
+    return _sharedInstance;
+  }
 
     public synchronized static void resetInstance() {
         _sharedInstance = null;
@@ -61,6 +65,7 @@ public class Options {
         }
 
         String path = CONFIG_DIR + File.separator + "config.json";
+        LOGGER.log(Level.INFO, "Config dir is {0}", CONFIG_DIR);
 
         //Get server options
         File fserver = new File(getClass().getResource("server_config.json").getPath());
