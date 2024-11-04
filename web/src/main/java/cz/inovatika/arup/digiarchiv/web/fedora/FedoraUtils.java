@@ -1,20 +1,17 @@
 
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
-import static cz.inovatika.arup.digiarchiv.web.ImageServlet.LOGGER;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.Duration;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -59,7 +59,7 @@ public class FedoraServlet extends HttpServlet {
                     Actions actionToDo = Actions.valueOf(action.toUpperCase());
                     if (actionToDo.equals(Actions.REQUEST_RAW)) {
                         // FedoraUtils.requestFile(request.getParameter("file"), InitServlet.CONFIG_DIR + File.separator + request.getParameter("file"), "application/pdf");
-                        InputStream is = FedoraUtils.requestInputStream(request.getParameter("file") + "/orig");
+                        InputStream is = FedoraUtils.requestInputStream(StringEscapeUtils.escapeHtml4(request.getParameter("file")) + "/orig");
                         String path = InitServlet.CONFIG_DIR + File.separator + "1.pdf";
                         File targetFile = new File(path);
                         FileUtils.copyInputStreamToFile(is, targetFile);
@@ -286,7 +286,7 @@ public class FedoraServlet extends HttpServlet {
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("resp", FedoraUtils.request(req.getParameter("url")));
+                    json.put("resp", FedoraUtils.request(StringEscapeUtils.escapeHtml4(req.getParameter("url"))));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }
