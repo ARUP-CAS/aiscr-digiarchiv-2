@@ -603,7 +603,8 @@
       "feedback_success": "Comment has been successfully submitted",
       "feedback_failed": "Error submitting comment",
       "error": "Error",
-      "search_error": "Error searching"
+      "search_error": "Error searching",
+      "login_server_error": "Login not available. Try later."
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",

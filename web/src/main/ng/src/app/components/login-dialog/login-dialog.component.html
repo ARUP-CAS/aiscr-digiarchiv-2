@@ -15,7 +15,7 @@
       </div>
   
       <div class="app-color-warning" *ngIf="loginError">
-        {{'dialog.alert.Špatné přihlašovací údaje' | translate}}.
+        {{loginError | translate}}
       </div>    
     </ng-container>
 

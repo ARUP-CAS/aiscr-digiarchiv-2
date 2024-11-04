@@ -13,7 +13,7 @@ export class LoginDialogComponent implements OnInit {
 
   user: string;
   pwd: string;
-  loginError: boolean;
+  loginError: any;
   loading: boolean;
 
   constructor(
@@ -33,9 +33,9 @@ export class LoginDialogComponent implements OnInit {
       this.state.setLogged(res);
       this.loading = false;
       if (res.error) {
-        this.loginError = true;
+        this.loginError = res.error;
       } else {
-        this.loginError = false;
+        this.loginError = null;
         this.user = '';
         this.pwd = '';
         this.dialogRef.close();

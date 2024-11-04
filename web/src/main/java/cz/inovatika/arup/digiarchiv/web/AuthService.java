@@ -56,17 +56,24 @@ public class AuthService {
     public static JSONObject login(String user, String pwd) throws URISyntaxException, IOException, InterruptedException, Exception {
         String token = getToken(user, pwd);
         if (token != null) {
-            if (new JSONObject(token).has("token")) {
-                String xml = getUserInfo(new JSONObject(token).getString("token"));
-                Uzivatel uz = (Uzivatel) FedoraModel.parseXml(xml, Uzivatel.class);
-                uz.setPristupnost();
-                ObjectMapper objectMapper = new ObjectMapper();
-                return new JSONObject(objectMapper.writeValueAsString(uz));
-            } else {
-                return new JSONObject().put("error", "invalid credentials");
+            try {
+                JSONObject tokenJSON = new JSONObject(token);
+                if (tokenJSON.has("token")) {
+                    String xml = getUserInfo(new JSONObject(token).getString("token"));
+                    Uzivatel uz = (Uzivatel) FedoraModel.parseXml(xml, Uzivatel.class);
+                    uz.setPristupnost();
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    return new JSONObject(objectMapper.writeValueAsString(uz));
+                } else if (tokenJSON.has("non_field_errors")) {
+                    return new JSONObject().put("error", "dialog.alert.Špatné přihlašovací údaje");
+                } else {
+                    return tokenJSON;
+                }
+            } catch (Exception ex) {
+                return new JSONObject().put("error", "dialog.alert.login_server_error");
             }
         } else {
-            return new JSONObject().put("error", "");
+            return new JSONObject().put("error", "invalid token");
         }
     }
     
