@@ -7,6 +7,7 @@ export class Configuration {
   registrationUrl: string;
   restorePassword: string;
   helpUrl: string;
+  accountUrl: string;
   amcr: string;
   amcr_server: string;
   isIndexing: boolean;
