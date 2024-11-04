@@ -9,18 +9,12 @@
       <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
         {{ 'card.menu.Persistentní odkaz' | translate }}
       </a>
-      <!-- <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="item.url + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
-        {{ 'card.menu.api_prefix' | translate }} {{ item.label }}(prefix: oai_amcr)
-      </a>
-      <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="config.amcr_server + 'id/' + result.ident_cely" target="_blank">
-        {{ 'card.menu.show_in_AMCR' | translate }}
-      </a> -->
       <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="item.url + result.ident_cely" target="_blank">
         {{ 'card.menu.' + item.label | translate }}
       </a>
 
     </mat-menu>
-    <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
+    <button mat-flat-button *ngIf="bibTex" (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
       <mat-icon>menu_book</mat-icon>
     </button>
     <a mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">

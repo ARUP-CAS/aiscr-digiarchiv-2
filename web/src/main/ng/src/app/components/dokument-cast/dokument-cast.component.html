@@ -89,6 +89,8 @@
     <div fxFlex></div>
     <!-- <app-result-actions [result]="result" [bibTex]="''" [isDocumentDialogOpen]="false" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions> -->
+      <app-result-actions [result]="result" [bibTex]="null" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+      [detailExpanded]="detailExpanded" [mapDetail]="false" ></app-result-actions>
   </mat-card-actions>
 
   <mat-card-content *ngIf="detailExpanded && !isChild">

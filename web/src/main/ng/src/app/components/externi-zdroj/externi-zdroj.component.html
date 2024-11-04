@@ -33,7 +33,9 @@
 			<span class="app-pipe"></span>
 		</ng-container> 
       </div>
-      <div>
+	  <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+      [detailExpanded]="detailExpanded" [mapDetail]="false" ></app-result-actions>
+      <!-- <div>
         <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
           <mat-icon>menu_book</mat-icon>
         </button>
@@ -46,7 +48,7 @@
         <button mat-flat-button *ngIf="!isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
           {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
         </button>
-      </div>
+      </div> -->
 		</mat-card-actions>
 		<mat-card-content *ngIf="detailExpanded">
       <div class="app-card-detail">
