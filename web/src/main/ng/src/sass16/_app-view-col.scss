@@ -1,0 +1,99 @@
+// --- VIEW COL ---
+
+.app-view-col {
+  & > div {
+    display: flex;
+    flex-flow: wrap;
+  }
+
+  app-dokument,
+  app-projekt,
+  app-akce,
+  app-lokalita,
+  app-samostatny-nalez,
+  app-knihovna3d {
+    $flex-width: 25%;
+    $flex-gap: 12px; // default val 16px - 4px because every 4 item has gap 0
+    flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+    box-sizing: border-box;
+    max-width: calc(#{$flex-width} - #{$flex-gap});
+    margin-right: $app-gap;
+
+    &:nth-child(4n) {
+      margin-right: 0;
+    }
+
+    .mat-mdc-card {
+      max-height: 216px;
+      
+      .mat-mdc-card-header {
+        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+        .mat-mdc-card-header-text {
+          width: 100%;
+  
+          .mat-mdc-card-title {
+            position: relative;
+            visibility: hidden;
+            max-height: 20px;
+
+            .app-ident-format {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              visibility: visible;
+              text-align: center;
+            }
+          }
+        }
+      }
+
+      .mat-mdc-card-content {
+        height: 100px;
+        min-height: 100px;
+
+        .app-metadata {
+          display: none;
+        }
+
+        .app-thumb {
+          @extend .app-clean-mg;
+          width: 100%;
+          background-color: $app-gray-2;
+          text-align: center;
+
+          img {
+            vertical-align: middle;
+          }
+
+          .mat-mdc-icon {
+            @include setIcon(32);
+          }
+
+          &.app-thumb-missing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+
+      .mat-mdc-card-actions {
+        place-content: center !important;
+
+        .app-metadata {
+          display: none;
+        }
+
+        .mat-mdc-unelevated-button {
+          @extend .app-clean-mg;
+
+          &:not(.app-col-detail) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
