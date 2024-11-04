@@ -19,7 +19,7 @@ export class LoginDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private config: AppConfiguration,
+    public config: AppConfiguration,
     public state: AppState,
     private service: AppService
   ) { }
@@ -39,6 +39,7 @@ export class LoginDialogComponent implements OnInit {
         this.user = '';
         this.pwd = '';
         this.dialogRef.close();
+        document.location.reload();
       }
     });
   }
@@ -49,6 +50,7 @@ export class LoginDialogComponent implements OnInit {
       this.state.logged = false;
       this.state.user = null;
       this.dialogRef.close();
+      document.location.reload();
     });
   }
 

@@ -2,8 +2,7 @@ package cz.inovatika.arup.digiarchiv.web;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.logging.Level;
+import java.util.logging.Level; 
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -21,22 +20,20 @@ public class Options {
   private static Options _sharedInstance = null;
 
   private static boolean _indexingFlag = false; // survives option reset
-  
+
   private final JSONObject client_conf;
   private final JSONObject server_conf;
 
   public synchronized static Options getInstance() {
     try {
-    if (_sharedInstance == null) {
-      _sharedInstance = new Options();
-    }
+      if (_sharedInstance == null) {
+        _sharedInstance = new Options();
+      }
     } catch (IOException | JSONException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
     }
     return _sharedInstance;
   }
-  
-  
 
   public synchronized static void resetInstance() {
     _sharedInstance = null;
@@ -53,7 +50,7 @@ public class Options {
 
     return old;
   }
-  
+
   public Options() throws IOException, JSONException {
 
     File fdef = new File(InitServlet.DEFAULT_CONFIG_FILE);
@@ -61,18 +58,16 @@ public class Options {
     String json = FileUtils.readFileToString(fdef, "UTF-8");
     client_conf = new JSONObject(json);
 
-    
     String path = InitServlet.CONFIG_DIR + File.separator + "config.json";
-    
+
     //Get server options
     File fserver = FileUtils.toFile(Options.class.getResource("server_config.json"));
     String sjson = FileUtils.readFileToString(fserver, "UTF-8");
     server_conf = new JSONObject(sjson);
-    
 
     //Merge options defined in custom dir
     File f = new File(path);
-    
+
     if (f.exists() && f.canRead()) {
       json = FileUtils.readFileToString(f, "UTF-8");
       JSONObject customClientConf = new JSONObject(json).getJSONObject("client");
@@ -160,5 +155,79 @@ public class Options {
 
   private void ensureIndexingFlag() {
     client_conf.put("indexing", _indexingFlag);
+  }
+
+  public String getOAIIdentify() {
+    try {
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_identify.xml";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+        return FileUtils.readFileToString(f, "UTF-8");
+      } else {
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_identify.xml"));
+        return FileUtils.readFileToString(fdef, "UTF-8");
+      }
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
+
+  public String getOAIListMetadataFormats() {
+    try {
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListMetadataFormats.xml";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+        return FileUtils.readFileToString(f, "UTF-8");
+      } else {
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListMetadataFormats.xml"));
+        return FileUtils.readFileToString(fdef, "UTF-8");
+      }
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
+
+  public String getOAIListSets() {
+    try {
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListSets.xml";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+        return FileUtils.readFileToString(f, "UTF-8");
+      } else {
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListSets.xml"));
+        return FileUtils.readFileToString(fdef, "UTF-8");
+      }
+    } catch (IOException ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      return ex.toString();
+    }
+  }
+  
+  public File getDCXslt() {
+      String path = InitServlet.CONFIG_DIR + File.separator + "metadata_DC.xslt";
+      File f = new File(path);
+      
+      if (f.exists() && f.canRead()) {
+          return f;
+      } else {
+          File fdef = FileUtils.toFile(Options.class.getResource("metadata_DC.xslt"));
+          return fdef;
+      }
+  }
+  
+  
+  
+  public File getEmptyXslt() {
+      String path = InitServlet.CONFIG_DIR + File.separator + "cleanEmpty.xslt";
+      File f = new File(path);
+      
+      if (f.exists() && f.canRead()) {
+          return f;
+      } else {
+          File fdef = FileUtils.toFile(Options.class.getResource("metadata_DC.xslt"));
+          return fdef;
+      }
   }
 }

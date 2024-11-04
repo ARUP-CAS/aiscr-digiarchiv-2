@@ -21,7 +21,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
   @Input() mapDetail: boolean;
   @Input() isDocumentDialogOpen: boolean;
   @Input() inDocument = false;
-  hasRights: boolean;
+  // hasRights: boolean;
   hasDetail: boolean;
   bibTex: string;
 
@@ -41,20 +41,21 @@ export class LokalitaComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
+    // this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
-       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       publisher = {Archeologická mapa České republiky [cit. ${now}]}
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
      if (this.inDocument) {
       this.setVsize();
       this.state.documentProgress = 0;
       this.state.loading = true;
       this.getDokuments();
+      this.getExtZdroj();
      }
   }
 
@@ -69,25 +70,52 @@ export class LokalitaComponent implements OnInit, OnChanges {
   }
 
   setVsize() {
-      if (this.result.child_dokument) {
-        this.numChildren += this.result.child_dokument.length;
+      if (this.result.az_dokument) {
+        this.numChildren += this.result.az_dokument.length;
       }
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getDokuments() {
-    if (this.result.child_dokument && this.hasRights) {
-      this.result.dokument = [];
-      for (let i = 0; i < this.result.child_dokument.length; i=i+10) {
-        const ids = this.result.child_dokument.slice(i, i+10);
+    if (this.result.az_dokument && this.result.az_dokument.length > 0) {
+      this.result.valid_dokument = [];
+      for (let i = 0; i < this.result.az_dokument.length; i=i+10) {
+        const ids = this.result.az_dokument.slice(i, i+10);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
-          this.result.dokument = this.result.dokument.concat(res.response.docs);
-          this.state.documentProgress = this.result.dokument.length / this.numChildren *100;
-          this.state.loading = (this.result.dokument.length) < this.numChildren;
+          this.result.valid_dokument = this.result.valid_dokument.concat(res.response.docs);
+          this.state.documentProgress = this.result.valid_dokument.length / this.numChildren *100;
+          this.state.loading = (this.result.valid_dokument.length) < this.numChildren;
         });
       }
     }
     this.state.loading = false;
+  }
+
+  getExtZdroj() {
+    if (this.result.az_ext_zdroj) {
+      for (let i = 0; i < this.result.az_ext_zdroj.length; i = i + 20) {
+        const ids = this.result.az_ext_zdroj.slice(i, i + 20);
+        this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
+          this.result.az_ext_zdroj = [];
+          this.result.az_ext_odkaz.forEach(eo => {
+            const ez = res.response.docs.find(ez => eo.ext_zdroj.id === ez.ident_cely);
+            ez.ext_odkaz_paginace = eo.paginace;
+            this.result.az_ext_zdroj.push(ez);
+          })
+        });
+        this.result.az_ext_zdroj.sort((ez1, ez2) => {
+          let res = 0;
+          res = ez1.ext_zdroj_autor[0].localeCompare(ez2.ext_zdroj_autor[0], 'cs');
+          if (res === 0) {
+            res = ez1.ext_zdroj_rok_vydani_vzniku = ez2.ext_zdroj_rok_vydani_vzniku;
+          }
+          if (res === 0) {
+            res = ez1.ext_zdroj_nazev.localeCompare(ez2.ext_zdroj_nazev);
+          }
+          return res;
+        })
+      }
+    }
   }
 
   getFullId() {
@@ -95,6 +123,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
       this.result = res.response.docs[0];
       this.setVsize();
       this.getDokuments();
+      this.getExtZdroj();
       this.hasDetail = true;
     });
   }

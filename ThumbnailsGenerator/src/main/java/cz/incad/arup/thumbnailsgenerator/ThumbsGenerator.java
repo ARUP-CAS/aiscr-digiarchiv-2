@@ -80,6 +80,16 @@ public class ThumbsGenerator {
           indexer.createThumb(id, false, true, false);
           return;
         }
+        case "-ident_cely": {
+          String id = args[1];
+          Indexer indexer = new Indexer(true);
+          try {
+            indexer.createForEntityRecord(id);
+          } catch (Exception ex) {
+            Logger.getLogger(ThumbsGenerator.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          return;
+        }
         case "-fq": {
           String fq = args[1];
           Indexer indexer = new Indexer(true);
@@ -100,11 +110,22 @@ public class ThumbsGenerator {
           }
           return;
         }
-        case "-used": {
+        case "-full": {
           try {
 
             Indexer indexer = new Indexer(false);
-            JSONObject jo = indexer.createForUsed(overwrite, onlyThumbs);
+            JSONObject jo = indexer.createForUsed(overwrite, onlyThumbs, null);
+            System.out.println(jo.toString(2));
+          } catch (Exception ex) {
+            Logger.getLogger(ThumbsGenerator.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          return;
+        }
+        case "-update": {
+          try {
+
+            Indexer indexer = new Indexer(false);
+            JSONObject jo = indexer.updateForUsed(overwrite, onlyThumbs);
             System.out.println(jo.toString(2));
           } catch (Exception ex) {
             Logger.getLogger(ThumbsGenerator.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,7 +136,8 @@ public class ThumbsGenerator {
     }
     Indexer indexer = new Indexer(false);
     try {
-      JSONObject jo = indexer.createThumbs(overwrite, onlyThumbs);
+      JSONObject jo = indexer.updateForUsed(overwrite, onlyThumbs);
+      // JSONObject jo = indexer.createThumbs(overwrite, onlyThumbs);
       System.out.println(jo.toString(2));
     } catch (Exception ex) {
       Logger.getLogger(ThumbsGenerator.class.getName()).log(Level.SEVERE, null, ex);

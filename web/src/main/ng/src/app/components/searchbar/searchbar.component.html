@@ -5,9 +5,9 @@
         <input type="text" [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above" />
         <span fxFlex class="app-controls">
           <span class="app-mobile-controls fxHide_gt-xs">
-            <a (click)="exportMapa('')">
+            <!-- <a (click)="exportMapa('')">
               <mat-icon>get_app</mat-icon>
-            </a>
+            </a> -->
             <a (click)="toggleMapa()">
               <mat-icon>{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
             </a>
@@ -18,15 +18,15 @@
         </span>
       </div>
       <div class="app-fx-right fxHide_xs">
-        <button mat-flat-button color="primary" 
+        <!-- <button mat-flat-button color="primary" 
            *ngIf="!state.isMapaCollapsed && (state.entity === 'samostatny_nalez' || state.entity === 'knihovna_3d')"
            (click)="openExport()">
           <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
           <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
           <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>
-        </button>
+        </button> -->
         <button mat-flat-button color="primary" [matMenuTriggerFor]="exports" 
-          *ngIf="!state.isMapaCollapsed && state.entity !== 'samostatny_nalez' && state.entity !== 'knihovna_3d'">
+          *ngIf="!state.isMapaCollapsed">
           <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
           <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
           <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>

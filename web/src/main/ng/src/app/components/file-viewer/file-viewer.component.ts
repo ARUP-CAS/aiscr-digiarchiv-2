@@ -22,7 +22,7 @@ export class FileViewerComponent implements OnInit {
   // result: any;
 
   files: File[] = [];
-  selectedFile: File = null;
+  selectedFile: File = null; 
 
   currentPage = 1;
   currentPageDisplayed = 1;
@@ -70,18 +70,18 @@ export class FileViewerComponent implements OnInit {
   }
 
   downloadUrl() {
-    return this.imgPoint(this.selectedFile) + '?full=true&id=' + this.selectedFile.filepath;
+    return this.config.context + '/api/img/full?id=' + this.selectedFile.id;
   }
 
-  imgPoint(doc: any) {
+  imgPoint(doc: any, size: string) {
     if (doc.hasOwnProperty('mimetype')) {
       if (doc.mimetype.indexOf('pdf') > 0) {
         return this.config.context + '/api/pdf';
       } else {
-        return this.config.context + '/api/img';
+        return this.config.context + '/api/img/' + size;
       }
     } else {
-      return this.config.context + '/api/img';
+      return this.config.context + '/api/img/' + size;
     }
   }
 
@@ -102,6 +102,7 @@ export class FileViewerComponent implements OnInit {
           link.href = this.downloadUrl();
           link.download = this.selectedFile.nazev;
           link.click();
+          this.service.showInfoDialog(this.service.getTranslation('dialog.desc.download_started'), 2000);
         }
 
       }
@@ -139,15 +140,16 @@ export class FileViewerComponent implements OnInit {
 
       this.data.soubor.forEach(f => {
         const file = new File();
+        file.id = f.id;
         file.nazev = f.nazev;
         file.mimetype = f.mimetype;
         const rozsah = f.rozsah;
         // const rozsah = '20';
         file.rozsah = (rozsah != null) ? parseInt(rozsah, 10) : 1;
-        file.size_bytes = parseInt(f.size_bytes, 10);
+        file.size_mb = f.size_mb;
         file.pages = new Array(file.rozsah);
         file.filepath = f.filepath;
-        file.setSize(true);
+        // file.setSize(true);
         this.files.push(file);
         this.files.sort((a, b) => {
           return a.nazev.localeCompare(b.nazev);

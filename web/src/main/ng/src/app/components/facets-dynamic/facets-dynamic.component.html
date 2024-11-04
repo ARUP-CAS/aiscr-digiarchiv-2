@@ -69,21 +69,23 @@
         <ng-container *ngSwitchCase="'number'">
           <mat-form-field fxFlex appearance="fill">
             <input matInput type="number" [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue"
-              [(ngModel)]="numberod" (keyup.enter)="addFilter()" />
+              [(ngModel)]="numberod" step="0.01" (keyup.enter)="addFilter()" />
           </mat-form-field>
           <mat-form-field fxFlex appearance="fill">
             <input matInput type="number" [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue"
-              [(ngModel)]="numberdo" (keyup.enter)="addFilter()" />
+              [(ngModel)]="numberdo" step="0.01" (keyup.enter)="addFilter()" />
           </mat-form-field>
         </ng-container>
+
         <ng-container *ngSwitchCase="'boolean'">
 
-        <mat-radio-group aria-label="Select an option" [(ngModel)]="boolValue">
-          <mat-radio-button value="1">{{ 'facet.button.Ano' | translate}}</mat-radio-button>&#160;
-          <mat-radio-button value="0">{{ 'facet.button.Ne' | translate}}</mat-radio-button>
-        </mat-radio-group>
+          <mat-radio-group aria-label="Select an option" [(ngModel)]="boolValue">
+            <mat-radio-button value="1">{{ (filterField.field === 'az_dj_negativni_jednotka' ? 'facet.button.negativní' : 'facet.button.Ano') | translate}}</mat-radio-button>&#160;
+            <mat-radio-button value="0">{{ (filterField.field === 'az_dj_negativni_jednotka' ? 'facet.button.pozitivní' : 'facet.button.Ne') | translate}}</mat-radio-button>
+          </mat-radio-group>
 
         </ng-container>
+
         <ng-container *ngSwitchDefault>
           <mat-form-field fxFlex appearance="fill">
             <input matInput [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue"

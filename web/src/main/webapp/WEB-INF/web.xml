@@ -9,13 +9,17 @@
         <servlet-name>ApiServlet</servlet-name>
         <servlet-class>cz.inovatika.arup.digiarchiv.web.ApiServlet</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>ApiServlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>HandleServlet</servlet-name>
         <servlet-class>cz.inovatika.arup.digiarchiv.web.HandleServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ApiServlet</servlet-name>
-        <url-pattern>/api/*</url-pattern>
+        <servlet-name>HandleServlet</servlet-name>
+        <url-pattern>/id/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>StaticServlet</servlet-name>
@@ -26,20 +30,16 @@
         <url-pattern>/export/*</url-pattern>
         <url-pattern>/export-mapa/*</url-pattern>
         <url-pattern>/home</url-pattern>
-        <url-pattern>/id_old</url-pattern>
+        <url-pattern>/id2/*</url-pattern>
         <url-pattern>/registrace</url-pattern>
         <url-pattern>/results/*</url-pattern>
         <url-pattern>/print/*</url-pattern>
         <url-pattern>/favorites</url-pattern>
         <url-pattern>/napoveda</url-pattern> 
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>HandleServlet</servlet-name>
-        <url-pattern>/id/*</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            300
         </session-timeout>
     </session-config>
     <welcome-file-list>

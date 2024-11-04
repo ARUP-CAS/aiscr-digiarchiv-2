@@ -1,0 +1,11 @@
+// --- VIEW ROW ---
+
+.app-view-row {
+  .mat-mdc-card {
+    .mat-mdc-card-content {
+      &.app-detail-closed {
+        display: none;
+      }
+    }
+  }
+}

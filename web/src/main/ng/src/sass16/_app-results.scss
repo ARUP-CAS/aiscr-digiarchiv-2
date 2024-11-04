@@ -1,0 +1,17 @@
+// --- RESULTS ---
+
+app-results {
+  // smaller top padding for result page
+  .app-display-table {
+    .app-table-cell {
+      padding-top: 24px;
+    }
+  }
+
+  .app-right {
+    @import "./app-toolbar";
+    @import "./app-chart-bar";
+    @import "./app-view-col";
+    @import "./app-view-row";
+  }
+}

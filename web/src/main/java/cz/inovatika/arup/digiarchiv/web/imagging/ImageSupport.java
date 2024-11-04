@@ -39,7 +39,11 @@ public class ImageSupport {
         try {
             Options opts = Options.getInstance();
             String destDir = opts.getString("thumbsDir");
-            String filename = f.substring(Math.max(0, f.lastIndexOf("/")), f.lastIndexOf("."));
+//            if (!f.contains(".")) {
+//                return null;
+//            }
+//            String filename = f.substring(Math.max(0, f.lastIndexOf("/")), f.lastIndexOf("."));
+            String filename = f.substring(f.lastIndexOf("/") + 1);
             int period = 2;
             int levels = 3;
             int l = filename.length();

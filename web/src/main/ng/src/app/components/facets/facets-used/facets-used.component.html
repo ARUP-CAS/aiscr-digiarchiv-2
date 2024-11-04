@@ -20,7 +20,14 @@
         <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>
       </span>
       <ng-container *ngIf="facet.field !== 'q'">{{ 'facet.field.' + facet.field | translate}}:&#160;</ng-container>
-      <span class="app-font-bold">{{ facet.display }}</span> 
+      <span *ngIf="facet.display" class="app-font-bold">{{ facet.display }}</span> 
+      <span *ngIf="facet.field === 'az_dj_negativni_jednotka'" class="app-font-bold">
+        {{ facet.value === '1' ? ('negativní' | translate) : ('pozitivní' | translate) }}
+      </span>
+      <span *ngIf="facet.field === 'dokument_cast_komponenta_dokument_jistota'" class="app-font-bold">
+        {{ facet.value === '1' ? ('Ano' | translate) : ('Ne' | translate) }}
+      </span>
+      <span *ngIf="!facet.display && facet.field !== 'az_dj_negativni_jednotka' && facet.field !== 'dokument_cast_komponenta_dokument_jistota'" class="app-font-bold">{{ facet.value | translateHeslar : facet.field}}</span> 
     </span> 
   </div>
   </mat-list-item>
