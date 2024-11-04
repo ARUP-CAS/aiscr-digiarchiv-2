@@ -62,6 +62,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.state.hasError = false;
     this.subs.push(this.service.currentLang.subscribe(res => {
       this.setTitle();
       const parts = this.router.url.split('?');
@@ -129,11 +130,27 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   search(params: Params) {
     this.state.loading = true;
+    this.state.documentProgress = 0;
     this.loading = true;
+    this.state.facetsLoading = true;
+    this.state.hasError = false;
     const p = Object.assign({}, params);
+    
+    if (!p['entity']) {
+      p['entity'] = 'dokument';
+    }
     // p.mapa = !this.state.isMapaCollapsed;
     this.docs = [];
+    p['noFacets'] = 'true';
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+      if (resp.error) {
+        this.state.loading = false;
+        this.state.facetsLoading = false;
+        this.loading = false;
+        this.state.hasError = true;
+        this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.search_error');
+        return;
+      }
       this.state.setSearchResponse(resp);
       this.docs = resp.response.docs;
       if (this.state.isMapaCollapsed) {
@@ -144,6 +161,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
       }, 100);
+
+      p['noFacets'] = 'false';
+      p['onlyFacets'] = 'true';
+      this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+        this.state.setFacets(resp);
+        this.state.facetsLoading = false;
+      });
       
       // Math.min(9*itemSize, docs.length * itemSize)
     });

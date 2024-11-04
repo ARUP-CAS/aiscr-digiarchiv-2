@@ -21,6 +21,16 @@ export class AdbComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.result?.ident_cely) { 
+    } else {
+      const pianid = this.result.id ? this.result.id : this.result;
+
+      this.service.getIdAsChild([pianid], "adb").subscribe((res: any) => {
+        this.result = res.response.docs[0]; 
+      });
+    }
   }
+
+  
 
 }

@@ -30,10 +30,10 @@
         <mat-card fxFlex="100%" *ngIf="showingCat" class="app-doctype">
           <mat-card-content fxLayout="row wrap">
             <mat-card fxFlex *ngFor="let doctype of kategories" class="app-card-doctype mat-elevation-z0">
-              <mat-card-header routerLink="/results" [queryParams]="{'kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
+              <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
                 <mat-card-title>
                   <a>
-                    <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'kategorie_dokumentu.' + doctype | translate }}
+                    <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
                   </a>
                 </mat-card-title>
                 <mat-card-subtitle>

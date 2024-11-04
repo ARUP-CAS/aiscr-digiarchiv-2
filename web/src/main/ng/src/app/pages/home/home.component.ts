@@ -51,11 +51,17 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });
     this.service.getHome().subscribe((resp: any) => {
       // this.fillBoxes(resp);
+      if (resp.error) {
+        this.state.loading = false;
+        this.loading = false;
+        return;
+      }
       this.totals = resp;
       this.kategories = Object.keys(resp.kategorie).filter(s => s !== 'ddata3d');
     });

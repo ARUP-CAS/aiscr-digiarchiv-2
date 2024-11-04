@@ -55,6 +55,7 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
 import { AdbComponent } from './components/adb/adb.component';
 import { PianComponent } from './components/pian/pian.component';
 import { LetComponent } from './components/let/let.component';
+import { DokumentCastComponent } from './components/dokument-cast/dokument-cast.component';
 import { SidenavListComponent } from './components/sidenav-list/sidenav-list.component';
 import { KontaktDialogComponent } from './components/footer/kontakt-dialog/kontakt-dialog.component';
 import { LicenceDialogComponent } from './components/footer/licence-dialog/licence-dialog.component';
@@ -77,6 +78,8 @@ import { KomponentaDokumentComponent } from './components/komponenta-dokument/ko
 import { RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 import { CitationComponent } from './components/citation/citation.component';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { ResultActionsComponent } from './components/result-actions/result-actions.component';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 
 registerLocaleData(localeCs, 'cs');
 
@@ -172,6 +175,7 @@ const providers: any[] =[
     LoginDialogComponent,
     AdbComponent,
     PianComponent,
+    DokumentCastComponent, 
     LetComponent,
     SidenavListComponent,
     KontaktDialogComponent,
@@ -186,8 +190,10 @@ const providers: any[] =[
     FacetsDynamicComponent,
     BibtextDialogComponent,
     FeedbackDialogComponent,
+    AlertDialogComponent,
     KomponentaDokumentComponent,
-    CitationComponent
+    CitationComponent,
+    ResultActionsComponent
   ],
   imports: [
     CommonModule,
@@ -212,9 +218,9 @@ const providers: any[] =[
     RecaptchaModule,
     RecaptchaFormsModule
   ],
-  entryComponents: [
-    FileViewerComponent
-  ],
+  // entryComponents: [
+  //   FileViewerComponent
+  // ],
   providers
 })
 export class AppModule { }

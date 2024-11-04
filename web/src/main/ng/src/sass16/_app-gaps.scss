@@ -1,0 +1,23 @@
+// --- GAPS ---
+
+@include setGap();
+
+.app-w-100 {
+  width: 100% !important;
+}
+
+.app-h-100 {
+  width: 100% !important;
+}
+
+.app-w-max-100 {
+ max-width: 100% !important;
+}
+
+.app-w-max-1 {
+  max-width: 1px !important;
+ }
+
+.app-w-min-100 {
+  min-width: 100% !important;
+}
