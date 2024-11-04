@@ -36,18 +36,33 @@ export class PianComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
+    if (this.result?.ident_cely) {
+      this.initProperties();
+    } else {
+      const pianid = this.result.id ? this.result.id : this.result;
+      this.service.getIdAsChild([pianid], "pian").subscribe((res: any) => {
+        this.result = res.response.docs[0];
+        this.initProperties();
+      });
+    }
+
+     
+
+  }
+
+  initProperties() {
+    if (!this.result) {
+      return;
+    }
+    // this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
-       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       publisher = {Archeologická mapa České republiky [cit. ${now}]}
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-
-     
-
   }
 
   toggleFav() {
@@ -69,4 +84,8 @@ export class PianComponent implements OnInit {
       panelClass: 'app-feedback-dialog'
     });
   } 
+
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
 }

@@ -93,10 +93,10 @@ export class FacetsComponent implements OnInit {
     this.facetsSorted = [];
     this.state.facetsFiltered.forEach(f => {
         const ff: { name: string, type: string, value: number, operator: string, poradi?: number }[] = f.values;
-        // ff.poradi = this.config.thesauri[f.field + '_' + ff.name];
+        
         if ('poradi' === this.state.facetSort[f.field]) {
           ff.forEach(v => {
-            v.poradi = this.config.thesauri[f.field + '_' + v.name];
+            v.poradi = this.config.thesauri[v.name];
           });
         }
 
@@ -108,9 +108,16 @@ export class FacetsComponent implements OnInit {
             return n1.localeCompare(n2, 'cs');
           });
         } else if ('poradi' === this.state.facetSort[f.field]) {
-          ff.sort((v1, v2) => {
-            return v1.poradi - v2.poradi
-          });
+          if (f.field === 'pristupnost') {
+            ff.sort((v1, v2) => {
+              return v1.name.localeCompare(v2.name, 'cs');
+            });
+            
+          } else {
+            ff.sort((v1, v2) => {
+              return v1.poradi - v2.poradi
+            });
+          }
         } else {
           ff.sort((v1, v2) => {
             return v2.value - v1.value
@@ -157,12 +164,12 @@ export class FacetsComponent implements OnInit {
 
   setEntity(entity) {
     // Validate sort param sort
-    const sortParam = this.state.sort.field + ' ' + this.state.sort.dir;
-    let sort = this.config.sorts.find(s => ((s.field + ' ' + s.dir) === sortParam) && (!s.entity || s.entity.length === 0 || s.entity.includes(entity)));
+    const sortParam = this.state.sort.field;
+    let sort = this.config.sorts.find(s => ((s.field) === sortParam) && (!s.entity || s.entity.length === 0 || s.entity.includes(entity)));
     if (!sort) {
       sort = this.config.sorts.find(s => !s.entity || s.entity.length === 0 || s.entity.includes(entity));
     }
-    this.router.navigate([], { queryParams: { entity, page: 0, sort: sort.field + ' ' + sort.dir }, queryParamsHandling: 'merge' });
+    this.router.navigate([], { queryParams: { entity, page: 0, sort: sort.field }, queryParamsHandling: 'merge' });
   }
 
   clickPivot(field: string, value: string, used: boolean) {

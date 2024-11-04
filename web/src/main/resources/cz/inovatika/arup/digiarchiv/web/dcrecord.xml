@@ -1,0 +1,40 @@
+<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gml="https://www.opengis.net/gml/3.2" xmlns:amcr="https://api.aiscr.cz/schema/amcr/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+    <oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          
+    
+        <dc:title xml:lang="cs">C-201802189</dc:title>
+        <dc:identifier>C-201802189</dc:identifier>
+        <dc:subject xml:lang="cs">projekt</dc:subject>
+        <dc:description xml:lang="cs">Stav: 3</dc:description>
+        <dc:type>http://base_url/id/HES-000865</dc:type>
+        <dc:type>http://base_url/id/HES-001136</dc:type>
+        <dc:coverage>http://base_url/id/ruian-3204</dc:coverage>
+        <dc:description>obnova NN za kNN, IE-12-96006878</dc:description>
+        <dc:contributor>http://base_url/id/OS-002494</dc:contributor>
+        <dc:contributor>http://base_url/id/ORG-000049</dc:contributor>
+        <dc:description>UAPPSC 322/2018</dc:description>
+        <dc:description/>
+        <dc:coverage>http://base_url/id/HES-000175</dc:coverage>
+        <dc:coverage>2018-03-01</dc:coverage>
+        <dc:coverage>2018-03-31</dc:coverage>
+        <dc:coverage>http://base_url/id/ruian-782807</dc:coverage>
+        <dc:coverage>http://base_url/id/ruian-111</dc:coverage>
+        <dc:coverage>http://base_url/id/ruian-222</dc:coverage>
+        <dc:coverage> obec</dc:coverage>
+        <dc:coverage>933/24</dc:coverage>
+        <dc:coverage/>
+        <dc:coverage>12345</dc:coverage>
+        <dc:coverage>Hrad Hořovice</dc:coverage>
+        <dc:format>application/xml</dc:format>
+        <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights>
+        <dc:publisher>https://www.aiscr.cz/</dc:publisher>
+        <dc:source>https://api.aiscr.cz/id/C-201901234</dc:source>
+        <dc:date>2023-02-01T16:58:50Z</dc:date>
+        <dc:creator>https://api.aiscr.cz/id/U-123456</dc:creator>
+        <dc:relation>http://fedora.aiscr.cz/rest/AMCR-test/C-201700002/file/39dc3dc9-aa6b-4034-becc-4f8cb1b94580</dc:relation>
+        <dc:relation>https://api.aiscr.cz/id/C-201901234A</dc:relation>
+        <dc:relation>https://api.aiscr.cz/id/C-201901234-N00001</dc:relation>
+        <dc:relation>https://api.aiscr.cz/id/C-TX-201901234</dc:relation>
+        
+    </oai_dc:dc>
+</oai_dc:dc>

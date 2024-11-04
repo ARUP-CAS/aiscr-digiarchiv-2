@@ -29,13 +29,28 @@ export class LetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    const id = this.result.ident_cely ? this.result.ident_cely : this.result;
+
+    if (this.result.ident_cely) {
+      this.setData();
+    }
+
+    // this.service.getIdAsChild([id], "let").subscribe((res: any) => {
+    //   this.result = res.response.docs[0];
+    //   this.setData();
+    // });
+
+
+  }
+  setData() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.bibTex = 
-     `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+    this.bibTex =
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
-       url = {https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       publisher = {Archeologická mapa České republiky [cit. ${now}]}
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
 
@@ -57,6 +72,6 @@ export class LetComponent implements OnInit {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
-  } 
+  }
 
 }

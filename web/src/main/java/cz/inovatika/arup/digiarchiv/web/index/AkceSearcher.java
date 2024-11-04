@@ -3,13 +3,14 @@ package cz.inovatika.arup.digiarchiv.web.index;
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,119 +20,270 @@ import org.json.JSONObject;
  */
 public class AkceSearcher implements EntitySearcher {
 
-  public static final Logger LOGGER = Logger.getLogger(AkceSearcher.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(AkceSearcher.class.getName());
 
-  final String ENTITY = "akce";
+    final String ENTITY = "akce";
 
-  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "child_dokument",
-    "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "organizace", "vedouci_akce", "okres", "datestamp"});
+    @Override
+    public void filter(JSONObject jo, String pristupnost, String org) {
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            String organizace = doc.optString("akce_organizace");
+            String docPr = doc.getString("pristupnost");
 
-  @Override
-  public void filter(JSONObject jo, String pristupnost, String org) {
-    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    for (int i = 0; i < ja.length(); i++) {
-      JSONObject doc = ja.getJSONObject(i);
-      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
-        Object[] keys =  doc.keySet().toArray();
-        for (Object key : keys) {
-          if (!allowedFields.contains((String)key)) {
-            doc.remove((String)key);
-          }
-          
+            boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
+            if (docPr.compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
+                doc.remove("chranene_udaje");
+                doc.remove("az_chranene_udaje");
+                doc.remove("akce_chranene_udaje");
+            }
         }
-      }
-    }
-  }
-
-  @Override
-  public String[] getChildSearchFields(String pristupnost) {
-    return new String[]{"ident_cely,entity,pristupnost,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace",
-      "katastr:f_katastr_" + pristupnost,
-      "lokalizace:f_lokalizace_" + pristupnost,
-      "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
-  }
-
-  @Override
-  public void getChilds(JSONObject jo, HttpSolrClient client, HttpServletRequest request) {
-    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    for (int i = 0; i < ja.length(); i++) {
-      JSONObject doc = ja.getJSONObject(i);
-      if (LoginServlet.userId(request) != null) {
-        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
-      }
-      String fields = "ident_cely,entity,pristupnost,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
-      SolrSearcher.addChildField(client, doc, "child_dokument", "dokument", fields);
-
-      fields = "ident_cely,pristupnost,katastr,okres,vedouci_projektu,typ_projektu,datum_zahajeni,datum_ukonceni,organizace_prihlaseni,dalsi_katastry,podnet";
-
-      SolrSearcher.addChildField(client, doc, "vazba_projekt", "projekt", fields);
-    }
-  }
-
-  @Override
-  public JSONObject search(HttpServletRequest request) {
-    JSONObject json = new JSONObject();
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-      SolrQuery query = new SolrQuery();
-      setQuery(request, query);
-      JSONObject jo = SearchUtils.json(query, client, "entities");
-      SolrSearcher.addFavorites(jo, client, request);
-      return jo;
-    } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-      json.put("error", ex);
-    }
-    return json;
-  }
-
-  @Override
-  public String export(HttpServletRequest request) {
-    try (HttpSolrClient client = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-      SolrQuery query = new SolrQuery();
-      setQuery(request, query);
-      return SearchUtils.csv(query, client, "entities");
-    } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-      return ex.toString();
-    }
-  }
-
-  @Override
-  public String[] getSearchFields(String pristupnost) {
-    return new String[]{"ident_cely", "katastr", "f_katastr:katastr", "okres", "f_okres:okres", "vedouci_akce", "loc", "entity", "datestamp",
-      "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost",
-      "organizace", "f_organizace:organizace", "vazba_projekt", "child_dokument",
-      "hlavni_typ", "f_hlavni_typ:hlavni_typ", "vedlejsi_typ", "f_vedlejsi_typ:vedlejsi_typ",
-      "vedouci_akce_ostatni", "organizace_ostatni", "uzivatelske_oznaceni", "ulozeni_nalezu", "poznamka",
-      "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]",
-      "komponenta:[json],komponenta_dokument:[json],neident_akce:[json],aktivita:[json]",
-      "lokalizace:f_lokalizace_" + pristupnost,
-      "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
-  }
-
-  public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
-    SolrSearcher.addCommonParams(request, query, ENTITY);
-    String pristupnost = LoginServlet.pristupnost(request.getSession());
-    if ("E".equals(pristupnost)) {
-      pristupnost = "D";
-    }
-    query.set("df", "text_all_" + pristupnost);
-    SolrSearcher.addFilters(request, query, pristupnost);
-
-    if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-      SolrSearcher.addLocationParams(request, query);
+        addOkresy(jo);
     }
 
-    if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
-      query.setFields("ident_cely,entity,vedouci_akce,organizace,pristupnost,loc_rpt,pian:[json],katastr,okres,child_dokument,vazba_projekt");
-    } else {
-//      query.setFields("ident_cely","katastr","f_katastr:katastr","okres","f_okres:okres","vedouci_akce", "loc","entity","datestamp",
-//      "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "pristupnost" ,
-//      "organizace","f_organizace:organizace","dalsi_katastry","lokalizace","vazba_projekt","child_dokument",
-//      "hlavni_typ","f_hlavni_typ:hlavni_typ","vedlejsi_typ","f_vedlejsi_typ:vedlejsi_typ", "vedouci_akce_ostatni","organizace_ostatni","uzivatelske_oznaceni","ulozeni_nalezu","poznamka",
-//      "dok_jednotka:[json],pian:[json],adb:[json],vazba_projekt_akce:[json],dokument:[json],projekt:[json],ext_zdroj:[json]");
-      query.setFields(getSearchFields(pristupnost));
+    @Override
+    public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        DokumentSearcher ds = new DokumentSearcher("dokument");
+        String dfs = String.join(",", ds.getChildSearchFields(pristupnost));
+
+        ProjektSearcher prs = new ProjektSearcher();
+        String pfs = String.join(",", prs.getChildSearchFields(pristupnost));
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("pian_id")) {
+                JSONArray cdjs = doc.getJSONArray("pian_id");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    String cdj = cdjs.getString(j);
+                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                    if (sub != null) {
+                        doc.append("pian", sub);
+                    }
+
+                }
+            }
+
+//      if (LoginServlet.userId(request) != null) {
+//        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+//      }
+            SolrSearcher.addChildField(client, doc, "az_dokument", "valid_dokument", dfs);
+            SolrSearcher.addChildField(client, doc, "akce_projekt", "valid_projekt", fields);
+        }
     }
-  }
+    
+    public void addOkresy(JSONObject jo) { 
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("az_chranene_udaje")) {
+                JSONArray cdjs = doc.getJSONObject("az_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
+                List<String> okresy = new ArrayList<>();
+                for (int j = 0; j < cdjs.length(); j++) {
+                    JSONObject dk = cdjs.getJSONObject(j);
+                    String ruian = dk.optString("id");
+                    String okres = SolrSearcher.getOkresByKatastr(ruian);
+                    if (!okresy.contains(okres)) {
+                        okresy.add(okres);
+                    }
+                }
+                doc.getJSONObject("az_chranene_udaje").put("okresy", okresy);
+            }
+        }
+    }
+
+    public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("az_dj_pian")) {
+                JSONArray cdjs = doc.getJSONArray("az_dj_pian");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    String cdj = cdjs.getString(j);
+                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                    if (sub != null) {
+                        String docPr = sub.getString("pristupnost");
+                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+                            sub.remove("pian_chranene_udaje");
+                        }
+                        doc.append("pian", sub);
+                    }
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public String[] getRelationsFields() {
+        return new String[]{"ident_cely", "dokument", "projekt"};
+    }
+
+    @Override
+    public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+
+        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < docs.length(); i++) {
+            JSONObject doc = docs.getJSONObject(i);
+            JSONArray valid_dokuments = new JSONArray();
+            if (doc.has("az_dokument")) {
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
+                        .setRows(10000)
+                        .setFields("ident_cely")
+                        .setParam("df", "ident_cely");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    for (int a = 0; a < ja.length(); a++) {
+                        valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+            doc.put("az_dokument", valid_dokuments);
+
+            if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
+                doc.remove("akce_projekt");
+            }
+        }
+    }
+
+    @Override
+    public JSONObject search(HttpServletRequest request) {
+        JSONObject json = new JSONObject();
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
+            SolrQuery query = new SolrQuery();
+            setQuery(request, query);
+            //LOGGER.log(Level.INFO, "send request");
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+
+            //LOGGER.log(Level.INFO, "checkRelations");
+            checkRelations(jo, client, request);
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            //LOGGER.log(Level.INFO, "filter");
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
+                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+                addPians(jo, client, request);
+            }
+            //LOGGER.log(Level.INFO, "addFavorites");
+            SolrSearcher.addFavorites(jo, client, request);
+            //LOGGER.log(Level.INFO, "hotovo");
+            return jo;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            json.put("error", ex);
+        }
+        return json;
+    }
+
+    @Override
+    public String export(HttpServletRequest request) {
+        try {
+            Http2SolrClient client = IndexUtils.getClientNoOp();
+            SolrQuery query = new SolrQuery();
+            setQuery(request, query);
+            // System.out.println(query);
+            return SearchUtils.csv(query, client, "entities");
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return ex.toString();
+        }
+    }
+
+    @Override
+    public String[] getSearchFields(String pristupnost) {
+
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+        List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("header").toList();
+        List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("detail").toList();
+
+        fields.addAll(azHeaderFields);
+        fields.addAll(azDetailFields);
+        fields.addAll(headerFields);
+        fields.addAll(detailFields);
+
+        fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("katastr:f_katastr_" + pristupnost);
+
+        String[] ret = fields.toArray(new String[0]);
+        return ret;
+        
+    }
+
+    @Override
+    public String[] getChildSearchFields(String pristupnost) {
+        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+        List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+        //List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
+        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("header").toList();
+        //List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("detail").toList();
+
+        fields.addAll(azHeaderFields);
+        //fields.addAll(azDetailFields);
+        fields.addAll(headerFields);
+        //fields.addAll(detailFields);
+
+        fields.add("loc_rpt:loc_rpt_" + pristupnost);
+        fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("katastr:f_katastr_" + pristupnost);
+
+        String[] ret = fields.toArray(new String[0]);
+        return ret;
+    }
+
+    public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
+        SolrSearcher.addCommonParams(request, query, ENTITY);
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        query.set("df", "text_all_" + pristupnost);
+        SolrSearcher.addFilters(request, query, pristupnost);
+
+        if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+            SolrSearcher.addLocationParams(request, query);
+        }
+        query.setFields(getSearchFields(pristupnost));
+//        if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
+//            query.setFields("ident_cely,entity,hlavni_vedouci,organizace,pristupnost,pian:[json],katastr,okres,child_dokument,vazba_projekt,pian_id",
+//                    "dokumentacni_jednotka_pian",
+//                    "dokumentacni_jednotka:[json]",
+//                    "chranene_udaje:[json]",
+//                    "akce_chranene_udaje:[json]",
+//                    "lat:lat_" + pristupnost,
+//                    "lng:lng_" + pristupnost,
+//                    "loc_rpt:loc_rpt_" + pristupnost,
+//                    "loc:loc_" + pristupnost,
+//                    "lokalizace:lokalizace_okolnosti_" + pristupnost,
+//                    "dalsi_katastry:f_dalsi_katastry_" + pristupnost);
+//            query.setFields(getSearchFields(pristupnost));
+//        } else {
+//            query.setFields(getSearchFields(pristupnost));
+//        }
+    }
 
 }
