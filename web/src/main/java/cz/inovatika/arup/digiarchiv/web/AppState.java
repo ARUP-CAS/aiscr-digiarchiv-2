@@ -16,18 +16,30 @@ public class AppState {
     static Map<String, Boolean>  ipsRunning = new HashMap<>();
     static Map<String, Instant>  ipsTimes = new HashMap<>();
     
-    public static synchronized boolean canGetFile(String ip) {
+    public static synchronized boolean canGetFile(String ip, String id) {
+        if (id.contains("thumb")) {
+            return true;
+        }
         int interval = Options.getInstance().getInt("requestInterval", 60);
         return !ipsRunning.containsKey(ip) && 
                (!ipsTimes.containsKey(ip) || ipsTimes.get(ip).isBefore(Instant.now().minus(interval, ChronoUnit.SECONDS)));
     }
     
-    public static synchronized void writeGetFileStarted(String ip) {
+    public static synchronized void writeGetFileStarted(String ip, String id) {
+        if (id.contains("thumb")) {
+            return;
+        }
         ipsRunning.put(ip, true);
     } 
     
-    public static synchronized void writeGetFileFinished(String ip) {
+    public static synchronized void writeGetFileFinished(String ip, String id, boolean success) {
+        if (id.contains("thumb")) {
+            return;
+        }
         ipsRunning.remove(ip);
-        ipsTimes.put(ip, Instant.now());
+        if (success) {
+            ipsTimes.put(ip, Instant.now());
+        }
+        
     }
 }

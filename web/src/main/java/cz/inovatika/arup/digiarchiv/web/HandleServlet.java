@@ -65,15 +65,15 @@ public class HandleServlet extends HttpServlet {
                 //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile started");
                 // Check if IP call could run by time limits
                 String ip = request.getRemoteAddr();
-                if (!AppState.canGetFile(ip)) {
+                if (!AppState.canGetFile(ip, id)) {
                     response.setStatus(HttpServletResponse.SC_CONFLICT);
                     response.getWriter().print("Too soon. Try later");
                     return;
                 }
-                AppState.writeGetFileStarted(ip);
-                getFile(id, request, response);
+                AppState.writeGetFileStarted(ip, id);
+                boolean success = getFile(id, request, response);
                 // Logs IP ends time
-                AppState.writeGetFileFinished(ip);
+                AppState.writeGetFileFinished(ip, id, success);
                 //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile end");
             } catch (Exception ex) {
                 Logger.getLogger(HandleServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,6 +102,7 @@ public class HandleServlet extends HttpServlet {
                         BufferedImage bi = ImageIO.read(f);
                         ImageIO.write(bi, "jpg", out);
                     } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                         LOGGER.log(Level.WARNING, "File does not exist in {0}. ", fname);
                     }
 
@@ -112,7 +113,7 @@ public class HandleServlet extends HttpServlet {
         }
     }
 
-    private static void getFile(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private static boolean getFile(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject user = new JSONObject();
         final String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
@@ -128,7 +129,7 @@ public class HandleServlet extends HttpServlet {
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().print("Invalid credentials");
-                return;
+                return false;
             }
         }
 
@@ -137,20 +138,20 @@ public class HandleServlet extends HttpServlet {
             try {
                 JSONObject doc = getDocument(id, user);
                 if (doc == null) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     LOGGER.log(Level.WARNING, "{0} not found", id);
-                    return;
+                    return false;
                 }
 
                 if (doc.optBoolean("not_allowed")) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().println("insuficient rights!!");
-                    return;
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    return false;
                 }
 
                 if (id.contains("page")) {
                     String page = id.substring(id.lastIndexOf("/") + 1);
                     getPdfPage(doc, page, request, response);
-                    return;
+                    return false;
                 }
 
                 String mime = doc.getString("mimetype");
@@ -172,6 +173,7 @@ public class HandleServlet extends HttpServlet {
                 LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
                 IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                 is.close();
+                return true;
 
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
@@ -179,6 +181,7 @@ public class HandleServlet extends HttpServlet {
                 f.delete();
             }
         }
+        return true;
     }
 
     private static boolean isAllowed(JSONObject doc, JSONObject user) {
@@ -211,7 +214,7 @@ public class HandleServlet extends HttpServlet {
 //-- B: (dokument/pristupnost <= B AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel = {user}
 //-- C: (dokument/pristupnost <= C AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel.organizace = {user}.organizace
 //-- D-E: bez omezení
-                if (userPr.equalsIgnoreCase("A") && stav == 3) {
+                if (userPr.equalsIgnoreCase("A") && docPr.equalsIgnoreCase("A") && stav == 3) {
                     return true;
                 } else if (userPr.equalsIgnoreCase("B")) {
                     if (docPr.compareToIgnoreCase("B") <= 0 && stav == 3) {

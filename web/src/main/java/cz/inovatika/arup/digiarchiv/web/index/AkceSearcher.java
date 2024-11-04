@@ -76,7 +76,7 @@ public class AkceSearcher implements EntitySearcher {
 //      if (LoginServlet.userId(request) != null) {
 //        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
 //      }
-            SolrSearcher.addChildField(client, doc, "az_dokument", "valid_dokument", dfs);
+            //SolrSearcher.addChildField(client, doc, "az_dokument", "valid_dokument", dfs);
             SolrSearcher.addChildField(client, doc, "akce_projekt", "valid_projekt", fields);
         }
     }
@@ -144,7 +144,7 @@ public class AkceSearcher implements EntitySearcher {
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
             JSONArray valid_dokuments = new JSONArray();
-            if (doc.has("az_dokument")) {
+            if (doc.has("az_dokument") && doc.getJSONArray("az_dokument").length() < 100) {
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
                         .setRows(10000)
@@ -158,8 +158,8 @@ public class AkceSearcher implements EntitySearcher {
                 } catch (SolrServerException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
-            }
-            doc.put("az_dokument", valid_dokuments);
+                doc.put("az_dokument", valid_dokuments);
+            } 
 
             if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
                 doc.remove("akce_projekt");
@@ -179,7 +179,7 @@ public class AkceSearcher implements EntitySearcher {
 
             //LOGGER.log(Level.INFO, "checkRelations");
             if (!Boolean.parseBoolean(request.getParameter("mapa"))){
-                checkRelations(jo, client, request);
+                // checkRelations(jo, client, request);
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             //LOGGER.log(Level.INFO, "filter");

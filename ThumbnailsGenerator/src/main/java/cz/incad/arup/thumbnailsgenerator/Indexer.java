@@ -213,7 +213,7 @@ public class Indexer {
             SolrQuery query = new SolrQuery();
             // query.addFilterQuery("entity:dokument");
             query.setQuery("ident_cely:\"" + ident_cely + "\"");
-            query.setFields("soubor");
+            query.setFields("ident_cely,soubor");
             query.set("wt", "json");
             query.setRows(rows);
 
