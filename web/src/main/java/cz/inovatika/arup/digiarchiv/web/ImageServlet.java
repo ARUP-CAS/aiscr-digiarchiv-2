@@ -229,6 +229,7 @@ public class ImageServlet extends HttpServlet {
                         IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                         // InputStream is = getFromFedora(id, "orig");
                         // IOUtils.copy(is, response.getOutputStream());
+                        LogAnalytics.log(request, doc.getString("path"), "file");
                         is.close();
 
                     } catch (Exception ex) {

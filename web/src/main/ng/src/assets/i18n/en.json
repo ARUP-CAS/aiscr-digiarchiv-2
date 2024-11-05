@@ -84,6 +84,10 @@
       "rok_vzniku": "Year of creation",
       "nazev": "Name",
       "organizace": "Organisation"
+    },
+    "dir": {
+      "asc": " ascending",
+      "desc": " descending"
     }
   },
 

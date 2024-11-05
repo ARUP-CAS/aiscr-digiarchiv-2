@@ -543,7 +543,7 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
                 JSONObject json = new JSONObject();
                 try {
-                    LogAnalytics.log(request, request.getParameter("id"), "id");
+                    LogAnalytics.log(request, request.getParameter("id"), request.getParameter("type"));
                 } catch (Exception ex) {
                     json.put("error", ex);
                 }

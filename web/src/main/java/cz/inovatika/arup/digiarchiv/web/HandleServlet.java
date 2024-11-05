@@ -172,6 +172,9 @@ public class HandleServlet extends HttpServlet {
                 FileUtils.copyInputStreamToFile(is, f);
                 LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
                 IOUtils.copy(new FileInputStream(f), response.getOutputStream());
+                if (!id.endsWith("thumb")) {
+                    LogAnalytics.log(request, doc.getString("path"), "file");
+                }
                 is.close();
                 return true;
 

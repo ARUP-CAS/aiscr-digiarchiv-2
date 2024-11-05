@@ -56,7 +56,7 @@ export class FileViewerComponent implements OnInit {
 
   ngOnInit(): void {
     this.setData();
-    this.service.logViewer(this.data.id).subscribe(() => {});
+    this.service.logViewer(this.data.ident_cely).subscribe(() => {});
   }
 
   selectFile(file: File, idx: number) {
