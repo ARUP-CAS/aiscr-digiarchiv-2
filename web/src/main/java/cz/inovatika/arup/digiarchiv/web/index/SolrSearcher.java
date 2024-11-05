@@ -520,6 +520,18 @@ public class SolrSearcher {
         return new JSONObject((String) resp.get("response"));
     }
 
+    public static JSONObject jsonSelect(SolrClient client, String core, SolrQuery query) throws SolrServerException, IOException {
+        query.setRequestHandler("/select");
+        QueryRequest req = new QueryRequest(query);
+
+        NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
+        rawJsonResponseParser.setWriterType("json");
+        req.setResponseParser(rawJsonResponseParser);
+
+        NamedList<Object> resp = client.request(req, core);
+        return new JSONObject((String) resp.get("response"));
+    }
+
     public static JSONObject getById(Http2SolrClient client, String id, String fields, String filter) {
         try {
             SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");

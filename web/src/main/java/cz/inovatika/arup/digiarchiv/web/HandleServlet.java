@@ -114,7 +114,7 @@ public class HandleServlet extends HttpServlet {
     }
 
     private static boolean getFile(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        JSONObject user = new JSONObject();
+        JSONObject user = LoginServlet.user(request);
         final String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
             // Authorization: Basic base64credentials
@@ -163,7 +163,7 @@ public class HandleServlet extends HttpServlet {
                     response.setContentType("image/png");
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
                 } else {
-                    url += "/orig";
+                    url += "/orig"; 
                     response.setContentType(mime);
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
                 }
@@ -184,7 +184,12 @@ public class HandleServlet extends HttpServlet {
         return true;
     }
 
-    private static boolean isAllowed(JSONObject doc, JSONObject user) {
+    private static boolean isAllowed(String id, JSONObject doc, JSONObject user) {
+        
+        if (id.contains("thumb") && !id.contains("page")) {
+            return true;
+        }
+        
         String entity = doc.optString("entity");
         int stav = doc.optInt("stav");
         String docPr = doc.getString("pristupnost");
@@ -322,16 +327,19 @@ public class HandleServlet extends HttpServlet {
         SolrQuery query = new SolrQuery("*")
                 .addSort("datestamp", SolrQuery.ORDER.desc)
                 .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,soubor:[json],historie:[json]")
-                .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"")
-                .addFilterQuery("searchable:true");
+                .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"");
 
-        JSONObject json = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query);
+        JSONObject json = SolrSearcher.jsonSelect(IndexUtils.getClientNoOp(), "entities", query);
         if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
             LOGGER.log(Level.WARNING, "{0} not found", id);
             return null;
         }
         JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-        if (!isAllowed(doc, user)) {
+        
+        
+        if (!isAllowed(id, doc, user)) {
+            
+            LOGGER.log(Level.WARNING, "{0} not allowed", id);
             return new JSONObject().put("not_allowed", true);
         }
 
