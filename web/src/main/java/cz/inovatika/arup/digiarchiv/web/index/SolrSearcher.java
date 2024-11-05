@@ -418,32 +418,32 @@ public class SolrSearcher {
         }
     }
 
-    public static String getPristupnostBySoubor(String id, String field) {
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-
-            SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
-            QueryResponse rsp = client.query("soubor", query);
-            if (rsp.getResults().isEmpty()) {
-                return null;
-            } else {
-                String dok = (String) rsp.getResults().get(0).getFirstValue("dokument");
-                if (dok == null || "".equals(dok)) {
-                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
-                }
-
-                SolrQuery queryDok = new SolrQuery("*").addFilterQuery("ident_cely:\"" + dok + "\"").setRows(1).setFields("pristupnost");
-                QueryResponse rsp2 = client.query("dokument", queryDok);
-                if (rsp2.getResults().isEmpty()) {
-                    return null;
-                } else {
-                    return (String) rsp2.getResults().get(0).getFirstValue("pristupnost");
-                }
-            }
-        } catch (IOException | SolrServerException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
+//    public static String getPristupnostBySoubor(String id, String field) {
+//        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+//
+//            SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
+//            QueryResponse rsp = client.query("soubor", query);
+//            if (rsp.getResults().isEmpty()) {
+//                return null;
+//            } else {
+//                String dok = (String) rsp.getResults().get(0).getFirstValue("dokument");
+//                if (dok == null || "".equals(dok)) {
+//                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
+//                }
+//
+//                SolrQuery queryDok = new SolrQuery("*").addFilterQuery("ident_cely:\"" + dok + "\"").setRows(1).setFields("pristupnost");
+//                QueryResponse rsp2 = client.query("dokument", queryDok);
+//                if (rsp2.getResults().isEmpty()) {
+//                    return null;
+//                } else {
+//                    return (String) rsp2.getResults().get(0).getFirstValue("pristupnost");
+//                }
+//            }
+//        } catch (IOException | SolrServerException ex) {
+//            LOGGER.log(Level.SEVERE, null, ex);
+//            return null;
+//        }
+//    }
 
     public static String getOkresByKatastr(String ruian) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {

@@ -174,11 +174,11 @@ public class SamostatnyNalez implements FedoraModel {
         IndexUtils.addRefField(idoc, "okres_sort", okres);
         IndexUtils.addRefField(idoc, "autor_sort", nalezce);
 
-        List<SolrInputDocument> idocs = new ArrayList<>();
+//        List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
-                SolrInputDocument djdoc = s.createSolrDoc();
-                idocs.add(djdoc);
+//                SolrInputDocument djdoc = s.createSolrDoc();
+//                idocs.add(djdoc);
                 IndexUtils.addJSONField(idoc, "soubor", s);
                 
                 idoc.addField("soubor_id", s.id);
@@ -188,9 +188,9 @@ public class SamostatnyNalez implements FedoraModel {
                 idoc.addField("soubor_size_bytes", s.size_mb);
 
             }
-            if (!idocs.isEmpty()) {
-                IndexUtils.getClientBin().add("soubor", idocs, 10);
-            }
+//            if (!idocs.isEmpty()) {
+//                IndexUtils.getClientBin().add("soubor", idocs, 10);
+//            }
         } catch (Exception ex) {
             Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);
         }

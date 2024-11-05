@@ -200,6 +200,10 @@ public class SearchServlet extends HttpServlet {
                     // Remove stats
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+                    
+                    if (Boolean.parseBoolean(request.getParameter("shouldLog"))) {
+                        LogAnalytics.log(request, request.getParameter("id"), "id");
+                    }
                     return jo.toString();
 
                 } catch (Exception ex) {
@@ -447,32 +451,32 @@ public class SearchServlet extends HttpServlet {
 //        return ret.toString();
             }
         },
-        GETHESLAR {
-            @Override
-            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-                JSONObject json = new JSONObject();
-                try {
-                    Http2SolrClient client = IndexUtils.getClientNoOp();
-                    String pristupnost = LoginServlet.pristupnost(request.getSession());
-                    SolrQuery query = new SolrQuery("heslar:\"" + request.getParameter("id") + "\"")
-                            .setRows(1000);
-
-                    QueryRequest req = new QueryRequest(query);
-
-                    NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
-                    rawJsonResponseParser.setWriterType("json");
-                    req.setResponseParser(rawJsonResponseParser);
-
-                    NamedList<Object> resp = client.request(req, "translations");
-                    return (String) resp.get("response");
-
-                } catch (Exception ex) {
-                    json.put("error", ex);
-                }
-                return json.toString();
-            }
-        },
+//        GETHESLAR {
+//            @Override
+//            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//
+//                JSONObject json = new JSONObject();
+//                try {
+//                    Http2SolrClient client = IndexUtils.getClientNoOp();
+//                    String pristupnost = LoginServlet.pristupnost(request.getSession());
+//                    SolrQuery query = new SolrQuery("heslar:\"" + request.getParameter("id") + "\"")
+//                            .setRows(1000);
+//
+//                    QueryRequest req = new QueryRequest(query);
+//
+//                    NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
+//                    rawJsonResponseParser.setWriterType("json");
+//                    req.setResponseParser(rawJsonResponseParser);
+//
+//                    NamedList<Object> resp = client.request(req, "translations");
+//                    return (String) resp.get("response");
+//
+//                } catch (Exception ex) {
+//                    json.put("error", ex);
+//                }
+//                return json.toString();
+//            }
+//        },
         THESAURI {
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -527,6 +531,19 @@ public class SearchServlet extends HttpServlet {
 
                     NamedList<Object> resp = client.request(req, "heslar");
                     return (String) resp.get("response");
+                } catch (Exception ex) {
+                    json.put("error", ex);
+                }
+                return json.toString();
+            }
+        },
+        LOG {
+            
+            @Override
+            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    LogAnalytics.log(request, request.getParameter("id"), "id");
                 } catch (Exception ex) {
                     json.put("error", ex);
                 }

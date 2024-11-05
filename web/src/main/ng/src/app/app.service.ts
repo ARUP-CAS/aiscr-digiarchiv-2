@@ -265,10 +265,18 @@ export class AppService {
     return this.get(`/search/check_relations`, params);
   }
 
-  getId(id: string): Observable<any > {
+  getId(id: string, shouldLog: boolean = true): Observable<any > {
     const params: HttpParams = new HttpParams()
-      .set('id', id);
+    .set('id', id)
+    .set('shouldLog', shouldLog);
     return this.get(`/search/id`, params);
+  }
+
+  logViewer(id: string): Observable<any > {
+    const params: HttpParams = new HttpParams()
+    .set('id', id)
+    .set('type', 'viewer');
+    return this.get(`/search/log`, params);
   }
 
   getIdAsChild(ids: string[], entity: string) {

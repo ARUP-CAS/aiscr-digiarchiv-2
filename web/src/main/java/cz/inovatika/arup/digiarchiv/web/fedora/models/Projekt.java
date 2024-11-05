@@ -234,19 +234,25 @@ public class Projekt implements FedoraModel {
             idoc.setField("projekt_dokument", v.getValue());
         }
 
-        List<SolrInputDocument> idocs = new ArrayList<>();
-        try {
+        //List<SolrInputDocument> idocs = new ArrayList<>();
             for (Soubor s : soubor) {
-                SolrInputDocument djdoc = s.createSolrDoc();
-                idocs.add(djdoc);
+//                SolrInputDocument djdoc = s.createSolrDoc();
+//                idocs.add(djdoc);
                 IndexUtils.addJSONField(idoc, "soubor", s);
+                
+                idoc.addField("soubor_id", s.id);
+                idoc.addField("soubor_nazev", s.nazev);
+                idoc.addField("soubor_filepath", s.path);
+                idoc.addField("soubor_rozsah", s.rozsah);
+                idoc.addField("soubor_size_bytes", s.size_mb);
+
             }
-            if (!idocs.isEmpty()) {
-                IndexUtils.getClientBin().add("soubor", idocs, 10);
-            }
-        } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//            if (!idocs.isEmpty()) {
+//                IndexUtils.getClientBin().add("soubor", idocs, 10);
+//            }
+//        } catch (SolrServerException | IOException ex) {
+//            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
         if (projekt_chranene_udaje != null) {
             projekt_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));

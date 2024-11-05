@@ -3,7 +3,6 @@ import { Condition } from 'src/app/shared/condition';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AppState } from 'src/app/app.state';
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
-import { AppHeslarService } from 'src/app/app.heslar.service';
 import { DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/app.service';
@@ -28,7 +27,6 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     public state: AppState,
     public config: AppConfiguration,
     private service: AppService,
-    public heslarService: AppHeslarService,
     @Inject(DOCUMENT) private document: Document
   ) { }
 

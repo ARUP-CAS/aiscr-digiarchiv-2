@@ -301,7 +301,7 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.state.mapResult.pian_id.forEach(pian_id => {
                 if (!this.piansList.includes(pian_id)) {
                   this.piansList.push(pian_id);
-                  this.service.getId(pian_id).subscribe(resp => {
+                  this.service.getId(pian_id, false).subscribe(resp => {
                     const pian = resp.response.docs[0];
                     if (!this.state.mapResult.pian) {
                       this.state.mapResult.pian = [];
@@ -411,7 +411,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       doc.pian_id.forEach(pian_id => {
         if (!this.piansList.includes(pian_id)) {
           this.piansList.push(pian_id);
-          this.service.getId(pian_id).subscribe(resp => {
+          this.service.getId(pian_id, false).subscribe(resp => {
             const pian = resp.response.docs[0];
             doc.pian = pian;
             const coords = pian.loc_rpt[0].split(',');
@@ -517,7 +517,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           if (!this.piansList.includes(pian_id)) {
             this.piansList.push(pian_id);
             if (this.showType !== 'heat') {
-              this.service.getId(pian_id).subscribe(resp => {
+              this.service.getId(pian_id, false).subscribe(resp => {
                 const pian = resp.response.docs[0];
                 if (pian) {
                   doc.pian.push(pian);

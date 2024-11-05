@@ -21,37 +21,37 @@ export class AppHeslarService {
     return this.heslare[heslar];
   }
 
-  getHeslar(h: string, sort: string) {
-    // const url = this.config['searchParams']['host'] + 'translations/select';
-    const params = new HttpParams()
-      .set('id', h);
-    return this.http.get('api/search/getheslar', { params })
-      .pipe(map((resp: any) => {
-        this.heslare[h] = resp.response.docs;
-        return this.heslare[h];
-      }));
-  }
+  // getHeslar(h: string, sort: string) {
+  //   // const url = this.config['searchParams']['host'] + 'translations/select';
+  //   const params = new HttpParams()
+  //     .set('id', h);
+  //   return this.http.get('api/search/getheslar', { params })
+  //     .pipe(map((resp: any) => {
+  //       this.heslare[h] = resp.response.docs;
+  //       return this.heslare[h];
+  //     }));
+  // }
 
-  setConditionFromHeslar(heslar: string, dispField: string, value: string, condition: Condition) {
-    if (this.heslare[heslar]) {
-      condition.heslar = heslar;
-      condition.heslarDisplay = dispField;
-      condition.heslarField = value;
-      if (!condition.value) {
-        condition.value = this.heslare[heslar][0][value];
-        condition.dispValue = this.heslare[heslar][0][dispField];
-      }
+  // setConditionFromHeslar(heslar: string, dispField: string, value: string, condition: Condition) {
+  //   if (this.heslare[heslar]) {
+  //     condition.heslar = heslar;
+  //     condition.heslarDisplay = dispField;
+  //     condition.heslarField = value;
+  //     if (!condition.value) {
+  //       condition.value = this.heslare[heslar][0][value];
+  //       condition.dispValue = this.heslare[heslar][0][dispField];
+  //     }
 
-    } else {
-      this.getHeslar(heslar, dispField).subscribe(res => {
-        condition.heslar = heslar;
-        condition.heslarDisplay = dispField;
-        condition.heslarField = value;
-        if (!condition.value) {
-          condition.value = res[0][value];
-          condition.dispValue = res[0][dispField];
-        }
-      });
-    }
-  }
+  //   } else {
+  //     this.getHeslar(heslar, dispField).subscribe(res => {
+  //       condition.heslar = heslar;
+  //       condition.heslarDisplay = dispField;
+  //       condition.heslarField = value;
+  //       if (!condition.value) {
+  //         condition.value = res[0][value];
+  //         condition.dispValue = res[0][dispField];
+  //       }
+  //     });
+  //   }
+  // }
 }
