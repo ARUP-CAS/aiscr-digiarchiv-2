@@ -97,20 +97,12 @@ public class Indexer {
         String fq = "datestamp:[" + lastUpdate + " TO *]";
         return createForUsed(overwrite, onlyThumbs, fq);
     }
-
+    
     public JSONObject createForUsed(boolean overwrite, boolean onlyThumbs, String fq) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
-        Instant start = Instant.now();
-        // Date start = new Date();
-        totalDocs = 0;
-
-        try {
-            File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "skipped.txt");
-            FileUtils.writeStringToFile(file, "Create thums started at " + start.toString() + System.getProperty("line.separator"), "UTF-8", true);
-            dokumentClient = getClient("entities/");
-            String sort = "ident_cely";
-            int rows = 200;
-            SolrQuery query = new SolrQuery("*");
-            query.addFilterQuery("searchable:true");
+        String sort = "ident_cely";
+        int rows = 200;
+        SolrQuery query = new SolrQuery("*");
+            // query.addFilterQuery("searchable:true");
             query.addFilterQuery("soubor_id:*");
             query.setFields("ident_cely,soubor");
             query.set("wt", "json");
@@ -120,6 +112,35 @@ public class Indexer {
             if (fq != null) {
                 query.addFilterQuery(fq);
             }
+        return createFromEntities( query, overwrite, onlyThumbs, rows);
+    }
+    
+    public JSONObject createForUnused(boolean overwrite, boolean onlyThumbs, String fq) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
+        String sort = "ident_cely";
+        int rows = 200;
+        SolrQuery query = new SolrQuery("*");
+            query.addFilterQuery("searchable:false");
+            query.addFilterQuery("soubor_id:*");
+            query.setFields("ident_cely,soubor");
+            query.set("wt", "json");
+            query.setRows(rows);
+            query.setSort(SolrQuery.SortClause.asc(sort));
+            
+            if (fq != null) {
+                query.addFilterQuery(fq);
+            }
+        return createFromEntities( query, overwrite, onlyThumbs, rows);
+    }
+
+    public JSONObject createFromEntities(SolrQuery query, boolean overwrite, boolean onlyThumbs, int rows) throws IOException, MalformedURLException, URISyntaxException, InterruptedException {
+        Instant start = Instant.now();
+        // Date start = new Date();
+        totalDocs = 0;
+
+        try {
+            File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "skipped.txt");
+            FileUtils.writeStringToFile(file, "Create thums started at " + start.toString() + System.getProperty("line.separator"), "UTF-8", true);
+            dokumentClient = getClient("entities/");
 
             String cursorMark = CursorMarkParams.CURSOR_MARK_START;
 

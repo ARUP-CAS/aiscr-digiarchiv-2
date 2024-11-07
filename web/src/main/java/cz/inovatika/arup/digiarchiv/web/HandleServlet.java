@@ -218,7 +218,6 @@ public class HandleServlet extends HttpServlet {
         String entity = doc.optString("entity");
         int stav = doc.optInt("stav");
         String docPr = doc.getString("pristupnost");
-        String docOrg = doc.optString("dokument_organizace");
 
         String userPr = user.optString("pristupnost", "A");
         String userId = user.optString("ident_cely", "A");
@@ -226,13 +225,14 @@ public class HandleServlet extends HttpServlet {
         if (user.has("organizace")) {
             userOrg = user.getJSONObject("organizace").optString("id", "");
         }
-        boolean sameOrg = userOrg.toLowerCase().equals(docOrg.toLowerCase()) && "C".compareTo(docPr) >= 0;
 
         switch (entity) {
             case "projekt":
 //-- A-B: nikdy
 //-- C: projekt/stav = 1 OR (projekt/stav >= 2 AND projekt/stav <= 6 AND projekt/organizace = {user}.organizace)
 //-- D-E: bez omezení
+                String docOrg = doc.optString("projekt_organizace");
+                boolean sameOrg = userOrg.toLowerCase().equals(docOrg.toLowerCase());
                 if (userPr.equalsIgnoreCase("C")
                         && ((stav == 1) || (sameOrg && stav <= 6))) {
                     return true;
@@ -248,7 +248,7 @@ public class HandleServlet extends HttpServlet {
                     return true;
                 } else if (userPr.equalsIgnoreCase("B")) {
                     if (docPr.compareToIgnoreCase("B") <= 0 && stav == 3) {
-                        return true;
+                        return true; 
                     }
 
                     JSONArray h = doc.getJSONArray("historie");

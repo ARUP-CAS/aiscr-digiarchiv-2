@@ -132,6 +132,17 @@ public class ThumbsGenerator {
           }
           return;
         }
+        case "-unused": {
+          try {
+
+            Indexer indexer = new Indexer(false);
+            JSONObject jo = indexer.createForUnused(overwrite, onlyThumbs, null);
+            System.out.println(jo.toString(2));
+          } catch (Exception ex) {
+            Logger.getLogger(ThumbsGenerator.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          return;
+        }
       }
     }
     Indexer indexer = new Indexer(false);
