@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.inovatika.arup.digiarchiv.web;
 
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
@@ -17,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.logging.Level;
@@ -65,11 +61,17 @@ public class HandleServlet extends HttpServlet {
                 //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile started");
                 // Check if IP call could run by time limits
                 String ip = request.getRemoteAddr();
-                if (!AppState.canGetFile(ip, id)) {
-                    response.setStatus(HttpServletResponse.SC_CONFLICT);
-                    response.getWriter().print("Too soon. Try later");
-                    return;
-                }
+                long retryTime = AppState.canGetFileInterval(ip, id);
+                    if (retryTime > 0) {
+                        response.setStatus(429); // 429 Too Many Requests
+                        response.addHeader("Retry-After", retryTime + "");
+                        response.getWriter().print("Try in " + retryTime + " seconds.");
+                        return;
+                    } else if (retryTime == -1){
+                        response.setStatus(429); // 429 Too Many Requests
+                        response.getWriter().print("Downloading file still in progress. Try later.");
+                        return;
+                    }
                 AppState.writeGetFileStarted(ip, id);
                 boolean success = getFile(id, request, response);
                 // Logs IP ends time
@@ -92,13 +94,16 @@ public class HandleServlet extends HttpServlet {
 
         try (OutputStream out = response.getOutputStream()) {
             String id = soubor.getString("id");
+            String filename = soubor.getString("nazev");
             if (id != null && !id.equals("")) {
                 try {
-                    String fname = ImageSupport.getDestDir(id) + id + File.separator + page + ".jpg";
+                    // Tady stranky zacinaji na 1. Generovane na 0 
+                    int pageIndex = Integer.parseInt(page) - 1;
+                    String fname = ImageSupport.getDestDir(id) + id + File.separator + pageIndex + ".jpg";
                     File f = new File(fname);
                     if (f.exists()) {
                         response.setContentType("image/jpeg");
-                        response.setHeader("Content-Disposition", "filename=" + id + "_" + f.getName());
+                        response.setHeader("Content-Disposition", "attachment; filename=" + filename + "_" + page + ".jpg");
                         BufferedImage bi = ImageIO.read(f);
                         ImageIO.write(bi, "jpg", out);
                     } else {
@@ -107,6 +112,7 @@ public class HandleServlet extends HttpServlet {
                     }
 
                 } catch (Exception ex) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
@@ -143,22 +149,39 @@ public class HandleServlet extends HttpServlet {
                     return false;
                 }
 
-                if (doc.optBoolean("not_allowed")) {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                if (doc.optBoolean("not_found")) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    // LOGGER.log(Level.WARNING, "{0} not found", id);
                     return false;
                 }
 
-                if (id.contains("page")) {
+                if (doc.optBoolean("invalid")) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    // LOGGER.log(Level.WARNING, "{0} not allowed", id);
+                    return false;
+                }
+
+                if (doc.optBoolean("not_allowed")) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    LOGGER.log(Level.WARNING, "{0} not allowed", id);
+                    return false;
+                }
+
+                String mime = doc.optString("mimetype");
+                if (id.contains("page") && mime.contains("pdf")) {
                     String page = id.substring(id.lastIndexOf("/") + 1);
                     getPdfPage(doc, page, request, response);
                     return false;
                 }
 
-                String mime = doc.getString("mimetype");
                 String filename = doc.getString("nazev");
 
                 String url = doc.getString("path");
-                if (id.endsWith("thumb")) {
+                if (id.contains("page")) {
+                    url += "/thumb-large";
+                    response.setContentType("image/png");
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
+                } else if (id.contains("thumb")) {
                     url += "/thumb";
                     response.setContentType("image/png");
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
@@ -172,7 +195,7 @@ public class HandleServlet extends HttpServlet {
                 FileUtils.copyInputStreamToFile(is, f);
                 LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
                 IOUtils.copy(new FileInputStream(f), response.getOutputStream());
-                if (!id.endsWith("thumb")) {
+                if (!id.contains("thumb")) {
                     LogAnalytics.log(request, doc.getString("path"), "file");
                 }
                 is.close();
@@ -188,7 +211,6 @@ public class HandleServlet extends HttpServlet {
     }
 
     private static boolean isAllowed(String id, JSONObject doc, JSONObject user) {
-        
         if (id.contains("thumb") && !id.contains("page")) {
             return true;
         }
@@ -234,7 +256,7 @@ public class HandleServlet extends HttpServlet {
                     for (int i = 0; i < h.length(); i++) {
                         JSONObject hi = h.getJSONObject(i);
                         if ("D01".equals(hi.optString("typ_zmeny"))) {
-                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                            uzivatel = hi.getJSONObject("uzivatel").getString("id");
                         }
                     }
                     return (userId.equals(uzivatel));
@@ -249,7 +271,7 @@ public class HandleServlet extends HttpServlet {
                     for (int i = 0; i < h.length(); i++) {
                         JSONObject hi = h.getJSONObject(i);
                         if ("D01".equals(hi.optString("typ_zmeny"))) {
-                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                            uzivatel = hi.getJSONObject("uzivatel").getString("id");
                         }
                     }
                     return (userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel)));
@@ -274,7 +296,7 @@ public class HandleServlet extends HttpServlet {
                     for (int i = 0; i < h.length(); i++) {
                         JSONObject hi = h.getJSONObject(i);
                         if ("SN01".equals(hi.optString("typ_zmeny"))) {
-                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                            uzivatel = hi.getJSONObject("uzivatel").getString("id");
                         }
                     }
                     return (userId.equals(uzivatel));
@@ -290,7 +312,7 @@ public class HandleServlet extends HttpServlet {
                     for (int i = 0; i < h.length(); i++) {
                         JSONObject hi = h.getJSONObject(i);
                         if ("D01".equals(hi.optString("typ_zmeny"))) {
-                            uzivatel = hi.getJSONObject(userPr).getString("id");
+                            uzivatel = hi.getJSONObject("uzivatel").getString("id");
                         }
                     }
                     if (userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel))) {
@@ -321,6 +343,14 @@ public class HandleServlet extends HttpServlet {
 
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2
         String soubor_filepath = "rest/AMCR/record/" + id;
+        
+        
+        if (id.contains("thumb") && !id.contains("page") && !id.endsWith("thumb")) { 
+//-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/1            
+            LOGGER.log(Level.WARNING, "{0} is invalid", id);
+            return new JSONObject().put("invalid", true);
+        }
+        
         if (id.contains("thumb")) {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/page/1            
@@ -335,7 +365,7 @@ public class HandleServlet extends HttpServlet {
         JSONObject json = SolrSearcher.jsonSelect(IndexUtils.getClientNoOp(), "entities", query);
         if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
             LOGGER.log(Level.WARNING, "{0} not found", id);
-            return null;
+            return new JSONObject().put("not_found", true);
         }
         JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
         
@@ -357,7 +387,7 @@ public class HandleServlet extends HttpServlet {
                 return sdoc;
             }
         }
-        return null;
+        return new JSONObject().put("not_found", true);
 
     }
 
