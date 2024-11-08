@@ -74,13 +74,6 @@
     -->
     <!-- <lib dir="${solr.install.dir:../../../..}/modules/ltr/lib" regex=".*\.jar" /> -->
      <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib" regex=".*\.jar"  /> 
-     
-     
-<!--  <lib dir="${solr.install.dir:../../../..}/modules/langid/lib/" regex=".*\.jar" />
-  <lib dir="${solr.install.dir:../../../..}/modules/langid/lib/" regex="solr-langid-\d.*\.jar" />
-  <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib/" regex="solr-analysis-extras-\d.*\.jar" />
-  <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib/" regex="lucene-analysis-icu-\d.*\.jar" />
-  <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib/" regex="icu4j-\d.*\.jar" />-->
     
     
 
@@ -747,7 +740,7 @@
   <requestHandler name="/search" class="solr.SearchHandler">
 	<lst name="defaults">
 	  <str name="echoParams">explicit</str>
-	  <str name="df">text_all_D</str>
+	  <str name="df">text_all</str>
 	  <str name="q">*:*</str>
 	  <int name="rows">20</int>
 	   
@@ -763,99 +756,6 @@
     </lst>
   </initParams>
 
-<initParams path="/search">
-    <lst name="defaults">
-
-       <str name="defType">edismax</str>
-	   <str name="df">text_all_A</str>
-       
-       <!-- <str name="facet">on</str> -->
-       <str name="facet.missing">false</str>
-       <str name="facet.mincount">1</str>
-       <str name="facet.limit">20000</str>
-       <str name="stats">true</str>
-	   
-       
-     </lst>
-     <lst name="appends">
-       
-       <str name="stats.field">datum_zverejneni</str>
-       <str name="stats.field">samostatny_nalez_datum_nalezu</str>
-       <str name="stats.field">datum_provedeni_od</str>
-       <str name="stats.field">datum_provedeni_do</str>
-       <str name="stats.field">extra_data_datum_vzniku</str>
-       <str name="stats.field">let_datum</str>
-       <str name="stats.field">dokument_rok_vzniku</str>
-       <str name="stats.field">rok_vydani</str>
-       
-       <str name="fq">searchable:true</str>
-	   
-       <str name="facet.field">{!ex=entityF}entity</str>
-       <str name="f.entity.facet.mincount">0</str>
-       <str name="facet.field">pristupnost</str>
-	   
-       <str name="facet.field">f_areal</str>
-       <str name="facet.field">f_obdobi</str>
-       <str name="facet.field">f_aktivita</str>
-       <str name="facet.field">f_typ_nalezu</str>
-       <str name="facet.field">f_specifikace</str>
-       <str name="facet.field">f_druh_nalezu</str>
-       <str name="facet.field">f_typ_vyzkumu</str>
-       
-       <str name="facet.field">dokument_kategorie_dokumentu</str>
-       <str name="facet.field">f_typ_dokumentu</str>
-	   
-	   
-       <str name="facet.field">f_okres</str>
-	   
-       <str name="facet.field">f_druh_lokality</str>
-       <str name="facet.field">f_typ_lokality</str>
-       <str name="facet.field">f_lokalita_zachovalost</str>
-	   
-       <str name="facet.field">f_typ_dokumentu_posudek</str>
-       <str name="facet.field">f_dj_typ</str>
-
-       <str name="facet.field">f_autor</str>
-       <str name="facet.field">f_osoby</str>
-       <str name="facet.field">f_vedouci</str>
-       <str name="facet.field">f_nalezce</str>
-       <str name="facet.field">f_pozorovatel</str>
-	   
-       <str name="facet.field">f_typ_projektu</str>
-	   
-       <str name="facet.field">f_organizace</str>
-	   
-       <str name="facet.field">f_material_dokumentu</str>
-	   
-       <str name="facet.field">f_jazyk_dokumentu</str>
-       <str name="facet.field">f_rada</str>
-       <str name="facet.field">f_ulozeni_originalu</str>
-       <str name="facet.field">f_format</str>
-       <str name="facet.field">f_zeme</str>
-       <str name="facet.field">f_zachovalost</str>
-       <str name="facet.field">f_jistota</str>
-       <str name="facet.field">f_nahrada</str>
-       <str name="facet.field">f_udalost_typ</str>
-       <str name="facet.field">f_zachovalost</str>
-	   
-       <str name="facet.field">f_let_organizace</str>
-       <str name="facet.field">f_let_pilot</str>
-       <str name="facet.field">f_let_letiste_start</str>
-       <str name="facet.field">f_let_letiste_cil</str>
-       <str name="facet.field">f_let_pocasi</str>
-       <str name="facet.field">f_let_dohlednost</str>
-	   
-       <str name="facet.field">f_tvar</str>
-
-       <str name="facet.field">f_nalezove_okolnosti</str>
-        <str name="facet.field">f_pian_typ</str>
-       <str name="facet.field">f_pian_presnost</str>
-<!--       <str name="facet.field">f_pian_zm10</str> -->
-       <str name="facet.field">f_adb_typ_sondy</str>
-       <str name="facet.field">f_adb_podnet</str>
-
-     </lst>
-  </initParams>
   
   <!-- Spell Check
 
@@ -1126,7 +1026,7 @@
   </updateProcessor>
 
   <!-- The update.autoCreateFields property can be turned to false to disable schemaless mode -->
-  <updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:false}"
+  <updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:true}"
            processor="uuid,remove-blank,field-name-mutating,parse-boolean,parse-long,parse-double,parse-date,add-schema-fields">
     <processor class="solr.LogUpdateProcessorFactory"/>
     <processor class="solr.DistributedUpdateProcessorFactory"/>
@@ -1191,7 +1091,6 @@
         <str name="content-type">text/plain; charset=UTF-8</str>
       </queryResponseWriter>
    -->
-   <queryResponseWriter name="json" class="solr.JSONResponseWriter" />
 
   <!-- Query Parsers
 

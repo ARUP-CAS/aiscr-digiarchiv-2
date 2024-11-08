@@ -61,7 +61,17 @@ public class SolrSearcher {
             pristupnost = "D";
         }
         String locField = "loc_rpt_" + pristupnost;
-        if (request.getParameter("loc_rpt") != null) {
+
+        if (request.getParameter("vyber") != null) {
+            String[] coords = request.getParameter("vyber").split(",");
+            String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
+            String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+
+            double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
+            query.setParam("facet.heatmap.geom", geom)
+                    .setParam("facet.heatmap.distErr", dist + "")
+                    .addFilterQuery(fq);
+        } else if (request.getParameter("loc_rpt") != null) {
             // loc_rpt=48.93993884224734,12.204711914062502,50.64177902497231,18.7877197265625
             String[] coords = request.getParameter("loc_rpt").split(",");
             String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
@@ -72,18 +82,22 @@ public class SolrSearcher {
                     .setParam("facet.heatmap.distErr", dist + "")
                     .addFilterQuery(fq);
         } else {
-            query
-                    .setParam("facet.heatmap.distErr", "0.04");
+            query.setParam("facet.heatmap.distErr", "0.04");
             //.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
             //.addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]");
-        }
-
-        if (request.getParameter("vyber") != null) {
-            String[] coords = request.getParameter("vyber").split(",");
+            
+            
+            // loc_rpt=48.93993884224734,12.204711914062502,50.64177902497231,18.7877197265625
+            String[] coords = new String[]{"48.50","12.30","51.0","18.80"};
+            String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
             String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
 
             double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
-            query.addFilterQuery(fq);
+            query.setParam("facet.heatmap.geom", geom)
+                    .setParam("facet.heatmap.distErr", dist + "")
+                    .addFilterQuery(fq);
+            
+            
         }
 
         query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
@@ -326,15 +340,14 @@ public class SolrSearcher {
         }
 
         String locField = "loc_rpt_" + pristupnost;
-        if (request.getParameter("loc_rpt") != null) {
-            String[] coords = request.getParameter("loc_rpt").split(",");
-            // String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
-            String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
-            query.addFilterQuery(fq);
-        }
 
         if (request.getParameter("vyber") != null) {
             String[] coords = request.getParameter("vyber").split(",");
+            String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+            query.addFilterQuery(fq);
+        } else if (request.getParameter("loc_rpt") != null) {
+            String[] coords = request.getParameter("loc_rpt").split(",");
+            // String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
             String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
             query.addFilterQuery(fq);
         }
@@ -405,32 +418,32 @@ public class SolrSearcher {
         }
     }
 
-    public static String getPristupnostBySoubor(String id, String field) {
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-
-            SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
-            QueryResponse rsp = client.query("soubor", query);
-            if (rsp.getResults().isEmpty()) {
-                return null;
-            } else {
-                String dok = (String) rsp.getResults().get(0).getFirstValue("dokument");
-                if (dok == null || "".equals(dok)) {
-                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
-                }
-
-                SolrQuery queryDok = new SolrQuery("*").addFilterQuery("ident_cely:\"" + dok + "\"").setRows(1).setFields("pristupnost");
-                QueryResponse rsp2 = client.query("dokument", queryDok);
-                if (rsp2.getResults().isEmpty()) {
-                    return null;
-                } else {
-                    return (String) rsp2.getResults().get(0).getFirstValue("pristupnost");
-                }
-            }
-        } catch (IOException | SolrServerException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
+//    public static String getPristupnostBySoubor(String id, String field) {
+//        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+//
+//            SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
+//            QueryResponse rsp = client.query("soubor", query);
+//            if (rsp.getResults().isEmpty()) {
+//                return null;
+//            } else {
+//                String dok = (String) rsp.getResults().get(0).getFirstValue("dokument");
+//                if (dok == null || "".equals(dok)) {
+//                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
+//                }
+//
+//                SolrQuery queryDok = new SolrQuery("*").addFilterQuery("ident_cely:\"" + dok + "\"").setRows(1).setFields("pristupnost");
+//                QueryResponse rsp2 = client.query("dokument", queryDok);
+//                if (rsp2.getResults().isEmpty()) {
+//                    return null;
+//                } else {
+//                    return (String) rsp2.getResults().get(0).getFirstValue("pristupnost");
+//                }
+//            }
+//        } catch (IOException | SolrServerException ex) {
+//            LOGGER.log(Level.SEVERE, null, ex);
+//            return null;
+//        }
+//    }
 
     public static String getOkresByKatastr(String ruian) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
@@ -441,6 +454,24 @@ public class SolrSearcher {
             JSONObject jo = json(client, "ruian", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("nazev");
+            } else {
+                return null;
+            }
+//            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public static String getOrganizaceUzivatele(String ident_cely) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
+                    .setRows(1).setFields("organizace");
+            JSONObject jo = json(client, "uzivatel", query);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("organizace");
             } else {
                 return null;
             }
@@ -479,6 +510,18 @@ public class SolrSearcher {
 
     public static JSONObject json(SolrClient client, String core, SolrQuery query) throws SolrServerException, IOException {
         query.setRequestHandler("/search");
+        QueryRequest req = new QueryRequest(query);
+
+        NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
+        rawJsonResponseParser.setWriterType("json");
+        req.setResponseParser(rawJsonResponseParser);
+
+        NamedList<Object> resp = client.request(req, core);
+        return new JSONObject((String) resp.get("response"));
+    }
+
+    public static JSONObject jsonSelect(SolrClient client, String core, SolrQuery query) throws SolrServerException, IOException {
+        query.setRequestHandler("/select");
         QueryRequest req = new QueryRequest(query);
 
         NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();

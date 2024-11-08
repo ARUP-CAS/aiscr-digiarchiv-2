@@ -5,11 +5,9 @@
  */
 package cz.inovatika.arup.digiarchiv.web;
 
-import cz.inovatika.arup.digiarchiv.web.imagging.ImageAccess;
 import cz.inovatika.arup.digiarchiv.web.imagging.ImageSupport;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -21,8 +19,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.text.StringEscapeUtils;
 
 /**
  *
@@ -47,8 +43,6 @@ public class PdfServlet extends HttpServlet {
       
     //String id = request.getParameter("nazev");
     String id = request.getParameter("id");
-
-   
     
     try (OutputStream out = response.getOutputStream()) {
       String page = request.getParameter("page");

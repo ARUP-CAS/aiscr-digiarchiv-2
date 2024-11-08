@@ -33,7 +33,9 @@
 			<span class="app-pipe"></span>
 		</ng-container> 
       </div>
-      <div>
+	  <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+      [detailExpanded]="detailExpanded" [mapDetail]="false" ></app-result-actions>
+      <!-- <div>
         <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
           <mat-icon>menu_book</mat-icon>
         </button>
@@ -46,7 +48,7 @@
         <button mat-flat-button *ngIf="!isDocumentDialogOpen" (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
           {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
         </button>
-      </div>
+      </div> -->
 		</mat-card-actions>
 		<mat-card-content *ngIf="detailExpanded">
       <div class="app-card-detail">
@@ -97,8 +99,9 @@
 		(<ng-container
 			 *ngIf="result.ext_zdroj_isbn">{{ result.ext_zdroj_isbn }},&#160;
 			</ng-container>
-			<ng-container *ngIf="inDocument">{{ result.ident_cely }}.&#160;</ng-container> 
-			<a *ngIf="!inDocument" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link">,&#160;</ng-container>
+			<ng-container *ngIf="inDocument">{{ result.ident_cely }}</ng-container> 
+			<a *ngIf="!inDocument" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon>
+			</a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link || (inDocument && result.ext_zdroj_paginace_titulu)">,&#160;</ng-container>
 		<ng-container *ngIf="result.ext_odkaz_paginace">{{ result.ext_odkaz_paginace }}.&#160;</ng-container> 
 		<ng-container *ngIf="inDocument && result.ext_zdroj_paginace_titulu">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="result.ext_zdroj_link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.ext_zdroj_link" target="_blank">{{ result.ext_zdroj_link }}</a>.</ng-container>
@@ -111,8 +114,14 @@
 		<ng-container *ngIf="result.ext_zdroj_podnazev">{{ result.ext_zdroj_podnazev }}.&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_casopis_denik_nazev">{{ result.ext_zdroj_casopis_denik_nazev }}&#160;</ng-container>
 		<ng-container *ngIf="result.ext_zdroj_casopis_rocnik">{{ result.ext_zdroj_casopis_rocnik }}&#160;</ng-container>
-		(<ng-container *ngIf="result.ext_zdroj_issn">{{ result.ext_zdroj_issn }}<ng-container *ngIf="!inDocument">,&#160;</ng-container></ng-container><a *ngIf="!inDocument" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link || result.ext_odkaz_paginace || result.ext_zdroj_paginace_titulu">,&#160;</ng-container>
+		(<ng-container
+		 *ngIf="result.ext_zdroj_issn">{{ result.ext_zdroj_issn }}<ng-container *ngIf="!inDocument">,&#160;</ng-container>
+		</ng-container>
+		<ng-container *ngIf="inDocument">{{ result.ident_cely }}</ng-container>
+		<a *ngIf="!inDocument" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon>
+		</a>)<ng-container *ngIf="result.ext_odkaz_paginace || result.ext_zdroj_link || result.ext_odkaz_paginace || result.ext_zdroj_paginace_titulu">,&#160;</ng-container>
 		<ng-container *ngIf="result.ext_odkaz_paginace">{{ result.ext_odkaz_paginace }}.&#160;</ng-container> 
+		<ng-container *ngIf="!result.ext_odkaz_paginace && result.ext_zdroj_paginace_titulu && !inDocument">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="inDocument && result.ext_zdroj_paginace_titulu">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="result.ext_zdroj_link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.ext_zdroj_link" target="_blank">{{ result.ext_zdroj_link }}</a>.</ng-container>
 	</ng-container>
@@ -126,6 +135,7 @@
 		<ng-container *ngIf="result.ext_zdroj_datum_rd">{{ result.ext_zdroj_datum_rd | date : 'dd.MM.yyyy' }},&#160;</ng-container>
 		<ng-container *ngIf="!inDocument">(<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>)</ng-container>
 		<ng-container *ngIf="result.ext_odkaz_paginace">,&#160;{{ result.ext_odkaz_paginace }}.&#160;</ng-container> 
+		<ng-container *ngIf="!result.ext_odkaz_paginace && result.ext_zdroj_paginace_titulu && !inDocument">,&#160;{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="inDocument && result.ext_zdroj_paginace_titulu">{{ result.ext_zdroj_paginace_titulu }}.&#160;</ng-container> 
 		<ng-container *ngIf="result.ext_zdroj_link">{{ 'card.desc.Dostupné z' | translate }}: <a [href]="result.ext_zdroj_link" target="_blank">{{ result.ext_zdroj_link }}</a>.</ng-container>
 	</ng-container>

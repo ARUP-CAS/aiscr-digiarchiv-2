@@ -265,10 +265,18 @@ export class AppService {
     return this.get(`/search/check_relations`, params);
   }
 
-  getId(id: string): Observable<any > {
+  getId(id: string, shouldLog: boolean = true): Observable<any > {
     const params: HttpParams = new HttpParams()
-      .set('id', id);
+    .set('id', id)
+    .set('shouldLog', shouldLog);
     return this.get(`/search/id`, params);
+  }
+
+  logViewer(id: string): Observable<any > {
+    const params: HttpParams = new HttpParams()
+    .set('id', id)
+    .set('type', 'viewer');
+    return this.get(`/search/log`, params);
   }
 
   getIdAsChild(ids: string[], entity: string) {
@@ -627,7 +635,12 @@ export class AppService {
       p.vyber = null;
     } else {
       this.state.mapResult = result;
-      // this.state.setMapResult(result, false);
+      const loc_rpt = result.loc_rpt[0].split(',');
+      const lat =  parseFloat(loc_rpt[0]);
+      const lng =  parseFloat(loc_rpt[1]);
+      p.loc_rpt = '' + (lat - 0.003) + ',' + (lng - 0.003) +
+        ',' + (lat + 0.003) + ',' + (lng + 0.003);
+      this.state.setMapResult(result, false);
     }
     
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });

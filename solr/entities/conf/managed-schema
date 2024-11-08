@@ -30,6 +30,7 @@
    <field name="entity" type="string" indexed="true" stored="true" />
    <field name="pristupnost" type="string" indexed="true" stored="true" />
    
+   <field name="historie" type="string" indexed="false" stored="true" multiValued="true" />
    <field name="historie_typ_zmeny" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="historie_uzivatel" type="string" indexed="true" stored="true" multiValued="false" />
    

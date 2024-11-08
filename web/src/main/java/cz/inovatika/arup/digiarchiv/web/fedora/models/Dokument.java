@@ -151,6 +151,10 @@ public class Dokument implements FedoraModel {
         idoc.setField("searchable", searchable);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
+        for (Historie h: historie) {
+            IndexUtils.addJSONField(idoc, "historie", h);
+        }
+        
 
         entity = (dokument_rada.getId().toUpperCase().equals("HES-000870")) ? "knihovna_3d" : "dokument";
         idoc.setField("entity", entity);
@@ -188,11 +192,11 @@ public class Dokument implements FedoraModel {
             IndexUtils.addRefField(idoc, "dokument_osoba", v);
         }
 
-        List<SolrInputDocument> idocs = new ArrayList<>();
+//        List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
-                SolrInputDocument djdoc = s.createSolrDoc();
-                idocs.add(djdoc);
+//                SolrInputDocument djdoc = s.createSolrDoc();
+//                idocs.add(djdoc);
                 IndexUtils.addJSONField(idoc, "soubor", s);
                 idoc.addField("soubor_id", s.id);
                 idoc.addField("soubor_nazev", s.nazev);
@@ -201,10 +205,10 @@ public class Dokument implements FedoraModel {
                 idoc.addField("soubor_size_mbytes", s.size_mb);
     
             }
-            if (!idocs.isEmpty()) {
-                IndexUtils.getClientBin().add("soubor", idocs, 10);
-            }
-        } catch (SolrServerException | IOException ex) {
+//            if (!idocs.isEmpty()) {
+//                IndexUtils.getClientBin().add("soubor", idocs, 10);
+//            }
+        } catch (Exception ex) {
             Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, null, ex);
         }
 

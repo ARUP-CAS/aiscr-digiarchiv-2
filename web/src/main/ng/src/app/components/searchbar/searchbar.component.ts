@@ -3,7 +3,6 @@ import { Condition } from 'src/app/shared/condition';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AppState } from 'src/app/app.state';
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
-import { AppHeslarService } from 'src/app/app.heslar.service';
 import { DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/app.service';
@@ -28,7 +27,6 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     public state: AppState,
     public config: AppConfiguration,
     private service: AppService,
-    public heslarService: AppHeslarService,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -80,22 +78,19 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.mapa = !this.state.isMapaCollapsed;
     p.loc_rpt = null;
 
-
-    const lat = this.state.stats.lat;
-    const lng = this.state.stats.lng;
-    if (lat.max === lat.min) {
-      lat.min = lat.min - 0.05;
-      lat.max = lat.max + 0.05;
-      lng.min = lng.min - 0.05;
-      lng.max = lng.max + 0.05;
-    }
-    p.loc_rpt = lat.min + ',' + lng.min +
-      ',' + lat.max + ',' + lng.max;
-
-
-
-    if (!p.mapa) {
-      // p.loc_rpt = null;
+    if (p.mapa) {
+      const lat = this.state.stats.lat;
+      const lng = this.state.stats.lng;
+      if (lat.max === lat.min) {
+        lat.min = lat.min - 0.05;
+        lat.max = lat.max + 0.05;
+        lng.min = lng.min - 0.05;
+        lng.max = lng.max + 0.05;
+      }
+      p.loc_rpt = lat.min + ',' + lng.min +
+        ',' + lat.max + ',' + lng.max;
+    } else {
+      p.loc_rpt = null;
       p.pian_id = null;
       p.mapa = null;
       if (!this.state.locationFilterEnabled) {

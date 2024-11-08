@@ -158,6 +158,9 @@ public class LoginServlet extends HttpServlet {
                     if (user != null) {
 
                         jo = AuthService.login(user, pwd);
+                        if (jo.has("error")) {
+                            return jo;
+                        }
                         LOGGER.log(Level.FINE, jo.toString(2));
                         req.getSession().setAttribute("user", jo);
                         req.getSession().setAttribute("userid", jo.getString("ident_cely"));

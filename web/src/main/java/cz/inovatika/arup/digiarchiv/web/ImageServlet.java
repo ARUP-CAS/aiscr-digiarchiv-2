@@ -49,7 +49,9 @@ public class ImageServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            String action = request.getPathInfo().substring(1);
+            String action = request
+                    .getPathInfo()
+                    .substring(1);
             if (action != null) {
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
                 actionToDo.doPerform(request, response, getServletContext());
@@ -123,7 +125,10 @@ public class ImageServlet extends HttpServlet {
         
         String mime = "image/png";
         String url = doc.getString("path") + "/" + imgSize;
-        url = url.substring(url.indexOf("record"));
+        if (url.contains("record")) {
+            url = url.substring(url.indexOf("record"));
+        }
+        
         InputStream is = FedoraUtils.requestInputStream(url);
 
         if (is != null) {
@@ -224,6 +229,7 @@ public class ImageServlet extends HttpServlet {
                         IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                         // InputStream is = getFromFedora(id, "orig");
                         // IOUtils.copy(is, response.getOutputStream());
+                        LogAnalytics.log(request, doc.getString("path"), "file");
                         is.close();
 
                     } catch (Exception ex) {

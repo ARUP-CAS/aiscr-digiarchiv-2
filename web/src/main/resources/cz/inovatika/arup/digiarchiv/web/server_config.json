@@ -46,6 +46,7 @@
     "sessionTimeout": 3600,
     "indexSecLevel": "E",
     "allowedIP": [""],
+    "requestInterval": 30,
 
     "securedFacets": [
         "f_kategorie", "f_pian_zm10", "projekt_chu_lokalizace", "projekt_parcelni_cislo",

@@ -22,15 +22,6 @@
             <mat-icon>help_outline</mat-icon>
             {{ 'navbar.desc.Nápověda' | translate }}
           </a>
-          <!-- <a routerLink="napoveda" routerLinkActive="app-active">
-            <mat-icon>help_outline</mat-icon>
-            {{ 'navbar.desc.Nápověda' | translate }}
-          </a> -->
-          <!-- <span class="app-pipe" *ngIf="state.logged"></span>
-          <a *ngIf="state.logged" routerLink="favorites" routerLinkActive="app-active">
-            <mat-icon>grade</mat-icon>
-            {{ 'Favorites' | translate }}
-          </a> -->
           <span class="app-pipe"></span>
           <a *ngIf="!state.logged" (click)="showLogin()">
             <mat-icon>login</mat-icon>
@@ -44,8 +35,11 @@
           <a *ngIf="state.logged" (click)="showLogin()">
             <mat-icon>logout</mat-icon>
             {{state.user.jmeno}} {{state.user.prijmeni}}
-            <!-- ({{'pristupnost_' + state.user.pristupnost | translate}}) -->
             ({{state.user.skupina[0].value | translate}})
+          </a>
+          <a *ngIf="state.logged" [href]="config.accountUrl" target="_blank">
+            <mat-icon>settings</mat-icon>
+            {{ 'navbar.desc.account' | translate }}
           </a>
           <span class="app-pipe"></span>
           <a *ngIf="state.currentLang !== 'en'" (click)="changeLang('en')">English</a>

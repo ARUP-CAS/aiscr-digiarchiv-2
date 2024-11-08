@@ -60,7 +60,7 @@ export class ProjektComponent implements OnInit, OnChanges {
   } 
 
   setVsize() {
-
+    this.numChildren = 0;
     if (this.result.projekt_archeologicky_zaznam) {
       this.numChildren += this.result.projekt_archeologicky_zaznam.length;
     }
@@ -70,7 +70,7 @@ export class ProjektComponent implements OnInit, OnChanges {
     if (this.result.projekt_dokument) {
       this.numChildren += this.result.projekt_dokument.length;
     }
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize); 
   }
 
   getDokument() {
@@ -104,7 +104,7 @@ export class ProjektComponent implements OnInit, OnChanges {
           this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
           if (res.response.docs.length < ids.length) {
             // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - ids.length + res.response.docs.length; 
+            this.numChildren = this.numChildren - ids.length + res.response.docs.length;
             this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
           }
           this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
@@ -120,6 +120,7 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
+      this.setVsize();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
     }
@@ -134,6 +135,7 @@ export class ProjektComponent implements OnInit, OnChanges {
       
       this.state.loading = (this.result.projekt_archeologicky_zaznam.length + this.result.projekt_samostatny_nalez.length) < this.numChildren;
       this.state.documentProgress = 0;
+      this.setVsize();
       this.getArchZaznam();
       this.getSamostatnyNalez();
       this.getDokument();

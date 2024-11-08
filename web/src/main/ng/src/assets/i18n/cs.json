@@ -16,7 +16,8 @@
       "logo_desc": "Digitální archiv AMČR",
       "Nápověda": "Nápověda",
       "Přihlásit uživatele": "Přihlásit uživatele",
-      "Registrovat uživatele": "Registrovat uživatele"
+      "Registrovat uživatele": "Registrovat uživatele",
+      "account": "Správa účtu"
     }
   },
 
@@ -83,6 +84,10 @@
       "rok_vzniku": "Rok vzniku",
       "nazev": "Název",
       "organizace": "Organizace"
+    },
+    "dir": {
+      "asc": " vzestupně",
+      "desc": " sestupně"
     }
   },
 
@@ -603,7 +608,8 @@
       "feedback_success": "Komentář byl úspěšně odeslán",
       "feedback_failed": "Chyba při odeslání komentáře",
       "error": "Chyba",
-      "search_error": "Chyba při odeslání dotazu"
+      "search_error": "Chyba při odeslání dotazu",
+      "login_server_error": "Přihlášení není momentálně dostupné"
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
