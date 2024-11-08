@@ -359,7 +359,7 @@ public class HandleServlet extends HttpServlet {
 
         SolrQuery query = new SolrQuery("*")
                 .addSort("datestamp", SolrQuery.ORDER.desc)
-                .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,soubor:[json],historie:[json]")
+                .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,soubor:[json],historie:[json]")
                 .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"");
 
         JSONObject json = SolrSearcher.jsonSelect(IndexUtils.getClientNoOp(), "entities", query);

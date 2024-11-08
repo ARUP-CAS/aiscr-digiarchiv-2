@@ -121,11 +121,11 @@ public class ThumbsGenerator {
           }
           return;
         }
-        case "-update": {
+        case "-used": {
           try {
 
             Indexer indexer = new Indexer(false);
-            JSONObject jo = indexer.updateForUsed(overwrite, onlyThumbs);
+            JSONObject jo = indexer.createForUsed(overwrite, onlyThumbs, null);
             System.out.println(jo.toString(2));
           } catch (Exception ex) {
             Logger.getLogger(ThumbsGenerator.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,7 +147,7 @@ public class ThumbsGenerator {
     }
     Indexer indexer = new Indexer(false);
     try {
-      JSONObject jo = indexer.updateForUsed(overwrite, onlyThumbs);
+      JSONObject jo = indexer.updateForEntities(overwrite, onlyThumbs);
       // JSONObject jo = indexer.createThumbs(overwrite, onlyThumbs);
       System.out.println(jo.toString(2));
     } catch (Exception ex) {
