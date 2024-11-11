@@ -50,9 +50,9 @@ public class ImageServlet extends HttpServlet {
 
         try {
             String action = request
-                    .getPathInfo()
-                    .substring(1);
+                    .getPathInfo();
             if (action != null) {
+                action = action.substring(1);
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
                 actionToDo.doPerform(request, response, getServletContext());
             } else {
