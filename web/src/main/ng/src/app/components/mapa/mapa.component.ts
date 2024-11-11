@@ -604,9 +604,21 @@ export class MapaComponent implements OnInit, OnDestroy {
       ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
     }
 
+
+    let latMax = 0;
+    let latMin = 90;
+    let lngMax = 0;
+    let lngMin = 180;
+
+    const bounds = []
     ms.forEach(m => {
       m.setIcon(m.pianTyp === 'bod' ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
+      const latlng = m.getLatLng();
+      latMax = Math.max(latMax, latlng.lat);
+      latMin = Math.min(latMin, latlng.lat);
+      lngMax = Math.max(lngMax, latlng.lng);
+      lngMin = Math.min(lngMin, latlng.lng);
       if (this.showType === 'heat') {
         m.addTo(this.markers);
         if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
@@ -617,9 +629,15 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     if (changed && ms.length > 0) {
       this.zoomingOnMarker = true;
-      if (this.map.getZoom() < this.config.mapOptions.hitZoomLevel) {
+      // if (this.map.getZoom() < this.config.mapOptions.hitZoomLevel) {
+      if (ms.length === 1) {
         this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
       } else {
+        // set bound to all
+        // const southWest = L.latLng(latMin, lngMin);
+        // const northEast = L.latLng(latMax, lngMax);
+        // const bounds = L.latLngBounds(southWest, northEast);
+        // this.map.setBounds(bounds);
         this.map.setView(ms[ms.length - 1].getLatLng());
       }
 
