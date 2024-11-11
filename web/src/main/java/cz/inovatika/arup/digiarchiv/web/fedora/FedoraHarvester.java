@@ -174,16 +174,18 @@ public class FedoraHarvester {
         // lastDate = "2024-07-30T15:37:05.633Z";
         ret.put("lastDate", lastDate);
 
+        solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
         String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        searchFedora(baseQuery, false, "update");
+        searchFedora(baseQuery, false, "update", true);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
         baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        searchFedora(baseQuery, true, "update");
-
+        searchFedora(baseQuery, true, "update", false);
+        solr.close();
         Instant end = Instant.now();
         String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
         ret.put("ellapsed time", interval);
@@ -197,40 +199,36 @@ public class FedoraHarvester {
         return ret;
     }
 
-    private JSONObject searchFedora(String baseQuery, boolean isDeleted, String indexType) throws IOException {
+    private JSONObject searchFedora(String baseQuery, boolean isDeleted, String indexType, boolean withRelated) throws IOException {
         try {
-            solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             int indexed = 0;
             int batchSize = 100;
             int pOffset = 0;
             String s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
             JSONObject json = new JSONObject(s);
-            // getModels(); 
-
             JSONArray records = json.getJSONArray("items");
             while (records.length() > 0) {
-                processSearchItems(records, isDeleted);
+                processSearchItems(records, isDeleted, withRelated);
                 indexed += records.length();
                 pOffset += batchSize;
                 s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
                 json = new JSONObject(s);
                 records = json.getJSONArray("items");
-                checkLists(0, indexed, "update", records.length());
-                String status = readStatusFile("update");
+                checkLists(0, indexed, indexType, records.length());
+                String status = readStatusFile(indexType);
                 if (STATUS_STOPPED.equals(status)) {
                     LOGGER.log(Level.INFO, "Index stopped at {0}", formatter.format(Instant.now()));
                     ret.put("msg", "Index stopped at " + formatter.format(Instant.now()));
-                    solr.close();
                     return ret;
                 }
             }
 
-                if (isDeleted) {
-                    ret.put("deleted", indexed);
-                } else {
-                    ret.put(indexType, indexed);
-                }
-            
+            if (isDeleted) {
+                ret.put("deleted", indexed);
+            } else {
+                ret.put(indexType, indexed);
+            }
+
             checkLists(0, indexed, "update", indexed);
             ret.put("items", json);
             solr.commit("oai");
@@ -240,36 +238,32 @@ public class FedoraHarvester {
                 solr.commit(key);
             }
 
-            solr.close();
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             ret.put("error", ex);
-            if (solr != null) {
-                solr.close();
-            }
-        } finally {
-
-            if (solr != null) {
-                solr.close();
-            }
-        }
+        } 
         return ret;
     }
 
-    private void processSearchItems(JSONArray records, boolean isDeleted) throws Exception {
+    private void processSearchItems(JSONArray records, boolean isDeleted, boolean withRelated) throws Exception {
         for (int i = 0; i < records.length(); i++) {
             String id = records.getJSONObject(i).getString("fedora_id");
             if (isDeleted) {
                 id = id.substring(id.lastIndexOf("member/") + 7);
                 processDeleted(id, records.getJSONObject(i).getString("modified"));
             } else {
-                id = id.substring(id.lastIndexOf("record/") + 7);
+                if (id.contains("record")) {
+                    id = id.substring(id.lastIndexOf("record/") + 7);
+                } else {
+                    id = id.substring(id.lastIndexOf("member/") + 7);
+                }
+                
                 if (id.contains("/metadata")) {
                     id = id.substring(0, id.indexOf("/metadata"));
                 }
                 id = id.split("/")[0];
-                LOGGER.log(Level.INFO, "Updating item  {0} ", id);
-                processRecord(id, true);
+                // LOGGER.log(Level.INFO, "Updating item  {0} ", id);
+                processRecord(id, withRelated);
             }
         }
     }
@@ -333,7 +327,8 @@ public class FedoraHarvester {
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             for (String model : models) {
-                processModel(model);
+                // processModel(model);
+                searchModel(model);
             }
             solr.commit("oai");
             solr.commit("entities");
@@ -482,7 +477,7 @@ public class FedoraHarvester {
             }
         }
     }
-    
+
     /**
      * Harvest Fedora for model and index
      *
@@ -507,9 +502,9 @@ public class FedoraHarvester {
         if ("deleted".equals(model)) {
             baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8");
         } else {
-            baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/"+model+"/metadata", "UTF8");
+            baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + model + "/member/*", "UTF8");
         }
-        searchFedora(baseQuery, "deleted".equals(model), model);
+        searchFedora(baseQuery, "deleted".equals(model), model, false);
 
         Instant end = Instant.now();
         String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
