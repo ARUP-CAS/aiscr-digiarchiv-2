@@ -297,7 +297,7 @@ public class SamostatnyNalez implements FedoraModel {
         JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
-            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt_organizace");
+            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("projekt_organizace", "nonexist");
         }
         if (userPr.compareToIgnoreCase("C") > 0) {
             return true;
