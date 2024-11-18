@@ -53,6 +53,11 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   }
 
     @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+    }
+
+    @Override
     public JSONObject search(HttpServletRequest request) {
         return new JSONObject();
     }

@@ -68,6 +68,13 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     public boolean isRelatedSearchable() {
         return parentSearchable;
     }
+    
+    
+
+    @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+    }
 
     @Override
     public JSONObject search(HttpServletRequest request) {

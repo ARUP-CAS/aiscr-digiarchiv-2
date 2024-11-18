@@ -217,6 +217,14 @@ public class ProjektSearcher implements EntitySearcher {
     }
 
     @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+            addOkresy(jo);
+        }
+    }
+
+    @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         try {

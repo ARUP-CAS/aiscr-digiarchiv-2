@@ -46,6 +46,11 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
   }
 
     @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+    }
+
+    @Override
     public JSONObject search(HttpServletRequest request) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

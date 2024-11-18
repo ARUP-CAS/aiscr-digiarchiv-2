@@ -251,6 +251,7 @@ public class SearchServlet extends HttpServlet {
                     JSONObject jo = SearchUtils.json(query, client, "entities");
                     if (searcher != null) {
                         searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+                        searcher.processAsChild(request, jo);
                     }
 
 //                    if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
