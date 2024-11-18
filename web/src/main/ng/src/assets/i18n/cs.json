@@ -587,7 +587,8 @@
       "Typ souboru": "Typ souboru",
       "Jméno": "Jméno",
       "Komentář": "Komentář",
-      "download_started": "Stažení souboru spuštěno"
+      "download_started": "Stažení souboru spuštěno",
+      "viewerInfo": "Obsah je zobrazen v náhledové kvalitě. Pro získání obsahu v plné kvalitě použijte ikonu pro stažení souboru."
     },
     "input": {
       "Jméno": "Jméno",

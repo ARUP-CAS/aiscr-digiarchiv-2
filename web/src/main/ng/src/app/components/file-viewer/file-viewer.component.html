@@ -26,7 +26,11 @@
       </ng-container>
     </div>
   </div>
-  
+  <mat-card class="app-card-info app-row-gap-16">
+    <mat-card-content>
+      {{ 'dialog.desc.viewerInfo' | translate }}
+    </mat-card-content>
+  </mat-card>
   <ngu-carousel #carousel [inputs]="carouselConfig" [dataSource]="selectedFile.pages">
     <div *nguCarouselDef="let item; let idx = index" class="item">
       <img [src]="imgPoint(selectedFile, 'medium') + '?size=medium&id='+ selectedFile.id + '&nazev='+ selectedFile.nazev + '&page=' + idx" />

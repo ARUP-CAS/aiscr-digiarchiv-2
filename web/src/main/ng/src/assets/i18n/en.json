@@ -587,7 +587,8 @@
       "Typ souboru": "File type",
       "Jméno": "Name",
       "Komentář": "Comment",
-      "download_started": "Download started"
+      "download_started": "Download started",
+      "viewerInfo": "The content is displayed in preview quality. Use the download icon to get the content in full quality."
     },
     "input": {
       "Jméno": "Name",
