@@ -28,7 +28,7 @@ public class LogAnalytics {
             idoc.addField("user", user.optString("ident_cely", "anonym"));
             idoc.addField("ip", ip);
             idoc.addField("type", type);
-            LOGGER.log(Level.FINE, "user:{0}; ip:{1}; ident_celt: {2}; type: {3}",
+            LOGGER.log(Level.FINE, "user:{0}; ip:{1}; ident_cely: {2}; type: {3}",
                     new String[]{user.optString("ident_cely", "anonym"),
                         ip, ident_cely, type});
             client.add("logs", idoc, 1000);  
