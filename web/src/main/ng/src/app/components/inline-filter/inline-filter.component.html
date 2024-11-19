@@ -1,6 +1,6 @@
 <ng-container *ngIf="value">
   <ng-container *ngIf="isChild">
-    <span *ngIf="!isDocument && !isDate && !isYear" >{{heslar ? (value | translateHeslar: heslar) : value }} </span>
+    <span *ngIf="!isDocument && !isDate && !isYear" >{{heslar ? (value | translateHeslar: heslar) : value }}</span>
     <span *ngIf="!isDocument && isDate" >{{value | date : 'yyyy-MM-dd'}} </span>
     <span *ngIf="!isDocument && isYear" >{{value}} </span>
     <ng-container *ngIf="isDocument && !isDate">{{heslar ? (value | translateHeslar: heslar) : value }}</ng-container>
