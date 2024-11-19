@@ -27,12 +27,13 @@ export class FileViewerComponent implements OnInit {
   currentPage = 1;
   currentPageDisplayed = 1;
   fileid = 0;
+  carouselItems: any[] = [];
 
   @ViewChild('carousel') carousel: NguCarousel<any>;
 
   carouselConfig: NguCarouselConfig = {
     grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
-    load: 10,
+    load: 5,
     // interval: {timing: 4000, initialDelay: 1000},
     loop: false,
     touch: true,
@@ -60,14 +61,24 @@ export class FileViewerComponent implements OnInit {
   }
 
   selectFile(file: File, idx: number) {
-
+    // this.carousel.dataSource = [];
     this.selectedFile = file;
     setTimeout(() => {
 
+    //this.carousel.dataSource = this.selectedFile.pages;
       this.currentPage = 1;
       this.setPage();
       this.fileid = idx + new Date().getTime();
     }, 10);
+  }
+
+  public carouselItemsLoad(j) {
+    const len = this.selectedFile.pages.length;
+      for (let i = j; i < j + 5; i++) {
+        this.carouselItems.push(
+          this.selectedFile.pages[i]
+        );
+      }
   }
 
   downloadUrl() {
@@ -124,6 +135,7 @@ export class FileViewerComponent implements OnInit {
   }
 
   setPage() {
+    this.carouselItemsLoad(0);
     if (this.currentPage > 0 || this.currentPage < this.selectedFile.rozsah) {
       this.carousel.moveTo(this.currentPage - 1, false);
     }
@@ -157,8 +169,9 @@ export class FileViewerComponent implements OnInit {
         });
       });
       this.fileid = new Date().getTime();
-      this.selectedFile = this.files[0];
-      this.currentPage = 1;
+      this.selectFile(this.files[0], 0);
+      // this.selectedFile = this.files[0];
+      // this.currentPage = 1;
       this.showing = true;
     }, 10);
 

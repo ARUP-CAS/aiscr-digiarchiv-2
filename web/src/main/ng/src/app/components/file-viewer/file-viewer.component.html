@@ -6,8 +6,8 @@
   </div>
 	<a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
 </h1>
-<div mat-dialog-content *ngIf="selectedFile">
-  <div fxLayout="row" fxLayoutAlign="start baseline" class="app-toolbar-wrapper">
+<div mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="start baseline" class="app-toolbar-wrapper" *ngIf="selectedFile">
     <div fxFlex class="app-controls">
       <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
       <span class="app-pipe"></span>
@@ -31,7 +31,7 @@
       {{ 'dialog.desc.viewerInfo' | translate }}
     </mat-card-content>
   </mat-card>
-  <ngu-carousel #carousel [inputs]="carouselConfig" [dataSource]="selectedFile.pages">
+  <ngu-carousel #carousel [inputs]="carouselConfig" (carouselLoad)="carouselItemsLoad($event)" [dataSource]="carouselItems" >
     <div *nguCarouselDef="let item; let idx = index" class="item">
       <img [src]="imgPoint(selectedFile, 'medium') + '?size=medium&id='+ selectedFile.id + '&nazev='+ selectedFile.nazev + '&page=' + idx" />
     </div>
