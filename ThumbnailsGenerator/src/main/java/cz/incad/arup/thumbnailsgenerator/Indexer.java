@@ -454,7 +454,7 @@ public class Indexer {
         String thumbsDir = opts.getString("thumbsDir");
         String path = json.getString("path");
         String id = json.getString("id");
-        String sha = json.getString("sha_512");
+        String sha = json.optString("sha_512");
         String url = path + "/orig";
         url = url.substring(url.indexOf("record"));
         String mimetype = json.getString("mimetype");

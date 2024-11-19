@@ -143,6 +143,7 @@ export class FileViewerComponent implements OnInit {
 
   setData() {
 
+
     this.selectedFile = null;
     this.files = [];
     this.showing = false;
