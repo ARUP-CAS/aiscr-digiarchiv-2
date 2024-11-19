@@ -19,4 +19,8 @@ export class KomponentaDokumentComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
 }
