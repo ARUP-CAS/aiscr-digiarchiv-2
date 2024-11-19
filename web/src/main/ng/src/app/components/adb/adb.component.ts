@@ -31,6 +31,8 @@ export class AdbComponent implements OnInit {
     }
   }
 
-  
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
 
 }

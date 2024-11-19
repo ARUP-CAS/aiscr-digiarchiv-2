@@ -9,6 +9,13 @@
     </mat-card-title>
   </mat-card-header>
 
+  <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
+    <div fxFlex class="app-metadata">
+
+    </div>
+    <app-result-actions [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"></app-result-actions>
+  </mat-card-actions>
+
   <div *ngIf="result.vyskovy_bod_geom_gml"><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ result.vyskovy_bod_geom_gml }}</div>
   <div *ngIf="result.vyskovy_bod_geom_wkt"><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
     EPSG:{{ result.vyskovy_bod_geom_wkt.epsg }}, {{ result.vyskovy_bod_geom_wkt.value }}

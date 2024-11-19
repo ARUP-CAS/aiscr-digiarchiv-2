@@ -43,4 +43,8 @@ export class KomponentaComponent implements OnInit {
     return Utils.hasValue(this.result, field);
   }
 
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
+
 }

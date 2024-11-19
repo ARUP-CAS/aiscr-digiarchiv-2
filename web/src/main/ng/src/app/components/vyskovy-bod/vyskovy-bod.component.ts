@@ -18,4 +18,9 @@ export class VyskovyBodComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
+
+
 }
