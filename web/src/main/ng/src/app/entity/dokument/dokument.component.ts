@@ -212,6 +212,9 @@ export class DokumentComponent implements OnInit, OnChanges {
 
   setImg() {
     if (this.result.soubor_filepath?.length > 0) {
+      this.result.soubor.sort((a: any, b: any) => {
+        return a.nazev.localeCompare(b.nazev);
+      });
       this.imgSrc = this.config.context + '/api/img/thumb?id=' + this.result.soubor[0].id;
     }
 
