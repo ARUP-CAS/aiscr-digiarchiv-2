@@ -7,6 +7,7 @@ import { ExportComponent } from 'src/app/pages/export/export.component';
 import { ResultsComponent } from 'src/app/pages/results/results.component';
 import { NapovedaComponent } from 'src/app/pages/napoveda/napoveda.component';
 import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
+import { StatsComponent } from './pages/stats/stats.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'export-mapa', component: ExportMapaComponent},
   {path: 'results', component: ResultsComponent},
   {path: 'napoveda', component: NapovedaComponent},
+  {path: 'stats', component: StatsComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full'},
 ];
 

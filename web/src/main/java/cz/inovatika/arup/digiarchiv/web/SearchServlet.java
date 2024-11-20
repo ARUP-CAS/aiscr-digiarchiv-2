@@ -551,6 +551,19 @@ public class SearchServlet extends HttpServlet {
                 return json.toString();
             }
         },
+        STATS {
+            
+            @Override
+            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    json = LogAnalytics.stats(request);
+                } catch (Exception ex) {
+                    json.put("error", ex);
+                }
+                return json.toString();
+            }
+        },
         MAPA {
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {

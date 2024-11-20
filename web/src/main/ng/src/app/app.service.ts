@@ -251,6 +251,15 @@ export class AppService {
   }
 
   /**
+   * Fired for stats search in stats page
+   * @param params the params
+   */
+  searchStats(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/stats`, params);
+  }
+
+  /**
    * Fired search in results page
    * @param params the params
    */

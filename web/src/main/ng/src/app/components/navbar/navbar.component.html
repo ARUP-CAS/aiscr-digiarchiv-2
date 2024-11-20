@@ -41,6 +41,10 @@
             <mat-icon>settings</mat-icon>
             {{ 'navbar.desc.account' | translate }}
           </a>
+          <a *ngIf="state.logged && state.user.pristupnost === 'D'" routerLink="stats">
+            <mat-icon>query_stats</mat-icon>
+            {{ 'navbar.desc.stats' | translate }}
+          </a>
           <span class="app-pipe"></span>
           <a *ngIf="state.currentLang !== 'en'" (click)="changeLang('en')">English</a>
           <a *ngIf="state.currentLang !== 'cs'" (click)="changeLang('cs')">Čeština</a>

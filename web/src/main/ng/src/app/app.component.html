@@ -7,7 +7,7 @@
   <mat-sidenav-content>
     <header *ngIf="!isExport">
       <app-navbar (sidenavToggle)="sidenav.toggle()"></app-navbar>
-      <app-searchbar *ngIf="!isExport"></app-searchbar>
+      <app-searchbar *ngIf="!isStats"></app-searchbar>
     </header>
     <main>
       <router-outlet></router-outlet> 
