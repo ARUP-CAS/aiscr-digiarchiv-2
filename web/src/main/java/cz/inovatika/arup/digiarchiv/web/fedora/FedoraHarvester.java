@@ -459,7 +459,8 @@ public class FedoraHarvester {
 
         JSONArray models = Options.getInstance().getJSONObject("fedora").getJSONArray("models");
         for (int i = 0; i < models.length(); i++) {
-            processModel(models.getString(i));
+            // processModel(models.getString(i));
+            searchModel(models.getString(i));
         }
     }
 
@@ -473,7 +474,8 @@ public class FedoraHarvester {
             for (int i = 0; i < models.length(); i++) {
                 String id = models.getJSONObject(i).getString("@id");
                 id = id.substring(id.lastIndexOf("/") + 1);
-                processModel(id);
+                // processModel(id);
+                searchModel(id);
             }
         }
     }
@@ -486,6 +488,7 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject searchModel(String model) throws Exception {
+        LOGGER.log(Level.INFO, "Searching model {0}", model);
         ret = new JSONObject();
 //        String status = readStatusFile("update");
 //        if (STATUS_RUNNING.equals(status)) {
