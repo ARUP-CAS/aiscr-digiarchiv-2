@@ -165,18 +165,21 @@
           </ul>
         </mat-expansion-panel>
       </mat-accordion>
+
+      <br/> 
+      <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+        <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
+          <mat-panel-title>
+            {{ 'card.panelTitle.Související záznamy' | translate }}:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+        <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+      </mat-expansion-panel> 
+
     </mat-card-content>
 
     
-  <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-    <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
-      <mat-panel-title>
-        {{ 'card.panelTitle.Související záznamy' | translate }}:
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-    <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
-  </mat-expansion-panel> 
 
   </mat-card> 
 </ng-container>
