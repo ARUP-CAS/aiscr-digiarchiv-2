@@ -24,7 +24,7 @@ export class FileViewerComponent implements OnInit {
   files: File[] = [];
   selectedFile: File = null; 
 
-  currentPage = 1;
+  currentPage: number = 1;
   currentPageDisplayed = 1;
   fileid = 0;
   carouselItems: any[] = [];
@@ -73,8 +73,10 @@ export class FileViewerComponent implements OnInit {
   }
 
   public carouselItemsLoad(j) {
+    this.carouselItems = [];
     const len = this.selectedFile.pages.length;
-      for (let i = j; i < j + 5; i++) {
+    const max = Math.min(len, this.currentPage + 4 );
+      for (let i = 0; i < max; i++) {
         this.carouselItems.push(
           this.selectedFile.pages[i]
         );
@@ -134,11 +136,22 @@ export class FileViewerComponent implements OnInit {
     }
   }
 
-  setPage() {
-    this.carouselItemsLoad(0);
+  gotoPage() {
+    
+    this.currentPage = parseInt(this.currentPage+'');
     if (this.currentPage > 0 || this.currentPage < this.selectedFile.rozsah) {
       this.carousel.moveTo(this.currentPage - 1, false);
     }
+  }
+
+  setPage() {
+    this.currentPage = parseInt(this.currentPage+'');
+    this.carouselItemsLoad(this.currentPage);
+    setTimeout(() => {
+      if (this.currentPage > 0 || this.currentPage < this.selectedFile.rozsah) {
+        this.carousel.moveTo(this.currentPage - 1, false);
+      }
+    }, 100);
   }
 
   setData() {

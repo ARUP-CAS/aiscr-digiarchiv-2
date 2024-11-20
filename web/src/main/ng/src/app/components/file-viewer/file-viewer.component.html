@@ -12,7 +12,7 @@
       <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
       <span class="app-pipe"></span>
       <mat-form-field>
-        <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()" />
+        <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()"  />
       </mat-form-field>
       {{ 'dialog.citation.stránka z' | translate }} <strong>{{ selectedFile?.rozsah }}</strong>
       <span *ngIf="currentPage < selectedFile.rozsah" class="app-pipe"></span>
