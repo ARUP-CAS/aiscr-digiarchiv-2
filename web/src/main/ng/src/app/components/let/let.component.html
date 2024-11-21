@@ -102,37 +102,7 @@
           <span class="app-pipe"></span>
         </ng-container>
       </div>
-      <div>
-        <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
-          <mat-icon>link</mat-icon>
-        </button>
-        <mat-menu #links="matMenu">
-          <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
-            {{ 'card.menu.Persistentní odkaz' | translate }}
-          </a>
-          <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="'https://api.aiscr.cz/dapro/oai?verb=GetRecord&identifier=https://api.aiscr.cz/id/' + result.ident_cely + '&metadataPrefix=' + item.metadataPrefix" target="_blank">
-            {{ 'card.menu.api_prefix' | translate }} {{ item.label }}
-          </a>
-          <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="config.amcr_server + 'id/' + result.ident_cely" target="_blank">
-            {{ 'card.menu.show_in_AMCR' | translate }}
-          </a>
-        </mat-menu>
-        <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
-          <mat-icon>menu_book</mat-icon>
-        </button>
-        <a mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
-          <mat-icon>print</mat-icon>
-        </a>
-        <button mat-flat-button *ngIf="state.logged" (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
-          <mat-icon>grade</mat-icon>
-        </button>
-        <button mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
-          <mat-icon>feedback</mat-icon>
-        </button>
-        <button mat-flat-button (click)="detailExpanded = !detailExpanded" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'" *ngIf="!isDocumentDialogOpen">
-          {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
-        </button>
-      </div>
+      <app-result-actions [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"></app-result-actions>
     </mat-card-actions>
     <mat-card-content *ngIf="detailExpanded">
       <div class="app-card-detail">

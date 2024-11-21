@@ -9,7 +9,7 @@
       <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
         {{ 'card.menu.Persistentní odkaz' | translate }}
       </a>
-      <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="item.url + result.ident_cely" target="_blank">
+      <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="item.url + apiIdentCely(item)" target="_blank">
         {{ 'card.menu.' + item.label | translate }}
       </a>
 

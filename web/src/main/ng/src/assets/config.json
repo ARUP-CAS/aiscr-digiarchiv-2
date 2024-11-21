@@ -378,8 +378,8 @@
     },
 
   "choiceApi": [
-    {"label": "api_prefix", "url": "https://api.aiscr.cz/id/"},
-    {"label": "show_in_AMCR", "url": "https://amcr.aiscr.cz/id/"}
+    {"label": "api_prefix", "url": "https://api.aiscr.cz/id/", "useParent": true},
+    {"label": "show_in_AMCR", "url": "https://amcr.aiscr.cz/id/", "useParent": false}
   ],
 
   "feedBackMaxLength": 4000

@@ -20,7 +20,8 @@
       </ng-container>
 
     </div>
-    <app-result-actions [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"></app-result-actions>
+    <app-result-actions [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"
+    [ident_cely_api]="result.ident_cely.substr(0, result.ident_cely.lastIndexOf('-'))"></app-result-actions>
   </mat-card-actions>
   <mat-card-content *ngIf="detailExpanded">
     <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
@@ -77,7 +78,7 @@
   
 </mat-expansion-panel>
 
-  <mat-expansion-panel *ngIf="(result.akce || result.lokalita) && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+  <mat-expansion-panel *ngIf="(result.akce || result.lokalita || result.dokument) && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
     <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
       <mat-panel-title>
         {{ 'card.panelTitle.Související záznamy' | translate }}:
@@ -86,5 +87,6 @@
     <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [isChild]="true" class="app-related-item"></app-dok-jednotka> -->
     <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
     <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+    <app-dokument *ngFor="let dokument of result.dokument" [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
   </mat-expansion-panel> 
 </ng-template>

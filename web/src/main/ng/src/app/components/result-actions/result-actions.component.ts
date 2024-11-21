@@ -19,8 +19,11 @@ export class ResultActionsComponent {
   @Input() isDocumentDialogOpen: boolean;
   @Input() detailExpanded: boolean;
   @Input() mapDetail: boolean;
+  @Input() ident_cely_api: any;
 
   @Output() onToggleDetail  = new EventEmitter<string>();
+
+  useParentEntities = ['']
 
   constructor(
     public service: AppService,
@@ -29,6 +32,10 @@ export class ResultActionsComponent {
     private router: Router,
     public config: AppConfiguration
   ) { }
+
+  apiIdentCely(item:{label: string, metadataPrefix: string, url: string, useParent: boolean}) {
+    return item.useParent ? this.ident_cely_api : this.result.ident_cely;
+  }
 
   toggleDetail() {
     this.onToggleDetail.emit('');

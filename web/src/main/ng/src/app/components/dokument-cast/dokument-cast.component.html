@@ -90,7 +90,7 @@
     <!-- <app-result-actions [result]="result" [bibTex]="''" [isDocumentDialogOpen]="false" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions> -->
       <app-result-actions [result]="result" [bibTex]="null" [isDocumentDialogOpen]="isDocumentDialogOpen" 
-      [detailExpanded]="detailExpanded" [mapDetail]="false" ></app-result-actions>
+      [detailExpanded]="detailExpanded" [mapDetail]="false" [ident_cely_api]="result.ident_cely.substr(0, result.ident_cely.lastIndexOf('-'))" ></app-result-actions>
   </mat-card-actions>
 
   <mat-card-content *ngIf="detailExpanded && !isChild">
@@ -101,7 +101,7 @@
             {{ 'card.panelTitle.Související záznamy' | translate }}:
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <app-dokument *ngFor="let dokument of result.dokumenty" [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
+        <app-dokument *ngFor="let dokument of result.dokument" [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
       </mat-expansion-panel> 
     </div>
   </mat-card-content>
