@@ -19,7 +19,7 @@ export class StatsComponent implements OnInit {
   search() {
     const p: any = {};
     // if ()
-    p.q = this.ident_cely;
+    p.ident_cely = this.ident_cely;
     p.page = 0;
     this.service.searchStats(p).subscribe((resp: any) => {});
   }

@@ -529,7 +529,8 @@
       "select area": "Select area",
       "remove selection": "Remove selection",
       "zoom in": "Zoom in",
-      "zoom out": "Zoom out"
+      "zoom out": "Zoom out",
+      "info": "The map displays records with accessibility corresponding to your user role. Only users with higher privileges can see hidden records."
     },
     "tooltip": {
       "Odstranit tento filtr": "Remove this filter"

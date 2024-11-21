@@ -530,7 +530,8 @@
       "select area": "Vybrat oblast",
       "remove selection": "Zrušit výběr",
       "zoom in": "Přiblížit",
-      "zoom out": "Oddálit"
+      "zoom out": "Oddálit",
+      "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním."
     },
     "tooltip": {
       "Odstranit tento filtr": "Zrušit tento filtr"

@@ -110,12 +110,16 @@ export class MapaComponent implements OnInit, OnDestroy {
   firstZoom = true;
 
   layersControl = { baseLayers: {}, overlays: {} };
+  osmInfo = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>. ';
 
   osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: this.config.mapOptions.maxZoom,
     maxNativeZoom: 19,
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> '
+    name: 'osm'
   });
+
+  info: string;
+  activeBaseLayerOSM: boolean = true;
 
   // osmColor = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM map', maxZoom: 25, maxNativeZoom: 19, minZoom: 6 });
 
@@ -159,6 +163,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.info = this.service.getTranslation('map.desc.info');
     this.initLayers();
     this.showDetail = false;
     this.maxNumMarkers = this.config.mapOptions.docsForMarker;
@@ -204,6 +209,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.subs.push(this.service.currentLang.subscribe(res => {
       if (this.mapReady) {
         setTimeout(() => {
+          this.setAttribution();
           this.initLayers();
           this.map.invalidateSize({ pan: false });
         }, 500);
@@ -215,12 +221,18 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
   }
 
+  setAttribution() {
+    this.map.attributionControl.removeAttribution(this.info);
+    this.info = (this.activeBaseLayerOSM ? this.osmInfo : '') + this.service.getTranslation('map.desc.info');
+    this.map.attributionControl.addAttribution(this.info);
+  }
+
   initLayers() {
     this.baseLayers = {};
     this.baseLayers[this.service.getTranslation('map.layer.cuzk_zakladni')] = this.cuzkZM,
-      this.baseLayers[this.service.getTranslation('map.layer.cuzk_orto')] = this.cuzkOrt,
-      this.baseLayers[this.service.getTranslation('map.layer.cuzk_stin')] = this.cuzkEL,
-      this.baseLayers[this.service.getTranslation('map.layer.openstreet')] = this.osm;
+    this.baseLayers[this.service.getTranslation('map.layer.cuzk_orto')] = this.cuzkOrt,
+    this.baseLayers[this.service.getTranslation('map.layer.cuzk_stin')] = this.cuzkEL,
+    this.baseLayers[this.service.getTranslation('map.layer.openstreet')] = this.osm;
     this.overlays = {};
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_mapa')] = this.cuzkWMS;
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_uzemi')] = this.cuzkWMS2;
@@ -729,6 +741,11 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.locationFilter.setBounds(bounds.pad(this.config.mapOptions.selectionInitPad));
       }
     }
+
+    map.on('baselayerchange', (e) => {
+      this.activeBaseLayerOSM = e.layer.options['name'] === 'osm';
+      this.setAttribution();
+    });
 
     map.on('zoomend', (e) => {
       if (!this.zoomingOnMarker && !this.firstZoom) {
