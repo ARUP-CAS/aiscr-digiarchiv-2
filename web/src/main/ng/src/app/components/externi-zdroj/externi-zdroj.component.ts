@@ -114,4 +114,8 @@ export class ExterniZdrojComponent implements OnInit {
       });
     }
   }
+
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
 }

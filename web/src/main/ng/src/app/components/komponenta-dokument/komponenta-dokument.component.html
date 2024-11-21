@@ -20,7 +20,7 @@
       </ng-container>
 
     </div>
-    <app-result-actions [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"></app-result-actions>
+    <app-result-actions [inDocument]="inDocument" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"></app-result-actions>
   </mat-card-actions>
   <mat-card-content *ngIf="detailExpanded">
     <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>

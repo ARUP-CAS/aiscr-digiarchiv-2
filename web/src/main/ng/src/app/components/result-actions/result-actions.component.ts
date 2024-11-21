@@ -18,6 +18,7 @@ export class ResultActionsComponent {
   @Input() bibTex: string;
   @Input() isDocumentDialogOpen: boolean;
   @Input() detailExpanded: boolean;
+  @Input() inDocument: boolean;
   @Input() mapDetail: boolean;
   @Input() ident_cely_api: any;
 

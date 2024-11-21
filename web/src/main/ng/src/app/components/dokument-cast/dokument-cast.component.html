@@ -87,9 +87,10 @@
 
   <mat-card-actions fxLayout="row" fxLayoutAlign="start end" *ngIf="!isChild">
     <div fxFlex></div>
-    <!-- <app-result-actions [result]="result" [bibTex]="''" [isDocumentDialogOpen]="false" 
+    <!-- <app-result-actions [inDocument]="inDocument" [result]="result" [bibTex]="''" [isDocumentDialogOpen]="false" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions> -->
-      <app-result-actions [result]="result" [bibTex]="null" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+      <app-result-actions [inDocument]="inDocument" [result]="result" [isDocumentDialogOpen]="isDocumentDialogOpen"  (onToggleDetail)="toggleDetail()"
+      [bibTex]="bibTex"
       [detailExpanded]="detailExpanded" [mapDetail]="false" [ident_cely_api]="result.ident_cely.substr(0, result.ident_cely.lastIndexOf('-'))" ></app-result-actions>
   </mat-card-actions>
 

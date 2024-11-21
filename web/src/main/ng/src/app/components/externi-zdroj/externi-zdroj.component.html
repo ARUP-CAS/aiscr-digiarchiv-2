@@ -33,7 +33,7 @@
 			<span class="app-pipe"></span>
 		</ng-container> 
       </div>
-	  <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+	  <app-result-actions [inDocument]="inDocument" [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen"  (onToggleDetail)="toggleDetail()"
       [detailExpanded]="detailExpanded" [mapDetail]="false" ></app-result-actions>
       <!-- <div>
         <button mat-flat-button (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">

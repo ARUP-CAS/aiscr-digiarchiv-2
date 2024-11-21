@@ -90,7 +90,7 @@
         <span class="app-pipe"></span>
       </ng-container>
     </div>
-    <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+    <app-result-actions [inDocument]="inDocument" [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
   </mat-card-actions>
   <mat-card-content *ngIf="detailExpanded && !isChild">

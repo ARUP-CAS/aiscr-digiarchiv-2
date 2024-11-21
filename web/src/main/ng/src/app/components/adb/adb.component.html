@@ -103,7 +103,8 @@
         </ng-container>
   
       </div>
-      <app-result-actions [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"></app-result-actions>
+      <app-result-actions [inDocument]="inDocument" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
+      [bibTex]="bibTex"></app-result-actions>
     </mat-card-actions>
 
     <mat-card-content [class.app-detail-closed]="!detailExpanded" *ngIf="detailExpanded">
