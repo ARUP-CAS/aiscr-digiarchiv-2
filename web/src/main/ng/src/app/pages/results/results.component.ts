@@ -62,6 +62,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.setTitle();
     this.state.hasError = false;
     this.subs.push(this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -113,7 +114,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Results');
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
+    + ' | ' + (this.state.isMapaCollapsed ? this.service.getTranslation('title.results') : this.service.getTranslation('title.map'))
+    + ' - ' + this.service.getTranslation('entities.'+ this.state.entity+'.title') );
   }
 
   toggleFavorites() {
@@ -152,6 +155,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
         return;
       }
       this.state.setSearchResponse(resp);
+      this.setTitle();
       this.docs = resp.response.docs;
       if (this.state.isMapaCollapsed) {
         this.state.loading = false;

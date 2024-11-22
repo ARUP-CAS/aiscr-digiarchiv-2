@@ -9,7 +9,13 @@
   "to": "do",
   "negativní": "negativní",
   "pozitivní": "pozitivní",
-
+  "title": {
+    "results": "Výsledky",
+    "map": "Mapa",
+    "Export": "Export",
+    "export-mapa": "Export mapy",
+    "record": "Záznam "
+  },
 
   "navbar": {
     "desc": {

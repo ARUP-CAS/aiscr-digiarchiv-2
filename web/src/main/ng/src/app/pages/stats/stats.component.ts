@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { AppService } from 'src/app/app.service';
 
 @Component({
@@ -10,10 +11,20 @@ export class StatsComponent implements OnInit {
 
   ident_cely: string;
 
-  constructor(private service: AppService) {}
+  constructor(
+    private titleService: Title,
+    private service: AppService) {}
 
   ngOnInit(): void {
+    this.setTitle();
+    this.service.currentLang.subscribe(res => {
+      this.setTitle();
+    });
 
+  }
+
+  setTitle() {
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Stats');
   }
 
   search() {

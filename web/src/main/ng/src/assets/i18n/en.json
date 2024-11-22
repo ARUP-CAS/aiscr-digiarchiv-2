@@ -9,6 +9,13 @@
   "to": "to",
   "negativní": "negative",
   "pozitivní": "positive",
+  "title": {
+    "results": "Results",
+    "map": "Map",
+    "Export": "Export",
+    "export-mapa": "Map Export",
+    "record": "Record "
+  },
 
 
   "navbar": {
