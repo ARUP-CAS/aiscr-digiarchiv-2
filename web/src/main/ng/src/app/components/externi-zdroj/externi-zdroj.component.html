@@ -59,10 +59,30 @@
                 {{ 'card.panelTitle.Související záznamy' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
-        	<app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-			<app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+
+			<cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
+				[minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
+				<app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true"  class="app-related-item"></app-lokalita>
+				<app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true"  class="app-related-item"></app-akce>
+			  </cdk-virtual-scroll-viewport>
+			  
+			  <ng-container *ngIf="vsSize > 0 && state.printing" >
+				<app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true"  class="app-related-item"></app-lokalita>
+				<app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true"  class="app-related-item"></app-akce>
+			  </ng-container>
+
+        	<!-- <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+			<app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita> -->
           </mat-expansion-panel> 
         </mat-accordion>
+
+
+
+
+		
+
+
+
       </div>
     </mat-card-content>
 	</mat-card>
