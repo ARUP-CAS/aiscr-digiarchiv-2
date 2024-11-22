@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { AppService } from 'src/app/app.service';
 import { AppConfiguration } from 'src/app/app-configuration';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-externi-zdroj',
@@ -21,6 +22,7 @@ export class ExterniZdrojComponent implements OnInit {
   numChildren = 0;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     public state: AppState,
     public service: AppService,
     public config: AppConfiguration
@@ -28,14 +30,6 @@ export class ExterniZdrojComponent implements OnInit {
 
   ngOnInit(): void {
     this.setData();
-
-    // const id = this.result.ident_cely ? this.result.ident_cely : this.result;
-
-    // this.service.getIdAsChild([id], "ext_zdroj").subscribe((res: any) => {
-    //   this.result = res.response.docs[0]; 
-    //   this.setData();
-    // });
-
   }
 
   checkLoading() {
@@ -61,10 +55,15 @@ export class ExterniZdrojComponent implements OnInit {
         const ids = this.result.ext_zdroj_ext_odkaz.slice(i, i + 10).map((eo: any) => eo.archeologicky_zaznam.id);
         this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          //this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
         });
       }
     }
@@ -72,7 +71,7 @@ export class ExterniZdrojComponent implements OnInit {
   }
 
   setData() {
-    if (this.inDocument) {
+    if (this.inDocument && isPlatformBrowser(this.platformId)) {
 
       this.setVsize();
       this.getArchZaznam();
