@@ -6,11 +6,15 @@
     <mat-card-title>
       <span class="app-ident-format">{{ result.ident_cely }}</span>
       <span class="app-pipe" *ngIf="result.dj_typ"></span>
-      <app-inline-filter [field]="'f_dj_typ'" [value]="result.dj_typ.id" [heslar]="'typ_dj'"></app-inline-filter>
+      <app-inline-filter [field]="'f_dj_typ'" [value]="result.dj_typ.id ? result.dj_typ.id : result.dj_typ" [heslar]="'typ_dj'"></app-inline-filter>
       <ng-container *ngIf="result.dj_nazev">&#160;({{result.dj_nazev}})</ng-container>
       <span class="app-pipe"></span>
     </mat-card-title>
   </mat-card-header>
+  <mat-card-content  *ngIf="detailExpanded">
+    <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
+  </mat-card-content>
+
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
 
@@ -28,8 +32,20 @@
     [bibTex]="bibTex"
     [ident_cely_api]="result.ident_cely.substr(0, result.ident_cely.lastIndexOf('-'))"></app-result-actions>
   </mat-card-actions>
+
   <mat-card-content  *ngIf="detailExpanded">
-    <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
+
+  <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+    <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard"
+      [collapsedHeight]="config.uiVars.panelHeightInCard">
+      <mat-panel-title>
+        {{ 'card.panelTitle.Související záznamy' | translate }}:
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+    <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true"
+      class="app-related-item"></app-lokalita>
+  </mat-expansion-panel>
   </mat-card-content>
 </mat-card>
 
@@ -58,15 +74,5 @@
       </mat-accordion>
   </mat-expansion-panel>
 
-  <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-    <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard"
-      [collapsedHeight]="config.uiVars.panelHeightInCard">
-      <mat-panel-title>
-        {{ 'card.panelTitle.Související záznamy' | translate }}:
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-    <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true"
-      class="app-related-item"></app-lokalita>
-  </mat-expansion-panel>
+  
 </ng-template>

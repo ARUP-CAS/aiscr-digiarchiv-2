@@ -35,7 +35,7 @@ export class ResultActionsComponent {
   ) { }
 
   apiIdentCely(item:{label: string, metadataPrefix: string, url: string, useParent: boolean}) {
-    return item.useParent ? this.ident_cely_api : this.result.ident_cely;
+    return (item.useParent && this.ident_cely_api) ? this.ident_cely_api : this.result.ident_cely;
   }
 
   toggleDetail() {
