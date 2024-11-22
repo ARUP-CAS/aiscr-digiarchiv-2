@@ -12,7 +12,7 @@
   "title": {
     "results": "Results",
     "map": "Map",
-    "Export": "Export",
+    "export": "Export",
     "export-mapa": "Map Export",
     "record": "Record "
   },
