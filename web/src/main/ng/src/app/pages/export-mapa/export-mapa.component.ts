@@ -33,7 +33,7 @@ export class ExportMapaComponent implements OnInit {
 
 
   ngOnInit(): void {
-      this.setTitle();
+    this.setTitle();
     this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -71,11 +71,11 @@ export class ExportMapaComponent implements OnInit {
     p.mapa = true;
     p.noFacets = true;
     p.noStats = true;
-this.state.loading = true;
+    this.state.loading = true;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       
+      this.state.loading = false;
       if (resp.error) {
-        this.state.loading = false;
         return;
       }
       if (this.state.entity === 'knihovna_3d') {
