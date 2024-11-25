@@ -78,14 +78,18 @@ public class HandleServlet extends HttpServlet {
                 AppState.writeGetFileFinished(ip, id, success);
                 //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile end");
             } catch (Exception ex) {
-                Logger.getLogger(HandleServlet.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         } else {
             try (PrintWriter out = response.getWriter()) {
                 response.setContentType("text/html;charset=UTF-8");
                 String url = "http://localhost:4000/id/" + id;
-                InputStream inputStream = RESTHelper.inputStream(url);
-                out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
+                try (InputStream inputStream = RESTHelper.inputStream(url)) {
+                    out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
+                }
+            } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, "Error processing {0}", request.getRequestURI());
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
     }

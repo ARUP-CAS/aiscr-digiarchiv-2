@@ -43,10 +43,13 @@ public class DokumentSearcher implements EntitySearcher {
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             // checkRelations(jo, client, request);
-            if (Boolean.parseBoolean(request.getParameter("mapa"))
-                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-                
-                // addPians(jo, client, request);
+
+//            if (Boolean.parseBoolean(request.getParameter("mapa"))
+//                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+//                addPians(jo, client, request);
+//            }
+            if (Boolean.parseBoolean(request.getParameter("isExport"))) {
+                addPians(jo, client, request);
             }
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);

@@ -69,6 +69,7 @@ export class ExportMapaComponent implements OnInit {
     const p = Object.assign({}, params);
     p.rows = this.config.exportRowsLimit;
     p.mapa = true;
+    p.isExport = true;
     p.noFacets = true;
     p.noStats = true;
     this.state.loading = true;
