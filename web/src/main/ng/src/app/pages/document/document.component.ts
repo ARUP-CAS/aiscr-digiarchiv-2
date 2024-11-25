@@ -82,7 +82,6 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         return;
       }
       this.state.setSearchResponse(resp);
-      this.setTitle();
       if (resp.response.numFound > 0) {
         this.result = resp.response.docs[0];
         if (this.result.autor) {
@@ -90,6 +89,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         }
 
         this.state.setMapResult(this.result, false);
+        this.setTitle();
       }
       this.link = this.config.serverUrl + 'id/' + id;
       this.loading = false;
