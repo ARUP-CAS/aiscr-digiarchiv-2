@@ -12,13 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -244,6 +242,7 @@ public class HandleServlet extends HttpServlet {
                     return userPr.compareToIgnoreCase("D") >= 0;
                 }
             case "dokument":
+            case "knihovna_3d":
 //-- A: dokument/pristupnost = A AND dokument/stav = 3
 //-- B: (dokument/pristupnost <= B AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel = {user}
 //-- C: (dokument/pristupnost <= C AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel.organizace = {user}.organizace

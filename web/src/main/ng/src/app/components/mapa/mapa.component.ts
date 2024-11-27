@@ -409,7 +409,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(lat.min, lng.min);
       const northEast = L.latLng(lat.max, lng.max);
       const bounds = L.latLngBounds(southWest, northEast);
-      console.log(bounds)
       this.map.fitBounds(bounds.pad(.03));
 
     }
