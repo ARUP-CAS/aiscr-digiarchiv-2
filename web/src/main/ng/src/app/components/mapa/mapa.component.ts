@@ -326,7 +326,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
                     mrk.addTo(this.markers);
                     if (!byLoc) {
-                      this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId.length);
+                      this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId);
                     }
                     this.hitMarker(this.state.mapResult);
 
@@ -346,7 +346,7 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.markersList.forEach(m => {
                 if (m.pianPresnost !== 'HES-000864' && m.pianTyp !== 'bod') {
                   //if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
-                  this.addShape(m.pianId, m.pianPresnost, m.docId.length);
+                  this.addShape(m.pianId, m.pianPresnost, m.docId);
                 }
               });
             }
@@ -409,7 +409,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(lat.min, lng.min);
       const northEast = L.latLng(lat.max, lng.max);
       const bounds = L.latLngBounds(southWest, northEast);
-      this.map.fitBounds(bounds.pad(.03));
+      //this.map.fitBounds(bounds.pad(.03));
+      this.map.fitBounds(bounds);
 
     }
   }
@@ -537,7 +538,7 @@ export class MapaComponent implements OnInit, OnDestroy {
                   const coords = pian.loc_rpt[0].split(',');
                   const mrk = this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.pian_presnost, pian.typ, doc);
                   mrk.addTo(this.markers);
-                  this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId.length);
+                  this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId);
                 }
               });
             }
@@ -635,7 +636,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.showType === 'heat') {
         m.addTo(this.markers);
         if (m.pianPresnost < 4 && m.pianTyp !== 'bod') {
-          this.addShape(m.pianId, m.pianPresnost, m.docId.length);
+          this.addShape(m.pianId, m.pianPresnost, m.docId);
         }
       }
     });
@@ -671,9 +672,15 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
   }
 
-  popUpHtml(id: string, presnost: string, pocet: number) {
+  // popUpHtml(id: string, presnost: string, pocet: number) {
+  //   console.log(pocet)
+  //   const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
+  //   return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + pocet + ')';
+  // }
+
+  popUpHtml(id: string, presnost: string, ids: string[]) {
     const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
-    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + pocet + ')';
+    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + ids + ')';
   }
 
   onMapReady(map: L.Map) {
@@ -706,19 +713,17 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
-      // if (this.state.locationFilterEnabled) {
-      //   this.locationFilter.setBounds(bounds);
-      // }
 
-      //this.map.fitBounds(bounds);
-      this.map.fitBounds(bounds.pad(.3));
+      this.map.fitBounds(bounds);
+      //this.map.fitBounds(bounds.pad(.3));
     } else if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('loc_rpt').split(',');
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
-
+      console.log(bounds)
       this.map.fitBounds(bounds);
+      console.log(this.map.getBounds())
       this.updateBounds(this.map.getBounds(), false, 'init');
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
@@ -732,8 +737,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(lat.min, lng.min);
       const northEast = L.latLng(lat.max, lng.max);
       bounds = L.latLngBounds(southWest, northEast);
-      this.map.fitBounds(bounds.pad(.5));
-      //this.map.fitBounds(bounds);
+      this.map.fitBounds(bounds);
+      //this.map.fitBounds(bounds.pad(.5));
       if (this.state.locationFilterEnabled) {
         this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
       }
@@ -756,6 +761,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.zoomingOnMarker = false;
     });
     map.on('dragend', () => {
+      console.log(map.getBounds())
       this.updateBounds(map.getBounds(), false, 'mapDragEnd');
     });
     map.on('fullscreenchange', () => {
@@ -910,17 +916,17 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.state.loading = false;
   }
 
-  addShapes() {
-    this.state.solrResponse.response.docs.forEach(doc => {
-      if (doc.pian && doc.pian.length > 0) {
-        doc.pian.forEach((pian: any) => {
+  // addShapes() {
+  //   this.state.solrResponse.response.docs.forEach(doc => {
+  //     if (doc.pian && doc.pian.length > 0) {
+  //       doc.pian.forEach((pian: any) => {
 
-        });
-      }
-    });
-  }
+  //       });
+  //     }
+  //   });
+  // }
 
-  addShape(ident_cely: string, presnost: string, pocet: number) {
+  addShape(ident_cely: string, presnost: string, ids: string[]) {
     this.service.getWKT(ident_cely).subscribe((resp: any) => {
       if (!resp.geom_wkt_c) {
         return;
@@ -941,7 +947,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         layer.on('click', (e) => {
           this.setPianId(ident_cely);
         });
-        layer.bindTooltip(this.popUpHtml(ident_cely, presnost, pocet));
+        layer.bindTooltip(this.popUpHtml(ident_cely, presnost, ids));
         // layer.addTo(this.overlays);
         layer.addTo(this.markers);
       }

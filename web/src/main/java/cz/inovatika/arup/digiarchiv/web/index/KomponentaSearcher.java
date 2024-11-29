@@ -19,7 +19,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
     public static final Logger LOGGER = Logger.getLogger(KomponentaSearcher.class.getName());
 
-    final String ENTITY = "komponenta";
+    final String ENTITY = "komponenta"; 
     private boolean parentSearchable;
 
     @Override
