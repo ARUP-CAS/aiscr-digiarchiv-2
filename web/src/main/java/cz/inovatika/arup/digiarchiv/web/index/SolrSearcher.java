@@ -100,6 +100,7 @@ public class SolrSearcher {
             
         }
 
+        query.setParam("facet.heatmap.distErr", "0.04");
         query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
                 .setParam("facet.heatmap.maxCells", "1000000");
     }

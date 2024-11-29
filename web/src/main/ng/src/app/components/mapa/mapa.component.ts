@@ -334,7 +334,7 @@ export class MapaComponent implements OnInit, OnDestroy {
                       this.setMarkersData(false);
                     }, 10);
                   });
-                }
+                } 
               });
             } else {
               this.setMarkersData(true);
@@ -536,12 +536,19 @@ export class MapaComponent implements OnInit, OnDestroy {
                 if (pian) {
                   doc.pian.push(pian);
                   const coords = pian.loc_rpt[0].split(',');
+                   
                   const mrk = this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.pian_presnost, pian.typ, doc);
                   mrk.addTo(this.markers);
                   this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId);
                 }
               });
             }
+          } else {
+            let mrk = this.markerExists(pian_id);
+            console.log(mrk)
+            mrk.docId.push(doc.ident_cely);
+            mrk.bindTooltip(this.popUpHtml(pian_id, mrk.pianPresnost, mrk.docId));
+            // this.addMarker(pian_id, true, '', '', '', '', doc);
           }
 
         });
@@ -680,7 +687,8 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   popUpHtml(id: string, presnost: string, ids: string[]) {
     const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
-    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + ids + ')';
+    const p = ids.length > 1 ? ids.length : ids[0];
+    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + p + ')';
   }
 
   onMapReady(map: L.Map) {
@@ -721,10 +729,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
-      console.log(bounds)
       this.map.fitBounds(bounds);
-      console.log(this.map.getBounds())
-      this.updateBounds(this.map.getBounds(), false, 'init');
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
       const lng = this.state.stats.lng;
@@ -761,7 +766,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.zoomingOnMarker = false;
     });
     map.on('dragend', () => {
-      console.log(map.getBounds())
       this.updateBounds(map.getBounds(), false, 'mapDragEnd');
     });
     map.on('fullscreenchange', () => {
@@ -798,6 +802,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     if (!this.isResults) {
+      this.updateBounds(this.map.getBounds(), false, 'init');
       this.setData(false);
     }
     this.setHeatData();

@@ -66,7 +66,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   setTitle() {
     this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
     + ' | ' + this.service.getTranslation('title.record') 
-    + ' - ' + this.result.ident_cely );
+    + ' - ' + (this.result ? this.result.ident_cely : '') );
   }
 
   search(id: string) {
