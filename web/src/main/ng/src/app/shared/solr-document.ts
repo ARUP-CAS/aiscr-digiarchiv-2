@@ -12,7 +12,8 @@ export class SolrDocument {
     typ: string, 
     parent_doctype: string, 
     centroid_n: string,
-    loc_rpt: any[]
+    loc_rpt: any[],
+    pian_chranene_udaje: any
   }[];
   [prop: string]: any;
 }

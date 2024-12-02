@@ -45,6 +45,7 @@ public class IndexUtils {
                         .build();
             }
         } catch (Exception ex) {
+            _solrNoOp = null;
             LOGGER.log(Level.SEVERE, null, ex);
         }
         return _solrNoOp;
@@ -56,6 +57,7 @@ public class IndexUtils {
                 _solrBin = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             }
         } catch (Exception ex) {
+            _solrBin = null;
             LOGGER.log(Level.SEVERE, null, ex);
         }
         return _solrBin;
