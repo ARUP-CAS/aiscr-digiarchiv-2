@@ -41,7 +41,7 @@
             <mat-icon>settings</mat-icon>
             {{ 'navbar.desc.account' | translate }}
           </a>
-          <a *ngIf="state.logged && state.user.pristupnost === 'D'" routerLink="stats">
+          <a *ngIf="state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')" routerLink="stats">
             <mat-icon>query_stats</mat-icon>
             {{ 'navbar.desc.stats' | translate }}
           </a>

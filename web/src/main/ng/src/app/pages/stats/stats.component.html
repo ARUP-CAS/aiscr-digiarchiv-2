@@ -1,1 +1,47 @@
-<input type="text" [placeholder]="'ident cely' | translate" name="ident_cely" id="ident_cely" (keyup.enter)="search()" [(ngModel)]="ident_cely"  />
+<div class="app-display-table app-container">
+    <div class="app-table-cell">
+        <mat-form-field>
+        <input matInput type="text" [placeholder]="'type' | translate" name="type" id="ident_cely"
+            (keyup.enter)="filter('type', type)" [(ngModel)]="type" />
+            <mat-icon *ngIf="type" matSuffix (click)="removeFilter('type')">close</mat-icon>
+        </mat-form-field>
+        <h3>Typ</h3>
+        <div *ngFor="let f of types">
+            <a (click)="filter('type', f.name)">{{ f.name }} - {{ f.value }}</a>
+        </div>
+    </div>
+    <div class="app-table-cell">
+        <mat-form-field>
+        <input matInput type="text" [placeholder]="'IP' | translate" name="ip" id="ident_cely"
+            (keyup.enter)="filter('ip', ip)" [(ngModel)]="ip" />
+            <mat-icon *ngIf="ip" matSuffix (click)="removeFilter('ip')">close</mat-icon>
+        </mat-form-field>
+        <h3>IP</h3>
+        <div *ngFor="let f of ips">
+            <a (click)="filter('ip', f.name)">{{ f.name }} - {{ f.value }}</a>
+        </div>
+    </div>
+    <div class="app-table-cell">
+        <mat-form-field>
+        <input matInput type="text" [placeholder]="'User' | translate" name="user" id="user"
+            (keyup.enter)="filter('user', user)" [(ngModel)]="user" />
+            <mat-icon *ngIf="user" matSuffix (click)="removeFilter('user')">close</mat-icon>
+        </mat-form-field>
+        <h3>User</h3>
+        <div *ngFor="let f of users">
+            <a (click)="filter('user', f.name)">{{ f.name }} - {{ f.value }}</a>
+        </div>
+
+    </div>
+    <div class="app-table-cell">
+        <mat-form-field>
+        <input matInput type="text" [placeholder]="'ident cely' | translate" name="ident_cely" id="ident_cely"
+            (keyup.enter)="setIdentCely()" [(ngModel)]="ident_cely" />
+            <mat-icon *ngIf="ident_cely" matSuffix (click)="removeFilter('ident_cely')">close</mat-icon>
+        </mat-form-field>
+        <h3>Records</h3>
+        <div *ngFor="let f of ids">
+            <a (click)="filter('ident_cely', f.name)">{{ f.name }} - {{ f.value }}</a>
+        </div>
+    </div>
+</div>

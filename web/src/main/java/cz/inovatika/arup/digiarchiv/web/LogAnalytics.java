@@ -54,12 +54,26 @@ public class LogAnalytics {
                 .withResponseParser(dontMessWithSolr).build()) {
             // request.getParameter("id"), request.getParameter("type")
             SolrQuery query = new SolrQuery()
-                    .setQuery("ident_cely:\"" + request.getParameter("ident_cely") + "\"")
+                    .setQuery("*")
                     .setFacet(true)
                     .setFacetMinCount(1)
                     .addFacetField("user")
                     .addFacetField("ip")
-                    .addFacetField("type");
+                    .addFacetField("type")
+                    .addFacetField("ident_cely")
+                    .setParam("json.nl","arrntv");
+            if (request.getParameter("ident_cely") != null) {
+                query.addFilterQuery("ident_cely:\"" + request.getParameter("ident_cely") + "\"");
+            }
+            if (request.getParameter("type") != null) {
+                query.addFilterQuery("type:\"" + request.getParameter("type") + "\"");
+            }
+            if (request.getParameter("user") != null) {
+                query.addFilterQuery("user:\"" + request.getParameter("user") + "\"");
+            }
+            if (request.getParameter("ip") != null) {
+                query.addFilterQuery("ip:\"" + request.getParameter("ip") + "\"");
+            }
             JSONObject ret = json(query, client, "logs");
             // client.close();
             return ret;
