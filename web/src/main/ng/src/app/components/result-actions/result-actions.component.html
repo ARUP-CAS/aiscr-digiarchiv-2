@@ -12,11 +12,18 @@
       <a mat-menu-item *ngFor="let item of config.choiceApi" [href]="item.url + apiIdentCely(item)" target="_blank">
         {{ 'card.menu.' + item.label | translate }}
       </a>
-
     </mat-menu>
-    <button mat-flat-button *ngIf="bibTex" (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
+    <button mat-flat-button [matMenuTriggerFor]="mCitace">
       <mat-icon>menu_book</mat-icon>
     </button>
+    <mat-menu #mCitace="matMenu">
+      <a mat-menu-item  (click)="showCitation()" [matTooltip]="'Zobrazit citaci'">
+        {{ 'card.menu.Zobrazit citaci' | translate }}
+      </a>
+      <a mat-menu-item  *ngIf="bibTex"  (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
+        {{ 'BibTeX' }}
+      </a>
+    </mat-menu>
     <a mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
       <mat-icon>print</mat-icon>
     </a>

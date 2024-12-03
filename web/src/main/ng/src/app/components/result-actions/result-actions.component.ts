@@ -6,6 +6,7 @@ import { AppState } from 'src/app/app.state';
 import { DocumentDialogComponent } from '../document-dialog/document-dialog.component';
 import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.component';
 import { Router } from '@angular/router';
+import { BibtextDialogComponent } from '../bibtext-dialog/bibtext-dialog.component';
 
 @Component({
   selector: 'app-result-actions',
@@ -68,6 +69,15 @@ export class ResultActionsComponent {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
+  }
+
+  showCitation() {
+    this.state.dialogRef = this.dialog.open(BibtextDialogComponent, {
+      width: '900px',
+      data: {result: this.result, link: this.config.serverUrl + 'id/' + this.result.ident_cely},
+      panelClass: 'app-feedback-dialog'
+    });
+    
   }
 
 }

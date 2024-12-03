@@ -358,7 +358,8 @@
     "menu": {
       "Persistentní odkaz": "Persistent link",
       "api_prefix": "OAI-PMH API",
-      "show_in_AMCR":"Show in AMČR"
+      "show_in_AMCR":"Show in AMČR",
+      "Zobrazit citaci": "Show citation"
     },
     "desc": {
       "Poslední změna": "Last change",

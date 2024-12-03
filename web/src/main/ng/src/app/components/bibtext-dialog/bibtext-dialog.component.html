@@ -1,12 +1,7 @@
-<h1 mat-dialog-title>BibTeX</h1>
+
 <div mat-dialog-content>
-  <div fxLayout="row wrap">
-  <pre>
-    {{ data }}
-  </pre>
-  </div>
+  <app-citation [result]="data.result" [link]="data.link"></app-citation>
 </div>
 <div mat-dialog-actions>
-    <button mat-button cdkFocusInitial (click)="ok()">{{'Ok' | translate}}</button>
   <button mat-button [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
 </div>
