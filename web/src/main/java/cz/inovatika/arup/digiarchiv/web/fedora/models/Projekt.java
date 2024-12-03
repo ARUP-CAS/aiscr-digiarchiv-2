@@ -461,7 +461,8 @@ class ProjektChraneneUdaje {
                 final WKTReader reader = new WKTReader();
                 try {
                     Geometry geometry = reader.read(wktStr);
-                    Point p = geometry.getCentroid();
+        // Point p = geometry.getCentroid();
+        Point p = geometry.getInteriorPoint();
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);
