@@ -11,6 +11,7 @@ import { AppService } from 'src/app/app.service';
 })
 export class StatsComponent implements OnInit {
 
+  typesAll = ['id', 'viewer', 'file'];
   ident_cely: string;
   type: string;
   ip: string;

@@ -773,5 +773,16 @@
   "f_aktivita_deponovani": "deposition",
   "f_aktivita_boj": "fighting",
   "f_aktivita_jina": "other activity",
-  "f_aktivita_intruze": "find intrusion"
+  "f_aktivita_intruze": "find intrusion",
+
+  "stats": {
+    "ident_cely": "Identifier",
+    "type": "Type",
+    "user": "User",
+    "typ": {
+      "id": "Display record detail",
+      "viewer": "Display record file thumbnails",
+      "file": "File download"
+    }
+  }
 }

@@ -773,5 +773,16 @@
   "f_aktivita_deponovani": "deponování",
   "f_aktivita_boj": "boj",
   "f_aktivita_jina": "jiný druh aktivity",
-  "f_aktivita_intruze": "intruze"
+  "f_aktivita_intruze": "intruze",
+
+  "stats": {
+    "ident_cely": "Identifikátor",
+    "type": "Typ",
+    "user": "Uživatel",
+    "typ": {
+      "id": "Zobrazení detailu záznamu",
+      "viewer": "Zobrazení náhledů souborů záznamu",
+      "file": "Stažení souborů"
+    }
+  }
 }
