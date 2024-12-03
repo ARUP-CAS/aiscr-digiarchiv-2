@@ -26,6 +26,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { CommonModule } from '@angular/common';
     MatNativeDateModule,
     MatSidenavModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
+    MatBottomSheetModule
   ],
   exports: [
     MatFormFieldModule,
