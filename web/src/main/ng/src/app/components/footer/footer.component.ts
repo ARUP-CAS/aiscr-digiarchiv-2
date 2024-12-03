@@ -22,7 +22,12 @@ export class FooterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.mustConsent = 'true' !== localStorage.getItem("consent");
+    let expired = false;
+    if (localStorage.getItem("consentTime") !== null) {
+      const EXPIRE_DATE = parseInt(localStorage.getItem("consentTime"));
+      expired = Date.now() > EXPIRE_DATE;
+    }
+    this.mustConsent = null === localStorage.getItem("consent") || expired ;
     if (this.mustConsent) {
       this._bottomSheet.open(ConsentSheet, {
         closeOnNavigation: false,
@@ -57,12 +62,20 @@ export class ConsentSheet {
   consent(event: MouseEvent): void {
     this._bottomSheetRef.dismiss();
     event.preventDefault();
-    localStorage.setItem("consent", "true");
+    localStorage.setItem("consent", "granted");
   }
   
   reject(event: MouseEvent): void {
     this._bottomSheetRef.dismiss();
     event.preventDefault();
-    localStorage.setItem("consent", "false");
+    localStorage.setItem("consent", "denied");
+    const TIMESTAMP = Date.now();
+    const expiresOn = TIMESTAMP + 1000*60*60*24*365 // 1year in ms
+    localStorage.setItem("consentTime", expiresOn.toString());
+  }
+  
+  close(event: MouseEvent): void {
+    this._bottomSheetRef.dismiss();
+    event.preventDefault();
   }
 }

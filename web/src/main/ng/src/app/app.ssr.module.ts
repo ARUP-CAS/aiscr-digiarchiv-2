@@ -24,7 +24,7 @@ import { HomeComponent } from 'src/app/pages/home/home.component';
 import { DocumentComponent } from 'src/app/pages/document/document.component';
 import { ExportComponent } from 'src/app/pages/export/export.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { FooterComponent } from './components/footer/footer.component';
+import { ConsentSheet, FooterComponent } from './components/footer/footer.component';
 import { FreeTextComponent } from './components/free-text/free-text.component';
 import { ResultsComponent } from './pages/results/results.component';
 import { TranslateHeslar } from 'src/app/translate-heslar.pipe';
@@ -178,7 +178,8 @@ const providers: any[] = [
     KomponentaDokumentComponent,
     CitationComponent,
     ResultActionsComponent,
-    StatsComponent
+    StatsComponent,
+    ConsentSheet
   ],
   imports: [
     CommonModule,
