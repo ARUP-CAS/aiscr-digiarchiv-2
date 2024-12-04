@@ -777,8 +777,8 @@
   "f_aktivita_intruze": "intruze",
 
   "stats": {
-    "ident_cely": "Identifikátor",
-    "type": "Typ",
+    "ident_cely": "ID",
+    "type": "Událost",
     "user": "Uživatel",
     "typ": {
       "id": "Zobrazení detailu",

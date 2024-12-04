@@ -777,8 +777,8 @@
   "f_aktivita_intruze": "find intrusion",
 
   "stats": {
-    "ident_cely": "Identifier",
-    "type": "Type",
+    "ident_cely": "ID",
+    "type": "Event",
     "user": "User",
     "typ": {
       "id": "Display detail",
