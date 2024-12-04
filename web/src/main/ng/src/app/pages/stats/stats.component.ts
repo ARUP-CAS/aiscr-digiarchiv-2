@@ -87,6 +87,12 @@ export class StatsComponent implements OnInit {
       this.types = resp.facet_counts.facet_fields.type;
       this.ips = resp.facet_counts.facet_fields.ip;
       this.ids = resp.facet_counts.facet_fields.ident_cely;
+      const prefix = 'rest/AMCR/record/';
+      this.ids.forEach(id => {
+        if (id.name.startsWith(prefix)) {
+          id.name = id.name.substring(prefix.length)
+        }
+      })
       this.users = resp.facet_counts.facet_fields.user;
     });
   }
