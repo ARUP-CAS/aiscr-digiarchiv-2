@@ -781,9 +781,9 @@
     "type": "Type",
     "user": "User",
     "typ": {
-      "id": "Display record detail",
-      "viewer": "Display record file thumbnails",
-      "file": "File download"
+      "id": "Display detail",
+      "viewer": "Display thumbnail",
+      "file": "Download file"
     }
   }
 }

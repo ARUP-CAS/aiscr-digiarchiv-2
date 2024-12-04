@@ -781,9 +781,9 @@
     "type": "Typ",
     "user": "Uživatel",
     "typ": {
-      "id": "Zobrazení detailu záznamu",
-      "viewer": "Zobrazení náhledů souborů záznamu",
-      "file": "Stažení souborů"
+      "id": "Zobrazení detailu",
+      "viewer": "Zobrazení náhledu",
+      "file": "Stažení souboru"
     }
   }
 }
