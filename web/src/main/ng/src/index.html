@@ -25,12 +25,12 @@
     if (consent === null) {
       consent = 'denied';
     }
-    gtag('consent', 'default', {
-      'ad_storage': consent,
-      'ad_user_data': consent,
-      'ad_personalization': consent,
-      'analytics_storage': consent
-    });
+    // gtag('consent', 'default', {
+    //   'ad_storage': consent,
+    //   'ad_user_data': consent,
+    //   'ad_personalization': consent,
+    //   'analytics_storage': consent
+    // });
 
     if (consent !== 'denied') {
       window.dataLayer = window.dataLayer || [];

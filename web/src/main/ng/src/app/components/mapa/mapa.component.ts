@@ -646,7 +646,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
     }
 
-
     let latMax = 0;
     let latMin = 90;
     let lngMax = 0;
@@ -743,8 +742,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
 
-      this.map.fitBounds(bounds);
-      //this.map.fitBounds(bounds.pad(.3));
+      //this.map.fitBounds(bounds);
+      this.map.fitBounds(bounds.pad(.3));
     } else if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('loc_rpt').split(',');
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);

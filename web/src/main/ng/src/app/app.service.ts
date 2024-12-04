@@ -644,11 +644,27 @@ export class AppService {
       p.vyber = null;
     } else {
       this.state.mapResult = result;
-      const loc_rpt = result.loc_rpt[0].split(',');
-      const lat =  parseFloat(loc_rpt[0]);
-      const lng =  parseFloat(loc_rpt[1]);
-      p.loc_rpt = '' + (lat - 0.003) + ',' + (lng - 0.003) +
-        ',' + (lat + 0.003) + ',' + (lng + 0.003);
+      // const loc_rpt = result.loc_rpt[0].split(',');
+      // const lat =  parseFloat(loc_rpt[0]);
+      // const lng =  parseFloat(loc_rpt[1]);
+
+      let latMax = 0;
+      let latMin = 90;
+      let lngMax = 0;
+      let lngMin = 180;
+
+      // 50.66795366897923,13.808275906582654
+      result.loc_rpt.forEach(m => {
+        const latlng = m.split(',');
+        latMax = Math.max(latMax, latlng[0]);
+        latMin = Math.min(latMin, latlng[0]);
+        lngMax = Math.max(lngMax, latlng[1]);
+        lngMin = Math.min(lngMin, latlng[1]);
+        
+      });
+
+      p.loc_rpt = '' + (latMin) + ',' + (lngMin ) +
+          ',' + (latMax) + ',' + (lngMax);
       this.state.setMapResult(result, false);
     }
     
