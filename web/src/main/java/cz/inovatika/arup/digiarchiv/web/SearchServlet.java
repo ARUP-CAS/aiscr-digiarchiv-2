@@ -487,7 +487,7 @@ public class SearchServlet extends HttpServlet {
                     Http2SolrClient client = IndexUtils.getClientNoOp();
                     String pristupnost = LoginServlet.pristupnost(request.getSession());
                     SolrQuery query = new SolrQuery("*")
-                            .setFields("id,ident_cely,razeni")
+                            .setFields("id,ident_cely,razeni,nazev_heslare")
                             .setRows(5000);
 
                     QueryRequest req = new QueryRequest(query);
@@ -503,8 +503,12 @@ public class SearchServlet extends HttpServlet {
 
                     // JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
                     for (int i = 0; i < docs.length(); i++) {
-                        ret.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getInt("razeni"));
-
+                        JSONObject doc = docs.getJSONObject(i);
+                        int razeni = doc.getInt("razeni");
+                        if ("objekt_druh".equals(doc.getString("nazev_heslare"))) {
+                            razeni += 4000; 
+                        }
+                        ret.put(doc.getString("ident_cely"), razeni);
                     }
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
