@@ -156,8 +156,10 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    public JSONObject update(String from) throws Exception {
-        ret = new JSONObject();
+    public JSONObject update(String from, boolean newSolr) throws Exception {
+        if (newSolr) {
+            ret = new JSONObject();
+        }
         String status = readStatusFile("update");
         if (STATUS_RUNNING.equals(status)) {
             LOGGER.log(Level.INFO, "Update is still running");
@@ -174,7 +176,9 @@ public class FedoraHarvester {
         // lastDate = "2024-07-30T15:37:05.633Z";
         ret.put("lastDate", lastDate);
 
-        solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+        if (newSolr) {
+            solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+        }
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
         String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
@@ -185,7 +189,9 @@ public class FedoraHarvester {
         baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
         searchFedora(baseQuery, true, "update", false);
-        solr.close();
+        if (newSolr) {
+            solr.close();
+        }
         Instant end = Instant.now();
         String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
         ret.put("ellapsed time", interval);
@@ -508,7 +514,7 @@ public class FedoraHarvester {
             baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + model + "/member/*", "UTF8");
         }
         searchFedora(baseQuery, "deleted".equals(model), model, false);
-
+        update(start.toString(), false); 
         Instant end = Instant.now();
         String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
         ret.put("ellapsed time", interval);

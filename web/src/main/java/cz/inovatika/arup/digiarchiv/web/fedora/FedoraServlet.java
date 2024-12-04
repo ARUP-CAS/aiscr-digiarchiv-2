@@ -147,7 +147,7 @@ public class FedoraServlet extends HttpServlet {
                 try {
                     String from = req.getParameter("from");
                     FedoraHarvester fh = new FedoraHarvester();
-                    json = fh.update(from);
+                    json = fh.update(from, true);
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }
