@@ -210,7 +210,6 @@ public class SolrSearcher {
     private static void addFilterNoQuotes(SolrQuery query, String field, String[] values, String pristupnost) {
         String fq = field; 
         if (Options.getInstance().getJSONArray("securedFacets").toList().contains(field)) {
-            // System.out.println("KKKKKK");
             fq += "_" + pristupnost;
         }
         fq += ":(";

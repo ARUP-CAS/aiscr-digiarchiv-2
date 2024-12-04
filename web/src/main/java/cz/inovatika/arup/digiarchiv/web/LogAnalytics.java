@@ -69,6 +69,23 @@ public class LogAnalytics {
             if (request.getParameter("ip") != null) {
                 query.addFilterQuery("ip:\"" + request.getParameter("ip") + "\"");
             }
+            if (request.getParameter("date") != null) {
+                String[] parts = request.getParameter("date").split(",");
+                String from = parts[0];
+                if ("null".equals(from)) {
+                    from = "*";
+                } else {
+                    from = from + "T00:00:00Z";
+                }
+                String to = parts[1];
+                if ("null".equals(to)) {
+                    to = "*";
+                } else {
+                    to = to + "T23:59:59Z";
+                }
+                String fq = "indextime:[" + from + " TO " + to + "]";
+                query.addFilterQuery(fq);
+            }
             JSONObject ret = json(query, client, "logs");
             // client.close();
             return ret;

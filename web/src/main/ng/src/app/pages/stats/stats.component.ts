@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
@@ -22,7 +23,11 @@ export class StatsComponent implements OnInit {
   users: { name: string, type: string, value: number }[];
   subs: any[] = [];
 
+  datumod: Date;
+  datumdo: Date;
+
   constructor(
+    private datePipe: DatePipe,
     private route: ActivatedRoute,
     private router: Router,
     private titleService: Title,
@@ -53,6 +58,13 @@ export class StatsComponent implements OnInit {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
+  addDateFilter() {
+    const params: any = {};
+    params['date'] = this.datePipe.transform(this.datumod, 'yyyy-MM-dd') + ',' + this.datePipe.transform(this.datumdo, 'yyyy-MM-dd');
+    params.page = 0;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
   filter(field: string, value: string) {
     const params: any = {};
     params[field] = value;
@@ -72,6 +84,16 @@ export class StatsComponent implements OnInit {
     this.type = params['type'];
     this.ip = params['ip'];
     this.user = params['user'];
+
+    if (params['date']) {
+      const dates = params['date'].split(',');
+      if ('null' !== dates[0]) {
+        this.datumod = dates[0];
+      }
+      if ('null' !== dates[1]) {
+        this.datumdo = dates[1];
+      }
+    }
 
     const p: any = Object.assign({}, params);
     // const p: any = {};

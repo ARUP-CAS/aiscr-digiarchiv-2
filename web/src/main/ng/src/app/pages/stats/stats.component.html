@@ -1,3 +1,28 @@
+<div class="app-container">
+    <div fxLayout="row" fxLayoutGap="32px" class="app-search-form" fxLayoutAlign="start center">
+        <mat-form-field  >
+            <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod"
+                [placeholder]="'facet.input.Datum od' | translate" (click)="datum_od.open()">
+            <mat-datepicker-toggle matSuffix [for]="datum_od"></mat-datepicker-toggle>
+            <button *ngIf="datumod" matSuffix mat-icon-button><mat-icon (click)="datumod = null">close</mat-icon></button>
+            <mat-datepicker #datum_od startView="multi-year">
+            </mat-datepicker>
+        </mat-form-field>
+        <mat-form-field  >
+            <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo"
+                [placeholder]="'facet.input.Datum do' | translate" (click)="datum_do.open()">
+            <mat-datepicker-toggle matSuffix [for]="datum_do"></mat-datepicker-toggle>
+            <button *ngIf="datumdo" matSuffix mat-icon-button><mat-icon (click)="datumdo = null">close</mat-icon></button>
+            <mat-datepicker #datum_do startView="multi-year">
+            </mat-datepicker>
+        </mat-form-field>
+        <button mat-flat-button (click)="addDateFilter()" >
+            <mat-icon mat-flat-button>filter_alt</mat-icon>
+            {{ 'facet.button.Aplikovat filtr' | translate }}
+        </button>
+    </div>
+</div>
+
 <div class="app-display-table app-container">
     <div class="app-table-cell">
         <h3>{{ 'stats.type' | translate }}</h3>
@@ -5,10 +30,10 @@
             <mat-select [(ngModel)]="type" (selectionChange)="filter('type', type)">
                 <mat-option *ngFor="let typ of typesAll" [value]="typ">{{ 'stats.typ.' + typ | translate }}</mat-option>
             </mat-select>
-        <!-- <input matInput type="text" [placeholder]="'stats.type' | translate" name="type" id="ident_cely"
+            <!-- <input matInput type="text" [placeholder]="'stats.type' | translate" name="type" id="ident_cely"
             (keyup.enter)="filter('type', type)" [(ngModel)]="type" /> -->
         </mat-form-field>
-        <button  *ngIf="type" matSuffix mat-icon-button>
+        <button *ngIf="type" matSuffix mat-icon-button>
             <mat-icon (click)="removeFilter('type')">close</mat-icon></button>
         <div *ngFor="let f of types">
             <a (click)="filter('type', f.name)">{{ 'stats.typ.' + f.name | translate }}</a> ({{ f.value }})
@@ -17,8 +42,8 @@
     <div class="app-table-cell">
         <h3>IP</h3>
         <mat-form-field>
-        <input matInput type="text" [placeholder]="'IP' | translate" name="ip" id="ident_cely"
-            (keyup.enter)="filter('ip', ip)" [(ngModel)]="ip" />
+            <input matInput type="text" [placeholder]="'IP' | translate" name="ip" id="ident_cely"
+                (keyup.enter)="filter('ip', ip)" [(ngModel)]="ip" />
             <mat-icon *ngIf="ip" matSuffix (click)="removeFilter('ip')">close</mat-icon>
         </mat-form-field>
         <div *ngFor="let f of ips">
@@ -28,8 +53,8 @@
     <div class="app-table-cell">
         <h3>{{ 'stats.user' | translate }}</h3>
         <mat-form-field>
-        <input matInput type="text" [placeholder]="'stats.user' | translate" name="user" id="user"
-            (keyup.enter)="filter('user', user)" [(ngModel)]="user" />
+            <input matInput type="text" [placeholder]="'stats.user' | translate" name="user" id="user"
+                (keyup.enter)="filter('user', user)" [(ngModel)]="user" />
             <mat-icon *ngIf="user" matSuffix (click)="removeFilter('user')">close</mat-icon>
         </mat-form-field>
         <div *ngFor="let f of users">
@@ -40,8 +65,8 @@
     <div class="app-table-cell">
         <h3>{{ 'stats.ident_cely' | translate }}</h3>
         <mat-form-field>
-        <input matInput type="text" [placeholder]="'stats.ident_cely' | translate" name="ident_cely" id="ident_cely"
-            (keyup.enter)="setIdentCely()" [(ngModel)]="ident_cely" />
+            <input matInput type="text" [placeholder]="'stats.ident_cely' | translate" name="ident_cely" id="ident_cely"
+                (keyup.enter)="setIdentCely()" [(ngModel)]="ident_cely" />
             <mat-icon *ngIf="ident_cely" matSuffix (click)="removeFilter('ident_cely')">close</mat-icon>
         </mat-form-field>
         <div *ngFor="let f of ids">
