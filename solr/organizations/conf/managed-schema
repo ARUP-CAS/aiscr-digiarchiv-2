@@ -134,7 +134,8 @@
   <field name="ico" type="string" indexed="true" stored="true"/> <!-- "{ico}" -->
   <field name="soucast" type="string" indexed="true" stored="true"/> <!-- "{soucast.ident_cely}" | "{soucast.nazev}" -->
   <field name="zanikla" type="string" indexed="true" stored="true"/> <!-- "{zanikla}" -->
-   
+  <field name="cteni_dokumentu" type="boolean" indexed="true" stored="true"/> 
+  
    <field name="text_all" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    
    <dynamicField name="*" type="string" multiValued="false"/>

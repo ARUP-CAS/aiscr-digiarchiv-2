@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ import org.json.JSONObject;
 public class Uzivatel implements FedoraModel {
 
     @Field
-    public String entity = "uzivatel"; 
+    public String entity = "uzivatel";
 
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
     @JacksonXmlProperty(localName = "ident_cely")
@@ -102,15 +103,18 @@ public class Uzivatel implements FedoraModel {
     @Field
     public String pristupnost;
 
+    @JacksonXmlProperty(localName = "cteni_dokumentu")
+    public boolean cteni_dokumentu;
+
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.setDateStampFromHistory(idoc, historie);
         IndexUtils.addVocabField(idoc, "organizace", organizace);
     }
-    
+
     @Override
-    public boolean isSearchable(){
+    public boolean isSearchable() {
         return true;
     }
 
@@ -127,6 +131,11 @@ public class Uzivatel implements FedoraModel {
         IndexUtils.setDateStampFromHistory(idoc, historie);
         return idoc;
 
+    }
+
+    public void setCteniDokumentu() {
+        // set cteni_dokumentu podle organizace
+        cteni_dokumentu = SolrSearcher.getOrganizace(organizace.getId()).optBoolean("cteni_dokumentu");
     }
 
     public void setPristupnost() {
@@ -160,7 +169,7 @@ public class Uzivatel implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        
+
 //-- A: nikdy
 //-- B-C: ident_cely = {user}.ident_cely
 //-- D-E: bez omezení

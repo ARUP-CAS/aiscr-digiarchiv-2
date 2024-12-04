@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Uzivatel;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -62,6 +63,7 @@ public class AuthService {
                     String xml = getUserInfo(new JSONObject(token).getString("token"));
                     Uzivatel uz = (Uzivatel) FedoraModel.parseXml(xml, Uzivatel.class);
                     uz.setPristupnost();
+                    uz.setCteniDokumentu();
                     ObjectMapper objectMapper = new ObjectMapper();
                     return new JSONObject(objectMapper.writeValueAsString(uz));
                 } else if (tokenJSON.has("non_field_errors")) {
