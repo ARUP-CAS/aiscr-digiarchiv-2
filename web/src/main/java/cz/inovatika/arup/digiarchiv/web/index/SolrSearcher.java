@@ -487,7 +487,7 @@ public class SolrSearcher {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
                     .setRows(1);
-            JSONObject jo = json(client, "organization", query);
+            JSONObject jo = json(client, "organizations", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             } else {
