@@ -14,6 +14,9 @@ export class CitationComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    if (this.result?.autor) {
+      this.result.autorFormatted = this.result.autor.join(' – ');
+    }
   }
 
 }
