@@ -166,8 +166,8 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   getFullId() {
-    // this.service.getId(this.result.ident_cely).subscribe((res: any) => {
-      //this.result = res.response.docs[0];
+    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+      this.result = res.response.docs[0];
       this.setVsize();
       this.result.valid_dokument = [];
       this.result.dokumentTemp = [];
@@ -176,7 +176,7 @@ export class AkceComponent implements OnInit, OnChanges {
       this.getProjekts();
       this.getExtZdroj();
       this.hasDetail = true;
-    //});
+    });
   }
 
   toggleDetail() {
