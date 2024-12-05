@@ -215,13 +215,16 @@ public class HandleServlet extends HttpServlet {
     private static boolean isAllowed(String id, JSONObject doc, JSONObject user) {
         if (id.contains("thumb") && !id.contains("page")) {
             return true;
-        }
+        } 
         
         String entity = doc.optString("entity");
         int stav = doc.optInt("stav");
         String docPr = doc.getString("pristupnost");
 
         String userPr = user.optString("pristupnost", "A");
+        if ("B".compareToIgnoreCase(userPr) < 0 && user.optBoolean("cteni_dokumentu")) {
+            userPr = "E";
+        }
         String userId = user.optString("ident_cely", "A");
         String userOrg = "none";
         if (user.has("organizace")) {

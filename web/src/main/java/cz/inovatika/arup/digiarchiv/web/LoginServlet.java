@@ -82,6 +82,18 @@ public class LoginServlet extends HttpServlet {
     }
 
     public static String pristupnost(HttpSession session) {
+        JSONObject user = (JSONObject) session.getAttribute("user");
+        String pristupnost = "A";
+        if (user != null && !user.has("error")) {
+            pristupnost = user.getString("pristupnost");
+            if ("B".compareToIgnoreCase(pristupnost) < 0 && user.optBoolean("cteni_dokumentu")) {
+                pristupnost = "E";
+            }
+        }
+        return pristupnost;
+    }
+
+    public static String pristupnostSimple(HttpSession session) {
         JSONObject ses = (JSONObject) session.getAttribute("user");
         String pristupnost = "A";
         if (ses != null && !ses.has("error")) {

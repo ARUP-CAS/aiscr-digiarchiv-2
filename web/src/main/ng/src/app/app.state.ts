@@ -295,9 +295,11 @@ export class AppState {
     if (pristupnost.toUpperCase() === 'A') {
       return true;
     } else if (this.logged) {
-      console.log(this.user)
       const sameOrg = this.user.organizace.id === organizace;
-      return this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
+      const orgCanRead = this.user.pristupnost.toUpperCase().localeCompare('C'.toUpperCase()) > -1 && this.user.cteni_dokumentu;
+      return orgCanRead ||
+             this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || 
+             ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
     } else {
       return false;
     }
