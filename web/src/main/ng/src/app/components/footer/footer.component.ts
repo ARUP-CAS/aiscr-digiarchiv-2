@@ -57,7 +57,9 @@ export class FooterComponent implements OnInit {
   templateUrl: 'consent.html'
 })
 export class ConsentSheet {
-  constructor(private _bottomSheetRef: MatBottomSheetRef<ConsentSheet>) {}
+  constructor(private _bottomSheetRef: MatBottomSheetRef<ConsentSheet>,
+    public state: AppState
+  ) {}
 
   consent(event: MouseEvent): void {
     this._bottomSheetRef.dismiss();
