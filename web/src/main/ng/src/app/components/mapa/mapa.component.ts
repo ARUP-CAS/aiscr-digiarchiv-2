@@ -470,7 +470,9 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.setPianId(e.target.pianId);
         });
         const pianInList = this.piansList.find(p => p.id === id);
-        mrk.bindTooltip(this.popUpHtml(id, presnost, pianInList.docIds));
+        if (pianInList) {
+          mrk.bindTooltip(this.popUpHtml(id, presnost, pianInList.docIds));
+        }
       } else {
         mrk.on('click', (e) => {
           this.setMarker(e.target.doc);
@@ -481,7 +483,10 @@ export class MapaComponent implements OnInit, OnDestroy {
     } else if (isPian) {
       mrk.docId.push(doc.ident_cely);
       const pianInList = this.piansList.find(p => p.id === id);
-      mrk.bindTooltip(this.popUpHtml(id, presnost, pianInList.docIds));
+      if (pianInList) {
+        mrk.bindTooltip(this.popUpHtml(id, presnost, pianInList.docIds));
+      }
+      
     }
     return mrk;
   }
