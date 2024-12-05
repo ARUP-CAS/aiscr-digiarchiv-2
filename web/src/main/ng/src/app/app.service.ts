@@ -53,7 +53,7 @@ export class AppService {
     //   panelClass: 'app-login-dialog'
     // });
 
-    const blob: Blob = new Blob([bibTex], {type: 'text/plain'});
+    const blob: Blob = new Blob([bibTex], { type: 'text/plain' });
     const fileName: string = id + '.bib';
     const objectUrl: string = URL.createObjectURL(blob);
     const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
@@ -61,7 +61,7 @@ export class AppService {
     a.href = objectUrl;
     a.download = fileName;
     document.body.appendChild(a);
-    a.click();        
+    a.click();
 
     document.body.removeChild(a);
     URL.revokeObjectURL(objectUrl);
@@ -102,7 +102,7 @@ export class AppService {
         return this.formatObdobi(value);
       }
       case 'dokument_kategorie_dokumentu': {
-        
+
         const hkey = 'dokument_kategorie_dokumentu.' + value;
         const t = this.translate.instant(hkey);
         if (t === hkey) {
@@ -130,7 +130,7 @@ export class AppService {
         }
       }
     }
-    
+
 
   }
 
@@ -162,14 +162,14 @@ export class AppService {
       message: [message]
     };
     const dialogRef = this.dialog.open(AlertDialogComponent, {
-         data,
-         width: '400px',
-         panelClass: 'app-alert-dialog'
+      data,
+      width: '400px',
+      panelClass: 'app-alert-dialog'
     });
-    
+
     dialogRef.afterOpened().subscribe(_ => {
       setTimeout(() => {
-         dialogRef.close();
+        dialogRef.close();
       }, duration)
     })
   }
@@ -181,11 +181,11 @@ export class AppService {
       message: [message]
     };
     const dialogRef = this.dialog.open(AlertDialogComponent, {
-         data,
-         width: '400px',
-         panelClass: 'app-alert-dialog'
+      data,
+      width: '400px',
+      panelClass: 'app-alert-dialog'
     });
-    
+
   }
 
   private handleError(error: HttpErrorResponse, me: any) {
@@ -198,7 +198,7 @@ export class AppService {
       // Forbiden. Redirect to login
       console.log("Service Unavailable");
       this.showErrorDialog('error', "Service Unavailable");
-      
+
     } else if (error.status === 403) {
       // Forbiden. Redirect to login
       console.log("Forbiden");
@@ -224,15 +224,15 @@ export class AppService {
     } else {
       const server = isPlatformBrowser(this.platformId) ? '' : this.config.amcr;
       return this.http.get<T>(`${server}api${url}`, options)
-      .pipe(map((r: any) => {
-        if (r.response?.status === -1) {
-          r.response.errors = { path: [{ errorMessage: r.response.errorMessage }] };
-        }
-        return r;
+        .pipe(map((r: any) => {
+          if (r.response?.status === -1) {
+            r.response.errors = { path: [{ errorMessage: r.response.errorMessage }] };
+          }
+          return r;
 
-      }))
-      .pipe(finalize(() => this.stopLoading()))
-      .pipe(catchError(err => this.handleError(err, this)));
+        }))
+        .pipe(finalize(() => this.stopLoading()))
+        .pipe(catchError(err => this.handleError(err, this)));
     }
 
   }
@@ -274,27 +274,27 @@ export class AppService {
     return this.get(`/search/check_relations`, params);
   }
 
-  getId(id: string, shouldLog: boolean = true): Observable<any > {
+  getId(id: string, shouldLog: boolean = true): Observable<any> {
     const params: HttpParams = new HttpParams()
-    .set('id', id)
-    .set('shouldLog', shouldLog);
+      .set('id', id)
+      .set('shouldLog', shouldLog);
     return this.get(`/search/id`, params);
   }
 
-  logViewer(id: string): Observable<any > {
+  logViewer(id: string): Observable<any> {
     const params: HttpParams = new HttpParams()
-    .set('id', id)
-    .set('type', 'viewer');
+      .set('id', id)
+      .set('type', 'viewer');
     return this.get(`/search/log`, params);
   }
 
   getIdAsChild(ids: string[], entity: string) {
     let params: HttpParams = new HttpParams()
-    .set('entity', entity);
+      .set('entity', entity);
     ids.forEach(id => {
       params = params.append('id', id);
     });
-    
+
     return this.get(`/search/id_as_child`, params);
   }
 
@@ -313,7 +313,7 @@ export class AppService {
     if (loc_rpt) {
       params = params.set('loc_rpt', loc_rpt);
     }
-    
+
     return this.get(`/search/geometrie`, params);
   }
 
@@ -342,7 +342,7 @@ export class AppService {
   getText(id: string): Observable<string> {
     const params: HttpParams = new HttpParams().set('id', id).set('lang', this.state.currentLang);
     return this.get(`/texts/get`, params, 'text')
-    .pipe(map((response: any) => response));
+      .pipe(map((response: any) => response));
   }
 
   getAkce(id: string) {
@@ -422,7 +422,7 @@ export class AppService {
       }));
   }
 
-  
+
 
   feedback(name: string, mail: string, text: string, ident_cely: string) {
     const url = '/feedback';
@@ -441,7 +441,7 @@ export class AppService {
 
   getLogged(wantsUser: boolean) {
     const url = '/user/islogged';
-    return this.get(url, new HttpParams().set('wantsUser', wantsUser+''));
+    return this.get(url, new HttpParams().set('wantsUser', wantsUser + ''));
   }
 
   login(user: string, pwd: string) {
@@ -471,17 +471,17 @@ export class AppService {
     if (params.has('vyber')) {
 
       // if (this.state.locationFilterEnabled) {
-        this.state.locationFilterEnabled = true;
-        const value = params.get('vyber');
+      this.state.locationFilterEnabled = true;
+      const value = params.get('vyber');
 
 
-        this.state.breadcrumbs.push(new Crumb('vyber', value, this.formatLocation(value)));
-        this.state.breadcrumbs.push(new Crumb('separator', '', ''));
+      this.state.breadcrumbs.push(new Crumb('vyber', value, this.formatLocation(value)));
+      this.state.breadcrumbs.push(new Crumb('separator', '', ''));
 
-        const loc_rpt = value.split(',');
-        const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
-        const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
-        this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
+      const loc_rpt = value.split(',');
+      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+      this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
 
       // }
     } else {
@@ -492,11 +492,11 @@ export class AppService {
     // this.config.urlFields.forEach(field => {
     //   if (params.has(field)) {
     params.keys.forEach(field => {
-      if (field.startsWith('f_') || 
-      this.config.urlFields.includes(field) ||
-      // this.config.dateFacets.includes(field) ||
-      // this.config.numberFacets.includes(field) ||
-      this.config.filterFields.find(ff => ff.field === field)) {
+      if (field.startsWith('f_') ||
+        this.config.urlFields.includes(field) ||
+        // this.config.dateFacets.includes(field) ||
+        // this.config.numberFacets.includes(field) ||
+        this.config.filterFields.find(ff => ff.field === field)) {
         let display = '';
         switch (field) {
           case 'obdobi_poradi': {
@@ -538,7 +538,7 @@ export class AppService {
             values.forEach(value => {
               const parts = value.split(':');
               const op = parts[parts.length - 1];
-              const val = value.substring(0,value.lastIndexOf(':'));
+              const val = value.substring(0, value.lastIndexOf(':'));
               if (filterField && filterField.type === 'number') {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
@@ -552,7 +552,7 @@ export class AppService {
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
           }
         }
-        
+
       }
     });
     this.state.breadcrumbs.pop();
@@ -625,9 +625,47 @@ export class AppService {
     this.state.setFacetChanged();
   }
 
+  getBoundsByResults() {
+    const lat = this.state.stats.lat;
+    const lng = this.state.stats.lng;
+    if (lat.max === lat.min) {
+      lat.min = lat.min - 0.05;
+      lat.max = lat.max + 0.05;
+      lng.min = lng.min - 0.05;
+      lng.max = lng.max + 0.05;
+    }
+    return lat.min + ',' + lng.min +
+      ',' + lat.max + ',' + lng.max;
+
+  }
+
+  getBoundsByDoc(result: any) {
+    let latMax = 0;
+    let latMin = 90;
+    let lngMax = 0;
+    let lngMin = 180;
+
+    // 50.66795366897923,13.808275906582654
+    result.loc_rpt.forEach(m => {
+      const latlng = m.split(',');
+      latMax = Math.max(latMax, latlng[0]);
+      latMin = Math.min(latMin, latlng[0]);
+      lngMax = Math.max(lngMax, latlng[1]);
+      lngMin = Math.min(lngMin, latlng[1]);
+
+    });
+
+    const southWest = L.latLng(latMin, lngMin);
+    const northEast = L.latLng(latMax, lngMax);
+    let bounds = L.latLngBounds(southWest, northEast);
+    return bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
+      ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
+
+  }
+
   showInMap(result: any, isPian = false) {
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;
-    this.windowRef.nativeWindow.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0,0);
+    this.windowRef.nativeWindow.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0, 0);
 
     this.state.isMapaCollapsed = false;
     const p: any = {};
@@ -644,30 +682,22 @@ export class AppService {
       p.vyber = null;
     } else {
       this.state.mapResult = result;
-      // const loc_rpt = result.loc_rpt[0].split(',');
-      // const lat =  parseFloat(loc_rpt[0]);
-      // const lng =  parseFloat(loc_rpt[1]);
+      // p.loc_rpt = this.getBoundsByDoc(result);
+      p.loc_rpt = this.getBoundsByResults();
 
-      let latMax = 0;
-      let latMin = 90;
-      let lngMax = 0;
-      let lngMin = 180;
+      // p.vyber = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
+      // ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
 
-      // 50.66795366897923,13.808275906582654
-      result.loc_rpt.forEach(m => {
-        const latlng = m.split(',');
-        latMax = Math.max(latMax, latlng[0]);
-        latMin = Math.min(latMin, latlng[0]);
-        lngMax = Math.max(lngMax, latlng[1]);
-        lngMin = Math.min(lngMin, latlng[1]);
-        
-      });
+      // bounds = L.latLngBounds(southWest, northEast).pad(3);
+      // p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
+      // ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
 
-      p.loc_rpt = '' + (latMin) + ',' + (lngMin ) +
-          ',' + (latMax) + ',' + (lngMax);
+
+      // p.loc_rpt = '' + (latMin) + ',' + (lngMin ) +
+      //     ',' + (latMax) + ',' + (lngMax);
       this.state.setMapResult(result, false);
     }
-    
+
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
 
     setTimeout(() => {

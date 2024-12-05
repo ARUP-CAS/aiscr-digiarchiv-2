@@ -340,7 +340,9 @@ export class MapaComponent implements OnInit, OnDestroy {
                   });
                 } else {
                     const pianInList = this.piansList.find(p => p.id === pian_id);
-                    pianInList.docIds.push(this.state.mapResult.ident_cely)
+                    if (!pianInList.docIds.includes(this.state.mapResult.ident_cely)) {
+                      pianInList.docIds.push(this.state.mapResult.ident_cely);
+                    }
                 }
               });
             } else {
@@ -563,7 +565,9 @@ export class MapaComponent implements OnInit, OnDestroy {
             }
           } else {
             const pianInList = this.piansList.find(p => p.id === pian_id);
-            pianInList.docIds.push(doc.ident_cely);
+            if (!pianInList.docIds.includes(doc.ident_cely)) {
+              pianInList.docIds.push(doc.ident_cely);
+            }
             let mrk = this.markerExists(pian_id);
             if (mrk) {
               mrk.docId = pianInList.docIds;
@@ -641,8 +645,6 @@ export class MapaComponent implements OnInit, OnDestroy {
           mrk.addTo(this.markers);
         });
       }
-
-
       ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
     }
 
@@ -670,17 +672,23 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     if (changed && ms.length > 0) {
       this.zoomingOnMarker = true;
-      // if (this.map.getZoom() < this.config.mapOptions.hitZoomLevel) {
-      if (ms.length === 1) {
-        this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
-      } else {
-        // set bound to all
-        // const southWest = L.latLng(latMin, lngMin);
-        // const northEast = L.latLng(latMax, lngMax);
-        // const bounds = L.latLngBounds(southWest, northEast);
-        // this.map.setBounds(bounds);
-        this.map.setView(ms[ms.length - 1].getLatLng());
-      }
+      if (this.map.getZoom() < this.config.mapOptions.hitZoomLevel) {
+      // if (ms.length === 1) {
+      //   setTimeout(() => {
+      //     this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
+      //   }, 2000)
+        
+      // } else {
+      //   // set bound to all
+      //   // const southWest = L.latLng(latMin, lngMin);
+      //   // const northEast = L.latLng(latMax, lngMax);
+      //   // const bounds = L.latLngBounds(southWest, northEast);
+      //   // this.map.setBounds(bounds);
+      //   this.map.setView(ms[ms.length - 1].getLatLng());
+      // }
+        setTimeout(() => {
+          this.map.setView(ms[ms.length - 1].getLatLng(), this.config.mapOptions.hitZoomLevel);
+        }, 400)};
 
     }
     if (!ms || ms.length === 0) {
@@ -708,6 +716,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   popUpHtml(id: string, presnost: string, ids: string[]) {
     const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
     const p = ids.length > 1 ? ids.length : ids[0];
+    // const p = ids.join(', ');
     return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + p + ')';
   }
 
@@ -741,9 +750,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
-
       //this.map.fitBounds(bounds);
-      this.map.fitBounds(bounds.pad(.3));
+      this.map.fitBounds(bounds.pad(2));
     } else if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('loc_rpt').split(',');
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
