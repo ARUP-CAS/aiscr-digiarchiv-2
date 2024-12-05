@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ public class LogAnalytics {
 
     public static final Logger LOGGER = Logger.getLogger(LogAnalytics.class.getName());
 
-    public static void log(HttpServletRequest request, String ident_cely, String type) {
+    public static void log(HttpServletRequest request, String ident_cely, String type, String entity) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             JSONObject user = LoginServlet.user(request);
             String ip = request.getRemoteAddr();
@@ -33,6 +34,7 @@ public class LogAnalytics {
             idoc.addField("user", user.optString("ident_cely", "anonym"));
             idoc.addField("ip", ip);
             idoc.addField("type", type);
+            idoc.addField("entity", entity);
             LOGGER.log(Level.FINE, "user:{0}; ip:{1}; ident_cely: {2}; type: {3}",
                     new String[]{user.optString("ident_cely", "anonym"),
                         ip, ident_cely, type});
@@ -51,23 +53,25 @@ public class LogAnalytics {
             SolrQuery query = new SolrQuery()
                     .setQuery("*")
                     .setFacet(true)
+                    .setRows(0)
                     .setFacetMinCount(1)
                     .addFacetField("user")
                     .addFacetField("ip")
                     .addFacetField("type")
+                    .addFacetField("entity")
                     .addFacetField("ident_cely")
                     .setParam("json.nl","arrntv");
             if (request.getParameter("ident_cely") != null) {
-                query.addFilterQuery("ident_cely:\"" + request.getParameter("ident_cely") + "\"");
+                query.addFilterQuery("ident_cely:" + request.getParameter("ident_cely").replaceAll("-", "\\-") + "");
             }
             if (request.getParameter("type") != null) {
                 query.addFilterQuery("type:\"" + request.getParameter("type") + "\"");
             }
             if (request.getParameter("user") != null) {
-                query.addFilterQuery("user:\"" + request.getParameter("user") + "\"");
+                query.addFilterQuery("user:" + request.getParameter("user").replaceAll("-", "\\-") + "");
             }
             if (request.getParameter("ip") != null) {
-                query.addFilterQuery("ip:\"" + request.getParameter("ip") + "\"");
+                query.addFilterQuery("ip:" + request.getParameter("ip") + "");
             }
             if (request.getParameter("date") != null) {
                 String[] parts = request.getParameter("date").split(",");
@@ -86,6 +90,14 @@ public class LogAnalytics {
                 String fq = "indextime:[" + from + " TO " + to + "]";
                 query.addFilterQuery(fq);
             }
+            
+            if (request.getParameter("entity") != null) {
+                // query.addFilterQuery("{!join fromIndex=entities to=ident_cely from=ident_cely}entity:\"" + request.getParameter("entity") + "\"");
+                query.addFilterQuery("entity:\"" + request.getParameter("entity") + "\"");
+            }
+            
+                    
+                    
             JSONObject ret = json(query, client, "logs");
             // client.close();
             return ret;

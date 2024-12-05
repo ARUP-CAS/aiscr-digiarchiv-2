@@ -780,6 +780,7 @@
     "ident_cely": "Identifikátor",
     "type": "Typ",
     "user": "Uživatel",
+    "entity": "Typ záznamů",
     "typ": {
       "id": "Zobrazení detailu záznamu",
       "viewer": "Zobrazení náhledů souborů záznamu",

@@ -202,7 +202,7 @@ public class SearchServlet extends HttpServlet {
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
                     
                     if (Boolean.parseBoolean(request.getParameter("shouldLog"))) {
-                        LogAnalytics.log(request, request.getParameter("id"), "id");
+                        LogAnalytics.log(request, request.getParameter("id"), "id", entity);
                     }
                     return jo.toString();
 
@@ -548,7 +548,7 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
                 JSONObject json = new JSONObject();
                 try {
-                    LogAnalytics.log(request, request.getParameter("id"), request.getParameter("type"));
+                    LogAnalytics.log(request, request.getParameter("id"), request.getParameter("type"), request.getParameter("entity"));
                 } catch (Exception ex) {
                     json.put("error", ex);
                 }

@@ -281,10 +281,11 @@ export class AppService {
     return this.get(`/search/id`, params);
   }
 
-  logViewer(id: string): Observable<any> {
+  logViewer(id: string, entity: string): Observable<any> {
     const params: HttpParams = new HttpParams()
       .set('id', id)
-      .set('type', 'viewer');
+      .set('type', 'viewer')
+      .set('entity', entity);
     return this.get(`/search/log`, params);
   }
 

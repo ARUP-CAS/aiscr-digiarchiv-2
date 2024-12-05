@@ -90,7 +90,7 @@ public class ImageServlet extends HttpServlet {
     private static JSONObject getDocument(String id) throws Exception {
         SolrQuery query = new SolrQuery("*") 
                 .addSort("datestamp", SolrQuery.ORDER.desc)
-                .setFields("soubor:[json]")
+                .setFields("entity,soubor:[json]")
                 .addFilterQuery("soubor_id:\"" + id + "\"")
                 .addFilterQuery("searchable:true");
 
@@ -100,9 +100,11 @@ public class ImageServlet extends HttpServlet {
             return null;
         }
         JSONArray soubor = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONArray("soubor");
+        String entity = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
         for (int i = 0; i< soubor.length(); i++) {
             JSONObject doc = soubor.getJSONObject(i);
             if (id.equals(doc.optString("id"))) {
+                doc.put("entity", entity);
                 return doc;
             }
         }
@@ -229,7 +231,7 @@ public class ImageServlet extends HttpServlet {
                         IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                         // InputStream is = getFromFedora(id, "orig");
                         // IOUtils.copy(is, response.getOutputStream());
-                        LogAnalytics.log(request, doc.getString("path"), "file");
+                        LogAnalytics.log(request, doc.getString("path"), "file", doc.getString("entity"));
                         is.close();
 
                     } catch (Exception ex) {

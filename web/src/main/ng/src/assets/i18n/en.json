@@ -780,6 +780,7 @@
     "ident_cely": "Identifier",
     "type": "Type",
     "user": "User",
+    "entity": "Record type",
     "typ": {
       "id": "Display record detail",
       "viewer": "Display record file thumbnails",

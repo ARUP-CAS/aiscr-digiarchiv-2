@@ -1,4 +1,10 @@
-<div class="app-container">
+<div class="app-display-table app-loading" *ngIf="loading" style="position: absolute; z-index:1000;">
+    <div class="app-table-cell app-clean-pd">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  </div>
+  
+  <div class="app-container">
     <div fxLayout="row" fxLayoutGap="32px" class="app-search-form" fxLayoutAlign="start center">
         <mat-form-field  >
             <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod"
@@ -59,6 +65,18 @@
         </mat-form-field>
         <div *ngFor="let f of users">
             <a (click)="filter('user', f.name)">{{ f.name }}</a> ({{ f.value }})
+        </div>
+
+    </div>
+    <div class="app-table-cell">
+        <h3>{{ 'stats.entity' | translate }}</h3>
+        <mat-form-field>
+            <input matInput type="text" [placeholder]="'stats.entity' | translate" name="entity" id="entity"
+                (keyup.enter)="filter('entity', entity)" [(ngModel)]="entity" />
+            <mat-icon *ngIf="entity" matSuffix (click)="removeFilter('entity')">close</mat-icon>
+        </mat-form-field>
+        <div *ngFor="let f of entities">
+            <a (click)="filter('entity', f.name)">{{ 'entities.' + f.name + '.title' | translate }}</a> ({{ f.value }})
         </div>
 
     </div>

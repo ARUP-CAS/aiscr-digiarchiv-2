@@ -17,14 +17,18 @@ export class StatsComponent implements OnInit {
   type: string;
   ip: string;
   user: string;
+  entity: string;
   ids: { name: string, type: string, value: number }[];
   types: { name: string, type: string, value: number }[];
   ips: { name: string, type: string, value: number }[];
   users: { name: string, type: string, value: number }[];
+  entities: { name: string, type: string, value: number }[];
   subs: any[] = [];
 
   datumod: Date;
   datumdo: Date;
+
+  loading = false;
 
   constructor(
     private datePipe: DatePipe,
@@ -80,6 +84,7 @@ export class StatsComponent implements OnInit {
   }
 
   search(params: Params) {
+    this.loading = true;
     this.ident_cely = params['ident_cely'];
     this.type = params['type'];
     this.ip = params['ip'];
@@ -96,14 +101,6 @@ export class StatsComponent implements OnInit {
     }
 
     const p: any = Object.assign({}, params);
-    // const p: any = {};
-    // if (this.ident_cely) {
-    //   p.ident_cely = this.ident_cely;
-    // }
-    // if (params['type']) {
-    //   p.type = params['type'];
-    // }
-
     p.page = 0;
     this.service.searchStats(p as HttpParams).subscribe((resp: any) => {
       this.types = resp.facet_counts.facet_fields.type;
@@ -116,6 +113,8 @@ export class StatsComponent implements OnInit {
         }
       })
       this.users = resp.facet_counts.facet_fields.user;
+      this.entities = resp.facet_counts.facet_fields.entity;
+      this.loading = false;
     });
   }
 
