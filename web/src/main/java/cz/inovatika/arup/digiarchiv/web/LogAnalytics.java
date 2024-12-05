@@ -2,6 +2,9 @@ package cz.inovatika.arup.digiarchiv.web;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -38,15 +41,15 @@ public class LogAnalytics {
             LOGGER.log(Level.FINE, "user:{0}; ip:{1}; ident_cely: {2}; type: {3}",
                     new String[]{user.optString("ident_cely", "anonym"),
                         ip, ident_cely, type});
-            client.add("logs", idoc, 1000);  
+            client.add("logs", idoc, 1000);
         } catch (SolrServerException | IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static JSONObject stats(HttpServletRequest request) {
-            NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-            dontMessWithSolr.setWriterType("json");
+        NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
+        dontMessWithSolr.setWriterType("json");
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost"))
                 .withResponseParser(dontMessWithSolr).build()) {
             // request.getParameter("id"), request.getParameter("type")
@@ -58,9 +61,24 @@ public class LogAnalytics {
                     .addFacetField("user")
                     .addFacetField("ip")
                     .addFacetField("type")
-                    .addFacetField("entity")
+                    .addFacetField("{!ex=entityF}entity")
                     .addFacetField("ident_cely")
-                    .setParam("json.nl","arrntv");
+                    .setParam("json.nl", "arrntv")
+                    .setParam("facet.range", "indextime")
+                    .setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR")
+                    .setParam("f.indextime.facet.range.end", "NOW")
+                    .setParam("f.indextime.facet.range.gap", "+1DAY");
+
+            if (request.getParameter("interval") != null) {
+                String gap = request.getParameter("interval");
+                if ("WEEK".equals(gap)) {
+                    gap = "7DAYS";
+                } else {
+                    gap = "1" + gap;
+                }
+                query.setParam("f.indextime.facet.range.gap", "+" + gap);
+            } 
+
             if (request.getParameter("ident_cely") != null) {
                 query.addFilterQuery("ident_cely:" + request.getParameter("ident_cely").replaceAll("-", "\\-") + "");
             }
@@ -90,14 +108,12 @@ public class LogAnalytics {
                 String fq = "indextime:[" + from + " TO " + to + "]";
                 query.addFilterQuery(fq);
             }
-            
+
             if (request.getParameter("entity") != null) {
                 // query.addFilterQuery("{!join fromIndex=entities to=ident_cely from=ident_cely}entity:\"" + request.getParameter("entity") + "\"");
-                query.addFilterQuery("entity:\"" + request.getParameter("entity") + "\"");
+                query.addFilterQuery("{!tag=entityF}entity:\"" + request.getParameter("entity") + "\"");
             }
-            
-                    
-                    
+
             JSONObject ret = json(query, client, "logs");
             // client.close();
             return ret;
@@ -106,8 +122,8 @@ public class LogAnalytics {
             return new JSONObject().put("error", ex);
         }
     }
-    
-    public static JSONObject json(SolrQuery query, Http2SolrClient client, String core) { 
+
+    public static JSONObject json(SolrQuery query, Http2SolrClient client, String core) {
         query.setRequestHandler("/select");
         String qt = query.get("qt");
         query.set("wt", "json");

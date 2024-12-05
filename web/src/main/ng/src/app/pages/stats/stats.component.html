@@ -27,6 +27,18 @@
             {{ 'facet.button.Aplikovat filtr' | translate }}
         </button>
     </div>
+
+    <div fxLayout="row" fxLayoutAlign="start start">
+        <div>
+            <h3>{{ 'stats.interval' | translate }}</h3>
+            <div [class.app-active]="interval === 'DAY'"><a (click)="setInterval('DAY')">{{ 'stats.interval_day' | translate }}</a></div>
+            <div [class.app-active]="interval === 'WEEK'"><a (click)="setInterval('WEEK')">{{ 'stats.interval_week' | translate }}</a></div>
+            <div [class.app-active]="interval === 'MONTH'"><a (click)="setInterval('MONTH')">{{ 'stats.interval_month' | translate }}</a></div>
+        </div>
+        <div fxFill>
+            <div *ngIf="!loading && series.length > 0" class="app-graph" echarts [options]="chartOptions" style="height: 350px;width:100%;" ></div>
+        </div>
+    </div>
 </div>
 
 <div class="app-display-table app-container">
@@ -70,11 +82,20 @@
     </div>
     <div class="app-table-cell">
         <h3>{{ 'stats.entity' | translate }}</h3>
+
         <mat-form-field>
-            <input matInput type="text" [placeholder]="'stats.entity' | translate" name="entity" id="entity"
-                (keyup.enter)="filter('entity', entity)" [(ngModel)]="entity" />
-            <mat-icon *ngIf="entity" matSuffix (click)="removeFilter('entity')">close</mat-icon>
+            <mat-select [(ngModel)]="entity" (selectionChange)="filter('entity', entity)">
+                <mat-option *ngFor="let e of entities" [value]="e.name">{{ 'entities.' + e.name + '.title' | translate }}</mat-option>
+            </mat-select>
         </mat-form-field>
+        <button *ngIf="entity" matSuffix mat-icon-button>
+            <mat-icon (click)="removeFilter('entity')">close</mat-icon></button>
+
+        <!-- <mat-form-field>
+            <input matInput type="text" [placeholder]="'stats.entity' | translate" name="entity" id="entity"
+                (keyup.enter)="filter('entity', entity)" [(ngModel)]="entity" [value]="'entities.' + entity + '.title' | translate" />
+            <mat-icon *ngIf="entity" matSuffix (click)="removeFilter('entity')">close</mat-icon>
+        </mat-form-field> -->
         <div *ngFor="let f of entities">
             <a (click)="filter('entity', f.name)">{{ 'entities.' + f.name + '.title' | translate }}</a> ({{ f.value }})
         </div>

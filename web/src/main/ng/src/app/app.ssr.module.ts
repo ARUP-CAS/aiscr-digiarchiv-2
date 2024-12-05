@@ -78,6 +78,14 @@ import { DokumentCastComponent } from './components/dokument-cast/dokument-cast.
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { StatsComponent } from './pages/stats/stats.component';
 
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
+import { BarChart } from 'echarts/charts';
+import { LineChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+echarts.use([TitleComponent, TooltipComponent, GridComponent, BarChart, LineChart, LegendComponent, CanvasRenderer]);
+
 registerLocaleData(localeCs, 'cs');
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -200,7 +208,11 @@ const providers: any[] = [
     AppMaterialModule,
     FlexLayoutModule,
     RecaptchaModule,
-    RecaptchaFormsModule
+    RecaptchaFormsModule,
+    NgxEchartsModule.forRoot({
+      // echarts: () => import('echarts'), 
+      echarts
+    })
   ],
   // entryComponents: [
   //   FileViewerComponent

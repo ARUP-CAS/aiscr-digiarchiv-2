@@ -785,6 +785,16 @@
       "id": "Display detail",
       "viewer": "Display thumbnail",
       "file": "Download file"
-    }
+    },
+    "graphTitle": {
+      "DAY": "Daily access count",
+      "WEEK": "Weekly access count",
+      "MONTH": "Monthly access count"
+    },
+    "graphName": "Access count",
+    "interval": "Interval",
+    "interval_day": "Day",
+    "interval_week": "Week",
+    "interval_month": "Month"
   }
 }

@@ -785,6 +785,16 @@
       "id": "Zobrazení detailu",
       "viewer": "Zobrazení náhledu",
       "file": "Stažení souboru"
-    }
+    },
+    "graphTitle": {
+      "DAY": "Počet přístupů denně",
+      "WEEK": "Počet přístupů týdně",
+      "MONTH": "Počet přístupů měsíčně"
+    },
+    "graphName": "Počet přístupů",
+    "interval": "Interval",
+    "interval_day": "Den",
+    "interval_week": "Tyden",
+    "interval_month": "Měsíc"
   }
 }

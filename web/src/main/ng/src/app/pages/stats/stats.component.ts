@@ -3,6 +3,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { EChartsOption } from 'echarts';
 import { AppService } from 'src/app/app.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class StatsComponent implements OnInit {
   ip: string;
   user: string;
   entity: string;
+  interval: string;
   ids: { name: string, type: string, value: number }[];
   types: { name: string, type: string, value: number }[];
   ips: { name: string, type: string, value: number }[];
@@ -30,6 +32,25 @@ export class StatsComponent implements OnInit {
 
   loading = false;
 
+  // insoType: string = 'O';
+  // extType: string;
+  series: any = [];
+  legend: any = [];
+
+  chartOptions: EChartsOption = {
+    tooltip: {},
+    xAxis: {
+    },
+    yAxis: {},
+    series: [],
+    legend: {
+      data: [],
+      bottom: 0,
+    },
+    color: ['rgb(0, 153, 168)', '#fac858'],
+  };
+
+
   constructor(
     private datePipe: DatePipe,
     private route: ActivatedRoute,
@@ -40,6 +61,7 @@ export class StatsComponent implements OnInit {
   ngOnInit(): void {
     this.setTitle();
     this.service.currentLang.subscribe(res => {
+      this.search(this.route.snapshot.queryParams);
       this.setTitle();
     });
     this.subs.push(this.route.queryParams.subscribe(val => {
@@ -53,6 +75,14 @@ export class StatsComponent implements OnInit {
 
   setTitle() {
     this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Stats');
+  }
+
+  setInterval(interval: string) {
+    
+    const params: any = {};
+    params.interval = interval;
+    params.page = 0;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
   setIdentCely() {
@@ -89,6 +119,8 @@ export class StatsComponent implements OnInit {
     this.type = params['type'];
     this.ip = params['ip'];
     this.user = params['user'];
+    this.interval = params['interval'] ? params['interval'] : 'DAY';
+    this.entity = params['entity'];
 
     if (params['date']) {
       const dates = params['date'].split(',');
@@ -114,8 +146,60 @@ export class StatsComponent implements OnInit {
       })
       this.users = resp.facet_counts.facet_fields.user;
       this.entities = resp.facet_counts.facet_fields.entity;
+      this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
       this.loading = false;
     });
+  }
+
+  setGraphData(counts: { name: string, type: string, value: number }[]) {
+    this.series = [];
+    const xAxisData: string[] = [];
+    const values: any[] = [];
+    let maxY = 0;
+    counts.forEach(element => {
+      values.push(element.value);
+      xAxisData.push(this.datePipe.transform(element.name, 'dd.MM.yyyy'));
+      maxY = Math.max(element.value, maxY);
+    });
+    this.series.push({
+      // source: 'source.name',
+      name: this.service.getTranslation('stats.graphName'),
+      field: 'indextime',
+      maxY: maxY,
+      minY: 0,
+      dataType: 'integer',
+      type: 'line',
+      lineStyle: {
+        width: 4,
+        shadowColor: 'rgba(0, 0, 0, 0.5)',
+        shadowBlur: 10,
+        shadowOffsetX: 5,
+        shadowOffsetY: 5
+      },
+      data: values,
+      
+    });
+    this.legend.push(this.service.getTranslation('stats.graphLegend'));
+
+    this.chartOptions.xAxis = {
+        data: xAxisData,
+        silent: false,
+        splitLine: {
+          show: true,
+        },
+        axisLabel: {
+          interval: this.interval !== 'DAY' ? 0 : null,
+        },
+      };
+    this.chartOptions.series = this.series;
+    this.chartOptions.legend = { data: this.legend, bottom: 0 };
+
+    let title = this.service.getTranslation('stats.graphTitle.' + (this.interval ? this.interval : 'DAY'));
+    this.chartOptions.title = {
+      text: title,
+      left: 'center'
+    };
+
   }
 
 }
