@@ -777,14 +777,14 @@
   "f_aktivita_intruze": "intruze",
 
   "stats": {
-    "ident_cely": "Identifikátor",
-    "type": "Typ",
+    "ident_cely": "ID",
+    "type": "Událost",
     "user": "Uživatel",
     "entity": "Typ záznamů",
     "typ": {
-      "id": "Zobrazení detailu záznamu",
-      "viewer": "Zobrazení náhledů souborů záznamu",
-      "file": "Stažení souborů"
+      "id": "Zobrazení detailu",
+      "viewer": "Zobrazení náhledu",
+      "file": "Stažení souboru"
     }
   }
 }

@@ -777,14 +777,14 @@
   "f_aktivita_intruze": "find intrusion",
 
   "stats": {
-    "ident_cely": "Identifier",
-    "type": "Type",
+    "ident_cely": "ID",
+    "type": "Event",
     "user": "User",
     "entity": "Record type",
     "typ": {
-      "id": "Display record detail",
-      "viewer": "Display record file thumbnails",
-      "file": "File download"
+      "id": "Display detail",
+      "viewer": "Display thumbnail",
+      "file": "Download file"
     }
   }
 }
