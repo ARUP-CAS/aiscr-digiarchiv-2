@@ -17,7 +17,6 @@
     "record": "Record "
   },
 
-
   "navbar": {
     "desc": {
       "logo_desc": "AMCR Digital Archive",
@@ -370,10 +369,10 @@
       "Organizace": "Organisation",
       "Katastr (okres)": "Cadastre (district)",
       "Popis": "Description",
-      "Počet archeologickych zaznamu": "Number of archeological records",
-      "Počet akcí": "Number of fieldwork events",
-      "Počet lokalit": "Number of sites",
-      "Počet souborů": "Number of files",
+      "Počet archeologickych zaznamu": "Fieldwork events and sites",
+      "Počet akcí": "Fieldwork events",
+      "Počet lokalit": "Sites",
+      "Počet souborů": "Files",
       "Jazyk": "Language",
       "Popis obsahu": "Content description",
       "Poznámka": "Note",
@@ -409,8 +408,8 @@
       "Nahrazuje NZ": "Replaces ER",
       "odlozena_nz": "Report postponed",
       "Lokalizace/okolnosti": "Location/circumstances",
-      "Počet dokumentů": "Number of documents",
-      "Počet projektů": "Number of projects",
+      "Počet dokumentů": "Documents",
+      "Počet projektů": "Projects",
       "Hlavní typ": "Primary type",
       "Vedlejší typ": "Secondary type",
       "Ostatní vedoucí": "Other researchers",
@@ -427,7 +426,7 @@
       "Projekt - typ": "Type",
       "Projekt - podnět": "Motivation",
       "Projekt - oznaceni_stavby": "Development permit ID",
-      "Počet samostatných nálezů": "Number of individual finds",
+      "Počet samostatných nálezů": "Finds",
       "Parcelní číslo": "Parcel number",
       "Plánované zahájení": "Scheduled launch",
       "Památková ochrana": "Heritage protection",
@@ -787,12 +786,12 @@
       "file": "Download file"
     },
     "graphTitle": {
-      "DAY": "Daily access count",
-      "WEEK": "Weekly access count",
-      "MONTH": "Monthly access count"
+      "DAY": "Accesses per day",
+      "WEEK": "Accesses per week",
+      "MONTH": "Accesses per month"
     },
-    "graphName": "Access count",
-    "interval": "Interval",
+    "graphName": "User access count",
+    "interval": "Displayed interval",
     "interval_day": "Day",
     "interval_week": "Week",
     "interval_month": "Month"
