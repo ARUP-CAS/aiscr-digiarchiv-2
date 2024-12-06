@@ -369,10 +369,10 @@
       "Organizace": "Organizace",
       "Katastr (okres)": "Katastr (okres)",
       "Popis": "Popis",
-      "Počet archeologickych zaznamu": "Počet archeologických záznamů",
-      "Počet akcí": "Počet akcí",
-      "Počet lokalit": "Počet lokalit",
-      "Počet souborů": "Počet souborů",
+      "Počet archeologickych zaznamu": "Akcí a lokalit",
+      "Počet akcí": "Akcí",
+      "Počet lokalit": "Lokalit",
+      "Počet souborů": "Souborů",
       "Jazyk": "Jazyk",
       "Popis obsahu": "Popis obsahu",
       "Poznámka": "Poznámka",
@@ -408,9 +408,9 @@
       "Nahrazuje NZ": "Nahrazuje NZ",
       "odlozena_nz": "Odložená NZ",
       "Lokalizace/okolnosti": "Lokalizace/okolnosti",
-      "Počet dokumentů": "Počet dokumentů",
-      "Počet projektů": "Počet projektů",
-      "Počet 3D dokumentů": "Počet 3D dokumentů",
+      "Počet dokumentů": "Dokumentů",
+      "Počet projektů": "Projektů",
+      "Počet 3D dokumentů": "3D modelů",
       "Hlavní typ": "Hlavní typ",
       "Vedlejší typ": "Vedlejší typ",
       "Ostatní vedoucí": "Ostatní vedoucí",
@@ -427,7 +427,7 @@
       "Projekt - typ": "Typ",
       "Projekt - podnět": "Podnět",
       "Projekt - oznaceni_stavby": "Označení stavby",
-      "Počet samostatných nálezů": "Počet samostatných nálezů",
+      "Počet samostatných nálezů": "Samostatných nálezů",
       "Parcelní číslo": "Parcelní číslo",
       "Plánované zahájení": "Plánované zahájení",
       "Památková ochrana": "Památková ochrana",
@@ -743,6 +743,21 @@
     "ext_zdroj": {
       "title": "Externí zdroje",
       "desc": "Bibliografické odkazy na externí zdroje informací o evidovaných archeologických akcích a lokalitách."
+    },
+    "adb": {
+      "title": "Archeologický dokumentační bod"
+    },
+    "dokumentacni_jednotka": {
+      "title": "Dokumentační jednotka"
+    },
+    "Komponenta": {
+      "title": "Komponenta"
+    },
+    "vyskovy_bod": {
+      "title": "Výškový bod"
+    },
+    "dokument_cast": {
+      "title": "Obsahová část dokumentu"
     }
   },
 
@@ -780,19 +795,19 @@
     "ident_cely": "ID",
     "type": "Událost",
     "user": "Uživatel",
-    "entity": "Typ záznamů",
+    "entity": "Typ záznamu",
     "typ": {
       "id": "Zobrazení detailu",
       "viewer": "Zobrazení náhledu",
       "file": "Stažení souboru"
     },
     "graphTitle": {
-      "DAY": "Počet přístupů denně",
-      "WEEK": "Počet přístupů týdně",
-      "MONTH": "Počet přístupů měsíčně"
+      "DAY": "Přístupů denně",
+      "WEEK": "Přístupů týdně",
+      "MONTH": "Přístupů měsíčně"
     },
-    "graphName": "Počet přístupů",
-    "interval": "Interval",
+    "graphName": "Počet uživatelských přístupů",
+    "interval": "Zobrazený interval",
     "interval_day": "Den",
     "interval_week": "Tyden",
     "interval_month": "Měsíc"
