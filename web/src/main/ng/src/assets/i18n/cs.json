@@ -745,19 +745,19 @@
       "desc": "Bibliografické odkazy na externí zdroje informací o evidovaných archeologických akcích a lokalitách."
     },
     "adb": {
-      "title": "Archeologický dokumentační bod"
+      "title": "Archeologické dokumentační body"
     },
     "dokumentacni_jednotka": {
-      "title": "Dokumentační jednotka"
+      "title": "Dokumentační jednotky"
     },
     "Komponenta": {
-      "title": "Komponenta"
+      "title": "Komponenty"
     },
     "vyskovy_bod": {
-      "title": "Výškový bod"
+      "title": "Výškové body"
     },
     "dokument_cast": {
-      "title": "Obsahová část dokumentu"
+      "title": "Obsahové část dokumentů"
     }
   },
 

@@ -745,19 +745,19 @@
       "desc": "Bibliographic references to external sources of information on recorded archaeological fieldwork events and sites."
     },
     "adb": {
-      "title": "Archaeological Documentation Point"
+      "title": "Archaeological Documentation Points"
     },
     "dokumentacni_jednotka": {
-      "title": "Documentation Unit"
+      "title": "Documentation Units"
     },
     "Komponenta": {
-      "title": "Component"
+      "title": "Components"
     },
     "vyskovy_bod": {
-      "title": "Elevation Point"
+      "title": "Elevation Points"
     },
     "dokument_cast": {
-      "title": "Document Content Part"
+      "title": "Document Content Parts"
     }
   },
 
