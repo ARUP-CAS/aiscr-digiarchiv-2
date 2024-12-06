@@ -810,6 +810,7 @@
     "interval": "Displayed interval",
     "interval_day": "Day",
     "interval_week": "Week",
-    "interval_month": "Month"
+    "interval_month": "Month",
+    "id_count": "showing {{count}} of {{total}}"
   }
 }

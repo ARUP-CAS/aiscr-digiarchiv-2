@@ -33,6 +33,12 @@
     <button mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
       <mat-icon>feedback</mat-icon>
     </button>
+    <a mat-flat-button  
+      target="stats"
+      routerLink="/stats" [queryParams]="{ident_cely: result.ident_cely}"
+      [matTooltip]="'navbar.desc.stats' | translate">
+      <mat-icon>query_stats</mat-icon>
+    </a>
     <button mat-flat-button *ngIf="!isDocumentDialogOpen && !inDocument" (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
       {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
     </button>
@@ -42,10 +48,4 @@
     <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false" *ngIf="state.itemView === 'col' && isDocumentDialogOpen && !inDocument">
       {{ 'card.button.Skrýt detail' | translate }}
     </button>
-    <a mat-flat-button *ngIf="state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')"  
-      target="stats"
-      routerLink="/stats" [queryParams]="{ident_cely: result.ident_cely}"
-      [matTooltip]="'navbar.desc.stats' | translate">
-      <mat-icon>query_stats</mat-icon>
-    </a>
   </div>
