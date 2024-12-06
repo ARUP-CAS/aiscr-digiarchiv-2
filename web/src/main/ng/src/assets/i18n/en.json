@@ -410,6 +410,7 @@
       "Lokalizace/okolnosti": "Location/circumstances",
       "Počet dokumentů": "Documents",
       "Počet projektů": "Projects",
+      "Počet 3D dokumentů": "3D models",
       "Hlavní typ": "Primary type",
       "Vedlejší typ": "Secondary type",
       "Ostatní vedoucí": "Other researchers",
@@ -742,6 +743,21 @@
     "ext_zdroj": {
       "title": "External Sources",
       "desc": "Bibliographic references to external sources of information on recorded archaeological fieldwork events and sites."
+    },
+    "adb": {
+      "title": "Archaeological Documentation Point"
+    },
+    "dokumentacni_jednotka": {
+      "title": "Documentation Unit"
+    },
+    "Komponenta": {
+      "title": "Component"
+    },
+    "vyskovy_bod": {
+      "title": "Elevation Point"
+    },
+    "dokument_cast": {
+      "title": "Document Content Part"
     }
   },
 

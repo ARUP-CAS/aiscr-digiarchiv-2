@@ -743,6 +743,21 @@
     "ext_zdroj": {
       "title": "Externí zdroje",
       "desc": "Bibliografické odkazy na externí zdroje informací o evidovaných archeologických akcích a lokalitách."
+    },
+    "adb": {
+      "title": "Archeologický dokumentační bod"
+    },
+    "dokumentacni_jednotka": {
+      "title": "Dokumentační jednotka"
+    },
+    "Komponenta": {
+      "title": "Komponenta"
+    },
+    "vyskovy_bod": {
+      "title": "Výškový bod"
+    },
+    "dokument_cast": {
+      "title": "Obsahová část dokumentu"
     }
   },
 
