@@ -269,7 +269,12 @@ public class FedoraHarvester {
                 }
                 id = id.split("/")[0];
                 // LOGGER.log(Level.INFO, "Updating item  {0} ", id);
-                processRecord(id, withRelated);
+                try {
+                    processRecord(id, withRelated);
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, "Error processing {0}", id);
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

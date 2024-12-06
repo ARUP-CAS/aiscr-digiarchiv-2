@@ -376,11 +376,10 @@ export class MapaComponent implements OnInit, OnDestroy {
           break;
         }
         case 'heat': {
-          // this.setMarkersData(true);
-          this.state.loading = false;
           setTimeout(() => {
             if (this.state.mapResult) {
               this.hitMarker(this.state.mapResult);
+              // this.state.loading = false;
             }
           }, 100);
           break;
@@ -444,7 +443,15 @@ export class MapaComponent implements OnInit, OnDestroy {
             pianInList.typ = pian.typ;
             const mrk = this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.pian_presnost, pian.typ, doc, pian.pian_chranene_udaje);
             mrk.addTo(this.markers);
-            //this.addShape(mrk.pianId, mrk.pianPresnost, mrk.docId.length);
+            
+            // if (this.showType !== 'heat') {
+            //   this.hitMarker(doc);
+            // } else {
+            //   // Dame cas kreslit heatmap
+            //   setTimeout(() => {
+            //     this.hitMarker(doc);
+            //   }, 5000)
+            // }
           });
         }
       });
@@ -644,13 +651,13 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     if (!ms || ms.length === 0) {
       this.addMarkerByResult(res);
-
-      if (this.showType !== 'heat') {
-        this.markersList.forEach(mrk => {
-          mrk.addTo(this.markers);
-        });
-      }
-      ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
+      return;
+      // if (this.showType !== 'heat') {
+      //   this.markersList.forEach(mrk => {
+      //     mrk.addTo(this.markers);
+      //   });
+      // } 
+      // ms = this.markersList.filter(mrk => mrk.docId.includes(docId));
     }
 
     let latMax = 0;
@@ -951,7 +958,12 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.heatmapLayer = new HeatmapOverlay(this.config.mapOptions.heatmapOptions);
     this.heatmapLayer.setData(this.data);
     this.map.addLayer(this.heatmapLayer);
-    this.state.loading = false;
+    setTimeout(() => {
+      if (this.state.mapResult) {
+        this.hitMarker(this.state.mapResult);
+      }
+      this.state.loading = false;
+    }, 3000);
   }
 
   addShape2(ident_cely: string, presnost: string, ids: string[]) {
