@@ -3,10 +3,12 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-        {{ 'card.panelTitle.Archeologický dokumentační bod' | translate }}&#160;
-        <a *ngIf="isChild" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
-        <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
-        <span *ngIf="!isChild" class="app-ident-format">{{ result.ident_cely }}</span>
+        <div fxFlex>
+          {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;
+          <span *ngIf="!isChild" >{{ result.ident_cely }}</span>
+          <a *ngIf="isChild" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+          <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
+        </div>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div *ngIf="result.adb_typ_sondy">
@@ -84,7 +86,9 @@
     <mat-card-header>
       <mat-card-title fxLayout="row" fxLayoutGap="16px">
         <div fxFlex>
-          {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+          {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;
+          <span>{{ result.ident_cely }}</span>
+          <!-- <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a> -->
           <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
         </div>
       </mat-card-title>
