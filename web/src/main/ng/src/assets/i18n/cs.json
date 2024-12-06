@@ -792,7 +792,7 @@
   "f_aktivita_intruze": "intruze",
 
   "stats": {
-    "ident_cely": "ID",
+    "ident_cely": "Přehled identifikátorů",
     "type": "Událost",
     "user": "Uživatel",
     "entity": "Typ záznamu",
@@ -810,6 +810,7 @@
     "interval": "Zobrazený interval",
     "interval_day": "Den",
     "interval_week": "Tyden",
-    "interval_month": "Měsíc"
+    "interval_month": "Měsíc",
+    "id_count": "zobrazeno {{count}} z {{total}}"
   }
 }

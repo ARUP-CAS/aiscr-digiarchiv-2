@@ -11,7 +11,7 @@
         <mat-card *ngIf="result.entity === 'pian' || result.entity === 'adb' || result.entity === 'let' || result.entity === 'dok_jednotka' || result.entity === 'komponenta' || result.entity === 'ext_zdroj'">
           <mat-card-content>
             <app-pian *ngIf="result.entity === 'pian'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
-            <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-adb>
+            <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
             <app-let *ngIf="result.entity === 'let'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
             <app-dok-jednotka *ngIf="result.entity === 'dok_jednotka'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
             <app-komponenta *ngIf="result.entity === 'komponenta'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>

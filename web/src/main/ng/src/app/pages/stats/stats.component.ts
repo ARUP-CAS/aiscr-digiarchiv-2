@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { AppService } from 'src/app/app.service';
+import { AppState } from 'src/app/app.state';
 
 @Component({
   selector: 'app-stats',
@@ -13,6 +14,7 @@ import { AppService } from 'src/app/app.service';
 })
 export class StatsComponent implements OnInit {
 
+  totalIds: number;
   typesAll = ['id', 'viewer', 'file'];
   ident_cely: string;
   type: string;
@@ -56,6 +58,7 @@ export class StatsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private titleService: Title,
+    public state: AppState,
     private service: AppService) { }
 
   ngOnInit(): void {
@@ -78,7 +81,7 @@ export class StatsComponent implements OnInit {
   }
 
   setInterval(interval: string) {
-    
+
     const params: any = {};
     params.interval = interval;
     params.page = 0;
@@ -101,7 +104,7 @@ export class StatsComponent implements OnInit {
 
   filter(field: string, value: string) {
     const params: any = {};
-    params[field] = value;
+    params[field] = value ? value : undefined;
     params.page = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
@@ -138,17 +141,23 @@ export class StatsComponent implements OnInit {
       this.types = resp.facet_counts.facet_fields.type;
       this.ips = resp.facet_counts.facet_fields.ip;
       this.ids = resp.facet_counts.facet_fields.ident_cely;
-      const prefix = 'rest/AMCR/record/';
-      this.ids.forEach(id => {
-        if (id.name.startsWith(prefix)) {
-          id.name = id.name.substring(prefix.length)
-        }
-      })
+
       this.users = resp.facet_counts.facet_fields.user;
       this.entities = resp.facet_counts.facet_fields.entity;
       this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
+
+      this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
       this.loading = false;
     });
+  }
+
+  prefix = 'rest/AMCR/record/';
+  formatId(id: string) {
+
+    if (id.startsWith(this.prefix)) {
+      return id.substring(this.prefix.length)
+    }
+    return id;
   }
 
   setGraphData(counts: { name: string, type: string, value: number }[]) {
@@ -177,20 +186,20 @@ export class StatsComponent implements OnInit {
         shadowOffsetY: 5
       },
       data: values,
-      
+
     });
     this.legend.push(this.service.getTranslation('stats.graphLegend'));
 
     this.chartOptions.xAxis = {
-        data: xAxisData,
-        silent: false,
-        splitLine: {
-          show: true,
-        },
-        axisLabel: {
-          interval: this.interval !== 'DAY' ? 0 : null,
-        },
-      };
+      data: xAxisData,
+      silent: false,
+      splitLine: {
+        show: true,
+      },
+      axisLabel: {
+        interval: this.interval !== 'DAY' ? 0 : null,
+      },
+    };
     this.chartOptions.series = this.series;
     this.chartOptions.legend = { data: this.legend, bottom: 0 };
 

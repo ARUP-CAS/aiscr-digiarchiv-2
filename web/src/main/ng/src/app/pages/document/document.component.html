@@ -41,7 +41,7 @@
         <app-externi-zdroj *ngIf="result.entity === 'ext_zdroj'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
         <!-- <mat-card *ngIf="result.entity === 'adb' || result.entity === 'dokumentacni_jednotka' || result.entity === 'komponenta' || result.entity === 'komponenta_dokument' || result.entity === 'vyskovy_bod'">
           <mat-card-content> -->
-            <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-adb>
+            <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
             <app-vyskovy-bod *ngIf="result.entity === 'vyskovy_bod'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
             <app-dok-jednotka *ngIf="result.entity === 'dokumentacni_jednotka'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
             <app-komponenta *ngIf="result.entity === 'komponenta'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>

@@ -436,20 +436,6 @@ public class SearchServlet extends HttpServlet {
                 PIANSearcher searcher = new PIANSearcher();
                 JSONObject jo = searcher.getMapPians(request);
                 return jo.toString();
-
-//        PIANSearcher searcher = new PIANSearcher();
-//        JSONObject ret = new JSONObject();
-//        JSONArray docs = searcher.getMapPians(request).getJSONObject("response").getJSONArray("docs");
-//        for (int i = 0; i < docs.length(); i++) {
-//          JSONObject doc = docs.getJSONObject(i);
-//          JSONObject pian = doc.getJSONObject("pian");
-//          String pianId =  pian.getString("ident_cely");
-//          if (ret.has(pianId)) {
-//            
-//          }
-//          ret.put(pianId, pian);
-//        }
-//        return ret.toString();
             }
         },
 //        GETHESLAR {

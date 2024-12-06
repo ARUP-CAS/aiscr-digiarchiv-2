@@ -165,6 +165,7 @@ public class AkceSearcher implements EntitySearcher {
                 doc.remove("akce_projekt");
             }
         }
+        addOkresy(jo);
     }
 
     @Override

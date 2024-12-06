@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<div class="app-display-table app-container">
+<div class="app-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="32px">
     <div class="app-table-cell">
         <h3>{{ 'stats.type' | translate }}</h3>
         <mat-form-field>
@@ -56,29 +56,6 @@
         <div *ngFor="let f of types">
             <a (click)="filter('type', f.name)">{{ 'stats.typ.' + f.name | translate }}</a> ({{ f.value }})
         </div>
-    </div>
-    <div class="app-table-cell">
-        <h3>IP</h3>
-        <mat-form-field>
-            <input matInput type="text" [placeholder]="'IP' | translate" name="ip" id="ident_cely"
-                (keyup.enter)="filter('ip', ip)" [(ngModel)]="ip" />
-            <mat-icon *ngIf="ip" matSuffix (click)="removeFilter('ip')">close</mat-icon>
-        </mat-form-field>
-        <div *ngFor="let f of ips">
-            <a (click)="filter('ip', f.name)">{{ f.name }}</a> ({{ f.value }})
-        </div>
-    </div>
-    <div class="app-table-cell">
-        <h3>{{ 'stats.user' | translate }}</h3>
-        <mat-form-field>
-            <input matInput type="text" [placeholder]="'stats.user' | translate" name="user" id="user"
-                (keyup.enter)="filter('user', user)" [(ngModel)]="user" />
-            <mat-icon *ngIf="user" matSuffix (click)="removeFilter('user')">close</mat-icon>
-        </mat-form-field>
-        <div *ngFor="let f of users">
-            <a (click)="filter('user', f.name)">{{ f.name }}</a> ({{ f.value }})
-        </div>
-
     </div>
     <div class="app-table-cell">
         <h3>{{ 'stats.entity' | translate }}</h3>
@@ -101,15 +78,41 @@
         </div>
 
     </div>
+    <div *ngIf="state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')"  class="app-table-cell">
+        <h3>IP</h3>
+        <mat-form-field>
+            <input matInput type="text" [placeholder]="'IP' | translate" name="ip" id="ident_cely"
+                (keyup.enter)="filter('ip', ip)" [(ngModel)]="ip" />
+            <mat-icon *ngIf="ip" matSuffix (click)="removeFilter('ip')">close</mat-icon>
+        </mat-form-field>
+        <div *ngFor="let f of ips">
+            <a (click)="filter('ip', f.name)">{{ f.name }}</a> ({{ f.value }})
+        </div>
+    </div>
+    <div *ngIf="state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')"  class="app-table-cell">
+        <h3>{{ 'stats.user' | translate }}</h3>
+        <mat-form-field>
+            <input matInput type="text" [placeholder]="'stats.user' | translate" name="user" id="user"
+                (keyup.enter)="filter('user', user)" [(ngModel)]="user" />
+            <mat-icon *ngIf="user" matSuffix (click)="removeFilter('user')">close</mat-icon>
+        </mat-form-field>
+        <div *ngFor="let f of users">
+            <a (click)="filter('user', f.name)">{{ f.name }}</a> ({{ f.value }})
+        </div>
+
+    </div>
     <div class="app-table-cell">
-        <h3>{{ 'stats.ident_cely' | translate }}</h3>
+        
+        <h3>{{ 'stats.ident_cely' | translate }} <span *ngIf="ids" >({{ 'stats.id_count' | translate : {count: ids.length, total: totalIds} }})</span></h3>
         <mat-form-field>
             <input matInput type="text" [placeholder]="'stats.ident_cely' | translate" name="ident_cely" id="ident_cely"
                 (keyup.enter)="setIdentCely()" [(ngModel)]="ident_cely" />
             <mat-icon *ngIf="ident_cely" matSuffix (click)="removeFilter('ident_cely')">close</mat-icon>
         </mat-form-field>
-        <div *ngFor="let f of ids">
-            <a (click)="filter('ident_cely', f.name)">{{ f.name }}</a> ({{ f.value }})
+        <div style="max-height:200px; overflow:scroll;">
+            <div *ngFor="let f of ids">
+                <a (click)="filter('ident_cely', f.name)">{{ formatId(f.name) }}</a> ({{ f.value }})
+            </div>
         </div>
     </div>
 </div>

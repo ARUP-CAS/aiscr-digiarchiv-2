@@ -58,17 +58,23 @@ public class LogAnalytics {
                     .setFacet(true)
                     .setRows(0)
                     .setFacetMinCount(1)
-                    .addFacetField("user")
-                    .addFacetField("ip")
                     .addFacetField("type")
                     .addFacetField("{!ex=entityF}entity")
                     .addFacetField("ident_cely")
+                    .setParam("stats.field", "{!countDistinct=true}ident_cely")
                     .setParam("json.nl", "arrntv")
                     .setParam("facet.range", "indextime")
                     .setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR")
                     .setParam("f.indextime.facet.range.end", "NOW")
                     .setParam("f.indextime.facet.range.gap", "+1DAY");
+            
+            if (LoginServlet.pristupnostSimple(request.getSession()).compareToIgnoreCase("C") > 0) {
+               query.addFacetField("user")
+                    .addFacetField("ip");
+                
+            }
 
+            query.set("stats", "true");
             if (request.getParameter("interval") != null) {
                 String gap = request.getParameter("interval");
                 if ("WEEK".equals(gap)) {
@@ -86,10 +92,10 @@ public class LogAnalytics {
                 query.addFilterQuery("type:\"" + request.getParameter("type") + "\"");
             }
             if (request.getParameter("user") != null) {
-                query.addFilterQuery("user:" + request.getParameter("user").replaceAll("-", "\\-") + "");
+                query.addFilterQuery("user:" + request.getParameter("user").replaceAll("-", "\\-").replaceAll("/", "%2F") + "");
             }
             if (request.getParameter("ip") != null) {
-                query.addFilterQuery("ip:" + request.getParameter("ip") + "");
+                query.addFilterQuery("ip:" + request.getParameter("ip").replaceAll(":", "\\\\:") + "");
             }
             if (request.getParameter("date") != null) {
                 String[] parts = request.getParameter("date").split(",");

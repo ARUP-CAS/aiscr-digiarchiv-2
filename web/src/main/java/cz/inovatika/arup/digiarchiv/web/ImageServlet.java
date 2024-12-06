@@ -224,7 +224,9 @@ public class ImageServlet extends HttpServlet {
                         response.setHeader("Content-Disposition", "filename=" + doc.getString("nazev"));
                         
                         String url = doc.getString("path") + "/orig";
-                        url = url.substring(url.indexOf("record"));
+                        if ( url.contains("record")) {
+                            url = url.substring(url.indexOf("record"));
+                        }
                         InputStream is = FedoraUtils.requestInputStream(url);
                         FileUtils.copyInputStreamToFile(is, f);
                         LOGGER.log(Level.INFO, "bytes received: {0}", f.length());

@@ -120,6 +120,7 @@ public class LokalitaSearcher implements EntitySearcher {
                 doc.remove("az_projekt");
             }
         }
+        addOkresy(jo);
     }
 
     @Override
