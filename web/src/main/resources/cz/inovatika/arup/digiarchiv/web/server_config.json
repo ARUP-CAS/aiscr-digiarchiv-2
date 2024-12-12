@@ -1,6 +1,5 @@
 {
     "solrhost": "http://localhost:8983/solr/",
-    "solrRels": "http://localhost:8983/solr/",
 
     "OAI": {
         "baseUrl": "https://api.aiscr.cz", 
