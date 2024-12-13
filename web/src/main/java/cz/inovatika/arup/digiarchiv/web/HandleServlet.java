@@ -92,7 +92,7 @@ public class HandleServlet extends HttpServlet {
         }
     }
 
-    private static void getPdfPage(JSONObject soubor, String page, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private static boolean getPdfPage(JSONObject soubor, String page, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         try (OutputStream out = response.getOutputStream()) {
             String id = soubor.getString("id");
@@ -108,16 +108,20 @@ public class HandleServlet extends HttpServlet {
                         response.setHeader("Content-Disposition", "attachment; filename=" + filename + "_" + page + ".jpg");
                         BufferedImage bi = ImageIO.read(f);
                         ImageIO.write(bi, "jpg", out);
+                        return true;
                     } else {
                         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                         LOGGER.log(Level.WARNING, "File does not exist in {0}. ", fname);
+                        return false;
                     }
 
                 } catch (Exception ex) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     LOGGER.log(Level.SEVERE, null, ex);
+                    return false;
                 }
             }
+            return false;
         }
     }
 
@@ -168,13 +172,20 @@ public class HandleServlet extends HttpServlet {
                     LOGGER.log(Level.WARNING, "{0} not allowed", id);
                     return false;
                 }
-
+ 
                 String mime = doc.optString("mimetype");
-                if (id.contains("page") && mime.contains("pdf")) {
+                if (id.contains("page")) {
                     String page = id.substring(id.lastIndexOf("/") + 1);
-                    getPdfPage(doc, page, request, response);
-                    return false;
+                    if (mime.contains("pdf")) {
+                        boolean success = getPdfPage(doc, page, request, response);
+                        return success;
+                    } else if (!"1".equals(page)) {
+                        LOGGER.log(Level.WARNING, "Image should have page 1");
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        return false;
+                    }
                 }
+                
 
                 String filename = doc.getString("nazev");
 
