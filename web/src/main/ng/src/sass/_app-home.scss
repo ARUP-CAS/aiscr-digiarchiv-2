@@ -68,9 +68,22 @@ app-home {
         }
       }
     }
-    
+
+    // split mat-card-actions into 2 lines
+    @media only screen and (min-width: 960px) and (max-width: 1159px) {
+      .mat-card {
+        &.app-card-entity {
+          .mat-card-actions {
+            span {
+              display: block;
+            }
+          }
+        }
+      }
+    }
 
     .mat-card {
+      min-height: 112px;
       @extend .app-row-gap-32, .app-font-family-rc;
 
       &.app-doctype-0,
