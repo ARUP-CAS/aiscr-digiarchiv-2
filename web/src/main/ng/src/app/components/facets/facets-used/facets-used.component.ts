@@ -44,6 +44,7 @@ export class FacetsUsedComponent implements OnInit {
   }
 
   clean() {
+    this.state.isFacetsCollapsed = true;
     const q: any = {};
     this.state.breadcrumbs.forEach((c: Crumb) => {
       q[c.field] = null;
