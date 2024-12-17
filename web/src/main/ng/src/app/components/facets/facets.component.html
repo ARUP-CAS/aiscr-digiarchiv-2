@@ -35,7 +35,7 @@
         <mat-list role="list">
           <cdk-virtual-scroll-viewport itemSize="22" [style.height.px]="math.min(198, facetField.values.length * 22)">
             <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-table" >
-              <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown" [matTooltip]="facet.operator ? ('facet.tooltip.Operátor ' + facet.operator | translate) : ('facet.tooltip.Zvolit operátor pro filtrování' | translate)">
+              <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown" [matTooltip]="facet.operator ? ('facet.tooltip.Operátor ' + facet.operator | translate) : ('facet.tooltip.Zvolit operátor pro filtrování' | translate)" class="app-mr-1">
                 <mat-icon *ngIf="!facet.operator || facet.operator === 'delete'">more_vert</mat-icon>
                 <span *ngIf="facet.operator && facet.operator !== 'delete'" [class]="'app-badge-op ' + facet.operator">
                   <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>

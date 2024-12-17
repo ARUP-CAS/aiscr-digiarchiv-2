@@ -52,6 +52,7 @@ export class FacetsDynamicComponent implements OnInit {
   }
 
   addFilter() {
+    this.state.isFacetsCollapsed = true;
     const params: any = {};
     let val = this.filterFieldValue;
     switch (this.filterField.type) {

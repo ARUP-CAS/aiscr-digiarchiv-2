@@ -5,9 +5,42 @@
   <div *ngIf="state.documentProgress" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 </div>
 
+<div fxLayout="row" fxLayoutAlign="start center" class="app-mobile-action-toolbar app-pl-4 app-pr-4" [class.app-mb-4]="state.numFound === 0 && state.isFacetsCollapsed">
+  <a (click)="setFacetsOpened()" fxFlex class="app-d-inline-flex">
+    <mat-icon>{{ state.isFacetsCollapsed ? 'filter_alt' : 'filter_alt_off' }}</mat-icon>
+  </a>
+  <div class="app-d-inline-flex">
+    <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate" class="app-d-inline-flex">
+      <mat-icon [ngSwitch]="state.itemView">
+        <ng-container *ngSwitchCase="'row'">reorder</ng-container>
+        <ng-container *ngSwitchCase="'col'">apps</ng-container>
+        <ng-container *ngSwitchDefault>tv</ng-container>
+      </mat-icon>
+    </a><span class="app-pipe"></span>
+    <mat-menu #menuView="matMenu">
+      <button mat-menu-item (click)="setItemView('row')">
+        <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
+      </button>
+      <button mat-menu-item (click)="setItemView('col')">
+        <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
+      </button>
+      <button mat-menu-item (click)="setItemView('default')">
+        <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
+      </button>
+    </mat-menu>
+    <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank" class="app-d-inline-flex">
+      <mat-icon>get_app</mat-icon>
+    </a>
+    <span class="app-pipe"></span>
+    <a  *ngIf="state.logged" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
+      <mat-icon>grade</mat-icon>
+    </a>
+  </div>
+</div>
+
 <div #leftElement class="app-display-table app-container" *ngIf="!loading || !state.isMapaCollapsed">
   <ng-container *ngIf="state.isMapaCollapsed">
-    <div class="app-table-cell app-left">
+    <div class="app-table-cell app-left" [class.app-facets-opened]="!state.isFacetsCollapsed">
       <div fxLayout="row" fxFlexFill>
         <div fxFlex class="app-facets">
           <div *ngIf="state.facetsLoading" class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
@@ -16,7 +49,7 @@
         </div>
       </div>
     </div>
-    <div class="app-table-cell app-right">
+    <div class="app-table-cell app-right" [class.app-results-opened]="state.isFacetsCollapsed">
       <mat-card *ngIf="state.hasError" class="app-card-info">
         <mat-card-content>
           {{ 'dialog.alert.search_error' | translate }}&#160;

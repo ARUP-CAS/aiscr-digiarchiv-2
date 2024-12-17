@@ -198,4 +198,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   setEntity(entity) {
     this.router.navigate([], { queryParams: { entity, page: 0 }, queryParamsHandling: 'merge' });
   }
+
+  setFacetsOpened() {
+    this.state.isFacetsCollapsed =! this.state.isFacetsCollapsed;
+  }
 }

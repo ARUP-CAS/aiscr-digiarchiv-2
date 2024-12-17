@@ -46,6 +46,7 @@ export class AppState {
   timelineOpened = true;
   printing = false;
   documentId: string;
+  isFacetsCollapsed = true;
 
   dialogRef: MatDialogRef<any, any>;
   mapResult: any; // Select entity in map view
