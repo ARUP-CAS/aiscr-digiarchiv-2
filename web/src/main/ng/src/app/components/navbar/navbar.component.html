@@ -27,7 +27,7 @@
             <mat-icon>login</mat-icon>
             {{ 'navbar.desc.Přihlásit uživatele' | translate }}
           </a>
-          <span class="app-pipe"></span>
+          <span class="app-pipe" *ngIf="!state.logged"></span>
           <a *ngIf="!state.logged" [href]="config.registrationUrl" target="_blank">
             <mat-icon>how_to_reg</mat-icon>
             {{ 'navbar.desc.Registrovat uživatele' | translate }}
@@ -37,10 +37,12 @@
             {{state.user.jmeno}} {{state.user.prijmeni}}
             ({{state.user.skupina[0].value | translate}})
           </a>
+          <span class="app-pipe" *ngIf="state.logged"></span>
           <a *ngIf="state.logged" [href]="config.accountUrl" target="_blank">
             <mat-icon>settings</mat-icon>
             {{ 'navbar.desc.account' | translate }}
           </a>
+          <span class="app-pipe"></span>
           <a routerLink="stats">
             <mat-icon>query_stats</mat-icon>
             {{ 'navbar.desc.stats' | translate }}

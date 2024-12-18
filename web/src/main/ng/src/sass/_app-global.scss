@@ -173,6 +173,20 @@ a {
   } */
 }
 
+.app-oh {
+  overflow: hidden;
+}
+
+.app-oa-y {
+  overflow-y: auto;
+}
+
+.app-count {
+  color: $app-gray-6;
+  font-size: 14px;
+  margin-left: calc(16px / 2);
+}
+
 .app-icon-ap {
   margin-left: $app-gap-icon;
 

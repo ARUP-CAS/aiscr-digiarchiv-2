@@ -28,6 +28,7 @@ export class FacetsUsedComponent implements OnInit {
 
   removeFacet(crumb: Crumb) {
     this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
     const params: any = {};
     const field = crumb.field;
     params[field] = [];
@@ -45,6 +46,7 @@ export class FacetsUsedComponent implements OnInit {
 
   clean() {
     this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
     const q: any = {};
     this.state.breadcrumbs.forEach((c: Crumb) => {
       q[c.field] = null;
