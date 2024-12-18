@@ -109,11 +109,12 @@ export class StatsComponent implements OnInit {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
-  removeFilter(field: string) {
+  removeFilter(field: string, $event) {
     const params: any = {};
     params[field] = undefined;
     params.page = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+    $event.stopPropagation()
   }
 
   search(params: Params) {
