@@ -417,7 +417,6 @@ public class Indexer {
 
     private void createThumbFromSolrDoc(SolrDocument doc, boolean overwrite, boolean force, boolean onlyThumbs) throws MalformedURLException, IOException, URISyntaxException, InterruptedException {
 
-        String imagesDir = opts.getString("imagesDir");
         String path = doc.getFirstValue("nazev").toString();
         // String path = doc.getFirstValue("path").toString();
         String url = doc.getFirstValue("path").toString() + "/orig";
@@ -427,7 +426,7 @@ public class Indexer {
         if (overwrite || !ImageSupport.thumbExists(path)) {
             // File f = FedoraUtils.requestFile(url, imagesDir).toFile();
             // InputStream is = FedoraUtils.requestInputStream(url);
-            byte[] is = FedoraUtils.requestBytes(url, imagesDir);
+            byte[] is = FedoraUtils.requestBytes(url);
             //if (!f.exists()) {
             //   LOGGER.log(Level.FINE, "File {0} doesn't exists", path);
             if (is == null) {
@@ -451,7 +450,6 @@ public class Indexer {
 
     private void createThumbFromJSON(JSONObject json, boolean overwrite, boolean force, boolean onlyThumbs) throws MalformedURLException, IOException, URISyntaxException, InterruptedException {
 
-        String thumbsDir = opts.getString("thumbsDir");
         String path = json.getString("path");
         String id = json.getString("id");
         String sha = json.optString("sha_512");
@@ -460,7 +458,7 @@ public class Indexer {
         String mimetype = json.getString("mimetype");
         if ("application/pdf".equals(mimetype)) {
             if (overwrite || ImageSupport.shaChanged(id, sha)) {
-                byte[] is = FedoraUtils.requestBytes(url, thumbsDir);
+                byte[] is = FedoraUtils.requestBytes(url);
                 if (is == null) {
                     LOGGER.log(Level.INFO, "File {0} doesn't exists", path);
                 } else {
@@ -507,7 +505,6 @@ public class Indexer {
     private void createThumbs(SolrDocumentList docs, boolean overwrite, boolean force, boolean onlyThumbs) {
         try {
             Options opts = Options.getInstance();
-            String imagesDir = opts.getString("imagesDir");
             //ImageSupport.initCount();
 
             for (SolrDocument doc : docs) {
