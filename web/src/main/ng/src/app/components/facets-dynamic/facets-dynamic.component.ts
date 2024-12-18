@@ -53,6 +53,7 @@ export class FacetsDynamicComponent implements OnInit {
 
   addFilter() {
     this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
     const params: any = {};
     let val = this.filterFieldValue;
     switch (this.filterField.type) {
