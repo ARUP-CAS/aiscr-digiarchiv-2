@@ -206,7 +206,7 @@ public class OAIRequest {
     }
 
     private static boolean validSet(String set) {
-        if ("akce".equals(set) || "lokalita".equals(set)) {
+        if ("akce".equals(set) || "lokalita".equals(set) || "knihovna_3d".equals(set)) {
             return false;
         }
         return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set);
@@ -288,6 +288,8 @@ public class OAIRequest {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
                 model = model + "\\:*";
+            } else if (model.equals("dokument")) {
+                model = model + "*";
             } else if (!validSet(model)) {
                 return badArgument(req, "Invalid set");
             } else {
@@ -301,6 +303,7 @@ public class OAIRequest {
                     // .addFilterQuery("stav:1")
                     .setRows(conf.getInt("recordsPerPage"));
 
+            System.out.println(query);
             if (resumptionToken != null) {
                 JSONObject solrRt = retrieveResumptionToken(resumptionToken);
                 if (solrRt != null) {

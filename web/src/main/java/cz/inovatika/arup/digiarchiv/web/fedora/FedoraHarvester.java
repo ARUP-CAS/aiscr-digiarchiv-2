@@ -767,6 +767,8 @@ public class FedoraHarvester {
         String model = (String) edoc.getFieldValue("entity");
         if (model.equals("akce") || model.equals("lokalita")) {
             model = "archeologicky_zaznam:" + model;
+        } else if (model.equals("knihovna_3d")) {
+            model = "dokument:3d"; 
         }
         idoc.setField("model", model);
         if (edoc.containsKey("projekt_organizace")) {

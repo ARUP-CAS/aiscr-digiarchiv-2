@@ -238,6 +238,7 @@ public interface FedoraModel {
             case "organizace":
                 return new Organizace();
             case "dokument":
+            case "dokument:3d":
             case "knihovna_3d":
                 return new Dokument();
             case "uzivatel":
