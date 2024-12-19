@@ -70,7 +70,7 @@ public interface FedoraModel {
     public static boolean isOAI(String model) {
         JSONArray sets = Options.getInstance().getJSONObject("OAI").getJSONArray("sets");
         List<Object> l = sets.toList();
-        return l.contains(model);
+        return l.contains(model) || "knihovna_3d".equals(model);
 //        for (int i = 0; i < sets.length(); i++) {
 //            if (model.equals(sets.getString(i))) {
 //                return true;
