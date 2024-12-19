@@ -750,7 +750,7 @@
     "dokumentacni_jednotka": {
       "title": "Documentation Units"
     },
-    "Komponenta": {
+    "komponenta": {
       "title": "Components"
     },
     "vyskovy_bod": {
@@ -792,14 +792,14 @@
   "f_aktivita_intruze": "find intrusion",
 
   "stats": {
-    "ident_cely": "ID",
+    "ident_cely": "Record ID",
     "type": "Event",
     "user": "User",
     "entity": "Record type",
     "typ": {
-      "id": "Display detail",
-      "viewer": "Display thumbnail",
-      "file": "Download file"
+      "id": "Detail shown",
+      "viewer": "Thumbnail shown",
+      "file": "File downloaded"
     },
     "graphTitle": {
       "DAY": "Accesses per day",
@@ -811,6 +811,6 @@
     "interval_day": "Day",
     "interval_week": "Week",
     "interval_month": "Month",
-    "id_count": "showing {{count}} of {{total}}"
+    "id_count": "{{count}} of {{total}}"
   }
 }

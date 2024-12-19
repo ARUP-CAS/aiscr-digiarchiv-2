@@ -750,7 +750,7 @@
     "dokumentacni_jednotka": {
       "title": "Dokumentační jednotky"
     },
-    "Komponenta": {
+    "komponenta": {
       "title": "Komponenty"
     },
     "vyskovy_bod": {
@@ -792,7 +792,7 @@
   "f_aktivita_intruze": "intruze",
 
   "stats": {
-    "ident_cely": "Přehled identifikátorů",
+    "ident_cely": "ID záznamu",
     "type": "Událost",
     "user": "Uživatel",
     "entity": "Typ záznamu",
@@ -809,8 +809,8 @@
     "graphName": "Počet uživatelských přístupů",
     "interval": "Zobrazený interval",
     "interval_day": "Den",
-    "interval_week": "Tyden",
+    "interval_week": "Týden",
     "interval_month": "Měsíc",
-    "id_count": "zobrazeno {{count}} z {{total}}"
+    "id_count": "{{count}} z {{total}}"
   }
 }
