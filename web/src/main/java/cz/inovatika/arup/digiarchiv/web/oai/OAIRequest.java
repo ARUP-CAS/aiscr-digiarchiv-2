@@ -303,7 +303,6 @@ public class OAIRequest {
                     // .addFilterQuery("stav:1")
                     .setRows(conf.getInt("recordsPerPage"));
 
-            System.out.println(query);
             if (resumptionToken != null) {
                 JSONObject solrRt = retrieveResumptionToken(resumptionToken);
                 if (solrRt != null) {
