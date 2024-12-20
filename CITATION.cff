@@ -27,9 +27,9 @@ authors:
   affiliation: "Czech Academy of Sciences, Institute of Archaeology, Brno"
 title: "Digitální archiv AMČR"
 abstract: "The Digital Archive of the Archaeological Map of the Czech Republic (AMCR) is a web application for viewing information on archaeological investigations, sites and finds, operated by the Archaeological Institutes of the CAS in Prague and Brno."
-version: v3.0.2
+version: v3.1.0
 doi: 10.5281/zenodo.8329064
-date-released: 2024-11-07
+date-released: 2024-12-20
 url: "https://github.com/ARUP-CAS/aiscr-digiarchiv-2"
 repository-code: "https://github.com/ARUP-CAS/aiscr-digiarchiv-2"
 license: GPL-3.0-or-later
