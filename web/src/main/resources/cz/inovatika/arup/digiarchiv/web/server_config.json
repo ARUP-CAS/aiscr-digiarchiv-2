@@ -82,7 +82,15 @@
     ""
   ],
   "requestInterval": 5,
+    
   "securedFacets": [
+    "f_kategorie",
+    "f_pian_zm10",
+    "f_okres",
+    "f_katastr",
+    "adb_vyskovy_bod_typ"
+  ],
+  "securedFilters": [
     "f_kategorie",
     "f_pian_zm10",
     "projekt_chu_lokalizace",
