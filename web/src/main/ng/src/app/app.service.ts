@@ -661,19 +661,20 @@ export class AppService {
 
     const southWest = L.latLng(latMin, lngMin);
     const northEast = L.latLng(latMax, lngMax);
-    let bounds = L.latLngBounds(southWest, northEast);
-    return bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
-      ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
+    return L.latLngBounds(southWest, northEast);
+    
 
   }
 
   showInMap(result: any, isPian = false) {
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;
+    this.state.switchingMap = true;
     this.windowRef.nativeWindow.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0, 0);
 
     this.state.isMapaCollapsed = false;
     const p: any = {};
     p.mapa = true;
+    p.mapId = result.ident_cely;
     let url = '/results';
     if (isPian) {
       p.pian_id = result.ident_cely;
@@ -686,8 +687,12 @@ export class AppService {
       p.vyber = null;
     } else {
       this.state.mapResult = result;
-      // p.loc_rpt = this.getBoundsByDoc(result);
-      p.loc_rpt = this.getBoundsByResults();
+
+      const bounds = this.getBoundsByDoc(result);
+
+      p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
+      ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
+      //p.loc_rpt = this.getBoundsByResults();
 
       // p.vyber = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       // ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;

@@ -155,21 +155,26 @@
             </div>
           </mat-tab>
           <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
-            <app-paginator></app-paginator>
-            <cdk-virtual-scroll-viewport *ngIf="vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
-            [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, docs.length * itemSize)*2">
-              <ng-container *cdkVirtualFor="let result of docs">
-                <ng-container [ngSwitch]="state.entity">
-                  <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-                  <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
-                  <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
-                  <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
-                  <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
-                  <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
-                  <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+            <div *ngIf="!state.isMapaCollapsed && state.solrResponse && state.solrResponse.response.numFound > config.mapOptions.docsForCluster">
+              {{ 'map.zoomToResults' | translate}}
+            </div>
+            <ng-container *ngIf="state.isMapaCollapsed || (state.solrResponse && state.solrResponse.response.numFound <= config.mapOptions.docsForCluster)">
+              <app-paginator></app-paginator>
+              <cdk-virtual-scroll-viewport *ngIf="vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
+              [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
+                <ng-container *cdkVirtualFor="let result of state.solrResponse.response.docs">
+                  <ng-container [ngSwitch]="state.entity">
+                    <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
+                    <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                    <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
+                    <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
+                    <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
+                    <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
+                    <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+                  </ng-container>
                 </ng-container>
-              </ng-container>
-            </cdk-virtual-scroll-viewport>
+              </cdk-virtual-scroll-viewport>
+            </ng-container>
           </mat-tab>
         </mat-tab-group>
       </mat-sidenav>

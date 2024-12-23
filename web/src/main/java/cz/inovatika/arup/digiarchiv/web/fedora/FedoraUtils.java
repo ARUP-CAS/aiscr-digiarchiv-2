@@ -24,7 +24,7 @@ public class FedoraUtils {
   
   private static final String API_POINT = Options.getInstance().getJSONObject("fedora").getString("api.point");
   private static final String SEARCH_POINT = Options.getInstance().getJSONObject("fedora").getString("search.point");
-  // private static final HttpClient client = HttpClient.newHttpClient();
+  private static final HttpClient client = HttpClient.newHttpClient();
   
   
   public static final String auth_header() {
@@ -37,7 +37,7 @@ public class FedoraUtils {
   }
 
   public static String request(String url) throws URISyntaxException, IOException, InterruptedException {
-    HttpClient client = HttpClient. newHttpClient();
+    //HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url)) 
@@ -51,7 +51,7 @@ public class FedoraUtils {
   }
 
   public static String search(String urlQuery) throws URISyntaxException, IOException, InterruptedException {
-    HttpClient client = HttpClient. newHttpClient();
+    //HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(SEARCH_POINT + urlQuery))
@@ -61,16 +61,16 @@ public class FedoraUtils {
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
     return response.body(); 
   }
-  
   public static String requestXml(String url) throws URISyntaxException, IOException, InterruptedException {
-    HttpClient client = HttpClient. newHttpClient();
+    // HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))
             .header("Authorization", auth_header())
             .build();
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    return response.body();
+    String ret = response.body();
+    return ret;
   }
   
   public static JSONObject getJsonById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {
@@ -82,7 +82,7 @@ public class FedoraUtils {
   }
   
   public static Path requestFile(String url, String filepath, String mime) throws URISyntaxException, IOException, InterruptedException {
-    HttpClient client = HttpClient. newHttpClient();
+    //HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))
@@ -92,11 +92,12 @@ public class FedoraUtils {
             .build();
     HttpResponse<Path> response = client.send(request, HttpResponse.BodyHandlers.ofFile(Paths.get(filepath), StandardOpenOption.WRITE, StandardOpenOption.CREATE));
     // HttpResponse<Path> response = client.send(request, HttpResponse.BodyHandlers.ofFileDownload(Paths.get(filepath), StandardOpenOption.WRITE, StandardOpenOption.CREATE));
+    
     return response.body();
   }
   
   public static InputStream requestInputStream(String url) throws URISyntaxException, IOException, InterruptedException {
-    HttpClient client = HttpClient. newHttpClient();
+    //HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
             .uri(new URI(API_POINT + url))
@@ -108,3 +109,4 @@ public class FedoraUtils {
   }
   
 }
+ 

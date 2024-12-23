@@ -52,9 +52,9 @@
       "ext_zdroj",
       "let",
       "archeologicky_zaznam",
+      "dokument",
       "projekt",
       "samostatny_nalez",
-      "dokument",
       "deleted"
     ],
     "user": "",
@@ -107,7 +107,11 @@
     "adb_poznamka",
     "f_okres",
     "f_katastr",
-    "adb_vyskovy_bod_typ"
+    "adb_vyskovy_bod_typ",
+    "akce_chranene_udaje_souhrn_upresneni",
+    "lokalita_popis",
+    "lokalita_poznamka",
+    "samostatny_nalez_lokalizace"
   ],
   "kategoriet": {
     "HES-001075": "texty",

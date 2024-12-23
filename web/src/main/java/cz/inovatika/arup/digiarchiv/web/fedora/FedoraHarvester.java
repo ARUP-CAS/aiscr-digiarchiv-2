@@ -208,7 +208,7 @@ public class FedoraHarvester {
     private JSONObject searchFedora(String baseQuery, boolean isDeleted, String indexType, boolean withRelated) throws IOException {
         try {
             int indexed = 0;
-            int batchSize = 100;
+            int batchSize = 1000;
             int pOffset = 0;
             String s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
             JSONObject json = new JSONObject(s);
@@ -338,8 +338,8 @@ public class FedoraHarvester {
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             for (String model : models) {
-                // processModel(model);
-                searchModel(model);
+                processModel(model);
+                // searchModel(model);
             }
             solr.commit("oai");
             solr.commit("entities");
@@ -620,7 +620,7 @@ public class FedoraHarvester {
             // returns xml
             LOGGER.log(Level.FINE, "Processing record {0}", id);
             long start = Instant.now().toEpochMilli();
-            String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+            String xml = FedoraUtils.requestXml("record/" + id + "/metadata"); 
             requestTime += Instant.now().toEpochMilli() - start;
             String model = FedoraModel.getModel(xml);
             start = Instant.now().toEpochMilli();

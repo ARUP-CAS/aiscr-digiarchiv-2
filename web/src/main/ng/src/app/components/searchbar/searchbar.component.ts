@@ -68,6 +68,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     // this.state.locationFilterEnabled = false;
     // this.state.locationFilterBounds = null;
     this.state.isMapaCollapsed = !this.state.isMapaCollapsed;
+    this.state.switchingMap = !this.state.isMapaCollapsed;
     this.state.setMapResult(null, false);
     if (!this.state.isMapaCollapsed) {
       this.document.body.classList.add('app-view-map');
@@ -95,9 +96,11 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
           ',' + lat.max + ',' + lng.max;
       }
     } else {
+
       p.loc_rpt = null;
       p.pian_id = null;
       p.mapa = null;
+      p.mapId = null;
       if (!this.state.locationFilterEnabled) {
         p.loc_rpt = null;
         p.vyber = null;

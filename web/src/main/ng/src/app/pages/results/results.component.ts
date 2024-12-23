@@ -83,9 +83,14 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.exportUrl = 'export?' + str;
     }));
 
-    // this.subs.push(this.state.resultsChanged.subscribe(val => {
-    //   console.log(val)
-    // }));
+    this.subs.push(this.state.resultsChanged.subscribe(val => {
+      if (val.typ === 'map') {
+        this.docs = this.state.solrResponse.response.docs;
+        // setTimeout(() => {
+        //   this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+        // }, 100);
+      }
+    }));
 
     // this.state.loggedChanged.subscribe(val => {
     //   this.search(this.route.snapshot.queryParams);
@@ -133,11 +138,19 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   search(params: Params) {
     this.state.loading = true;
+    if (params.mapa) {
+      // Zpracuje mapa
+      setTimeout(() => {
+        this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      }, 100);
+      return;
+    }
+    const p = Object.assign({}, params);
+    this.state.switchingMap = false;
     this.state.documentProgress = 0;
     this.loading = true;
     this.state.facetsLoading = true;
     this.state.hasError = false;
-    const p = Object.assign({}, params);
     
     if (!p['entity']) {
       p['entity'] = 'dokument';

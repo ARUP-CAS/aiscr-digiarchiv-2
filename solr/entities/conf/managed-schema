@@ -130,8 +130,7 @@
    <field name="akce_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
    <dynamicField name="akce_lokalizace_okolnosti_*" type="text_general" indexed="true" stored="true" multiValued="true" />
-   
-	
+   <dynamicField name="akce_chranene_udaje_souhrn_upresneni_*" type="text_general" indexed="true" stored="true" multiValued="true" />
 
 <!--   <field name="az_lokalita" type="string" indexed="false" stored="true" multiValued="true" /> -->
    <field name="lokalita_typ_lokality" type="string" indexed="false" stored="true" multiValued="false" /> 
@@ -144,6 +143,9 @@
    <field name="lokalita_nazev_B" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="lokalita_nazev_C" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="lokalita_nazev_D" type="text_general" indexed="true" stored="true" multiValued="true" />
+
+   <dynamicField name="lokalita_popis_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <dynamicField name="lokalita_poznamka_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
    
    <!--
    Musime prejmenovat pro projekt. Akce ma nevalidni data pro tyto pole.
@@ -181,10 +183,12 @@
    <field name="samostatny_nalez_katastr_B" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_katastr_C" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_katastr_D" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="samostatny_nalez_lokalizace_A" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <!-- <field name="samostatny_nalez_lokalizace_A" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_lokalizace_B" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_lokalizace_C" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="samostatny_nalez_lokalizace_D" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_lokalizace_D" type="string" indexed="true" stored="true" multiValued="false" />  -->
+   
+   <dynamicField name="samostatny_nalez_lokalizace_*" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    
    
    <!-- Projekt fields -->

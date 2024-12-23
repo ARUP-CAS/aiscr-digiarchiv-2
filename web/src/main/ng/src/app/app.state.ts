@@ -26,7 +26,7 @@ export class AppState {
   private loggedSubject: Subject<boolean> = new Subject();
   public loggedChanged: Observable<boolean> = this.loggedSubject.asObservable();
 
-  private mapResultSubject: Subject<string> = new Subject();
+  private mapResultSubject: Subject<string> = new ReplaySubject(1);
   public mapResultChanged: Observable<string> = this.mapResultSubject.asObservable();
 
   private mapViewSubject: Subject<string> = new Subject();
@@ -61,6 +61,7 @@ export class AppState {
 
   solrResponse: SolrResponse;
   loading: boolean;
+  switchingMap = false;
   facetsLoading = false;
   hasError = false;
   imagesLoading: boolean;
@@ -127,7 +128,7 @@ export class AppState {
     });
   }
 
-  setSearchResponse(resp: SolrResponse) {
+  setSearchResponse(resp: SolrResponse, typ: string = 'results') {
     this.solrResponse = resp;
     this.numFound = resp.response.numFound;
     this.totalPages = this.numFound / this.rows;
@@ -150,7 +151,7 @@ export class AppState {
     }
     
 
-    this.resultsSubject.next({typ: 'results', pageChanged: this.pageChanged});
+    this.resultsSubject.next({typ, pageChanged: this.pageChanged});
     this.pageChanged = false;
     if (resp.facet_counts) {
       setTimeout(() => {
@@ -316,11 +317,11 @@ export class AppState {
   }
 
   setMapResult(result, mapDetail) {
+    const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
+    this.mapResult = result;
     if (mapDetail) {
       return;
     }
-    const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
-    this.mapResult = result;
     if (changed) {
       this.mapResultSubject.next(result);
     }
