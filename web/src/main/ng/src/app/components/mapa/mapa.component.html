@@ -1,5 +1,4 @@
 <ng-container *ngIf="isBrowser">
-	
 	<div class="app-map" leaflet [leafletOptions]="options"
 	 (leafletMapReady)="onMapReady($event)"
 	 [leafletLayersControl]="layersControl"

@@ -690,20 +690,9 @@ export class AppService {
 
       const bounds = this.getBoundsByDoc(result);
 
-      p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
-      ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
+      //p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
+      //',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
       //p.loc_rpt = this.getBoundsByResults();
-
-      // p.vyber = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
-      // ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
-
-      // bounds = L.latLngBounds(southWest, northEast).pad(3);
-      // p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
-      // ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
-
-
-      // p.loc_rpt = '' + (latMin) + ',' + (lngMin ) +
-      //     ',' + (latMax) + ',' + (lngMax);
       this.state.setMapResult(result, false);
     }
 

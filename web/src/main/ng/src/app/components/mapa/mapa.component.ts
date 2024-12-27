@@ -12,7 +12,7 @@ import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 
 import 'node_modules/leaflet.fullscreen/Control.FullScreen.js';
-import { geoJSON, Marker, marker } from 'leaflet';
+import { geoJSON, LatLngBounds, Marker, marker } from 'leaflet';
 import { isPlatformBrowser } from '@angular/common';
 
 declare var L;
@@ -161,7 +161,9 @@ export class MapaComponent implements OnInit, OnDestroy {
   lfAttribution = '<span aria-hidden="true"> | </span><a href="https://leafletjs.com" title="A JavaScript library for interactive maps"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"></path><path fill="#FFD500" d="M0 4h12v3H0z"></path><path fill="#E0BC00" d="M0 7h12v1H0z"></path></svg> Leaflet</a>';
 
   showDetail = false;
+  currentMapId: string;
   currentLocBounds: any;
+  shouldZoomOnMarker = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -187,9 +189,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.params = this.route.snapshot.queryParams as HttpParams;
     this.maxNumMarkers = this.config.mapOptions.docsForMarker;
     this.options.zoom = this.config.mapOptions.zoom;
-    if (this.state.mapResult) {
-      this.options.zoom = this.config.mapOptions.hitZoomLevel;
-    }
+    // if (this.state.mapResult) {
+    //   this.options.zoom = this.config.mapOptions.hitZoomLevel;
+    // }
     this.initLayers();
     this.options.center = L.latLng(this.config.mapOptions.centerX, this.config.mapOptions.centerY);
     L.control.zoom(this.zoomOptions);
@@ -202,16 +204,10 @@ export class MapaComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.push(this.route.queryParams.subscribe(val => {
-      if (this.mapReady) {
+      if (this.mapReady && !this.state.isMapaCollapsed) {
         this.paramsChanged();
       }
     }));
-
-    // this.subs.push(this.state.mapResultChanged.subscribe((res: any) => {
-    //   if (this.mapReady) {
-    //     this.zoomOnMapResult();
-    //   }
-    // }));
 
   }
 
@@ -275,7 +271,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     map.on('enterFullscreen', () => map.invalidateSize());
     map.on('exitFullscreen', () => map.invalidateSize());
 
-    this.paramsChanged();
 
     map.on('baselayerchange', (e) => {
       this.activeBaseLayerOSM = e.layer.options['name'] === 'osm';
@@ -283,8 +278,11 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     map.on('zoomend', (e) => {
+      this.setAttribution();
       if (!this.zoomingOnMarker && !this.processingParams && !this.firstZoom) {
-        this.debounce(this.updateBounds(map.getBounds(), false, 'mapZoomEnd'), 200, false);
+        this.doZoom();
+      } else if (this.zoomingOnMarker) {
+        this.getDataByVisibleArea();
       }
       this.firstZoom = false;
       this.zoomingOnMarker = false;
@@ -327,47 +325,68 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.state.locationFilterBounds = null;
       this.updateBounds(null, false, 'locDisabled');
     });
-
+    
+    this.paramsChanged();
     this.setAttribution();
     this.mapReady = true;
     // this.updateBounds(this.map.getBounds(), false, 'mapReady');
   }
 
-  debounce(func, wait, immediate) {
-    var timeout;
-    return () => {
-      var context = this, args = arguments;
-      clearTimeout(timeout);
-      timeout = setTimeout(function () {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      }, wait);
-      if (immediate && !timeout) func.apply(context, args);
-    };
+  zoomingCount = 0;
+  doZoom() {
+    this.zoomingCount++;
+    setTimeout(() => {
+      this.zoomingCount--;
+        if (this.zoomingCount < 1) {
+          this.updateBounds(this.map.getBounds(), false, 'zoom');
+        }
+    }, 1000)
+  }
+
+  isEqualsBounds(bounds: LatLngBounds) {
+    const b = this.map.getBounds()
+    return bounds.getSouth() === b.getSouth() &&
+          bounds.getNorth() === b.getNorth() &&
+          bounds.getEast() === b.getEast() &&
+          bounds.getWest() === b.getWest()
   }
 
   paramsChanged() {
     this.processingParams = true;
     let bounds;
+    if (this.route.snapshot.queryParamMap.has('mapId') && 
+        this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId') &&
+        !this.route.snapshot.queryParamMap.has('loc_rpt')) {
+      this.shouldZoomOnMarker = true;
+    }
+    this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
+    this.currentLocBounds = this.route.snapshot.queryParamMap.get('loc_rpt');
+
+    if (!this.route.snapshot.queryParamMap.has('loc_rpt') && this.route.snapshot.queryParamMap.has('mapId')) {
+      this.getMarkerById();
+      return;
+    }
+
     if (this.route.snapshot.queryParamMap.has('vyber')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('vyber').split(',');
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
-      //this.map.fitBounds(bounds);
-      this.map.fitBounds(bounds.pad(2));
-    } else if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
+
+      this.state.locationFilterBounds = bounds;
+      this.locationFilter.setBounds(bounds);
+      // this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
+    }
+
+    if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('loc_rpt').split(',');
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
-      this.map.fitBounds(bounds);
-      // this.zoomOnMapResult();
-      // setTimeout(() => {
-      //   this.zoomOnMapResult();
-      //   // this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
-      //   // console.log(this.map.getBounds(), bounds.getCenter())
-      // }, 100)
+      if (!this.isEqualsBounds(bounds)) {
+        this.map.fitBounds(bounds);
+      }
+      
 
     } else if (this.state.stats?.lat && this.state.stats.lat.count > 0) {
       const lat = this.state.stats.lat;
@@ -382,15 +401,13 @@ export class MapaComponent implements OnInit, OnDestroy {
       const northEast = L.latLng(lat.max, lng.max);
       bounds = L.latLngBounds(southWest, northEast);
       this.map.fitBounds(bounds);
-      if (this.state.locationFilterEnabled) {
-        this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
-      }
-    } else {
-      if (this.state.locationFilterEnabled) {
-        this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
-      }
     }
-    this.getDataByVisibleArea();
+
+
+    if (!this.firstZoom) {
+      this.getDataByVisibleArea();
+    }
+
   }
 
   updateBounds(mapBounds: any, isLocation: boolean, caller: string) {
@@ -430,24 +447,30 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setMapType(count: number) {
     this.showType = 'undefined';
-      if (this.state.mapResult) {
-        this.showType = 'marker';
-        return;
-      }
-      if (count > this.config.mapOptions.docsForCluster) {
-        this.showType = 'heat';
-      } else if (count > this.maxNumMarkers) {
-        this.showType = 'cluster';
-      } else {
-        this.showType = 'marker';
-      }
-    
+    if (this.currentMapId) {
+      this.showType = 'marker';
+      return;
+    }
+    if (count > this.config.mapOptions.docsForCluster) {
+      this.showType = 'heat';
+    } else if (count > this.maxNumMarkers) {
+      this.showType = 'cluster';
+    } else {
+      this.showType = 'marker';
+    }
+
   }
 
   getDataByVisibleArea() {
 
     // Nejdriv ziskame facets. A podle poctu vysledku nastavime mapType
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
+
+    const bounds = this.map.getBounds();
+    const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
+      ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
+    p.loc_rpt = value;
+
     p.rows = 0;
     p['noFacets'] = 'false';
     p['onlyFacets'] = 'true';
@@ -472,9 +495,6 @@ export class MapaComponent implements OnInit, OnDestroy {
               this.setClusterDataByPian(res.response.docs);
             }
             this.state.loading = false;
-            // setTimeout(() => {
-            //   this.zoomOnMapResult();
-            // }, 100);
           });
           break;
         }
@@ -546,6 +566,22 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.currentZoom = this.map.getZoom();
   }
 
+  getMarkerById() {
+    this.state.loading = true;
+    const p: any = Object.assign({}, this.route.snapshot.queryParams);
+    
+    this.service.getId(this.currentMapId).subscribe((res: any) => {
+      this.state.setSearchResponse(res, 'map');
+      this.setMarkers(res.response.docs, false);
+      this.state.loading = false;
+      
+      const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
+      this.state.setMapResult(doc, false);
+      this.zoomOnMapResult(doc);
+      
+    });
+  }
+
   getVisibleAreaMarkers() {
     this.state.loading = true;
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
@@ -560,11 +596,12 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.state.setSearchResponse(res, 'map');
       this.setMarkers(res.response.docs, false);
       this.state.loading = false;
-      if (this.route.snapshot.queryParamMap.has('mapId')) {
-        const doc = res.response.docs.find(d => d.ident_cely === this.route.snapshot.queryParamMap.get('mapId'));
-        console.log(doc)
+      if (this.currentMapId) {
+        const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
         this.state.setMapResult(doc, false);
-        this.zoomOnMapResult(doc);
+        if (this.shouldZoomOnMarker) {
+          this.zoomOnMapResult(doc);
+        }
       }
     });
   }
@@ -577,10 +614,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     let appmrk = this.findMarker(mr.id);
     if (!appmrk || !appmrk.mrk) {
       const mrk = L.marker([mr.lat, mr.lng], { id: mr.id, riseOnHover: true, icon: mr.typ === 'bod' ? this.iconPoint : this.icon });
-      if (this.state.mapResult?.ident_cely === mr.doc.ident_cely) {
+      if (this.currentMapId === mr.doc.ident_cely) {
         mrk.setIcon(mr.typ === 'bod' ? this.hitIconPoint : this.hitIcon);
       }
-
       mr.mrk = mrk;
       this.markersList.push(mr);
       if (mr.isPian) {
@@ -661,6 +697,9 @@ export class MapaComponent implements OnInit, OnDestroy {
                 doc.pian.push(pian);
                 const coords = pian.loc_rpt[0].split(',');
                 const pianInList = this.piansList.find(p => p.id === pian_id);
+                if (!pianInList) {
+                  return;
+                }
                 pianInList.presnost = pian.pian_presnost;
                 pianInList.typ = pian.typ;
                 const mrk = this.addMarker({
@@ -758,13 +797,15 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   zoomOnMapResult(doc: any) {
+    this.zoomingOnMarker = true;
     const changed = this.selectedResultId !== doc.ident_cely;
     this.hitMarker(doc);
-    if (this.state.mapResult && changed) {
-      const bounds = this.service.getBoundsByDoc(doc);
-      this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
-      this.selectedResultId = this.state.mapResult.ident_cely;
-    }
+
+    const bounds = this.service.getBoundsByDoc(doc);
+    this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
+    this.selectedResultId = this.state.mapResult.ident_cely;
+
+    this.shouldZoomOnMarker = false;
   }
 
   hitMarker(res) {
@@ -818,6 +859,5 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.selectedMarker = ms;
     return changed;
   }
-
 }
 
