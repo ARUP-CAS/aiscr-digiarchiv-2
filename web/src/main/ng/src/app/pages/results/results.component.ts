@@ -12,7 +12,8 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { NgZone } from '@angular/core';
 
 @Component({
-  selector: 'app-results', animations: [
+  selector: 'app-results', 
+  animations: [
     trigger(
       'enterAnimation', [
       transition(':enter', [
@@ -86,9 +87,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.subs.push(this.state.resultsChanged.subscribe(val => {
       if (val.typ === 'map') {
         this.docs = this.state.solrResponse.response.docs;
-        // setTimeout(() => {
-        //   this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
-        // }, 100);
+        setTimeout(() => {
+          this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+        }, 100);
       }
     }));
 
@@ -140,9 +141,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.state.loading = true;
     if (params.mapa) {
       // Zpracuje mapa
-      setTimeout(() => {
-        this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
-      }, 100);
+      // setTimeout(() => {
+      //   this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      // }, 100);
       return;
     }
     const p = Object.assign({}, params);

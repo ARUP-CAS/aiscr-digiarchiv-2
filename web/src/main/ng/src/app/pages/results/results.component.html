@@ -1,8 +1,8 @@
 <div class="app-display-table app-loading" *ngIf="state.loading" style="position: absolute; z-index:1000;">
-  <div class="app-table-cell app-clean-pd">
+  <div class="app-table-cell app-clean-pd" *ngIf="state.isMapaCollapsed">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
-  <div *ngIf="state.documentProgress" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
+  <div *ngIf="state.documentProgress && state.isMapaCollapsed" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
 </div>
 
 <div fxLayout="row" fxLayoutAlign="start center" class="app-mobile-action-toolbar app-pl-4 app-pr-4" [class.app-mb-4]="state.numFound === 0 && state.isFacetsCollapsed">
@@ -143,7 +143,7 @@
   </ng-container>
   <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
     <mat-sidenav-container class="app-sidenav-container">
-      <mat-sidenav #sidenav mode="side" [(opened)]="opened"><!--[(opened)]="opened"-->
+      <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="overflow-x: hidden;"><!--[(opened)]="opened"-->
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
           <mat-icon>last_page</mat-icon>
         </button>
@@ -166,7 +166,6 @@
                   <ng-container [ngSwitch]="state.entity">
                     <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
                     <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
-                    <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
                     <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
                     <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
                     <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
