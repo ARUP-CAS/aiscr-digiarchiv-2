@@ -687,9 +687,8 @@ export class AppService {
       p.vyber = null;
     } else {
       this.state.mapResult = result;
-
-      const bounds = this.getBoundsByDoc(result);
-
+      p.loc_rpt = null;
+      // const bounds = this.getBoundsByDoc(result);
       //p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       //',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
       //p.loc_rpt = this.getBoundsByResults();
