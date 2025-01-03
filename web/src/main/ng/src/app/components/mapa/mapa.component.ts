@@ -23,7 +23,7 @@ import * as Wkt from 'wicket';
 import { SolrDocument } from 'src/app/shared/solr-document';
 // import { Wkt } from 'src/typings';
 
-export class AppMarker {
+export class AppMarkerOptions {
   id: string;
   isPian: boolean;
   lat: string;
@@ -115,6 +115,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   markersList: any[] = [];
   selectedMarker: any[] = [];
   selectedResultId: string;
+  distErr: number;
 
   showHeat: boolean;
   mapReady = false;
@@ -209,6 +210,13 @@ export class MapaComponent implements OnInit, OnDestroy {
       }
     }));
 
+    this.subs.push(this.state.facetsChanged.subscribe(res => {
+      const start = new Date();
+      if (this.mapReady) {
+        this.setHeatData();
+      }
+    }));
+
   }
 
   setAttribution() {
@@ -282,10 +290,10 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.setAttribution();
       if (!this.processingParams && !this.zoomingOnMarker) {
         this.doZoom();
-      } else if (this.zoomingOnMarker) {
+      } else if (this.zoomingOnMarker || this.processingParams) {
         this.getDataByVisibleArea();
       }
-      // this.firstZoom = false;
+      this.firstZoom = false;
       this.zoomingOnMarker = false;
       this.processingParams = false;
     });
@@ -390,6 +398,10 @@ export class MapaComponent implements OnInit, OnDestroy {
       bounds = L.latLngBounds(southWest, northEast);
       if (!this.isEqualsBounds(bounds)) {
         this.map.fitBounds(bounds);
+      } else {
+        this.getDataByVisibleArea();
+        this.processingParams = false;
+        return;
       }
       
 
@@ -416,7 +428,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.getDataByVisibleArea();
       } 
     } else {
-      this.getDataByVisibleArea();
+      // this.getDataByVisibleArea();
     }
     
     this.state.switchingMap = false;
@@ -538,15 +550,16 @@ export class MapaComponent implements OnInit, OnDestroy {
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
     p.loc_rpt = value;
-
     p.rows = 0;
     p['noFacets'] = 'false';
     p['onlyFacets'] = 'true';
     this.state.loading = true;
     this.service.search(p as HttpParams).subscribe((resp: any) => {
+      this.state.numFound = resp.response.numFound;
+      this.distErr = resp.responseHeader.params['facet.heatmap.distErr'];
       this.state.setFacets(resp);
-      this.state.facetsLoading = false;
       this.processResponse(resp);
+      this.state.facetsLoading = false;
       this.state.loading = false;
     });
   }
@@ -643,21 +656,21 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   findMarker(id: string) {
-    return this.markersList.find(m => m.id === id);
+    return this.markersList.find(m => m.options.id === id);
   }
 
-  addMarker(mr: AppMarker) {
+  addMarker(mr: AppMarkerOptions): any {
     let appmrk = this.findMarker(mr.id);
-    if (!appmrk || !appmrk.mrk) {
+    if (!appmrk) {
       const mrk = L.marker([mr.lat, mr.lng], { id: mr.id, doc: mr.doc, riseOnHover: true, icon: mr.typ === 'bod' ? this.iconPoint : this.icon });
       if (this.currentMapId === mr.doc.ident_cely) {
         mrk.setIcon(mr.typ === 'bod' ? this.hitIconPoint : this.hitIcon);
       }
-      mr.mrk = mrk;
+      // mr.mrk = mrk;
       this.markersList.push(mrk);
       if (mr.isPian) {
         mrk.on('click', (e) => {
-          this.setPianId(e.target.options.id);
+          this.setPianId(e.target.options.id, e.target.options.doc.ident_cely);
         });
         const pianInList = this.piansList.find(p => p.id === mr.id);
         if (pianInList) {
@@ -671,16 +684,15 @@ export class MapaComponent implements OnInit, OnDestroy {
         });
         mrk.bindTooltip(mr.id);
       }
-      // mrk.addTo(this.markers);
+      return mrk;
     } else if (mr.isPian) {
       // mrk.docId.push(doc.ident_cely);
       const pianInList = this.piansList.find(p => p.id === mr.id);
       if (pianInList) {
         appmrk.bindTooltip(this.popUpHtml(mr.id, mr.presnost, pianInList.docIds));
       }
-    } else {
-
-    }
+      return appmrk;
+    } 
     return mr;
   }
 
@@ -717,7 +729,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         });
         //if (this.showType !== 'heat') {
         this.markersList.forEach(mrk => {
-          mrk.mrk.addTo(this.markers);
+          mrk.addTo(this.markers);
         });
         //}
       } else if (doc.pian_id && doc.pian_id.length > 0) {
@@ -734,7 +746,6 @@ export class MapaComponent implements OnInit, OnDestroy {
                 const coords = pian.loc_rpt[0].split(',');
                 const pianInList = this.piansList.find(p => p.id === pian_id);
                 if (!pianInList) {
-                  console.log('AA')
                   return;
                 }
                 pianInList.presnost = pian.pian_presnost;
@@ -749,8 +760,8 @@ export class MapaComponent implements OnInit, OnDestroy {
                   doc: doc,
                   pian_chranene_udaje: pian.pian_chranene_udaje
                 });
-                mrk.mrk.addTo(this.markers);
-                // this.addShapeLayer(mrk.pianId, mrk.pianPresnost, pian.pian_chranene_udaje?.geom_wkt.value);
+                mrk.addTo(this.markers);
+                this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, doc.ident_cely);
               }
             });
             //}
@@ -783,7 +794,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         }
         //if (this.showType !== 'heat') {
         this.markersList.forEach(mrk => {
-          mrk.mrk.addTo(this.markers);
+          mrk.addTo(this.markers);
         });
         //}
       }
@@ -813,10 +824,12 @@ export class MapaComponent implements OnInit, OnDestroy {
     return count;
   }
 
-  setPianId(pian_id: string) {
+  setPianId(pian_id: string, docId: string) {
     this.zone.run(() => {
+      this.markersList = [];
+      this.markers = new L.featureGroup();
       this.showDetail = true;
-      this.router.navigate([], { queryParams: { pian_id, page: 0 }, queryParamsHandling: 'merge' });
+      this.router.navigate([], { queryParams: { pian_id, mapId: docId, page: 0 }, queryParamsHandling: 'merge' });
     });
   }
 
@@ -825,7 +838,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   clearSelectedMarker() {
-
     this.selectedMarker.forEach(m => {
       m.setIcon(m.typ === 'bod' ? this.iconPoint : this.icon);
       m.setZIndexOffset(0);
@@ -841,7 +853,6 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     const bounds = this.service.getBoundsByDoc(doc);
     
-    console.log(this.map.getZoom(), this.config.mapOptions.hitZoomLevel)
     this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
     this.selectedResultId = this.state.mapResult.ident_cely;
     if (this.currentZoom === this.config.mapOptions.hitZoomLevel) {
@@ -853,20 +864,18 @@ export class MapaComponent implements OnInit, OnDestroy {
   hitMarker(res) {
     if (!res) {
       this.clearSelectedMarker();
-      // this.updateBounds(this.map.getBounds(), false, 'hitMarker');
       return true;
     }
     const docId = res.ident_cely;
     let changed = true;
-    console.log(this.selectedMarker)
     if ((this.selectedMarker.length > 0 && this.selectedMarker[0].options.doc.ident_cely.includes(docId))) {
       // the same or document
       changed = false;
     }
     let ms = this.markersList.filter(mrk => mrk.options.doc.ident_cely.includes(docId));
-    if (changed) {
+    //if (changed) {
       this.clearSelectedMarker();
-    }
+    //}
 
     if (!ms || ms.length === 0) {
       // this.addMarkerByResult(res);
@@ -890,7 +899,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.showType === 'heat') {
         m.addTo(this.markers);
         if (parseInt(m.presnost) < 4 && m.typ !== 'bod') {
-          // this.addShapeLayer(m.pianId, m.pianPresnost, null);
+          this.addShapeLayer(m.options.id, m.options.presnost, null, m.options.doc.ident_cely);
         }
       }
     });
@@ -900,8 +909,108 @@ export class MapaComponent implements OnInit, OnDestroy {
       // this.map.setView(ms[ms.length - 1].mrk.getLatLng(), this.config.mapOptions.hitZoomLevel);
     }
     this.selectedMarker = ms;
-    console.log(this.selectedMarker)
     return changed;
   }
+
+  setHeatData() {
+    this.state.loading = true;
+    if (this.state.mapResult) {
+      return
+    }
+
+    if (this.heatmapLayer) {
+      this.map.removeLayer(this.heatmapLayer);
+    }
+    if (!this.state.heatMaps?.loc_rpt) {
+      return;
+    }
+    // const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
+
+    this.showHeat = this.state.numFound > this.config.mapOptions.docsForCluster
+      && this.map.getZoom() < this.markerZoomLevel;
+    // this.showHeat = false;
+    if (!this.showHeat) {
+      return;
+    }
+    this.data.data = [];
+    const f = this.state.heatMaps.loc_rpt;
+    const counts_ints2D = f.counts_ints2D;
+    // const gridLevel = f.gridLevel;
+    const columns = f.columns;
+    const rows = f.rows;
+    const minX = f.minX;
+    const maxX = f.maxX;
+    const minY = f.minY;
+    const maxY = f.maxY;
+    const distX = (maxX - minX) / columns;
+    const distY = (maxY - minY) / rows;
+
+    let maxBounds = null;
+
+    if (this.locationFilter.isEnabled()) {
+      const bounds = this.locationFilter.getBounds();
+      maxBounds = new L.latLngBounds(bounds.getSouthWest(), bounds.getNorthEast());
+    }
+
+    if (counts_ints2D !== null) {
+      for (let i = 0; i < counts_ints2D.length; i++) {
+        if (counts_ints2D[i] !== null && counts_ints2D[i] !== 'null') {
+          const row = counts_ints2D[i];
+          const lat = maxY - i * distY;
+          for (let j = 0; j < row.length; j++) {
+            const count = row[j];
+            if (count > 0) {
+              const lng = minX + j * distX;
+              const bounds = new L.latLngBounds([
+                [lat, lng],
+                [lat - distY, lng + distX]
+              ]);
+              if (!this.locationFilter.isEnabled() || maxBounds.contains(bounds.getCenter())) {
+                this.data.data.push({ lat: bounds.getCenter().lat, lng: bounds.getCenter().lng, count });
+              }
+            }
+          }
+        }
+      }
+    }
+    this.config.mapOptions.heatmapOptions.radius = 1.9 * this.distErr;
+    this.heatmapLayer = new HeatmapOverlay(this.config.mapOptions.heatmapOptions);
+    this.heatmapLayer.setData(this.data);
+    this.map.addLayer(this.heatmapLayer);
+    setTimeout(() => {
+      if (this.state.mapResult) {
+        this.hitMarker(this.state.mapResult);
+      }
+      this.state.loading = false;
+    }, 100);
+  }
+
+  addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docId: string) {
+    if (!geom_wkt_c) {
+      return;
+    }
+    const wkt = new Wkt.Wkt();
+    wkt.read(geom_wkt_c);
+
+    if (wkt.toJson().type !== 'Point') {
+      const layer = geoJSON((wkt.toJson() as any), {
+        style: () => ({
+          color: this.config.mapOptions.shape.color,
+          weight: this.config.mapOptions.shape.weight,
+          fillColor: this.config.mapOptions.shape.fillColor,
+          fillOpacity: this.config.mapOptions.shape.fillOpacity
+        })
+      });
+      // layer.pianId = ident_cely;
+      layer.on('click', (e) => {
+        this.setPianId(ident_cely, docId);
+      });
+      const pianInList = this.piansList.find(p => p.id === ident_cely);
+      layer.bindTooltip(this.popUpHtml(ident_cely, presnost, pianInList.docIds));
+      // layer.addTo(this.overlays);
+      layer.addTo(this.markers);
+    }
+  }
+  
 }
 

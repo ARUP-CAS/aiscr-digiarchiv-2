@@ -1,5 +1,5 @@
 <div class="app-display-table app-loading" *ngIf="state.loading" style="position: absolute; z-index:1000;">
-  <div class="app-table-cell app-clean-pd" *ngIf="state.isMapaCollapsed">
+  <div class="app-table-cell app-clean-pd" >
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
   <div *ngIf="state.documentProgress && state.isMapaCollapsed" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
@@ -155,10 +155,10 @@
             </div>
           </mat-tab>
           <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
-            <div *ngIf="!state.isMapaCollapsed && state.solrResponse && state.solrResponse.response.numFound > config.mapOptions.docsForCluster">
-              {{ 'map.zoomToResults' | translate}}
+            <div *ngIf="!state.isMapaCollapsed && state.numFound > config.mapOptions.docsForCluster">
+              {{ state.numFound }} - {{ 'map.zoomToResults' | translate}}
             </div>
-            <ng-container *ngIf="state.isMapaCollapsed || (state.solrResponse && state.solrResponse.response.numFound <= config.mapOptions.docsForCluster)">
+            <ng-container *ngIf="state.isMapaCollapsed || (state.solrResponse && state.numFound <= config.mapOptions.docsForCluster)">
               <app-paginator></app-paginator>
               <cdk-virtual-scroll-viewport *ngIf="vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
               [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">

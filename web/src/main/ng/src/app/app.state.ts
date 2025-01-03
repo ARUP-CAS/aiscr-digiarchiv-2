@@ -129,7 +129,6 @@ export class AppState {
   }
 
   setSearchResponse(resp: SolrResponse, typ: string = 'results') {
-    console.log(resp.response.numFound)
     this.solrResponse = resp;
     this.numFound = resp.response.numFound;
     this.totalPages = this.numFound / this.rows;
