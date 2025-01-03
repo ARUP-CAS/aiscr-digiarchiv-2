@@ -503,6 +503,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
     // this.markersList = [];
     this.piansList = [];
+    
+    console.log(this.showType)
     switch (this.showType) {
       case 'cluster': {
         // this.markers = new L.markerClusterGroup();
@@ -606,7 +608,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             doc: doc,
             pian_chranene_udaje: null
           });
-          mrk.mrk.addTo(this.markers);
+          mrk.addTo(this.markers);
         }
       }
     });
@@ -615,7 +617,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   getMarkerById() {
-    this.state.loading = true;
+    //this.state.loading = true;
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
     
     this.service.getId(this.currentMapId, false).subscribe((res: any) => {
@@ -644,7 +646,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.service.search(p as HttpParams).subscribe((res: any) => {
       this.state.setSearchResponse(res, 'map');
       this.setMarkers(res.response.docs, false);
-      this.state.loading = false;
       if (this.currentMapId) {
         const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
         this.state.setMapResult(doc, false);
@@ -652,6 +653,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.zoomOnMapResult(doc);
         }
       }
+      this.state.loading = false;
     });
   }
 
@@ -913,15 +915,16 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setHeatData() {
-    this.state.loading = true;
     if (this.state.mapResult) {
       return
     }
+    this.state.loading = true;
 
     if (this.heatmapLayer) {
       this.map.removeLayer(this.heatmapLayer);
     }
     if (!this.state.heatMaps?.loc_rpt) {
+      this.state.loading = false;
       return;
     }
     // const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);

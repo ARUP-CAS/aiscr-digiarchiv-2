@@ -247,7 +247,7 @@ public class FedoraHarvester {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             ret.put("error", ex);
-        } 
+        }
         return ret;
     }
 
@@ -263,7 +263,7 @@ public class FedoraHarvester {
                 } else {
                     id = id.substring(id.lastIndexOf("member/") + 7);
                 }
-                
+
                 if (id.contains("/metadata")) {
                     id = id.substring(0, id.indexOf("/metadata"));
                 }
@@ -338,8 +338,11 @@ public class FedoraHarvester {
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             for (String model : models) {
-                processModel(model);
-                // searchModel(model);
+                if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", true)) {
+                    searchModel(model);
+                } else {
+                    processModel(model);
+                }
             }
             solr.commit("oai");
             solr.commit("entities");
@@ -471,7 +474,11 @@ public class FedoraHarvester {
         JSONArray models = Options.getInstance().getJSONObject("fedora").getJSONArray("models");
         for (int i = 0; i < models.length(); i++) {
             // processModel(models.getString(i));
-            searchModel(models.getString(i));
+            if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", true)) {
+                searchModel(models.getString(i));
+            } else {
+                processModel(models.getString(i));
+            }
         }
     }
 
@@ -519,7 +526,7 @@ public class FedoraHarvester {
             baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + model + "/member/*", "UTF8");
         }
         searchFedora(baseQuery, "deleted".equals(model), model, false);
-        update(start.toString(), false); 
+        update(start.toString(), false);
         Instant end = Instant.now();
         String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
         ret.put("ellapsed time", interval);
@@ -620,7 +627,7 @@ public class FedoraHarvester {
             // returns xml
             LOGGER.log(Level.FINE, "Processing record {0}", id);
             long start = Instant.now().toEpochMilli();
-            String xml = FedoraUtils.requestXml("record/" + id + "/metadata"); 
+            String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
             requestTime += Instant.now().toEpochMilli() - start;
             String model = FedoraModel.getModel(xml);
             start = Instant.now().toEpochMilli();
@@ -768,7 +775,7 @@ public class FedoraHarvester {
         if (model.equals("akce") || model.equals("lokalita")) {
             model = "archeologicky_zaznam:" + model;
         } else if (model.equals("knihovna_3d")) {
-            model = "dokument:3d"; 
+            model = "dokument:3d";
         }
         idoc.setField("model", model);
         if (edoc.containsKey("projekt_organizace")) {

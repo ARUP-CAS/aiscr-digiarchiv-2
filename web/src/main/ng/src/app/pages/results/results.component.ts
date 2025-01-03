@@ -138,7 +138,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search(params: Params) {
-    this.state.loading = true;
     if (params.mapa) {
       // Zpracuje mapa
       // setTimeout(() => {
@@ -146,6 +145,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       // }, 100);
       return;
     }
+    this.state.loading = true;
     const p = Object.assign({}, params);
     this.state.switchingMap = false;
     this.state.documentProgress = 0;
