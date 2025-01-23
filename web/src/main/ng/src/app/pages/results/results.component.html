@@ -155,14 +155,14 @@
             </div>
           </mat-tab>
           <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
-            <div *ngIf="!state.isMapaCollapsed && state.numFound > config.mapOptions.docsForCluster">
+            <div *ngIf="!state.isMapaCollapsed && state.numFound > config.mapOptions.docsForMarker">
               <mat-card class="app-result-item app-row-gap-16">
                 {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
               </mat-card>
             </div>
-            <ng-container *ngIf="state.isMapaCollapsed || (state.solrResponse && state.numFound <= config.mapOptions.docsForCluster)">
+            <ng-container *ngIf="state.isMapaCollapsed || (state.solrResponse && state.numFound <= config.mapOptions.docsForMarker)">
               <app-paginator></app-paginator>
-              <cdk-virtual-scroll-viewport *ngIf="vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
+              <cdk-virtual-scroll-viewport *ngIf="state.isMapaCollapsed && vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
               [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
                 <ng-container *cdkVirtualFor="let result of state.solrResponse.response.docs">
                   <ng-container [ngSwitch]="state.entity">
@@ -175,6 +175,19 @@
                   </ng-container>
                 </ng-container>
               </cdk-virtual-scroll-viewport>
+              <div *ngIf="!state.isMapaCollapsed">
+                {{ state.solrResponse.response.docs.length }}
+                  <ng-container *ngFor="let result of state.solrResponse.response.docs">
+                    <ng-container [ngSwitch]="state.entity">
+                      <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
+                      <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                      <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
+                      <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
+                      <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
+                      <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+                    </ng-container>
+                  </ng-container>
+                </div>
             </ng-container>
           </mat-tab>
         </mat-tab-group>
