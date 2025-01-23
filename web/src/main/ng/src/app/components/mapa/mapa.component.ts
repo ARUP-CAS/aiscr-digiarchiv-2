@@ -418,7 +418,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
 
     if (this.state.switchingMap) {
-      this.setMapType(this.state.solrResponse.response.numFound);
+      this.setMapType(this.state.numFound);
       this.processResponse(this.state.solrResponse);
       // this.setMarkers(this.state.solrResponse.response.docs, false);
       if (this.showType === 'marker' && this.state.solrResponse.response.numFound > this.state.solrResponse.response.docs.length) {
@@ -496,7 +496,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   processResponse(resp: any) {
-    this.setMapType(resp.response.numFound);
+    this.setMapType(this.state.numFound);
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
     // this.markersList = [];
     this.piansList = [];
@@ -511,7 +511,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
           ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
         p.loc_rpt = value;
-        p.rows = resp.response.numFound;
+        p.rows = this.state.numFound;
         p['noFacets'] = 'true';
         p['onlyFacets'] = 'false';
         this.service.getPians(p as HttpParams).subscribe((res: any) => {
@@ -552,14 +552,17 @@ export class MapaComponent implements OnInit, OnDestroy {
     p.rows = 0;
     p['noFacets'] = 'false';
     p['onlyFacets'] = 'true';
+    if (!p.entity) {
+      p.entity = 'dokument';
+    }
     this.state.loading = true;
     this.service.search(p as HttpParams).subscribe((resp: any) => {
+      this.state.loading = false;
       this.state.numFound = resp.response.numFound;
       this.distErr = resp.responseHeader.params['facet.heatmap.distErr'];
       this.state.setFacets(resp);
       this.processResponse(resp);
       this.state.facetsLoading = false;
-      this.state.loading = false;
     });
   }
 
@@ -930,6 +933,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       && this.map.getZoom() < this.markerZoomLevel;
     // this.showHeat = false;
     if (!this.showHeat) {
+      this.state.loading = false;
       return;
     }
     this.data.data = [];

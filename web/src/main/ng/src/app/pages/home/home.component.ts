@@ -67,6 +67,7 @@ export class HomeComponent implements OnInit {
       this.kategories = Object.keys(resp.kategorie).filter(s => s !== 'ddata3d');
 
       this.state.stats = resp.stats.stats_fields;
+      this.state.numFound = resp.response.numFound;
 
     });
   }

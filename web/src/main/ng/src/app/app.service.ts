@@ -666,7 +666,10 @@ export class AppService {
 
   }
 
-  showInMap(result: any, isPian = false) {
+  showInMap(result: any, force = false, isPian = false) {
+    if (!force && this.state.isMapaCollapsed) {
+      return;
+    }
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;
     this.state.switchingMap = true;
     this.windowRef.nativeWindow.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0, 0);

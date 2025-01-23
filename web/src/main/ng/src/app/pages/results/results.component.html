@@ -156,7 +156,9 @@
           </mat-tab>
           <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
             <div *ngIf="!state.isMapaCollapsed && state.numFound > config.mapOptions.docsForCluster">
-              {{ state.numFound }} - {{ 'map.zoomToResults' | translate}}
+              <mat-card class="app-result-item app-row-gap-16">
+                {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
+              </mat-card>
             </div>
             <ng-container *ngIf="state.isMapaCollapsed || (state.solrResponse && state.numFound <= config.mapOptions.docsForCluster)">
               <app-paginator></app-paginator>

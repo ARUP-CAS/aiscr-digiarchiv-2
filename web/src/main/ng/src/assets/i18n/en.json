@@ -551,7 +551,8 @@
       "openstreet": "OpenStreetMap",
       "cuzk_katastr_mapa": "ČÚZK - Cadastral  Map",
       "cuzk_katastr_uzemi": "ČÚZK - Cadastral Territory"
-    }
+    },
+    "zoomToResults": "he number of results found is: {{numFound}}. To view the results, zoom in on the map or use filtering."
   },
 
 
