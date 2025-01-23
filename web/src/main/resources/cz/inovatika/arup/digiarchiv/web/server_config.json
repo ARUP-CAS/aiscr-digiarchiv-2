@@ -321,10 +321,10 @@
         "f_typ_dokumentu_posudek:dokument_posudek.id",
         "f_jazyk_dokumentu:dokument_jazyk_dokumentu.id",
         "f_ulozeni_originalu:dokument_ulozeni_originalu",
-        "f_licence:dokument_licence",
+        "f_licence:dokument_licence.id",
         "f_format:dokument_extra_data.format.id",
         "f_zachovalost:dokument_extra_data.zachovalost.id",
-        "f_nahrada:dokument_extra_data.nahrada",
+        "f_nahrada:dokument_extra_data.nahrada.id",
         "f_tvar:dokument_tvar.tvar.id",
         "f_osoby:dokument_osoba.id",
         "f_pozorovatel:dokument_let.let_pozorovatel.id",
@@ -582,15 +582,15 @@
         "az_dj_adb.chranene_udaje.vyskovy_bod.geom_wkt"
       ],
       "facets": [
-        "f_organizace:akce_organizace",
+        "f_organizace:akce_organizace.id",
         "f_organizace:akce_vedouci_akce_ostatni.organizace.id",
-        "f_vedouci:akce_hlavni_vedouci",
-        "f_vedouci:akce_vedouci_akce_ostatni.vedouci.value",
-        "f_typ_vyzkumu:akce_hlavni_typ",
-        "f_typ_vyzkumu:akce_vedlejsi_typ",
-        "f_adb_typ_sondy:az_dj_adb.typ_sondy",
-        "f_adb_podnet:az_dj_adb.podnet",
-        "adb_vyskovy_bod_typ:az_dj_adb.chranene_udaje.vyskovy_bod.typ"
+        "f_vedouci:akce_hlavni_vedouci.id",
+        "f_vedouci:akce_vedouci_akce_ostatni.vedouci.id",
+        "f_typ_vyzkumu:akce_hlavni_typ.id",
+        "f_typ_vyzkumu:akce_vedlejsi_typ.id",
+        "f_adb_typ_sondy:az_dj_adb.typ_sondy.id",
+        "f_adb_podnet:az_dj_adb.podnet.id",
+        "adb_vyskovy_bod_typ:az_dj_adb.chranene_udaje.vyskovy_bod.typ.id"
       ], // odebrat facetu f_autor
       "full_text": [
         "akce_hlavni_vedouci",
@@ -635,10 +635,10 @@
         "lokalita_chranene_udaje.poznamka"
       ],
       "facets": [
-        "f_typ_lokality:lokalita_typ_lokality",
-        "f_druh_lokality:lokalita_druh",
-        "f_jistota:lokalita_jistota",
-        "f_lokalita_zachovalost:lokalita_zachovalost"        
+        "f_typ_lokality:lokalita_typ_lokality.id",
+        "f_druh_lokality:lokalita_druh.id",
+        "f_jistota:lokalita_jistota.id",
+        "f_lokalita_zachovalost:lokalita_zachovalost.id"
       ],
       "full_text": [
         "lokalita_typ_lokality",
@@ -746,15 +746,15 @@
       ],
       "facets": [
         "pristupnost",
-        "f_organizace:samostatny_nalez_predano_organizace",
-        "f_okres:samostatny_nalez_okres",
-        "f_kraj:samostatny_nalez_okres.kraj",
-        "f_katastr:samostatny_nalez_chranene_udaje.katastr",
-        "f_obdobi:samostatny_nalez_obdobi",
-        "f_druh_nalezu:samostatny_nalez_druh_nalezu",
-        "f_specifikace:samostatny_nalez_specifikace",
-        "f_nalezce:samostatny_nalez_nalezce",
-        "f_nalezove_okolnosti:samostatny_nalez_okolnosti",
+        "f_organizace:samostatny_nalez_predano_organizace.id",
+        "f_kraj:samostatny_nalez_okres.kraj.id",
+        "f_okres:samostatny_nalez_okres.id",
+        "f_katastr:samostatny_nalez_chranene_udaje.katastr.id",
+        "f_obdobi:samostatny_nalez_obdobi.id",
+        "f_druh_nalezu:samostatny_nalez_druh_nalezu.id",
+        "f_specifikace:samostatny_nalez_specifikace.id",
+        "f_nalezce:samostatny_nalez_nalezce.id",
+        "f_nalezove_okolnosti:samostatny_nalez_okolnosti.id",
         "f_mimetype:soubor_mimetype"
       ],
       "full_text": [
