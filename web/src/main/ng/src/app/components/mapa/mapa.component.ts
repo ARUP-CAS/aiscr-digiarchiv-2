@@ -222,9 +222,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   setAttribution() {
     this.map.attributionControl.removeAttribution(this.info);
     this.info = this.service.getTranslation('map.desc.info') + (this.activeBaseLayerOSM ? this.osmInfo : '') + this.lfAttribution;
-    const bounds = this.map.getBounds();
-    this.info = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
-      ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
     this.map.attributionControl.addAttribution(this.info);
     this.map.attributionControl.setPrefix(false);
   }
