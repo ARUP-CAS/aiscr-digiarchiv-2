@@ -30,7 +30,7 @@
         <div *ngIf="result.samostatny_nalez_predano_organizace || result.samostatny_nalez_evidencni_cislo || result.pristupnost">
           <ng-container *ngIf="result.samostatny_nalez_predano_organizace">
             <label class="app-label">{{ 'card.desc.Předáno organizaci' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'samostatny_nalez_predano_organizace'" [value]="result.samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.samostatny_nalez_evidencni_cislo">

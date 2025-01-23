@@ -749,7 +749,7 @@
     "f_typ_lokality",
     "f_typ_projektu",
     "inv_cislo",
-    "predano_organizace",
+    "samostatny_nalez_predano_organizace",
     "predmet_kategorie"
   ],
   "uiVars": {

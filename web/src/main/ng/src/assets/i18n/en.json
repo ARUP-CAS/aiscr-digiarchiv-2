@@ -295,7 +295,7 @@
       "f_nalezove_okolnosti": "Ind. find - context",
       "loc_rpt": "Map selection",
       "rada": "Document - series",
-      "predano_organizace": "Transferred to organisation",
+      "samostatny_nalez_predano_organizace": "Transferred to organisation",
       "predmet_kategorie": "Find - category",
       "vyber": "Map selection",
       "f_nahrada": "Document - replacement copy",
@@ -551,7 +551,8 @@
       "openstreet": "OpenStreetMap",
       "cuzk_katastr_mapa": "ČÚZK - Cadastral  Map",
       "cuzk_katastr_uzemi": "ČÚZK - Cadastral Territory"
-    }
+    },
+    "zoomToResults": "The number of results found is: {{numFound}}. To view the results, zoom in on the map or use filtering."
   },
 
 

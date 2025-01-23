@@ -295,7 +295,7 @@
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
       "loc_rpt": "Mapový výběr",
       "rada": "Dokument - řada",
-      "predano_organizace": "Předáno organizaci",
+      "samostatny_nalez_predano_organizace": "Předáno organizaci",
       "predmet_kategorie": "Nález - kategorie",
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
@@ -551,7 +551,8 @@
       "openstreet": "OpenStreetMap",
       "cuzk_katastr_mapa": "ČÚZK - Katastrální mapa",
       "cuzk_katastr_uzemi": "ČÚZK - Katastrální území"
-    }
+    },
+    "zoomToResults": "Počet nalezených výsledků je: {{numFound}}. Pro zobrazení výsledků přibližte mapu nebo použijte filtraci."
   },
 
 

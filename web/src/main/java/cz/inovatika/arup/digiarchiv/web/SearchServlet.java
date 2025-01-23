@@ -101,6 +101,7 @@ public class SearchServlet extends HttpServlet {
                     json = jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("entity");
                     json.put("kategorie", jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("dokument_kategorie_dokumentu"));
                     json.put("stats", jo.getJSONObject("stats")); 
+                    json.put("response", jo.getJSONObject("response")); 
 
                 } catch (Exception ex) {
                     json.put("error", ex);
