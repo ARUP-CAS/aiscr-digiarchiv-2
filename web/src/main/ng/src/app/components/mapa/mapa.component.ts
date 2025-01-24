@@ -1,5 +1,5 @@
 
-import { Component, OnInit, NgZone, Renderer2, Inject, PLATFORM_ID, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, NgZone, Renderer2, Inject, PLATFORM_ID, OnDestroy, Input, ChangeDetectorRef } from '@angular/core';
 
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -168,6 +168,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
+    private cd: ChangeDetectorRef,
     private renderer: Renderer2,
     private router: Router,
     private route: ActivatedRoute,
@@ -284,12 +285,12 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     map.on('zoomend', (e) => {
       //console.log('zoomend', this.processingParams, this.zoomingOnMarker)
-      this.setAttribution();
       if (!this.processingParams && !this.zoomingOnMarker) {
         this.doZoom();
       } else if (this.zoomingOnMarker || this.processingParams) {
         this.getDataByVisibleArea();
       }
+      this.state.mapBounds = this.map.getBounds();
       this.firstZoom = false;
       this.zoomingOnMarker = false;
       this.processingParams = false;
@@ -365,6 +366,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     let bounds;
     if (this.state.closingMapResult) {
       this.state.closingMapResult = false;
+      this.processingParams = false;
+      this.clearSelectedMarker();
+      // console.log(this.markers)
       return;
     }
     if (this.route.snapshot.queryParamMap.has('mapId') &&
@@ -460,7 +464,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       // bounds = this.locationFilter.getBounds();
       this.state.locationFilterBounds = this.locationFilter.getBounds();
     }
-
+    this.state.mapBounds = bounds;
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
 
@@ -586,11 +590,10 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.markersList = [];
     this.piansList = [];
     docs.forEach(pian => {
-      if (this.state.hasRights(pian.pristupnost, pian.organizace)) {
+      //if (this.state.hasRights(pian.pristupnost, pian.organizace)) {
         const coords = pian.loc_rpt[0].split(',');
-        // this.addMarker(pian.ident_cely, true, coords[0], coords[1], pian.presnost, pian.typ, pian, pian.pian_chranene_udaje);
         const mrk = this.addMarker({
-          id: pian.ident_cely,
+          id: pian.pian_id,
           isPian: true,
           lat: coords[0],
           lng: coords[1],
@@ -599,8 +602,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           doc: pian,
           pian_chranene_udaje: pian.pian_chranene_udaje
         });
-        //mrk.mrk.addTo(this.markers);
-      }
+      //}
     });
     this.markers.addLayers(this.markersList);
     this.currentZoom = this.map.getZoom();
@@ -861,8 +863,8 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setPianId(pian_id: string, docId: string) {
     this.zone.run(() => {
-      this.markersList = [];
-      this.markers = new L.featureGroup();
+      // this.markersList = [];
+      // this.markers = new L.featureGroup();
       this.showDetail = true;
       this.router.navigate([], { queryParams: { pian_id, mapId: docId, page: 0 }, queryParamsHandling: 'merge' });
     });
@@ -873,9 +875,10 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   clearSelectedMarker() {
-    this.selectedMarker.forEach(m => {
+    this.markersList.forEach(m => {
       m.setIcon(m.typ === 'bod' ? this.iconPoint : this.icon);
       m.setZIndexOffset(0);
+      m.options.selected = false;
     });
     this.selectedMarker = [];
   }
@@ -926,6 +929,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     ms.forEach(m => {
       m.setIcon(m.typ === 'bod' ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
+      m.options.selected = true;
       const latlng = m.getLatLng();
       latMax = Math.max(latMax, latlng.lat);
       latMin = Math.min(latMin, latlng.lat);
@@ -943,7 +947,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.zoomingOnMarker = true;
       // this.map.setView(ms[ms.length - 1].mrk.getLatLng(), this.config.mapOptions.hitZoomLevel);
     }
-    this.selectedMarker = ms;
     return changed;
   }
 
@@ -1019,7 +1022,8 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.hitMarker(this.state.mapResult);
       }
       this.state.loading = false;
-    }, 100);
+      this.cd.detectChanges()
+    }, 10);
   }
 
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docId: string) {

@@ -662,8 +662,6 @@ export class AppService {
     const southWest = L.latLng(latMin, lngMin);
     const northEast = L.latLng(latMax, lngMax);
     return L.latLngBounds(southWest, northEast);
-    
-
   }
 
   setMapResult(result, mapDetail) {
@@ -674,6 +672,8 @@ export class AppService {
       let url = '/results';
       const p: any = {};
       p.mapId = null;
+      p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
+      ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
       this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
     } else {
       this.state.setMapResult(result, mapDetail);

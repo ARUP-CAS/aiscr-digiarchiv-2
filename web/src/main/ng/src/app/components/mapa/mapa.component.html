@@ -1,3 +1,4 @@
+<mat-progress-bar mode="indeterminate" *ngIf="state.loading"></mat-progress-bar>
 <ng-container *ngIf="isBrowser">
 	<div class="app-map" leaflet [leafletOptions]="options"
 	 (leafletMapReady)="onMapReady($event)"

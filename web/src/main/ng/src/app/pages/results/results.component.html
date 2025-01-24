@@ -1,4 +1,4 @@
-<div class="app-display-table app-loading" *ngIf="state.loading" style="position: absolute; z-index:1000;">
+<div class="app-display-table app-loading" *ngIf="state.loading && state.isMapaCollapsed" style="position: absolute; z-index:1000;">
   <div class="app-table-cell app-clean-pd" >
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
