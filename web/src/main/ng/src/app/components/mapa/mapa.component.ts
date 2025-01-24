@@ -205,7 +205,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.push(this.route.queryParams.subscribe(val => {
-
       if (this.mapReady && !this.state.isMapaCollapsed) {
         this.paramsChanged();
       }
@@ -284,7 +283,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     map.on('zoomend', (e) => {
-      console.log('zoomend', this.processingParams, this.zoomingOnMarker)
+      //console.log('zoomend', this.processingParams, this.zoomingOnMarker)
       this.setAttribution();
       if (!this.processingParams && !this.zoomingOnMarker) {
         this.doZoom();
@@ -296,18 +295,18 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.processingParams = false;
     });
     map.on('dragend', () => {
-      console.log('dragend')
+      //console.log('dragend')
       if (!this.processingParams) {
         this.updateBounds(map.getBounds(), false, 'mapDragEnd');
       }
 
     });
     map.on('fullscreenchange', () => {
-      console.log('fullscreenchange')
+      //console.log('fullscreenchange')
       this.updateBounds(map.getBounds(), false, 'mapFull');
     });
     map.on('resize', () => {
-      console.log('resize')
+      //console.log('resize')
       this.updateBounds(map.getBounds(), false, 'mapResize');
     });
 
@@ -364,6 +363,10 @@ export class MapaComponent implements OnInit, OnDestroy {
   paramsChanged() {
     this.processingParams = true;
     let bounds;
+    if (this.state.closingMapResult) {
+      this.state.closingMapResult = false;
+      return;
+    }
     if (this.route.snapshot.queryParamMap.has('mapId') &&
       this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId') &&
       !this.route.snapshot.queryParamMap.has('loc_rpt')) {
@@ -442,7 +445,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   updateBounds(mapBounds: any, isLocation: boolean, caller: string) {
-    console.log(caller)
+    //console.log(caller)
     if (!this.isResults) {
       // Jsme v documentu, nepotrebujeme znovu nacist data
       return;
@@ -512,7 +515,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     // this.markersList = [];
     this.piansList = [];
 
-    console.log(this.showType)
+    //console.log(this.showType)
     switch (this.showType) {
       case 'cluster': {
         // this.markers = new L.markerClusterGroup();
@@ -655,6 +658,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     p.loc_rpt = value;
     if (this.state.solrResponse?.response) {
       p.rows = this.state.solrResponse.response.numFound;
+    }
+    if (!p.entity) {
+      p.entity = 'dokument';
     }
     this.state.solrResponse = null;
     this.service.search(p as HttpParams).subscribe((res: any) => {
@@ -862,7 +868,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   zoomOnMapResult(doc: any) {
-    console.log('zoomOnMapResult')
+    //console.log('zoomOnMapResult')
     this.zoomingOnMarker = true;
     const changed = this.selectedResultId !== doc.ident_cely;
     this.hitMarker(doc);

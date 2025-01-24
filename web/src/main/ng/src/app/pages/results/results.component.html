@@ -175,8 +175,7 @@
                   </ng-container>
                 </ng-container>
               </cdk-virtual-scroll-viewport>
-              <div *ngIf="!state.isMapaCollapsed">
-                {{ state.solrResponse.response.docs.length }}
+              <div *ngIf="!state.isMapaCollapsed && state.solrResponse?.response">
                   <ng-container *ngFor="let result of state.solrResponse.response.docs">
                     <ng-container [ngSwitch]="state.entity">
                       <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>

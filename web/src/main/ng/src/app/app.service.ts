@@ -666,8 +666,22 @@ export class AppService {
 
   }
 
-  showInMap(result: any, force = false, isPian = false) {
-    if (!force && this.state.isMapaCollapsed) {
+  setMapResult(result, mapDetail) {
+    if (!result && mapDetail) {
+      // zavirame kartu
+      this.state.closingMapResult = true;
+      this.state.mapResult = result;
+      let url = '/results';
+      const p: any = {};
+      p.mapId = null;
+      this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
+    } else {
+      this.state.setMapResult(result, mapDetail);
+    }
+  }
+
+  showInMap(result: any, isMapDetail = true, force = false) {
+    if ((!force && this.state.isMapaCollapsed) || isMapDetail) {
       return;
     }
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;
@@ -679,11 +693,7 @@ export class AppService {
     p.mapa = true;
     p.mapId = result.ident_cely;
     let url = '/results';
-    if (isPian) {
-      p.pian_id = result.ident_cely;
-      p.entity = result.akce ? 'akce' : (result.lokalita ? 'lokalita' : 'akce');
-      this.state.setMapResult(null, false);
-    } else if (this.router.isActive('/id', false)) {
+    if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;

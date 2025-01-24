@@ -1,5 +1,5 @@
 <div>
-    <button *ngIf="!mapDetail && (result.chranene_udaje || result.loc_rpt || result.loc)" mat-flat-button (click)="service.showInMap(result, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
+    <button *ngIf="!mapDetail && (result.chranene_udaje || result.loc_rpt || result.loc)" mat-flat-button (click)="service.showInMap(result, false, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
       <mat-icon>map</mat-icon>
     </button>
     <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">

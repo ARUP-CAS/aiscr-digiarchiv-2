@@ -1,5 +1,5 @@
 <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-knihovna_3d]="!isChild && !isDocumentDialogOpen" (click)="state.setMapResult(result, mapDetail)">
-  <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+  <a *ngIf="mapDetail" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   <mat-card-header>
@@ -93,7 +93,7 @@
       </ng-container>
     </div>
     <div>
-      <button *ngIf="!mapDetail && result.loc" mat-flat-button (click)="service.showInMap(result)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
+      <button *ngIf="!mapDetail && result.loc" mat-flat-button (click)="service.showInMap(result, false)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
         <mat-icon>map</mat-icon>
       </button>
       <button mat-flat-button [matTooltip]="'Odkazy' | translate" [matMenuTriggerFor]="links">

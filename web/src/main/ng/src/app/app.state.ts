@@ -62,6 +62,7 @@ export class AppState {
   solrResponse: SolrResponse;
   loading: boolean;
   switchingMap = false;
+  closingMapResult = false;
   facetsLoading = false;
   hasError = false;
   imagesLoading: boolean;
@@ -319,6 +320,10 @@ export class AppState {
   setMapResult(result, mapDetail) {
     const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
     this.mapResult = result;
+    // if (!result && !this.isMapaCollapsed) {
+      
+    //   return;
+    // }
     if (mapDetail) {
       return;
     }
