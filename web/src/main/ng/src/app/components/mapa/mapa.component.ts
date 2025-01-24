@@ -731,6 +731,16 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.markers = new L.featureGroup();
     }
     //this.markers = new L.markerClusterGroup();
+    const pianIds: string[] = [];
+    docs.forEach(doc => {
+      if (doc.pian_id && doc.pian_id.length > 0) {
+        doc.pian_id.forEach(pian_id => {
+          if (!pianIds.includes(doc.pian_id)){
+            pianIds.push(doc.pian_id);
+          }
+        });
+      }
+    });
     docs.forEach(doc => {
       if (doc.pian && doc.pian.length > 0) {
         doc.pian.forEach(pian => {
@@ -784,6 +794,9 @@ export class MapaComponent implements OnInit, OnDestroy {
                 });
                 mrk.addTo(this.markers);
                 this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, doc.ident_cely);
+                const m = Object.keys(this.markers._layers).length
+                this.state.loading = m < pianIds.length;
+                //console.log(m, pianIds.length)
               }
             });
             //}
