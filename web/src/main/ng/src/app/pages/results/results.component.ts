@@ -1,7 +1,7 @@
 import { SolrDocument } from './../../shared/solr-document';
 import { HttpParams } from '@angular/common/http';
 import { SolrResponse } from './../../shared/solr-response';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
@@ -58,6 +58,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     private service: AppService,
     public mediaMatcher: MediaMatcher,
     private zone: NgZone,
+    private cd: ChangeDetectorRef
   ) {
     this.state.bodyClass = 'app-page-results';
   }
@@ -215,5 +216,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   setFacetsOpened() {
     this.state.isFacetsCollapsed =! this.state.isFacetsCollapsed;
+  }
+
+  loadingFinished() {
+    this.cd.detectChanges()
   }
 }

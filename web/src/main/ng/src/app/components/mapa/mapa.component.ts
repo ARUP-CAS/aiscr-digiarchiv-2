@@ -1,5 +1,5 @@
 
-import { Component, OnInit, NgZone, Renderer2, Inject, PLATFORM_ID, OnDestroy, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, Renderer2, Inject, PLATFORM_ID, OnDestroy, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -45,6 +45,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   @Input() isResults = true;
   @Input() showResults = false;
+  @Output() loadingFinished = new EventEmitter();
 
   isBrowser: boolean;
   data = {
@@ -350,7 +351,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.zoomingCount < 1) {
         this.updateBounds(this.map.getBounds(), false, 'zoom');
       }
-    }, 200)
+    }, 100)
   }
 
   isEqualsBounds(bounds: LatLngBounds) {
@@ -517,7 +518,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.setMapType(this.state.numFound);
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
     // this.markersList = [];
-    this.piansList = [];
+    // this.piansList = [];
 
     //console.log(this.showType)
     switch (this.showType) {
@@ -544,7 +545,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       }
       case 'marker': {
         // this.markers = new L.featureGroup();
-        this.getVisibleAreaMarkers(true);
+        this.getVisibleAreaMarkers(false);
         break;
       }
       case 'heat': {
@@ -734,6 +735,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     //this.markers = new L.markerClusterGroup();
     const pianIds: string[] = [];
+    const processedPianIds: string[] = [];
     docs.forEach(doc => {
       if (doc.pian_id && doc.pian_id.length > 0) {
         doc.pian_id.forEach(pian_id => {
@@ -769,8 +771,8 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else if (doc.pian_id && doc.pian_id.length > 0) {
         doc.pian = [];
         doc.pian_id.forEach(pian_id => {
-
-          if (!this.piansList.find(p => p.id === pian_id)) {
+          const pianInList = this.piansList.find(p => p.id === pian_id);
+          if (!pianInList) {
             this.piansList.push({ id: pian_id, presnost: null, typ: null, docIds: [doc.ident_cely] });
             //if (this.showType !== 'heat') {
             this.service.getId(pian_id, false).subscribe(resp => {
@@ -796,14 +798,19 @@ export class MapaComponent implements OnInit, OnDestroy {
                 });
                 mrk.addTo(this.markers);
                 this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, doc.ident_cely);
-                const m = Object.keys(this.markers._layers).length
-                this.state.loading = m < pianIds.length;
+                // const m = Object.keys(this.markers._layers).length
+                processedPianIds.push(pian_id)
+                this.state.loading = processedPianIds.length < pianIds.length;
+                if (!this.state.loading) {
+                  this.loadingFinished.emit();
+                }
                 //console.log(m, pianIds.length)
               }
             });
             //}
           } else {
-            const pianInList = this.piansList.find(p => p.id === pian_id);
+            processedPianIds.push(pian_id);
+            
             if (!pianInList.docIds.includes(doc.ident_cely)) {
               pianInList.docIds.push(doc.ident_cely);
             }
@@ -811,6 +818,10 @@ export class MapaComponent implements OnInit, OnDestroy {
             if (mrk) {
               // mrk.docId = pianInList.docIds;
               // mrk.bindTooltip(this.popUpHtml(pian_id, mrk.pianPresnost, pianInList.docIds));
+            }
+            this.state.loading = processedPianIds.length < pianIds.length;
+            if (!this.state.loading) {
+              this.loadingFinished.emit();
             }
           }
 
@@ -1022,7 +1033,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.hitMarker(this.state.mapResult);
       }
       this.state.loading = false;
-      this.cd.detectChanges()
+      this.loadingFinished.emit();
     }, 10);
   }
 

@@ -1,4 +1,4 @@
-<div class="app-display-table app-loading" *ngIf="state.loading && state.isMapaCollapsed" style="position: absolute; z-index:1000;">
+<div class="app-display-table app-loading" *ngIf="state.loading" style="position: absolute; z-index:1000;">
   <div class="app-table-cell app-clean-pd" >
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
@@ -196,7 +196,7 @@
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
           <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
         </button>
-        <app-mapa [showResults]="opened"></app-mapa>
+        <app-mapa [showResults]="opened" (loadingFinished)="loadingFinished()"></app-mapa>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </div>
