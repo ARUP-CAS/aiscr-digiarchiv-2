@@ -82,9 +82,9 @@ app-stats {
         @extend .app-pt-2;
         background-color: $app-gray-1;
 
-        & > div {
-          width: 100% !important;
-        }
+        // & > div {
+        //   width: 100% !important;
+        // }
       }
     } 
   }
