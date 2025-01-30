@@ -7,9 +7,9 @@
 <div class="app-display-table app-container">
   <div class="app-table-cell">
     <ng-container *ngIf="state.isMapaCollapsed">
-      <div fxLayout="row wrap" class="app-entities-wrapper">
-        <ng-container *ngFor="let entity of config.entities">
-          <mat-card [class]="'app-entity-' + entity" class="app-card-entity" [matTooltip]="'entities.' + entity + '.desc' | translate">
+      <div fxLayout="row wrap" class="app-entities-wrapper" [class.app-doctype-expanded]="showingCat">
+        <ng-container *ngFor="let entity of config.entities; let index = index">
+          <mat-card [class]="'app-entity-' + entity + ' app-' + index" class="app-card-entity" [matTooltip]="'entities.' + entity + '.desc' | translate">
             <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity}" class="app-cursor-pointer">
               <mat-card-title fxLayout="row">
                 <a fxFlex>
@@ -26,8 +26,59 @@
               </a>
             </mat-card-actions>
           </mat-card>
+          
+          <mat-card fxFlex="100%" *ngIf="showingCat && index === 0" class="app-doctype app-doctype-0">
+            <mat-card-content fxLayout="row wrap">
+              <mat-card fxFlex *ngFor="let doctype of kategories" class="app-card-doctype mat-elevation-z0">
+                <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
+                  <mat-card-title>
+                    <a>
+                      <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
+                    </a>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card fxFlex="100%" *ngIf="showingCat && index === 1" class="app-doctype app-doctype-1">
+            <mat-card-content fxLayout="row wrap">
+              <mat-card fxFlex *ngFor="let doctype of kategories" class="app-card-doctype mat-elevation-z0">
+                <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
+                  <mat-card-title>
+                    <a>
+                      <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
+                    </a>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card fxFlex="100%" *ngIf="showingCat && index === 2" class="app-doctype app-doctype-2">
+            <mat-card-content fxLayout="row wrap">
+              <mat-card fxFlex *ngFor="let doctype of kategories" class="app-card-doctype mat-elevation-z0">
+                <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
+                  <mat-card-title>
+                    <a>
+                      <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
+                    </a>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+            </mat-card-content>
+          </mat-card>  
         </ng-container>
-        <mat-card fxFlex="100%" *ngIf="showingCat" class="app-doctype">
+        <mat-card fxFlex="100%" *ngIf="showingCat" class="app-doctype app-doctype-5">
           <mat-card-content fxLayout="row wrap">
             <mat-card fxFlex *ngFor="let doctype of kategories" class="app-card-doctype mat-elevation-z0">
               <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">

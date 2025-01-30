@@ -42,40 +42,37 @@ public class ExtZdrojSearcher implements EntitySearcher {
 
     @Override
     public void getChilds(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-        String pristupnost = LoginServlet.pristupnost(request.getSession());
-        if ("E".equals(pristupnost)) {
-            pristupnost = "D";
-        }
-
-        AkceSearcher as = new AkceSearcher();
-
-//        String[] f = new String[]{
-//            "chranene_udaje:[json]",
-//            "ident_cely,entity,okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,organizace,dalsi_katastry,lokalizace"
-//        };
-        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) {
-            try {
-                JSONObject doc = ja.getJSONObject(i);
-//                if (LoginServlet.userId(request) != null) {
-//                    SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+//        String pristupnost = LoginServlet.pristupnost(request.getSession());
+//        if ("E".equals(pristupnost)) {
+//            pristupnost = "D";
+//        }
+//
+//        AkceSearcher as = new AkceSearcher();
+//        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+//        for (int i = 0; i < ja.length(); i++) {
+//            try {
+//                JSONObject doc = ja.getJSONObject(i);
+//                SolrQuery query = new SolrQuery("*")
+//                        .addFilterQuery("az_ext_zdroj:\"" + doc.getString("ident_cely") + "\"")
+//                        .setFields(as.getChildSearchFields(pristupnost))
+//                        .setRows(1000);
+//                JSONObject r = SolrSearcher.json(client, "entities", query);
+//                JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
+//                for (int j = 0; j < cdjs.length(); j++) {
+//                    JSONObject cdj = cdjs.getJSONObject(j);
+//                    doc.append(cdj.getString("entity"), cdj);
 //                }
-                SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("az_ext_zdroj:\"" + doc.getString("ident_cely") + "\"")
-                        .setFields(as.getChildSearchFields(pristupnost))
-                        .setRows(1000);
-                JSONObject r = SolrSearcher.json(client, "entities", query);
-                JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
-                for (int j = 0; j < cdjs.length(); j++) {
-                    JSONObject cdj = cdjs.getJSONObject(j);
-                    doc.append(cdj.getString("entity"), cdj);
-                }
-            } catch (SolrServerException ex) {
-                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//            } catch (SolrServerException ex) {
+//                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+    }
+
+    @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
     }
 
     @Override

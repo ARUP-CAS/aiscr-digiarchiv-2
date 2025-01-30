@@ -4,10 +4,10 @@
       <app-sidenav-list (sidenavClose)="sidenav.close()"></app-sidenav-list>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content id="content-scroller">
     <header *ngIf="!isExport">
       <app-navbar (sidenavToggle)="sidenav.toggle()"></app-navbar>
-      <app-searchbar *ngIf="!isExport"></app-searchbar>
+      <app-searchbar *ngIf="!isStats"></app-searchbar>
     </header>
     <main>
       <router-outlet></router-outlet> 

@@ -52,7 +52,7 @@ public class FedoraServlet extends HttpServlet {
                 boolean isLocalhost = request.getRemoteAddr().startsWith("127.0.0.1");
                 String pristupnost = LoginServlet.pristupnost(request.getSession());
                 String confLevel = Options.getInstance().getString("indexSecLevel", "E");
-                LOGGER.log(Level.INFO,
+                LOGGER.log(Level.FINE,
                         "pristupnost -> {0}. confLevel -> {1}. isLocalhost -> {2}. isAllowedIP -> {3}. request -> {4}",
                         new Object[]{pristupnost, confLevel, isLocalhost, isAllowedIP, request.getRequestURL().toString()});
                 if (isAllowedIP || isLocalhost || pristupnost.compareTo(confLevel) >= 0) {
@@ -147,7 +147,7 @@ public class FedoraServlet extends HttpServlet {
                 try {
                     String from = req.getParameter("from");
                     FedoraHarvester fh = new FedoraHarvester();
-                    json = fh.update(from);
+                    json = fh.update(from, true);
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }

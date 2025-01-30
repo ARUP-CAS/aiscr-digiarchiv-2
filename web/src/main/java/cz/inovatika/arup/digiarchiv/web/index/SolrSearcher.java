@@ -100,6 +100,7 @@ public class SolrSearcher {
             
         }
 
+        query.setParam("facet.heatmap.distErr", "0.04");
         query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
                 .setParam("facet.heatmap.maxCells", "1000000");
     }
@@ -208,8 +209,7 @@ public class SolrSearcher {
 
     private static void addFilterNoQuotes(SolrQuery query, String field, String[] values, String pristupnost) {
         String fq = field; 
-        if (Options.getInstance().getJSONArray("securedFacets").toList().contains(field)) {
-            // System.out.println("KKKKKK");
+        if (Options.getInstance().getJSONArray("securedFilters").toList().contains(field)) {
             fq += "_" + pristupnost;
         }
         fq += ":(";
@@ -324,7 +324,7 @@ public class SolrSearcher {
                     query.addFilterQuery(fq);
                 } else if (field.startsWith("f_katastr")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-                } else if (field.startsWith("f_kategorie")) {
+                } else if (field.startsWith("f_pian_zm10")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
                 } else if (field.startsWith("adb_vyskovy_bod_typ")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
@@ -479,6 +479,24 @@ public class SolrSearcher {
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
+        }
+    }
+
+    public static JSONObject getOrganizace(String ident_cely) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
+                    .setRows(1);
+            JSONObject jo = json(client, "organizations", query);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            } else {
+                return new JSONObject();
+            }
+//            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject();
         }
     }
 
@@ -658,11 +676,6 @@ public class SolrSearcher {
         if (field.equals("f_aktivita")) {
             for (String sufix : prSufix) {
                 idoc.addField("f_aktivita_" + sufix, idoc.getFieldValues(field));
-            }
-        }
-        if (field.equals("nalez_kategorie")) {
-            for (String sufix : prSufix) {
-                idoc.addField("f_kategorie_" + sufix, idoc.getFieldValues(field));
             }
         }
         if (field.contains("druh_nalezu")) {

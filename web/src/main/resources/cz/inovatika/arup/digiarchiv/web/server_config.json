@@ -1,246 +1,278 @@
 {
-    "solrhost": "http://localhost:8983/solr/",
-    "solrRels": "http://localhost:8983/solr/",
-
-    "OAI": {
-        "baseUrl": "https://api.aiscr.cz", 
-        "repositoryName": "Archaeological Map of the Czech Republic (AMCR)",
-        "adminEmail": "info@amapa.cz",
-        "metadataPrefixes": ["oai_dc", "oai_amcr"],
-        "recordsPerPage": 100,
-        "orderField": "datestamp",
-        "orderDirection": "desc",
-        "resumptionTokenExpires": 60,
-        "sets": ["dokument","ext_zdroj","pian","akce","lokalita","archeologicky_zaznam","archeologicky_zaznam:akce","archeologicky_zaznam:lokalita","projekt","samostatny_nalez","heslo","ruian_kraj","ruian_okres","ruian_katastr","organizace",
-            "osoba","uzivatel","let", "adb","knihovna_3d"]
-    },
+  "solrhost": "http://localhost:8983/solr/",
+  "OAI": {
+    "baseUrl": "https://api.aiscr.cz",
+    "repositoryName": "Archaeological Map of the Czech Republic (AMCR)",
+    "adminEmail": "info@amapa.cz",
+    "metadataPrefixes": [
+      "oai_dc",
+      "oai_amcr"
+    ],
+    "recordsPerPage": 100,
+    "orderField": "datestamp",
+    "orderDirection": "desc",
+    "resumptionTokenExpires": 60,
+    "sets": [
+      "projekt",
+      "archeologicky_zaznam",
+      "archeologicky_zaznam:akce",
+      "akce",
+      "archeologicky_zaznam:lokalita",
+      "lokalita",
+      "let",
+      "adb",
+      "dokument",
+      "dokument:3d",
+      "ext_zdroj",
+      "pian",
+      "samostatny_nalez",
+      "uzivatel",
+      "heslo",
+      "ruian_kraj",
+      "ruian_okres",
+      "ruian_katastr",
+      "organizace",
+      "osoba"
+    ]
+  },
+  "auth": "https://amcr.aiscr.cz/api/",
+  "fedora": {
+    "api.point": "https://fedora.aiscr.cz/rest/AMCR/",
+    "search.point": "https://fedora.aiscr.cz/rest/fcr:search?",
+    "models": [
+      "heslo",
+      "ruian_kraj",
+      "ruian_okres",
+      "ruian_katastr",
+      "organizace",
+      "osoba",
+      "uzivatel",
+      "adb",
+      "pian",
+      "ext_zdroj",
+      "let",
+      "archeologicky_zaznam",
+      "dokument",
+      "projekt",
+      "samostatny_nalez",
+      "deleted"
+    ],
+    "user": "",
+    "pwd": "",
+    "search_fedora_id_prefix": "AMCR/",
+    "useSearch": true
+  },
+  "mail": {
+    "smtp.host": "xxx",
+    "smtp.port": 1,
+    "destMail": "info@amapa.cz",
+    "subject": "Digitální archiv AMČR - komentář k záznamu ",
+    "smtp.user": "user",
+    "smtp.pwd": "heslo"
+  },
+  "thumbsDir": "/var/lib/digiarchiv/thumbs/",
+  "dynamicThumbs": false,
+  "thumbWidth": 100,
+  "thumbHeight": 100,
+  "mediumHeight": 1000,
+  "maxPixels": 10000000,
+  "watermark.alpha": 0,
+  "sessionTimeout": 3600,
+  "indexSecLevel": "E",
+  "allowedIP": [
+    ""
+  ],
+  "requestInterval": 5,
     
-    "auth": "https://amcr.aiscr.cz/api/",
-
-    "fedora": {
-        "api.point": "https://fedora.aiscr.cz/rest/AMCR/",
-        "search.point": "https://fedora.aiscr.cz/rest/fcr:search?",
-        "models":["heslo", "ruian_kraj", "ruian_okres", "ruian_katastr", "organizace", "osoba", "uzivatel", "adb", "pian", "ext_zdroj", "let", "archeologicky_zaznam", "projekt", "samostatny_nalez", "dokument", "deleted"],
-        "user": "",
-        "pwd": "",
-        "search_fedora_id_prefix": "AMCR/"
-    },
-
-    "mail": {
-        "smtp.host": "mail.arup.cas.cz",
-        "smtp.port": 25,
-        "destMail": "info@amapa.cz",
-        "subject": "Digitální archiv AMČR - komentář k záznamu ",
-        "smtp.user": "user",
-        "smtp.pwd": "heslo"
-    },
-
-    "imagesDir": "/var/lib/digiarchiv/thumbs/",
-    "thumbsDir": "/var/lib/digiarchiv/data/",
-    "dynamicThumbs": false,
-    "thumbWidth": 100,
-    "thumbHeight": 100,
-    "mediumHeight": 1000,
-    "maxPixels": 10000000,
-    "watermark.alpha": 0,
-    "sessionTimeout": 3600,
-    "indexSecLevel": "E",
-    "allowedIP": [""],
-    "requestInterval": 30,
-
-    "securedFacets": [
-        "f_kategorie", "f_pian_zm10", "projekt_chu_lokalizace", "projekt_parcelni_cislo",
-        "projekt_kulturni_pamatka_cislo", "projekt_kulturni_pamatka_popis",
-        "akce_lokalizace_okolnosti", "lokalita_nazev", "f_uzivatelske_oznaceni", 
-        "adb_uzivatelske_oznaceni_sondy", "adb_trat", "adb_cislo_popisne", "adb_parcelni_cislo", "adb_poznamka", 
-        "f_okres", "f_katastr", "adb_vyskovy_bod_typ"],
-
-    "kategoriet": {
-        "HES-001075": "texty",
-        "HES-001076": "texty",
-        "HES-001077": "texty",
-        "HES-001078": "texty",
-        "HES-001079": "texty",
-        "HES-001080": "texty",
-        "HES-001081": "texty",
-        "HES-001110": "texty",
-
-        "HES-001082": "ddata",
-        "HES-001083": "ddata",
-        "HES-001084": "ddata",
-        "HES-001085": "ddata",
-        "HES-001086": "ddata",
-        "HES-001087": "ddata",
-
-        "HES-001088": "foto",
-        "HES-001089": "foto",
-        "HES-001090": "foto",
-        "HES-001091": "foto",
-        "HES-001092": "foto",
-        "HES-001093": "foto",
-        "HES-001094": "foto",
-        "HES-001095": "foto",
-        "HES-001096": "foto",
-        "HES-001097": "foto",
-
-        "HES-001098": "lfoto",
-        "HES-001099": "lfoto",
-        "HES-001116": "lfoto",
-        "HES-001100": "lfoto",
-        "HES-001102": "lfoto",
-        "HES-001103": "lfoto",
-        "HES-001104": "lfoto",
-        "HES-001105": "lfoto",    
-
-        "HES-001101": "mplany",
-        "HES-001106": "mplany",
-        "HES-001107": "mplany",
-        "HES-001108": "mplany",
-        "HES-001109": "mplany",
-        "HES-001111": "mplany",
-
-        "HES-001113": "ddata3d",
-        "HES-001114": "ddata3d",
-        "HES-001115": "ddata3d",
-
-        "HES-001112": "neuvedeno"
-    },
-    
-    
-
-"fields": {
+  "securedFacets": [
+    "f_katastr",
+    "adb_vyskovy_bod_typ",
+    "f_pian_zm10"
+  ],
+  "securedFilters": [
+    "projekt_chu_lokalizace",
+        
+    "projekt_chranene_udaje.hlavni_katastr",
+    "projekt_chranene_udaje.dalsi_katastr",
+    "projekt_chranene_udaje_lokalizace",
+    "projekt_chranene_udaje_parcelni_cislo",
+    "projekt_chranene_udaje.geom_gml",
+    "projekt_chranene_udaje.geom_wkt",
+    "projekt_chranene_udaje_kulturni_pamatka_cislo",
+    "projekt_chranene_udaje_kulturni_pamatka_popis",
+        
+        
+        
+    "akce_lokalizace_okolnosti",
+    "lokalita_nazev",
+    "f_uzivatelske_oznaceni",
+    "adb_uzivatelske_oznaceni_sondy",
+    "adb_trat",
+    "adb_cislo_popisne",
+    "adb_parcelni_cislo",
+    "adb_poznamka",
+    "f_okres",
+    "f_katastr",
+    "adb_vyskovy_bod_typ",
+    "akce_chranene_udaje_souhrn_upresneni",
+    "lokalita_popis",
+    "lokalita_poznamka",
+    "samostatny_nalez_lokalizace"
+  ],
+  "kategoriet": {
+    "HES-001075": "texty",
+    "HES-001076": "texty",
+    "HES-001077": "texty",
+    "HES-001078": "texty",
+    "HES-001079": "texty",
+    "HES-001080": "texty",
+    "HES-001081": "texty",
+    "HES-001110": "texty",
+    "HES-001082": "ddata",
+    "HES-001083": "ddata",
+    "HES-001084": "ddata",
+    "HES-001085": "ddata",
+    "HES-001086": "ddata",
+    "HES-001087": "ddata",
+    "HES-001088": "foto",
+    "HES-001089": "foto",
+    "HES-001090": "foto",
+    "HES-001091": "foto",
+    "HES-001092": "foto",
+    "HES-001093": "foto",
+    "HES-001094": "foto",
+    "HES-001095": "foto",
+    "HES-001096": "foto",
+    "HES-001097": "foto",
+    "HES-001098": "lfoto",
+    "HES-001099": "lfoto",
+    "HES-001116": "lfoto",
+    "HES-001100": "lfoto",
+    "HES-001102": "lfoto",
+    "HES-001103": "lfoto",
+    "HES-001104": "lfoto",
+    "HES-001105": "lfoto",
+    "HES-001101": "mplany",
+    "HES-001106": "mplany",
+    "HES-001107": "mplany",
+    "HES-001108": "mplany",
+    "HES-001109": "mplany",
+    "HES-001111": "mplany",
+    "HES-001113": "ddata3d",
+    "HES-001114": "ddata3d",
+    "HES-001115": "ddata3d",
+    "HES-001112": "neuvedeno"
+  },
+  "fields": {
     "common": [
-      "ident_cely", "datestamp", "entity", "stav", "pristupnost",
-      "entity"
+      "ident_cely",
+      "datestamp",
+      "entity",
+      "stav",
+      "pristupnost"
     ],
-  "dokument": {
-    "header": [
-      "dokument_autor",
-      "autor:dokument_autor",
-      "dokument_rok_vzniku",
-      "rok_vzniku:dokument_rok_vzniku",
-      "dokument_typ_dokumentu",
-      "dokument_material_originalu",
-      "dokument_rada",
-      "dokument_organizace",
-      "organizace:dokument_organizace",
-      "dokument_okres",
-      "dokument_popis", 
-      "dokument_cast_archeologicky_zaznam",
-      "dokument_cast_projekt",
-      "archeologicky_zaznam_chranene_udaje_hlavni_katastr",
-      "projekt_chranene_udaje_hlavni_katastr",
-      "projekt_chranene_udaje_dalsi_katastr",
-      "archeologicky_zaznam_chranene_udaje_dalsi_katastr",
-      "dokument_cast_neident_akce_katastr",
-      "archeologicky_zaznam_okres",
-      "projekt_okres",
-      "dokument_cast_neident_akce_okres","dokument_cast_akce", "dokument_cast_lokalita",
-      "soubor:[json]",
-      "soubor_filepath",
-      "location_info:[json]"
-    ],
-    "detail": [
-      "pian_id",
-      "dokument_jazyk_dokumentu",
-      "dokument_poznamka",
-      "dokument_posudek",
-      "dokument_ulozeni_originalu",
-      "dokument_oznaceni_originalu",
-      "dokument_datum_zverejneni",
-      "dokument_cast:[json]",
-      "dokument_extra_data:[json]",
-      "dokument_let:[json]","dokument_tvar:[json]",
-      "dokument_osoba",
-      "dokument_licence"
-    ],
-    "facets": [
-      "f_pozorovatel:dokument_let.let_pozorovatel", 
-      "f_let_letiste_start:dokument_let.let_letiste_start",
-      "f_let_pocasi:dokument_let.let_pocasi",
-      "f_let_organizace:dokument_let.let_organizace", 
-      "f_let_letiste_cil:dokument_let.let_letiste_cil", 
-      "f_let_pilot:dokument_let.let_pilot", 
-      "f_let_dohlednost:dokument_let.let_dohlednost",
-      "f_let_uzivatelske_oznaceni:dokument_let.let_uzivatelske_oznaceni", 
-      "f_zachovalost:dokument_extra_data.zachovalost.id",
-      "f_autor:dokument_autor",      
-                
-      "f_typ_dokumentu_posudek:dokument_posudek",
-      "f_areal:dokument_cast.komponenta[*].komponenta_areal.id",
-      "f_pian_presnost:dokument_cast.neident_akce[*].pian_presnost",
-      "f_pian_typ:dokument_cast.neident_akce[*].pian_typ",          
-      "f_typ_dokumentu:dokument_typ_dokumentu", "f_jazyk_dokumentu:dokument_jazyk_dokumentu",
-      "f_rada:dokument_rada",      
-      "f_organizace:dokument_organizace",
-      "f_ulozeni_originalu:dokument_ulozeni_originalu",
-      "f_material_dokumentu:dokument_material_originalu",    
+    "dokument": {
+      "header": [
+        "dokument_autor",
+        "dokument_rok_vzniku",
+        "dokument_typ_dokumentu",
+        "dokument_material_originalu",
+        "dokument_rada",
+        "dokument_organizace",
+        "dokument_okres",
+        "dokument_popis",
+        "dokument_cast_archeologicky_zaznam",
+        "dokument_cast_projekt",
+        "archeologicky_zaznam_chranene_udaje_hlavni_katastr",
+        "projekt_chranene_udaje_hlavni_katastr",
+        "projekt_chranene_udaje_dalsi_katastr",
+        "archeologicky_zaznam_chranene_udaje_dalsi_katastr",
+        "dokument_cast_neident_akce_katastr",
+        "dokument_cast_neident_akce_okres",
+        "dokument_cast_akce",
+        "dokument_cast_lokalita",
+        "soubor:[json]",
+        "soubor_filepath",
+        "location_info:[json]"
+      ],
+      "detail": [
+        "pian_id",
+        "dokument_jazyk_dokumentu",
+        "dokument_poznamka",
+        "dokument_posudek",
+        "dokument_ulozeni_originalu",
+        "dokument_oznaceni_originalu",
+        "dokument_datum_zverejneni",
+        "dokument_cast:[json]",
+        "dokument_extra_data:[json]",
+        "dokument_let:[json]",
+        "dokument_tvar:[json]",
+        "dokument_osoba",
+        "dokument_licence"
+      ],
+      "facets": [
+        "f_pozorovatel:dokument_let.let_pozorovatel",
+        "f_let_letiste_start:dokument_let.let_letiste_start",
+        "f_let_letiste_cil:dokument_let.let_letiste_cil",
+        "f_let_pocasi:dokument_let.let_pocasi",
+        "f_let_organizace:dokument_let.let_organizace",
+        "f_let_dohlednost:dokument_let.let_dohlednost",
+        "f_zachovalost:dokument_extra_data.zachovalost.id",
+        "f_autor:dokument_autor",
+        "f_organizace:dokument_organizace",
+        "f_typ_dokumentu_posudek:dokument_posudek",
+        "f_typ_dokumentu:dokument_typ_dokumentu",
+        "f_jazyk_dokumentu:dokument_jazyk_dokumentu",
+        "f_rada:dokument_rada",
+        "f_ulozeni_originalu:dokument_ulozeni_originalu",
+        "f_material_dokumentu:dokument_material_originalu",
+        "f_obdobi:dokument_cast.komponenta[*].komponenta_obdobi.id",
+        "f_areal:dokument_cast.komponenta[*].komponenta_areal.id",
         "f_aktivita:dokument_cast.komponenta[*].komponenta_aktivita[*].id",
         "f_typ_nalezu:dokument_cast.komponenta[*].komponenta_typ_nalezu",
         "f_druh_nalezu:dokument_cast.komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:dokument_cast.komponenta[*].komponenta_nalez_predmet[*].druh.id",
         "f_specifikace:dokument_cast.komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
         "f_specifikace:dokument_cast.komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
-        "f_obdobi:dokument_cast.komponenta[*].komponenta_obdobi.id",
-        "f_format:dokument_extra_data.format.id", 
-        "f_tvar:dokument_tvar.tvar.id",  
-        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
-        "f_pian_presnost:pian_presnost",
-        "f_pian_typ:pian_typ",
-        "f_pian_zm10:pian_chranene_udaje.zm10",
-        "f_organizace:akce_organizace",
-        "f_zeme:dokument_extra_data.zeme.id"
-    ],
-    "facets2": [ 
-      "f_vedouci:dokument_cast_neident_akce_vedouci",
-      "f_vedouci:dokument_cast_akce_hlavni_vedouci",
-      "f_okres",
-      "f_katastr",
-      "dokument_kategorie_dokumentu", 
-      "f_pian_zm10", "f_typ_vyzkumu", 
-      "f_kategorie"
-    ],
-    "full_text": [
+        "f_format:dokument_extra_data.format.id",
+        "f_tvar:dokument_tvar.tvar.id",
+        "f_zeme:dokument_extra_data.zeme.id",
+        "f_osoby:dokument_extra_data.osoby"
+      ],
+      "full_text": [
         "ident_cely",
         "dokument_autor",
         "dokument_rok_vzniku",
         "dokument_popis",
         "dokument_poznamka",
         "dokument_oznaceni_originalu",
-
         "dokument_cast_ident_cely",
         "dokument_cast_archeologicky_zaznam",
         "dokument_cast_projekt",
         "dokument_cast_poznamka",
-
         "komponenta_dokument_ident_cely",
-        "komponenta_dokument_obdobi", 
+        "komponenta_dokument_obdobi",
         "komponenta_dokument_presna_datace",
-        "komponenta_dokument_areal", 
-        "f_aktivita", 
+        "komponenta_dokument_areal",
+        "f_aktivita",
         "komponenta_dokument_poznamka",
         "komponenta_nalez_objekt_poznamka",
         "komponenta_nalez_predmet_poznamka",
-
-        "nalez_dokumentu_typ_nalezu", 
-        "nalez_dokumentu_druh_nalezu", 
-        "nalez_dokumentu_kategorie", 
-        "nalez_dokumentu_specifikace", 
+        "nalez_dokumentu_typ_nalezu",
+        "nalez_dokumentu_druh_nalezu",
+        "nalez_dokumentu_kategorie",
+        "nalez_dokumentu_specifikace",
         "nalez_dokumentu_poznamka",
-
-        "pian_id",
-
         "extra_data_region",
         "extra_data_cislo_objektu",
-        "extra_data_format", 
-        "extra_data_zachovalost", 
-        "extra_data_nahrada", 
+        "extra_data_format",
+        "extra_data_zachovalost",
+        "extra_data_nahrada",
         "extra_data_odkaz",
         "extra_data_datum_vzniku",
         "extra_data_udalost_typ",
         "extra_data_udalost",
-        "extra_data_zeme", 
-
+        "extra_data_zeme",
         "dokument_let_ident_cely",
         "let_datum",
         "let_pozorovatel",
@@ -249,15 +281,13 @@
         "let_pilot",
         "let_typ_letounu",
         "let_ucel_letu",
-        "let_letiste_start", 
-        "let_letiste_cil", 
-        "let_pocasi", 
-        "let_dohlednost", 
+        "let_letiste_start",
+        "let_letiste_cil",
+        "let_pocasi",
+        "let_dohlednost",
         "let_uzivatelske_oznaceni",
-
-        "tvar_tvar", 
+        "tvar_tvar",
         "tvar_poznamka",
-
         "neident_akce_okres",
         "neident_akce_katastr",
         "neident_akce_vedouci",
@@ -267,124 +297,123 @@
         "neident_akce_popis",
         "neident_akce_poznamka",
         "neident_akce_pian",
-
         "parent_akce_okres",
         "parent_akce_katastr"
-    ]
-  },
-  "archeologicky_zaznam": {
-    "header": [
-      "az_okres",
-      "az_dokument", "az_ext_odkaz:[json]",
-      "az_chranene_udaje_hlavni_katastr",
-      "az_chranene_udaje_dalsi_katastry",
-      "az_chranene_udaje:[json]"
-    ],
-    "detail": [
+      ]
+    },
+    "archeologicky_zaznam": {
+      "header": [
+        "az_okres",
+        "az_dokument",
+        "az_ext_odkaz:[json]",
+        "az_chranene_udaje_hlavni_katastr",
+        "az_chranene_udaje_dalsi_katastry",
+        "az_chranene_udaje:[json]"
+      ],
+      "detail": [
         "az_dokumentacni_jednotka:[json]",
         "az_dj_pian",
         "az_dj_adb",
         "az_ext_zdroj:[json]"
-    ],
-    "facets": [
-    ],
-    "full_text": [
+      ],
+      "facets": [],
+      "full_text": [
         "ident_cely",
         "az_okres",
         "az_dokument",
         "az_dj",
         "pian_ident_cely",
         "f_aktivita"
-    ]
-  },
-  "akce": {
-    "header": [
-        "akce_hlavni_vedouci", "specifikace_data", "datum_zahajeni", "datum_ukonceni", "je_nz", "odlozena_nz", "pristupnost",
-        "akce_projekt", "akce_typ","akce_je_nz","akce_odlozena_nz","akce_hlavni_vedouci",
-        "akce_organizace","akce_vedouci_akce_ostatni:[json]","akce_specifikace_data","akce_datum_zahajeni", 
-        "akce_datum_ukonceni" ,"akce_hlavni_typ","akce_vedlejsi_typ","akce_ulozeni_nalezu",
-        "akce_ulozeni_dokumentace","akce_chranene_udaje:[json]"
-    ],
-    "detail": [
-        
-    ],
-    "facets": [
-        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
+      ]
+    },
+    "akce": {
+      "header": [
+        "akce_hlavni_vedouci",
+        "specifikace_data",
+        "datum_zahajeni",
+        "datum_ukonceni",
+        "je_nz",
+        "odlozena_nz",
+        "pristupnost",
+        "akce_projekt",
+        "akce_typ",
+        "akce_je_nz",
+        "akce_odlozena_nz",
+        "akce_hlavni_vedouci",
+        "akce_organizace",
+        "akce_vedouci_akce_ostatni:[json]",
+        "akce_specifikace_data",
+        "akce_datum_zahajeni",
+        "akce_datum_ukonceni",
+        "akce_hlavni_typ",
+        "akce_vedlejsi_typ",
+        "akce_ulozeni_nalezu",
+        "akce_ulozeni_dokumentace",
+        "akce_chranene_udaje:[json]"
+      ],
+      "detail": [],
+      "facets": [
+        "f_okres:az_okres",
         "f_typ_vyzkumu:akce_hlavni_typ",
         "f_typ_vyzkumu:akce_vedlejsi_typ",
-        "f_okres:az_okres",
         "f_vedouci:akce_hlavni_vedouci",
         "f_vedouci:akce_vedouci_akce_ostatni.vedouci.value",
-        "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
-        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
-        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
+        "f_organizace:akce_organizace",
+        "f_organizace:akce_vedouci_akce_ostatni.organizace.id",
         "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
+        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
+        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
         "f_aktivita:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita[*].id",
+        "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
-        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
-        "f_organizace:akce_organizace",
-        "f_organizace:akce_vedouci_akce_ostatni.organizace.id"
-    ],
-    "facets2": [
-        "f_katastr:az_chranene_udaje.hlavni_katastr.id",
-        "f_adb_typ_sondy:adb_typ_sondy",
-        "f_pian_presnost",
-        "f_adb_podnet",
-        "f_pian_zm10",
-        "f_autor",
-        "f_pian_typ",
-        "f_kategorie"
-    ],
-    "full_text": [
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id"
+      ],
+      "full_text": [
         "akce_ulozeni_nalezu",
         "akce_projekt",
         "vyskovy_bod_ident_cely",
         "vyskovy_bod_typ"
-    ]
-  },
-  "lokalita": {
-    "header": [
-      "lokalita_chranene_udaje:[json]",
-      "lokalita_typ_lokality",
-      "lokalita_druh",
-      "lokalita_zachovalost",
-      "lokalita_jistota"
-    ],
-    "detail": [
-    ],
-    "facets": [
-        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
-        "f_typ_lokality:lokalita_typ_lokality",
+      ]
+    },
+    "lokalita": {
+      "header": [
+        "lokalita_chranene_udaje:[json]",
+        "lokalita_typ_lokality",
+        "lokalita_druh",
+        "lokalita_zachovalost",
+        "lokalita_jistota"
+      ],
+      "detail": [],
+      "facets": [
         "f_okres:az_okres",
+        "f_typ_lokality:lokalita_typ_lokality",
         "f_druh_lokality:lokalita_druh",
+        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
+        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
+        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
         "f_aktivita:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita[*].id",
         "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
-        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
-        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
         "f_lokalita_zachovalost:lokalita_zachovalost",
+        "f_jistota:lokalita_jistota",
         "f_pian_presnost:pian_presnost",
         "f_pian_typ:pian_typ",
-        "f_pian_zm10:pian_chranene_udaje.zm10",
-        "f_organizace:akce_organizace",
-        "f_jistota:lokalita_jistota"
-    ],
-    "facets2": [
-      "f_kategorie"
-    ],
-    "full_text": [
+        "f_pian_zm10:pian_chranene_udaje.zm10"
+      ],
+      "full_text": [
         "lokalita_nazev",
         "lokalita_popis",
         "lokalita_poznamka",
         "lokalita_uzivatelske_oznaceni"
-    ]
-  },
-  "projekt": {
-    "header": [
+      ]
+    },
+    "projekt": {
+      "header": [
         "projekt_okres",
         "projekt_vedouci_projektu",
         "projekt_organizace",
@@ -396,95 +425,90 @@
         "projekt_archeologicky_zaznam",
         "projekt_dokument",
         "projekt_samostatny_nalez"
-    ],
-    "detail": [
-                "projekt_planovane_zahajeni",
-                "projekt_podnet",
-                "projekt_uzivatelske_oznaceni",
-                "projekt_kulturni_pamatka",
-                "projekt_oznaceni_stavby",
-                "pian_id"
-            ],
-    "facets": [
-      "f_vedouci:projekt_vedouci_projektu",
-      "f_organizace:projekt_organizace",
-      "f_typ_projektu:projekt_typ_projektu",
-      "f_okres:projekt_okres"
-    ],
-    "facets2": [
-      "f_katastr:projekt_chranene_udaje.hlavni_katastr.id",
-      "f_katastr:projekt_chranene_udaje.dalsi_katastr[*].id"
-    ],
-    "full_text": [
+      ],
+      "detail": [
+        "projekt_planovane_zahajeni",
+        "projekt_podnet",
+        "projekt_uzivatelske_oznaceni",
+        "projekt_kulturni_pamatka",
+        "projekt_oznaceni_stavby",
+        "pian_id"
+      ],
+      "facets": [
+        "f_vedouci:projekt_vedouci_projektu",
+        "f_organizace:projekt_organizace",
+        "f_typ_projektu:projekt_typ_projektu",
+        "f_okres:projekt_okres"
+      ],
+      "full_text": [
         "ident_cely",
-        "projekt_typ_projektu", 
+        "projekt_typ_projektu",
         "projekt_okres",
         "projekt_hlavni_katastr",
         "projekt_dalsi_katastr",
         "projekt_podnet",
         "projekt_vedouci_projektu",
-        "projekt_organizace", 
-        "projekt_oznaceni_stavby", 
+        "projekt_organizace",
+        "projekt_oznaceni_stavby",
         "projekt_datum_zahajeni",
         "projekt_datum_ukonceni",
         "projekt_archeologicky_zaznam",
         "projekt_dokument",
         "projekt_samostatny_nalez"
-    ]
-  },
-  "samostatny_nalez": {
-    "header": [
-      "samostatny_nalez_nalezce",
-      "samostatny_nalez_datum_nalezu",
-      "samostatny_nalez_predano_organizace",
-      "samostatny_nalez_evidencni_cislo",
-      "samostatny_nalez_obdobi",
-      "samostatny_nalez_presna_datace",
-      "samostatny_nalez_druh_nalezu",
-      "samostatny_nalez_specifikace",
-      "samostatny_nalez_chranene_udaje_katastr", 
-      "samostatny_nalez_okres",
-      "soubor:[json]",
-      "soubor_filepath"
-    ],
-    "detail": [
-      "samostatny_nalez_pocet",
-      "samostatny_nalez_chranene_udaje_lokalizace",
-      "samostatny_nalez_okolnosti",
-      "samostatny_nalez_hloubka",
-      "samostatny_nalez_poznamka",
-      "samostatny_nalez_geom_system",
-      "samostatny_nalez_projekt",
-      "samostatny_nalez_chranene_udaje:[json]"
-    ],
-    "facets": [
-      "f_nalezove_okolnosti:samostatny_nalez_nalezove_okolnosti",
-      "f_organizace:samostatny_nalez_predano_organizace",
-      "f_obdobi:samostatny_nalez_obdobi",
-      "f_okres:samostatny_nalez_okres",
-      "f_katastr:samostatny_nalez_chranene_udaje_katastr", 
-      "f_druh_nalezu:samostatny_nalez_druh_nalezu",
-      "f_specifikace:samostatny_nalez_specifikace",
-      "f_nalezce:samostatny_nalez_nalezce",
-      "f_nalezove_okolnosti:samostatny_nalez_okolnosti"
-    ],
-    "full_text": [
+      ]
+    },
+    "samostatny_nalez": {
+      "header": [
+        "samostatny_nalez_nalezce",
+        "samostatny_nalez_datum_nalezu",
+        "samostatny_nalez_predano_organizace",
         "samostatny_nalez_evidencni_cislo",
-        "samostatny_nalez_okolnosti", 
+        "samostatny_nalez_obdobi",
+        "samostatny_nalez_presna_datace",
+        "samostatny_nalez_druh_nalezu",
+        "samostatny_nalez_specifikace",
+        "samostatny_nalez_chranene_udaje_katastr",
+        "samostatny_nalez_okres",
+        "soubor:[json]",
+        "soubor_filepath"
+      ],
+      "detail": [
+        "samostatny_nalez_pocet",
+        "samostatny_nalez_chranene_udaje_lokalizace",
+        "samostatny_nalez_okolnosti",
+        "samostatny_nalez_hloubka",
+        "samostatny_nalez_poznamka",
+        "samostatny_nalez_geom_system",
+        "samostatny_nalez_projekt",
+        "samostatny_nalez_chranene_udaje:[json]"
+      ],
+      "facets": [
+        "f_okres:samostatny_nalez_okres",
+        "f_katastr:samostatny_nalez_chranene_udaje_katastr",
+        "f_nalezce:samostatny_nalez_nalezce",
+        "f_nalezove_okolnosti:samostatny_nalez_okolnosti",
+        "f_organizace:samostatny_nalez_predano_organizace",
+        "f_obdobi:samostatny_nalez_obdobi",
+        "f_druh_nalezu:samostatny_nalez_druh_nalezu",
+        "f_specifikace:samostatny_nalez_specifikace"
+      ],
+      "full_text": [
+        "samostatny_nalez_evidencni_cislo",
+        "samostatny_nalez_okolnosti",
         "samostatny_nalez_presna_datace",
         "samostatny_nalez_poznamka",
         "samostatny_nalez_predano_organizace",
         "samostatny_nalez_datum_nalezu",
         "samostatny_nalez_projekt",
         "samostatny_nalez_okres",
-        "samostatny_nalez_specifikace", 
+        "samostatny_nalez_specifikace",
         "samostatny_nalez_nalezce",
-        "samostatny_nalez_obdobi", 
-        "samostatny_nalez_druh_nalezu", 
+        "samostatny_nalez_obdobi",
+        "samostatny_nalez_druh_nalezu",
         "samostatny_nalez_katastr",
         "samostatny_nalez_lokalizace",
         "soubor_nazev"
-    ]
-  }
+      ]
+    }
   }
 }

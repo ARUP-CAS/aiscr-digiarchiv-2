@@ -51,6 +51,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setTitle();
     this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -66,6 +67,7 @@ export class HomeComponent implements OnInit {
       this.kategories = Object.keys(resp.kategorie).filter(s => s !== 'ddata3d');
 
       this.state.stats = resp.stats.stats_fields;
+      this.state.numFound = resp.response.numFound;
 
     });
   }
@@ -75,7 +77,7 @@ export class HomeComponent implements OnInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Home');
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc'));
   }
 
   showPop(box: Box, relative: any, template: TemplateRef<any>) {

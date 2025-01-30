@@ -9,7 +9,13 @@
   "to": "do",
   "negativní": "negativní",
   "pozitivní": "pozitivní",
-
+  "title": {
+    "results": "Výsledky",
+    "map": "Mapa",
+    "export": "Export",
+    "export-mapa": "Export mapy",
+    "record": "Záznam "
+  },
 
   "navbar": {
     "desc": {
@@ -17,7 +23,8 @@
       "Nápověda": "Nápověda",
       "Přihlásit uživatele": "Přihlásit uživatele",
       "Registrovat uživatele": "Registrovat uživatele",
-      "account": "Správa účtu"
+      "account": "Správa účtu",
+      "stats": "Statistiky"
     }
   },
 
@@ -226,7 +233,7 @@
       "soubor_size_mbytes": "Soubor - velikost (MB)",
       "projekt_podnet": "Projekt - podnět",
       "projekt_chu_lokalizace": "Projekt - lokalizace",
-      "projekt_parcelni_cislo": "Projekt - parcelní číslo",
+      "projekt_chranene_udaje_parcelni_cislo": "Projekt - parcelní číslo",
       "projekt_planovane_zahajeni": "Projekt - plánované zahájení",
       "projekt_kulturni_pamatka_cislo": "Projekt - rejstříkové číslo památky",
       "projekt_kulturni_pamatka_popis": "Projekt - název památky",
@@ -288,7 +295,7 @@
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
       "loc_rpt": "Mapový výběr",
       "rada": "Dokument - řada",
-      "predano_organizace": "Předáno organizaci",
+      "samostatny_nalez_predano_organizace": "Předáno organizaci",
       "predmet_kategorie": "Nález - kategorie",
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
@@ -350,7 +357,8 @@
     "menu": {
       "Persistentní odkaz": "Persistentní odkaz",
       "api_prefix": "OAI-PMH API",
-      "show_in_AMCR":"Zobrazit v AMČR"
+      "show_in_AMCR":"Zobrazit v AMČR",
+      "Zobrazit citaci": "Zobrazit citaci"
     },
     "desc": {
       "Poslední změna": "Poslední změna",
@@ -361,10 +369,10 @@
       "Organizace": "Organizace",
       "Katastr (okres)": "Katastr (okres)",
       "Popis": "Popis",
-      "Počet archeologickych zaznamu": "Počet archeologických záznamů",
-      "Počet akcí": "Počet akcí",
-      "Počet lokalit": "Počet lokalit",
-      "Počet souborů": "Počet souborů",
+      "Počet archeologickych zaznamu": "Akcí a lokalit",
+      "Počet akcí": "Akcí",
+      "Počet lokalit": "Lokalit",
+      "Počet souborů": "Souborů",
       "Jazyk": "Jazyk",
       "Popis obsahu": "Popis obsahu",
       "Poznámka": "Poznámka",
@@ -400,8 +408,9 @@
       "Nahrazuje NZ": "Nahrazuje NZ",
       "odlozena_nz": "Odložená NZ",
       "Lokalizace/okolnosti": "Lokalizace/okolnosti",
-      "Počet dokumentů": "Počet dokumentů",
-      "Počet projektů": "Počet projektů",
+      "Počet dokumentů": "Dokumentů",
+      "Počet projektů": "Projektů",
+      "Počet 3D dokumentů": "3D modelů",
       "Hlavní typ": "Hlavní typ",
       "Vedlejší typ": "Vedlejší typ",
       "Ostatní vedoucí": "Ostatní vedoucí",
@@ -418,7 +427,7 @@
       "Projekt - typ": "Typ",
       "Projekt - podnět": "Podnět",
       "Projekt - oznaceni_stavby": "Označení stavby",
-      "Počet samostatných nálezů": "Počet samostatných nálezů",
+      "Počet samostatných nálezů": "Samostatných nálezů",
       "Parcelní číslo": "Parcelní číslo",
       "Plánované zahájení": "Plánované zahájení",
       "Památková ochrana": "Památková ochrana",
@@ -529,7 +538,8 @@
       "select area": "Vybrat oblast",
       "remove selection": "Zrušit výběr",
       "zoom in": "Přiblížit",
-      "zoom out": "Oddálit"
+      "zoom out": "Oddálit",
+      "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním."
     },
     "tooltip": {
       "Odstranit tento filtr": "Zrušit tento filtr"
@@ -541,7 +551,8 @@
       "openstreet": "OpenStreetMap",
       "cuzk_katastr_mapa": "ČÚZK - Katastrální mapa",
       "cuzk_katastr_uzemi": "ČÚZK - Katastrální území"
-    }
+    },
+    "zoomToResults": "Počet nalezených výsledků je: {{numFound}}. Pro zobrazení výsledků přibližte mapu nebo použijte filtraci."
   },
 
 
@@ -587,7 +598,8 @@
       "Typ souboru": "Typ souboru",
       "Jméno": "Jméno",
       "Komentář": "Komentář",
-      "download_started": "Stažení souboru spuštěno"
+      "download_started": "Stažení souboru spuštěno",
+      "viewerInfo": "Obsah je zobrazen v náhledové kvalitě. Pro získání obsahu v plné kvalitě použijte ikonu pro stažení souboru."
     },
     "input": {
       "Jméno": "Jméno",
@@ -732,6 +744,21 @@
     "ext_zdroj": {
       "title": "Externí zdroje",
       "desc": "Bibliografické odkazy na externí zdroje informací o evidovaných archeologických akcích a lokalitách."
+    },
+    "adb": {
+      "title": "Archeologické dokumentační body"
+    },
+    "dokumentacni_jednotka": {
+      "title": "Dokumentační jednotky"
+    },
+    "komponenta": {
+      "title": "Komponenty"
+    },
+    "vyskovy_bod": {
+      "title": "Výškové body"
+    },
+    "dokument_cast": {
+      "title": "Obsahové část dokumentů"
     }
   },
 
@@ -763,5 +790,28 @@
   "f_aktivita_deponovani": "deponování",
   "f_aktivita_boj": "boj",
   "f_aktivita_jina": "jiný druh aktivity",
-  "f_aktivita_intruze": "intruze"
+  "f_aktivita_intruze": "intruze",
+
+  "stats": {
+    "ident_cely": "ID záznamu",
+    "type": "Událost",
+    "user": "Uživatel",
+    "entity": "Typ záznamu",
+    "typ": {
+      "id": "Zobrazení detailu",
+      "viewer": "Zobrazení náhledu",
+      "file": "Stažení souboru"
+    },
+    "graphTitle": {
+      "DAY": "Přístupů denně",
+      "WEEK": "Přístupů týdně",
+      "MONTH": "Přístupů měsíčně"
+    },
+    "graphName": "Počet uživatelských přístupů",
+    "interval": "Zobrazený interval",
+    "interval_day": "Den",
+    "interval_week": "Týden",
+    "interval_month": "Měsíc",
+    "id_count": "{{count}} z {{total}}"
+  }
 }

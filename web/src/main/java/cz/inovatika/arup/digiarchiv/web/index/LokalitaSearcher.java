@@ -120,6 +120,7 @@ public class LokalitaSearcher implements EntitySearcher {
                 doc.remove("az_projekt");
             }
         }
+        addOkresy(jo);
     }
 
     @Override
@@ -178,9 +179,17 @@ public class LokalitaSearcher implements EntitySearcher {
     }
 
     @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+            addOkresy(jo);
+        }
+    }
+
+    @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try {
+        try { 
             Http2SolrClient client = IndexUtils.getClientNoOp();
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
@@ -189,9 +198,13 @@ public class LokalitaSearcher implements EntitySearcher {
                 return jo;
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
-                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-                // addPians(jo, client, request);
+
+//            if (Boolean.parseBoolean(request.getParameter("mapa"))
+//                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+//                addPians(jo, client, request);
+//            } 
+            if (Boolean.parseBoolean(request.getParameter("isExport"))) {
+                addPians(jo, client, request);
             }
             if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
                 checkRelations(jo, client, request);

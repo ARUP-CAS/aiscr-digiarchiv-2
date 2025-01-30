@@ -89,6 +89,12 @@ public class IndexerServlet extends HttpServlet {
         
         return json;
       }
+    },
+    FIX_LOG {
+      @Override
+      JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        return LogAnalytics.fixEntity();
+      }
     };
 
     abstract JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception;

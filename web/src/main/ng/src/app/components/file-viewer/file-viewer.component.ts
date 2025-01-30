@@ -24,15 +24,16 @@ export class FileViewerComponent implements OnInit {
   files: File[] = [];
   selectedFile: File = null; 
 
-  currentPage = 1;
+  currentPage: number = 1;
   currentPageDisplayed = 1;
   fileid = 0;
+  carouselItems: any[] = [];
 
   @ViewChild('carousel') carousel: NguCarousel<any>;
 
   carouselConfig: NguCarouselConfig = {
     grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
-    load: 10,
+    load: 5,
     // interval: {timing: 4000, initialDelay: 1000},
     loop: false,
     touch: true,
@@ -56,18 +57,30 @@ export class FileViewerComponent implements OnInit {
 
   ngOnInit(): void {
     this.setData();
-    this.service.logViewer(this.data.ident_cely).subscribe(() => {});
+    this.service.logViewer(this.data.ident_cely, this.data.entity).subscribe(() => {});
   }
 
   selectFile(file: File, idx: number) {
-
+    // this.carousel.dataSource = [];
     this.selectedFile = file;
     setTimeout(() => {
 
+    //this.carousel.dataSource = this.selectedFile.pages;
       this.currentPage = 1;
       this.setPage();
       this.fileid = idx + new Date().getTime();
     }, 10);
+  }
+
+  public carouselItemsLoad(j) {
+    this.carouselItems = [];
+    const len = this.selectedFile.pages.length;
+    const max = Math.min(len, this.currentPage + 4 );
+      for (let i = 0; i < max; i++) {
+        this.carouselItems.push(
+          this.selectedFile.pages[i]
+        );
+      }
   }
 
   downloadUrl() {
@@ -123,13 +136,26 @@ export class FileViewerComponent implements OnInit {
     }
   }
 
-  setPage() {
+  gotoPage() {
+    
+    this.currentPage = parseInt(this.currentPage+'');
     if (this.currentPage > 0 || this.currentPage < this.selectedFile.rozsah) {
       this.carousel.moveTo(this.currentPage - 1, false);
     }
   }
 
+  setPage() {
+    this.currentPage = parseInt(this.currentPage+'');
+    this.carouselItemsLoad(this.currentPage);
+    setTimeout(() => {
+      if (this.currentPage > 0 || this.currentPage < this.selectedFile.rozsah) {
+        this.carousel.moveTo(this.currentPage - 1, false);
+      }
+    }, 100);
+  }
+
   setData() {
+
 
     this.selectedFile = null;
     this.files = [];
@@ -157,8 +183,9 @@ export class FileViewerComponent implements OnInit {
         });
       });
       this.fileid = new Date().getTime();
-      this.selectedFile = this.files[0];
-      this.currentPage = 1;
+      this.selectFile(this.files[0], 0);
+      // this.selectedFile = this.files[0];
+      // this.currentPage = 1;
       this.showing = true;
     }, 10);
 

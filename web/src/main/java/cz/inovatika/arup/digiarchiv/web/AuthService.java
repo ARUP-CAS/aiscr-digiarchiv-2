@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Uzivatel;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
  * @author alber
  */
 public class AuthService {
-
+    public static final Logger LOGGER = Logger.getLogger(AuthService.class.getName());
     private static final String API_POINT = Options.getInstance().getString("auth");
     private static final HttpClient client = HttpClient.newHttpClient();
     
@@ -34,7 +35,7 @@ public class AuthService {
             String r = response.body();
             return r;
         } catch (Exception ex) {
-            Logger.getLogger(AuthService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, null, ex);
             return ex.toString();
         }
     }
@@ -62,6 +63,7 @@ public class AuthService {
                     String xml = getUserInfo(new JSONObject(token).getString("token"));
                     Uzivatel uz = (Uzivatel) FedoraModel.parseXml(xml, Uzivatel.class);
                     uz.setPristupnost();
+                    uz.setCteniDokumentu();
                     ObjectMapper objectMapper = new ObjectMapper();
                     return new JSONObject(objectMapper.writeValueAsString(uz));
                 } else if (tokenJSON.has("non_field_errors")) {
@@ -70,6 +72,7 @@ public class AuthService {
                     return tokenJSON;
                 }
             } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
                 return new JSONObject().put("error", "dialog.alert.login_server_error");
             }
         } else {

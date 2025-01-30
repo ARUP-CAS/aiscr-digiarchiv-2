@@ -297,7 +297,7 @@ public class SamostatnyNalez implements FedoraModel {
         JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
 
         if (json.getJSONObject("response").getInt("numFound") > 0) {
-            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt_organizace");
+            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("projekt_organizace", "nonexist");
         }
         if (userPr.compareToIgnoreCase("C") > 0) {
             return true;
@@ -375,7 +375,8 @@ class SnChraneneUdaje {
             final WKTReader reader = new WKTReader();
             try {
                 Geometry geometry = reader.read(wktStr);
-                Point p = geometry.getCentroid();
+        // Point p = geometry.getCentroid();
+        Point p = geometry.getInteriorPoint();
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

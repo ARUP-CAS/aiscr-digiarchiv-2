@@ -217,6 +217,14 @@ public class ProjektSearcher implements EntitySearcher {
     }
 
     @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+            addOkresy(jo);
+        }
+    }
+
+    @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         try {
@@ -225,9 +233,13 @@ public class ProjektSearcher implements EntitySearcher {
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             // removeInvalid(client, jo);
-            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
-                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-                // addPians(jo, client, request);
+
+//            if (Boolean.parseBoolean(request.getParameter("mapa"))
+//                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+//                addPians(jo, client, request);
+//            }
+            if (Boolean.parseBoolean(request.getParameter("isExport"))) {
+                addPians(jo, client, request);
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));

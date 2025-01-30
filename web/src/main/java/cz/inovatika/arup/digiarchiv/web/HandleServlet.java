@@ -12,13 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -78,19 +76,23 @@ public class HandleServlet extends HttpServlet {
                 AppState.writeGetFileFinished(ip, id, success);
                 //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile end");
             } catch (Exception ex) {
-                Logger.getLogger(HandleServlet.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         } else {
             try (PrintWriter out = response.getWriter()) {
                 response.setContentType("text/html;charset=UTF-8");
                 String url = "http://localhost:4000/id/" + id;
-                InputStream inputStream = RESTHelper.inputStream(url);
-                out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
+                try (InputStream inputStream = RESTHelper.inputStream(url)) {
+                    out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
+                }
+            } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, "Error processing {0}", request.getRequestURI());
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    private static void getPdfPage(JSONObject soubor, String page, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private static boolean getPdfPage(JSONObject soubor, String page, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         try (OutputStream out = response.getOutputStream()) {
             String id = soubor.getString("id");
@@ -106,16 +108,20 @@ public class HandleServlet extends HttpServlet {
                         response.setHeader("Content-Disposition", "attachment; filename=" + filename + "_" + page + ".jpg");
                         BufferedImage bi = ImageIO.read(f);
                         ImageIO.write(bi, "jpg", out);
+                        return true;
                     } else {
                         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                         LOGGER.log(Level.WARNING, "File does not exist in {0}. ", fname);
+                        return false;
                     }
 
                 } catch (Exception ex) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     LOGGER.log(Level.SEVERE, null, ex);
+                    return false;
                 }
             }
+            return false;
         }
     }
 
@@ -166,13 +172,20 @@ public class HandleServlet extends HttpServlet {
                     LOGGER.log(Level.WARNING, "{0} not allowed", id);
                     return false;
                 }
-
+ 
                 String mime = doc.optString("mimetype");
-                if (id.contains("page") && mime.contains("pdf")) {
+                if (id.contains("page")) {
                     String page = id.substring(id.lastIndexOf("/") + 1);
-                    getPdfPage(doc, page, request, response);
-                    return false;
+                    if (mime.contains("pdf")) {
+                        boolean success = getPdfPage(doc, page, request, response);
+                        return success;
+                    } else if (!"1".equals(page)) {
+                        LOGGER.log(Level.WARNING, "Image should have page 1");
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        return false;
+                    }
                 }
+                
 
                 String filename = doc.getString("nazev");
 
@@ -196,7 +209,7 @@ public class HandleServlet extends HttpServlet {
                 LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
                 IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                 if (!id.contains("thumb")) {
-                    LogAnalytics.log(request, doc.getString("path"), "file");
+                    LogAnalytics.log(request, doc.getString("path"), "file", doc.getString("entity"));
                 }
                 is.close();
                 return true;
@@ -213,13 +226,16 @@ public class HandleServlet extends HttpServlet {
     private static boolean isAllowed(String id, JSONObject doc, JSONObject user) {
         if (id.contains("thumb") && !id.contains("page")) {
             return true;
-        }
+        } 
         
         String entity = doc.optString("entity");
         int stav = doc.optInt("stav");
         String docPr = doc.getString("pristupnost");
 
         String userPr = user.optString("pristupnost", "A");
+        if ("B".compareToIgnoreCase(userPr) < 0 && user.optBoolean("cteni_dokumentu")) {
+            userPr = "E";
+        }
         String userId = user.optString("ident_cely", "A");
         String userOrg = "none";
         if (user.has("organizace")) {
@@ -240,6 +256,7 @@ public class HandleServlet extends HttpServlet {
                     return userPr.compareToIgnoreCase("D") >= 0;
                 }
             case "dokument":
+            case "knihovna_3d":
 //-- A: dokument/pristupnost = A AND dokument/stav = 3
 //-- B: (dokument/pristupnost <= B AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel = {user}
 //-- C: (dokument/pristupnost <= C AND dokument/stav = 3) OR dokument/historie[typ_zmeny='D01']/uzivatel.organizace = {user}.organizace

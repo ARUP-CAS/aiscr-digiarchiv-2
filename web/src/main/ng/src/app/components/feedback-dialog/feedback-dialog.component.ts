@@ -1,8 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
+import { AppState } from 'src/app/app.state';
 
 @Component({
   selector: 'app-feedback-dialog',
@@ -17,17 +19,23 @@ export class FeedbackDialogComponent implements OnInit {
   mail: string;
   text: string;
   ident_cely: string;
-  reCaptchaValid = true;
+  reCaptchaValid = false;
 
   constructor(
     public dialogRef: MatDialogRef<FeedbackDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
+    private state: AppState,
     public config: AppConfiguration,
-    private service: AppService
+    private service: AppService,
+    private http: HttpClient
     ) { }
 
   ngOnInit(): void {
     this.ident_cely = this.data;
+    if (this.state.logged) {
+      this.name = this.state.user.jmeno + ' ' + this.state.user.prijmeni;
+      this.mail = this.state.user.email;
+    }
   }
 
   ngAfterViewInit() {
@@ -36,12 +44,10 @@ export class FeedbackDialogComponent implements OnInit {
 
   public resolved(captchaResponse: string): void {
     this.reCaptchaValid = true;
-    // console.log(captchaResponse);
   }
 
   errored(captchaResponse: any): void {
     this.reCaptchaValid = false;
-    // console.log(captchaResponse);
   }
 
   sendFeedback() {

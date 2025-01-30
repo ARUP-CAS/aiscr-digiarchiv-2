@@ -89,6 +89,9 @@ public class Organizace implements FedoraModel {
   @Field
   public boolean zanikla;
   
+  @JacksonXmlProperty(localName = "cteni_dokumentu")
+  @Field
+  public boolean cteni_dokumentu;
 
     @JacksonXmlProperty(localName = "historie")
     public List<Historie> historie = new ArrayList();

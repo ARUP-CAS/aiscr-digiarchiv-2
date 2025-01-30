@@ -101,6 +101,7 @@ public class SearchServlet extends HttpServlet {
                     json = jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("entity");
                     json.put("kategorie", jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("dokument_kategorie_dokumentu"));
                     json.put("stats", jo.getJSONObject("stats")); 
+                    json.put("response", jo.getJSONObject("response")); 
 
                 } catch (Exception ex) {
                     json.put("error", ex);
@@ -202,7 +203,7 @@ public class SearchServlet extends HttpServlet {
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
                     
                     if (Boolean.parseBoolean(request.getParameter("shouldLog"))) {
-                        LogAnalytics.log(request, request.getParameter("id"), "id");
+                        LogAnalytics.log(request, request.getParameter("id"), "id", entity);
                     }
                     return jo.toString();
 
@@ -251,6 +252,7 @@ public class SearchServlet extends HttpServlet {
                     JSONObject jo = SearchUtils.json(query, client, "entities");
                     if (searcher != null) {
                         searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+                        searcher.processAsChild(request, jo);
                     }
 
 //                    if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
@@ -435,20 +437,6 @@ public class SearchServlet extends HttpServlet {
                 PIANSearcher searcher = new PIANSearcher();
                 JSONObject jo = searcher.getMapPians(request);
                 return jo.toString();
-
-//        PIANSearcher searcher = new PIANSearcher();
-//        JSONObject ret = new JSONObject();
-//        JSONArray docs = searcher.getMapPians(request).getJSONObject("response").getJSONArray("docs");
-//        for (int i = 0; i < docs.length(); i++) {
-//          JSONObject doc = docs.getJSONObject(i);
-//          JSONObject pian = doc.getJSONObject("pian");
-//          String pianId =  pian.getString("ident_cely");
-//          if (ret.has(pianId)) {
-//            
-//          }
-//          ret.put(pianId, pian);
-//        }
-//        return ret.toString();
             }
         },
 //        GETHESLAR {
@@ -486,7 +474,7 @@ public class SearchServlet extends HttpServlet {
                     Http2SolrClient client = IndexUtils.getClientNoOp();
                     String pristupnost = LoginServlet.pristupnost(request.getSession());
                     SolrQuery query = new SolrQuery("*")
-                            .setFields("id,ident_cely,razeni")
+                            .setFields("id,ident_cely,razeni,nazev_heslare")
                             .setRows(5000);
 
                     QueryRequest req = new QueryRequest(query);
@@ -502,8 +490,12 @@ public class SearchServlet extends HttpServlet {
 
                     // JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
                     for (int i = 0; i < docs.length(); i++) {
-                        ret.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getInt("razeni"));
-
+                        JSONObject doc = docs.getJSONObject(i);
+                        int razeni = doc.getInt("razeni");
+                        if ("objekt_druh".equals(doc.getString("nazev_heslare"))) {
+                            razeni += 4000; 
+                        }
+                        ret.put(doc.getString("ident_cely"), razeni);
                     }
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
@@ -543,7 +535,20 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
                 JSONObject json = new JSONObject();
                 try {
-                    LogAnalytics.log(request, request.getParameter("id"), request.getParameter("type"));
+                    LogAnalytics.log(request, request.getParameter("id"), request.getParameter("type"), request.getParameter("entity"));
+                } catch (Exception ex) {
+                    json.put("error", ex);
+                }
+                return json.toString();
+            }
+        },
+        STATS {
+            
+            @Override
+            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    json = LogAnalytics.stats(request);
                 } catch (Exception ex) {
                     json.put("error", ex);
                 }

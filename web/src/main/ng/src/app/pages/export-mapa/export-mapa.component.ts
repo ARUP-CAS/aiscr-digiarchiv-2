@@ -33,6 +33,7 @@ export class ExportMapaComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.setTitle();
     this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -46,7 +47,9 @@ export class ExportMapaComponent implements OnInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Export');
+      this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
+      + ' | ' + this.service.getTranslation('title.export-mapa') 
+      + ' - ' + this.service.getTranslation('entities.'+ this.state.entity+'.title') );
   }
 
   getByPath(doc: any, path: string) {
@@ -66,13 +69,14 @@ export class ExportMapaComponent implements OnInit {
     const p = Object.assign({}, params);
     p.rows = this.config.exportRowsLimit;
     p.mapa = true;
+    p.isExport = true;
     p.noFacets = true;
     p.noStats = true;
-this.state.loading = true;
+    this.state.loading = true;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       
+      this.state.loading = false;
       if (resp.error) {
-        this.state.loading = false;
         return;
       }
       if (this.state.entity === 'knihovna_3d') {

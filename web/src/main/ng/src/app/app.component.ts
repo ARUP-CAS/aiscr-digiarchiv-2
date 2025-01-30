@@ -16,6 +16,7 @@ import { DOCUMENT } from '@angular/common';
 export class AppComponent implements OnInit {
 
   isExport: boolean;
+  isStats: boolean;
   isResults: boolean;
 
   constructor(
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit {
       if (val instanceof NavigationEnd) {
         this.isExport = this.router.isActive('export', false) || this.router.isActive('export-mapa', false);
         this.isResults = this.router.isActive('results', false);
+        this.isStats = this.router.isActive('stats', false);
         const params = this.route.snapshot.queryParamMap;
         if (params.has('lang')) {
           this.service.changeLang(params.get('lang'));

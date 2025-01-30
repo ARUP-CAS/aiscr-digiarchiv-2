@@ -1,7 +1,7 @@
 import { SolrDocument } from './../../shared/solr-document';
 import { HttpParams } from '@angular/common/http';
 import { SolrResponse } from './../../shared/solr-response';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
@@ -12,7 +12,8 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { NgZone } from '@angular/core';
 
 @Component({
-  selector: 'app-results', animations: [
+  selector: 'app-results', 
+  animations: [
     trigger(
       'enterAnimation', [
       transition(':enter', [
@@ -57,11 +58,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
     private service: AppService,
     public mediaMatcher: MediaMatcher,
     private zone: NgZone,
+    private cd: ChangeDetectorRef
   ) {
     this.state.bodyClass = 'app-page-results';
   }
 
   ngOnInit(): void {
+    this.setTitle();
     this.state.hasError = false;
     this.subs.push(this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -82,9 +85,14 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.exportUrl = 'export?' + str;
     }));
 
-    // this.subs.push(this.state.resultsChanged.subscribe(val => {
-    //   console.log(val)
-    // }));
+    this.subs.push(this.state.resultsChanged.subscribe(val => {
+      if (val.typ === 'map') {
+        this.docs = this.state.solrResponse.response.docs;
+        setTimeout(() => {
+          this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+        }, 100);
+      }
+    }));
 
     // this.state.loggedChanged.subscribe(val => {
     //   this.search(this.route.snapshot.queryParams);
@@ -113,7 +121,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Results');
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
+    + ' | ' + (this.state.isMapaCollapsed ? this.service.getTranslation('title.results') : this.service.getTranslation('title.map'))
+    + ' - ' + this.service.getTranslation('entities.'+ this.state.entity+'.title') );
   }
 
   toggleFavorites() {
@@ -129,12 +139,20 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search(params: Params) {
+    if (params.mapa) {
+      // Zpracuje mapa
+      // setTimeout(() => {
+      //   this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      // }, 100);
+      return;
+    }
     this.state.loading = true;
+    const p = Object.assign({}, params);
+    this.state.switchingMap = false;
     this.state.documentProgress = 0;
     this.loading = true;
     this.state.facetsLoading = true;
     this.state.hasError = false;
-    const p = Object.assign({}, params);
     
     if (!p['entity']) {
       p['entity'] = 'dokument';
@@ -152,6 +170,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
         return;
       }
       this.state.setSearchResponse(resp);
+      this.setTitle();
       this.docs = resp.response.docs;
       if (this.state.isMapaCollapsed) {
         this.state.loading = false;
@@ -193,5 +212,13 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   setEntity(entity) {
     this.router.navigate([], { queryParams: { entity, page: 0 }, queryParamsHandling: 'merge' });
+  }
+
+  setFacetsOpened() {
+    this.state.isFacetsCollapsed =! this.state.isFacetsCollapsed;
+  }
+
+  loadingFinished() {
+    this.cd.detectChanges()
   }
 }

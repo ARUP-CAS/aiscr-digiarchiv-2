@@ -7,6 +7,10 @@
     <mat-icon>help_outline</mat-icon>
     {{ 'navbar.desc.Nápověda' | translate }}
   </a>
+  <a mat-list-item routerLink="stats" (click)="onSidenavClose()" routerLinkActive="app-active">
+    <mat-icon>query_stats</mat-icon>
+    {{ 'navbar.desc.stats' | translate }}
+  </a>
   <mat-divider></mat-divider>
   <a mat-list-item *ngIf="!state.logged" (click)="showLogin(); onSidenavClose()">
     <mat-icon>login</mat-icon>

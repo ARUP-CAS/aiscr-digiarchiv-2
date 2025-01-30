@@ -27,22 +27,26 @@ export class FacetsUsedComponent implements OnInit {
   }
 
   removeFacet(crumb: Crumb) {
-      const params: any = {};
-      const field = crumb.field;
-      params[field] = [];
-      this.state.breadcrumbs.forEach((c: Crumb) => {
-        if (c.field === field && c.value !== crumb.value) {
-          params[field].push(c.value + ':' + c.operator);
-        }
-      });
-      if (params[field].length === 0) {
-        params[field] = null;
+    this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
+    const params: any = {};
+    const field = crumb.field;
+    params[field] = [];
+    this.state.breadcrumbs.forEach((c: Crumb) => {
+      if (c.field === field && c.value !== crumb.value) {
+        params[field].push(c.value + ':' + c.operator);
       }
-      params.page = 0;
-      this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+    });
+    if (params[field].length === 0) {
+      params[field] = null;
+    }
+    params.page = 0;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
   clean() {
+    this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
     const q: any = {};
     this.state.breadcrumbs.forEach((c: Crumb) => {
       q[c.field] = null;

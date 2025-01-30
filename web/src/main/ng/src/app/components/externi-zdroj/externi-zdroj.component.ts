@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { AppService } from 'src/app/app.service';
 import { AppConfiguration } from 'src/app/app-configuration';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-externi-zdroj',
@@ -16,7 +17,12 @@ export class ExterniZdrojComponent implements OnInit {
   @Input() isDocumentDialogOpen: boolean;
   bibTex: string;
 
+  itemSize = 133;
+  vsSize = 0;
+  numChildren = 0;
+
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     public state: AppState,
     public service: AppService,
     public config: AppConfiguration
@@ -24,18 +30,52 @@ export class ExterniZdrojComponent implements OnInit {
 
   ngOnInit(): void {
     this.setData();
+  }
 
-    // const id = this.result.ident_cely ? this.result.ident_cely : this.result;
+  checkLoading() {
+    this.state.loading = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
+  }
 
-      // this.service.getIdAsChild([id], "ext_zdroj").subscribe((res: any) => {
-      //   this.result = res.response.docs[0]; 
-      //   this.setData();
-      // });
-
+  setVsize() {
+    this.numChildren = 0;
+    if (this.result.ext_zdroj_ext_odkaz) {
+      this.numChildren += this.result.ext_zdroj_ext_odkaz.length;
     }
 
-  setData(){  
-    console.log(this.result)
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  }
+
+  getArchZaznam() {
+    this.result.akce = [];
+    this.result.lokalita = [];
+    this.numChildren = this.result.ext_zdroj_ext_odkaz.length;
+    this.state.documentProgress = 0;
+    if (this.result.ext_zdroj_ext_odkaz) {
+      for (let i = 0; i < this.result.ext_zdroj_ext_odkaz.length; i = i + 10) {
+        const ids = this.result.ext_zdroj_ext_odkaz.slice(i, i + 10).map((eo: any) => eo.archeologicky_zaznam.id);
+        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
+          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length) / this.numChildren * 100;
+          this.state.loading = (this.result.akce.length + this.result.lokalita.length) < this.numChildren;
+        });
+      }
+    }
+    
+  }
+
+  setData() {
+    if (this.inDocument && isPlatformBrowser(this.platformId)) {
+
+      this.setVsize();
+      this.getArchZaznam();
+    }
     const autor = this.result.ext_zdroj_autor ? this.result.ext_zdroj_autor.join(' – ') : '';
     switch (this.result.ext_zdroj_typ) {
       case 'HES-001117': // 'kniha'
@@ -113,5 +153,9 @@ export class ExterniZdrojComponent implements OnInit {
         this.result.isFav = true;
       });
     }
+  }
+
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
   }
 }
