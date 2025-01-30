@@ -233,7 +233,7 @@
       "soubor_size_mbytes": "File - size (MB)",
       "projekt_podnet": "Project - motivation",
       "projekt_chu_lokalizace": "Project - location",
-      "projekt_parcelni_cislo": "Project - parcel number",
+      "projekt_chranene_udaje_parcelni_cislo": "Project - parcel number",
       "projekt_planovane_zahajeni": "Project - scheduled launch",
       "projekt_kulturni_pamatka_cislo": "Project - monument registration number",
       "projekt_kulturni_pamatka_popis": "Project - monument name",

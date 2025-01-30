@@ -85,19 +85,24 @@
   "requestInterval": 5,
     
   "securedFacets": [
-    "f_kategorie",
-    "f_pian_zm10",
-    "f_okres",
     "f_katastr",
-    "adb_vyskovy_bod_typ"
+    "adb_vyskovy_bod_typ",
+    "f_pian_zm10"
   ],
   "securedFilters": [
-    "f_kategorie",
-    "f_pian_zm10",
     "projekt_chu_lokalizace",
-    "projekt_parcelni_cislo",
-    "projekt_kulturni_pamatka_cislo",
-    "projekt_kulturni_pamatka_popis",
+        
+    "projekt_chranene_udaje.hlavni_katastr",
+    "projekt_chranene_udaje.dalsi_katastr",
+    "projekt_chranene_udaje_lokalizace",
+    "projekt_chranene_udaje_parcelni_cislo",
+    "projekt_chranene_udaje.geom_gml",
+    "projekt_chranene_udaje.geom_wkt",
+    "projekt_chranene_udaje_kulturni_pamatka_cislo",
+    "projekt_chranene_udaje_kulturni_pamatka_popis",
+        
+        
+        
     "akce_lokalizace_okolnosti",
     "lokalita_nazev",
     "f_uzivatelske_oznaceni",
@@ -169,14 +174,11 @@
     "dokument": {
       "header": [
         "dokument_autor",
-        "autor:dokument_autor",
         "dokument_rok_vzniku",
-        "rok_vzniku:dokument_rok_vzniku",
         "dokument_typ_dokumentu",
         "dokument_material_originalu",
         "dokument_rada",
         "dokument_organizace",
-        "organizace:dokument_organizace",
         "dokument_okres",
         "dokument_popis",
         "dokument_cast_archeologicky_zaznam",
@@ -186,8 +188,6 @@
         "projekt_chranene_udaje_dalsi_katastr",
         "archeologicky_zaznam_chranene_udaje_dalsi_katastr",
         "dokument_cast_neident_akce_katastr",
-        "archeologicky_zaznam_okres",
-        "projekt_okres",
         "dokument_cast_neident_akce_okres",
         "dokument_cast_akce",
         "dokument_cast_lokalita",

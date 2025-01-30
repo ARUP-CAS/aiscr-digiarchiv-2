@@ -7,6 +7,8 @@
   "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/",
   "accountUrl": "https://amcr.aiscr.cz/uzivatel/edit/",
   "restorePassword": "https://amcr.aiscr.cz/accounts/password_reset",
+  "recaptchaKey": "",
+  "recaptchaApiKey": "",
   "mapOptions": {
     "docsForMarker": 500,
     "docsForCluster": 10000,
@@ -498,7 +500,7 @@
     },
     {
       "type": "text",
-      "field": "projekt_parcelni_cislo"
+      "field": "projekt_chranene_udaje_parcelni_cislo"
     },
     {
       "type": "text",

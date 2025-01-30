@@ -324,7 +324,7 @@ public class SolrSearcher {
                     query.addFilterQuery(fq);
                 } else if (field.startsWith("f_katastr")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
-                } else if (field.startsWith("f_kategorie")) {
+                } else if (field.startsWith("f_pian_zm10")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
                 } else if (field.startsWith("adb_vyskovy_bod_typ")) {
                     addFilter(query, field + "_" + pristupnost, request.getParameterValues(field));
@@ -676,11 +676,6 @@ public class SolrSearcher {
         if (field.equals("f_aktivita")) {
             for (String sufix : prSufix) {
                 idoc.addField("f_aktivita_" + sufix, idoc.getFieldValues(field));
-            }
-        }
-        if (field.equals("nalez_kategorie")) {
-            for (String sufix : prSufix) {
-                idoc.addField("f_kategorie_" + sufix, idoc.getFieldValues(field));
             }
         }
         if (field.contains("druh_nalezu")) {

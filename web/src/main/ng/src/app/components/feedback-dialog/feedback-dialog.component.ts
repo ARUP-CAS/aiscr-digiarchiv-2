@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -18,14 +19,15 @@ export class FeedbackDialogComponent implements OnInit {
   mail: string;
   text: string;
   ident_cely: string;
-  reCaptchaValid = true;
+  reCaptchaValid = false;
 
   constructor(
     public dialogRef: MatDialogRef<FeedbackDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
     private state: AppState,
     public config: AppConfiguration,
-    private service: AppService
+    private service: AppService,
+    private http: HttpClient
     ) { }
 
   ngOnInit(): void {
@@ -42,12 +44,10 @@ export class FeedbackDialogComponent implements OnInit {
 
   public resolved(captchaResponse: string): void {
     this.reCaptchaValid = true;
-    // console.log(captchaResponse);
   }
 
   errored(captchaResponse: any): void {
     this.reCaptchaValid = false;
-    // console.log(captchaResponse);
   }
 
   sendFeedback() {

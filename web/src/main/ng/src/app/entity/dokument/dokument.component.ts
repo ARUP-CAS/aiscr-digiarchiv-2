@@ -39,7 +39,7 @@ export class DokumentComponent implements OnInit, OnChanges {
   @Input() mapDetail: boolean;
   @Input() isDocumentDialogOpen: boolean;
   hasDetail: boolean;
-  hasRights: boolean;
+  
   hasMapRights: boolean;
 
   imgSrc: string;
@@ -83,7 +83,6 @@ export class DokumentComponent implements OnInit, OnChanges {
         }
       });
     }
-    this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     if (this.result.pian) {
       this.result.pian.forEach(pian => {
         this.hasMapRights = this.hasMapRights || this.state.hasRights(pian.pristupnost, this.result.organizace);
@@ -241,33 +240,6 @@ export class DokumentComponent implements OnInit, OnChanges {
           }
           ret += katastr + ' (' + okres + ')';
         }
-      }
-      return ret;
-    } else {
-      return '';
-    }
-  }
-
-  organizace() {
-    if (this.result.hasOwnProperty('organizace')) {
-      const os = [];
-      let ret = '';
-      for (let idx = 0; idx < this.result.organizace.length; idx++) {
-        let org = this.result.organizace[idx];
-        if (org) {
-          org = org.trim();
-        }
-
-        const o = org ? this.service.getHeslarTranslation(org, 'card.field.f_organizace') : '';
-        if ((o !== '') && (os.indexOf(o) < 0)) {
-          os.push(o);
-
-          if (idx > 0) {
-            ret += ', ';
-          }
-          ret += o;
-        }
-
       }
       return ret;
     } else {
