@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 
@@ -13,9 +14,26 @@ export class VyskovyBodComponent implements OnInit {
   @Input() isChild: boolean;
   @Input() inDocument = false;
 
-  constructor(public state: AppState) { }
+  bibTex: string;
+
+  constructor(
+    private datePipe: DatePipe,
+    public state: AppState) { }
 
   ngOnInit(): void {
+    const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.bibTex =
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+       author = {AMČR},
+       title = {Záznam ${this.result.ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       note = {Archeologická mapa České republiky [cit. ${now}]}
+     }`;
   }
+
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
+
 
 }

@@ -1,30 +1,78 @@
-<mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument">
-  <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
-    <mat-panel-title>
-      <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-      {{ 'card.panelTitle.Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
-      <app-inline-filter [field]="'f_dj_typ'" [value]="result.dj_typ.id" [heslar]="'typ_dj'"></app-inline-filter>
+<ng-container *ngIf="!inDocument">
+  <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
+</ng-container>
+<mat-card *ngIf="inDocument" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild">
+  <mat-card-header>
+    <mat-card-title>
+      <span class="app-ident-format">{{ result.ident_cely }}</span>
+      <span class="app-pipe" *ngIf="result.dj_typ"></span>
+      <app-inline-filter [field]="'f_dj_typ'" [value]="result.dj_typ.id ? result.dj_typ.id : result.dj_typ" [heslar]="'typ_dj'"></app-inline-filter>
       <ng-container *ngIf="result.dj_nazev">&#160;({{result.dj_nazev}})</ng-container>
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-  <ng-container><!--*ngIf="result.dj_negativni_jednotka"-->
-    <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
-    {{ result.dj_negativni_jednotka  ? ('negativní' | translate) : ('pozitivní' | translate) }}
-  </ng-container>
-  
-  <mat-accordion multi="true">
-    <app-pian *ngIf="result.dj_pian" [result]="result.dj_pian"></app-pian>
-    <app-adb *ngIf="result.dj_adb" [result]="result.dj_adb"></app-adb>
-    <app-komponenta *ngFor="let komponenta of result.dj_komponenta" [result]="komponenta"></app-komponenta>
-  </mat-accordion>
-</mat-expansion-panel>
+      <span class="app-pipe"></span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content  *ngIf="detailExpanded">
+    <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
+  </mat-card-content>
 
-<mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-  <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
-    <mat-panel-title>
-      {{ 'card.panelTitle.Související záznamy' | translate }}:
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-  <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-  <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
-</mat-expansion-panel> 
+  <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
+    <div fxFlex class="app-metadata">
+
+      <ng-container *ngIf="result.akce?.length > 0">
+        {{ 'card.desc.Počet akcí' | translate }}: <strong>{{result.akce?.length}}</strong>
+        <span class="app-pipe"></span>
+      </ng-container>
+      <ng-container *ngIf="result.lokalita?.length > 0">
+        {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{result.lokalita.length}}</strong>
+        <span class="app-pipe"></span>
+      </ng-container>
+
+    </div>
+    <app-result-actions [inDocument]="inDocument" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
+    [bibTex]="bibTex"
+    [ident_cely_api]="result.ident_cely.substr(0, result.ident_cely.lastIndexOf('-'))"></app-result-actions>
+  </mat-card-actions>
+
+  <mat-card-content  *ngIf="detailExpanded">
+
+  <mat-expansion-panel *ngIf="result.akce || result.lokalita" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+    <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard"
+      [collapsedHeight]="config.uiVars.panelHeightInCard">
+      <mat-panel-title>
+        {{ 'card.panelTitle.Související záznamy' | translate }}:
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+    <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true"
+      class="app-related-item"></app-lokalita>
+  </mat-expansion-panel>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #contentTmpl>
+  <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader
+      (click)="panelHeader._toggle()">
+      <mat-panel-title *ngIf="!inDocument">
+        <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+        {{ 'card.panelTitle.Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely"
+          [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge"
+          [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }}
+          <mat-icon>link</mat-icon></a>–&#160;
+        <app-inline-filter [field]="'f_dj_typ'" [value]="result.dj_typ.id" [heslar]="'typ_dj'"></app-inline-filter>
+        <ng-container *ngIf="result.dj_nazev">&#160;({{result.dj_nazev}})</ng-container>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-container *ngIf="detailExpanded || !inDocument"><!--*ngIf="result.dj_negativni_jednotka"-->
+      <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
+      {{ result.dj_negativni_jednotka ? ('negativní' | translate) : ('pozitivní' | translate) }}
+    </ng-container>
+      <mat-accordion multi="true" *ngIf="detailExpanded || !inDocument">
+        <app-pian *ngIf="result.dj_pian" [result]="result.dj_pian"></app-pian>
+        <app-adb *ngIf="result.dj_adb" [result]="result.dj_adb" [isChild]="true"></app-adb>
+        <app-komponenta *ngFor="let komponenta of result.dj_komponenta" [result]="komponenta"></app-komponenta>
+      </mat-accordion>
+  </mat-expansion-panel>
+
+  
+</ng-template>

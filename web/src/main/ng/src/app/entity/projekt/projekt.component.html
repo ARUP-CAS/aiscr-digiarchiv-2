@@ -1,10 +1,10 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-projekt]="!isChild && !isDocumentDialogOpen" (click)="state.setMapResult(result, mapDetail)">
-  <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-projekt]="!isChild && !isDocumentDialogOpen">
+  <a *ngIf="mapDetail" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   <mat-card-header>
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
-      <div fxFlex>
+      <div fxFlex (click)="service.showInMap(result, false)">
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
         <mat-icon class="app-entity-projekt" [matTooltip]="'entities.projekt.title' | translate">{{ config.entityIcons["projekt"] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
@@ -78,7 +78,7 @@
         <span class="app-pipe"></span>
       </ng-container>
     </div>
-    <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+    <app-result-actions [inDocument]="inDocument" [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
   </mat-card-actions>
   <mat-card-content *ngIf="detailExpanded && !isChild" >

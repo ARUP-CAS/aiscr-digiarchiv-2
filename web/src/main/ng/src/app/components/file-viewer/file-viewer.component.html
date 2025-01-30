@@ -6,13 +6,13 @@
   </div>
 	<a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
 </h1>
-<div mat-dialog-content *ngIf="selectedFile">
-  <div fxLayout="row" fxLayoutAlign="start baseline" class="app-toolbar-wrapper">
+<div mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="start baseline" class="app-toolbar-wrapper" *ngIf="selectedFile">
     <div fxFlex class="app-controls">
       <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
       <span class="app-pipe"></span>
       <mat-form-field>
-        <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()" />
+        <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()"  />
       </mat-form-field>
       {{ 'dialog.citation.stránka z' | translate }} <strong>{{ selectedFile?.rozsah }}</strong>
       <span *ngIf="currentPage < selectedFile.rozsah" class="app-pipe"></span>
@@ -26,8 +26,12 @@
       </ng-container>
     </div>
   </div>
-  
-  <ngu-carousel #carousel [inputs]="carouselConfig" [dataSource]="selectedFile.pages">
+  <mat-card class="app-card-info app-row-gap-16">
+    <mat-card-content>
+      {{ 'dialog.desc.viewerInfo' | translate }}
+    </mat-card-content>
+  </mat-card>
+  <ngu-carousel #carousel [inputs]="carouselConfig" (carouselLoad)="carouselItemsLoad($event)" [dataSource]="carouselItems" >
     <div *nguCarouselDef="let item; let idx = index" class="item">
       <img [src]="imgPoint(selectedFile, 'medium') + '?size=medium&id='+ selectedFile.id + '&nazev='+ selectedFile.nazev + '&page=' + idx" />
     </div>

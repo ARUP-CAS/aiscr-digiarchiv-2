@@ -2,8 +2,95 @@
 
 app-home {
   .app-entities-wrapper {
+    
+    &.app-doctype-expanded {
+      // mq - categories behavior
+      @media only screen and (max-width: 399px) {
+        .mat-card {
+          &.app-doctype-0 {
+            display: block !important;
+          }
+  
+          &.app-doctype-5 {
+            display: none !important;
+          }
+        }
+      }
+
+      @media #{$xxs} {
+        .mat-card {
+          &.app-card-entity {
+            &.app-2,
+            &.app-4 {
+              margin-right: $app-gap-double !important;
+            }  
+
+            &.app-1,
+            &.app-3 {
+              margin-right: 0 !important;
+            }       
+          }
+
+          &.app-doctype-1 {
+            display: block;
+          }
+
+          &.app-doctype-0,
+          &.app-doctype-2,
+          &.app-doctype-5 {
+            display: none;
+          }
+        }
+      }
+
+      @media #{$sm} {
+        .mat-card {
+          &.app-card-entity {
+            &.app-1 {
+              margin-right: $app-gap-double !important;
+            }
+
+            &.app-2,
+            &.app-5 {
+              margin-right: 0 !important;
+            }   
+          }
+          
+          &.app-doctype-2 {
+            display: block;
+          }
+
+          &.app-doctype-0,
+          &.app-doctype-1,
+          &.app-doctype-5 {
+            display: none;
+          }
+        }
+      }
+    }
+
+    // split mat-card-actions into 2 lines
+    @media only screen and (min-width: 960px) and (max-width: 1159px) {
+      .mat-card {
+        &.app-card-entity {
+          .mat-card-actions {
+            span {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+
     .mat-card {
+      min-height: 112px;
       @extend .app-row-gap-32, .app-font-family-rc;
+
+      &.app-doctype-0,
+      &.app-doctype-1,
+      &.app-doctype-2 {
+        display: none;
+      }
     
       &.app-card-entity {
         @include setEntityColor(home_card);
@@ -13,7 +100,7 @@ app-home {
         margin-right: $app-gap-double;
         color: $app-color-lightnes;
   
-        &:nth-child(6) {
+        &.app-5 {
           margin-right: 0;
         }
 
@@ -23,8 +110,8 @@ app-home {
           flex: 1 1 calc(#{$flex-width} - #{$app-gap-double});
           min-width: calc(#{$flex-width} - #{$app-gap-double});
 
-          &:nth-child(2),
-          &:nth-child(4) {
+          &.app-1,
+          &.app-3 {
             margin-right: 0 !important;
           }
         }
@@ -34,7 +121,7 @@ app-home {
           flex: 1 1 calc(#{$flex-width} - #{$app-gap-double});
           min-width: calc(#{$flex-width} - #{$app-gap-double});
 
-          &:nth-child(3) {
+          &.app-2 {
             margin-right: 0;
           }
         }

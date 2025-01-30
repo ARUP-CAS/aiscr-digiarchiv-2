@@ -6,6 +6,7 @@ import { AppState } from 'src/app/app.state';
 import { DocumentDialogComponent } from '../document-dialog/document-dialog.component';
 import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.component';
 import { Router } from '@angular/router';
+import { BibtextDialogComponent } from '../bibtext-dialog/bibtext-dialog.component';
 
 @Component({
   selector: 'app-result-actions',
@@ -18,9 +19,13 @@ export class ResultActionsComponent {
   @Input() bibTex: string;
   @Input() isDocumentDialogOpen: boolean;
   @Input() detailExpanded: boolean;
+  @Input() inDocument: boolean;
   @Input() mapDetail: boolean;
+  @Input() ident_cely_api: any;
 
   @Output() onToggleDetail  = new EventEmitter<string>();
+
+  useParentEntities = ['']
 
   constructor(
     public service: AppService,
@@ -29,6 +34,10 @@ export class ResultActionsComponent {
     private router: Router,
     public config: AppConfiguration
   ) { }
+
+  apiIdentCely(item:{label: string, metadataPrefix: string, url: string, useParent: boolean}) {
+    return (item.useParent && this.ident_cely_api) ? this.ident_cely_api : this.result.ident_cely;
+  }
 
   toggleDetail() {
     this.onToggleDetail.emit('');
@@ -60,6 +69,15 @@ export class ResultActionsComponent {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
+  }
+
+  showCitation() {
+    this.state.dialogRef = this.dialog.open(BibtextDialogComponent, {
+      width: '900px',
+      data: {result: this.result, link: this.config.serverUrl + 'id/' + this.result.ident_cely},
+      panelClass: 'app-feedback-dialog'
+    });
+    
   }
 
 }

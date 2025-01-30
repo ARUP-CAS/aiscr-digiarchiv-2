@@ -8,10 +8,36 @@ app-results {
     }
   }
 
+  .app-mobile-action-toolbar {
+    display: none !important;
+    height: var(--app-mobile-action-toolbar-height);
+    background-color: var(--app-gray-0);
+    border-bottom: 1px solid var(--app-gray-3);
+
+    @media #{$lt-md} {
+      display: flex !important;
+    }
+  }
+
+  .app-left {
+    @media #{$lt-md} {
+      &:not(.app-facets-opened) {
+        display: none !important;
+      }
+    }
+  }
+
   .app-right {
     @import "./app-toolbar";
     @import "./app-chart-bar";
     @import "./app-view-col";
     @import "./app-view-row";
+
+    @media #{$lt-md} {
+      &:not(.app-results-opened),
+      .app-action-links {
+        display: none !important;
+      }
+    }
   }
 }

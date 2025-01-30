@@ -1,8 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
@@ -166,7 +164,8 @@ class PIANChraneneUdaje {
       final WKTReader reader = new WKTReader();
       try {
         Geometry geometry = reader.read(wktStr);
-        Point p = geometry.getCentroid();
+        // Point p = geometry.getCentroid();
+        Point p = geometry.getInteriorPoint();
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

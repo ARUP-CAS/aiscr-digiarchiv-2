@@ -68,6 +68,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     // this.state.locationFilterEnabled = false;
     // this.state.locationFilterBounds = null;
     this.state.isMapaCollapsed = !this.state.isMapaCollapsed;
+    this.state.switchingMap = !this.state.isMapaCollapsed;
     this.state.setMapResult(null, false);
     if (!this.state.isMapaCollapsed) {
       this.document.body.classList.add('app-view-map');
@@ -79,20 +80,27 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.loc_rpt = null;
 
     if (p.mapa) {
-      const lat = this.state.stats.lat;
-      const lng = this.state.stats.lng;
-      if (lat.max === lat.min) {
-        lat.min = lat.min - 0.05;
-        lat.max = lat.max + 0.05;
-        lng.min = lng.min - 0.05;
-        lng.max = lng.max + 0.05;
+      if (this.router.isActive('/id', false)) {
+        p.loc_rpt = null;
+        p.vyber = null;
+      } else {
+        const lat = this.state.stats.lat;
+        const lng = this.state.stats.lng;
+        if (lat.max === lat.min) {
+          lat.min = lat.min - 0.05;
+          lat.max = lat.max + 0.05;
+          lng.min = lng.min - 0.05;
+          lng.max = lng.max + 0.05;
+        }
+        p.loc_rpt = lat.min + ',' + lng.min +
+          ',' + lat.max + ',' + lng.max;
       }
-      p.loc_rpt = lat.min + ',' + lng.min +
-        ',' + lat.max + ',' + lng.max;
     } else {
+
       p.loc_rpt = null;
       p.pian_id = null;
       p.mapa = null;
+      p.mapId = null;
       if (!this.state.locationFilterEnabled) {
         p.loc_rpt = null;
         p.vyber = null;

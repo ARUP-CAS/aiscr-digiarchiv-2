@@ -1,10 +1,10 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-samostatny_nalez]="!isChild && !isDocumentDialogOpen" (click)="state.setMapResult(result, mapDetail)">
-  <a *ngIf="mapDetail" (click)="state.setMapResult(null, false)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-samostatny_nalez]="!isChild && !isDocumentDialogOpen">
+  <a *ngIf="mapDetail" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a> 
   <mat-card-header>
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
-      <div fxFlex>
+      <div fxFlex (click)="service.showInMap(result, false)">
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
         <mat-icon class="app-entity-samostatny_nalez" [matTooltip]="'entities.samostatny_nalez.title' | translate">{{ config.entityIcons["samostatny_nalez"] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
@@ -30,7 +30,7 @@
         <div *ngIf="result.samostatny_nalez_predano_organizace || result.samostatny_nalez_evidencni_cislo || result.pristupnost">
           <ng-container *ngIf="result.samostatny_nalez_predano_organizace">
             <label class="app-label">{{ 'card.desc.Předáno organizaci' | translate }}:</label>&#160;
-            <app-inline-filter [isChild]="isChild" [field]="'predano_organizace'" [value]="result.samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild" [field]="'samostatny_nalez_predano_organizace'" [value]="result.samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
           <ng-container *ngIf="result.samostatny_nalez_evidencni_cislo">
@@ -81,7 +81,7 @@
         {{'card.desc.Počet souborů' | translate}}: <strong>{{result.soubor_filepath.length}}</strong>
       </ng-container>
     </div>
-    <app-result-actions [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
+    <app-result-actions [inDocument]="inDocument" [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen" 
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions>
   </mat-card-actions>
   <mat-card-content *ngIf="detailExpanded && !isChild">

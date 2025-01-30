@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
@@ -15,12 +16,23 @@ export class AdbComponent implements OnInit {
   @Input() inDocument = false;
   @Input() onlyHead = false;
 
+  bibTex: string;
+
   constructor(
+    private datePipe: DatePipe,
     public service: AppService,
     public state: AppState
   ) { }
 
   ngOnInit(): void {
+    const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.bibTex =
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+       author = {AMČR},
+       title = {Záznam ${this.result.ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       note = {Archeologická mapa České republiky [cit. ${now}]}
+     }`;
     if (this.result?.ident_cely) { 
     } else {
       const pianid = this.result.id ? this.result.id : this.result;
@@ -31,6 +43,8 @@ export class AdbComponent implements OnInit {
     }
   }
 
-  
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
 
 }

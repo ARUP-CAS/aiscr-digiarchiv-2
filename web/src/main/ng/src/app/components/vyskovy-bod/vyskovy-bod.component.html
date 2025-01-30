@@ -1,5 +1,5 @@
 
-<mat-card class="app-clean-shadow app-pt-0 app-pb-0">
+<mat-card class="app-result-item app-row-gap-16">
   <mat-card-header>
     <mat-card-title>
       {{ 'card.panelTitle.Výškový bod' | translate }}:&#160;
@@ -8,20 +8,35 @@
       (<app-inline-filter [field]="'typ'" [value]="result.vyskovy_bod_typ" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>) 
     </mat-card-title>
   </mat-card-header>
+  
+  <mat-card-content *ngIf="detailExpanded">
+    <div *ngIf="result.vyskovy_bod_geom_gml"><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ result.vyskovy_bod_geom_gml }}</div>
+    <div *ngIf="result.vyskovy_bod_geom_wkt"><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
+      EPSG:{{ result.vyskovy_bod_geom_wkt.epsg }}, {{ result.vyskovy_bod_geom_wkt.value }}
+    </div>
+  </mat-card-content>
 
-  <div *ngIf="result.vyskovy_bod_geom_gml"><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ result.vyskovy_bod_geom_gml }}</div>
-  <div *ngIf="result.vyskovy_bod_geom_wkt"><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
-    EPSG:{{ result.vyskovy_bod_geom_wkt.epsg }}, {{ result.vyskovy_bod_geom_wkt.value }}
-  </div>
+  <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
+    <div fxFlex class="app-metadata">
+
+    </div>
+    <app-result-actions [inDocument]="inDocument" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
+    [bibTex]="bibTex"
+    [ident_cely_api]="result.ident_cely.substr(0, result.ident_cely.lastIndexOf('-'))"></app-result-actions>
+  </mat-card-actions>
+
+  <mat-card-content *ngIf="detailExpanded">
+    
+    <mat-expansion-panel *ngIf="result.vyskovy_bod_parent && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
+      <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
+        <mat-panel-title>
+          {{ 'card.panelTitle.Související záznamy' | translate }}:
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-adb *ngFor="let result of result.adb" [result]="result" [isChild]="true" [onlyHead]="true" class="app-related-item"></app-adb>
+    </mat-expansion-panel> 
+
+  </mat-card-content>
+  
 
 </mat-card>
-
-
-<mat-expansion-panel *ngIf="result.vyskovy_bod_parent && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-  <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
-    <mat-panel-title>
-      {{ 'card.panelTitle.Související záznamy' | translate }}:
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-  <app-adb *ngFor="let result of result.adb" [result]="result" [isChild]="true" [onlyHead]="true" class="app-related-item"></app-adb>
-</mat-expansion-panel> 

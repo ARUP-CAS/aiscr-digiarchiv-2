@@ -39,7 +39,7 @@ public class AkceSearcher implements EntitySearcher {
                 doc.remove("akce_chranene_udaje");
             }
         }
-        
+
     }
 
     @Override
@@ -80,8 +80,8 @@ public class AkceSearcher implements EntitySearcher {
             SolrSearcher.addChildField(client, doc, "akce_projekt", "valid_projekt", fields);
         }
     }
-    
-    public void addOkresy(JSONObject jo) { 
+
+    public void addOkresy(JSONObject jo) {
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
@@ -159,11 +159,20 @@ public class AkceSearcher implements EntitySearcher {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
                 doc.put("az_dokument", valid_dokuments);
-            } 
+            }
 
             if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
                 doc.remove("akce_projekt");
             }
+        }
+        addOkresy(jo);
+    }
+
+    @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+            addOkresy(jo);
         }
     }
 
@@ -178,18 +187,21 @@ public class AkceSearcher implements EntitySearcher {
             JSONObject jo = SearchUtils.json(query, client, "entities");
 
             //LOGGER.log(Level.INFO, "checkRelations");
-            if (!Boolean.parseBoolean(request.getParameter("mapa"))){
+            if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
                 // checkRelations(jo, client, request);
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             //LOGGER.log(Level.INFO, "filter");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            
-            if (Boolean.parseBoolean(request.getParameter("mapa")) && 
-                    jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-                // addPians(jo, client, request);
-            }
-            if (!Boolean.parseBoolean(request.getParameter("mapa"))){
+
+//            if (Boolean.parseBoolean(request.getParameter("mapa"))
+//                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
+//                addPians(jo, client, request);
+//            }
+            if (Boolean.parseBoolean(request.getParameter("isExport"))) {
+                addPians(jo, client, request);
+            } 
+            if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
                 addOkresy(jo);
             }
             //LOGGER.log(Level.INFO, "addFavorites");
@@ -238,7 +250,7 @@ public class AkceSearcher implements EntitySearcher {
 
         String[] ret = fields.toArray(new String[0]);
         return ret;
-        
+
     }
 
     @Override

@@ -50,9 +50,9 @@ public class ImageServlet extends HttpServlet {
 
         try {
             String action = request
-                    .getPathInfo()
-                    .substring(1);
+                    .getPathInfo();
             if (action != null) {
+                action = action.substring(1);
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
                 actionToDo.doPerform(request, response, getServletContext());
             } else {
@@ -90,7 +90,7 @@ public class ImageServlet extends HttpServlet {
     private static JSONObject getDocument(String id) throws Exception {
         SolrQuery query = new SolrQuery("*") 
                 .addSort("datestamp", SolrQuery.ORDER.desc)
-                .setFields("soubor:[json]")
+                .setFields("entity,soubor:[json]")
                 .addFilterQuery("soubor_id:\"" + id + "\"")
                 .addFilterQuery("searchable:true");
 
@@ -100,9 +100,11 @@ public class ImageServlet extends HttpServlet {
             return null;
         }
         JSONArray soubor = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONArray("soubor");
+        String entity = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
         for (int i = 0; i< soubor.length(); i++) {
             JSONObject doc = soubor.getJSONObject(i);
             if (id.equals(doc.optString("id"))) {
+                doc.put("entity", entity);
                 return doc;
             }
         }
@@ -222,14 +224,16 @@ public class ImageServlet extends HttpServlet {
                         response.setHeader("Content-Disposition", "filename=" + doc.getString("nazev"));
                         
                         String url = doc.getString("path") + "/orig";
-                        url = url.substring(url.indexOf("record"));
+                        if ( url.contains("record")) {
+                            url = url.substring(url.indexOf("record"));
+                        }
                         InputStream is = FedoraUtils.requestInputStream(url);
                         FileUtils.copyInputStreamToFile(is, f);
                         LOGGER.log(Level.INFO, "bytes received: {0}", f.length());
                         IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                         // InputStream is = getFromFedora(id, "orig");
                         // IOUtils.copy(is, response.getOutputStream());
-                        LogAnalytics.log(request, doc.getString("path"), "file");
+                        LogAnalytics.log(request, doc.getString("path"), "file", doc.getString("entity"));
                         is.close();
 
                     } catch (Exception ex) {

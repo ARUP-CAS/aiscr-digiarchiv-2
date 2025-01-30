@@ -8,7 +8,6 @@ import cz.inovatika.arup.digiarchiv.web.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Historie;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Lang;
 import cz.inovatika.arup.digiarchiv.web.fedora.models.Vocab;
-import static cz.inovatika.arup.digiarchiv.web.index.SolrSearcher.getSufixesByLevel;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +44,7 @@ public class IndexUtils {
                         .build();
             }
         } catch (Exception ex) {
+            _solrNoOp = null;
             LOGGER.log(Level.SEVERE, null, ex);
         }
         return _solrNoOp;
@@ -56,6 +56,7 @@ public class IndexUtils {
                 _solrBin = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             }
         } catch (Exception ex) {
+            _solrBin = null;
             LOGGER.log(Level.SEVERE, null, ex);
         }
         return _solrBin;
@@ -104,7 +105,7 @@ public class IndexUtils {
     }
 
     public static void addSecuredFieldNonRepeat(SolrInputDocument idoc, String field, Object value, String level) {
-        List<String> prSufix = getSufixesByLevel(level);
+        List<String> prSufix = SolrSearcher.getSufixesByLevel(level);
         for (String sufix : prSufix) {
             String f = field + "_" + sufix;
             if (idoc.getFieldValues(f) == null || !idoc.getFieldValues(f).contains(value)) {
@@ -114,7 +115,7 @@ public class IndexUtils {
     }
 
     public static void setSecuredField(SolrInputDocument idoc, String field, Object value, String level) {
-        List<String> prSufix = getSufixesByLevel(level);
+        List<String> prSufix = SolrSearcher.getSufixesByLevel(level);
         for (String sufix : prSufix) {
             String f = field + "_" + sufix;
             idoc.setField(f, value);

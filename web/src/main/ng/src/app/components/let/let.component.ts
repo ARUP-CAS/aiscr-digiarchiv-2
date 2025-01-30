@@ -74,4 +74,8 @@ export class LetComponent implements OnInit {
     });
   }
 
+  toggleDetail() {
+    this.detailExpanded = !this.detailExpanded;
+  }
+
 }

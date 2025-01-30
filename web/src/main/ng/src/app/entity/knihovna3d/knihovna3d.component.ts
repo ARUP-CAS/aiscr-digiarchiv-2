@@ -44,6 +44,9 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     if (this.result.soubor_filepath?.length > 0) {
+      this.result.soubor.sort((a: any, b: any) => {
+        return a.nazev.localeCompare(b.nazev);
+      });
       this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
     }
 
@@ -147,6 +150,9 @@ export class Knihovna3dComponent implements OnInit, OnChanges {
 
   setImg() {
     if (this.result.soubor_filepath?.length > 0) {
+      this.result.soubor.sort((a: any, b: any) => {
+        return a.nazev.localeCompare(b.nazev);
+      });
       this.imgSrc = this.config.context + '/api/img?id=' + this.result.soubor_filepath[0];
     }
 

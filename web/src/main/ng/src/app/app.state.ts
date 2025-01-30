@@ -26,7 +26,7 @@ export class AppState {
   private loggedSubject: Subject<boolean> = new Subject();
   public loggedChanged: Observable<boolean> = this.loggedSubject.asObservable();
 
-  private mapResultSubject: Subject<string> = new Subject();
+  private mapResultSubject: Subject<string> = new ReplaySubject(1);
   public mapResultChanged: Observable<string> = this.mapResultSubject.asObservable();
 
   private mapViewSubject: Subject<string> = new Subject();
@@ -46,12 +46,14 @@ export class AppState {
   timelineOpened = true;
   printing = false;
   documentId: string;
+  isFacetsCollapsed = true;
 
   dialogRef: MatDialogRef<any, any>;
   mapResult: any; // Select entity in map view
   pianId: string; // Selected pian in map
   locationFilterEnabled: boolean; // Vyber na mape
   locationFilterBounds: any; // Vyber na mape
+  mapBounds: any;
 
 
   // public loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -60,6 +62,8 @@ export class AppState {
 
   solrResponse: SolrResponse;
   loading: boolean;
+  switchingMap = false;
+  closingMapResult = false;
   facetsLoading = false;
   hasError = false;
   imagesLoading: boolean;
@@ -126,7 +130,7 @@ export class AppState {
     });
   }
 
-  setSearchResponse(resp: SolrResponse) {
+  setSearchResponse(resp: SolrResponse, typ: string = 'results') {
     this.solrResponse = resp;
     this.numFound = resp.response.numFound;
     this.totalPages = this.numFound / this.rows;
@@ -149,7 +153,7 @@ export class AppState {
     }
     
 
-    this.resultsSubject.next({typ: 'results', pageChanged: this.pageChanged});
+    this.resultsSubject.next({typ, pageChanged: this.pageChanged});
     this.pageChanged = false;
     if (resp.facet_counts) {
       setTimeout(() => {
@@ -295,9 +299,11 @@ export class AppState {
     if (pristupnost.toUpperCase() === 'A') {
       return true;
     } else if (this.logged) {
-      console.log(this.user)
       const sameOrg = this.user.organizace.id === organizace;
-      return this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
+      const orgCanRead = this.user.pristupnost.toUpperCase().localeCompare('C'.toUpperCase()) > -1 && this.user.cteni_dokumentu;
+      return orgCanRead ||
+             this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || 
+             ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
     } else {
       return false;
     }
@@ -313,11 +319,15 @@ export class AppState {
   }
 
   setMapResult(result, mapDetail) {
+    const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
+    this.mapResult = result;
+    // if (!result && !this.isMapaCollapsed) {
+      
+    //   return;
+    // }
     if (mapDetail) {
       return;
     }
-    const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
-    this.mapResult = result;
     if (changed) {
       this.mapResultSubject.next(result);
     }

@@ -64,7 +64,9 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | ' + this.service.getTranslation('card.citation.Dokument'));
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
+    + ' | ' + this.service.getTranslation('title.record') 
+    + ' - ' + (this.result ? this.result.ident_cely : '') );
   }
 
   search(id: string) {
@@ -87,6 +89,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         }
 
         this.state.setMapResult(this.result, false);
+        this.setTitle();
       }
       this.link = this.config.serverUrl + 'id/' + id;
       this.loading = false;

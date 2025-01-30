@@ -54,7 +54,7 @@ public class OAIRequest {
             dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
             dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
         }
-        return dcTransformer; 
+        return dcTransformer;
     }
 
     private static Transformer getTransformer2() throws TransformerConfigurationException {
@@ -65,10 +65,10 @@ public class OAIRequest {
             emptyTransformer.setOutputProperty("omit-xml-declaration", "yes");
         }
         return emptyTransformer;
-    } 
+    }
 
     public static String headerOAI() {
-        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
+        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><?xml-stylesheet type=\"text/xsl\" href=\"oai2.xsl\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
     }
 
     public static String responseDateTag() {
@@ -206,7 +206,7 @@ public class OAIRequest {
     }
 
     private static boolean validSet(String set) {
-        if ("akce".equals(set) || "lokalita".equals(set)) {
+        if ("akce".equals(set) || "lokalita".equals(set) || "knihovna_3d".equals(set)) {
             return false;
         }
         return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set);
@@ -283,11 +283,14 @@ public class OAIRequest {
             String model = req.getParameter("set");
             String from = req.getParameter("from");
             String until = req.getParameter("until");
+
             long page = 0;
             if (model == null) {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
                 model = model + "\\:*";
+            } else if (model.equals("dokument")) {
+                model = model + "*";
             } else if (!validSet(model)) {
                 return badArgument(req, "Invalid set");
             } else {
@@ -328,6 +331,11 @@ public class OAIRequest {
             query.addFilterQuery("model:"
                     + model);
 
+            if (from != null && until != null) {
+                if (from.length() != until.length()) {
+                    return badArgument(req, "The request has different granularities for the from and until parameters.");
+                }
+            }
             if (from != null || until != null) {
                 if (from == null || from.isBlank()) {
                     from = "*";
@@ -338,6 +346,9 @@ public class OAIRequest {
                     until = "*";
                 } else if (until.length() < 11 && !"*".equals(until)) {
                     until = until + "T23:59:59Z";
+                }
+                if (from.length() != until.length()) {
+
                 }
                 query.addFilterQuery("datestamp:[" + from + " TO " + until + "]");
             }
@@ -489,8 +500,8 @@ public class OAIRequest {
                 .append("</datestamp>");
         if (model != null) {
             ret.append("<setSpec>")
-                .append(model)
-                .append("</setSpec>");
+                    .append(model)
+                    .append("</setSpec>");
         }
 
         // <setSpec>projekt</setSpec> <!-- "projekt" | "archeologicky_zaznam" | "let" | "adb" | "dokument" | "ext_zdroj" | "pian" | "samostatny_nalez" | "uzivatel" | "heslo" | "ruian_kraj" | "ruian_okres" | "ruian_katastr" | "organizace | "osoba -->
@@ -524,20 +535,20 @@ public class OAIRequest {
 
         String docPristupnost = (String) doc.getFieldValue("pristupnost");
         String projektOrg = (String) doc.getFirstValue("organizace");
-        String model = (String) doc.getFieldValue("model"); 
-        
+        String model = (String) doc.getFieldValue("model");
+
         FedoraModel fm = FedoraModel.getFedoraModel(model);
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
-            long stav = 0; 
+            long stav = 0;
             if (doc.containsKey("stav")) {
                 stav = (long) doc.getFieldValue("stav");
             }
             String xml = (String) doc.getFieldValue("xml");
             String ret = xml;
-            if (ret.contains("<amcr:oznamovatel>") && 
-                    ("C".compareToIgnoreCase(userPristupnost) > 0 || // A-B
-                    ("C".equalsIgnoreCase(userPristupnost) && !(stav == 1 || userOrg.equals(projektOrg))))
-                ) {
+            if (ret.contains("<amcr:oznamovatel>")
+                    && ("C".compareToIgnoreCase(userPristupnost) > 0
+                    || // A-B
+                    ("C".equalsIgnoreCase(userPristupnost) && !(stav == 1 || userOrg.equals(projektOrg))))) {
 // M-202204636
 //projekt/oznamovatel
 //-- A-B: nikdy
@@ -576,7 +587,7 @@ public class OAIRequest {
 
         Source text = new StreamSource(new StringReader(xml));
         StringWriter sw = new StringWriter();
-        
+
         getTransformer().transform(text, new StreamResult(sw));
 
         Pattern emptyValueTag = Pattern.compile("\\s*<dc:\\w+.*/>");

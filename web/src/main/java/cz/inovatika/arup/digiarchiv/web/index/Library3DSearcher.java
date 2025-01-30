@@ -66,6 +66,11 @@ public class Library3DSearcher implements EntitySearcher {
     }
 
     @Override
+    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+    }
+
+    @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         try {

@@ -427,6 +427,9 @@ class ProjektChraneneUdaje {
     public String parcelni_cislo;
 
 //<xs:element name="geom_gml" minOccurs="0" maxOccurs="1" type="amcr:gmlType"/> <!-- ST_AsGML("{geom}") -->
+    @JacksonXmlProperty(localName = "geom_gml")
+    public WKT geom_gml;
+    
 //<xs:element name="geom_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom}") | ST_AsText("{geom}") -->
     @JacksonXmlProperty(localName = "geom_wkt")
     public WKT geom_wkt;
@@ -442,15 +445,15 @@ class ProjektChraneneUdaje {
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
         IndexUtils.setSecuredJSONField(idoc, "projekt_chranene_udaje", this);
 
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chu_lokalizace", lokalizace, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_parcelni_cislo", parcelni_cislo, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_lokalizace", lokalizace, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_parcelni_cislo", parcelni_cislo, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
+        IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
 
         for (Vocab v : dalsi_katastr) {
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_dalsi_katastr", v.getValue(), pristupnost);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_dalsi_katastr", v.getValue(), pristupnost);
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
         }
 
@@ -461,7 +464,8 @@ class ProjektChraneneUdaje {
                 final WKTReader reader = new WKTReader();
                 try {
                     Geometry geometry = reader.read(wktStr);
-                    Point p = geometry.getCentroid();
+                    // Point p = geometry.getCentroid();
+                    Point p = geometry.getInteriorPoint();
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
                     IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

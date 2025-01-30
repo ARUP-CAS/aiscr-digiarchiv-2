@@ -18,13 +18,29 @@
   <link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
   
   <!-- Google Analitycs -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79200582-3"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZVN4RLK11P"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'UA-79200582-3');
+    let consent = localStorage.getItem("consent");
+    if (consent === null) {
+      consent = 'denied';
+    }
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+    gtag('consent', 'default', {
+      'ad_storage': consent,
+      'ad_user_data': consent,
+      'ad_personalization': consent,
+      'analytics_storage': consent
+    });
+
+    if (consent !== 'denied') {
+      gtag('js', new Date());
+      gtag('config', 'G-ZVN4RLK11P');
+    }
+
   </script>
 </head>
 <body class="mat-typography">

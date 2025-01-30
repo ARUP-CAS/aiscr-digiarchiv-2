@@ -25,7 +25,7 @@ import { DocumentComponent } from 'src/app/pages/document/document.component';
 import { ExportComponent } from 'src/app/pages/export/export.component';
 import { ExportMapaComponent } from 'src/app/pages/export-mapa/export-mapa.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { FooterComponent } from './components/footer/footer.component';
+import { ConsentSheet, FooterComponent } from './components/footer/footer.component';
 import { FreeTextComponent } from './components/free-text/free-text.component';
 import { ResultsComponent } from './pages/results/results.component';
 import { TranslateHeslar } from 'src/app/translate-heslar.pipe';
@@ -80,6 +80,17 @@ import { CitationComponent } from './components/citation/citation.component';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { ResultActionsComponent } from './components/result-actions/result-actions.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { StatsComponent } from './pages/stats/stats.component';
+
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
+import { BarChart } from 'echarts/charts';
+import { LineChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+import 'echarts/theme/macarons.js';
+
+echarts.use([TitleComponent, TooltipComponent, GridComponent, BarChart, LineChart, LegendComponent, CanvasRenderer]);
 
 registerLocaleData(localeCs, 'cs');
 
@@ -193,7 +204,9 @@ const providers: any[] =[
     AlertDialogComponent,
     KomponentaDokumentComponent,
     CitationComponent,
-    ResultActionsComponent
+    ResultActionsComponent,
+    StatsComponent,
+    ConsentSheet
   ],
   imports: [
     CommonModule,
@@ -216,7 +229,11 @@ const providers: any[] =[
     AppMaterialModule,
     FlexLayoutModule,
     RecaptchaModule,
-    RecaptchaFormsModule
+    RecaptchaFormsModule,
+    NgxEchartsModule.forRoot({
+      // echarts: () => import('echarts'), 
+      echarts
+    })
   ],
   // entryComponents: [
   //   FileViewerComponent

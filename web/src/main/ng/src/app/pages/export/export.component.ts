@@ -30,6 +30,7 @@ export class ExportComponent implements OnInit {
 
 
   ngOnInit(): void {
+      this.setTitle();
     this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -55,7 +56,9 @@ export class ExportComponent implements OnInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') + ' | Export');
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
+    + ' | ' + this.service.getTranslation('title.export') 
+    + ' - ' + this.service.getTranslation('entities.'+ this.state.entity+'.title') );
   }
 
   search(params: Params) {

@@ -163,6 +163,8 @@ export class FacetsComponent implements OnInit {
   }
 
   setEntity(entity) {
+    this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
     // Validate sort param sort
     const sortParam = this.state.sort.field;
     let sort = this.config.sorts.find(s => ((s.field) === sortParam) && (!s.entity || s.entity.length === 0 || s.entity.includes(entity)));
@@ -216,6 +218,8 @@ export class FacetsComponent implements OnInit {
   }
 
   applyFilters() {
+    this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
     const params: any = {};
     this.changedFacets.forEach((c: Crumb) => {
       if (!params[c.field]) {
