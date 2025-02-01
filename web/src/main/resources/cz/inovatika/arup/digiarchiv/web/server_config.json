@@ -173,12 +173,15 @@
     ],
     "dokument": {
       "header": [
+        "autor:dokument_autor",
         "dokument_autor",
+        "rok_vzniku:dokument_rok_vzniku",
         "dokument_rok_vzniku",
         "dokument_typ_dokumentu",
         "dokument_material_originalu",
         "dokument_rada",
         "dokument_organizace",
+        "organizace:dokument_organizace",
         "dokument_okres",
         "dokument_popis",
         "dokument_cast_archeologicky_zaznam",
