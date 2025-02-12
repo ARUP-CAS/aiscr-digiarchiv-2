@@ -70,7 +70,7 @@ public class Komponenta {
     DocumentObjectBinder dob = new DocumentObjectBinder();
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
-    IndexUtils.addVocabField(kdoc, "komponenta_areal", komponenta_areal);
+    IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
     for (Vocab a : komponenta_aktivita) {
         // IndexUtils.addVocabField(kdoc, "aktivita", a);
         IndexUtils.addJSONField(kdoc, "komponenta_aktivita", a);
