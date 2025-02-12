@@ -192,6 +192,7 @@ public class LogAnalytics {
                             idoc.addField("ident_cely", ident_cely);
                             idoc.addField("user", doc.getFirstValue("user"));
                             idoc.addField("ip", doc.getFirstValue("ip"));
+                            idoc.addField("indextime", doc.getFirstValue("indextime"));
                             idoc.addField("type", doc.getFirstValue("type"));
                             idoc.addField("entity", docs2.get(0).getFirstValue("entity"));
                             client.add("logs", idoc);
