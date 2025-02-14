@@ -71,7 +71,14 @@ public class LogAnalytics {
                     .setParam("facet.range", "indextime")
                     .setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR")
                     .setParam("f.indextime.facet.range.end", "NOW")
-                    .setParam("f.indextime.facet.range.gap", "+1DAY");
+                    .setParam("f.indextime.facet.range.gap", 
+                            "+1DAY");
+            JSONArray ips = Options.getInstance().getJSONArray("statsIpFilter");
+            for(int i =0; i<ips.length(); i++) {
+                query.addFilterQuery("-ip:" + ips.getString(i)
+                        .replaceAll(":", "\\\\:")
+                        .replaceAll("\\.", "\\\\."));
+            }
 
             if (LoginServlet.pristupnostSimple(request.getSession()).compareToIgnoreCase("C") > 0) {
                 query.addFacetField("user")
@@ -154,22 +161,28 @@ public class LogAnalytics {
     }
 
     public static JSONObject fixEntity() {
+        LOGGER.log(Level.INFO, "Fix logs entity started");
         Instant start = Instant.now();
         // Date start = new Date();
         int totalDocs = 0;
         int rows = 100;
         JSONObject jo = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) { 
 
             SolrQuery query = new SolrQuery("*")
+                    //.addFilterQuery("-entity:*") 
                     .setRows(rows)
-                    .addFilterQuery("-entity:*");
+                    .setSort("id", SolrQuery.ORDER.asc);
             boolean done = false;
+            QueryResponse rsp = null;
             SolrDocumentList docs;
+            String cursorMark = CursorMarkParams.CURSOR_MARK_START;
             while (!done) {
+                query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursorMark);
                 try {
-                    docs = client.query("logs", query).getResults();
-                    for (SolrDocument doc : docs) {
+                    rsp = client.query("logs_old", query);
+                    docs = rsp.getResults();
+                    for (SolrDocument doc : docs) { 
                         String ident_cely = (String) doc.getFirstValue("ident_cely");
                         String typ = (String) doc.getFirstValue("type");
 
@@ -195,17 +208,24 @@ public class LogAnalytics {
                             idoc.addField("indextime", doc.getFirstValue("indextime"));
                             idoc.addField("type", doc.getFirstValue("type"));
                             idoc.addField("entity", docs2.get(0).getFirstValue("entity"));
+                            // client.add("logs", idoc);
                             client.add("logs", idoc);
                         }
                         totalDocs++;
                     }
                     client.commit("logs"); 
-                    //totalDocs += rsp.getResults().size();
                     LOGGER.log(Level.INFO, "Currently {0} files processed", totalDocs);
 
-                    if (docs.size() < rows) {
+                    String nextCursorMark = rsp.getNextCursorMark();
+                    if (cursorMark.equals(nextCursorMark) || rsp.getResults().size() < rows) {
                         done = true;
+                    } else {
+                        cursorMark = nextCursorMark;
                     }
+                
+//                    if (docs.size() < rows) {
+//                        done = true;
+//                    }
 
                 } catch (SolrServerException e) {
                     LOGGER.log(Level.SEVERE, null, e);

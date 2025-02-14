@@ -83,6 +83,8 @@
     ""
   ],
   "requestInterval": 5,
+  "statsIpFilter": ["66.249*", "0:0:0:0:0:0:0:1", "127.0.0.1"],
+    
     
   "securedFacets": [
     "f_katastr",
