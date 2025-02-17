@@ -7,6 +7,12 @@
 		<div [leafletLayer]="markers"></div>
 	</div> 
 
+	<mat-card class="app-active-pian-facet" *ngIf="loadingMarkers">
+		<mat-card-content>
+			<a [matTooltip]="'map.tooltip.Zastavit' | translate" (click)="stopLoadingMarkers()"><mat-icon>stop</mat-icon></a>
+		</mat-card-content>
+	</mat-card>
+
 	<mat-card class="app-active-pian-facet" *ngIf="state.pianId">
 		<mat-card-content>
 			<a [matTooltip]="'map.tooltip.Odstranit tento filtr' | translate" (click)="clearPian()"><mat-icon>clear</mat-icon>{{ state.pianId }}</a>&#160;

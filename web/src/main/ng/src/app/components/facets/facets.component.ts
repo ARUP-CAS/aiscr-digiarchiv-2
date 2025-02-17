@@ -164,6 +164,7 @@ export class FacetsComponent implements OnInit {
 
   setEntity(entity) {
     this.state.isFacetsCollapsed = true;
+    this.state.setFacetChanged();
     document.getElementById('content-scroller').scrollTo(0,0);
     // Validate sort param sort
     const sortParam = this.state.sort.field;
@@ -219,6 +220,7 @@ export class FacetsComponent implements OnInit {
 
   applyFilters() {
     this.state.isFacetsCollapsed = true;
+    this.state.setFacetChanged();
     document.getElementById('content-scroller').scrollTo(0,0);
     const params: any = {};
     this.changedFacets.forEach((c: Crumb) => {

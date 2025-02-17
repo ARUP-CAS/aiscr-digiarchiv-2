@@ -149,6 +149,36 @@ public class PIANSearcher implements EntitySearcher {
 
         SolrSearcher.addFilters(request, query, pristupnost);
     }
+    
+    public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("pian_id")) { 
+                JSONArray cdjs = doc.getJSONArray("pian_id");
+                for (int j = 0; j < cdjs.length(); j++) {
+                    String cdj = cdjs.getString(j);
+                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                    if (sub != null) {
+                        String docPr = sub.getString("pristupnost");
+                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+                            sub.remove("pian_chranene_udaje");
+                        }
+                        doc.append("pian", sub);
+                    }
+
+                }
+            }
+        }
+    }
 
     public JSONObject getMapPians(HttpServletRequest request) {
         JSONObject json = new JSONObject();
@@ -175,9 +205,12 @@ public class PIANSearcher implements EntitySearcher {
             query.setFields("pian:[json],pian_id,ident_cely,organizace,pristupnost", "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost);
 
             query.setRows(Math.min(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForCluster", 5000), Integer.parseInt(request.getParameter("rows"))));
-
+            
             JSONObject jo = SearchUtils.json(query, client, "entities");
             SolrSearcher.addFavorites(jo, client, request);
+            if (request.getParameter("getFullPian") != null) {
+                addPians(jo, client, request);
+            }
             return jo;
 
         } catch (Exception ex) {

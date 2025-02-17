@@ -216,6 +216,11 @@ export class MapaComponent implements OnInit, OnDestroy {
       const start = new Date();
       if (this.mapReady) {
         this.setHeatData();
+        if (res === 'direct') {
+          this.markersList = [];
+          this.piansList = [];
+          this.markers = new L.featureGroup();
+        }
       }
     }));
 
@@ -539,7 +544,11 @@ export class MapaComponent implements OnInit, OnDestroy {
           } else {
             this.setClusterDataByPian(res.response.docs);
           }
-          this.state.loading = false;
+          setTimeout(() => {
+            this.state.loading = false;
+            this.loadingFinished.emit();
+          }, 100)
+          
         });
         break;
       }
@@ -576,7 +585,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     this.state.loading = true;
     this.service.search(p as HttpParams).subscribe((resp: any) => {
-      this.state.loading = false;
+      //this.state.loading = false;
       this.state.setSearchResponse(resp);
       this.state.numFound = resp.response.numFound;
       this.distErr = resp.responseHeader.params['facet.heatmap.distErr'];
@@ -592,21 +601,22 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.piansList = [];
     docs.forEach(pian => {
       //if (this.state.hasRights(pian.pristupnost, pian.organizace)) {
-        const coords = pian.loc_rpt[0].split(',');
-        const mrk = this.addMarker({
-          id: pian.pian_id,
-          isPian: true,
-          lat: coords[0],
-          lng: coords[1],
-          presnost: pian.pian_presnost,
-          typ: pian.typ,
-          doc: pian,
-          pian_chranene_udaje: pian.pian_chranene_udaje
-        });
+      const coords = pian.loc_rpt[0].split(',');
+      const mrk = this.addMarker({
+        id: pian.pian_id,
+        isPian: true,
+        lat: coords[0],
+        lng: coords[1],
+        presnost: pian.pian_presnost,
+        typ: pian.typ,
+        doc: pian,
+        pian_chranene_udaje: pian.pian_chranene_udaje
+      });
       //}
     });
     this.markers.addLayers(this.markersList);
     this.currentZoom = this.map.getZoom();
+    this.cd.detectChanges();
   }
 
   setClusterDataByLoc(docs: any[]) {
@@ -634,6 +644,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
     this.markers.addLayers(this.markersList);
     this.currentZoom = this.map.getZoom();
+    this.cd.detectChanges();
   }
 
   getMarkerById() {
@@ -717,8 +728,9 @@ export class MapaComponent implements OnInit, OnDestroy {
         appmrk.bindTooltip(this.popUpHtml(mr.id, mr.presnost, pianInList.docIds));
       }
       return appmrk;
+    } else {
+      return appmrk;
     }
-    return mr;
   }
 
   selectMarker(res) {
@@ -727,7 +739,138 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadingMarkers = false;
+
+  stopLoadingMarkers() {
+    this.state.loading = false;
+    this.loadingMarkers = false;
+    if (!this.state.loading) {
+      this.loadingFinished.emit();
+    }
+  }
+
+  processMarkersResp(resp: any[], ids: { id: string, docId: string }[]) {
+    resp.forEach(pian => {
+      const coords = pian.loc_rpt[0].split(',');
+      const pianInList = this.piansList.find(p => p.id === pian.ident_cely);
+      if (!pianInList) {
+        return;
+      }
+      const doc = ids.find(p => p.id === pian.ident_cely).docId;
+      pianInList.presnost = pian.pian_presnost;
+      pianInList.typ = pian.typ;
+      const mrk = this.addMarker({
+        id: pian.ident_cely,
+        isPian: true,
+        lat: coords[0],
+        lng: coords[1],
+        presnost: pian.pian_presnost,
+        typ: pian.typ,
+        doc: doc,
+        pian_chranene_udaje: pian.pian_chranene_udaje
+      });
+      mrk.addTo(this.markers);
+      this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, doc);
+    });
+  }
+
+  loadNextMarkers(ids: { id: string, docId: string }[], entity: string) {
+    if (!this.loadingMarkers) {
+      return;
+    }
+    const idsSize = 20;
+    const ids2 = ids.splice(0, idsSize);
+    this.service.getIdAsChild(ids2.map(p => p.id), entity).subscribe((res: any) => {
+      this.processMarkersResp(res.response.docs, ids2);
+      if (res.response.docs.length < idsSize) {
+        // To znamena konec
+        this.state.loading = false;
+        this.loadingMarkers = false;
+        if (!this.state.loading) {
+          this.loadingFinished.emit();
+        }
+      } else {
+
+        if (ids.length > 0) {
+          this.state.loading = true;
+          this.loadNextMarkers(ids, entity)
+        } else {
+          this.state.loading = false;
+          this.loadingMarkers = false;
+          if (!this.state.loading) {
+            this.loadingFinished.emit();
+          }
+        }
+
+      }
+    });
+  }
+
+  setMarkersByPian(docs: SolrDocument[]) {
+    const pianIds: { id: string, docId: string }[] = [];
+    docs.forEach(doc => {
+      if (doc.pian_id && doc.pian_id.length > 0) {
+        doc.pian_id.forEach(pian_id => {
+          // const pianInList = this.piansList.find(p => p.id === pian_id);
+          const pianInList = pianIds.find(p => p.id === pian_id);
+          if (!pianInList) {
+            pianIds.push({ id: pian_id, docId: doc.ident_cely });
+            this.piansList.push({ id: pian_id, presnost: null, typ: null, docIds: [doc.ident_cely] });
+          }
+        });
+      }
+    });
+    this.loadingMarkers = true;
+    this.loadNextMarkers(pianIds, 'pian');
+  }
+
+  setMarkersByLoc(docs: SolrDocument[]) {
+    const pianIds: { id: string, docId: string }[] = [];
+    docs.forEach(doc => {
+
+      if (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument') {
+        const coords = doc.loc_rpt[0].split(',');
+        const mrk = this.addMarker({
+          id: doc.ident_cely,
+          isPian: false,
+          lat: coords[0],
+          lng: coords[1],
+          presnost: '',
+          typ: '',
+          doc: doc,
+          pian_chranene_udaje: null
+        });
+        mrk.addTo(this.markers);
+      }
+      //this.markersList.forEach(mrk => {
+      //  mrk.addTo(this.markers);
+      //});
+
+    });
+    this.loadingMarkers = false;
+    setTimeout(() => {
+      this.state.loading = false;
+      this.loadingFinished.emit();
+    }, 100)
+  }
+
+
+
   setMarkers(docs: SolrDocument[], clean: boolean) {
+    if (clean) {
+      this.markersList = [];
+      this.piansList = [];
+      this.markers = new L.featureGroup();
+    }
+    const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
+    if (byLoc) {
+      this.setMarkersByLoc(docs)
+    } else {
+      this.setMarkersByPian(docs)
+    }
+  }
+
+  setMarkers2(docs: SolrDocument[], clean: boolean) {
     if (clean) {
       this.markersList = [];
       this.piansList = [];
@@ -739,7 +882,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     docs.forEach(doc => {
       if (doc.pian_id && doc.pian_id.length > 0) {
         doc.pian_id.forEach(pian_id => {
-          if (!pianIds.includes(doc.pian_id)){
+          if (!pianIds.includes(doc.pian_id)) {
             pianIds.push(doc.pian_id);
           }
         });
@@ -810,7 +953,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             //}
           } else {
             processedPianIds.push(pian_id);
-            
+
             if (!pianInList.docIds.includes(doc.ident_cely)) {
               pianInList.docIds.push(doc.ident_cely);
             }
@@ -971,7 +1114,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.map.removeLayer(this.heatmapLayer);
     }
     if (!this.state.heatMaps?.loc_rpt) {
-      this.state.loading = false;
+      //this.state.loading = false;
       return;
     }
     // const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
@@ -980,7 +1123,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       && this.map.getZoom() < this.markerZoomLevel;
     // this.showHeat = false;
     if (!this.showHeat) {
-      this.state.loading = false;
+      // this.state.loading = false;
       return;
     }
     this.data.data = [];

@@ -273,7 +273,7 @@ public class ArcheologickyZaznam implements FedoraModel {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
 
-                // IndexUtils.addSecuredFieldNonRepeat(idoc, "pian", pianDoc.toString(), pristupnost);
+                // IndexUtils.setSecuredJSONField(idoc, "pian", pianDoc, pristupnost);
                 IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
                 IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);

@@ -209,7 +209,7 @@ export class AppState {
   }
 
   setFacetChanged() {
-    this.facetsSubject.next('facets');
+    this.facetsSubject.next('direct');
   }
 
   setFacetPivots(resp: SolrResponse) {
