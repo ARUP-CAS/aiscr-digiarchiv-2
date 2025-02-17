@@ -1018,6 +1018,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       // this.markersList = [];
       // this.markers = new L.featureGroup();
       this.showDetail = true;
+      this.state.setFacetChanged();
       this.router.navigate([], { queryParams: { pian_id, mapId: docId, page: 0 }, queryParamsHandling: 'merge' });
     });
   }
