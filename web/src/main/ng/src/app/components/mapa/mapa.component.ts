@@ -109,7 +109,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   showType = 'marker'; // 'heat', 'cluster', 'marker'
 
   map;
-  // markers = new L.featureGroup();
+  idmarkers = new L.featureGroup();
   markers = new L.markerClusterGroup();
 
   piansList: { id: string, presnost: string, typ: string, docIds: string[] }[] = [];
@@ -385,6 +385,10 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     this.currentLocBounds = this.route.snapshot.queryParamMap.get('loc_rpt');
 
+    if (this.route.snapshot.queryParamMap.has('mapId')) {
+      this.getMarkerById();
+    }
+
     if (!this.route.snapshot.queryParamMap.has('loc_rpt') && this.route.snapshot.queryParamMap.has('mapId')) {
       this.getMarkerById();
       this.processingParams = false;
@@ -494,13 +498,13 @@ export class MapaComponent implements OnInit, OnDestroy {
   setMapType(count: number) {
     const oldType = this.showType;
     this.showType = 'undefined';
-    if (this.currentMapId) {
-      this.showType = 'marker';
-      if (oldType !== this.showType) {
-        this.markers = new L.featureGroup();
-      }
-      return;
-    }
+    // if (this.currentMapId) {
+    //   this.showType = 'marker';
+    //   if (oldType !== this.showType) {
+    //     this.markers = new L.featureGroup();
+    //   }
+    //   return;
+    // }
     if (count > this.config.mapOptions.docsForCluster) {
       this.showType = 'heat';
       this.markersList = [];
@@ -654,12 +658,13 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     this.service.getId(this.currentMapId, false).subscribe((res: any) => {
       this.state.setSearchResponse(res, 'map');
-      this.setMarkers(res.response.docs, false);
-      this.state.loading = false;
+      this.setMarkers(res.response.docs, false, true);
 
       const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
       this.state.setMapResult(doc, false);
-      this.zoomOnMapResult(doc);
+      if (this.shouldZoomOnMarker) {
+        this.zoomOnMapResult(doc);
+      }
 
     });
   }
@@ -680,7 +685,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.state.solrResponse = null;
     this.service.search(p as HttpParams).subscribe((res: any) => {
       this.state.setSearchResponse(res, 'map');
-      this.setMarkers(res.response.docs, clean);
+      this.setMarkers(res.response.docs, clean, false);
       if (this.currentMapId) {
         const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
         this.state.setMapResult(doc, false);
@@ -751,7 +756,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }, 1000)
   }
 
-  processMarkersResp(resp: any[], ids: { id: string, docId: string }[]) {
+  processMarkersResp(resp: any[], ids: { id: string, docId: string }[], isId: boolean) {
     resp.forEach(pian => {
       const coords = pian.loc_rpt[0].split(',');
       const pianInList = this.piansList.find(p => p.id === pian.ident_cely);
@@ -771,12 +776,16 @@ export class MapaComponent implements OnInit, OnDestroy {
         doc: doc,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
-      mrk.addTo(this.markers);
+      if (isId) {
+        mrk.addTo(this.idmarkers);
+      } else {
+        mrk.addTo(this.markers);
+      }
       this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, doc);
     });
   }
 
-  loadNextMarkers(ids: { id: string, docId: string }[], entity: string) {
+  loadNextMarkers(ids: { id: string, docId: string }[], entity: string, isId: boolean) {
     if (!this.loadingMarkers) {
       return;
     }
@@ -787,7 +796,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     const idsSize = 20;
     const ids2 = ids.splice(0, idsSize);
     this.service.getIdAsChild(ids2.map(p => p.id), entity).subscribe((res: any) => {
-      this.processMarkersResp(res.response.docs, ids2);
+      this.processMarkersResp(res.response.docs, ids2, isId);
       if (res.response.docs.length < idsSize) {
         // To znamena konec
         
@@ -795,7 +804,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else {
         if (ids.length > 0) {
           this.state.loading = true;
-          this.loadNextMarkers(ids, entity)
+          this.loadNextMarkers(ids, entity, isId)
         } else {
           this.stopLoadingMarkers();
         }
@@ -803,7 +812,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
   }
 
-  setMarkersByPian(docs: SolrDocument[]) {
+  setMarkersByPian(docs: SolrDocument[], isId: boolean) {
     const pianIds: { id: string, docId: string }[] = [];
     docs.forEach(doc => {
       if (doc.pian_id && doc.pian_id.length > 0) {
@@ -819,10 +828,10 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
     this.state.loading = true;
     this.loadingMarkers = true;
-    this.loadNextMarkers(pianIds, 'pian');
+    this.loadNextMarkers(pianIds, 'pian', isId);
   }
 
-  setMarkersByLoc(docs: SolrDocument[]) {
+  setMarkersByLoc(docs: SolrDocument[], isId: boolean) {
     const pianIds: { id: string, docId: string }[] = [];
     docs.forEach(doc => {
 
@@ -838,7 +847,12 @@ export class MapaComponent implements OnInit, OnDestroy {
           doc: doc,
           pian_chranene_udaje: null
         });
-        mrk.addTo(this.markers);
+        if (isId) {
+          mrk.addTo(this.idmarkers);
+        } else {
+          mrk.addTo(this.markers);
+        }
+        
       }
       //this.markersList.forEach(mrk => {
       //  mrk.addTo(this.markers);
@@ -854,7 +868,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
 
 
-  setMarkers(docs: SolrDocument[], clean: boolean) {
+  setMarkers(docs: SolrDocument[], clean: boolean, isId: boolean) {
     if (clean) {
       this.markersList = [];
       this.piansList = [];
@@ -862,9 +876,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     }
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
     if (byLoc) {
-      this.setMarkersByLoc(docs)
+      this.setMarkersByLoc(docs, isId)
     } else {
-      this.setMarkersByPian(docs)
+      this.setMarkersByPian(docs, isId)
     }
   }
 

@@ -5,6 +5,7 @@
 	 [leafletLayersControlOptions]="{position: 'topright'}">
 		<!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
 		<div [leafletLayer]="markers"></div>
+		<div [leafletLayer]="idmarkers"></div>
 	</div> 
 
 	<mat-card class="app-active-pian-facet" *ngIf="loadingMarkers">
