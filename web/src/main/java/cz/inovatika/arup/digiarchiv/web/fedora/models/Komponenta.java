@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,7 @@ public class Komponenta {
     }
     if (!komponenta_nalez_objekt.isEmpty()) {
       // komponenta_typ_nalezu = "objekt";
-      komponenta_typ_nalezu = "HES-001125";
+      komponenta_typ_nalezu = IndexUtils.getTypNalezu("objekt");
     }
     for (NalezObjekt no : komponenta_nalez_objekt) {
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_objekt", no);
