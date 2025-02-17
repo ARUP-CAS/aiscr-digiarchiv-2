@@ -312,7 +312,7 @@
                     </tr>
                     <tr *ngFor="let v of dokument_cast.neident_akce.vedouci">
                       <th class="app-label">{{ 'card.desc.Vedoucí akce' | translate }}:</th>
-                      <td>{{ v.value }}</td>
+                      <td><app-inline-filter [isChild]="isChild" [field]="'f_vedouci'" [value]="v.value"></app-inline-filter></td>
                     </tr>
                     <tr *ngIf="dokument_cast.neident_akce.rok_zahajeni || dokument_cast.neident_akce.rok_ukonceni">
                       <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
