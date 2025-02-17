@@ -227,6 +227,7 @@ public class SearchServlet extends HttpServlet {
                     String entity = request.getParameter("entity");
                     SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
                             .addFilterQuery("entity:" + entity)
+                            .setSort("ident_cely", SolrQuery.ORDER.asc)
                             .setFacet(false);
                     query.setRequestHandler("/search");
 //          if (entity == null) {

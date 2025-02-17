@@ -42,22 +42,26 @@ export class ProjektComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.bibTex = 
-     `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+    this.bibTex =
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
        author = {AMČR},
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-     this.setVsize();
-     if (this.inDocument) {
-       this.state.loading = false;
-       this.state.documentProgress = 0;
-       this.getArchZaznam();
-       this.getSamostatnyNalez();
-       this.getDokument();
-     }
-  } 
+    this.setVsize();
+    if (this.inDocument) {
+      this.state.loading = false;
+      this.state.documentProgress = 0;
+
+      this.result.sn_toprocess = JSON.parse(JSON.stringify(this.result.projekt_samostatny_nalez));
+      this.result.sn_toprocess.sort();
+      this.result.valid_samostatny_nalez = [];
+      this.getArchZaznam();
+      this.getSamostatnyNalez(false);
+      this.getDokument();
+    }
+  }
 
   setVsize() {
     this.numChildren = 0;
@@ -70,36 +74,60 @@ export class ProjektComponent implements OnInit, OnChanges {
     if (this.result.projekt_dokument) {
       this.numChildren += this.result.projekt_dokument.length;
     }
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize); 
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
   }
 
   getDokument() {
     this.result.valid_projekt_dokument = [];
     if (this.result.projekt_dokument) {
-      for (let i = 0; i < this.result.projekt_dokument.length; i=i+10) {
-        const ids = this.result.projekt_dokument.slice(i, i+10);
+      for (let i = 0; i < this.result.projekt_dokument.length; i = i + 10) {
+        const ids = this.result.projekt_dokument.slice(i, i + 10);
         this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
           this.result.valid_projekt_dokument = this.result.valid_projekt_dokument.concat(res.response.docs);
           if (res.response.docs.length < ids.length) {
             // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - ids.length + res.response.docs.length; 
+            this.numChildren = this.numChildren - ids.length + res.response.docs.length;
             this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
           }
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
+          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
           if (!this.state.loading) {
-            this.result.valid_projekt_dokument.sort((a:any, b:any) => a.ident_cely.localeCompare(b.ident_cely))
+            this.result.valid_projekt_dokument.sort((a: any, b: any) => a.ident_cely.localeCompare(b.ident_cely))
           }
         });
       }
     }
   }
 
-  getSamostatnyNalez() {
+  getSamostatnyNalez(loadAll: boolean) {
+
+    const idsSize = 20;
+    if (this.result.sn_toprocess.length > 0) {
+      const ids = this.result.sn_toprocess.splice(0, idsSize);
+      this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
+        this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
+        if (res.response.docs.length < ids.length) {
+          // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
+          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+          this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+        }
+        this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
+        this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
+
+        if (loadAll && this.state.loading) {
+          this.getSamostatnyNalez(loadAll)
+        }
+      });
+    }
+  }
+
+  getSamostatnyNalezAll() {
     this.result.valid_samostatny_nalez = [];
+    const idsSize = 20;
     if (this.result.projekt_samostatny_nalez) {
-      for (let i = 0; i < this.result.projekt_samostatny_nalez.length; i=i+10) {
-        const ids = this.result.projekt_samostatny_nalez.slice(i, i+10);
+      this.result.projekt_samostatny_nalez.sort();
+      for (let i = 0; i < this.result.projekt_samostatny_nalez.length; i = i + idsSize) {
+        const ids = this.result.projekt_samostatny_nalez.slice(i, i + idsSize);
         this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
           this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
           if (res.response.docs.length < ids.length) {
@@ -107,12 +135,13 @@ export class ProjektComponent implements OnInit, OnChanges {
             this.numChildren = this.numChildren - ids.length + res.response.docs.length;
             this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
           }
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
+          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
           if (!this.state.loading) {
-            this.result.valid_samostatny_nalez.sort((a:any, b:any) => a.ident_cely.localeCompare(b.ident_cely))
+            this.result.valid_samostatny_nalez.sort((a: any, b: any) => a.ident_cely.localeCompare(b.ident_cely))
           }
         });
+        return;
       }
     }
   }
@@ -132,15 +161,22 @@ export class ProjektComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      
+
       this.state.loading = (this.result.projekt_archeologicky_zaznam.length + this.result.projekt_samostatny_nalez.length) < this.numChildren;
       this.state.documentProgress = 0;
       this.setVsize();
       this.getArchZaznam();
-      this.getSamostatnyNalez();
+      this.getSamostatnyNalez(false);
       this.getDokument();
       this.hasDetail = true;
     });
+  }
+
+  loadAll() {
+
+    this.getArchZaznam();
+    this.getSamostatnyNalez(true);
+    this.getDokument();
   }
 
   getArchZaznam() {
@@ -153,7 +189,7 @@ export class ProjektComponent implements OnInit, OnChanges {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
           this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
+          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
         });
       }
@@ -165,7 +201,7 @@ export class ProjektComponent implements OnInit, OnChanges {
           this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
           this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
           this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
+          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
           this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
         });
       }
@@ -214,14 +250,14 @@ export class ProjektComponent implements OnInit, OnChanges {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
-  } 
+  }
 
   formatDate(s: string) {
     // [2023-05-26, 2023-05-26]
     // (d)d.(m)m.rrrr - (d)d.(m)m.rrrr
-    let parts = s.replace('[','').replace(']','').split(',');
+    let parts = s.replace('[', '').replace(']', '').split(',');
     console.log()
     return this.datePipe.transform(parts[0].trim(), 'd.M.yyyy') + ' - ' + this.datePipe.transform(parts[1].trim(), 'd.M.yyyy');
   }
-  
+
 }

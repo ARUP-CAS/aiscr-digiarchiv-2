@@ -80,6 +80,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
 
   getDokuments() {
     if (this.result.az_dokument && this.result.az_dokument.length > 0) {
+      this.result.az_dokument.sort();
       this.result.valid_dokument = [];
       for (let i = 0; i < this.result.az_dokument.length; i=i+10) {
         const ids = this.result.az_dokument.slice(i, i+10);
