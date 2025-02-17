@@ -456,6 +456,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   updateBounds(mapBounds: any, isLocation: boolean, caller: string) {
     //console.log(caller)
+    this.stopLoadingMarkers();
     if (!this.isResults) {
       // Jsme v documentu, nepotrebujeme znovu nacist data
       return;
@@ -744,9 +745,10 @@ export class MapaComponent implements OnInit, OnDestroy {
   stopLoadingMarkers() {
     this.state.loading = false;
     this.loadingMarkers = false;
-    if (!this.state.loading) {
-      this.loadingFinished.emit();
-    }
+    this.loadingFinished.emit();
+    setTimeout(() => {
+      this.cd.detectChanges();
+    }, 1000)
   }
 
   processMarkersResp(resp: any[], ids: { id: string, docId: string }[]) {
@@ -778,30 +780,25 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (!this.loadingMarkers) {
       return;
     }
+    if (ids.length === 0) {
+      this.stopLoadingMarkers();
+      return;
+    }
     const idsSize = 20;
     const ids2 = ids.splice(0, idsSize);
     this.service.getIdAsChild(ids2.map(p => p.id), entity).subscribe((res: any) => {
       this.processMarkersResp(res.response.docs, ids2);
       if (res.response.docs.length < idsSize) {
         // To znamena konec
-        this.state.loading = false;
-        this.loadingMarkers = false;
-        if (!this.state.loading) {
-          this.loadingFinished.emit();
-        }
+        
+        this.stopLoadingMarkers();
       } else {
-
         if (ids.length > 0) {
           this.state.loading = true;
           this.loadNextMarkers(ids, entity)
         } else {
-          this.state.loading = false;
-          this.loadingMarkers = false;
-          if (!this.state.loading) {
-            this.loadingFinished.emit();
-          }
+          this.stopLoadingMarkers();
         }
-
       }
     });
   }
@@ -811,8 +808,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     docs.forEach(doc => {
       if (doc.pian_id && doc.pian_id.length > 0) {
         doc.pian_id.forEach(pian_id => {
-          // const pianInList = this.piansList.find(p => p.id === pian_id);
-          const pianInList = pianIds.find(p => p.id === pian_id);
+          const pianInList = this.piansList.find(p => p.id === pian_id);
+          //const pianInList = pianIds.find(p => p.id === pian_id);
           if (!pianInList) {
             pianIds.push({ id: pian_id, docId: doc.ident_cely });
             this.piansList.push({ id: pian_id, presnost: null, typ: null, docIds: [doc.ident_cely] });
@@ -820,6 +817,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.state.loading = true;
     this.loadingMarkers = true;
     this.loadNextMarkers(pianIds, 'pian');
   }
