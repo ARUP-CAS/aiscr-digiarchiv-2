@@ -291,9 +291,15 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     map.on('zoomend', (e) => {
       //console.log('zoomend', this.processingParams, this.zoomingOnMarker)
+
+      if (!this.isResults) {
+        // Jsme v documentu, nepotrebujeme znovu nacist data
+        return;
+      }
+      
       if (!this.processingParams && !this.zoomingOnMarker) {
         this.doZoom();
-      } else if (this.zoomingOnMarker || this.processingParams) {
+      } else if (this.zoomingOnMarker || this.processingParams ) {
         this.getDataByVisibleArea();
       }
       this.state.mapBounds = this.map.getBounds();
@@ -370,6 +376,13 @@ export class MapaComponent implements OnInit, OnDestroy {
   paramsChanged() {
     this.processingParams = true;
     let bounds;
+    if (!this.isResults) {
+      this.currentMapId = this.route.snapshot.params.id;
+      this.shouldZoomOnMarker = true;
+      this.getMarkerById();
+      this.processingParams = false;
+      return;
+    }
     if (this.state.closingMapResult) {
       this.state.closingMapResult = false;
       this.processingParams = false;
@@ -658,10 +671,10 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     this.service.getId(this.currentMapId, false).subscribe((res: any) => {
       this.state.setSearchResponse(res, 'map');
-      this.setMarkers(res.response.docs, false, true);
-
       const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
       this.state.setMapResult(doc, false);
+      this.setMarkers(res.response.docs, false, true);
+
       if (this.shouldZoomOnMarker) {
         this.zoomOnMapResult(doc);
       }

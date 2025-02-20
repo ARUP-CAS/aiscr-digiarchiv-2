@@ -55,6 +55,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     // if ()
     p.q = this.state.q ? (this.state.q !== '' ? this.state.q : null) : null;
     p.page = 0;
+    this.state.setFacetChanged();
     this.router.navigate(['/results'], { queryParams: p, queryParamsHandling: 'merge' });
   }
 
