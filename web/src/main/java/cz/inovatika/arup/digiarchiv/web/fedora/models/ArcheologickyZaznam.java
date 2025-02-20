@@ -339,8 +339,19 @@ class AZChraneneUdaje {
 //<xs:element name="uzivatelske_oznaceni" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{uzivatelske_oznaceni}" -->
     @JacksonXmlProperty(localName = "uzivatelske_oznaceni")
     public String uzivatelske_oznaceni;
+    
+    public List<String> okresy = new ArrayList<>();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+        for (Vocab v : dalsi_katastr) {
+            String ruian = v.getId();
+            String okres = SolrSearcher.getOkresNazevByKatastr(ruian);
+            if (!okresy.contains(okres)) {
+                okresy.add(okres);
+                IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+            }
+        }
+        
         IndexUtils.setSecuredJSONField(idoc, "az_chranene_udaje", this);
         // IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
@@ -349,7 +360,7 @@ class AZChraneneUdaje {
 
         for (Vocab v : dalsi_katastr) {
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
-            IndexUtils.addFieldNonRepeat(idoc, "f_okres", SolrSearcher.getOkresByKatastr(v.getId()));
+            IndexUtils.addFieldNonRepeat(idoc, "f_okres", SolrSearcher.getOkresNazevByKatastr(v.getId()));
         }
     }
 }

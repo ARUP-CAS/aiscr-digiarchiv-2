@@ -124,7 +124,7 @@ public class DokumentCast {
                         k = dalsi_katastr.getJSONObject(j).optString("value");
                         if (k != null) {
                             SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
-                            String okres = SolrSearcher.getOkresByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            String okres = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
                             IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
                             JSONObject li2 = new JSONObject()
                                     .put("pristupnost", doc.getString("pristupnost"))
@@ -175,7 +175,7 @@ public class DokumentCast {
                     k = dalsi_katastr.getJSONObject(j).optString("value");
                     if (k != null) {
                         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
-                            String okres = SolrSearcher.getOkresByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            String okres = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
                             IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
                         JSONObject li2 = new JSONObject()
                                 .put("pristupnost", doc.getString("pristupnost"))

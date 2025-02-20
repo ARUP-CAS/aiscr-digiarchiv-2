@@ -515,7 +515,7 @@ public class SolrSearcher {
         return katastry.get(ruian);
     }
 
-    public static String getOkresByKatastr(String ruian) {
+    public static String getOkresByKatastrOld(String ruian) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + ruian + "\"")

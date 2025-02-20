@@ -83,23 +83,23 @@ public class AkceSearcher implements EntitySearcher {
 
     public void addOkresy(JSONObject jo) {
 
-        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) {
-            JSONObject doc = ja.getJSONObject(i);
-            if (doc.has("az_chranene_udaje")) {
-                JSONArray cdjs = doc.getJSONObject("az_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
-                List<String> okresy = new ArrayList<>();
-                for (int j = 0; j < cdjs.length(); j++) {
-                    JSONObject dk = cdjs.getJSONObject(j);
-                    String ruian = dk.optString("id");
-                    String okres = SolrSearcher.getOkresByKatastr(ruian);
-                    if (!okresy.contains(okres)) {
-                        okresy.add(okres);
-                    }
-                }
-                doc.getJSONObject("az_chranene_udaje").put("okresy", okresy);
-            }
-        }
+//        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+//        for (int i = 0; i < ja.length(); i++) {
+//            JSONObject doc = ja.getJSONObject(i);
+//            if (doc.has("az_chranene_udaje")) {
+//                JSONArray cdjs = doc.getJSONObject("az_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
+//                List<String> okresy = new ArrayList<>();
+//                for (int j = 0; j < cdjs.length(); j++) {
+//                    JSONObject dk = cdjs.getJSONObject(j);
+//                    String ruian = dk.optString("id");
+//                    String okres = SolrSearcher.getOkresByKatastr(ruian);
+//                    if (!okresy.contains(okres)) {
+//                        okresy.add(okres);
+//                    }
+//                }
+//                doc.getJSONObject("az_chranene_udaje").put("okresy", okresy);
+//            }
+//        }
     }
 
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
