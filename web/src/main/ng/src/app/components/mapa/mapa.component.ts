@@ -296,7 +296,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         // Jsme v documentu, nepotrebujeme znovu nacist data
         return;
       }
-      
+
       if (!this.processingParams && !this.zoomingOnMarker) {
         this.doZoom();
       } else if (this.zoomingOnMarker || this.processingParams ) {
@@ -453,6 +453,44 @@ export class MapaComponent implements OnInit, OnDestroy {
       const northEast = L.latLng(lat.max, lng.max);
       bounds = L.latLngBounds(southWest, northEast);
       this.map.fitBounds(bounds);
+    } else {
+      // hledame primo v mape
+
+      const p = Object.assign({}, this.route.snapshot.queryParams);
+      this.state.switchingMap = false;
+      this.state.documentProgress = 0;
+      this.state.facetsLoading = true;
+      this.state.hasError = false;
+      
+      if (!p['entity']) {
+        p['entity'] = 'dokument';
+      }
+      p['noFacets'] = 'false';
+      p['onlyFacets'] = 'true';
+      this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+        if (resp.error) {
+          this.state.loading = false;
+          this.state.facetsLoading = false;
+          this.state.hasError = true;
+          this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.search_error');
+          return;
+        }
+        this.state.setSearchResponse(resp);
+
+        const lat = this.state.stats.lat;
+        const lng = this.state.stats.lng;
+        if (lat.max === lat.min) {
+          lat.min = lat.min - 0.05;
+          lat.max = lat.max + 0.05;
+          lng.min = lng.min - 0.05;
+          lng.max = lng.max + 0.05;
+        }
+        const southWest = L.latLng(lat.min, lng.min);
+        const northEast = L.latLng(lat.max, lng.max);
+        bounds = L.latLngBounds(southWest, northEast);
+        this.map.fitBounds(bounds);
+
+      });
     }
 
     if (this.state.switchingMap) {

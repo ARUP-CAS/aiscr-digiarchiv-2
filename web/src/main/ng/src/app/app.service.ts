@@ -89,6 +89,7 @@ export class AppService {
     
     this.state.isFacetsCollapsed = true;
     document.getElementById('content-scroller').scrollTo(0,0);
+    this.state.setFacetChanged();
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 

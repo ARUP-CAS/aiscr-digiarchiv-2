@@ -209,6 +209,7 @@ export class AppState {
   }
 
   setFacetChanged() {
+    this.stats = null;
     this.facetsSubject.next('direct');
   }
 
