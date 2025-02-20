@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.Date;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
@@ -66,10 +67,11 @@ public class RUIANKatastr implements FedoraModel {
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("ident_cely", kod);
         IndexUtils.addVocabField(idoc, "okres", okres);
+        idoc.setField("okres_nazev", SolrSearcher.getOkresNazev(okres.getId()));
         IndexUtils.addRefField(idoc, "pian", pian);
-        IndexUtils.setDateStamp(idoc, kod);
+        IndexUtils.setDateStamp(idoc, kod);   
     }
-
+ 
     @Override
     public String coreName() {
         return "ruian";

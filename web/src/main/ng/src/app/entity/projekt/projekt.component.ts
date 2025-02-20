@@ -49,14 +49,20 @@ export class ProjektComponent implements OnInit, OnChanges {
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+    this.result.sn_toprocess = [];
     this.setVsize();
     if (this.inDocument) {
       this.state.loading = false;
       this.state.documentProgress = 0;
 
-      this.result.sn_toprocess = JSON.parse(JSON.stringify(this.result.projekt_samostatny_nalez));
-      this.result.sn_toprocess.sort();
       this.result.valid_samostatny_nalez = [];
+      this.result.akce = [];
+      this.result.lokalita = [];
+      if (this.result.projekt_samostatny_nalez) {
+        this.result.sn_toprocess = JSON.parse(JSON.stringify(this.result.projekt_samostatny_nalez));
+      }
+      
+      this.result.sn_toprocess.sort();
       this.getArchZaznam();
       this.getSamostatnyNalez(false);
       this.getDokument();
@@ -102,7 +108,7 @@ export class ProjektComponent implements OnInit, OnChanges {
   getSamostatnyNalez(loadAll: boolean) {
 
     const idsSize = 20;
-    if (this.result.sn_toprocess.length > 0) {
+    if (this.result.sn_toprocess && this.result.sn_toprocess.length > 0) {
       const ids = this.result.sn_toprocess.splice(0, idsSize);
       this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
         this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
@@ -154,16 +160,22 @@ export class ProjektComponent implements OnInit, OnChanges {
       this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
-      this.getFullId();
+      this.getFullId(false);
     }
   }
 
-  getFullId() {
-    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+  getFullId(shouldLog: boolean) {
+    this.service.getId(this.result.ident_cely, shouldLog).subscribe((res: any) => {
       this.result = res.response.docs[0];
 
       this.state.loading = (this.result.projekt_archeologicky_zaznam.length + this.result.projekt_samostatny_nalez.length) < this.numChildren;
       this.state.documentProgress = 0;
+      this.result.valid_samostatny_nalez = [];
+      this.result.akce = [];
+      this.result.lokalita = [];
+      if (this.result.projekt_samostatny_nalez) {
+        this.result.sn_toprocess = JSON.parse(JSON.stringify(this.result.projekt_samostatny_nalez));
+      }
       this.setVsize();
       this.getArchZaznam();
       this.getSamostatnyNalez(false);
@@ -180,8 +192,6 @@ export class ProjektComponent implements OnInit, OnChanges {
   }
 
   getArchZaznam() {
-    this.result.akce = [];
-    this.result.lokalita = [];
     if (this.result.id_akce) {
       for (let i = 0; i < this.result.id_akce.length; i = i + 10) {
         const ids = this.result.id_akce.slice(i, i + 10);
@@ -210,7 +220,7 @@ export class ProjektComponent implements OnInit, OnChanges {
 
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.getFullId();
+      this.getFullId(true);
     }
     this.detailExpanded = !this.detailExpanded;
   }

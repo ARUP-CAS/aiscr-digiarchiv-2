@@ -98,12 +98,12 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
       this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
-      this.getFullId();
+      this.getFullId(false);
     }
   }
 
-  getFullId() {
-    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+  getFullId(shouldLog: boolean) {
+    this.service.getId(this.result.ident_cely, shouldLog).subscribe((res: any) => {
       this.result = res.response.docs[0];
       this.setVsize();
       this.state.documentProgress = 0;
@@ -120,7 +120,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
 
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.getFullId();
+      this.getFullId(true);
     }
     this.detailExpanded = !this.detailExpanded;
   }

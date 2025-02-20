@@ -441,10 +441,21 @@ class ProjektChraneneUdaje {
 //<xs:element name="kulturni_pamatka_popis" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{kulturni_pamatka_popis}" -->
     @JacksonXmlProperty(localName = "kulturni_pamatka_popis")
     public String kulturni_pamatka_popis;
+    
+    public List<String> okresy = new ArrayList<>();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+        
+        for (Vocab v : dalsi_katastr) {
+            String ruian = v.getId();
+            String okres = SolrSearcher.getOkresNazevByKatastr(ruian);
+            if (!okresy.contains(okres)) {
+                okresy.add(okres);
+                IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+            }
+        }
+        
         IndexUtils.setSecuredJSONField(idoc, "projekt_chranene_udaje", this);
-
         IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_lokalizace", lokalizace, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_parcelni_cislo", parcelni_cislo, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);

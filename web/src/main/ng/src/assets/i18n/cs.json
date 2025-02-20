@@ -473,7 +473,8 @@
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
-      "Zobrazit detail": "Zobrazit detail"
+      "Zobrazit detail": "Zobrazit detail",
+      "Zobrazit vsechny": "Zobrazit vsechny"
     },
     "panelTitle": {
       "Popis dokumentu": "Popis dokumentu",

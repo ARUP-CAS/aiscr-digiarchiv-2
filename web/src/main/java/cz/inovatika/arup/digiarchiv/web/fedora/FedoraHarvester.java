@@ -341,7 +341,7 @@ public class FedoraHarvester {
                 if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", true)) {
                     searchModel(model);
                 } else {
-                    processModel(model);
+                    processModel(model); 
                 }
             }
             solr.commit("oai");

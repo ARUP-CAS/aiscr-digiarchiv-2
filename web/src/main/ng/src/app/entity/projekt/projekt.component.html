@@ -144,7 +144,7 @@
             <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-dokument *ngFor="let dok of result.valid_projekt_dokument" [result]="dok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
             <app-samostatny-nalez *ngFor="let sn of result.valid_samostatny_nalez" [result]="sn" [isChild]="true" [mapDetail]="mapDetail"  class="app-related-item"></app-samostatny-nalez>
-            <button mat-button color="primary" *ngIf="result.sn_toprocess.length > 0" (click)="loadAll()">load all</button>
+            <button mat-button color="primary" *ngIf="result.sn_toprocess?.length > 0" (click)="loadAll()">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
           </cdk-virtual-scroll-viewport>
           
           <ng-container *ngIf="vsSize > 0 && state.printing" >

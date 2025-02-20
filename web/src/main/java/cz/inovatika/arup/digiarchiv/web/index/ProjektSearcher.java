@@ -141,49 +141,45 @@ public class ProjektSearcher implements EntitySearcher {
                 SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
             }
 
-            AkceSearcher as = new AkceSearcher();
-            String fields = String.join(",", as.getSearchFields(pristupnost));
-//            String fields = "ident_cely,pristupnost,entity,"
-//                    + "katastr,"
-//                    + "okres,vedouci_akce,specifikace_data,datum_zahajeni,datum_ukonceni,je_nz,pristupnost,"
-//                    + "organizace.dalsi_katastry,lokalizace,pian:[json]";
-            SolrSearcher.addChildFieldByEntity(client, doc, "projekt_archeologicky_zaznam", fields);
+            // AkceSearcher as = new AkceSearcher();
+            // String fields = String.join(",", as.getSearchFields(pristupnost));
+            // SolrSearcher.addChildFieldByEntity(client, doc, "projekt_archeologicky_zaznam", fields);
 
-            fields = "ident_cely,pristupnost,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
-            SolrSearcher.addChildField(client, doc, "samostatny_nalez", "valid_samostatny_nalez", fields, "searchable:true");
-            if (doc.has("pian_id")) {
-                JSONArray cdjs = doc.getJSONArray("pian_id");
-                for (int j = 0; j < cdjs.length(); j++) {
-                    String cdj = cdjs.getString(j);
-                    JSONObject sub = SolrSearcher.getById(client, cdj, pfields);
-                    if (sub != null) {
-                        doc.append("pian", sub);
-                    }
-
-                }
-            }
+//            fields = "ident_cely,pristupnost,katastr,okres,nalezce,datum_nalezu,typ_dokumentu,material_originalu,rada,pristupnost,obdobi,presna_datace,druh,specifikace,soubor_filepath";
+//            SolrSearcher.addChildField(client, doc, "samostatny_nalez", "valid_samostatny_nalez", fields, "searchable:true");
+//            if (doc.has("pian_id")) {
+//                JSONArray cdjs = doc.getJSONArray("pian_id");
+//                for (int j = 0; j < cdjs.length(); j++) {
+//                    String cdj = cdjs.getString(j);
+//                    JSONObject sub = SolrSearcher.getById(client, cdj, pfields);
+//                    if (sub != null) {
+//                        doc.append("pian", sub);
+//                    }
+//
+//                }
+//            }
         }
     }
     
     public void addOkresy(JSONObject jo) {
 
-        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) {
-            JSONObject doc = ja.getJSONObject(i);
-            if (doc.has("projekt_chranene_udaje")) {
-                JSONArray cdjs = doc.getJSONObject("projekt_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
-                List<String> okresy = new ArrayList<>();
-                for (int j = 0; j < cdjs.length(); j++) {
-                    JSONObject dk = cdjs.getJSONObject(j);
-                    String ruian = dk.optString("id");
-                    String okres = SolrSearcher.getOkresByKatastr(ruian);
-                    if (!okresy.contains(okres)) {
-                        okresy.add(okres);
-                    }
-                }
-                doc.getJSONObject("projekt_chranene_udaje").put("okresy", okresy);
-            }
-        }
+//        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+//        for (int i = 0; i < ja.length(); i++) {
+//            JSONObject doc = ja.getJSONObject(i);
+//            if (doc.has("projekt_chranene_udaje")) {
+//                JSONArray cdjs = doc.getJSONObject("projekt_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
+//                List<String> okresy = new ArrayList<>();
+//                for (int j = 0; j < cdjs.length(); j++) {
+//                    JSONObject dk = cdjs.getJSONObject(j);
+//                    String ruian = dk.optString("id");
+//                    String okres = SolrSearcher.getOkresNazev(ruian);
+//                    if (!okresy.contains(okres)) {
+//                        okresy.add(okres);
+//                    }
+//                }
+//                doc.getJSONObject("projekt_chranene_udaje").put("okresy", okresy);
+//            }
+//        }
     }
     
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
@@ -232,7 +228,7 @@ public class ProjektSearcher implements EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
-            // removeInvalid(client, jo);
+//            removeInvalid(client, jo);
 
 //            if (Boolean.parseBoolean(request.getParameter("mapa"))
 //                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
@@ -284,6 +280,7 @@ public class ProjektSearcher implements EntitySearcher {
             JSONArray valid_dokuments = new JSONArray();
             if (doc.has("projekt_dokument")) {
                 query = new SolrQuery("*")
+                        .addFilterQuery("entity:dokument")
                         // .addFilterQuery("{!join fromIndex=entities to=ident_cely from=dokument}ident_cely:\"" + doc.getString("ident_cely") + "\"")
                         .addFilterQuery("ident_cely:" + doc.getJSONArray("projekt_dokument").join("\" OR \""))
                         .setRows(10000)
