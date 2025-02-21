@@ -331,7 +331,7 @@ public class OAIRequest {
             query.addFilterQuery("model:"
                     + model);
 
-            if (from != null && until != null) {
+            if (from != null && until != null && !"*".equals(from) && !"*".equals(until) ) {
                 if (from.length() != until.length()) {
                     return badArgument(req, "The request has different granularities for the from and until parameters.");
                 }
