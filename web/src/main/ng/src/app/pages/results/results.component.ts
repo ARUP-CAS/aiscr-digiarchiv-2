@@ -222,7 +222,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.state.loading = false;
       this.cd.detectChanges();
-    }, 1000)
+    }, 100)
     
   }
 }

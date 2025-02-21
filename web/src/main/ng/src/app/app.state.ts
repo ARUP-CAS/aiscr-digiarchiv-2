@@ -61,7 +61,7 @@ export class AppState {
   // loading = true;
 
   solrResponse: SolrResponse;
-  loading: boolean;
+  loading: boolean = true;
   switchingMap = false;
   closingMapResult = false;
   facetsLoading = false;

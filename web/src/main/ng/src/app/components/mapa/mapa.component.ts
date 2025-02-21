@@ -217,9 +217,11 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.mapReady) {
         this.setHeatData();
         if (res === 'direct') {
+        console.log(res)
           this.markersList = [];
           this.piansList = [];
           this.markers = new L.featureGroup();
+          this.idmarkers = new L.featureGroup();
         }
       }
     }));
@@ -379,7 +381,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (!this.isResults) {
       this.currentMapId = this.route.snapshot.params.id;
       this.shouldZoomOnMarker = true;
-      this.getMarkerById();
+      this.getMarkerById(true);
       this.processingParams = false;
       return;
     }
@@ -396,16 +398,21 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.shouldZoomOnMarker = true;
     }
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
+    if(!this.currentMapId) {
+      this.state.mapResult = null;
+      this.idmarkers = new L.featureGroup();
+      this.clearSelectedMarker();
+    }
     this.currentLocBounds = this.route.snapshot.queryParamMap.get('loc_rpt');
 
-    if (this.route.snapshot.queryParamMap.has('mapId')) {
-      this.getMarkerById();
-    }
-
     if (!this.route.snapshot.queryParamMap.has('loc_rpt') && this.route.snapshot.queryParamMap.has('mapId')) {
-      this.getMarkerById();
+      this.getMarkerById(false);
       this.processingParams = false;
       return;
+    }
+
+    if (this.route.snapshot.queryParamMap.has('mapId')) {
+      this.getMarkerById(false);
     }
 
     if (this.route.snapshot.queryParamMap.has('vyber')) {
@@ -432,7 +439,8 @@ export class MapaComponent implements OnInit, OnDestroy {
             this.getDataByVisibleArea();
             this.processingParams = false;
           }
-        }, 10)
+        }, 10);
+        return;
       } else {
         this.getDataByVisibleArea();
         this.processingParams = false;
@@ -703,12 +711,14 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.cd.detectChanges();
   }
 
-  getMarkerById() {
+  getMarkerById(setResponse: boolean) {
     //this.state.loading = true;
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
 
     this.service.getId(this.currentMapId, false).subscribe((res: any) => {
-      this.state.setSearchResponse(res, 'map');
+      if (setResponse) {
+        this.state.setSearchResponse(res, 'map');
+      }
       const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
       this.state.setMapResult(doc, false);
       this.setMarkers(res.response.docs, false, true);
@@ -756,7 +766,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     let appmrk = this.findMarker(mr.id);
     if (!appmrk) {
       const mrk = L.marker([mr.lat, mr.lng], { id: mr.id, doc: mr.doc, riseOnHover: true, icon: mr.typ === 'bod' ? this.iconPoint : this.icon });
-      if (this.currentMapId === mr.doc.ident_cely) {
+      if (this.currentMapId === mr.doc) {
         mrk.setIcon(mr.typ === 'bod' ? this.hitIconPoint : this.hitIcon);
       }
       // mr.mrk = mrk;
@@ -804,7 +814,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.loadingFinished.emit();
     setTimeout(() => {
       this.cd.detectChanges();
-    }, 1000)
+    }, 100)
   }
 
   processMarkersResp(resp: any[], ids: { id: string, docId: string }[], isId: boolean) {
@@ -814,9 +824,10 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (!pianInList) {
         return;
       }
-      const doc = ids.find(p => p.id === pian.ident_cely).docId;
+      const docId = ids.find(p => p.id === pian.ident_cely).docId;
       pianInList.presnost = pian.pian_presnost;
       pianInList.typ = pian.typ;
+      pianInList.docIds.push(docId);
       const mrk = this.addMarker({
         id: pian.ident_cely,
         isPian: true,
@@ -824,7 +835,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         lng: coords[1],
         presnost: pian.pian_presnost,
         typ: pian.typ,
-        doc: doc,
+        doc: docId,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
       if (isId) {
@@ -832,7 +843,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       } else {
         mrk.addTo(this.markers);
       }
-      this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, doc);
+      this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, docId);
     });
   }
 
@@ -1128,7 +1139,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       // the same or document
       changed = false;
     }
-    let ms = this.markersList.filter(mrk => mrk.options.doc.ident_cely.includes(docId));
+    let ms = this.markersList.filter(mrk => mrk.options.doc.includes(docId));
     //if (changed) {
     this.clearSelectedMarker();
     //}

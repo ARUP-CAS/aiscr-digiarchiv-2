@@ -65,15 +65,15 @@
   </mat-card-content>
   <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
     <div fxFlex class="app-metadata">
-      <ng-container *ngIf="result.projekt_dokument?.length > 0">
+      <ng-container *ngIf="relationsChecked && result.projekt_dokument?.length > 0">
         {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.projekt_dokument?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
-      <ng-container *ngIf="result.projekt_archeologicky_zaznam?.length > 0">
+      <ng-container *ngIf="relationsChecked && result.projekt_archeologicky_zaznam?.length > 0">
         {{ 'card.desc.Počet archeologickych zaznamu' | translate }}: <strong>{{result.projekt_archeologicky_zaznam?.length}}</strong>
         <span class="app-pipe"></span>
       </ng-container> 
-      <ng-container *ngIf="result.projekt_samostatny_nalez?.length > 0"> 
+      <ng-container *ngIf="relationsChecked && result.projekt_samostatny_nalez?.length > 0"> 
         {{'card.desc.Počet samostatných nálezů' | translate}}: <strong>{{result.projekt_samostatny_nalez?.length}}</strong> 
         <span class="app-pipe"></span>
       </ng-container>

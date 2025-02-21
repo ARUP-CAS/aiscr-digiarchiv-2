@@ -29,6 +29,7 @@ export class ProjektComponent implements OnInit, OnChanges {
   vsSize = 0;
   numChildren = 0;
   math = Math;
+  relationsChecked = false;
 
   constructor(
     private datePipe: DatePipe,
@@ -50,7 +51,9 @@ export class ProjektComponent implements OnInit, OnChanges {
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
     this.result.sn_toprocess = [];
-    this.setVsize();
+    
+    this.checkRelations();
+    // this.setVsize();
     if (this.inDocument) {
       this.state.loading = false;
       this.state.documentProgress = 0;
@@ -67,6 +70,16 @@ export class ProjektComponent implements OnInit, OnChanges {
       this.getSamostatnyNalez(false);
       this.getDokument();
     }
+  }
+
+  checkRelations() {
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.projekt_archeologicky_zaznam = res.projekt_archeologicky_zaznam;
+      this.result.projekt_samostatny_nalez = res.projekt_samostatny_nalez;
+      this.result.projekt_dokument = res.projekt_dokument;
+      this.relationsChecked = true;
+      this.setVsize();
+    });
   }
 
   setVsize() {
