@@ -81,8 +81,8 @@ public class AkceSearcher implements EntitySearcher {
         }
     }
 
-    public void addOkresy(JSONObject jo) {
-
+//    public void addOkresy(JSONObject jo) {
+//
 //        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
 //        for (int i = 0; i < ja.length(); i++) {
 //            JSONObject doc = ja.getJSONObject(i);
@@ -100,7 +100,7 @@ public class AkceSearcher implements EntitySearcher {
 //                doc.getJSONObject("az_chranene_udaje").put("okresy", okresy);
 //            }
 //        }
-    }
+//    }
 
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -165,15 +165,15 @@ public class AkceSearcher implements EntitySearcher {
                 doc.remove("akce_projekt");
             }
         }
-        addOkresy(jo);
+//        addOkresy(jo);
     }
 
     @Override
     public void processAsChild(HttpServletRequest request, JSONObject jo) {
 
-        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
-            addOkresy(jo);
-        }
+//        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+//            addOkresy(jo);
+//        }
     }
 
     @Override
@@ -201,9 +201,9 @@ public class AkceSearcher implements EntitySearcher {
             if (Boolean.parseBoolean(request.getParameter("isExport"))) {
                 addPians(jo, client, request);
             } 
-            if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
-                addOkresy(jo);
-            }
+//            if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+//                addOkresy(jo);
+//            }
             //LOGGER.log(Level.INFO, "addFavorites");
             SolrSearcher.addFavorites(jo, client, request);
             //LOGGER.log(Level.INFO, "hotovo");

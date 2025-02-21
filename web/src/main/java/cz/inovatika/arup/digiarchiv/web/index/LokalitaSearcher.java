@@ -6,6 +6,7 @@ import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,27 +60,6 @@ public class LokalitaSearcher implements EntitySearcher {
         }
         
     }
-    
-    public void addOkresy(JSONObject jo) { 
-
-//        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-//        for (int i = 0; i < ja.length(); i++) {
-//            JSONObject doc = ja.getJSONObject(i);
-//            if (doc.has("az_chranene_udaje")) {
-//                JSONArray cdjs = doc.getJSONObject("az_chranene_udaje").optJSONArray("dalsi_katastr", new JSONArray());
-//                List<String> okresy = new ArrayList<>();
-//                for (int j = 0; j < cdjs.length(); j++) {
-//                    JSONObject dk = cdjs.getJSONObject(j);
-//                    String ruian = dk.optString("id");
-//                    String okres = SolrSearcher.getOkresByKatastr(ruian);
-//                    if (!okresy.contains(okres)) {
-//                        okresy.add(okres);
-//                    }
-//                }
-//                doc.getJSONObject("az_chranene_udaje").put("okresy", okresy);
-//            }
-//        }
-    }
 
     @Override
     public String[] getChildSearchFields(String pristupnost) {
@@ -120,7 +100,6 @@ public class LokalitaSearcher implements EntitySearcher {
                 doc.remove("az_projekt");
             }
         }
-        addOkresy(jo);
     }
 
     @Override
@@ -180,10 +159,10 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public void processAsChild(HttpServletRequest request, JSONObject jo) {
-
-        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
-            addOkresy(jo);
-        }
+//
+//        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+//            addOkresy(jo);
+//        }
     }
 
     @Override
@@ -198,21 +177,15 @@ public class LokalitaSearcher implements EntitySearcher {
                 return jo;
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-
-//            if (Boolean.parseBoolean(request.getParameter("mapa"))
-//                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
-//                addPians(jo, client, request);
-//            } 
+            
             if (Boolean.parseBoolean(request.getParameter("isExport"))) {
                 addPians(jo, client, request);
             }
             if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
-                checkRelations(jo, client, request);
+//                checkRelations(jo, client, request);
             }
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            if (!Boolean.parseBoolean(request.getParameter("mapa"))){
-                addOkresy(jo);
-            }
+
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
         } catch (Exception ex) {

@@ -8,6 +8,7 @@ import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -403,14 +404,14 @@ public class SearchServlet extends HttpServlet {
                     }
                     // Remove stats in case of one result, without access
                     int numFound = jo.getJSONObject("response").getInt("numFound");
-                    if (numFound == 1 && !Boolean.parseBoolean(request.getParameter("onlyFacets"))) {
-                        String docPr = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("pristupnost");
-                        String pristupnost = LoginServlet.pristupnost(request.getSession());
-                        if (docPr.compareTo(pristupnost) > 0) {
-                            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
-                            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
-                        }
-                    }
+//                    if (numFound == 1 && !Boolean.parseBoolean(request.getParameter("onlyFacets"))) {
+//                        String docPr = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("pristupnost");
+//                        String pristupnost = LoginServlet.pristupnost(request.getSession());
+//                        if (docPr.compareTo(pristupnost) > 0) {
+//                            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
+//                            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+//                        }
+//                    }
                     return jo.toString();
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);

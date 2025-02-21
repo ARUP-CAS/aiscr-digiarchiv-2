@@ -376,7 +376,7 @@ public class OAIRequest {
             rt.put("nextCursorMark", nextCursorMark);
             String md5Hex = DigestUtils.md5Hex(rt.toString()).toUpperCase();
             storeResumptionToken(md5Hex, rt);
-
+            
             // String nextCursorMark = resp.getNextCursorMark();
             if (!cursor.equals(nextCursorMark) && docs.getNumFound() > conf.getInt("recordsPerPage")) {
                 ret.append("<resumptionToken ")
