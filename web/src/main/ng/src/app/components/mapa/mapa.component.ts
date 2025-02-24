@@ -422,6 +422,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       bounds = L.latLngBounds(southWest, northEast);
 
       this.state.locationFilterBounds = bounds;
+      this.locationFilter.enable();
       this.locationFilter.setBounds(bounds);
       // this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
     }
