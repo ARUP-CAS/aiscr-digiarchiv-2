@@ -474,7 +474,7 @@
     "button": {
       "Skrýt detail": "Hide detail",
       "Zobrazit detail": "Show detail",
-      "Zobrazit vsechny": "Show all"
+      "Zobrazit vsechny": "Load all records"
     },
     "panelTitle": {
       "Popis dokumentu": "Document description",
