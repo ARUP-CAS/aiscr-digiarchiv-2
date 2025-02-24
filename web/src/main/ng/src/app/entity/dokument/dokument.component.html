@@ -341,27 +341,7 @@
           </mat-accordion>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="result.dokument_cast_archeologicky_zaznam?.length > 0 || result.dokument_cast_projekt?.length > 0 " [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
-          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
-            <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}:
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          
-          <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
-            [minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
-            <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
-            <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
-            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-          </cdk-virtual-scroll-viewport>
-          
-          <ng-container *ngIf="vsSize > 0 && state.printing" >
-            <app-lokalita *ngFor="let lok of result.lokalita" [result]="lok" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
-            <app-akce *ngFor="let akce of result.akce" [result]="akce" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
-            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-          </ng-container>
-          
-        </mat-expansion-panel>
+        <app-related [related]="related"></app-related>
       </mat-accordion>
     </div>
   </mat-card-content>

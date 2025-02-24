@@ -4,9 +4,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,7 +66,7 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public String[] getRelationsFields() {
-        return new String[]{"ident_cely", "dokument", "projekt"};
+        return new String[]{"ident_cely", "az_dokument"};
     }
 
     @Override
@@ -95,10 +93,6 @@ public class LokalitaSearcher implements EntitySearcher {
                 }
             }
             doc.put("az_dokument", valid_dokuments);
-
-            if (doc.has("az_projekt") && !SolrSearcher.existsById(client, doc.getString("az_projekt"))) {
-                doc.remove("az_projekt");
-            }
         }
     }
 

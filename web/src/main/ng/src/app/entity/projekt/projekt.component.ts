@@ -25,11 +25,8 @@ export class ProjektComponent implements OnInit, OnChanges {
   hasRights: boolean;
   bibTex: string;
 
-  itemSize = 133;
-  vsSize = 0;
-  numChildren = 0;
-  math = Math;
   relationsChecked = false;
+  related: {entity: string, ident_cely: string}[] = [];
 
   constructor(
     private datePipe: DatePipe,
@@ -52,8 +49,6 @@ export class ProjektComponent implements OnInit, OnChanges {
      }`;
     this.result.sn_toprocess = [];
     
-    this.checkRelations();
-    // this.setVsize();
     if (this.inDocument) {
       this.state.loading = false;
       this.state.documentProgress = 0;
@@ -66,9 +61,6 @@ export class ProjektComponent implements OnInit, OnChanges {
       }
       
       this.result.sn_toprocess.sort();
-      this.getArchZaznam();
-      this.getSamostatnyNalez(false);
-      this.getDokument();
     }
   }
 
@@ -78,97 +70,26 @@ export class ProjektComponent implements OnInit, OnChanges {
       this.result.projekt_samostatny_nalez = res.projekt_samostatny_nalez;
       this.result.projekt_dokument = res.projekt_dokument;
       this.relationsChecked = true;
-      this.setVsize();
-    });
-  }
-
-  setVsize() {
-    this.numChildren = 0;
-    if (this.result.projekt_archeologicky_zaznam) {
-      this.numChildren += this.result.projekt_archeologicky_zaznam.length;
-    }
-    if (this.result.projekt_samostatny_nalez) {
-      this.numChildren += this.result.projekt_samostatny_nalez.length;
-    }
-    if (this.result.projekt_dokument) {
-      this.numChildren += this.result.projekt_dokument.length;
-    }
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-  }
-
-  getDokument() {
-    this.result.valid_projekt_dokument = [];
-    if (this.result.projekt_dokument) {
-      for (let i = 0; i < this.result.projekt_dokument.length; i = i + 10) {
-        const ids = this.result.projekt_dokument.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
-          this.result.valid_projekt_dokument = this.result.valid_projekt_dokument.concat(res.response.docs);
-          if (res.response.docs.length < ids.length) {
-            // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-            this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-          }
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-          if (!this.state.loading) {
-            this.result.valid_projekt_dokument.sort((a: any, b: any) => a.ident_cely.localeCompare(b.ident_cely))
-          }
-        });
-      }
-    }
-  }
-
-  getSamostatnyNalez(loadAll: boolean) {
-
-    const idsSize = 20;
-    if (this.result.sn_toprocess && this.result.sn_toprocess.length > 0) {
-      const ids = this.result.sn_toprocess.splice(0, idsSize);
-      this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
-        this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
-        if (res.response.docs.length < ids.length) {
-          // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-        }
-        this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
-        this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-
-        if (loadAll && this.state.loading) {
-          this.getSamostatnyNalez(loadAll)
-        }
+      this.related = [];
+      res.id_akce.forEach((ident_cely: string) => {
+        this.related.push({entity: 'akce', ident_cely})
       });
-    }
-  }
-
-  getSamostatnyNalezAll() {
-    this.result.valid_samostatny_nalez = [];
-    const idsSize = 20;
-    if (this.result.projekt_samostatny_nalez) {
-      this.result.projekt_samostatny_nalez.sort();
-      for (let i = 0; i < this.result.projekt_samostatny_nalez.length; i = i + idsSize) {
-        const ids = this.result.projekt_samostatny_nalez.slice(i, i + idsSize);
-        this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
-          this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
-          if (res.response.docs.length < ids.length) {
-            // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-            this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-          }
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-          if (!this.state.loading) {
-            this.result.valid_samostatny_nalez.sort((a: any, b: any) => a.ident_cely.localeCompare(b.ident_cely))
-          }
-        });
-        return;
-      }
-    }
+      res.id_lokalita.forEach((ident_cely: string) => {
+        this.related.push({entity: 'lokalita', ident_cely})
+      });
+      res.projekt_samostatny_nalez.forEach((ident_cely: string) => {
+        this.related.push({entity: 'samostatny_nalez', ident_cely})
+      });
+      res.projekt_dokument.forEach((ident_cely: string) => {
+        this.related.push({entity: 'dokument', ident_cely})
+      });
+    });
   }
 
 
   ngOnChanges(c) {
     if (c.result) {
-      this.setVsize();
+      this.checkRelations();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
     }
@@ -180,55 +101,8 @@ export class ProjektComponent implements OnInit, OnChanges {
   getFullId(shouldLog: boolean) {
     this.service.getId(this.result.ident_cely, shouldLog).subscribe((res: any) => {
       this.result = res.response.docs[0];
-
-      this.state.loading = (this.result.projekt_archeologicky_zaznam.length + this.result.projekt_samostatny_nalez.length) < this.numChildren;
-      this.state.documentProgress = 0;
-      this.result.valid_samostatny_nalez = [];
-      this.result.akce = [];
-      this.result.lokalita = [];
-      if (this.result.projekt_samostatny_nalez) {
-        this.result.sn_toprocess = JSON.parse(JSON.stringify(this.result.projekt_samostatny_nalez));
-      }
-      this.setVsize();
-      this.getArchZaznam();
-      this.getSamostatnyNalez(false);
-      this.getDokument();
       this.hasDetail = true;
     });
-  }
-
-  loadAll() {
-
-    this.getArchZaznam();
-    this.getSamostatnyNalez(true);
-    this.getDokument();
-  }
-
-  getArchZaznam() {
-    if (this.result.id_akce) {
-      for (let i = 0; i < this.result.id_akce.length; i = i + 10) {
-        const ids = this.result.id_akce.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-        });
-      }
-    }
-    if (this.result.id_lokalita) {
-      for (let i = 0; i < this.result.id_lokalita.length; i = i + 10) {
-        const ids = this.result.id_lokalita.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-        });
-      }
-    }
   }
 
   toggleDetail() {

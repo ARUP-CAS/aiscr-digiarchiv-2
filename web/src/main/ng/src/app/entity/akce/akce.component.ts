@@ -24,11 +24,9 @@ export class AkceComponent implements OnInit, OnChanges {
   hasDetail: boolean;
   bibTex: string;
 
-  math = Math;
-  itemSize = 133;
-  vsSize = 0;
-  numChildren = 0;
   dokLoaded = 0;
+  relationsChecked = false;
+  related: {entity: string, ident_cely: string}[] = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -52,17 +50,12 @@ export class AkceComponent implements OnInit, OnChanges {
      }`;
     this.result.dokumentTemp = [];
     if (this.inDocument) {
-      this.setVsize();
+      this.checkRelations();
       this.state.documentProgress = 0;
       if (isPlatformBrowser(this.platformId)) {
         setTimeout(() => {
           this.state.loading = true;
           this.state.imagesLoading = true;
-          this.result.valid_dokument = [];
-          this.result.valid_projekt = [];
-          this.getDokuments();
-          this.getProjekts(); 
-          this.getExtZdroj();
         }, 100);
       }
     }  
@@ -70,7 +63,7 @@ export class AkceComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
-      this.setVsize();
+      this.checkRelations();
       this.hasDetail = false;
       this.result.dokumentTemp = [];
       this.detailExpanded = this.inDocument;
@@ -80,24 +73,20 @@ export class AkceComponent implements OnInit, OnChanges {
     }
   }
 
-  setVsize() {
-    this.numChildren = 0;
-      if (this.result.az_dokument) {
-        this.numChildren += this.result.az_dokument.length;
-        this.state.numImages = this.result.az_dokument.length;
-      }
-      if (this.result.akce_projekt) {
-        this.numChildren += 1;
-      }
-      this.state.numChildren = this.numChildren;
-      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-  }
-
-  checkLoading() {
-    this.state.loading = (this.dokLoaded + this.result.valid_projekt.length) < this.numChildren;
-    if (!this.state.loading) {
-      this.result.valid_dokument = this.result.dokumentTemp.concat([]);
-    }
+  checkRelations() {
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.az_dokument = res.az_dokument;
+      this.result.akce_projekt = res.akce_projekt;
+      this.relationsChecked = true;
+      this.related = [];
+      res.az_dokument.forEach((ident_cely: string) => {
+        this.related.push({entity: 'dokument', ident_cely})
+      });
+      
+      res.akce_projekt.forEach((ident_cely: string) => {
+        this.related.push({entity: 'projekt', ident_cely})
+      });
+    });
   }
 
   getExtZdroj() {
@@ -129,52 +118,9 @@ export class AkceComponent implements OnInit, OnChanges {
     }
   }
 
-
-  getDokuments() {
-    if (this.result.az_dokument) {
-      for (let i = 0; i < this.result.az_dokument.length; i++) {
-        this.result.dokumentTemp.push({});
-      }
-      for (let i = 0; i < this.result.az_dokument.length; i = i + 20) {
-        const ids = this.result.az_dokument.slice(i, i + 20);
-        this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
-          // Odpoved ma jine serazeni.
-          const sorted: any[] = [];
-          ids.forEach(id => {
-            const doc = res.response.docs.find(d => d.ident_cely === id);
-            // sorted.push(doc);
-            const idx = this.result.az_dokument.findIndex(d => d === id);
-            this.result.dokumentTemp[idx] = doc;
-            this.dokLoaded++;
-          });
-          this.state.documentProgress = this.dokLoaded / this.numChildren * 100;
-          this.checkLoading();
-
-        });
-      }
-    }
-    this.state.loading = false;
-  }
-
-  getProjekts() {
-    if (this.result.akce_projekt) {
-        this.service.getIdAsChild([this.result.akce_projekt], "projekt").subscribe((res: any) => {
-          this.result.valid_projekt = res.response.docs;
-          this.checkLoading();
-        });
-    }
-  }
-
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      this.setVsize();
-      this.result.valid_dokument = [];
-      this.result.dokumentTemp = [];
-      this.result.valid_projekt = [];
-      this.getDokuments();
-      this.getProjekts();
-      this.getExtZdroj();
       this.hasDetail = true;
     });
   }

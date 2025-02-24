@@ -61,6 +61,7 @@ import { DocumentDialogComponent } from './components/document-dialog/document-d
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { InlineFilterComponent } from './components/inline-filter/inline-filter.component';
+import { RelatedComponent } from './components/related/related.component';
 import { NalezComponent } from './components/nalez/nalez.component';
 import { JednotkaDokumentuComponent } from './entity/jednotka-dokumentu/jednotka-dokumentu.component';
 import { MapaShimComponent } from './components/mapa-shim/mapa-shim.component';
@@ -187,7 +188,8 @@ const providers: any[] = [
     CitationComponent,
     ResultActionsComponent,
     StatsComponent,
-    ConsentSheet
+    ConsentSheet,
+    RelatedComponent
   ],
   imports: [
     CommonModule,

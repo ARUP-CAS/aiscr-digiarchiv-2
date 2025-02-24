@@ -134,7 +134,7 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public String[] getRelationsFields() {
-        return new String[]{"ident_cely", "dokument", "projekt"};
+        return new String[]{"ident_cely", "az_dokument", "akce_projekt"};
     }
 
     @Override
