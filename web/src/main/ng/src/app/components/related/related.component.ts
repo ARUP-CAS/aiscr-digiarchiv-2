@@ -74,16 +74,6 @@ export class RelatedComponent implements OnInit {
     }
   }
 
-  // getEntityRecords(ids: string[], entity: string) {
-  //     this.service.getIdAsChild(ids, entity).subscribe((res: any) => {
-  //       res.response.docs.forEach(result => {
-  //         this.children.push({entity, result})
-  //       });
-  //       this.state.documentProgress = this.children.length / this.numChildren * 100;
-  //       this.state.loading = (this.children.length) < this.numChildren;
-  //     });
-  // }
-
   loadAll() {
     this.getRecords(true)
   }

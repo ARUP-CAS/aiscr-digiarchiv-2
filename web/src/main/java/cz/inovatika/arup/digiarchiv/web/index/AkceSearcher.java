@@ -158,8 +158,8 @@ public class AkceSearcher implements EntitySearcher {
                 } catch (SolrServerException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
-                doc.put("az_dokument", valid_dokuments);
             }
+            doc.put("az_dokument", valid_dokuments);
 
             if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
                 doc.remove("akce_projekt");

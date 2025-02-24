@@ -50,12 +50,15 @@ export class LokalitaComponent implements OnInit, OnChanges {
      if (this.inDocument) {
       this.checkRelations();
       this.state.documentProgress = 0;
-      this.state.loading = true;
+      //this.state.loading = true;
       this.getExtZdroj();
      }
   }
 
   checkRelations() {
+    if (this.isChild) {
+      return;
+    }
     this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
       this.result.az_dokument = res.az_dokument;
       this.result.akce_projekt = res.akce_projekt;

@@ -63,13 +63,14 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
      if (this.inDocument) {
-      this.checkRelations();
-      this.state.documentProgress = 0;
-      this.state.loading = true;
+      //this.checkRelations();
      }
   }  
 
   checkRelations() {
+    if (this.isChild) {
+      return;
+    }
     this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
       this.result.samostatny_nalez_projekt = res.samostatny_nalez_projekt;
       this.relationsChecked = true;

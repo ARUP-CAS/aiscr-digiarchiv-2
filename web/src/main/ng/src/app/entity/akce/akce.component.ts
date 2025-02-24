@@ -51,11 +51,9 @@ export class AkceComponent implements OnInit, OnChanges {
     this.result.dokumentTemp = [];
     if (this.inDocument) {
       this.checkRelations();
-      this.state.documentProgress = 0;
       if (isPlatformBrowser(this.platformId)) {
         setTimeout(() => {
-          this.state.loading = true;
-          this.state.imagesLoading = true;
+          // this.state.imagesLoading = true;
         }, 100);
       }
     }  
@@ -63,7 +61,7 @@ export class AkceComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
-      this.checkRelations();
+      // this.checkRelations();
       this.hasDetail = false;
       this.result.dokumentTemp = [];
       this.detailExpanded = this.inDocument;
@@ -74,6 +72,9 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   checkRelations() {
+    if (this.isChild) {
+      return;
+    }
     this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
       this.result.az_dokument = res.az_dokument;
       this.result.akce_projekt = res.akce_projekt;
@@ -82,10 +83,10 @@ export class AkceComponent implements OnInit, OnChanges {
       res.az_dokument.forEach((ident_cely: string) => {
         this.related.push({entity: 'dokument', ident_cely})
       });
-      
-      res.akce_projekt.forEach((ident_cely: string) => {
-        this.related.push({entity: 'projekt', ident_cely})
-      });
+
+      if (res.akce_projekt) {
+        this.related.push({entity: 'projekt', ident_cely: res.akce_projekt})
+      }
     });
   }
 

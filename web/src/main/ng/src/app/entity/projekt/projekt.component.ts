@@ -47,24 +47,16 @@ export class ProjektComponent implements OnInit, OnChanges {
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-    this.result.sn_toprocess = [];
     
     if (this.inDocument) {
-      this.state.loading = false;
-      this.state.documentProgress = 0;
-
-      this.result.valid_samostatny_nalez = [];
-      this.result.akce = [];
-      this.result.lokalita = [];
-      if (this.result.projekt_samostatny_nalez) {
-        this.result.sn_toprocess = JSON.parse(JSON.stringify(this.result.projekt_samostatny_nalez));
-      }
       
-      this.result.sn_toprocess.sort();
     }
   }
 
   checkRelations() {
+    if (this.isChild) {
+      return;
+    }
     this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
       this.result.projekt_archeologicky_zaznam = res.projekt_archeologicky_zaznam;
       this.result.projekt_samostatny_nalez = res.projekt_samostatny_nalez;

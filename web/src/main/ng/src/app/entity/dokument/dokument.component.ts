@@ -100,8 +100,7 @@ export class DokumentComponent implements OnInit, OnChanges {
       this.setBibTex();
     });
     if (this.inDocument) {
-      this.state.loading = this.result.dokument_cast_archeologicky_zaznam.length > 0;
-      this.state.documentProgress = 0;
+      //this.state.documentProgress = 0;
     }
   }
 
@@ -110,6 +109,9 @@ export class DokumentComponent implements OnInit, OnChanges {
  }
 
  checkRelations() {
+  if (this.isChild) {
+    return;
+  }
   this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
     console.log(res)
     this.result.dokument_cast_archeologicky_zaznam = res.dokument_cast_archeologicky_zaznam;
