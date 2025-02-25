@@ -59,6 +59,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   zoomOptions = {
     zoomInTitle: this.service.getTranslation('map.desc.zoom in'),
     zoomOutTitle: this.service.getTranslation('map.desc.zoom out'),
+    position: 'topright'
   };
 
   options = {
@@ -203,6 +204,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.mapReady) {
         this.setAttribution();
         this.initLayers();
+
       }
     }));
 
@@ -217,7 +219,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.mapReady) {
         this.setHeatData();
         if (res === 'direct') {
-        console.log(res)
+          console.log(res)
           this.markersList = [];
           this.piansList = [];
           this.markers = new L.featureGroup();
@@ -264,12 +266,15 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.map = map;
 
     map.addControl(L.control.zoom(this.zoomOptions));
+    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
 
     this.locationFilter = new L.LocationFilter({
-      adjustButton: false
+      adjustButton: false,
+      buttonPosition: 'topright'
     });
 
     L.setOptions(this.locationFilter, {
+      buttonPosition: 'topright',
       enableButton: {
         enableText: this.service.getTranslation('map.desc.select area'),
         disableText: this.service.getTranslation('map.desc.remove selection')
@@ -301,7 +306,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
       if (!this.processingParams && !this.zoomingOnMarker) {
         this.doZoom();
-      } else if (this.zoomingOnMarker || this.processingParams ) {
+      } else if (this.zoomingOnMarker || this.processingParams) {
         this.getDataByVisibleArea();
       }
       this.state.mapBounds = this.map.getBounds();
@@ -398,7 +403,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.shouldZoomOnMarker = true;
     }
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
-    if(!this.currentMapId) {
+    if (!this.currentMapId) {
       this.state.mapResult = null;
       this.idmarkers = new L.featureGroup();
       this.clearSelectedMarker();
@@ -470,7 +475,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.state.documentProgress = 0;
       this.state.facetsLoading = true;
       this.state.hasError = false;
-      
+
       if (!p['entity']) {
         p['entity'] = 'dokument';
       }
@@ -613,7 +618,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             this.state.loading = false;
             this.loadingFinished.emit();
           }, 100)
-          
+
         });
         break;
       }
@@ -862,7 +867,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.processMarkersResp(res.response.docs, ids2, isId);
       if (res.response.docs.length < idsSize) {
         // To znamena konec
-        
+
         this.stopLoadingMarkers();
       } else {
         if (ids.length > 0) {
@@ -915,7 +920,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         } else {
           mrk.addTo(this.markers);
         }
-        
+
       }
       //this.markersList.forEach(mrk => {
       //  mrk.addTo(this.markers);
