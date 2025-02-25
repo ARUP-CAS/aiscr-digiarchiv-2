@@ -113,7 +113,6 @@ export class DokumentComponent implements OnInit, OnChanges {
     return;
   }
   this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
-    console.log(res)
     this.result.dokument_cast_archeologicky_zaznam = res.dokument_cast_archeologicky_zaznam;
     this.result.dokument_cast_projekt = res.dokument_cast_projekt;
     this.relationsChecked = true;

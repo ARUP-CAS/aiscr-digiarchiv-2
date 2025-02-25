@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
+import static cz.inovatika.arup.digiarchiv.web.index.ProjektSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,11 +41,42 @@ public class PIANSearcher implements EntitySearcher {
 
     @Override
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
+        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < docs.length(); i++) {
+            JSONObject doc = docs.getJSONObject(i);
+
+            JSONArray az_dj_pian = new JSONArray();
+            JSONArray id_akce = new JSONArray();
+            JSONArray id_lokalita = new JSONArray();
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"")
+                    .setRows(10000)
+                    .setFields("ident_cely,entity");
+            try {
+                JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                for (int a = 0; a < ja.length(); a++) {
+                    az_dj_pian.put(ja.getJSONObject(a).getString("ident_cely"));
+                    if ("akce".equals(ja.getJSONObject(a).getString("entity"))) {
+                        id_akce.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+
+                    if ("lokalita".equals(ja.getJSONObject(a).getString("entity"))) {
+                        id_lokalita.put(ja.getJSONObject(a).getString("ident_cely"));
+                    }
+                }
+            } catch (SolrServerException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+
+            doc.put("az_dj_pian", az_dj_pian);
+            doc.put("id_akce", id_akce);
+            doc.put("id_lokalita", id_lokalita);
+        }
     }
 
     @Override
     public String[] getRelationsFields() {
-        return new String[]{"dokument", "projekt"};
+        return new String[]{"ident_cely"};
     }
 
     @Override
@@ -60,32 +92,34 @@ public class PIANSearcher implements EntitySearcher {
                 if (LoginServlet.userId(request) != null) {
                     SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
                 }
-                
-                SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("entity:akce")
-                        .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
-                query.setFields(af); 
-                JSONObject r = SolrSearcher.json(client, "entities", query);
-                as.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
-                JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
-                for (int j = 0; j < cdjs.length(); j++) {
-                    JSONObject cdj = cdjs.getJSONObject(j);
-                    doc.append("akce", cdj);
-                }
-                
-                query = new SolrQuery("*")
-                        .addFilterQuery("entity:lokalita")
-                        .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
-                query.setFields(lf);
-                r = SolrSearcher.json(client, "entities", query);
-                ls.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
-                cdjs = r.getJSONObject("response").getJSONArray("docs");
 
-                for (int j = 0; j < cdjs.length(); j++) {
-                    JSONObject cdj = cdjs.getJSONObject(j);
-                    doc.append("lokalita", cdj);
-                }
-            } catch (SolrServerException | IOException ex) {
+//                SolrQuery query = new SolrQuery("*")
+//                        .setRows(1000)
+//                        .addFilterQuery("entity:akce")
+//                        .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
+//                query.setFields(af); 
+//                JSONObject r = SolrSearcher.json(client, "entities", query);
+//                as.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
+//                JSONArray cdjs = r.getJSONObject("response").getJSONArray("docs");
+//                for (int j = 0; j < cdjs.length(); j++) {
+//                    JSONObject cdj = cdjs.getJSONObject(j);
+//                    doc.append("akce", cdj);
+//                }
+//                
+//                query = new SolrQuery("*")
+//                        .setRows(1000)
+//                        .addFilterQuery("entity:lokalita")
+//                        .addFilterQuery("az_dj_pian:\"" + doc.getString("ident_cely") + "\"");
+//                query.setFields(lf);
+//                r = SolrSearcher.json(client, "entities", query);
+//                ls.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
+//                cdjs = r.getJSONObject("response").getJSONArray("docs");
+//
+//                for (int j = 0; j < cdjs.length(); j++) {
+//                    JSONObject cdj = cdjs.getJSONObject(j);
+//                    doc.append("lokalita", cdj);
+//                }
+            } catch (Exception ex) {
                 Logger.getLogger(PIANSearcher.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -149,7 +183,7 @@ public class PIANSearcher implements EntitySearcher {
 
         SolrSearcher.addFilters(request, query, pristupnost);
     }
-    
+
     public void addPians(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -162,7 +196,7 @@ public class PIANSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.has("pian_id")) { 
+            if (doc.has("pian_id")) {
                 JSONArray cdjs = doc.getJSONArray("pian_id");
                 for (int j = 0; j < cdjs.length(); j++) {
                     String cdj = cdjs.getString(j);
@@ -205,7 +239,7 @@ public class PIANSearcher implements EntitySearcher {
             query.setFields("pian:[json],pian_id,ident_cely,organizace,pristupnost", "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost);
 
             query.setRows(Math.min(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForCluster", 5000), Integer.parseInt(request.getParameter("rows"))));
-            
+
             JSONObject jo = SearchUtils.json(query, client, "entities");
             SolrSearcher.addFavorites(jo, client, request);
             if (request.getParameter("getFullPian") != null) {

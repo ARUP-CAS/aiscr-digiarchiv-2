@@ -53,6 +53,7 @@ export class AkceComponent implements OnInit, OnChanges {
       this.checkRelations();
       if (isPlatformBrowser(this.platformId)) {
         setTimeout(() => {
+          this.getExtZdroj();
           // this.state.imagesLoading = true;
         }, 100);
       }
@@ -122,6 +123,7 @@ export class AkceComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
+      this.getExtZdroj();
       this.hasDetail = true;
     });
   }

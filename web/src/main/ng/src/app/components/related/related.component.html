@@ -14,7 +14,7 @@
         <app-projekt *ngIf="child.entity === 'projekt'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
         <app-samostatny-nalez *ngIf="child.entity === 'samostatny_nalez'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-samostatny-nalez>
       </div>
-      <button mat-button color="primary" *ngIf="toProcess?.length > 0" (click)="loadAll()">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
+      <button mat-button color="primary" fxFlexFill fxLayoutAlign="center center" *ngIf="toProcess?.length > 0" (click)="loadAll()">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
     </cdk-virtual-scroll-viewport>
     
     <ng-container *ngIf="state.printing" >
