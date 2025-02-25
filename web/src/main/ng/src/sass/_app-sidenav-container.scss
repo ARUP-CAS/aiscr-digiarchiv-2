@@ -129,7 +129,7 @@
     @extend .app-clean-shadow;
     position: absolute;
     top: calc(#{$app-gap-map} - 2px);
-    right: 170px;
+    right: 50px;
     z-index: 1002;
     padding: 0 $app-gap-icon;
     min-height: 30px;

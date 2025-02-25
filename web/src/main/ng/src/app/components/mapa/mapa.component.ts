@@ -5,6 +5,7 @@ import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import 'src/assets/js/locationfilter';
+import 'leaflet.polylinemeasure';
 
 import { AppService } from 'src/app/app.service';
 import { SolrResponse } from 'src/app/shared/solr-response';
@@ -167,6 +168,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   currentMapId: string;
   currentLocBounds: any;
   shouldZoomOnMarker = false;
+  markersActive = true;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -246,6 +248,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.overlays = {};
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_mapa')] = this.cuzkWMS;
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_uzemi')] = this.cuzkWMS2;
+    this.overlays['data'] = this.markers;
 
     this.options.layers = [this.osm];
 
@@ -272,6 +275,11 @@ export class MapaComponent implements OnInit, OnDestroy {
       adjustButton: false,
       buttonPosition: 'topright'
     });
+    L.control.polylineMeasure({
+      position: 'topright',
+      measureControlTitleOn: this.service.getTranslation('map.desc.measureOn'), // 'Turn on PolylineMeasure' Title for the control going to be switched on
+      measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
+    }).addTo (map);
 
     L.setOptions(this.locationFilter, {
       buttonPosition: 'topright',
@@ -294,6 +302,22 @@ export class MapaComponent implements OnInit, OnDestroy {
     map.on('baselayerchange', (e) => {
       this.activeBaseLayerOSM = e.layer.options['name'] === 'osm';
       this.setAttribution();
+    });
+
+    
+    map.on('overlayadd', (e) => {
+      if (e.name === 'data') {
+        this.markersActive = true;
+        this.paramsChanged();
+      }
+    });
+
+    
+    map.on('overlayremove', (e) => {
+      if (e.name === 'data') {
+        this.markersActive = false;
+
+      }
     });
 
     map.on('zoomend', (e) => {
@@ -381,6 +405,9 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   paramsChanged() {
+    if (!this.markersActive) {
+      return;
+    }
     this.processingParams = true;
     let bounds;
     if (!this.isResults) {
