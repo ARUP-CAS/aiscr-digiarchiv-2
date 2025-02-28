@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web.index;
 
 import cz.inovatika.arup.digiarchiv.web.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web.Options;
-import static cz.inovatika.arup.digiarchiv.web.index.ProjektSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -152,7 +151,7 @@ public class PIANSearcher implements EntitySearcher {
     @Override
     public String[] getSearchFields(String pristupnost) {
 
-        return new String[]{"ident_cely,entity,pristupnost,stav,pian_typ,pian_presnost,pian_geom_system,pian_geom_updated_at,pian_geom_sjtsk_updated_at,pian_chranene_udaje:[json]",
+        return new String[]{"ident_cely,entity,pristupnost,stav,pian_typ,pian_presnost,pian_geom_system,pian_chranene_udaje:[json]",
             "centroid_n:centroid_n_" + pristupnost, "centroid_e:centroid_e_" + pristupnost,
             "lat:lat_" + pristupnost,
             "lng:lng_" + pristupnost,

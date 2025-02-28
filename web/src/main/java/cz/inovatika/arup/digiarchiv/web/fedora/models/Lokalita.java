@@ -33,6 +33,10 @@ public class Lokalita {
 //<xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:lok-chranene_udajeType"/> <!-- SELF -->  
     @JacksonXmlProperty(localName = "chranene_udaje")
     private LokalitaChraneneUdaje lokalita_chranene_udaje;
+    
+//<xs:element name="igsn" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "igsn")
+    public String lokalita_igsn;
 
     public void fillSolrFields(SolrInputDocument idoc) {
         IndexUtils.addVocabField(idoc, "lokalita_typ_lokality", lokalita_typ_lokality);
@@ -42,6 +46,7 @@ public class Lokalita {
         IndexUtils.addVocabField(idoc, "lokalita_zachovalost", lokalita_zachovalost);
         IndexUtils.addRefField(idoc, "lokalita_zachovalost_human", lokalita_zachovalost);
         IndexUtils.addVocabField(idoc, "lokalita_jistota", lokalita_jistota);
+        idoc.addField("lokalita_igsn", lokalita_igsn);
 
         if (lokalita_chranene_udaje != null) {
             lokalita_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));

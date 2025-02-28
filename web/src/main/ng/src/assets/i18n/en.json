@@ -262,7 +262,7 @@
       "dj_nazev": "Doc. unit - label",
       "az_dj_nazev": "Doc. unit - label",
       "az_dj_negativni_jednotka": "Doc. unit - type of evidence",
-      "pian_ident_cely": "Doc. unit - related spatial unit",
+      "pian_id": "Doc. unit - related spatial unit",
       "az_dj_adb": "ADP - identifier",
       "adb_uzivatelske_oznaceni_sondy": "ADP - user label",
       "adb_trat": "ADP - street/track",
@@ -525,6 +525,7 @@
 
   "sidenav": {
     "tab": {
+      "Info": "The displayed results correspond to the current map window.",
       "Filtry": "Filters",
       "Výsledky": "Results"
     },

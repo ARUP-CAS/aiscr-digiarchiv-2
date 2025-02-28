@@ -42,6 +42,11 @@ public class Dokument implements FedoraModel {
 //<xs:element name="pristupnost" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost.ident_cely}" | "{pristupnost.heslo}" -->
     @JacksonXmlProperty(localName = "pristupnost")
     public Vocab pristupnost;
+    
+//<xs:element name="doi" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "doi")
+    @Field
+    public String dokument_doi;
 
 //<xs:element name="let" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{let.ident_cely}" | "{let.ident_cely}" -->
     @JacksonXmlProperty(localName = "let")

@@ -262,7 +262,7 @@
       "dj_nazev": "Dok. jednotka - název",
       "az_dj_nazev": "Dok. jednotka - název",
       "az_dj_negativni_jednotka": "Dok. jednotka - typ zjištění",
-      "pian_ident_cely": "Dok. jednotka - související PIAN",
+      "pian_id": "Dok. jednotka - související PIAN",
       "az_dj_adb": "ADB - identifikátor",
       "adb_uzivatelske_oznaceni_sondy": "ADB - uživatelské označení",
       "adb_trat": "ADB - ulice/trať",
@@ -525,6 +525,7 @@
 
   "sidenav": {
     "tab": {
+      "Info": "Zobrazené výsledky odpovídají aktuálnímu výřezu mapy.",
       "Filtry": "Filtry",
       "Výsledky": "Výsledky"
     },

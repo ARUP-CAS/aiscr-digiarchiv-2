@@ -121,7 +121,6 @@ public class ArcheologickyZaznam implements FedoraModel {
                 // choose dokumentacni_jednotka fields to put in idoc for akce/lokalita
                 idoc.addField("az_dj", dj.ident_cely);
                 idoc.addField("az_dj_pian", djdoc.getFieldValue("dj_pian"));
-                idoc.addField("pian_ident_cely", djdoc.getFieldValue("dj_pian"));
                 idoc.addField("az_dj_adb", djdoc.getFieldValue("dj_adb"));
                 idoc.addField("az_dj_negativni_jednotka", djdoc.getFieldValue("dj_negativni_jednotka")); 
                 idoc.addField("az_dj_nazev", dj.dj_nazev);

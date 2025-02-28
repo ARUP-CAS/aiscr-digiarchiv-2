@@ -118,12 +118,10 @@ public class SamostatnyNalez implements FedoraModel {
 
 //<xs:element name="geom_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_updated_at}" -->
     @JacksonXmlProperty(localName = "geom_updated_at")
-    @Field
     public Date samostatny_nalez_geom_updated_at;
 
 //<xs:element name="geom_sjtsk_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_sjtsk_updated_at}" -->
     @JacksonXmlProperty(localName = "geom_sjtsk_updated_at")
-    @Field
     public Date samostatny_nalez_geom_sjtsk_updated_at;
 
 //<xs:element name="pristupnost" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost.ident_cely}" | "{pristupnost.heslo}" -->
@@ -141,6 +139,11 @@ public class SamostatnyNalez implements FedoraModel {
 //<xs:element name="soubor" minOccurs="0" maxOccurs="unbounded" type="amcr:souborType"/>  <!-- "{soubory.soubory}" -->  
     @JacksonXmlProperty(localName = "soubor")
     public List<Soubor> soubor = new ArrayList();
+    
+//<xs:element name="igsn" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "igsn")
+    @Field
+    public String samostatny_nalez_igsn;
 
     @Override
     public String coreName() {

@@ -14,7 +14,7 @@
     "docsForCluster": 10000,
     "maxZoom": 24,
     "zoom": 8,
-    "hitZoomLevel": 16,
+    "hitZoomLevel": 18,
     "centerX": 49.803,
     "centerY": 15.496,
     "heatmapOptions": {
@@ -604,7 +604,7 @@
     },
     {
       "type": "text",
-      "field": "pian_ident_cely"
+      "field": "pian_id"
     },
     {
       "type": "text",

@@ -200,13 +200,13 @@ export class MapaComponent implements OnInit, OnDestroy {
     // }
     this.initLayers();
     this.options.center = L.latLng(this.config.mapOptions.centerX, this.config.mapOptions.centerY);
-    L.control.zoom(this.zoomOptions);
+    // L.control.zoom(this.zoomOptions);
 
     this.subs.push(this.service.currentLang.subscribe(res => {
       if (this.mapReady) {
         this.setAttribution();
         this.initLayers();
-
+        this.translateControls();
       }
     }));
 
@@ -239,6 +239,16 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.map.attributionControl.setPrefix(false);
   }
 
+  translateControls() {
+    L.setOptions(this.locationFilter, {
+      enableButton: {
+        enableText: this.service.getTranslation('map.desc.select area'),
+        disableText: this.service.getTranslation('map.desc.remove selection')
+      }
+    });
+    
+  }
+
   initLayers() {
     this.baseLayers = {};
     this.baseLayers[this.service.getTranslation('map.layer.cuzk_zakladni')] = this.cuzkZM;
@@ -268,20 +278,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   onMapReady(map: L.Map) {
     this.map = map;
 
-    map.addControl(L.control.zoom(this.zoomOptions));
-    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
-
     this.locationFilter = new L.LocationFilter({
       adjustButton: false,
-      buttonPosition: 'topright'
-    });
-    L.control.polylineMeasure({
-      position: 'topright',
-      measureControlTitleOn: this.service.getTranslation('map.desc.measureOn'), // 'Turn on PolylineMeasure' Title for the control going to be switched on
-      measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
-    }).addTo (map);
-
-    L.setOptions(this.locationFilter, {
       buttonPosition: 'topright',
       enableButton: {
         enableText: this.service.getTranslation('map.desc.select area'),
@@ -290,6 +288,16 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     map.addLayer(this.locationFilter);
+
+    L.control.polylineMeasure({
+      position: 'topright',
+      measureControlTitleOn: this.service.getTranslation('map.desc.measureOn'), // 'Turn on PolylineMeasure' Title for the control going to be switched on
+      measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
+    }).addTo (map);
+
+    map.addControl(L.control.zoom(this.zoomOptions));
+    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
+
 
     this.markers = new L.featureGroup();
     // this.markers = new L.markerClusterGroup();
@@ -466,7 +474,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       bounds = L.latLngBounds(southWest, northEast);
       if (!this.isEqualsBounds(bounds)) {
         const ob = this.map.getBounds();
-        this.map.fitBounds(bounds);
+        this.map.fitBounds(bounds, {paddingTopLeft: [21,21], paddingBottomRight: [21,21]});
         setTimeout(() => {
           if (this.isEqualsBounds(ob)) {
             this.getDataByVisibleArea();
@@ -1152,7 +1160,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.hitMarker(doc);
 
     const bounds = this.service.getBoundsByDoc(doc);
-
     this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
     this.selectedResultId = this.state.mapResult.ident_cely;
     if (this.currentZoom === this.config.mapOptions.hitZoomLevel) {
