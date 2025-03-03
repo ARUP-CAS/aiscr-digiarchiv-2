@@ -44,6 +44,7 @@ import org.json.JSONObject;
 public class OAIRequest {
 
     private static Transformer dcTransformer;
+    private static Transformer forbiddenTransformer;
     private static Transformer emptyTransformer;
 
     private static Transformer getTransformer() throws TransformerConfigurationException {
@@ -55,6 +56,16 @@ public class OAIRequest {
             dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
         }
         return dcTransformer;
+    }
+
+    private static Transformer get404Transformer() throws TransformerConfigurationException {
+        if (forbiddenTransformer == null) {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Source xslt = new StreamSource(Options.getInstance().getForbiddenXslt());
+            forbiddenTransformer = factory.newTransformer(xslt);
+            forbiddenTransformer.setOutputProperty("omit-xml-declaration", "yes");
+        }
+        return forbiddenTransformer;
     }
 
     private static Transformer getTransformer2() throws TransformerConfigurationException {
@@ -526,7 +537,7 @@ public class OAIRequest {
 
     private static final String ERROR_404_MSG = "<amcr:amcr xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:gml=\"https://www.opengis.net/gml/3.2\" xmlns:amcr=\"https://api.aiscr.cz/schema/amcr/2.0/\" xsi:schemaLocation=\"https://api.aiscr.cz/schema/amcr/2.0/ https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd\">\n"
             + "    HTTP/1.1 403 Forbidden\n"
-            + "  </amcr:amcr>";
+            + "  </amcr:amcr>"; 
 
     private static String filter(HttpServletRequest req, SolrDocument doc) {
         // LoginServlet.organizace(req.getSession())
@@ -538,12 +549,12 @@ public class OAIRequest {
         String model = (String) doc.getFieldValue("model");
 
         FedoraModel fm = FedoraModel.getFedoraModel(model);
+        String xml = (String) doc.getFieldValue("xml");
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
             long stav = 0;
             if (doc.containsKey("stav")) {
                 stav = (long) doc.getFieldValue("stav");
             }
-            String xml = (String) doc.getFieldValue("xml");
             String ret = xml;
             if (ret.contains("<amcr:oznamovatel>")
                     && ("C".compareToIgnoreCase(userPristupnost) > 0
@@ -578,9 +589,25 @@ public class OAIRequest {
                 return ret;
             }
         } else {
-            return ERROR_404_MSG;
+            //return ERROR_404_MSG;
+            try {
+                return transformToForbidden(xml);
+            } catch (TransformerException ex) {
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                return ERROR_404_MSG;
+            }
         }
 
+    }
+    
+    private static String transformToForbidden(String xml) throws TransformerException {
+
+        Source text = new StreamSource(new StringReader(xml));
+        StringWriter sw = new StringWriter();
+        get404Transformer().transform(text, new StreamResult(sw));
+        String e404 = sw.toString();
+        System.out.println(e404);
+        return e404;
     }
 
     private static String transformToDC(String xml) throws TransformerException {
