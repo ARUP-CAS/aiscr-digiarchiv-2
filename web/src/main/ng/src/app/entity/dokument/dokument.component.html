@@ -4,7 +4,7 @@
   </a>
   <mat-card-header>
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
-      <div fxFlex (click)="service.showInMap(result, false)">    
+      <div fxFlex (click)="service.showInMap(result, false, false, isChild)">    
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
         <mat-icon class="app-entity-dokument" [matTooltip]="'entities.dokument.title' | translate">{{ config.entityIcons[result.entity] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
@@ -79,6 +79,14 @@
             <a [href]="result.dokument_extra_data.odkaz" target="_blank">{{ result.dokument_extra_data.odkaz }}</a> 
         </div>
         </ng-container>
+
+
+        <div *ngIf="result.dokument_doi">
+          <ng-container>
+            <label class="app-label">{{ 'DOI' | translate }}:</label>&#160;
+            <a [href]="result.dokument_doi" target="_blank">{{ result.dokument_doi }}</a> 
+          </ng-container>
+        </div>
 
 
         <div *ngIf="result.entity !== 'knihovna_3d' && result.dokument_organizace">
@@ -174,10 +182,18 @@
                   <th class="app-label">{{ 'card.desc.Objekt/kontext' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.cislo_objektu }}</td>
                 </tr>
+                <tr *ngIf="result.dokument_extra_data.geom_system">
+                  <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                  <td>{{ result.dokument_extra_data.geom_system }}</td>
+                </tr>
                 <tr *ngIf="result.dokument_extra_data.geom_gml">
                   <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
-                  <td>{{ result.dokument_extra_data.geom_gml }}</td>
+                  <td>{{ result.dokument_extra_data.geom_gml }}<br/>
+                    <ng-container *ngIf="result.dokument_extra_data.geom_sjtsk_gml">{{ result.dokument_extra_data.geom_sjtsk_gml }}</ng-container>
+                  </td>
                 </tr>
+
+
                 <tr *ngIf="result.dokument_extra_data.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
                   <td>

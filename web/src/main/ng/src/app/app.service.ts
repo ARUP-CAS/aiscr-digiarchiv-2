@@ -681,8 +681,8 @@ export class AppService {
     }
   }
 
-  showInMap(result: any, isMapDetail = true, force = false) {
-    if ((!force && this.state.isMapaCollapsed) || isMapDetail) {
+  showInMap(result: any, isMapDetail = true, force = false, isChild = false) {
+    if ((!force && this.state.isMapaCollapsed) || isMapDetail || isChild) {
       return;
     }
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;

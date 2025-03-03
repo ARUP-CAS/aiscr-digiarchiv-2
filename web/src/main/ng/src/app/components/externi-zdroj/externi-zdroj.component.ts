@@ -89,6 +89,7 @@ export class ExterniZdrojComponent implements OnInit {
           ${this.result.ext_zdroj_isbn ? `note = ISBN: {${this.result.ext_zdroj_isbn}},` : ''}
           ${this.result.ext_zdroj_issn ? `note = ISSN: {${this.result.ext_zdroj_issn}},` : ''}
           ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
+          ${this.result.ext_zdroj_doi ? `doi = {${this.result.ext_zdroj_doi}}` : ''}
         }`;
         break;
       case 'HES-001118': // 'část knihy':
@@ -104,6 +105,7 @@ export class ExterniZdrojComponent implements OnInit {
             ${this.result.ext_zdroj_issn ? `note = ISSN: {${this.result.ext_zdroj_issn}},` : ''}
             ${this.result.ext_zdroj_isbn ? `note = ISBN: {${this.result.ext_zdroj_isbn}},` : ''}
             ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
+            ${this.result.ext_zdroj_doi ? `doi = {${this.result.ext_zdroj_doi}}` : ''}
             pages = {${this.result.ext_zdroj_paginace_titulu}}
           }`;
         break;
@@ -117,6 +119,7 @@ export class ExterniZdrojComponent implements OnInit {
               ${this.result.ext_zdroj_issn ? `note = ISSN: {${this.result.ext_zdroj_issn}},` : ''}
               ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
               ${this.result.ext_zdroj_paginace_titulu ? `pages = {${this.result.ext_zdroj_paginace_titulu}}` : ''}
+              ${this.result.ext_zdroj_doi ? `, doi = {${this.result.ext_zdroj_doi}}` : ''}
             }`;
         break;
       case 'HES-001120': // 'článek v novinách':
@@ -129,6 +132,7 @@ export class ExterniZdrojComponent implements OnInit {
                 ${this.result.ext_zdroj_isbn ? `note = ISSN: {${this.result.ext_zdroj_issn}},` : ''}
                 ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
                 ${this.result.ext_zdroj_paginace_titulu ? `pages = {${this.result.ext_zdroj_paginace_titulu}},` : ''}
+                ${this.result.ext_zdroj_doi ? `, doi = {${this.result.ext_zdroj_doi}}` : ''}
               }`;
         break;
       case 'HES-001121': // 'nepublikovaná zpráva':
@@ -138,6 +142,7 @@ export class ExterniZdrojComponent implements OnInit {
                   year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
                   ${this.result.ext_zdroj_link ? `url = {${this.result.ext_zdroj_link}},` : ''}
                   note = {${this.result.ext_zdroj_organizace}}
+                  ${this.result.ext_zdroj_doi ? `, doi = {${this.result.ext_zdroj_doi}}` : ''}
                 }`;
         break;
     }

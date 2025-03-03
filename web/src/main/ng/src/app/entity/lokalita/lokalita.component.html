@@ -4,7 +4,7 @@
   </a>
   <mat-card-header>
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
-      <div fxFlex (click)="service.showInMap(result, false)">
+      <div fxFlex (click)="service.showInMap(result, false, false, isChild)">
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
         <mat-icon class="app-entity-lokalita" [matTooltip]="'entities.lokalita.title' | translate">{{ config.entityIcons["lokalita"] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
@@ -51,6 +51,9 @@
           <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
           <span class="app-pipe"></span>
         </ng-container>
+      </div>
+      <div *ngIf="result.lokalita_igsn">
+        <label class="app-label">{{ 'ISGN' | translate }}:</label>&#160;{{ result.lokalita_igsn }}
       </div>
       <div *ngIf="result.az_chranene_udaje?.dalsi_katastr?.length > 0">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;

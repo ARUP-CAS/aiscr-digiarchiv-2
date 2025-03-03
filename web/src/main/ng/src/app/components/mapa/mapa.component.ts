@@ -221,7 +221,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.mapReady) {
         this.setHeatData();
         if (res === 'direct') {
-          console.log(res)
           this.markersList = [];
           this.piansList = [];
           this.markers = new L.featureGroup();
@@ -876,7 +875,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         lng: coords[1],
         presnost: pian.pian_presnost,
         typ: pian.typ,
-        doc: docId,
+        doc: pianInList.docIds,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
       if (isId) {
@@ -938,7 +937,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     const pianIds: { id: string, docId: string }[] = [];
     docs.forEach(doc => {
 
-      if (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument') {
+      if (!doc.pian_id && (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument')) {
         const coords = doc.loc_rpt[0].split(',');
         const mrk = this.addMarker({
           id: doc.ident_cely,
@@ -947,7 +946,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           lng: coords[1],
           presnost: '',
           typ: '',
-          doc: doc,
+          doc: [doc.ident_cely],
           pian_chranene_udaje: null
         });
         if (isId) {
@@ -957,9 +956,6 @@ export class MapaComponent implements OnInit, OnDestroy {
         }
 
       }
-      //this.markersList.forEach(mrk => {
-      //  mrk.addTo(this.markers);
-      //});
 
     });
     this.loadingMarkers = false;
@@ -978,10 +974,15 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.markers = new L.featureGroup();
     }
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
+
     if (byLoc) {
       this.setMarkersByLoc(docs, isId)
     } else {
-      this.setMarkersByPian(docs, isId)
+      if (this.state.entity === 'projekt') {
+        // Projekt muze mit bez pian
+        this.setMarkersByLoc(docs, isId)
+      }
+      this.setMarkersByPian(docs, isId);
     }
   }
 

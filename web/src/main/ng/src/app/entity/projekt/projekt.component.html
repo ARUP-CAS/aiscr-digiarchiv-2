@@ -4,7 +4,7 @@
   </a>
   <mat-card-header>
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
-      <div fxFlex (click)="service.showInMap(result, false)">
+      <div fxFlex (click)="service.showInMap(result, false, false, isChild)">
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
         <mat-icon class="app-entity-projekt" [matTooltip]="'entities.projekt.title' | translate">{{ config.entityIcons["projekt"] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
