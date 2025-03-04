@@ -78,15 +78,21 @@ public class OAIRequest {
         return emptyTransformer;
     }
 
-    public static String headerOAI() {
-        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><?xml-stylesheet type=\"text/xsl\" href=\"oai2.xsl\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
+    public static String headerOAI(String version) {
+        String xsl = "oai2.xsl";
+        if ("/v2".equals(version)) {
+            xsl = "amcr_2.1_2.0.xslt";
+        } else if ("/v2.1".equals(version)) {
+            xsl = "amcr_2.1_2.1.xslt";
+        } 
+        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><?xml-stylesheet type=\"text/xsl\" href=\""+xsl+"\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
     }
 
     public static String responseDateTag() {
         return "<responseDate>" + ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT) + "</responseDate>";
     }
 
-    public static String requestTag(HttpServletRequest req) {
+    public static String requestTag(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
         ret.append("<request ");
         for (String p : req.getParameterMap().keySet()) {
@@ -96,33 +102,33 @@ public class OAIRequest {
         return ret.toString();
     }
 
-    public static String identify(HttpServletRequest req) {
+    public static String identify(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
-        ret.append(headerOAI())
+        ret.append(headerOAI(version))
                 .append(responseDateTag())
-                .append(requestTag(req))
+                .append(requestTag(req, version))
                 .append(Options.getInstance().getOAIIdentify())
                 .append("</OAI-PMH>");
         return ret.toString();
     }
 
-    public static String listSets(HttpServletRequest req) {
+    public static String listSets(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
-        ret.append(headerOAI())
+        ret.append(headerOAI(version))
                 .append(responseDateTag())
-                .append(requestTag(req))
+                .append(requestTag(req, version))
                 .append(Options.getInstance().getOAIListSets())
                 .append("</OAI-PMH>");
         return ret.toString();
     }
 
-    public static String metadataFormats(HttpServletRequest req) {
+    public static String metadataFormats(HttpServletRequest req, String version) {
         try {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             String identifier = req.getParameter("identifier");
             if (identifier != null) {
                 if (identifier.length() < prefix.length()) {
-                    return idDoesNotExist(req);
+                    return idDoesNotExist(req, version);
                 }
                 String id = identifier.substring(prefix.length());
                 SolrQuery query = new SolrQuery("*")
@@ -130,14 +136,14 @@ public class OAIRequest {
                 QueryResponse resp = IndexUtils.getClientBin().query("oai", query);
 
                 if (resp.getResults().getNumFound() == 0) {
-                    return idDoesNotExist(req);
+                    return idDoesNotExist(req, version);
                 }
             }
 
             StringBuilder ret = new StringBuilder();
-            ret.append(headerOAI())
+            ret.append(headerOAI(version))
                     .append(responseDateTag())
-                    .append(requestTag(req))
+                    .append(requestTag(req, version))
                     .append(Options.getInstance().getOAIListMetadataFormats())
                     .append("</OAI-PMH>");
             return ret.toString();
@@ -188,29 +194,29 @@ public class OAIRequest {
         }
     }
 
-    private static String idDoesNotExist(HttpServletRequest req) {
-        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+    private static String idDoesNotExist(HttpServletRequest req, String version) {
+        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"idDoesNotExist\" />"
                 + "</OAI-PMH>";
     }
 
-    private static String noRecordsMatch(HttpServletRequest req) {
-        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+    private static String noRecordsMatch(HttpServletRequest req, String version) {
+        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"noRecordsMatch\" />"
                 + "</OAI-PMH>";
     }
 
-    private static String badArgument(HttpServletRequest req) {
-        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+    private static String badArgument(HttpServletRequest req, String version) {
+        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">Invalid arguments</error>"
                 + "</OAI-PMH>";
     }
 
-    private static String badArgument(HttpServletRequest req, String msg) {
-        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+    private static String badArgument(HttpServletRequest req, String msg, String version) {
+        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">" + msg + "</error>"
                 + "</OAI-PMH>";
@@ -223,22 +229,22 @@ public class OAIRequest {
         return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set);
     }
 
-    public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers) {
+    public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers, String version) {
         List<String> validParams = List.of("verb", "resumptionToken", "metadataPrefix", "from", "until", "set");
         List<String> params = Collections.list(req.getParameterNames());
 
         for (String name : params) {
             if (validParams.indexOf(name) < 0) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
         }
 
         for (String name : validParams) {
             if (req.getParameter(name) != null && req.getParameterValues(name).length > 1) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
             if (req.getParameter(name) != null && "".equals(req.getParameter(name))) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
         }
 
@@ -247,7 +253,7 @@ public class OAIRequest {
         if (resumptionToken != null) {
 
             if (req.getParameterMap().size() > 2) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
 
             JSONObject solrRt = retrieveResumptionToken(resumptionToken);
@@ -255,7 +261,7 @@ public class OAIRequest {
                 // Build query with info in resumptionToken
                 metadataPrefix = solrRt.getString("metadataPrefix");
             } else {
-                String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                         + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                         + "<error code=\"badResumptionToken\"/>"
                         + "</OAI-PMH>";
@@ -272,7 +278,7 @@ public class OAIRequest {
 
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (resumptionToken == null && !metadataPrefixes.contains(metadataPrefix)) {
-            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+            String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                     + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
@@ -281,9 +287,9 @@ public class OAIRequest {
 
         StringBuilder ret = new StringBuilder();
         JSONObject conf = Options.getInstance().getJSONObject("OAI");
-        ret.append(headerOAI())
+        ret.append(headerOAI(version))
                 .append(responseDateTag())
-                .append(requestTag(req));
+                .append(requestTag(req, version));
         if (onlyIdentifiers) {
             ret.append("<ListIdentifiers>");
         } else {
@@ -331,7 +337,7 @@ public class OAIRequest {
                     }
 
                 } else {
-                    String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+                    String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                             + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                             + "<error code=\"badResumptionToken\"/>"
                             + "</OAI-PMH>";
@@ -368,7 +374,7 @@ public class OAIRequest {
 
             SolrDocumentList docs = resp.getResults();
             if (docs.getNumFound() == 0) {
-                return noRecordsMatch(req);
+                return noRecordsMatch(req, version);
             }
             for (SolrDocument doc : docs) {
                 appendRecord(ret, doc, req, onlyIdentifiers, metadataPrefix);
@@ -406,13 +412,13 @@ public class OAIRequest {
 
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         }
         if (onlyIdentifiers) {
             ret.append("</ListIdentifiers>");
@@ -423,14 +429,14 @@ public class OAIRequest {
         return ret.toString();
     }
 
-    public static String getRecord(HttpServletRequest req) {
+    public static String getRecord(HttpServletRequest req, String version) {
 
         List<String> validParams = List.of("verb", "metadataPrefix", "identifier");
         List<String> params = Collections.list(req.getParameterNames());
 
         for (String name : params) {
             if (validParams.indexOf(name) < 0) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
         }
 
@@ -447,22 +453,22 @@ public class OAIRequest {
         }
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (!metadataPrefixes.contains(metadataPrefix)) {
-            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
+            String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
                     + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
         }
         StringBuilder ret = new StringBuilder();
-        ret.append(headerOAI())
+        ret.append(headerOAI(version))
                 .append(responseDateTag())
-                .append(requestTag(req));
+                .append(requestTag(req, version));
 
         ret.append("<GetRecord>");
         try {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             if (req.getParameter("identifier").length() < prefix.length()) {
-                return idDoesNotExist(req);
+                return idDoesNotExist(req, version);
             }
             String id = req.getParameter("identifier").substring(prefix.length());
             SolrQuery query = new SolrQuery("*")
@@ -470,17 +476,17 @@ public class OAIRequest {
             QueryResponse resp = IndexUtils.getClientBin().query("oai", query);
 
             if (resp.getResults().getNumFound() == 0) {
-                return idDoesNotExist(req);
+                return idDoesNotExist(req, version);
             }
             SolrDocument doc = resp.getResults().get(0);
 
             appendRecord(ret, doc, req, false, metadataPrefix);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         }
         ret.append("</GetRecord></OAI-PMH>");
         return ret.toString();
@@ -606,7 +612,6 @@ public class OAIRequest {
         StringWriter sw = new StringWriter();
         get404Transformer().transform(text, new StreamResult(sw));
         String e404 = sw.toString();
-        System.out.println(e404);
         return e404;
     }
 
