@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
@@ -21,7 +22,13 @@ export class RelatedComponent implements OnInit {
       return c1.ident_cely.localeCompare(c2.ident_cely)
     });
     this.toProcess = JSON.parse(JSON.stringify(this.ids));
-    this.getRecords(false);
+    if (this.state.printing || this.router.isActive('print', false)) {
+      this.state.loading = true;
+      this.getRecords(true)
+    } else {
+      this.getRecords(false);
+    }
+    
   }
 
   
@@ -35,6 +42,7 @@ export class RelatedComponent implements OnInit {
   loadSize = 20;
 
   constructor(
+    private router: Router,
     public config: AppConfiguration,
     public state: AppState,
     private service: AppService

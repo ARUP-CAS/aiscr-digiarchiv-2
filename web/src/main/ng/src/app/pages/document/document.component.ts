@@ -60,7 +60,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.state.loading = true;
         this.service.print();
       }
-    }, 1000);
+    }, 2000);
   }
 
   setTitle() {
