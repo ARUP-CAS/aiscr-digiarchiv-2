@@ -56,7 +56,7 @@ L.Control.Button = L.Class.extend({
 
   setText: function(text) {
       this._button.title = text;
-      // this._button.innerHTML = text;
+      this._button.innerHTML = text;
   }
 });
 
@@ -355,6 +355,18 @@ L.LocationFilter = L.Layer.extend({
   _adjustToMap: function() {
       this.setBounds(this._map.getBounds());
       this._map.zoomOut();
+  },
+
+  updateText: function() {
+
+    if (!this._enableButton) {
+          return;
+    }
+    if (this._enabled) {
+        this._enableButton.setText(this.options.enableButton.disableText);
+    } else {
+        this._enableButton.setText(this.options.enableButton.enableText);
+    }
   },
 
   /* Enable the location filter */

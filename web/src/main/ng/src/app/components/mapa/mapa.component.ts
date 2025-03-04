@@ -223,8 +223,10 @@ export class MapaComponent implements OnInit, OnDestroy {
         if (res === 'direct') {
           this.markersList = [];
           this.piansList = [];
-          this.markers = new L.featureGroup();
-          this.idmarkers = new L.featureGroup();
+          this.markers.clearLayers();
+          this.idmarkers.clearLayers();
+          // this.markers = new L.featureGroup();
+          // this.idmarkers = new L.featureGroup();
         }
       }
     }));
@@ -245,7 +247,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         disableText: this.service.getTranslation('map.desc.remove selection')
       }
     });
-    
+    this.locationFilter.updateText();
   }
 
   initLayers() {
@@ -323,7 +325,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     map.on('overlayremove', (e) => {
       if (e.name === 'data') {
         this.markersActive = false;
-
       }
     });
 
@@ -1133,8 +1134,9 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setPianId(pian_id: string, docId: string) {
     this.zone.run(() => {
-      // this.markersList = [];
-      // this.markers = new L.featureGroup();
+      this.markersList = [];
+      this.piansList = [];
+      //this.markers = new L.featureGroup();
       this.showDetail = true;
       this.state.setFacetChanged();
       this.router.navigate([], { queryParams: { pian_id, mapId: docId, page: 0 }, queryParamsHandling: 'merge' });
