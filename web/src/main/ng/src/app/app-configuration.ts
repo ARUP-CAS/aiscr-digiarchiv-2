@@ -166,31 +166,6 @@ import { isPlatformBrowser } from '@angular/common';
         );
     }
 
-    // public loadOld(): Promise<any> {
-    //     // console.log('loading config ...');
-    //     const promise = this.http.get(this.server + 'assets/config.json')
-    //         .toPromise()
-    //         .then(cfg => {
-    //             this.config = cfg as Configuration;
-    //             this.config.amcr = this.server;
-    //             // }).then(() => {
-    //             //     return this.getObdobi();
-    //         }).then(() => {
-    //             return this.getThesauri();
-    //         });
-    //     return promise;
-    // }
-
-    // getObdobi() {
-    //     const url = this.server + 'api/search/obdobi';
-    //     return this.http.get(url)
-    //         .toPromise()
-    //         .then((res: any) => {
-    //             this.obdobi = res.response.docs;
-    //             this.obdobiStats = res.stats.stats_fields.poradi;
-    //         });
-    // }
-
     getThesauri() {
         const url = this.server + 'api/search/thesauri';
         return this.http.get(url)

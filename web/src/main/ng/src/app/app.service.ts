@@ -429,6 +429,11 @@ export class AppService {
 
 
 
+  verifyRecaptcha(reCaptchaMsg: string) {
+    const url = '/feedback';
+    return this.post(url, { reCaptchaMsg, key: environment.recaptcha.siteKey });
+  }
+  
   feedback(name: string, mail: string, text: string, ident_cely: string) {
     const url = '/feedback';
     return this.post(url, { name, mail, text, ident_cely });
