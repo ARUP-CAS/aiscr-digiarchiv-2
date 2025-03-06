@@ -72,6 +72,9 @@ public class FedoraHarvester {
     }
 
     private String readStatusFile(String type) throws IOException {
+        if (type.contains("/")) {
+            return "none";
+        }
         File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_" + "status.txt");
         if (f.exists() && f.canRead()) {
             return FileUtils.readFileToString(f, "UTF-8");
