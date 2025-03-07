@@ -338,8 +338,13 @@ export class MapaComponent implements OnInit, OnDestroy {
         return;
       }
       if (!this.processingParams && !this.zoomingOnMarker) {
+        this.stopLoadingMarkers();
         this.doZoom();
       } else if (this.zoomingOnMarker || this.processingParams) {
+        this.stopLoadingMarkers();
+        if (this.markersSubs) {
+          this.markersSubs.unsubscribe();
+        }
         this.getDataByVisibleArea();
       }
       this.state.mapBounds = this.map.getBounds();
@@ -350,6 +355,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     map.on('dragend', () => {
       //console.log('dragend')
       if (!this.processingParams) {
+        if (this.markersSubs) {
+          this.markersSubs.unsubscribe();
+        }
         this.updateBounds(map.getBounds(), false, 'mapDragEnd');
       }
 
@@ -767,6 +775,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
   }
 
+  markersSubs: any;
   getVisibleAreaMarkers(clean: boolean) {
     this.state.loading = true;
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
@@ -781,7 +790,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       p.entity = 'dokument';
     }
     this.state.solrResponse = null;
-    this.service.search(p as HttpParams).subscribe((res: any) => {
+    this.markersSubs = this.service.search(p as HttpParams).subscribe((res: any) => {
       this.state.setSearchResponse(res, 'map');
       this.setMarkers(res.response.docs, clean, false);
       if (this.currentMapId) {
