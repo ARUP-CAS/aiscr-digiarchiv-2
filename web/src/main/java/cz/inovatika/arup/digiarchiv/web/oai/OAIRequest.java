@@ -534,7 +534,7 @@ public class OAIRequest {
             ret.append("<metadata>");
             String xml = filter(req, doc);
             
-            if (version != null) {
+            if (isValidVersion(version)) {
                 try {
                     xml = transformByVersion(xml, version); 
                 } catch (TransformerException ex) {
@@ -627,6 +627,10 @@ public class OAIRequest {
         get404Transformer().transform(text, new StreamResult(sw));
         String e404 = sw.toString();
         return e404;
+    }
+    
+    private static boolean isValidVersion(String version) {
+        return ("/v2".equals(version) ||  "/v2.1".equals(version));
     }
     
     private static String transformByVersion(String xml, String version) throws TransformerException {
