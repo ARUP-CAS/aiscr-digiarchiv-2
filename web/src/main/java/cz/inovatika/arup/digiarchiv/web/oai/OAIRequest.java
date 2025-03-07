@@ -46,6 +46,7 @@ public class OAIRequest {
     private static Transformer dcTransformer;
     private static Transformer forbiddenTransformer;
     private static Transformer emptyTransformer;
+    private static Transformer versionTransformer;
 
     private static Transformer getTransformer() throws TransformerConfigurationException {
         if (dcTransformer == null) {
@@ -68,6 +69,16 @@ public class OAIRequest {
         return forbiddenTransformer;
     }
 
+    private static Transformer getVersionTransformer(String version) throws TransformerConfigurationException {
+        if (versionTransformer == null) {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Source xslt = new StreamSource(Options.getInstance().getVersionXslt(version));
+            versionTransformer = factory.newTransformer(xslt);
+            versionTransformer.setOutputProperty("omit-xml-declaration", "yes");
+        }
+        return versionTransformer;
+    }
+
     private static Transformer getTransformer2() throws TransformerConfigurationException {
         if (emptyTransformer == null) {
             TransformerFactory factory = TransformerFactory.newInstance();
@@ -78,14 +89,8 @@ public class OAIRequest {
         return emptyTransformer;
     }
 
-    public static String headerOAI(String version) {
-        String xsl = "oai2.xsl";
-        if ("/v2".equals(version)) {
-            xsl = "amcr_2.1_2.0.xslt";
-        } else if ("/v2.1".equals(version)) {
-            xsl = "amcr_2.1_2.1.xslt";
-        } 
-        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><?xml-stylesheet type=\"text/xsl\" href=\""+xsl+"\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
+    public static String headerOAI() {
+        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><?xml-stylesheet type=\"text/xsl\" href=\"/oai2.xsl\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
     }
 
     public static String responseDateTag() {
@@ -104,7 +109,7 @@ public class OAIRequest {
 
     public static String identify(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
-        ret.append(headerOAI(version))
+        ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req, version))
                 .append(Options.getInstance().getOAIIdentify())
@@ -114,7 +119,7 @@ public class OAIRequest {
 
     public static String listSets(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
-        ret.append(headerOAI(version))
+        ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req, version))
                 .append(Options.getInstance().getOAIListSets())
@@ -141,7 +146,7 @@ public class OAIRequest {
             }
 
             StringBuilder ret = new StringBuilder();
-            ret.append(headerOAI(version))
+            ret.append(headerOAI())
                     .append(responseDateTag())
                     .append(requestTag(req, version))
                     .append(Options.getInstance().getOAIListMetadataFormats())
@@ -195,28 +200,28 @@ public class OAIRequest {
     }
 
     private static String idDoesNotExist(HttpServletRequest req, String version) {
-        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"idDoesNotExist\" />"
                 + "</OAI-PMH>";
     }
 
     private static String noRecordsMatch(HttpServletRequest req, String version) {
-        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"noRecordsMatch\" />"
                 + "</OAI-PMH>";
     }
 
     private static String badArgument(HttpServletRequest req, String version) {
-        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">Invalid arguments</error>"
                 + "</OAI-PMH>";
     }
 
     private static String badArgument(HttpServletRequest req, String msg, String version) {
-        return OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+        return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">" + msg + "</error>"
                 + "</OAI-PMH>";
@@ -261,7 +266,7 @@ public class OAIRequest {
                 // Build query with info in resumptionToken
                 metadataPrefix = solrRt.getString("metadataPrefix");
             } else {
-                String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+                String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                         + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                         + "<error code=\"badResumptionToken\"/>"
                         + "</OAI-PMH>";
@@ -278,7 +283,7 @@ public class OAIRequest {
 
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (resumptionToken == null && !metadataPrefixes.contains(metadataPrefix)) {
-            String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                     + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
@@ -287,7 +292,7 @@ public class OAIRequest {
 
         StringBuilder ret = new StringBuilder();
         JSONObject conf = Options.getInstance().getJSONObject("OAI");
-        ret.append(headerOAI(version))
+        ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req, version));
         if (onlyIdentifiers) {
@@ -337,7 +342,7 @@ public class OAIRequest {
                     }
 
                 } else {
-                    String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+                    String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                             + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                             + "<error code=\"badResumptionToken\"/>"
                             + "</OAI-PMH>";
@@ -377,7 +382,7 @@ public class OAIRequest {
                 return noRecordsMatch(req, version);
             }
             for (SolrDocument doc : docs) {
-                appendRecord(ret, doc, req, onlyIdentifiers, metadataPrefix);
+                appendRecord(ret, doc, req, onlyIdentifiers, metadataPrefix, version);
             }
 
             String nextCursorMark = resp.getNextCursorMark();
@@ -453,14 +458,14 @@ public class OAIRequest {
         }
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (!metadataPrefixes.contains(metadataPrefix)) {
-            String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                     + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
         }
         StringBuilder ret = new StringBuilder();
-        ret.append(headerOAI(version))
+        ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req, version));
 
@@ -480,7 +485,7 @@ public class OAIRequest {
             }
             SolrDocument doc = resp.getResults().get(0);
 
-            appendRecord(ret, doc, req, false, metadataPrefix);
+            appendRecord(ret, doc, req, false, metadataPrefix, version);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
             return badArgument(req, version);
@@ -492,7 +497,7 @@ public class OAIRequest {
         return ret.toString();
     }
 
-    private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req, boolean onlyIdentifiers, String metadataPrefix) {
+    private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req, boolean onlyIdentifiers, String metadataPrefix, String version) {
         String id = (String) doc.getFieldValue("ident_cely");
         Date datestamp = (Date) doc.getFieldValue("datestamp");
         boolean isDeleted = false;
@@ -528,6 +533,15 @@ public class OAIRequest {
 
             ret.append("<metadata>");
             String xml = filter(req, doc);
+            
+            if (version != null) {
+                try {
+                    xml = transformByVersion(xml, version); 
+                } catch (TransformerException ex) {
+                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                
             if (!xml.equals(ERROR_404_MSG) && "oai_dc".equals(metadataPrefix)) {
                 try {
                     xml = transformToDC(xml);
@@ -613,6 +627,14 @@ public class OAIRequest {
         get404Transformer().transform(text, new StreamResult(sw));
         String e404 = sw.toString();
         return e404;
+    }
+    
+    private static String transformByVersion(String xml, String version) throws TransformerException {
+
+        Source text = new StreamSource(new StringReader(xml));
+        StringWriter sw = new StringWriter();
+        getVersionTransformer(version).transform(text, new StreamResult(sw));
+        return sw.toString();
     }
 
     private static String transformToDC(String xml) throws TransformerException {

@@ -217,8 +217,6 @@ public class Options {
       }
   }
   
-  
-  
   public File getForbiddenXslt() {
       String path = InitServlet.CONFIG_DIR + File.separator + "forbidden.xslt";
       File f = new File(path);
@@ -226,6 +224,23 @@ public class Options {
           return f;
       } else {
           File fdef = FileUtils.toFile(Options.class.getResource("forbidden.xslt"));
+          return fdef;
+      } 
+  }
+  
+  public File getVersionXslt(String version) {
+      String file = "";
+      if ("/v2".equals(version)) {
+            file = "amcr_2.1_2.0.xslt";
+        } else if ("/v2.1".equals(version)) {
+            file = "amcr_2.1_2.1.xslt";
+        } 
+      String path = InitServlet.CONFIG_DIR + File.separator + file;
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+          return f;
+      } else {
+          File fdef = FileUtils.toFile(Options.class.getResource(file));
           return fdef;
       }
   }

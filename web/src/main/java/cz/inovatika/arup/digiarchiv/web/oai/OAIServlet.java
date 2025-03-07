@@ -39,7 +39,6 @@ public class OAIServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String version = request.getPathInfo();
         try {
-            System.out.println("version -> " + version);
             String actionNameParam = request.getParameter("verb");
             if (actionNameParam != null) {
                 Actions actionToDo = Actions.valueOf(actionNameParam);
@@ -64,7 +63,7 @@ public class OAIServlet extends HttpServlet {
                 String xml = actionToDo.doPerform(request, response, version);
                 out.println(xml);
             } else {
-                String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+                String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                         + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                         + "<error code=\"badVerb\">verb is absent</error>"
                         + "</OAI-PMH>";
@@ -72,10 +71,10 @@ public class OAIServlet extends HttpServlet {
             }
         } catch (IllegalArgumentException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
-            String xml = OAIRequest.headerOAI(version) + OAIRequest.responseDateTag()
+            String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                     + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"badVerb\">Illegal OAI verb</error>"
-                    + "</OAI-PMH>";
+                    + "</OAI-PMH>"; 
             out.print(xml);
         } catch (SecurityException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
