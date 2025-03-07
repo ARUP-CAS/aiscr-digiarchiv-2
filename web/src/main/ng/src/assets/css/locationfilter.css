@@ -20,6 +20,7 @@ div.location-filter.button-container {
 
   background:#fff url(../img/area.png) no-repeat 0 0; 
   background-size:26px 52px;
+  background-position-y: 2px;
   /*
     display: inline-block;
     color: #0F2416;
