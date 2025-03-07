@@ -112,7 +112,8 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   map;
   idmarkers = new L.featureGroup();
-  markers = new L.markerClusterGroup();
+  markers = new L.featureGroup();
+  clusters = new L.markerClusterGroup();
 
   piansList: { id: string, presnost: string, typ: string, docIds: string[] }[] = [];
   markersList: any[] = [];
@@ -164,6 +165,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   lfAttribution = '<span aria-hidden="true"> | </span><a href="https://leafletjs.com" title="A JavaScript library for interactive maps"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"></path><path fill="#FFD500" d="M0 4h12v3H0z"></path><path fill="#E0BC00" d="M0 7h12v1H0z"></path></svg> Leaflet</a>';
 
+  dataLayerName: string = 'data';
   showDetail = false;
   currentMapId: string;
   currentLocBounds: any;
@@ -225,8 +227,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.piansList = [];
           this.markers.clearLayers();
           this.idmarkers.clearLayers();
-          // this.markers = new L.featureGroup();
-          // this.idmarkers = new L.featureGroup();
+          this.clusters.clearLayers();
         }
       }
     }));
@@ -259,8 +260,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.overlays = {};
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_mapa')] = this.cuzkWMS;
     this.overlays[this.service.getTranslation('map.layer.cuzk_katastr_uzemi')] = this.cuzkWMS2;
-    this.overlays['data'] = this.markers;
-
+    this.dataLayerName = this.service.getTranslation('map.layer.data');
+    this.overlays[this.dataLayerName] = this.markers;
     this.options.layers = [this.osm];
 
     this.layersControl = {
@@ -300,8 +301,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
 
 
-    this.markers = new L.featureGroup();
-    // this.markers = new L.markerClusterGroup();
+    this.markers.clearLayers();
+    this.clusters.clearLayers();
     map.addLayer(this.markers);
 
     map.on('enterFullscreen', () => map.invalidateSize());
@@ -315,7 +316,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     
     map.on('overlayadd', (e) => {
-      if (e.name === 'data') {
+      if (e.name === this.dataLayerName) {
         this.markersActive = true;
         this.paramsChanged();
       }
@@ -323,8 +324,9 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     
     map.on('overlayremove', (e) => {
-      if (e.name === 'data') {
+      if (e.name === this.dataLayerName) {
         this.markersActive = false;
+        this.clusters.clearLayers();
       }
     });
 
@@ -335,7 +337,6 @@ export class MapaComponent implements OnInit, OnDestroy {
         // Jsme v documentu, nepotrebujeme znovu nacist data
         return;
       }
-
       if (!this.processingParams && !this.zoomingOnMarker) {
         this.doZoom();
       } else if (this.zoomingOnMarker || this.processingParams) {
@@ -440,7 +441,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     if (!this.currentMapId) {
       this.state.mapResult = null;
-      this.idmarkers = new L.featureGroup();
+      this.idmarkers.clearLayers();
       this.clearSelectedMarker();
     }
     this.currentLocBounds = this.route.snapshot.queryParamMap.get('loc_rpt');
@@ -476,10 +477,10 @@ export class MapaComponent implements OnInit, OnDestroy {
         const ob = this.map.getBounds();
         this.map.fitBounds(bounds, {paddingTopLeft: [21,21], paddingBottomRight: [21,21]});
         setTimeout(() => {
-          if (this.isEqualsBounds(ob)) {
+          //if (this.isEqualsBounds(ob)) {
             this.getDataByVisibleArea();
             this.processingParams = false;
-          }
+          //}
         }, 10);
         return;
       } else {
@@ -598,27 +599,22 @@ export class MapaComponent implements OnInit, OnDestroy {
   setMapType(count: number) {
     const oldType = this.showType;
     this.showType = 'undefined';
-    // if (this.currentMapId) {
-    //   this.showType = 'marker';
-    //   if (oldType !== this.showType) {
-    //     this.markers = new L.featureGroup();
-    //   }
-    //   return;
-    // }
     if (count > this.config.mapOptions.docsForCluster) {
       this.showType = 'heat';
       this.markersList = [];
       this.piansList = [];
-      this.markers = new L.featureGroup();
+      this.markers.clearLayers();
+      this.clusters.clearLayers();
     } else if (count > this.maxNumMarkers) {
       this.showType = 'cluster';
       if (oldType !== this.showType) {
-        this.markers = new L.markerClusterGroup();
+        this.clusters.clearLayers();
       }
     } else {
       this.showType = 'marker';
       if (oldType !== this.showType) {
-        this.markers = new L.featureGroup();
+        this.markers.clearLayers();
+        this.clusters.clearLayers();
       }
     }
 
@@ -633,7 +629,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     //console.log(this.showType)
     switch (this.showType) {
       case 'cluster': {
-        // this.markers = new L.markerClusterGroup();
         const p: any = Object.assign({}, this.route.snapshot.queryParams);
 
         const bounds = this.map.getBounds();
@@ -658,7 +653,6 @@ export class MapaComponent implements OnInit, OnDestroy {
         break;
       }
       case 'marker': {
-        // this.markers = new L.featureGroup();
         this.getVisibleAreaMarkers(false);
         break;
       }
@@ -701,7 +695,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setClusterDataByPian(docs: any[]) {
-    this.markers = new L.markerClusterGroup();
+    this.markers.clearLayers();
+    this.clusters.clearLayers();
     this.markersList = [];
     this.piansList = [];
     docs.forEach(pian => {
@@ -719,13 +714,14 @@ export class MapaComponent implements OnInit, OnDestroy {
       });
       //}
     });
-    this.markers.addLayers(this.markersList);
+    this.clusters.addLayers(this.markersList);
     this.currentZoom = this.map.getZoom();
     this.cd.detectChanges();
   }
 
   setClusterDataByLoc(docs: any[]) {
-    this.markers = new L.markerClusterGroup();
+    this.markers.clearLayers();
+    this.clusters.clearLayers();
     this.markersList = [];
     this.piansList = [];
     docs.forEach(doc => {
@@ -743,11 +739,11 @@ export class MapaComponent implements OnInit, OnDestroy {
             doc: doc,
             pian_chranene_udaje: null
           });
-          mrk.addTo(this.markers);
+          mrk.addTo(this.clusters);
         }
       }
     });
-    this.markers.addLayers(this.markersList);
+    this.clusters.addLayers(this.markersList);
     this.currentZoom = this.map.getZoom();
     this.cd.detectChanges();
   }
@@ -861,9 +857,11 @@ export class MapaComponent implements OnInit, OnDestroy {
   processMarkersResp(resp: any[], ids: { id: string, docId: string }[], isId: boolean) {
     resp.forEach(pian => {
       const coords = pian.loc_rpt[0].split(',');
-      const pianInList = this.piansList.find(p => p.id === pian.ident_cely);
+      let pianInList = this.piansList.find(p => p.id === pian.ident_cely);
       if (!pianInList) {
-        return;
+        pianInList = { id: pian.ident_cely, presnost: null, typ: null, docIds: [pian.ident_cely] }
+        this.piansList.push(pianInList);
+        // return;
       }
       const docId = ids.find(p => p.id === pian.ident_cely).docId;
       pianInList.presnost = pian.pian_presnost;
@@ -921,10 +919,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (doc.pian_id && doc.pian_id.length > 0) {
         doc.pian_id.forEach(pian_id => {
           const pianInList = this.piansList.find(p => p.id === pian_id);
-          //const pianInList = pianIds.find(p => p.id === pian_id);
           if (!pianInList) {
             pianIds.push({ id: pian_id, docId: doc.ident_cely });
-            this.piansList.push({ id: pian_id, presnost: null, typ: null, docIds: [doc.ident_cely] });
+            // this.piansList.push({ id: pian_id, presnost: null, typ: null, docIds: [doc.ident_cely] });
           }
         });
       }
@@ -972,7 +969,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (clean) {
       this.markersList = [];
       this.piansList = [];
-      this.markers = new L.featureGroup();
+      this.markers.clearLayers();
+      this.clusters.clearLayers();
     }
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
 
@@ -991,9 +989,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (clean) {
       this.markersList = [];
       this.piansList = [];
-      this.markers = new L.featureGroup();
+    this.markers.clearLayers();
+    this.clusters.clearLayers();
     }
-    //this.markers = new L.markerClusterGroup();
     const pianIds: string[] = [];
     const processedPianIds: string[] = [];
     docs.forEach(doc => {
@@ -1136,7 +1134,6 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.zone.run(() => {
       this.markersList = [];
       this.piansList = [];
-      //this.markers = new L.featureGroup();
       this.showDetail = true;
       this.state.setFacetChanged();
       this.router.navigate([], { queryParams: { pian_id, mapId: docId, page: 0 }, queryParamsHandling: 'merge' });
