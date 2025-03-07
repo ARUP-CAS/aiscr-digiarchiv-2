@@ -18,6 +18,7 @@ export class Configuration {
   // numberFacets: string[];
 
   entities: string[];
+  reCaptchaScore: number;
 
   uiVars: {[key: string]: any};
 

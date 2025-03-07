@@ -59,6 +59,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.facets;
     }
 
+    public get reCaptchaScore() {
+        return this.config.reCaptchaScore;
+    }
+
     // public get dateFacets() {
     //     return this.config.dateFacets;
     // }

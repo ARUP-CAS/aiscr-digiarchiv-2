@@ -8,7 +8,7 @@
   "accountUrl": "https://amcr.aiscr.cz/uzivatel/edit/",
   "restorePassword": "https://amcr.aiscr.cz/accounts/password_reset",
   "recaptchaKey": "",
-  "recaptchaApiKey": "",
+  "reCaptchaScore": -1,
   "mapOptions": {
     "docsForMarker": 500,
     "docsForCluster": 10000,

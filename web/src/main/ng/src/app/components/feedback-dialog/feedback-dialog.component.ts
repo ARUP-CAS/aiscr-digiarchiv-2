@@ -51,7 +51,7 @@ export class FeedbackDialogComponent implements OnInit {
     }
     this.service.verifyRecaptcha(this.reCaptchaMsg).subscribe((res: any)=>{
       //console.log(res);
-      if (res.tokenProperties?.valid && res.riskAnalysis?.score > 0.3) {
+      if (res.tokenProperties?.valid && res.riskAnalysis?.score > this.config.reCaptchaScore) {
         this.reCaptchaValid = true;
       }
       
