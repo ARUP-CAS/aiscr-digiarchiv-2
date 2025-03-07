@@ -100,7 +100,8 @@ export class DokumentComponent implements OnInit, OnChanges {
       this.setBibTex();
     });
     if (this.inDocument) {
-      //this.state.documentProgress = 0;
+      this.state.documentProgress = 0;
+      this.state.loading = false;
     }
   }
 
@@ -129,10 +130,9 @@ export class DokumentComponent implements OnInit, OnChanges {
   });
 }
 
-
   imageLoaded() {
     this.state.imagesLoaded++;
-    this.state.imagesLoading =  this.state.imagesLoaded < this.state.numImages;
+    // this.state.imagesLoading =  this.state.imagesLoaded < this.state.numImages;
   }
 
   setBibTex() {
