@@ -111,7 +111,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   showType = 'marker'; // 'heat', 'cluster', 'marker'
 
   map;
-  idmarkers = new L.featureGroup();
+  //idmarkers = new L.featureGroup();
   markers = new L.featureGroup();
   clusters = new L.markerClusterGroup();
 
@@ -226,7 +226,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           this.markersList = [];
           this.piansList = [];
           this.markers.clearLayers();
-          this.idmarkers.clearLayers();
+          //this.idmarkers.clearLayers();
           this.clusters.clearLayers();
         }
       }
@@ -333,6 +333,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     map.on('zoomend', (e) => {
       //console.log('zoomend', this.processingParams, this.zoomingOnMarker)
 
+      this.state.mapBounds = this.map.getBounds();
       if (!this.isResults) {
         // Jsme v documentu, nepotrebujeme znovu nacist data
         return;
@@ -347,7 +348,6 @@ export class MapaComponent implements OnInit, OnDestroy {
         }
         this.getDataByVisibleArea();
       }
-      this.state.mapBounds = this.map.getBounds();
       this.firstZoom = false;
       this.zoomingOnMarker = false;
       this.processingParams = false;
@@ -437,8 +437,12 @@ export class MapaComponent implements OnInit, OnDestroy {
     if (this.state.closingMapResult) {
       this.state.closingMapResult = false;
       this.processingParams = false;
+      this.shouldZoomOnMarker = false;
+      this.currentMapId = null;
+      this.map.fitBounds(this.state.mapBounds);
       this.clearSelectedMarker();
-      // console.log(this.markers)
+      this.getDataByVisibleArea();
+      this.processingParams = false;
       return;
     }
     if (this.route.snapshot.queryParamMap.has('mapId') &&
@@ -449,7 +453,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     if (!this.currentMapId) {
       this.state.mapResult = null;
-      this.idmarkers.clearLayers();
+      //this.idmarkers.clearLayers();
       this.clearSelectedMarker();
     }
     this.currentLocBounds = this.route.snapshot.queryParamMap.get('loc_rpt');
@@ -889,11 +893,12 @@ export class MapaComponent implements OnInit, OnDestroy {
         doc: pianInList.docIds,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
-      if (isId) {
-        mrk.addTo(this.idmarkers);
-      } else {
+      // if (isId) {
+      //   mrk.addTo(this.idmarkers);
+      // } else {
+      //   mrk.addTo(this.markers);
+      // }
         mrk.addTo(this.markers);
-      }
       this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, docId);
     });
   }
@@ -910,18 +915,18 @@ export class MapaComponent implements OnInit, OnDestroy {
     const ids2 = ids.splice(0, idsSize);
     this.service.getIdAsChild(ids2.map(p => p.id), entity).subscribe((res: any) => {
       this.processMarkersResp(res.response.docs, ids2, isId);
-      if (res.response.docs.length < idsSize) {
-        // To znamena konec
+      // if (res.response.docs.length < idsSize) {
+      //   // To znamena konec
 
-        this.stopLoadingMarkers();
-      } else {
+      //   this.stopLoadingMarkers();
+      // } else {
         if (ids.length > 0) {
           this.state.loading = true;
           this.loadNextMarkers(ids, entity, isId)
         } else {
           this.stopLoadingMarkers();
         }
-      }
+      // }
     });
   }
 
@@ -962,11 +967,12 @@ export class MapaComponent implements OnInit, OnDestroy {
           doc: [doc.ident_cely],
           pian_chranene_udaje: null
         });
-        if (isId) {
-          mrk.addTo(this.idmarkers);
-        } else {
+        // if (isId) {
+        //   mrk.addTo(this.idmarkers);
+        // } else {
+        //   mrk.addTo(this.markers);
+        // }
           mrk.addTo(this.markers);
-        }
 
       }
 
@@ -1053,6 +1059,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     const bounds = this.service.getBoundsByDoc(doc);
     this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
     this.selectedResultId = this.state.mapResult.ident_cely;
+    
+    this.state.mapBounds = this.map.getBounds();
     if (this.currentZoom === this.config.mapOptions.hitZoomLevel) {
       this.getDataByVisibleArea();
     }

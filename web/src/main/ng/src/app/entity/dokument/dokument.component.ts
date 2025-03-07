@@ -63,7 +63,7 @@ export class DokumentComponent implements OnInit, OnChanges {
     if (c.result) {
       this.checkRelations();
       this.hasDetail = false;
-      this.detailExpanded = this.inDocument;
+      this.detailExpanded = this.inDocument;// && !this.mapDetail;
     }
     if (this.mapDetail) {
       this.getFullId();

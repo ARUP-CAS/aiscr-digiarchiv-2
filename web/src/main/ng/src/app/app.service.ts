@@ -9,7 +9,7 @@ import { Subject, Observable, of } from 'rxjs';
 import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { Crumb } from 'src/app/shared/crumb';
-import { ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
@@ -30,6 +30,7 @@ export class AppService {
     private dialog: MatDialog,
     private windowRef: AppWindowRef,
     private decimalPipe: DecimalPipe,
+    private route: ActivatedRoute,
     private router: Router,
     private config: AppConfiguration,
     private state: AppState,
@@ -673,7 +674,9 @@ export class AppService {
   setMapResult(result, mapDetail) {
     if (!result && mapDetail) {
       // zavirame kartu
-      this.state.closingMapResult = true;
+
+      const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
+      this.state.closingMapResult = inResults;
       this.state.mapResult = result;
       let url = '/results';
       const p: any = {};
