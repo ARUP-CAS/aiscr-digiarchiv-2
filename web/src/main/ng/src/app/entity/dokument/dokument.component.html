@@ -83,8 +83,7 @@
 
         <div *ngIf="result.dokument_doi">
           <ng-container>
-            <label class="app-label">{{ 'DOI' | translate }}:</label>&#160;
-            <a [href]="result.dokument_doi" target="_blank">{{ result.dokument_doi }}</a> 
+            <label class="app-label">{{ 'DOI' | translate }}:</label>&#160;{{ result.dokument_doi }}
           </ng-container>
         </div>
 
