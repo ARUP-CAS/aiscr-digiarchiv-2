@@ -715,18 +715,18 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.clusters.clearLayers();
     this.markersList = [];
     this.piansList = [];
-    docs.forEach(pian => {
+    docs.forEach(doc => {
       //if (this.state.hasRights(pian.pristupnost, pian.organizace)) {
-      const coords = pian.loc_rpt[0].split(',');
+      const coords = doc.loc_rpt[0].split(',');
       const mrk = this.addMarker({
-        id: pian.pian_id,
+        id: doc.pian_id,
         isPian: true,
         lat: coords[0],
         lng: coords[1],
-        presnost: pian.pian_presnost,
-        typ: pian.typ,
-        doc: pian,
-        pian_chranene_udaje: pian.pian_chranene_udaje
+        presnost: doc.pian_presnost,
+        typ: doc.typ,
+        doc: [doc.ident_cely],
+        pian_chranene_udaje: doc.pian_chranene_udaje
       });
       //}
     });
@@ -752,7 +752,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             lng: coords[1],
             presnost: '',
             typ: 'bod',
-            doc: doc,
+            doc: [doc.ident_cely],
             pian_chranene_udaje: null
           });
           mrk.addTo(this.clusters);
@@ -1002,6 +1002,11 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.piansList = [];
       this.markers.clearLayers();
       this.clusters.clearLayers();
+    }
+    if (this.markers._layers.length + docs.length > this.config.mapOptions.docsForMarker) {
+      this.markersList = [];
+      this.piansList = [];
+      this.markers.clearLayers();
     }
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
 
