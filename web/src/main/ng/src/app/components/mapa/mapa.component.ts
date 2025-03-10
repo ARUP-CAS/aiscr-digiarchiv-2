@@ -170,6 +170,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   currentMapId: string;
   currentLocBounds: any;
   shouldZoomOnMarker = false;
+  setToMarkerZoom = false;
   markersActive = true;
 
   constructor(
@@ -485,6 +486,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       bounds = L.latLngBounds(southWest, northEast);
+      if (loc_rpt[0] === loc_rpt[2]) {
+        this.setToMarkerZoom = true;
+      }
       if (!this.isEqualsBounds(bounds)) {
         const ob = this.map.getBounds();
         this.map.fitBounds(bounds, {paddingTopLeft: [21,21], paddingBottomRight: [21,21]});
@@ -747,7 +751,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             lat: coords[0],
             lng: coords[1],
             presnost: '',
-            typ: '',
+            typ: 'bod',
             doc: doc,
             pian_chranene_udaje: null
           });
@@ -803,6 +807,11 @@ export class MapaComponent implements OnInit, OnDestroy {
         if (this.shouldZoomOnMarker) {
           this.zoomOnMapResult(doc);
         }
+      } else {
+        if (this.setToMarkerZoom) {
+          this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
+          this.setToMarkerZoom = false;
+        }
       }
       this.state.loading = false;
     });
@@ -816,8 +825,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     let appmrk = this.findMarker(mr.id);
     if (!appmrk) {
       const mrk = L.marker([mr.lat, mr.lng], { id: mr.id, doc: mr.doc, riseOnHover: true, icon: mr.typ === 'bod' ? this.iconPoint : this.icon });
-      if (this.currentMapId === mr.doc) {
-        mrk.setIcon(mr.typ === 'bod' ? this.hitIconPoint : this.hitIcon);
+      if (mr.doc.includes(this.currentMapId)) {
+        mrk.setIcon(this.hitIcon);
+        // mrk.setIcon((mr.typ === 'bod' || mr.typ === 'HES-001135') ? this.hitIconPoint : this.hitIcon);
       }
       // mr.mrk = mrk;
       this.markersList.push(mrk);
@@ -889,7 +899,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         lat: coords[0],
         lng: coords[1],
         presnost: pian.pian_presnost,
-        typ: pian.typ,
+        typ: pian.pian_typ,
         doc: pianInList.docIds,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
@@ -963,7 +973,7 @@ export class MapaComponent implements OnInit, OnDestroy {
           lat: coords[0],
           lng: coords[1],
           presnost: '',
-          typ: '',
+          typ: 'bod',
           doc: [doc.ident_cely],
           pian_chranene_udaje: null
         });
@@ -1043,7 +1053,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   clearSelectedMarker() {
     this.markersList.forEach(m => {
-      m.setIcon(m.typ === 'bod' ? this.iconPoint : this.icon);
+      m.setIcon((m.typ === 'bod' || m.typ === 'HES-001135') ? this.iconPoint : this.icon);
       m.setZIndexOffset(0);
       m.options.selected = false;
     });
@@ -1095,7 +1105,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     const bounds = []
     ms.forEach(m => {
-      m.setIcon(m.typ === 'bod' ? this.hitIconPoint : this.hitIcon);
+      m.setIcon((m.typ === 'bod' || m.typ === 'HES-001135') ? this.hitIconPoint : this.hitIcon);
       m.setZIndexOffset(100);
       m.options.selected = true;
       const latlng = m.getLatLng();
