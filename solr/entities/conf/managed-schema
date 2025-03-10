@@ -177,6 +177,9 @@
    <field name="samostatny_nalez_lokalizace_B" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_lokalizace_C" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_lokalizace_D" type="string" indexed="true" stored="true" multiValued="false" />  -->
+
+   <field name="samostatny_nalez_igsn" type="string" indexed="true" stored="true" multiValued="false" /> 
+   
    
    <dynamicField name="samostatny_nalez_lokalizace_*" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    
@@ -326,6 +329,7 @@
    <field name="ext_zdroj_autor" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="ext_zdroj_editor" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="ext_zdroj_ext_odkaz" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="ext_zdroj_doi" type="string" indexed="true" stored="true" multiValued="false" /> 
    
    
    <!-- dokumentacni_jednotka fields -->

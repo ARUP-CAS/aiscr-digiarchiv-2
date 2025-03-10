@@ -184,6 +184,7 @@
         "dokument_typ_dokumentu",
         "dokument_material_originalu",
         "dokument_rada",
+        "dokument_doi",
         "dokument_organizace",
         "organizace:dokument_organizace",
         "dokument_okres",
@@ -390,6 +391,7 @@
         "lokalita_typ_lokality",
         "lokalita_druh",
         "lokalita_zachovalost",
+        "lokalita_igsn",
         "lokalita_jistota"
       ],
       "detail": [],
@@ -476,6 +478,7 @@
         "samostatny_nalez_specifikace",
         "samostatny_nalez_chranene_udaje_katastr",
         "samostatny_nalez_okres",
+        "samostatny_nalez_igsn",
         "soubor:[json]",
         "soubor_filepath"
       ],
