@@ -537,8 +537,8 @@
 
   "map": {
     "desc": {
-      "select area": "Vybrat oblast",
-      "remove selection": "Zrušit výběr",
+      "select area": "Filtrovat oblast",
+      "remove selection": "Zrušit filtr",
       "zoom in": "Přiblížit",
       "zoom out": "Oddálit",
       "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním.",
