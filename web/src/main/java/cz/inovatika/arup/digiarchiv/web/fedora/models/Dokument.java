@@ -301,7 +301,7 @@ public class Dokument implements FedoraModel {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
-            IndexUtils.addByPath(idoc, orig, dest, Arrays.asList(SolrSearcher.prSufixAll));
+            IndexUtils.addByPath(idoc, orig, dest, Arrays.asList(SolrSearcher.prSufixAll), false);
         }
         
     }
@@ -311,13 +311,18 @@ public class Dokument implements FedoraModel {
 
         for (Object f : indexFields) {
             String s = (String) f;
-            for (String sufix : SolrSearcher.prSufixAll) {
-                if (idoc.containsKey(s)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+            if (s.contains(".")) {
+                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
+            } else {
+                for (String sufix : SolrSearcher.prSufixAll) {
+                    if (idoc.containsKey(s)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    }
+                    if (idoc.containsKey(s + "_" + sufix)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    }
                 }
-                if (idoc.containsKey(s + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
-                }
+                
             }
         } 
         for (String sufix : SolrSearcher.prSufixAll) {

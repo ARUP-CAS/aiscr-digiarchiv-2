@@ -282,7 +282,7 @@ public class Projekt implements FedoraModel {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
-            IndexUtils.addByPath(idoc, orig, dest, prSufix);
+            IndexUtils.addByPath(idoc, orig, dest, prSufix, false);
         }
     }
 

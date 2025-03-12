@@ -81,7 +81,7 @@ public class Lokalita {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
-            IndexUtils.addByPath(idoc, orig, dest, prSufix);
+            IndexUtils.addByPath(idoc, orig, dest, prSufix, false);
 //            if (idoc.containsKey(orig)) {
 //                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
 //            } 

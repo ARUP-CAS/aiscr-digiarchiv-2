@@ -8,24 +8,6 @@
   <p>
     <app-citation [result]="result" [link]="link"></app-citation>
   </p>
-  <!-- <div *ngIf="result.doctype !== 'samostatny_nalez'">
-  <p>
-    <strong>{{ 'dialog.citation.Citujte jako' | translate }}:</strong>
-    {{result.autor}} {{result.rok_vzniku}}: {{ 'dialog.citation.Dokument' | translate }}
-    {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'organizace' }}. 
-    {{ 'dialog.citation.Dostupné z' | translate }}: <a [href]="'https://digiarchiv.aiscr.cz/id/'+ result.ident_cely">https://digiarchiv.aiscr.cz/id/{{ result.ident_cely }}</a>.
-  </p>
-  </div>
-  <div *ngIf="result.doctype === 'samostatny_nalez'">
-    <p>
-    <strong>{{ 'dialog.citation.Citujte jako' | translate }}:</strong>
-    {{ 'dialog.citation.AMČR: Záznam' | translate }}
-    {{ result.ident_cely }}
-    [cit. {{ now | date : 'yyyy-MM-dd' }}].
-    {{ 'dialog.citation.Archeologická mapa České republiky' | translate }}.
-    {{ 'dialog.citation.Dostupné z' | translate }}: <a [href]="'https://digiarchiv.aiscr.cz/id/'+ result.ident_cely">https://digiarchiv.aiscr.cz/id/{{ result.ident_cely }}</a>.
-    </p>
-  </div> -->
 </div>
 <div mat-dialog-actions>
     <button mat-button cdkFocusInitial (click)="ok()">{{'dialog.button.Souhlasím' | translate}}</button>

@@ -191,10 +191,6 @@
         "dokument_popis",
         "dokument_cast_archeologicky_zaznam",
         "dokument_cast_projekt",
-        "archeologicky_zaznam_chranene_udaje_hlavni_katastr",
-        "projekt_chranene_udaje_hlavni_katastr",
-        "projekt_chranene_udaje_dalsi_katastr",
-        "archeologicky_zaznam_chranene_udaje_dalsi_katastr",
         "dokument_cast_neident_akce_katastr",
         "dokument_cast_neident_akce_okres",
         "dokument_cast_akce",
@@ -294,7 +290,7 @@
         "let_pocasi",
         "let_dohlednost",
         "let_uzivatelske_oznaceni",
-        "tvar_tvar",
+        "dokument_tvar.tvar.value",
         "tvar_poznamka",
         "neident_akce_okres",
         "neident_akce_katastr",
@@ -304,9 +300,7 @@
         "neident_akce_lokalizace",
         "neident_akce_popis",
         "neident_akce_poznamka",
-        "neident_akce_pian",
-        "parent_akce_okres",
-        "parent_akce_katastr"
+        "neident_akce_pian"
       ]
     },
     "archeologicky_zaznam": {
@@ -314,8 +308,6 @@
         "az_okres",
         "az_dokument",
         "az_ext_odkaz:[json]",
-        "az_chranene_udaje_hlavni_katastr",
-        "az_chranene_udaje_dalsi_katastry",
         "az_chranene_udaje:[json]"
       ],
       "detail": [
@@ -331,7 +323,18 @@
         "az_dokument",
         "az_dj",
         "pian_ident_cely",
-        "f_aktivita"
+        "f_aktivita",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.value",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_presna_datace",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.value",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita.value",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_poznamka",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.value",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.value",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].poznamka",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.value",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.value",
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].poznamka"
       ]
     },
     "akce": {

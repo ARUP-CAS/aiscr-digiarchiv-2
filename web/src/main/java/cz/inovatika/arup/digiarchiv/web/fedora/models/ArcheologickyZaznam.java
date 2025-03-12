@@ -7,6 +7,7 @@ import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -122,15 +123,15 @@ public class ArcheologickyZaznam implements FedoraModel {
                 idoc.addField("az_dj", dj.ident_cely);
                 idoc.addField("az_dj_pian", djdoc.getFieldValue("dj_pian"));
                 idoc.addField("az_dj_adb", djdoc.getFieldValue("dj_adb"));
-                idoc.addField("az_dj_negativni_jednotka", djdoc.getFieldValue("dj_negativni_jednotka")); 
+                idoc.addField("az_dj_negativni_jednotka", djdoc.getFieldValue("dj_negativni_jednotka"));
                 idoc.addField("az_dj_nazev", dj.dj_nazev);
-                
+
                 for (Komponenta k : dj.dj_komponenta) {
                     idoc.addField("komponenta_ident_cely", k.ident_cely);
                     idoc.addField("komponenta_dokument_presna_datace", k.komponenta_presna_datace);
                 }
                 if (az_akce != null) {
-                    IndexUtils.addFieldNonRepeat(idoc, "f_dj_typ", djdoc.getFieldValue("dj_typ")); 
+                    IndexUtils.addFieldNonRepeat(idoc, "f_dj_typ", djdoc.getFieldValue("dj_typ"));
                 }
 
                 // add loc field by pian
@@ -180,16 +181,36 @@ public class ArcheologickyZaznam implements FedoraModel {
             prSufix.add("D");
         }
 
-        Object[] fields = idoc.getFieldNames().toArray();
-        for (Object f : fields) {
+        for (Object f : indexFields) {
             String s = (String) f;
-
-            if (indexFields.contains(s)) {
+            if (s.contains(".")) {
+                IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
+            } else {
                 for (String sufix : prSufix) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    if (idoc.containsKey(s)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    }
+                    if (idoc.containsKey(s + "_" + sufix)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    }
                 }
+
             }
         }
+
+//        Object[] fields = idoc.getFieldNames().toArray();
+//        for (Object f : fields) {
+//            String s = (String) f;
+//            if (s.contains(".")) {
+//                IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
+//            } else {
+//                if (indexFields.contains(s)) {
+//                    for (String sufix : prSufix) {
+//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+//                    }
+//                }
+//            }
+//        }
         for (String sufix : prSufix) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, az_chranene_udaje.hlavni_katastr);
             for (Vocab v : az_chranene_udaje.dalsi_katastr) {
@@ -228,32 +249,32 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "az_adb_rok_popisu", doc.optIntegerObject("adb_rok_popisu", null));
                 IndexUtils.addFieldNonRepeat(idoc, "az_adb_rok_revize", doc.optIntegerObject("adb_rok_revize", null));
                 IndexUtils.addFieldNonRepeat(idoc, "vyskovy_bod_ident_cely", doc.opt("vyskovy_bod_ident_cely"));
-                
+
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_A", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_A"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_B", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_B"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_C", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_C"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_uzivatelske_oznaceni_sondy_D", doc.opt("adb_chranene_udaje_uzivatelske_oznaceni_sondy_D"));
-                
+
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_A", doc.opt("adb_chranene_udaje_trat_A"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_B", doc.opt("adb_chranene_udaje_trat_B"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_C", doc.opt("adb_chranene_udaje_trat_C"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_trat_D", doc.opt("adb_chranene_udaje_trat_D"));
-                
+
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_A", doc.opt("adb_chranene_udaje_cislo_popisne_A"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_B", doc.opt("adb_chranene_udaje_cislo_popisne_B"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_C", doc.opt("adb_chranene_udaje_cislo_popisne_C"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_cislo_popisne_D", doc.opt("adb_chranene_udaje_cislo_popisne_D"));
-           
+
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_A", doc.opt("adb_chranene_udaje_parcelni_cislo_A"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_B", doc.opt("adb_chranene_udaje_parcelni_cislo_B"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_C", doc.opt("adb_chranene_udaje_parcelni_cislo_C"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_parcelni_cislo_D", doc.opt("adb_chranene_udaje_parcelni_cislo_D"));
-           
+
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_A", doc.opt("adb_chranene_udaje_poznamka_A"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_B", doc.opt("adb_chranene_udaje_poznamka_B"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_C", doc.opt("adb_chranene_udaje_poznamka_C"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_poznamka_D", doc.opt("adb_chranene_udaje_poznamka_D"));
-                
+
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_A", doc.opt("adb_vyskovy_bod_typ_A"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_B", doc.opt("adb_vyskovy_bod_typ_B"));
                 IndexUtils.addFieldNonRepeatByJSONVal(idoc, "adb_vyskovy_bod_typ_C", doc.opt("adb_vyskovy_bod_typ_C"));
@@ -338,7 +359,7 @@ class AZChraneneUdaje {
 //<xs:element name="uzivatelske_oznaceni" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{uzivatelske_oznaceni}" -->
     @JacksonXmlProperty(localName = "uzivatelske_oznaceni")
     public String uzivatelske_oznaceni;
-    
+
     public List<String> okresy = new ArrayList<>();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
@@ -350,7 +371,7 @@ class AZChraneneUdaje {
                 IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
             }
         }
-        
+
         IndexUtils.setSecuredJSONField(idoc, "az_chranene_udaje", this);
         // IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);

@@ -104,8 +104,8 @@ public class DokumentCast {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
                 if (doc.has("projekt_chranene_udaje")) {
 
-                    JSONObject az_chranene_udaje = doc.getJSONObject("projekt_chranene_udaje");
-                    String k = az_chranene_udaje.getJSONObject("hlavni_katastr").optString("value");
+                    JSONObject pr_chranene_udaje = doc.getJSONObject("projekt_chranene_udaje");
+                    String k = pr_chranene_udaje.getJSONObject("hlavni_katastr").optString("value");
                     IndexUtils.addSecuredFieldNonRepeat(idoc,
                             "f_katastr",
                             k,
@@ -118,7 +118,7 @@ public class DokumentCast {
                             .put("okres", doc.getString("projekt_okres"));
                     IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
 
-                    JSONArray dalsi_katastr = az_chranene_udaje.getJSONArray("dalsi_katastr");
+                    JSONArray dalsi_katastr = pr_chranene_udaje.getJSONArray("dalsi_katastr");
 
                     for (int j = 0; j < dalsi_katastr.length(); j++) {
                         k = dalsi_katastr.getJSONObject(j).optString("value");

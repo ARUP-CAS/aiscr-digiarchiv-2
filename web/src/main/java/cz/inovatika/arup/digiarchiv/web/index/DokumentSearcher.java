@@ -311,7 +311,6 @@ public class DokumentSearcher implements EntitySearcher {
                 doc.remove("loc");
                 doc.remove("lat");
                 doc.remove("lng");
-                doc.remove("parent_akce_katastr");
                 doc.remove("dok_jednotka");
 
                 Object[] keys = doc.keySet().toArray();

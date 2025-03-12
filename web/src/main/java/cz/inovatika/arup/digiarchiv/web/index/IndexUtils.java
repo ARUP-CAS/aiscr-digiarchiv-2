@@ -244,8 +244,8 @@ public class IndexUtils {
         }
     }
 
-    public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix) {
-        boolean secured = path.contains("chranene_udaje");
+    public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix, boolean isSecured) {
+        boolean secured = path.contains("chranene_udaje") || isSecured;
         String[] parts = path.split("\\.", 2);
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
         if (vals == null) {
