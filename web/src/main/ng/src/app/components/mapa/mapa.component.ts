@@ -299,15 +299,9 @@ export class MapaComponent implements OnInit, OnDestroy {
       measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
     }).addTo (map);
 
-    
-
     map.on('polylinemeasure:toggle', (e: any) => { 
       this.usingMeasure = e.sttus
     });
-
-     map.on('polylinemeasure:start', currentLine => {
-      console.log(currentLine)
-     });
 
     map.addControl(L.control.zoom(this.zoomOptions));
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
@@ -1068,6 +1062,9 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setPianId(pian_id: string, docId: string[]) {
     this.zone.run(() => {
+      if (this.usingMeasure) {
+        return;
+      }
       this.markersList = [];
       this.piansList = [];
       this.showDetail = true;
@@ -1098,6 +1095,10 @@ export class MapaComponent implements OnInit, OnDestroy {
 
     const bounds = this.service.getBoundsByDoc(doc);
     this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
+    if (!this.map.getBounds().contains(bounds)) {
+      // Markers outside view in this zoom
+      this.map.fitBounds(bounds, {paddingTopLeft: [21,21], paddingBottomRight: [21,21]});
+    }
     this.selectedResultId = this.state.mapResult.ident_cely;
     
     this.state.mapBounds = this.map.getBounds();
