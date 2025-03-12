@@ -54,7 +54,7 @@ export class ProjektComponent implements OnInit, OnChanges {
   }
 
   checkRelations() {
-    if (this.isChild) {
+    if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
       return;
     }
     this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {

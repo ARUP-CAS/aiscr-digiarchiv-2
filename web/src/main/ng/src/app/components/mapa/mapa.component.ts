@@ -172,6 +172,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   shouldZoomOnMarker = false;
   setToMarkerZoom = false;
   markersActive = true;
+  usingMeasure = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -297,6 +298,16 @@ export class MapaComponent implements OnInit, OnDestroy {
       measureControlTitleOn: this.service.getTranslation('map.desc.measureOn'), // 'Turn on PolylineMeasure' Title for the control going to be switched on
       measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
     }).addTo (map);
+
+    
+
+    map.on('polylinemeasure:toggle', (e: any) => { 
+      this.usingMeasure = e.sttus
+    });
+
+     map.on('polylinemeasure:start', currentLine => {
+      console.log(currentLine)
+     });
 
     map.addControl(L.control.zoom(this.zoomOptions));
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
@@ -493,10 +504,10 @@ export class MapaComponent implements OnInit, OnDestroy {
         const ob = this.map.getBounds();
         this.map.fitBounds(bounds, {paddingTopLeft: [21,21], paddingBottomRight: [21,21]});
         setTimeout(() => {
-          //if (this.isEqualsBounds(ob)) {
+          if (this.isEqualsBounds(ob)) {
             this.getDataByVisibleArea();
             this.processingParams = false;
-          //}
+          }
         }, 10);
         return;
       } else {
@@ -557,6 +568,7 @@ export class MapaComponent implements OnInit, OnDestroy {
         this.map.fitBounds(bounds);
 
       });
+      return;
     }
 
     if (this.state.switchingMap) {
@@ -877,21 +889,23 @@ export class MapaComponent implements OnInit, OnDestroy {
     }, 100)
   }
 
-  processMarkersResp(resp: any[], ids: { id: string, docId: string }[], isId: boolean) {
+  processMarkersResp(resp: any[], ids: { id: string, docIds: string[] }[], isId: boolean) {
     resp.forEach(pian => {
       const coords = pian.loc_rpt[0].split(',');
-      const docId = ids.find(p => p.id === pian.ident_cely).docId;
+      const docIds = ids.find(p => p.id === pian.ident_cely).docIds
       let pianInList = this.piansList.find(p => p.id === pian.ident_cely);
       if (!pianInList) {
-        pianInList = { id: pian.ident_cely, presnost: null, typ: null, docIds: [docId] }
+        pianInList = { id: pian.ident_cely, presnost: null, typ: null, docIds: docIds }
         this.piansList.push(pianInList);
         // return;
       }
       pianInList.presnost = pian.pian_presnost;
       pianInList.typ = pian.typ;
-      if (!pianInList.docIds.includes(docId)) {
-        pianInList.docIds.push(docId);
-      }
+      docIds.forEach(docId => {
+        if (!pianInList.docIds.includes(docId)) {
+          pianInList.docIds.push(docId);
+        }
+      });
       
       const mrk = this.addMarker({
         id: pian.ident_cely,
@@ -909,11 +923,11 @@ export class MapaComponent implements OnInit, OnDestroy {
       //   mrk.addTo(this.markers);
       // }
         mrk.addTo(this.markers);
-      this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, docId);
+      this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value);
     });
   }
 
-  loadNextMarkers(ids: { id: string, docId: string }[], entity: string, isId: boolean) {
+  loadNextMarkers(ids: { id: string, docIds: string[] }[], entity: string, isId: boolean) {
     if (!this.loadingMarkers) {
       return;
     }
@@ -941,16 +955,27 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   setMarkersByPian(docs: SolrDocument[], isId: boolean) {
-    const pianIds: { id: string, docId: string }[] = [];
+    const pianIds: { id: string, docIds: string[] }[] = [];
     docs.forEach(doc => {
       if (doc.pian_id && doc.pian_id.length > 0) {
         doc.pian_id.forEach(pian_id => {
           const pianInList = this.piansList.find(p => p.id === pian_id);
           if (!pianInList) {
-            pianIds.push({ id: pian_id, docId: doc.ident_cely });
+            const p = pianIds.find(p => p.id === pian_id)
+            if (!p) {
+              pianIds.push({ id: pian_id, docIds: [doc.ident_cely] });
+            } else {
+              if (!p.docIds.includes(doc.ident_cely)) {
+                p.docIds.push(doc.ident_cely);
+              }
+            }
           } else {
             if (!pianInList.docIds.includes(doc.ident_cely)) {
               pianInList.docIds.push(doc.ident_cely);
+            }
+            const p = pianIds.find(p => p.id === pian_id)
+            if (p) {
+                p.docIds = pianInList.docIds;
             }
           }
         });
@@ -1121,7 +1146,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       if (this.showType === 'heat') {
         m.addTo(this.markers);
         if (parseInt(m.presnost) < 4 && m.typ !== 'bod') {
-          this.addShapeLayer(m.options.id, m.options.presnost, null, m.options.doc.ident_cely);
+          this.addShapeLayer(m.options.id, m.options.presnost, null);
         }
       }
     });
@@ -1209,7 +1234,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     }, 10);
   }
 
-  addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docId: string) {
+  addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string) {
     if (!geom_wkt_c) {
       return;
     }
