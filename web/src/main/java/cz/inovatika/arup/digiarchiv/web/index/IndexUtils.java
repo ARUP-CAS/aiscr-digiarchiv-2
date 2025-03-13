@@ -277,8 +277,8 @@ public class IndexUtils {
                             addFieldNonRepeat(idoc, field, jpReturns);
                         }
                     }
-                } catch (com.jayway.jsonpath.PathNotFoundException pnfex) {
-                    return;
+                } catch (Exception pnfex) {
+                    LOGGER.log(Level.FINE, "No value for ", o);
                 }
 
             }

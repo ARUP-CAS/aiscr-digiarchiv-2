@@ -73,33 +73,38 @@ export class MapaComponent implements OnInit, OnDestroy {
     preferCanvas: true
   };
 
-  icon = L.icon({
-    iconSize: [12, 20],
-    iconAnchor: [6, 20],
-    iconUrl: 'assets/img/pin.png',
-    //shadowUrl: 'assets/img/marker-shadow.png'
-  });
+  icon = L.divIcon({className: 'map-pin', iconSize: null });
+  hitIcon = L.divIcon({className: 'map-pin-hit', iconSize: null });
+  iconPoint = L.divIcon({className: 'map-pin-point', iconSize: null });
+  hitIconPoint = L.divIcon({className: 'map-pin-hit-point', iconSize: null });
 
-  iconPoint = L.icon({
-    iconSize: [16, 26],
-    iconAnchor: [8, 26],
-    iconUrl: 'assets/img/pin-point.png',
-    //shadowUrl: 'assets/img/marker-shadow.png'
-  });
+  // icon = L.icon({
+  //   iconSize: [12, 20],
+  //   iconAnchor: [6, 20],
+  //   iconUrl: 'assets/img/pin.png',
+  //   //shadowUrl: 'assets/img/marker-shadow.png'
+  // });
 
-  hitIcon = L.icon({
-    iconSize: [12, 20],
-    iconAnchor: [6, 20],
-    iconUrl: 'assets/img/pin-hit.png',
-    //shadowUrl: 'assets/img/marker-shadow.png'
-  });
+  // hitIcon = L.icon({
+  //   iconSize: [12, 20],
+  //   iconAnchor: [6, 20],
+  //   iconUrl: 'assets/img/pin-hit.png',
+  //   //shadowUrl: 'assets/img/marker-shadow.png'
+  // });
 
-  hitIconPoint = L.icon({
-    iconSize: [16, 26],
-    iconAnchor: [8, 26],
-    iconUrl: 'assets/img/pin-hit-point.png',
-    //shadowUrl: 'assets/img/marker-shadow.png'
-  });
+  // iconPoint = L.icon({
+  //   iconSize: [16, 26],
+  //   iconAnchor: [8, 26],
+  //   iconUrl: 'assets/img/pin-point.png',
+  //   //shadowUrl: 'assets/img/marker-shadow.png'
+  // });
+
+  // hitIconPoint = L.icon({
+  //   iconSize: [16, 26],
+  //   iconAnchor: [8, 26],
+  //   iconUrl: 'assets/img/pin-hit-point.png',
+  //   //shadowUrl: 'assets/img/marker-shadow.png'
+  // });
 
   params: HttpParams;
 

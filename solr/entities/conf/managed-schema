@@ -66,7 +66,7 @@
    <field name="soubor_id" type="string" indexed="false" stored="true" multiValued="true" /> 
    
    <!-- Dokument fields -->
-   <field name="dokument_let" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_let" type="string_big" indexed="false" stored="true" multiValued="false" />
    <field name="dokument_let_ident_cely" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_typ_dokumentu" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_material_originalu" type="string" indexed="true" stored="true" multiValued="false" />
@@ -364,11 +364,12 @@
    <field name="let_letiste_cil" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="let_pocasi" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="let_dohlednost" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="let_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_fotoaparat" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_typ_letounu" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_ucel_letu" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="let_ident_cely" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_fotoaparat" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_typ_letounu" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_ucel_letu" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_datum" type="pdate" indexed="true" stored="true"  multiValued="false" />
 
    <field name="let_dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
    
@@ -380,7 +381,6 @@
    <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="rok_vydani" type="pint" indexed="true" stored="true"  multiValued="true" />
    <!-- <field name="extra_data_datum_vzniku" type="pdate" indexed="true" stored="true"  multiValued="true" /> -->
-   <field name="let_datum" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <!--<str name="stats.field">samostatny_nalez_datum_nalezu</str>-->
 
    

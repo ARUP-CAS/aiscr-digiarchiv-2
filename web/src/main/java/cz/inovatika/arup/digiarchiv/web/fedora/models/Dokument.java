@@ -277,18 +277,19 @@ public class Dokument implements FedoraModel {
     private void addLet(SolrInputDocument idoc) throws Exception {
 
         IndexUtils.addVocabField(idoc, "dokument_let_ident_cely", dokument_let);
-        SolrQuery query = new SolrQuery("ident_cely:\"" + dokument_let.getId() + "\"");
+        SolrQuery query = new SolrQuery("ident_cely:\"" + dokument_let.getId() + "\"")
+                .setFields("*,let_letiste_start:[json],let_letiste_cil:[json],let_dohlednost:[json],let_organizace:[json],let_pocasi:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", dokument_let.getId());
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-                SolrSearcher.addFieldNonRepeat(idoc, "dokument_let", doc.toString());
-                for (String key : doc.keySet()) {
-                    if (key.startsWith("let_")) {
-                        SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
-                    }
-                    
-                }
+                SolrSearcher.addFieldNonRepeat(idoc, "dokument_let", doc.toString()); 
+//                for (String key : doc.keySet()) {
+//                    if (key.startsWith("let_")) {
+//                        SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
+//                    }
+//                    
+//                }
             }
         }
     }
