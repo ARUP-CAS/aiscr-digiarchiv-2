@@ -109,7 +109,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
         p.vyber = null;
       }
     }
-    let url = '/results';
+    let url = '/map';
     if (this.router.isActive('/id', false)) {
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;

@@ -1,0 +1,110 @@
+<ng-container *ngIf="isBrowser">
+
+  <div class="app-display-table app-loading" *ngIf="loading" style="position: absolute; z-index:1000;">
+    <div class="app-table-cell app-clean-pd" >
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    
+  </div>
+  
+  <div #leftElement class="app-display-table app-container">
+    
+    <div class="app-table-cell" >
+      <mat-sidenav-container class="app-sidenav-container">
+        <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="overflow-x: hidden;"><!--[(opened)]="opened"-->
+          <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
+            <mat-icon>last_page</mat-icon>
+          </button>
+          <div style="padding: 15px;">{{ 'sidenav.tab.Info' | translate }}</div>
+          <mat-tab-group [selectedIndex]="1">
+            <mat-tab [label]="'sidenav.tab.Filtry' | translate">
+              <div class="app-facets">
+                <app-facets-used *ngIf="state.breadcrumbs?.length !== 0"></app-facets-used>
+                <app-facets></app-facets>
+              </div>
+            </mat-tab>
+            <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
+              <div *ngIf="state.numFound > config.mapOptions.docsForMarker">
+                <mat-card class="app-result-item app-row-gap-16">
+                  {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
+                </mat-card>
+              </div>
+              <ng-container *ngIf="(state.solrResponse && state.numFound <= config.mapOptions.docsForMarker)">
+                <app-paginator></app-paginator>
+                <cdk-virtual-scroll-viewport *ngIf="state.isMapaCollapsed && vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
+                [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
+                  <ng-container *cdkVirtualFor="let result of state.solrResponse.response.docs">
+                    <ng-container [ngSwitch]="state.entity">
+                      <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
+                      <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                      <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
+                      <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
+                      <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
+                      <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+                    </ng-container>
+                  </ng-container>
+                </cdk-virtual-scroll-viewport>
+                <div *ngIf="state.solrResponse?.response">
+                    <ng-container *ngFor="let result of state.solrResponse.response.docs">
+                      <ng-container [ngSwitch]="state.entity">
+                        <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
+                        <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
+                        <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
+                        <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
+                        <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
+                        <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+              </ng-container>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-sidenav>
+      
+        <mat-sidenav-content style="margin-left: 0 !important;">
+          <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
+            <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
+          </button>
+          
+
+            <div class="app-map" leaflet [leafletOptions]="options"
+             (leafletMapReady)="onMapReady($event)"
+             [leafletLayersControl]="layersControl"
+             [leafletLayersControlOptions]="{position: 'topright'}">
+              <!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
+              <div [leafletLayer]="markers"></div>
+              <!-- <div [leafletLayer]="idmarkers"></div> -->
+              <div [leafletLayer]="clusters"></div>
+            </div> 
+          
+            <mat-card class="app-active-pian-facet" *ngIf="loadingMarkers">
+              <mat-card-content>
+                <a [matTooltip]="'map.tooltip.Zastavit' | translate" (click)="stopLoadingMarkers()"><mat-icon style="margin-right: 0px !important">stop</mat-icon></a>
+              </mat-card-content>
+            </mat-card>
+          
+            <mat-card class="app-active-pian-facet" *ngIf="state.pianId">
+              <mat-card-content>
+                <a [matTooltip]="'map.tooltip.Odstranit tento filtr' | translate" (click)="clearPian()"><mat-icon>clear</mat-icon>{{ state.pianId }}</a>&#160;
+              </mat-card-content>
+            </mat-card>
+          
+            <div class="app-view-card-info" [class.app-pian-visible]="state.pianId && opened" [class.app-pian-visible-sidenav-closed]="state.pianId && !opened">
+              <ng-container *ngIf="state.mapResult">
+                <ng-container [ngSwitch]="state.mapResult.entity">
+                  <app-dokument *ngSwitchCase="'dokument'" [result]="state.mapResult" [mapDetail]="true"></app-dokument>
+                  <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="state.mapResult" [mapDetail]="true"></app-dokument>
+                  <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="state.mapResult" [mapDetail]="true"></app-samostatny-nalez>
+                  <app-projekt *ngSwitchCase="'projekt'" [result]="state.mapResult" [mapDetail]="true"></app-projekt>
+                  <app-akce *ngSwitchCase="'akce'" [result]="state.mapResult" [mapDetail]="true"></app-akce>
+                  <app-lokalita *ngSwitchCase="'lokalita'" [result]="state.mapResult" [mapDetail]="true"></app-lokalita>
+                </ng-container>
+              </ng-container>
+            </div>
+
+
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
+  </div>
+ </ng-container>

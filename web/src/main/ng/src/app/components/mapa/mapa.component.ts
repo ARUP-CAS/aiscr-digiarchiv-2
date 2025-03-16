@@ -13,7 +13,7 @@ import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
 
 import 'node_modules/leaflet.fullscreen/Control.FullScreen.js';
-import { geoJSON, LatLngBounds, Marker, marker } from 'leaflet';
+import { Control, geoJSON, LatLngBounds, Map, Marker, marker } from 'leaflet';
 import { isPlatformBrowser } from '@angular/common';
 
 declare var L;
@@ -115,7 +115,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   processingParams = false;
   showType = 'marker'; // 'heat', 'cluster', 'marker'
 
-  map;
+  map: L.Map;
   //idmarkers = new L.featureGroup();
   markers = new L.featureGroup();
   clusters = new L.markerClusterGroup();
@@ -286,8 +286,17 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   onMapReady(map: L.Map) {
     this.map = map;
+    if (this.route.snapshot.queryParamMap.has('vyber')) {
+      const loc_rpt = this.route.snapshot.queryParamMap.get('vyber').split(',');
+      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+
+      this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
+    }
 
     this.locationFilter = new L.LocationFilter({
+      bounds: this.state.locationFilterBounds,
+      enable: this.state.locationFilterBounds !== null,
       adjustButton: false,
       buttonPosition: 'topright',
       enableButton: {
@@ -383,7 +392,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     });
 
     this.locationFilter.on('change', (e) => {
-      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds()) && !this.firstChange) {
+      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds())) {
         this.updateBounds(null, true, 'locChange');
       }
       this.firstChange = false;
@@ -479,17 +488,16 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.getMarkerById(false);
     }
 
-    if (this.route.snapshot.queryParamMap.has('vyber')) {
-      const loc_rpt = this.route.snapshot.queryParamMap.get('vyber').split(',');
-      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
-      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
-      bounds = L.latLngBounds(southWest, northEast);
+    // if (this.route.snapshot.queryParamMap.has('vyber')) {
+    //   const loc_rpt = this.route.snapshot.queryParamMap.get('vyber').split(',');
+    //   const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+    //   const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+    //   bounds = L.latLngBounds(southWest, northEast);
 
-      this.state.locationFilterBounds = bounds;
-      this.locationFilter.enable();
-      this.locationFilter.setBounds(bounds);
-      // this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
-    }
+    //   this.state.locationFilterBounds = bounds;
+    //   this.locationFilter.enable();
+    //   this.locationFilter.setBounds(bounds);
+    // }
 
     if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
       const loc_rpt = this.route.snapshot.queryParamMap.get('loc_rpt').split(',');

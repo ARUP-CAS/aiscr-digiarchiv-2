@@ -64,7 +64,7 @@ import { InlineFilterComponent } from './components/inline-filter/inline-filter.
 import { RelatedComponent } from './components/related/related.component';
 import { NalezComponent } from './components/nalez/nalez.component';
 import { JednotkaDokumentuComponent } from './entity/jednotka-dokumentu/jednotka-dokumentu.component';
-import { MapaShimComponent } from './components/mapa-shim/mapa-shim.component';
+import { MapaShimComponent, MapViewShimComponent } from './components/mapa-shim/mapa-shim.component';
 import { Knihovna3dComponent } from './entity/knihovna3d/knihovna3d.component';
 import { VyskovyBodComponent } from './components/vyskovy-bod/vyskovy-bod.component';
 import { FacetsDynamicComponent } from './components/facets-dynamic/facets-dynamic.component';
@@ -189,7 +189,8 @@ const providers: any[] = [
     ResultActionsComponent,
     StatsComponent,
     ConsentSheet,
-    RelatedComponent
+    RelatedComponent,
+    MapViewShimComponent
   ],
   imports: [
     CommonModule,

@@ -27,14 +27,13 @@ export class AppComponent implements OnInit {
     private router: Router,
     @Inject(DOCUMENT) private document: Document
   ) {
-
   }
 
   ngOnInit() {
 
     this.state.setConfig(this.config);
     this.service.changeLang(this.state.currentLang);
-
+    
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
         this.isExport = this.router.isActive('export', false) || this.router.isActive('export-mapa', false);
