@@ -90,8 +90,17 @@ export class DocumentComponent implements OnInit, AfterViewInit {
 
         this.state.setMapResult(this.result, false);
         this.setTitle();
+        if (this.result.entity === 'lokalita' && this.result.lokalita_igsn) {
+          this.link = 'https://doi.org/' + this.result.lokalita_igsn;
+        } else if (this.result.samostatny_nalez_igsn) {
+          this.link = 'https://doi.org/' + this.result.samostatny_nalez_igsn;
+        } else if (this.result.dokument_doi) {
+          this.link = 'https://doi.org/' + this.result.dokument_doi;
+        } else {
+          this.link = this.config.serverUrl + 'id/' + id;
+        }
+        
       }
-      this.link = this.config.serverUrl + 'id/' + id;
       this.loading = false;
     });
   }

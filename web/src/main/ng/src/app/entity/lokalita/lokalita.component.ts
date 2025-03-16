@@ -48,9 +48,9 @@ export class LokalitaComponent implements OnInit, OnChanges {
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
      if (this.inDocument) {
-      this.checkRelations();
+      // this.checkRelations();
       this.state.documentProgress = 0;
-      //this.state.loading = true;
+      this.state.loading = false;
       this.getExtZdroj();
      }
   }

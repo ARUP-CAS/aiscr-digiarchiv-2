@@ -119,7 +119,6 @@ public class DokumentSearcher implements EntitySearcher {
             JSONArray dokument_cast_projekt = new JSONArray();
             if (doc.has("dokument_cast_projekt")) {
                 String fq = "ident_cely:\"" + doc.getJSONArray("dokument_cast_projekt").getString(0) + "\"";
-                System.out.println(fq);
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery(fq)
                         .setRows(10000)

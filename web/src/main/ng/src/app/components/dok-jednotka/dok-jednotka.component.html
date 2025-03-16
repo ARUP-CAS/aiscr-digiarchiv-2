@@ -68,7 +68,7 @@
       {{ result.dj_negativni_jednotka ? ('negativní' | translate) : ('pozitivní' | translate) }}
     </ng-container>
       <mat-accordion multi="true" *ngIf="detailExpanded || !inDocument">
-        <app-pian *ngIf="result.dj_pian" [result]="result.dj_pian"></app-pian>
+        <app-pian *ngIf="result.dj_pian" [result]="result.dj_pian" [isChild]="true"></app-pian>
         <app-adb *ngIf="result.dj_adb" [result]="result.dj_adb" [isChild]="true"></app-adb>
         <app-komponenta *ngFor="let komponenta of result.dj_komponenta" [result]="komponenta"></app-komponenta>
       </mat-accordion>
