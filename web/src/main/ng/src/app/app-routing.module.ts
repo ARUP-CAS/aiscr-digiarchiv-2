@@ -8,7 +8,7 @@ import { ResultsComponent } from 'src/app/pages/results/results.component';
 import { NapovedaComponent } from 'src/app/pages/napoveda/napoveda.component';
 import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
 import { StatsComponent } from './pages/stats/stats.component';
-import { MapViewComponent } from './pages/map-view/map-view.component';
+import { MapViewContainerComponent } from './pages/map-view/map-view-container.component';
 
 
 const routes: Routes = [
@@ -18,7 +18,7 @@ const routes: Routes = [
   {path: 'export', component: ExportComponent},
   {path: 'export-mapa', component: ExportMapaComponent},
   {path: 'results', component: ResultsComponent},
-  {path: 'map', component: MapViewComponent},
+  {path: 'map', component: MapViewContainerComponent},
   {path: 'napoveda', component: NapovedaComponent},
   {path: 'stats', component: StatsComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full'},

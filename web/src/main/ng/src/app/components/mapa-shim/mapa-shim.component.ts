@@ -15,20 +15,3 @@ export class MapaShimComponent implements OnInit {
   }
 
 }
-
-
-@Component({
-  selector: 'app-map-view',
-  templateUrl: './mapa-shim.component.html',
-  styleUrls: ['./mapa-shim.component.scss']
-})
-export class MapViewShimComponent implements OnInit {
-  @Input() isResults = true;
-  @Input() showResults = false;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}

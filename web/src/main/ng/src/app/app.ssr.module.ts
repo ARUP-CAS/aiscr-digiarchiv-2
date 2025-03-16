@@ -64,7 +64,7 @@ import { InlineFilterComponent } from './components/inline-filter/inline-filter.
 import { RelatedComponent } from './components/related/related.component';
 import { NalezComponent } from './components/nalez/nalez.component';
 import { JednotkaDokumentuComponent } from './entity/jednotka-dokumentu/jednotka-dokumentu.component';
-import { MapaShimComponent, MapViewShimComponent } from './components/mapa-shim/mapa-shim.component';
+import { MapaShimComponent } from './components/mapa-shim/mapa-shim.component';
 import { Knihovna3dComponent } from './entity/knihovna3d/knihovna3d.component';
 import { VyskovyBodComponent } from './components/vyskovy-bod/vyskovy-bod.component';
 import { FacetsDynamicComponent } from './components/facets-dynamic/facets-dynamic.component';
@@ -85,6 +85,8 @@ import { BarChart } from 'echarts/charts';
 import { LineChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
+import { MapViewShimComponent } from './components/mapa-shim/map-view-shim.component';
+import { MapViewContainerComponent } from './pages/map-view/map-view-container.component';
 echarts.use([TitleComponent, TooltipComponent, GridComponent, BarChart, LineChart, LegendComponent, CanvasRenderer]);
 
 registerLocaleData(localeCs, 'cs');
@@ -179,6 +181,8 @@ const providers: any[] = [
     NalezComponent,
     JednotkaDokumentuComponent,
     MapaShimComponent,
+    MapViewContainerComponent,
+    MapViewShimComponent,
     Knihovna3dComponent,
     VyskovyBodComponent,
     BibtextDialogComponent,
@@ -189,8 +193,7 @@ const providers: any[] = [
     ResultActionsComponent,
     StatsComponent,
     ConsentSheet,
-    RelatedComponent,
-    MapViewShimComponent
+    RelatedComponent
   ],
   imports: [
     CommonModule,
