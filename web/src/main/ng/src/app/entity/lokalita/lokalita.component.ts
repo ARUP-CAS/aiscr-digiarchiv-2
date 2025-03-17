@@ -45,7 +45,8 @@ export class LokalitaComponent implements OnInit, OnChanges {
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       note = {Archeologická mapa České republiky [cit. ${now}]}
+       note = {Archeologická mapa České republiky [cit. ${now}]},
+       doi = {${this.result.lokalita_igsn}}
      }`;
      if (this.inDocument) {
       // this.checkRelations();
@@ -76,6 +77,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
       this.checkRelations();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
+      // this.getExtZdroj();
     }
     if (this.mapDetail) {
       this.getFullId();
@@ -113,7 +115,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
       // this.getDokuments();
-      // this.getExtZdroj();
+      this.getExtZdroj();
       this.hasDetail = true;
     });
   }

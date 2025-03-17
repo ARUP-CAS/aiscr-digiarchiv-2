@@ -60,7 +60,8 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
        author = {AMČR}, 
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       note = {Archeologická mapa České republiky [cit. ${now}]}
+       note = {Archeologická mapa České republiky [cit. ${now}]},
+       doi = {${this.result.samostatny_nalez_igsn}}
      }`;
      if (this.inDocument) {
       //this.checkRelations();

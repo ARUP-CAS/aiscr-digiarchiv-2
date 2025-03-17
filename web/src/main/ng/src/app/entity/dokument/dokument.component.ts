@@ -143,7 +143,8 @@ export class DokumentComponent implements OnInit, OnChanges {
       title = {Dokument ${this.result.ident_cely}},
       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
       year = {${this.result.dokument_rok_vzniku}},
-      note = {${organizace}}
+      note = {${organizace}},
+      doi = {${this.result.dokument_doi}}
     }`;
   }
 

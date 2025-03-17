@@ -157,7 +157,14 @@ public class ExtraData {
             geom_gml = FedoraModel.getAsXml(geom_gml);
             // System.out.println(xml);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.WARNING, null, ex);
+        }
+        
+        try {
+            geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml);
+            // System.out.println(xml);
+        } catch (JsonProcessingException ex) {
+            LOGGER.log(Level.WARNING, null, ex);
         }
 
         if (geom_wkt != null) {

@@ -88,7 +88,7 @@
         </div>
 
 
-        <div *ngIf="result.entity !== 'knihovna_3d' && result.dokument_organizace">
+        <div *ngIf="result.dokument_organizace">
           <ng-container>
             <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild" [field]="'f_organizace'" [value]="result.dokument_organizace" [heslar]="'organizace'"></app-inline-filter>
@@ -147,7 +147,13 @@
             <tbody>
               <tr *ngIf="result.dokument_jazyk_dokumentu?.length > 0 && result.entity !== 'knihovna_3d'">
                 <th class="app-label">{{ 'card.desc.Jazyk' | translate }}:</th>
-                <td><app-inline-filter *ngFor="let jazyk of result.dokument_jazyk_dokumentu" [isChild]="isChild" [field]="'f_jazyk_dokumentu'" [value]="jazyk" [heslar]="'jazyk_dokumentu'"></app-inline-filter></td>
+                <td>
+                  <ng-container *ngFor="let jazyk of result.dokument_jazyk_dokumentu; let last = last">
+                    <app-inline-filter [isChild]="isChild" [field]="'f_jazyk_dokumentu'" [value]="jazyk" [heslar]="'jazyk_dokumentu'"></app-inline-filter>
+                    <span *ngIf="!last">,&#160;</span>
+                  </ng-container>
+                  
+                </td>
               </tr>
               <tr *ngIf="result.dokument_popis">
                 <th class="app-label">{{ 'card.desc.Popis obsahu' | translate }}:</th>
@@ -188,15 +194,19 @@
                 <tr *ngIf="result.dokument_extra_data.geom_gml">
                   <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.geom_gml }}<br/>
-                    <ng-container *ngIf="result.dokument_extra_data.geom_sjtsk_gml">{{ result.dokument_extra_data.geom_sjtsk_gml }}</ng-container>
+                    <ng-container *ngIf="result.dokument_extra_data.geom_sjtsk_gml">
+                      {{ result.dokument_extra_data.geom_sjtsk_gml }}
+                    </ng-container>
                   </td>
                 </tr>
-
 
                 <tr *ngIf="result.dokument_extra_data.geom_wkt">
                   <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
                   <td>
-                    EPSG:{{ result.dokument_extra_data.geom_wkt.epsg }}, {{ result.dokument_extra_data.geom_wkt.value }}
+                    EPSG:{{ result.dokument_extra_data.geom_wkt.epsg }}, {{ result.dokument_extra_data.geom_wkt.value }}<br/>
+                    <ng-container *ngIf="result.dokument_extra_data.geom_sjtsk_wkt">
+                      EPSG:{{ result.dokument_extra_data.geom_sjtsk_wkt.epsg }}, {{ result.dokument_extra_data.geom_sjtsk_wkt.value }}
+                    </ng-container>
                   </td>
                 </tr>
                 <tr *ngIf="result.dokument_extra_data.format">
