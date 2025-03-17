@@ -26,10 +26,12 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -47,20 +49,28 @@ import org.xml.sax.InputSource;
  */
 public class OAIRequest {
 
-    private static Transformer dcTransformer;
+    private static final Map<String, Transformer> dcTransformers = new HashMap<>();  
     private static Transformer forbiddenTransformer;
     private static Transformer emptyTransformer;
-    private static Map<String, Transformer> versionTransformers = new HashMap<>();
+    private static final Map<String, Transformer> versionTransformers = new HashMap<>();
 
-    private static Transformer getTransformer() throws TransformerConfigurationException {
-        if (dcTransformer == null) {
+    private static Transformer getDcTransformer(String xmlns_amcr) throws TransformerConfigurationException {
+        if (dcTransformers.get(xmlns_amcr) == null) {
             TransformerFactory factory = TransformerFactory.newInstance();
-            Source xslt = new StreamSource(Options.getInstance().getDCXslt());
-            dcTransformer = factory.newTransformer(xslt);
-            dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
-            dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
+            String xsltStr; 
+            try {
+                xsltStr = FileUtils.readFileToString(Options.getInstance().getDCXslt(), "UTF-8");
+                xsltStr = xsltStr.replace("##AMCRVERSION##", xmlns_amcr);
+                Source xslt = new StreamSource(new StringReader(xsltStr));
+                Transformer dcTransformer = factory.newTransformer(xslt);
+                dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
+                dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
+                dcTransformers.put(xmlns_amcr, dcTransformer);
+            } catch (IOException ex) {
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        return dcTransformer;
+        return dcTransformers.get(xmlns_amcr);
     }
 
     private static Transformer get404Transformer() throws TransformerConfigurationException {
@@ -655,7 +665,12 @@ public class OAIRequest {
         Source text = new StreamSource(new StringReader(xml));
         StringWriter sw = new StringWriter();
 
-        getTransformer().transform(text, new StreamResult(sw));
+        
+        int pos1 = xml.indexOf("xmlns:amcr=");
+        int pos2 = xml.indexOf("\"", pos1 + 14);
+        String xmlns_amcr = xml.substring(pos1 + "xmlns:amcr=\"".length(), pos2);
+                    
+        getDcTransformer(xmlns_amcr).transform(text, new StreamResult(sw));
 
         Pattern emptyValueTag = Pattern.compile("\\s*<dc:\\w+.*/>");
         Pattern emptyTagMultiLine = Pattern.compile("\\s*<\\w+>\n*\\s*</\\w+>");
