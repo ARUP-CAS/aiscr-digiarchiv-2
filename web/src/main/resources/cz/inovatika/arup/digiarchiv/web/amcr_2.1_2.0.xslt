@@ -15,7 +15,7 @@
     </xsl:template>
 
     <xsl:template match="amcr_old:*">
-        <xsl:element name="amcr:{local-name()}">
+        <xsl:element name="amcr:{local-name()}" namespace="https://api.aiscr.cz/schema/amcr/2.0/">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>
