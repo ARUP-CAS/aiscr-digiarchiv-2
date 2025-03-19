@@ -794,7 +794,7 @@ export class MapViewComponent {
     if (ids.length === 0) {
       this.stopLoadingMarkers();
       if (this.currentMapId && !this.state.mapResult) {
-        this.getMarkerById(this.currentMapId, false, true);
+        this.getMarkerById(this.currentMapId, false, false);
       }
       return;
     }
@@ -813,7 +813,7 @@ export class MapViewComponent {
       } else {
         this.stopLoadingMarkers();
         if (this.currentMapId && !this.state.mapResult) {
-          this.getMarkerById(this.currentMapId, false, true);
+          this.getMarkerById(this.currentMapId, false, false);
         }
       }
       // }
@@ -882,7 +882,7 @@ export class MapViewComponent {
     });
     this.loadingMarkers = false;
     if (this.currentMapId && !this.state.mapResult) {
-      this.getMarkerById(this.currentMapId, false, true);
+      this.getMarkerById(this.currentMapId, false, false);
     }
     
     setTimeout(() => {
