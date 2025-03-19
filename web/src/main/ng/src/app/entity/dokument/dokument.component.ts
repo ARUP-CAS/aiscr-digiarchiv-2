@@ -64,9 +64,9 @@ export class DokumentComponent implements OnInit, OnChanges {
       this.checkRelations();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;// && !this.mapDetail;
-    }
-    if (this.mapDetail) {
-      this.getFullId();
+      if (this.mapDetail) {
+        this.getFullId();
+      }
     }
   }
 
@@ -110,7 +110,7 @@ export class DokumentComponent implements OnInit, OnChanges {
  }
 
  checkRelations() {
-  if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+  if (!this.result.ident_cely || this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
     return;
   }
   this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {

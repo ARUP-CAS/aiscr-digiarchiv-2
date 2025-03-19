@@ -105,7 +105,6 @@ export class MapViewComponent {
   lfAttribution = '<span aria-hidden="true"> | </span><a href="https://leafletjs.com" title="A JavaScript library for interactive maps"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"></path><path fill="#FFD500" d="M0 4h12v3H0z"></path><path fill="#E0BC00" d="M0 7h12v1H0z"></path></svg> Leaflet</a>';
 
 
-
   icon = L.divIcon({ className: 'map-pin', iconSize: null });
   hitIcon = L.divIcon({ className: 'map-pin-hit', iconSize: null });
   iconPoint = L.divIcon({ className: 'map-pin-point', iconSize: null });
@@ -217,17 +216,17 @@ export class MapViewComponent {
   }
 
   paramsChanged() {
+    const mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
+    this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     if (this.facetsChanged || this.pianIdChanged) {
       this.getDataByVisibleArea();
       this.facetsChanged = false;
       this.pianIdChanged = false;
       return;
     }
-    const mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
     if (mapIdChanged) {
       this.state.mapResult = null;
     }
-    this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     if (!this.currentMapId) {
       this.state.mapResult = null;
       this.clearSelectedMarker();
@@ -279,8 +278,16 @@ export class MapViewComponent {
   onMapReady(map: L.Map) {
     this.map = map;
 
+    if (this.route.snapshot.queryParamMap.has('vyber')) {
+      const loc_rpt = this.route.snapshot.queryParamMap.get('vyber').split(',');
+      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+      this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
+    }
+
     this.locationFilter = new L.LocationFilter({
       bounds: this.state.locationFilterBounds,
+      enable: this.state.locationFilterBounds !== null,
       adjustButton: false,
       buttonPosition: 'topright',
       enableButton: {
@@ -369,6 +376,9 @@ export class MapViewComponent {
     });
 
     this.locationFilter.on('disabled', () => {
+      if (this.state.isMapaCollapsed) {
+        return;
+      }
       this.state.locationFilterEnabled = false;
       this.state.locationFilterBounds = null;
       this.updateVyber();
@@ -425,7 +435,7 @@ export class MapViewComponent {
     }
     const queryParams: any = { page: 0 };
     if (this.state.locationFilterEnabled) {
-      queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' +
+        queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' +
         this.state.locationFilterBounds.getSouthWest().lng + ',' +
         this.state.locationFilterBounds.getNorthEast().lat + ',' +
         this.state.locationFilterBounds.getNorthEast().lng;
@@ -433,7 +443,9 @@ export class MapViewComponent {
       queryParams.vyber = null;
     }
 
+
     this.zone.run(() => {
+      this.state.setFacetChanged();
       this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
     });
   }
@@ -847,7 +859,6 @@ export class MapViewComponent {
   setMarkersByLoc(docs: SolrDocument[], isId: boolean) {
     const pianIds: { id: string, docId: string }[] = [];
     docs.forEach(doc => {
-
       if (!doc.pian_id && (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument')) {
         const coords = doc.loc_rpt[0].split(',');
         const mrk = this.addMarker({
@@ -860,6 +871,9 @@ export class MapViewComponent {
           docIds: [doc.ident_cely],
           pian_chranene_udaje: null
         });
+        if (doc.ident_cely === this.currentMapId) {
+          mrk.setIcon(this.hitIcon);
+        }
         this.markersList.push(mrk);
         mrk.addTo(this.markers);
 
@@ -930,10 +944,10 @@ export class MapViewComponent {
   }
 
   selectMarker(markerId: string) {
-    console.log(markerId)
     this.zone.run(() => {
       const mrk = this.findMarker(markerId);
       if (mrk) {
+        this.currentMapId = mrk.options.docIds[0];
         this.getMarkerById(mrk.options.docIds[0], false, false);
       }
       
@@ -947,7 +961,7 @@ export class MapViewComponent {
         return;
       }
       this.markersList = [];
-      this.opened = true;
+      //this.opened = true;
       this.state.setFacetChanged();
       this.pianIdChanged = true;
       const mapId = docId.length === 1 ? docId[0] : null;
@@ -1002,10 +1016,10 @@ export class MapViewComponent {
         this.state.setSearchResponse(res, 'map');
       }
       const doc = res.response.docs.find(d => d.ident_cely === docId);
-      this.state.setMapResult(doc, false);
+      this.state.mapResult = doc;
       this.setMarkers(res.response.docs, false, true);
       if (zoom) {
-        // this.zoomOnMapResult(doc);
+        this.zoomOnMapResult(doc);
       }
 
 
