@@ -6,9 +6,15 @@
 >
     <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
 
+    <xsl:template match="/">
+        <amcr:amcr xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:gml="http://www.opengis.net/gml/3.2"
+            xmlns:amcr="https://api.aiscr.cz/schema/amcr/2.1/" xsi:schemaLocation="https://api.aiscr.cz/schema/amcr/2.0/ https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd">
+            <xsl:apply-templates select="@* | node()"/>
+        </amcr:amcr>
+    </xsl:template>
+    
     <xsl:template match="@* | node()">
-      <xsl:copy copy-namespaces="true">
           HTTP/1.1 403 Forbidden
-      </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

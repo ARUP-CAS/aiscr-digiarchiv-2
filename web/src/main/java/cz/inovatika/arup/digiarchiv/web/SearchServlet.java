@@ -229,6 +229,7 @@ public class SearchServlet extends HttpServlet {
                     SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", request.getParameterValues("id")) + "\")")
                             .addFilterQuery("entity:" + entity)
                             .setSort("ident_cely", SolrQuery.ORDER.asc)
+                            .setParam("stats", false)
                             .setFacet(false);
                     query.setRequestHandler("/search");
 //          if (entity == null) {
@@ -268,8 +269,9 @@ public class SearchServlet extends HttpServlet {
 //                            }
 //                        }
 //                    }
-                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
-                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+
+//                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
+//                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
                     return jo.toString();
 
                 } catch (Exception ex) {

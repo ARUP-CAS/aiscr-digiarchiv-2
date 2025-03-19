@@ -85,7 +85,8 @@ public class OAIRequest {
 
     private static Transformer getVersionTransformer(String version) throws TransformerConfigurationException {
         if (versionTransformers.get(version) == null) {
-            TransformerFactory factory = TransformerFactory.newDefaultInstance();
+            //TransformerFactory factory = TransformerFactory.newDefaultInstance();
+            TransformerFactory factory = new net.sf.saxon.TransformerFactoryImpl();
             Source xslt = new StreamSource(Options.getInstance().getVersionXslt(version));
             Transformer t = factory.newTransformer(xslt);
             t.setOutputProperty("omit-xml-declaration", "yes");
@@ -552,8 +553,11 @@ public class OAIRequest {
 
             ret.append("<metadata>\n");
             String xml = filter(req, doc);
+            int pos1 = xml.indexOf("xmlns:amcr=");
+            int pos2 = xml.indexOf("\"", pos1 + 14);
+            String xmlns_amcr = xml.substring(pos1 + "xmlns:amcr=\"".length(), pos2);
 
-            if (isValidVersion(version)) {
+            if (shoulTransformVersion(version, xmlns_amcr)) {
                 try {
                     xml = transformByVersion(xml, version);
                 } catch (TransformerException ex) {
@@ -563,7 +567,7 @@ public class OAIRequest {
 
             if (!xml.equals(ERROR_404_MSG) && "oai_dc".equals(metadataPrefix)) {
                 try {
-                    xml = transformToDC(xml);
+                    xml = transformToDC(xml, xmlns_amcr);
                 } catch (TransformerException ex) {
                     Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -648,8 +652,10 @@ public class OAIRequest {
         return e404;
     }
 
-    private static boolean isValidVersion(String version) {
-        return ("/v2".equals(version) || "/v2.1".equals(version));
+    private static boolean shoulTransformVersion(String version, String xmlns_amcr ) {
+        
+        return (("/v2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr)) 
+                || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr)) );
     }
 
     private static String transformByVersion(String xml, String version) throws TransformerException {
@@ -660,15 +666,10 @@ public class OAIRequest {
         return sw.toString();
     }
 
-    private static String transformToDC(String xml) throws TransformerException {
+    private static String transformToDC(String xml, String xmlns_amcr) throws TransformerException {
 
         Source text = new StreamSource(new StringReader(xml));
         StringWriter sw = new StringWriter();
-
-        
-        int pos1 = xml.indexOf("xmlns:amcr=");
-        int pos2 = xml.indexOf("\"", pos1 + 14);
-        String xmlns_amcr = xml.substring(pos1 + "xmlns:amcr=\"".length(), pos2);
                     
         getDcTransformer(xmlns_amcr).transform(text, new StreamResult(sw));
 
