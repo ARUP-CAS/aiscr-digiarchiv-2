@@ -83,7 +83,7 @@ export class ExterniZdrojComponent implements OnInit {
       case 'HES-001117': // 'kniha'
         this.bibTex = `@book{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
           author = {${autor}}, 
-          title = {${this.result.ext_zdroj_nazev}${this.result.ext_zdroj_podnazev ? ' ' + this.result.ext_zdroj_podnazev : ''}},
+          title = {${this.result.ext_zdroj_nazev}},
           ${this.result.ext_zdroj_vydavatel ? `publisher = {${this.result.ext_zdroj_vydavatel}},` : ''}
           year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
           ${this.result.ext_zdroj_edice_rada ? `series = {${this.result.ext_zdroj_edice_rada}},` : ''}
@@ -96,7 +96,7 @@ export class ExterniZdrojComponent implements OnInit {
       case 'HES-001118': // 'část knihy':
         this.bibTex = `@inproceedings{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
             author = {${autor}}, 
-            title = {${this.result.ext_zdroj_nazev}${this.result.ext_zdroj_podnazev ? ' ' + this.result.ext_zdroj_podnazev : ''}},
+            title = {${this.result.ext_zdroj_nazev}},
             booktitle = {${this.result.ext_zdroj_sbornik_nazev}},
             year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
             ${this.result.ext_zdroj_editor ? `editor = {${this.result.ext_zdroj_editor}},` : ''}
@@ -112,7 +112,7 @@ export class ExterniZdrojComponent implements OnInit {
       case 'HES-001119': // 'článek v časopise':
         this.bibTex = `@article{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
               author = {${autor}},
-              title = {${this.result.ext_zdroj_nazev}${this.result.ext_zdroj_podnazev ? ' ' + this.result.ext_zdroj_podnazev : ''}},
+              title = {${this.result.ext_zdroj_nazev}},
               journal = {${this.result.ext_zdroj_casopis_denik_nazev}},
               year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
               volume = {${this.result.ext_zdroj_casopis_rocnik}},
@@ -125,7 +125,7 @@ export class ExterniZdrojComponent implements OnInit {
       case 'HES-001120': // 'článek v novinách':
         this.bibTex = `@article{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
                 author = {${autor}},
-                title = {${this.result.ext_zdroj_nazev}${this.result.ext_zdroj_podnazev ? ' ' + this.result.ext_zdroj_podnazev : ''}},
+                title = {${this.result.ext_zdroj_nazev}},
                 journal = {${this.result.ext_zdroj_casopis_denik_nazev}},
                 year = {${this.result.ext_zdroj_rok_vydani_vzniku}},
                 volume = {${this.result.ext_zdroj_datum_rd}},
