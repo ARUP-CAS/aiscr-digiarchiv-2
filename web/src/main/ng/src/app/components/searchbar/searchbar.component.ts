@@ -57,8 +57,12 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.page = 0;
     p.mapId = null;
     this.state.mapResult = null;
+    let url = '/results';
+    if (this.router.isActive('map', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+      url = '/map';
+    }
     this.state.setFacetChanged();
-    this.router.navigate(['/results'], { queryParams: p, queryParamsHandling: 'merge' });
+    this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
   }
 
   changeShowWithoutThumbs() {
@@ -83,7 +87,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.loc_rpt = null;
 
     if (p.mapa) {
-      if (this.router.isActive('/id', false)) {
+      if (this.router.isActive('id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
         p.loc_rpt = null;
         p.vyber = null;
       } else {
@@ -110,7 +114,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
       }
     }
     let url = '/results';
-    if (this.router.isActive('/id', false)) {
+    if (this.router.isActive('id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;
       p.vyber = null;

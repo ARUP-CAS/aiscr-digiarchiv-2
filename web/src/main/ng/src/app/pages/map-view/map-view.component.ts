@@ -128,6 +128,7 @@ export class MapViewComponent {
   loadingMarkers = false;
   settingsBounds = false;
   currentMapId: string = null;
+  pianIdChanged = false;
   currentZoom: number;
   currentLocBounds: string;
   showType = 'marker'; // 'heat', 'cluster', 'marker'
@@ -216,16 +217,29 @@ export class MapViewComponent {
   }
 
   paramsChanged() {
-    if (this.facetsChanged) {
+    if (this.facetsChanged || this.pianIdChanged) {
       this.getDataByVisibleArea();
       this.facetsChanged = false;
+      this.pianIdChanged = false;
       return;
     }
-    const mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId')
+    const mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
+    if (mapIdChanged) {
+      this.state.mapResult = null;
+    }
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
+    if (!this.currentMapId) {
+      this.state.mapResult = null;
+      this.clearSelectedMarker();
+    } else {
+      if (mapIdChanged && !this.route.snapshot.queryParamMap.has('loc_rpt')) {
+        // Zpracujeme tady jen kdyz nemame souracnice
+        // Pokud mame, zkontrolujeme na konci ziskani markeru
+        this.getMarkerById(this.currentMapId, false, true);
+      }
+    }
 
-    // const locrptChanged = this.currentLocBounds !== this.route.snapshot.queryParamMap.get('loc_rpt');
-    let locrptChanged = false;
+    const locrptChanged = this.currentLocBounds !== this.route.snapshot.queryParamMap.get('loc_rpt');
     this.currentLocBounds = this.route.snapshot.queryParamMap.get('loc_rpt');
 
     if (this.route.snapshot.queryParamMap.has('loc_rpt')) {
@@ -236,15 +250,20 @@ export class MapViewComponent {
       if (loc_rpt[0] === loc_rpt[2]) {
         // this.setToMarkerZoom = true;
       }
-      locrptChanged = !this.map.getBounds().equals(bounds);
+      //locrptChanged = !this.map.getBounds().equals(bounds);
       if (locrptChanged) {
-        if (this.shouldPad) {
-          this.fitBounds(bounds, { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
+        if (this.map.getBounds().equals(bounds)) {
+          // Bounds already set by user interaction. So find data
+          this.getDataByVisibleArea();
         } else {
-          this.fitBounds(bounds, null);
+          if (this.shouldPad) {
+            this.fitBounds(bounds, { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
+          } else {
+            this.fitBounds(bounds, null);
+          }
+          this.shouldPad = false;
         }
-        this.shouldPad = false;
-      } else {
+      } else if (this.currentMapId) {
         this.getDataByVisibleArea();
       }
     }
@@ -252,6 +271,7 @@ export class MapViewComponent {
   }
 
   clearData() {
+    this.markersList = [];
     this.markers.clearLayers();
     this.clusters.clearLayers();
   }
@@ -559,23 +579,23 @@ export class MapViewComponent {
       this.clusters.clearLayers();
     } else if (count > this.maxNumMarkers) {
       this.showType = 'cluster';
-      if (this.heatmapLayer) {
-        this.map.removeLayer(this.heatmapLayer);
-      }
       if (oldType !== this.showType) {
         this.markersList = [];
         this.markers.clearLayers();
         this.clusters.clearLayers();
+      }
+      if (this.heatmapLayer) {
+        this.map.removeLayer(this.heatmapLayer);
       }
     } else {
       this.showType = 'marker';
-      if (this.heatmapLayer) {
-        this.map.removeLayer(this.heatmapLayer);
-      }
       if (oldType !== this.showType) {
         this.markersList = [];
         this.markers.clearLayers();
         this.clusters.clearLayers();
+      }
+      if (this.heatmapLayer) {
+        this.map.removeLayer(this.heatmapLayer);
       }
     }
 
@@ -686,6 +706,8 @@ export class MapViewComponent {
   }
 
   clearPian() {
+    this.state.setFacetChanged();
+    this.pianIdChanged = true;
     this.router.navigate([], { queryParams: { pian_id: null, page: 0 }, queryParamsHandling: 'merge' });
   }
 
@@ -705,6 +727,7 @@ export class MapViewComponent {
     this.state.solrResponse = null;
     this.markersSubs = this.service.search(p as HttpParams).subscribe((res: any) => {
       this.state.setSearchResponse(res, 'map');
+      
       this.setMarkers(res.response.docs, clean, false);
       // if (this.currentMapId) {
       //   const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
@@ -746,6 +769,7 @@ export class MapViewComponent {
         docIds: docIds,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
+      this.markersList.push(mrk);
       mrk.addTo(this.markers);
       this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, docIds);
     });
@@ -757,6 +781,9 @@ export class MapViewComponent {
     }
     if (ids.length === 0) {
       this.stopLoadingMarkers();
+      if (this.currentMapId && !this.state.mapResult) {
+        this.getMarkerById(this.currentMapId, false, true);
+      }
       return;
     }
     const idsSize = 20;
@@ -773,6 +800,9 @@ export class MapViewComponent {
         this.loadNextMarkers(ids, entity, isId)
       } else {
         this.stopLoadingMarkers();
+        if (this.currentMapId && !this.state.mapResult) {
+          this.getMarkerById(this.currentMapId, false, true);
+        }
       }
       // }
     });
@@ -802,6 +832,9 @@ export class MapViewComponent {
             if (p) {
               p.docIds = markerInList.options.docIds;
             }
+            if (markerInList.options.docIds.includes(this.currentMapId)) {
+              markerInList.setIcon(this.hitIcon);
+            }
           }
         });
       }
@@ -827,12 +860,17 @@ export class MapViewComponent {
           docIds: [doc.ident_cely],
           pian_chranene_udaje: null
         });
+        this.markersList.push(mrk);
         mrk.addTo(this.markers);
 
       }
 
     });
     this.loadingMarkers = false;
+    if (this.currentMapId && !this.state.mapResult) {
+      this.getMarkerById(this.currentMapId, false, true);
+    }
+    
     setTimeout(() => {
       this.loading = false;
       this.cd.detectChanges();
@@ -847,9 +885,9 @@ export class MapViewComponent {
       this.markers.clearLayers();
       this.clusters.clearLayers();
     }
-    if (this.markers._layers.length + docs.length > this.config.mapOptions.docsForMarker) {
-      this.markersList = [];
-      this.markers.clearLayers();
+    if (this.markersList.length + docs.length > this.config.mapOptions.docsForMarker && !isId) {
+      // this.markersList = [];
+      // this.markers.clearLayers();
     }
     const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
 
@@ -879,58 +917,172 @@ export class MapViewComponent {
       mrk.on('click', (e) => {
         const id = e.target.options.id;
         // const doc = this.findMarker(id).doc;
-        // this.selectMarker(doc);
+        this.selectMarker(e.target.options.id);
       });
       mrk.bindTooltip(mr.id);
     }
     this.markersList.push(mrk);
     return mrk;
-}
+  }
+
+  findMarker(id: string) {
+    return this.markersList.find(m => m.options.id === id);
+  }
+
+  selectMarker(markerId: string) {
+    console.log(markerId)
+    this.zone.run(() => {
+      const mrk = this.findMarker(markerId);
+      if (mrk) {
+        this.getMarkerById(mrk.options.docIds[0], false, false);
+      }
+      
+    });
+  }
 
 
-setPianId(pian_id: string, docId: string[]) {
-  this.zone.run(() => {
-    if (this.usingMeasure) {
+  setPianId(pian_id: string, docId: string[]) {
+    this.zone.run(() => {
+      if (this.usingMeasure) {
+        return;
+      }
+      this.markersList = [];
+      this.opened = true;
+      this.state.setFacetChanged();
+      this.pianIdChanged = true;
+      const mapId = docId.length === 1 ? docId[0] : null;
+      this.router.navigate([], { queryParams: { pian_id, mapId, page: 0 }, queryParamsHandling: 'merge' });
+    });
+  }
+
+  popUpHtml(id: string, presnost: string, ids: string[]) {
+    const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
+    const p = ids.length > 1 ? ids.length : ids[0];
+    // const p = ids.join(', ');
+    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + p + ')';
+  }
+
+  addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docIds: string[]) {
+    if (!geom_wkt_c) {
       return;
     }
-    this.markersList = [];
-    this.opened = true;
-    this.state.setFacetChanged();
-    const mapId = docId.length === 1 ? docId[0] : null;
-    this.router.navigate([], { queryParams: { pian_id, mapId, page: 0 }, queryParamsHandling: 'merge' });
-  });
-}
+    try {
 
-popUpHtml(id: string, presnost: string, ids: string[]) {
-  const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
-  const p = ids.length > 1 ? ids.length : ids[0];
-  // const p = ids.join(', ');
-  return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + p + ')';
-}
+      const wkt = new Wkt.Wkt();
+      wkt.read(geom_wkt_c);
 
-addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docIds: string[]) {
-  if (!geom_wkt_c) {
-    return;
+      if (wkt.toJson().type !== 'Point') {
+        const layer = geoJSON((wkt.toJson() as any), {
+          style: () => ({
+            color: this.config.mapOptions.shape.color,
+            weight: this.config.mapOptions.shape.weight,
+            fillColor: this.config.mapOptions.shape.fillColor,
+            fillOpacity: this.config.mapOptions.shape.fillOpacity
+          })
+        });
+        layer.on('click', (e) => {
+          this.setPianId(e.target.options.id, e.target.options.docIds);
+        });
+        layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
+        // layer.addTo(this.overlays);
+        layer.addTo(this.markers);
+      }
+    } catch(e) {
+      // console.log(e)
+    }
+    
   }
-  const wkt = new Wkt.Wkt();
-  wkt.read(geom_wkt_c);
 
-  if (wkt.toJson().type !== 'Point') {
-    const layer = geoJSON((wkt.toJson() as any), {
-      style: () => ({
-        color: this.config.mapOptions.shape.color,
-        weight: this.config.mapOptions.shape.weight,
-        fillColor: this.config.mapOptions.shape.fillColor,
-        fillOpacity: this.config.mapOptions.shape.fillOpacity
-      })
+  getMarkerById(docId: string, setResponse: boolean, zoom: boolean) {
+    //this.state.loading = true;
+    const p: any = Object.assign({}, this.route.snapshot.queryParams);
+
+    this.service.getId(docId, false).subscribe((res: any) => {
+      if (setResponse) {
+        this.state.setSearchResponse(res, 'map');
+      }
+      const doc = res.response.docs.find(d => d.ident_cely === docId);
+      this.state.setMapResult(doc, false);
+      this.setMarkers(res.response.docs, false, true);
+      if (zoom) {
+        // this.zoomOnMapResult(doc);
+      }
+
+
     });
-    layer.on('click', (e) => {
-      this.setPianId(e.target.options.id, e.target.options.docIds);
-    });
-    layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
-    // layer.addTo(this.overlays);
-    layer.addTo(this.markers);
   }
-}
+
+  zoomOnMapResult(doc: any) {
+
+    this.hitMarker(doc);
+
+    const bounds = this.service.getBoundsByDoc(doc);
+    this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
+    if (!this.map.getBounds().contains(bounds)) {
+      // Markers outside view in this zoom
+      this.fitBounds(bounds, { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
+    }
+
+    this.state.mapBounds = this.map.getBounds();
+    if (this.currentZoom === this.config.mapOptions.hitZoomLevel) {
+      this.getDataByVisibleArea();
+    }
+  }
+
+  hitMarker(res) {
+    // if (!res) {
+    //   this.clearSelectedMarker();
+    //   return true;
+    // }
+    // const docId = res.ident_cely;
+    // let changed = true;
+    // if ((this.selectedMarker.length > 0 && this.selectedMarker[0].options.doc.ident_cely.includes(docId))) {
+    //   // the same or document
+    //   changed = false;
+    // }
+    // let ms = this.markersList.filter(mrk => mrk.options.doc.includes(docId));
+    // //if (changed) {
+    // this.clearSelectedMarker();
+    // //}
+
+    // if (!ms || ms.length === 0) {
+    //   // this.addMarkerByResult(res);
+    //   return changed;
+    // }
+
+    // let latMax = 0;
+    // let latMin = 90;
+    // let lngMax = 0;
+    // let lngMin = 180;
+
+    // const bounds = []
+    // ms.forEach(m => {
+    //   m.setIcon((m.typ === 'bod' || m.typ === 'HES-001135') ? this.hitIconPoint : this.hitIcon);
+    //   m.setZIndexOffset(100);
+    //   m.options.selected = true;
+    //   const latlng = m.getLatLng();
+    //   latMax = Math.max(latMax, latlng.lat);
+    //   latMin = Math.min(latMin, latlng.lat);
+    //   lngMax = Math.max(lngMax, latlng.lng);
+    //   lngMin = Math.min(lngMin, latlng.lng);
+    //   if (this.showType === 'heat') {
+    //     m.addTo(this.markers);
+    //     if (parseInt(m.presnost) < 4 && m.typ !== 'bod') {
+    //       this.addShapeLayer(m.options.id, m.options.presnost, null);
+    //     }
+    //   }
+    // });
+
+
+    // return changed;
+  }
+
+  clearSelectedMarker() {
+    this.markersList.forEach(m => {
+      m.setIcon((m.typ === 'bod' || m.typ === 'HES-001135') ? this.iconPoint : this.icon);
+      m.setZIndexOffset(0);
+      m.options.selected = false;
+    });
+  }
 
 }

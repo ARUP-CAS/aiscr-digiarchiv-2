@@ -678,7 +678,7 @@ export class AppService {
       const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
       this.state.closingMapResult = inResults;
       this.state.mapResult = result;
-      let url = '/results';
+      let url = '/map';
       const p: any = {};
       p.mapId = null;
       p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
@@ -701,7 +701,7 @@ export class AppService {
     const p: any = {};
     p.mapa = true;
     p.mapId = result.ident_cely;
-    let url = '/results';
+    let url = '/map';
     if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
       url = '/id/' + this.state.documentId;
