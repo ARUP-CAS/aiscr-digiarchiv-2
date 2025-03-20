@@ -127,6 +127,7 @@ export class MapViewComponent {
   loadingMarkers = false;
   settingsBounds = false;
   currentMapId: string = null;
+  currentPianId: string = null;
   pianIdChanged = false;
   currentZoom: number;
   currentLocBounds: string;
@@ -154,6 +155,7 @@ export class MapViewComponent {
     this.setTitle();
     this.initLayers();
     this.options.center = L.latLng(this.config.mapOptions.centerX, this.config.mapOptions.centerY);
+    this.options.maxZoom = this.config.mapOptions.maxZoom;
     this.maxNumMarkers = this.config.mapOptions.docsForMarker;
     this.subs.push(this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -218,7 +220,13 @@ export class MapViewComponent {
   paramsChanged() {
     const mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
-    if (this.facetsChanged || this.pianIdChanged) {
+    this.pianIdChanged = this.currentPianId !== this.route.snapshot.queryParamMap.get('pian_id');
+    this.currentPianId = this.route.snapshot.queryParamMap.get('pian_id');
+    if (this.pianIdChanged) {
+      this.clearData();
+    }
+
+    if (this.facetsChanged) {
       this.getDataByVisibleArea();
       this.facetsChanged = false;
       this.pianIdChanged = false;
@@ -235,6 +243,7 @@ export class MapViewComponent {
         // Zpracujeme tady jen kdyz nemame souracnice
         // Pokud mame, zkontrolujeme na konci ziskani markeru
         this.getMarkerById(this.currentMapId, false, true);
+        return;
       }
     }
 
@@ -254,6 +263,7 @@ export class MapViewComponent {
         if (this.map.getBounds().equals(bounds)) {
           // Bounds already set by user interaction. So find data
           this.getDataByVisibleArea();
+          return;
         } else {
           if (this.shouldPad) {
             this.fitBounds(bounds, { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
@@ -261,11 +271,15 @@ export class MapViewComponent {
             this.fitBounds(bounds, null);
           }
           this.shouldPad = false;
+          return;
         }
       } else if (this.currentMapId) {
         this.getDataByVisibleArea();
+        return;
       }
     }
+    // Nothing happened, so changed url with back button
+    this.getDataByVisibleArea();
 
   }
 
@@ -947,8 +961,9 @@ export class MapViewComponent {
     this.zone.run(() => {
       const mrk = this.findMarker(markerId);
       if (mrk) {
-        this.currentMapId = mrk.options.docIds[0];
+        const mapId = mrk.options.docIds[0];
         this.getMarkerById(mrk.options.docIds[0], false, false);
+        this.router.navigate([], { queryParams: { mapId, page: 0 }, queryParamsHandling: 'merge' });
       }
       
     });
@@ -984,18 +999,22 @@ export class MapViewComponent {
 
       const wkt = new Wkt.Wkt();
       wkt.read(geom_wkt_c);
-
-      if (wkt.toJson().type !== 'Point') {
-        const layer = geoJSON((wkt.toJson() as any), {
+      const wJson = wkt.toJson();
+      wJson.id = ident_cely;
+      wJson.docIds = docIds;
+      if (wJson.type !== 'Point') {
+        console.log(wJson)
+        const layer = geoJSON((wJson as any), {
           style: () => ({
             color: this.config.mapOptions.shape.color,
             weight: this.config.mapOptions.shape.weight,
             fillColor: this.config.mapOptions.shape.fillColor,
             fillOpacity: this.config.mapOptions.shape.fillOpacity
           })
-        });
+        }
+      );
         layer.on('click', (e) => {
-          this.setPianId(e.target.options.id, e.target.options.docIds);
+          this.setPianId(ident_cely, docIds);
         });
         layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
         // layer.addTo(this.overlays);
