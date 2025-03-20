@@ -488,26 +488,38 @@
         "pian_id"
       ],
       "facets": [
-        "f_vedouci:projekt_vedouci_projektu",
         "f_organizace:projekt_organizace",
-        "f_typ_projektu:projekt_typ_projektu",
-        "f_okres:projekt_okres"
+        "f_kraj:projekt_okres.kraj.id",
+        "f_okres:projekt_okres",
+        "f_katastr:projekt_chranene_udaje.hlavni_katastr.id",
+        "f_katastr:projekt_chranene_udaje.dalsi_katastr[*].id",
+        "f_vedouci:projekt_vedouci_projektu",
+        "f_typ_vyzkumu:akce_hlavni_typ.id",
+        "f_typ_vyzkumu:akce_vedlejsi_typ.id",
+        "f_typ_projektu:projekt_typ_projektu"
       ],
       "full_text": [
         "ident_cely",
-        "projekt_typ_projektu",
+        "projekt_chranene_udaje.hlavni_katastr.value",
+        "projekt_chranene_udaje.dalsi_katastr[*].value",
+        "projekt_chranene_udaje.lokalizace",
+        "projekt_chranene_udaje.parcelni_cislo",
+        "projekt_chranene_udaje.kulturni_pamatka_cislo",
+        "projekt_chranene_udaje.kulturni_pamatka_popis",
         "projekt_okres",
-        "projekt_hlavni_katastr",
-        "projekt_dalsi_katastr",
-        "projekt_podnet",
         "projekt_vedouci_projektu",
         "projekt_organizace",
-        "projekt_oznaceni_stavby",
+        "projekt_typ_projektu",
         "projekt_datum_zahajeni",
         "projekt_datum_ukonceni",
+        "projekt_podnet",
         "projekt_archeologicky_zaznam",
         "projekt_dokument",
-        "projekt_samostatny_nalez"
+        "projekt_samostatny_nalez",
+        "projekt_uzivatelske_oznaceni",
+        "projekt_kulturni_pamatka",
+        "projekt_oznaceni_stavby"
+                
       ]
     },
     "samostatny_nalez": {

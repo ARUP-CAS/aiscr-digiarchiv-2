@@ -60,7 +60,7 @@ public class SearchUtils {
         }
     }
 
-    public static Map getPristupnostMap() {
+    public static Map<String, String> getPristupnostMap() {
         if (pristupnostMap == null) {
             initPristupnostMap();
         }
