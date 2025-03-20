@@ -603,7 +603,7 @@ export class MapViewComponent {
       this.markersList = [];
       this.markers.clearLayers();
       this.clusters.clearLayers();
-    } else if (count > this.maxNumMarkers) {
+    } else if (count > this.maxNumMarkers && this.map.getZoom() < this.options.maxZoom) {
       this.showType = 'cluster';
       if (oldType !== this.showType) {
         this.markersList = [];
@@ -703,7 +703,10 @@ export class MapViewComponent {
     this.clusterList = [];
     docs.forEach(doc => {
       const coords = doc.loc_rpt[0].split(',');
-      const mrk = L.marker([coords[0], coords[1]], { id: doc.pian_id, doc: [doc.ident_cely], riseOnHover: true, icon: doc.typ === 'bod' ? this.iconPoint : this.icon });
+      const mrk = L.marker([coords[0], coords[1]], { id: doc.pian_id, docId: [doc.ident_cely], riseOnHover: true, icon: doc.typ === 'bod' ? this.iconPoint : this.icon });
+      mrk.on('click', (e) => {
+        this.setPianId(e.target.options.id, e.target.options.docId);
+      });
       this.clusterList.push(mrk);
     });
     this.clusters.addLayers(this.clusterList);
@@ -720,7 +723,10 @@ export class MapViewComponent {
       if (doc.loc_rpt) {
         if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
           const coords = doc.loc_rpt[0].split(',');
-          const mrk = L.marker([coords[0], coords[1]], { id: doc.ident_cely, doc: [doc.ident_cely], riseOnHover: true, icon: this.iconPoint });
+          const mrk = L.marker([coords[0], coords[1]], { id: doc.ident_cely, docId: doc.ident_cely, riseOnHover: true, icon: this.iconPoint });
+          mrk.on('click', (e) => {
+            this.selectMarkerFromCluster(e.target.options.docId);
+          });
           this.clusterList.push(mrk);
           mrk.addTo(this.clusters);
         }
@@ -956,6 +962,22 @@ export class MapViewComponent {
 
   findMarker(id: string) {
     return this.markersList.find(m => m.options.id === id);
+  }
+
+  
+
+  selectMarkerFromCluster(docId: string) {
+    this.zone.run(() => {
+      this.getMarkerById(docId, false, true);
+      this.router.navigate([], { queryParams: { mapId: docId, page: 0 }, queryParamsHandling: 'merge' });
+      // const mrk = this.findMarker(markerId);
+      // if (mrk) {
+      //   const mapId = mrk.options.docIds[0];
+      //   this.getMarkerById(mrk.options.docIds[0], false, false);
+      //   this.router.navigate([], { queryParams: { mapId: docId, page: 0 }, queryParamsHandling: 'merge' });
+      // }
+      
+    });
   }
 
   selectMarker(markerId: string) {
