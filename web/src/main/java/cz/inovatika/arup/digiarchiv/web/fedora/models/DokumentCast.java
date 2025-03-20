@@ -124,8 +124,15 @@ public class DokumentCast {
                         k = dalsi_katastr.getJSONObject(j).optString("value");
                         if (k != null) {
                             SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
-                            String okres = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            //String okres = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            
+                            JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            String okres = kat.getString("okres_nazev");
+                            String kraj = kat.getString("kraj_nazev");
+            
+            
                             IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+                            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                             JSONObject li2 = new JSONObject()
                                     .put("pristupnost", doc.getString("pristupnost"))
                                     .put("katastr", k)
@@ -175,8 +182,11 @@ public class DokumentCast {
                     k = dalsi_katastr.getJSONObject(j).optString("value");
                     if (k != null) {
                         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
-                            String okres = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
-                            IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+                        JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                        String okres = kat.getString("okres_nazev");
+                        String kraj = kat.getString("kraj_nazev");
+                        IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+                        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                         JSONObject li2 = new JSONObject()
                                 .put("pristupnost", doc.getString("pristupnost"))
                                 .put("katastr", k)

@@ -182,16 +182,20 @@ public class FedoraHarvester {
         if (newSolr) {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
         }
+        
+        int total = 0;
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
         String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        searchFedora(baseQuery, false, "update", true);
+        JSONObject searchJSON = searchFedora(baseQuery, false, "update", true);
+        total += searchJSON.optInt("total", 0);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
         baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        searchFedora(baseQuery, true, "update", false);
+        searchJSON = searchFedora(baseQuery, true, "update", false);
+        total += searchJSON.optInt("total", 0);
         if (newSolr) {
             solr.close();
         }
@@ -205,6 +209,9 @@ public class FedoraHarvester {
 
         writeRetToFile("update", start);
         writeStatusFile("update", STATUS_FINISHED);
+        if (total > 0) {
+            update(start.toString(), false);
+        }
         return ret;
     }
 
@@ -240,6 +247,7 @@ public class FedoraHarvester {
 
             checkLists(0, indexed, "update", indexed);
             ret.put("items", json);
+            ret.put("total", indexed);
             solr.commit("oai");
             solr.commit("entities");
 

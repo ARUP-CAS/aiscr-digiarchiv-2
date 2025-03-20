@@ -157,13 +157,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         if (az_lokalita != null) {
             az_lokalita.fillSolrFields(idoc);
         }
-
-        setFullText(idoc);
-    }
-
-    public void setFullText(SolrInputDocument idoc) {
-        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("full_text").toList();
-
+        
         String pr = (String) idoc.getFieldValue("pristupnost");
         List<String> prSufix = new ArrayList<>();
 
@@ -179,6 +173,26 @@ public class ArcheologickyZaznam implements FedoraModel {
         if ("D".compareTo(pr) >= 0) {
             prSufix.add("D");
         }
+        
+        setFacets(idoc, prSufix);
+        setFullText(idoc, prSufix);
+    }
+    
+    public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("facets").toList();
+        // List<String> prSufixAll = new ArrayList<>();
+
+        for (Object f : indexFields) {
+            String s = (String) f;
+            String dest = s.split(":")[0];
+            String orig = s.split(":")[1];
+            IndexUtils.addByPath(idoc, orig, dest, prSufix, false);
+        }
+
+    }
+
+    public void setFullText(SolrInputDocument idoc, List<String> prSufix) {
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("full_text").toList();
 
         for (Object f : indexFields) {
             String s = (String) f;
@@ -360,20 +374,30 @@ class AZChraneneUdaje {
     public String uzivatelske_oznaceni;
 
     public List<String> okresy = new ArrayList<>();
+    public List<String> kraje = new ArrayList<>();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
         for (Vocab v : dalsi_katastr) {
             String ruian = v.getId();
-            String okres = SolrSearcher.getOkresNazevByKatastr(ruian);
+            JSONObject k = SolrSearcher.getOkresNazevByKatastr(ruian);
+            String okres = k.getString("okres_nazev");
             if (!okresy.contains(okres)) {
                 okresy.add(okres);
                 IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
             }
+            String kraj = k.getString("kraj_nazev");
+            if (!kraje.contains(kraj)) {
+                kraje.add(kraj);
+                IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
+            }
         }
 
-        IndexUtils.setSecuredJSONField(idoc, "az_chranene_udaje", this);
-        // IndexUtils.addSecuredFieldNonRepeat(idoc, "hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
+        IndexUtils.setSecuredJSONField(idoc, "az_chranene_udaje", this); 
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
+        
+            JSONObject k = SolrSearcher.getOkresNazevByKatastr(hlavni_katastr.getId());
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", k.getString("kraj_nazev"));
+            
         IndexUtils.addRefField(idoc, "katastr_sort", hlavni_katastr);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);
 

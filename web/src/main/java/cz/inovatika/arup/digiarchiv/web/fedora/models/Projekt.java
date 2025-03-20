@@ -505,15 +505,22 @@ class ProjektChraneneUdaje {
     public String kulturni_pamatka_popis;
 
     public List<String> okresy = new ArrayList<>();
+    public List<String> kraje = new ArrayList<>(); 
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
 
         for (Vocab v : dalsi_katastr) {
             String ruian = v.getId();
-            String okres = SolrSearcher.getOkresNazevByKatastr(ruian);
+            JSONObject k = SolrSearcher.getOkresNazevByKatastr(ruian);
+            String okres = k.getString("okres_nazev");
             if (!okresy.contains(okres)) {
                 okresy.add(okres);
                 IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+            }
+            String kraj = k.getString("kraj_nazev");
+            if (!kraje.contains(kraj)) {
+                kraje.add(kraj);
+                IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
             }
         }
 

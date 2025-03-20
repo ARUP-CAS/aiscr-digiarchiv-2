@@ -443,7 +443,7 @@ public class SolrSearcher {
 //        }
 //    }
     private static Map<String, String> okresy;
-    private static Map<String, String> katastry;
+    private static Map<String, JSONObject> katastry;
 
     private static void initOkresy() {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
@@ -465,10 +465,6 @@ public class SolrSearcher {
     }
     
     public static String getOkresNazev(String ruian) {
-//        if (okresy == null) {
-//            initOkresy();
-//        }
-//        return okresy.get(ruian); 
         
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*")
@@ -488,6 +484,27 @@ public class SolrSearcher {
         }
         
     }
+    
+    public static JSONObject getKrajNazev(String ruianOkresu) {
+        
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*") 
+                    //.addFilterQuery("kod:\"" + ruianOkresu + "\"")
+                    .addFilterQuery("{!join fromIndex=ruian to=kod from=kraj}kod:\"" + ruianOkresu + "\"")
+                    .setRows(1).setFields("nazev,kod");
+            JSONObject jo = json(client, "ruian", query);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            } else {
+                return null; 
+            }
+//            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+        
+    }
 
     private static void initKatastry() {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
@@ -495,12 +512,12 @@ public class SolrSearcher {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_katastr")
                     .setRows(100000)
-                    .setFields("kod, okres_nazev");
+                    .setFields("kod, okres_nazev, kraj_nazev, kraj, okres");
             JSONObject jo = json(client, "ruian", query);
             JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
             for (int i = 0; i < ja.length(); i++) {
                 JSONObject doc = ja.getJSONObject(i);
-                katastry.put(doc.getString("kod"), doc.getString("okres_nazev"));
+                katastry.put(doc.getString("kod"), doc);
             }
             
         } catch (IOException | SolrServerException ex) {
@@ -508,7 +525,7 @@ public class SolrSearcher {
         }
     }
     
-    public static String getOkresNazevByKatastr(String ruian) {
+    public static JSONObject getOkresNazevByKatastr(String ruian) {
         if (katastry == null) {
             initKatastry();
         }

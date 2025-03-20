@@ -61,13 +61,16 @@ public class RUIANKatastr implements FedoraModel {
     @Override
     public boolean isSearchable(){
         return true;
-    }
+    } 
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("ident_cely", kod);
         IndexUtils.addVocabField(idoc, "okres", okres);
         idoc.setField("okres_nazev", SolrSearcher.getOkresNazev(okres.getId()));
+        JSONObject kraj = SolrSearcher.getKrajNazev(okres.getId());
+        idoc.setField("kraj_nazev", kraj.getString("nazev"));
+        idoc.setField("kraj", kraj.getString("kod"));
         IndexUtils.addRefField(idoc, "pian", pian);
         IndexUtils.setDateStamp(idoc, kod);   
     }

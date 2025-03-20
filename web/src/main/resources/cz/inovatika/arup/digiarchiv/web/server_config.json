@@ -338,7 +338,12 @@
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
-        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id"
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
+        "f_ez_typ:az_ext_zdroj.ext_zdroj_typ.id",
+        "f_ez_autor:az_ext_zdroj.ext_zdroj_autor.value",
+        "f_ez_autor:az_ext_zdroj.ext_zdroj_editor.value",
+        "f_ez_casopis:az_ext_zdroj.ext_zdroj_casopis_denik_nazev"
+                
       ],
       "full_text": [
         "ident_cely",
@@ -357,7 +362,23 @@
         "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].poznamka",
         "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.value",
         "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.value",
-        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].poznamka"
+        "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].poznamka",
+                
+        "az_ext_zdroj.ident_cely",
+        "az_ext_zdroj.ext_zdroj_autor.value",
+        "az_ext_zdroj.ext_zdroj_nazev",
+        "az_ext_zdroj.ext_zdroj_edice_rada",
+        "az_ext_zdroj.ext_zdroj_isbn",
+        "az_ext_zdroj.ext_zdroj_issn",
+        "az_ext_zdroj.ext_zdroj_vydavatel",
+        "az_ext_zdroj.ext_zdroj_editor.value",
+        "az_ext_zdroj.ext_zdroj_sbornik_nazev",
+        "az_ext_zdroj.ext_zdroj_casopis_denik_nazev",
+        "az_ext_zdroj.ext_zdroj_paginace_titulu",
+        "az_ext_zdroj.ext_zdroj_link",
+        "az_ext_zdroj.ext_zdroj_typ_dokumentu.value",
+        "az_ext_zdroj.ext_zdroj_organizace",
+        "az_ext_zdroj.ext_zdroj_poznamka"
                 
       ]
     },
