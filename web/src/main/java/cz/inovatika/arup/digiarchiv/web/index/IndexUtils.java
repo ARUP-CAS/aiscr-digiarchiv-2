@@ -252,7 +252,6 @@ public class IndexUtils {
             return;
         }
         if (parts.length > 1) {
-
             for (Object o : vals) {
                 try {
                     Object jpReturns = JsonPath.read((String) o, "$." + parts[1]);

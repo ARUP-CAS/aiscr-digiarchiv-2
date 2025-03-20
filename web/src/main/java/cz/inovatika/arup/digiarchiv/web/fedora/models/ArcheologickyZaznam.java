@@ -141,7 +141,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
                 //add adb fields
                 if (djdoc.getFieldValue("dj_adb") != null) {
-                    addAdbFields(idoc, (String) djdoc.getFieldValue("dj_adb"));
+                    // addAdbFields(idoc, (String) djdoc.getFieldValue("dj_adb"));
                 }
             }
             if (!djdocs.isEmpty()) {

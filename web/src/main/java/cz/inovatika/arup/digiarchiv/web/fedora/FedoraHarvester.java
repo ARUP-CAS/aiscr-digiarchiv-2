@@ -431,6 +431,24 @@ public class FedoraHarvester {
         return ret;
     }
 
+    public FedoraModel getIdParsed(String id) throws IOException {
+        try {
+
+            LOGGER.log(Level.INFO, "Processing record {0}", id);
+            String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+            String model = FedoraModel.getModel(xml);
+            Class clazz = FedoraModel.getModelClass(model);
+            if (clazz != null) {
+                return FedoraModel.parseXml(xml, clazz);
+            }
+            return null;
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     public String getId(String id) throws IOException {
         try {
 

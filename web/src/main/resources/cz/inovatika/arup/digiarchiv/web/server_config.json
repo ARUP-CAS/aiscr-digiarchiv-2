@@ -328,7 +328,17 @@
         "az_dj_adb",
         "az_ext_zdroj:[json]"
       ],
-      "facets": [],
+      "facets": [
+        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
+        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
+        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
+        "f_aktivita:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita[*].id",
+        "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
+        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
+        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
+        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id"
+      ],
       "full_text": [
         "ident_cely",
         "az_okres",
@@ -384,21 +394,38 @@
         "f_vedouci:akce_vedouci_akce_ostatni.vedouci.value",
         "f_organizace:akce_organizace",
         "f_organizace:akce_vedouci_akce_ostatni.organizace.id",
-        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
-        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
-        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
-        "f_aktivita:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita[*].id",
-        "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
-        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
-        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
-        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
-        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id"
+        "f_adb_typ_sondy:az_dokumentacni_jednotka.dj_adb.adb_typ_sondy.id",
+        "f_adb_podnet:az_dokumentacni_jednotka.dj_adb.adb_podnet.id",
+        "adb_vyskovy_bod_typ:az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.vyskovy_bod[*].typ.id"
       ],
       "full_text": [
-        "akce_ulozeni_nalezu",
+        "akce_hlavni_vedouci",
         "akce_projekt",
-        "vyskovy_bod_ident_cely",
-        "vyskovy_bod_typ"
+        "akce_organizace",
+        "akce_datum_zahajeni",
+        "akce_datum_ukonceni",
+        "akce_chranene_udaje.lokalizace_okolnosti",
+        "akce_hlavni_typ",
+        "akce_vedlejsi_typ",
+        "akce_vedouci_akce_ostatni.vedouci",
+        "akce_vedouci_akce_ostatni.organizace",
+        "akce_ulozeni_nalezu",
+        "akce_ulozeni_dokumentace",
+        "akce_chranene_udaje.souhrn_upresneni",
+        "az_dokumentacni_jednotka.dj_adb.ident_cely",
+        "az_dokumentacni_jednotka.dj_adb.adb_typ_sondy.value",
+        "az_dokumentacni_jednotka.dj_adb.adb_podnet.value",
+        "az_dokumentacni_jednotka.dj_adb.adb_autor_popisu.value",
+        "az_dokumentacni_jednotka.dj_adb.adb_rok_popisu",
+        "az_dokumentacni_jednotka.dj_adb.adb_autor_revize.value",
+        "az_dokumentacni_jednotka.dj_adb.adb_rok_revize",
+        "az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.uzivatelske_oznaceni_sondy",
+        "az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.trat",
+        "az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.parcelni_cislo",
+        "az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.poznamka",
+        "az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.vyskovy_bod[*].ident_cely.id",
+        "az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.vyskovy_bod[*].typ.value"
+                
       ]
     },
     "lokalita": {
@@ -431,10 +458,11 @@
         "f_pian_zm10:pian_chranene_udaje.zm10"
       ],
       "full_text": [
-        "lokalita_nazev",
-        "lokalita_popis",
-        "lokalita_poznamka",
-        "lokalita_uzivatelske_oznaceni"
+        "lokalita_typ_lokality",
+        "lokalita_druh",
+        "lokalita_chranene_udaje.nazev",
+        "lokalita_chranene_udaje.popis",
+        "lokalita_chranene_udaje.poznamka"
       ]
     },
     "projekt": {

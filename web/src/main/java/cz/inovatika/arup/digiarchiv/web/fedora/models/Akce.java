@@ -164,17 +164,25 @@ public class Akce {
     private void setFullText(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("akce").getJSONArray("full_text").toList();
 
+        
         for (Object f : indexFields) {
             String s = (String) f;
-            if (idoc.containsKey(s)) {
-                IndexUtils.addSecuredFieldNonRepeat(idoc, "text_all", idoc.getFieldValues(s), prSufix);
-            }
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(s + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+            if (s.contains(".")) {
+                IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
+            } else {
+                for (String sufix : prSufix) {
+                    if (idoc.containsKey(s)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    }
+                    if (idoc.containsKey(s + "_" + sufix)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    }
                 }
+
             }
         }
+        
+        
 
         for (String sufix : prSufix) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, akce_hlavni_typ);

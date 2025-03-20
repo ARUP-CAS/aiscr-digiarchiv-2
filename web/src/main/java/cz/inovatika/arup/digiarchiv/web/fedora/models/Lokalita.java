@@ -32,7 +32,7 @@ public class Lokalita {
 
 //<xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:lok-chranene_udajeType"/> <!-- SELF -->  
     @JacksonXmlProperty(localName = "chranene_udaje")
-    private LokalitaChraneneUdaje lokalita_chranene_udaje;
+    public LokalitaChraneneUdaje lokalita_chranene_udaje;
     
 //<xs:element name="igsn" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
     @JacksonXmlProperty(localName = "igsn")
@@ -95,17 +95,24 @@ public class Lokalita {
 
     private void setFullText(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("full_text").toList();
-        Object[] fields = idoc.getFieldNames().toArray();
-        for (Object f : fields) {
+        
+        for (Object f : indexFields) {
             String s = (String) f;
-
-            // SolrSearcher.addSecuredFieldFacets(s, idoc, prSufix);
-            if (indexFields.contains(s)) {
+            if (s.contains(".")) {
+                IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
+            } else {
                 for (String sufix : prSufix) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    if (idoc.containsKey(s)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    }
+                    if (idoc.containsKey(s + "_" + sufix)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    }
                 }
+
             }
         }
+        
 
         for (String sufix : SolrSearcher.prSufixAll) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, lokalita_druh);
