@@ -9,6 +9,7 @@ import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -245,17 +246,18 @@ public class SamostatnyNalez implements FedoraModel {
 
         for (Object f : indexFields) {
             String s = (String) f;
-
-            if (idoc.containsKey(s)) {
+            if (s.contains(".")) {
+                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
+            } else {
                 for (String sufix : SolrSearcher.prSufixAll) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    if (idoc.containsKey(s)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    }
+                    if (idoc.containsKey(s + "_" + sufix)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    }
                 }
-            }
-
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(s + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
-                }
+                
             }
         }
 
@@ -363,9 +365,9 @@ class SnChraneneUdaje {
 
         IndexUtils.setSecuredJSONField(idoc, "samostatny_nalez_chranene_udaje", this);
 
-        if (katastr != null) {
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
-        }
+//        if (katastr != null) {
+//            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
+//        }
         IndexUtils.addRefField(idoc, "katastr_sort", katastr);
 
         if (lokalizace != null) {
