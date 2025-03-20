@@ -873,24 +873,25 @@ export class MapViewComponent {
   setMarkersByLoc(docs: SolrDocument[], isId: boolean) {
     const pianIds: { id: string, docId: string }[] = [];
     docs.forEach(doc => {
-      if (!doc.pian_id && (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument')) {
-        const coords = doc.loc_rpt[0].split(',');
-        const mrk = this.addMarker({
-          id: doc.ident_cely,
-          isPian: false,
-          lat: coords[0],
-          lng: coords[1],
-          presnost: '',
-          typ: 'bod',
-          docIds: [doc.ident_cely],
-          pian_chranene_udaje: null
+      if (!doc.pian_id) {
+        doc.loc_rpt.forEach(loc_rpt => {
+          const coords = loc_rpt.split(',');
+          const mrk = this.addMarker({
+            id: doc.ident_cely,
+            isPian: false,
+            lat: coords[0],
+            lng: coords[1],
+            presnost: '',
+            typ: 'bod',
+            docIds: [doc.ident_cely],
+            pian_chranene_udaje: null
+          });
+          if (doc.ident_cely === this.currentMapId) {
+            mrk.setIcon(this.hitIcon);
+          }
+          this.markersList.push(mrk);
+          mrk.addTo(this.markers);
         });
-        if (doc.ident_cely === this.currentMapId) {
-          mrk.setIcon(this.hitIcon);
-        }
-        this.markersList.push(mrk);
-        mrk.addTo(this.markers);
-
       }
 
     });
