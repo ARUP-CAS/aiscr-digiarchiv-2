@@ -190,6 +190,7 @@ public class SamostatnyNalez implements FedoraModel {
                 idoc.addField("soubor_filepath", s.path);
                 idoc.addField("soubor_rozsah", s.rozsah);
                 idoc.addField("soubor_size_bytes", s.size_mb);
+                idoc.addField("soubor_mimetype", s.mimetype);
 
             }
 //            if (!idocs.isEmpty()) {

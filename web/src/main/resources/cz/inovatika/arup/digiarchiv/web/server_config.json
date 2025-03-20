@@ -248,7 +248,8 @@
         "f_format:dokument_extra_data.format.id",
         "f_tvar:dokument_tvar.tvar.id",
         "f_zeme:dokument_extra_data.zeme.id",
-        "f_osoby:dokument_extra_data.osoby"
+        "f_osoby:dokument_extra_data.osoby",
+        "f_mimetype:soubor_mimetype"
       ],
       "full_text": [
         "ident_cely",
@@ -556,8 +557,8 @@
         "f_druh_nalezu:samostatny_nalez_druh_nalezu",
         "f_specifikace:samostatny_nalez_specifikace",
         "f_nalezce:samostatny_nalez_nalezce",
-        "f_nalezove_okolnosti:samostatny_nalez_okolnosti"
-                
+        "f_nalezove_okolnosti:samostatny_nalez_okolnosti",
+        "f_mimetype:soubor_mimetype"        
       ],
       "full_text": [
         "samostatny_nalez_nalezce",

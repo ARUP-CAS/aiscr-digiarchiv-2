@@ -64,6 +64,7 @@
    <field name="soubor_filepath" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_nazev" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_id" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="soubor_mimetype" type="string" indexed="false" stored="true" multiValued="true" /> 
    
    <!-- Dokument fields -->
    <field name="dokument_let" type="string_big" indexed="false" stored="true" multiValued="false" />
@@ -494,6 +495,7 @@
    <field name="f_dj_typ" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_nalezove_okolnosti" type="string" indexed="true" stored="true" multiValued="true" />
 
+   <field name="f_mimetype" type="string" indexed="true" stored="true" multiValued="true" />
    
    <!-- sort fields -->
    <field name="autor_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
