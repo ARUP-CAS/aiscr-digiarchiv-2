@@ -117,8 +117,8 @@ export class MapViewComponent {
   map: L.Map;
   mapReady = false;
   layersInited = false;
-  markers = new L.featureGroup();
   clusters = new L.markerClusterGroup();
+  markers = new L.featureGroup();
   heatmapLayer: any;
   locationFilter: any;
   usingMeasure = false;
@@ -721,15 +721,19 @@ export class MapViewComponent {
     this.clusterList = [];
     docs.forEach(doc => {
       if (doc.loc_rpt) {
-        if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
+        
           const coords = doc.loc_rpt[0].split(',');
-          const mrk = L.marker([coords[0], coords[1]], { id: doc.ident_cely, docId: doc.ident_cely, riseOnHover: true, icon: this.iconPoint });
+          const mrk = L.marker([coords[0], coords[1]], { id: doc.ident_cely, docId: doc.ident_cely, riseOnHover: false, icon: this.iconPoint });
           mrk.on('click', (e) => {
             this.selectMarkerFromCluster(e.target.options.docId);
           });
           this.clusterList.push(mrk);
-          mrk.addTo(this.clusters);
-        }
+          //mrk.addTo(this.clusters);
+
+          if (doc.ident_cely === this.currentMapId) {
+            this.getMarkerById(this.currentMapId, false, false);
+          }
+        
       }
     });
     this.clusters.addLayers(this.clusterList);
@@ -750,8 +754,8 @@ export class MapViewComponent {
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
     p.loc_rpt = value;
-    if (this.state.solrResponse?.response) {
-      p.rows = this.state.solrResponse.response.numFound;
+    if (this.state.numFound) {
+      p.rows = this.state.numFound;
     }
     if (!p.entity) {
       p.entity = 'dokument';
@@ -938,7 +942,7 @@ export class MapViewComponent {
   }
 
   addMarker(mr: AppMarkerOptions): any {
-    const mrk = L.marker([mr.lat, mr.lng], { id: mr.id, docIds: mr.docIds, riseOnHover: true, icon: mr.typ === 'bod' ? this.iconPoint : this.icon });
+    const mrk = L.marker([mr.lat, mr.lng], { id: mr.id, docIds: mr.docIds, riseOnHover: true, typ: mr.typ, icon: mr.typ === 'bod' ? this.iconPoint : this.icon });
     if (mr.docIds.includes(this.currentMapId)) {
       mrk.setIcon(this.hitIcon);
       // mrk.setIcon((mr.typ === 'bod' || mr.typ === 'HES-001135') ? this.hitIconPoint : this.hitIcon);
@@ -1073,7 +1077,7 @@ export class MapViewComponent {
     this.hitMarker(doc);
 
     const bounds = this.service.getBoundsByDoc(doc);
-    this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
+    this.map.setView(bounds.getCenter(), Math.max(this.config.mapOptions.hitZoomLevel,  this.map.getZoom()));
     if (!this.map.getBounds().contains(bounds)) {
       // Markers outside view in this zoom
       this.fitBounds(bounds, { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
@@ -1135,7 +1139,7 @@ export class MapViewComponent {
 
   clearSelectedMarker() {
     this.markersList.forEach(m => {
-      m.setIcon((m.typ === 'bod' || m.typ === 'HES-001135') ? this.iconPoint : this.icon);
+      m.setIcon((m.options.typ === 'bod' || m.typ === 'HES-001135') ? this.iconPoint : this.icon);
       m.setZIndexOffset(0);
       m.options.selected = false;
     });

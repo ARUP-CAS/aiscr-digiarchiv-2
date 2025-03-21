@@ -28,7 +28,7 @@
         <a *ngIf="isChild" [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
           <img [src]="imgSrc" (load)="imageLoaded()" />
         </a>
-        <a *ngIf="!isChild" (click)="viewFiles()">
+        <a *ngIf="!isChild && (state.isMapaCollapsed || result.ident_cely === state.mapResult?.ident_cely)" (click)="viewFiles()">
           <img [src]="imgSrc" />
         </a>
       </div>

@@ -24,12 +24,12 @@
               </div>
             </mat-tab>
             <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
-              <div *ngIf="state.numFound > config.mapOptions.docsForMarker">
+              <div *ngIf="showType !== 'marker'">
                 <mat-card class="app-result-item app-row-gap-16">
                   {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
                 </mat-card>
               </div>
-              <ng-container *ngIf="(state.solrResponse && state.numFound <= config.mapOptions.docsForMarker)">
+              <ng-container *ngIf="(state.solrResponse && showType === 'marker')">
                 <app-paginator></app-paginator>
                 <cdk-virtual-scroll-viewport *ngIf="state.isMapaCollapsed && vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
                 [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
@@ -72,9 +72,9 @@
              [leafletLayersControl]="layersControl"
              [leafletLayersControlOptions]="{position: 'topright'}">
               <!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
+              <div [leafletLayer]="clusters"></div>
               <div [leafletLayer]="markers"></div>
               <!-- <div [leafletLayer]="idmarkers"></div> -->
-              <div [leafletLayer]="clusters"></div>
             </div> 
           
             <mat-card class="app-active-pian-facet" *ngIf="loadingMarkers">

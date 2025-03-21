@@ -19,13 +19,15 @@
   <mat-card-content [class.app-detail-closed]="!detailExpanded">
     <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16" fxFlexFill>
       <div *ngIf="imgSrc" class="app-thumb">
-        <a (click)="viewFiles()">
+        <a *ngIf="!isChild && (state.isMapaCollapsed || result.ident_cely === state.mapResult?.ident_cely)" (click)="viewFiles()">
           <img [src]="imgSrc" /> 
         </a>
       </div>
       <div *ngIf="!imgSrc && state.itemView === 'col' && !isDocumentDialogOpen" fxFlex class="app-thumb app-thumb-missing" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
+
+      
       <div fxFlex class="app-metadata">
         <div *ngIf="result.samostatny_nalez_predano_organizace || result.samostatny_nalez_evidencni_cislo || result.pristupnost">
           <ng-container *ngIf="result.samostatny_nalez_predano_organizace">
