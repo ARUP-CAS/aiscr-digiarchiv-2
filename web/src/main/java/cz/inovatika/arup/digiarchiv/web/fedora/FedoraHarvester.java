@@ -165,7 +165,7 @@ public class FedoraHarvester {
         }
         String status = readStatusFile("update");
         if (STATUS_RUNNING.equals(status)) {
-            LOGGER.log(Level.INFO, "Update is still running");
+            LOGGER.log(Level.INFO, "Update is still running. Start is {0}", from);
             ret.put("msg", "Update is still running");
             return ret;
         }
@@ -212,7 +212,7 @@ public class FedoraHarvester {
         if (total > 0) {
             update(start.toString(), false);
         }
-        return ret;
+        return ret; 
     }
 
     private JSONObject searchFedora(String baseQuery, boolean isDeleted, String indexType, boolean withRelated) throws IOException {

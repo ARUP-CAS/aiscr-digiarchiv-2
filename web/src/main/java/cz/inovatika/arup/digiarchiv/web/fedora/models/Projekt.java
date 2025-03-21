@@ -21,9 +21,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.io.WKTReader;
 
 /**
  *
@@ -336,10 +333,10 @@ public class Projekt implements FedoraModel {
 
         try {
             String[] facetFields = new String[]{"f_areal",
-                "f_obdobi",
-                "f_aktivita",
-                "f_typ_nalezu",
-                "f_druh_nalezu",
+                //"f_obdobi",
+                //"f_aktivita",
+                //"f_typ_nalezu",
+                //"f_druh_nalezu",
                 //"dokumentacni_jednotka_komponenta_nalez_objekt_druh",
                 //"dokumentacni_jednotka_komponenta_nalez_predmet_druh",
                 //"f_specifikace",
@@ -347,9 +344,9 @@ public class Projekt implements FedoraModel {
                 "f_typ_vyzkumu"};
             SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
                     setFields("pian_id,pristupnost");
-//            for (String f : facetFields) {
-//                query.addField(f);
-//            }
+            for (String f : facetFields) {
+                query.addField(f);
+            }
             JSONObject json = SearchUtils.searchOrIndex(query, "entities", az);
 
             if (json.getJSONObject("response").getInt("numFound") > 0) {
@@ -363,22 +360,22 @@ public class Projekt implements FedoraModel {
                             // idoc.addField("pian_id", pians.optString(j));
                             addPian(idoc, pristupnost, pians.optString(j));
                         }
-                    }
+                    } 
 
-//                    for (String f : facetFields) {
-//                        if (azDoc.has(f)) {
-//                            Object val = azDoc.get(f);
-//                            if (val instanceof JSONArray) {
-//                                JSONArray ja = (JSONArray) val;
-//                                for (int j = 0; j < ja.length(); j++) {
-//                                    SolrSearcher.addFieldNonRepeat(idoc, f, ja.get(j));
-//                                }
-//                            } else {
-//                                SolrSearcher.addFieldNonRepeat(idoc, f, val);
-//                            }
-//
-//                        }
-//                    }
+                    for (String f : facetFields) {
+                        if (azDoc.has(f)) {
+                            Object val = azDoc.get(f);
+                            if (val instanceof JSONArray) {
+                                JSONArray ja = (JSONArray) val;
+                                for (int j = 0; j < ja.length(); j++) {
+                                    SolrSearcher.addFieldNonRepeat(idoc, f, ja.get(j));
+                                }
+                            } else {
+                                SolrSearcher.addFieldNonRepeat(idoc, f, val);
+                            }
+
+                        }
+                    }
 
                 }
             }
@@ -530,11 +527,11 @@ class ProjektChraneneUdaje {
         IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_kulturni_pamatka_cislo", kulturni_pamatka_cislo, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_kulturni_pamatka_popis", kulturni_pamatka_popis, pristupnost);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_hlavni_katastr", hlavni_katastr.getValue(), pristupnost);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
+        //IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
 
         for (Vocab v : dalsi_katastr) {
             IndexUtils.addSecuredFieldNonRepeat(idoc, "projekt_chranene_udaje_dalsi_katastr", v.getValue(), pristupnost);
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
+            // IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
         }
     }
 }

@@ -403,7 +403,8 @@ class AZChraneneUdaje {
 
         for (Vocab v : dalsi_katastr) {
             IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", v.getValue(), pristupnost);
-            IndexUtils.addFieldNonRepeat(idoc, "f_okres", SolrSearcher.getOkresNazevByKatastr(v.getId()));
+            
+            IndexUtils.addFieldNonRepeat(idoc, "f_okres", SolrSearcher.getOkresNazevByKatastr(v.getId()).getString("okres_nazev"));
         }
     }
 }

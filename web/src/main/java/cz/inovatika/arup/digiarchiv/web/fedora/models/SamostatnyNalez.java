@@ -225,20 +225,12 @@ public class SamostatnyNalez implements FedoraModel {
 
     public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("facets").toList();
-        // List<String> prSufixAll = new ArrayList<>();
 
         for (Object f : indexFields) {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
-            if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-            }
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + sufix, idoc.getFieldValues(orig + "_" + sufix));
-                }
-            }
+            IndexUtils.addByPath(idoc, orig, dest, prSufix, false);
         }
     }
 

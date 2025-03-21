@@ -103,6 +103,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         
       }
       this.loading = false;
+      this.state.loading = false;
     });
   }
 
