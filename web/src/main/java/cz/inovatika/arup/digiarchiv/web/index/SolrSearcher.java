@@ -129,7 +129,8 @@ public class SolrSearcher {
 
         int rows = Options.getInstance().getClientConf().getInt("defaultRows");
         if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-            rows = Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200);
+            rows = Math.max(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200), Integer.parseInt(request.getParameter("rows")));            
+            
         } else if (request.getParameter("rows") != null) {
             rows = Integer.parseInt(request.getParameter("rows"));
         }

@@ -205,13 +205,14 @@ public class FedoraHarvester {
         ret.put("request time", FormatUtils.formatInterval(requestTime));
         ret.put("process time", FormatUtils.formatInterval(processTime));
         ret.put("errors", errors);
-        LOGGER.log(Level.INFO, "Update finished in {0}", interval);
 
         writeRetToFile("update", start);
         writeStatusFile("update", STATUS_FINISHED);
         if (total > 0) {
+            LOGGER.log(Level.INFO, "Running update for changes after start");
             update(start.toString(), false);
         }
+        LOGGER.log(Level.INFO, "Update finished in {0}", interval);
         return ret; 
     }
 
