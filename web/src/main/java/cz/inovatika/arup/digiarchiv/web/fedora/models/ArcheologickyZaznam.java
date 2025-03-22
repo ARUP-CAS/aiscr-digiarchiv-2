@@ -94,6 +94,7 @@ public class ArcheologickyZaznam implements FedoraModel {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         IndexUtils.addRefField(idoc, "az_okres", az_okres);
         IndexUtils.addRefField(idoc, "okres_sort", az_okres);
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajNazev(az_okres.getId()));
 
         if (az_chranene_udaje != null) {
             az_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -298,6 +299,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
     private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
+        idoc.addField("pian_ident_cely", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
                 .setFields("*,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
@@ -395,8 +397,8 @@ class AZChraneneUdaje {
         IndexUtils.setSecuredJSONField(idoc, "az_chranene_udaje", this); 
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
         
-            JSONObject k = SolrSearcher.getOkresNazevByKatastr(hlavni_katastr.getId());
-            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", k.getString("kraj_nazev"));
+//            JSONObject k = SolrSearcher.getOkresNazevByKatastr(hlavni_katastr.getId());
+//            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", k.getString("kraj_nazev"));
             
         IndexUtils.addRefField(idoc, "katastr_sort", hlavni_katastr);
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_uzivatelske_oznaceni", uzivatelske_oznaceni, pristupnost);

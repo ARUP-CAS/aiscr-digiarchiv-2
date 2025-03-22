@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.Date;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
@@ -62,6 +63,8 @@ public class RUIANOkres implements FedoraModel {
     public void fillSolrFields(SolrInputDocument idoc) {
         idoc.setField("ident_cely", kod);
         IndexUtils.addVocabField(idoc, "kraj", kraj);
+        // JSONObject kraj = SolrSearcher.getKrajNazevBykod(kraj.getId);
+        idoc.setField("kraj_nazev", kraj.getValue()); 
         IndexUtils.setDateStamp(idoc, kod);
     }
     

@@ -350,7 +350,7 @@
         "az_okres",
         "az_dokument",
         "az_dj",
-        "pian_id",
+        "pian_ident_cely",
         "f_aktivita",
         "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.value",
         "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_presna_datace",
@@ -409,6 +409,8 @@
       ],
       "detail": [],
       "facets": [
+        "f_kraj:az_okres.kraj.id",
+        "f_kraj:az_chranene_udaje.dalsi_katastr.okres.kraj.id",
         "f_okres:az_okres",
         "f_typ_vyzkumu:akce_hlavni_typ",
         "f_typ_vyzkumu:akce_vedlejsi_typ",

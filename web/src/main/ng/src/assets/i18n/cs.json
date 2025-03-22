@@ -262,7 +262,7 @@
       "dj_nazev": "Dok. jednotka - název",
       "az_dj_nazev": "Dok. jednotka - název",
       "az_dj_negativni_jednotka": "Dok. jednotka - typ zjištění",
-      "pian_id": "Dok. jednotka - související PIAN",
+      "pian_ident_cely": "Dok. jednotka - související PIAN",
       "az_dj_adb": "ADB - identifikátor",
       "adb_uzivatelske_oznaceni_sondy": "ADB - uživatelské označení",
       "adb_trat": "ADB - ulice/trať",
@@ -300,7 +300,8 @@
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
       "f_udalost_typ": "Dokument - typ události",
-      "adb_vyskovy_bod_typ": "ADB - typ výškového bodu"
+      "adb_vyskovy_bod_typ": "ADB - typ výškového bodu",
+      "f_kraj": "Kraj"
     }
   },
 

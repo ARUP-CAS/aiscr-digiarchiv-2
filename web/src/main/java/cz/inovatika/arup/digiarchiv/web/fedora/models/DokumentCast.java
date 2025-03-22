@@ -226,6 +226,7 @@ public class DokumentCast {
 
     private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
+        idoc.addField("pian_ident_cely", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
                 .setFields("*,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);

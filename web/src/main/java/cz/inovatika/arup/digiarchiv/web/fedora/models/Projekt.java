@@ -332,7 +332,8 @@ public class Projekt implements FedoraModel {
     private void addArch(SolrInputDocument idoc, String az) {
 
         try {
-            String[] facetFields = new String[]{"f_areal",
+            String[] facetFields = new String[]{
+                //"f_areal",
                 //"f_obdobi",
                 //"f_aktivita",
                 //"f_typ_nalezu",
@@ -343,7 +344,7 @@ public class Projekt implements FedoraModel {
                 // "f_dj_typ",
                 "f_typ_vyzkumu"};
             SolrQuery query = new SolrQuery("ident_cely:\"" + az + "\"").
-                    setFields("pian_id,pristupnost");
+                    setFields("pian_id,pian_ident_cely,pristupnost");
             for (String f : facetFields) {
                 query.addField(f);
             }
@@ -415,6 +416,7 @@ public class Projekt implements FedoraModel {
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             SolrSearcher.addFieldNonRepeat(idoc, "pian_id", pian_id);
+            SolrSearcher.addFieldNonRepeat(idoc, "pian_ident_cely", pian_id);
 //            IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", doc.getString("pian_typ"));
 //            IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", doc.getString("pian_presnost"));
 //            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", doc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);

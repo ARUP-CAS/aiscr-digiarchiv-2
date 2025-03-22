@@ -604,7 +604,7 @@
     },
     {
       "type": "text",
-      "field": "pian_id"
+      "field": "pian_ident_cely"
     },
     {
       "type": "text",
@@ -729,7 +729,7 @@
     "pristupnost",
     "kategorie",
     "f_typ_dokumentu",
-    "pian_id",
+    "pian_ident_cely",
     "obdobi_poradi",
     "lokalita_zachovalost",
     "extra_data_datum_vzniku",

@@ -53,7 +53,7 @@
    <field name="lng_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="lat_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="pian_id" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <!-- <field name="pian_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />  -->
+   <field name="pian_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="location_info" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    

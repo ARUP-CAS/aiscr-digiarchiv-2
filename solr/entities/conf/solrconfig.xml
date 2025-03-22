@@ -852,6 +852,7 @@
 <!--       <str name="facet.field">f_pian_zm10</str> -->
        <str name="facet.field">f_adb_typ_sondy</str>
        <str name="facet.field">f_adb_podnet</str>
+       <str name="facet.field">f_kraj</str>
 
      </lst>
   </initParams>

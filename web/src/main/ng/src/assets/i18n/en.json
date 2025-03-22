@@ -262,7 +262,7 @@
       "dj_nazev": "Doc. unit - label",
       "az_dj_nazev": "Doc. unit - label",
       "az_dj_negativni_jednotka": "Doc. unit - type of evidence",
-      "pian_id": "Doc. unit - related spatial unit",
+      "pian_ident_cely": "Doc. unit - related spatial unit",
       "az_dj_adb": "ADP - identifier",
       "adb_uzivatelske_oznaceni_sondy": "ADP - user label",
       "adb_trat": "ADP - street/track",
@@ -300,7 +300,8 @@
       "vyber": "Map selection",
       "f_nahrada": "Document - replacement copy",
       "f_udalost_typ": "Document - type of event",
-      "adb_vyskovy_bod_typ": "ADP - type of elevation point"
+      "adb_vyskovy_bod_typ": "ADP - type of elevation point",
+      "f_kraj": "Region"
     }
   },
 
