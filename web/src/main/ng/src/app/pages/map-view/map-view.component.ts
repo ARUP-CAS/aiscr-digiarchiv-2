@@ -134,6 +134,7 @@ export class MapViewComponent {
   showType = 'marker'; // 'heat', 'cluster', 'marker'
   shouldPad = true;
   facetsChanged = false;
+  setToMarkerZoom = false;
 
   constructor(
     @Inject(PLATFORM_ID) platformId: any,
@@ -225,6 +226,9 @@ export class MapViewComponent {
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     this.pianIdChanged = this.currentPianId !== this.route.snapshot.queryParamMap.get('pian_id');
     this.currentPianId = this.route.snapshot.queryParamMap.get('pian_id');
+    if (!this.route.snapshot.queryParamMap.has('vyber')) {
+      this.locationFilter.disable();
+    }
     if (this.pianIdChanged) {
       this.clearData();
     }
@@ -259,7 +263,7 @@ export class MapViewComponent {
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       const bounds: LatLngBounds = L.latLngBounds(southWest, northEast);
       if (loc_rpt[0] === loc_rpt[2]) {
-        // this.setToMarkerZoom = true;
+        this.setToMarkerZoom = true;
       }
       //locrptChanged = !this.map.getBounds().equals(bounds);
       if (locrptChanged) {
@@ -352,6 +356,9 @@ export class MapViewComponent {
     });
 
     map.on('overlayremove', (e) => {
+      if (this.state.isMapaCollapsed) {
+        return;
+      }
       if (e.name === this.dataLayerName) {
         this.markersActive = false;
         this.clusters.clearLayers();
@@ -782,6 +789,10 @@ export class MapViewComponent {
       //     this.setToMarkerZoom = false;
       //   }
       // }
+      if (this.setToMarkerZoom) {
+        this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
+        this.setToMarkerZoom = false;
+      }
       this.loading = false;
     });
   }
