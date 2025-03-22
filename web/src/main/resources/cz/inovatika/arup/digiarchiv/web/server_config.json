@@ -350,7 +350,7 @@
         "az_okres",
         "az_dokument",
         "az_dj",
-        "pian_ident_cely",
+        "pian_id",
         "f_aktivita",
         "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.value",
         "az_dokumentacni_jednotka.dj_komponenta[*].komponenta_presna_datace",

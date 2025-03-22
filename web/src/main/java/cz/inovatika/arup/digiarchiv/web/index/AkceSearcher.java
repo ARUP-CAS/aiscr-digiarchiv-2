@@ -127,14 +127,15 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
-
+ 
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
-            JSONArray valid_dokuments = new JSONArray();
-            if (doc.has("az_dokument") && doc.getJSONArray("az_dokument").length() < 100) {
+            if (doc.has("az_dokument")) {
+                JSONArray valid_dokuments = new JSONArray();
                 SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
+                        .addFilterQuery("dokument_cast_akce:\"" + doc.getString("ident_cely") + "\"")
+                        // .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
                         .setRows(10000)
                         .setFields("ident_cely")
                         .setParam("df", "ident_cely");
@@ -146,8 +147,8 @@ public class AkceSearcher implements EntitySearcher {
                 } catch (SolrServerException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
+                doc.put("az_dokument", valid_dokuments);
             }
-            doc.put("az_dokument", valid_dokuments);
 
             if (doc.has("akce_projekt") && !SolrSearcher.existsById(client, doc.getString("akce_projekt"))) {
                 doc.remove("akce_projekt");
