@@ -80,15 +80,12 @@ public class SolrSearcher {
 
             double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
             query.setParam("facet.heatmap.geom", geom)
-                    .setParam("facet.heatmap.distErr", dist + "")
+                    //.setParam("facet.heatmap.distErr", dist + "")
+                    .setParam("facet.heatmap.distErr", "0.04")
                     .addFilterQuery(fq);
         }
         if (request.getParameter("vyber") == null && request.getParameter("loc_rpt") == null) {
             query.setParam("facet.heatmap.distErr", "0.04");
-            //.setParam("facet.heatmap.geom", "[\"12.30 48.50\" TO \"18.80 51.0\"]")
-            //.addFilterQuery(locField + ":[\"12.30 48.50\" TO \"18.80 51.0\"]");
-
-            // loc_rpt=48.93993884224734,12.204711914062502,50.64177902497231,18.7877197265625
             String[] coords = new String[]{"48.50", "12.30", "51.0", "18.80"};
             String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
             String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
@@ -100,7 +97,7 @@ public class SolrSearcher {
 
         }
 
-        query.setParam("facet.heatmap.distErr", "0.04");
+        //query.setParam("facet.heatmap.distErr", "0.04");
         query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
                 .setParam("facet.heatmap.maxCells", "1000000");
     }
@@ -504,17 +501,16 @@ public class SolrSearcher {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
         }
-        
     }
     
-    public static JSONObject getKrajNazev(String ruianOkresu) {
+    public static JSONObject getKrajByOkres(String ruianOkresu) {
         
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
             SolrQuery query = new SolrQuery("*") 
-                    //.addFilterQuery("kod:\"" + ruianOkresu + "\"")
-                    .addFilterQuery("{!join fromIndex=ruian to=kod from=kraj}kod:\"" + ruianOkresu + "\"")
-                    .setRows(1).setFields("nazev,kod");
-            JSONObject jo = json(client, "ruian", query);
+                    .addFilterQuery("kod:\"" + ruianOkresu + "\"")
+                    // .addFilterQuery("{!join fromIndex=ruian to=kod from=kraj}kod:\"" + ruianOkresu + "\"")
+                    .setRows(1).setFields("kraj_nazev,kraj"); 
+            JSONObject jo = json(IndexUtils.getClientNoOp(), "ruian", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             } else {

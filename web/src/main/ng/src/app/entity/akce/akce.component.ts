@@ -50,7 +50,7 @@ export class AkceComponent implements OnInit, OnChanges {
      }`;
     this.result.dokumentTemp = [];
     if (this.inDocument) {
-      this.checkRelations();
+      // this.checkRelations();
       if (isPlatformBrowser(this.platformId)) {
         setTimeout(() => {
           this.getExtZdroj();

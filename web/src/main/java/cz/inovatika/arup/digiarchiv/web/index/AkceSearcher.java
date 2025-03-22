@@ -127,7 +127,7 @@ public class AkceSearcher implements EntitySearcher {
 
     @Override
     public void checkRelations(JSONObject jo, Http2SolrClient client, HttpServletRequest request) {
- 
+  
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
             JSONArray valid_dokuments = new JSONArray();

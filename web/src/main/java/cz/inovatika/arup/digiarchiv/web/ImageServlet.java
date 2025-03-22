@@ -145,10 +145,10 @@ public class ImageServlet extends HttpServlet {
                 ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
                 ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
             } else {
-                LOGGER.log(Level.WARNING, "Response is not image {0}. ", id);
+                LOGGER.log(Level.FINE, "Response is not image {0}. ", id);
                 emptyImg(response, response.getOutputStream(), ctx);
             }
-            is.close();
+            is.close();   
 
         } else {
             //LOG to file
