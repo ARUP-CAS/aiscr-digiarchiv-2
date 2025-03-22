@@ -62,7 +62,7 @@ export class AkceComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
-      // this.checkRelations();
+      this.checkRelations();
       this.hasDetail = false;
       this.result.dokumentTemp = [];
       this.detailExpanded = this.inDocument;

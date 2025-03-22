@@ -761,7 +761,7 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.piansList = [];
     docs.forEach(doc => {
       if (doc.loc_rpt) {
-        if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
+        //if (this.state.hasRights(doc.pristupnost, doc.organizace)) {
           const coords = doc.loc_rpt[0].split(',');
           // this.addMarker(doc.ident_cely, false, coords[0], coords[1], '', '', doc, null);
           const mrk = this.addMarker({
@@ -775,7 +775,7 @@ export class MapaComponent implements OnInit, OnDestroy {
             pian_chranene_udaje: null
           });
           mrk.addTo(this.clusters);
-        }
+        //}
       }
     });
     this.clusters.addLayers(this.markersList);
@@ -841,8 +841,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   addMarker(mr: AppMarkerOptions): any {
-    let appmrk = this.findMarker(mr.id);
-    if (!appmrk) {
+    //let appmrk = this.findMarker(mr.id);
+    //if (!appmrk) {
       const mrk = L.marker([mr.lat, mr.lng], { id: mr.id, doc: mr.doc, riseOnHover: true, icon: mr.typ === 'bod' ? this.iconPoint : this.icon });
       if (mr.doc.includes(this.currentMapId)) {
         mrk.setIcon(this.hitIcon);
@@ -867,16 +867,16 @@ export class MapaComponent implements OnInit, OnDestroy {
         mrk.bindTooltip(mr.id);
       }
       return mrk;
-    } else if (mr.isPian) {
-      // mrk.docId.push(doc.ident_cely);
-      const pianInList = this.piansList.find(p => p.id === mr.id);
-      if (pianInList) {
-        appmrk.bindTooltip(this.popUpHtml(mr.id, mr.presnost, pianInList.docIds));
-      }
-      return appmrk;
-    } else {
-      return appmrk;
-    }
+    // } else if (mr.isPian) {
+    //   // mrk.docId.push(doc.ident_cely);
+    //   const pianInList = this.piansList.find(p => p.id === mr.id);
+    //   if (pianInList) {
+    //     appmrk.bindTooltip(this.popUpHtml(mr.id, mr.presnost, pianInList.docIds));
+    //   }
+    //   return appmrk;
+    // } else {
+    //   return appmrk;
+    // }
   }
 
   selectMarker(res) {
@@ -997,8 +997,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     const pianIds: { id: string, docId: string }[] = [];
     docs.forEach(doc => {
 
-      if (!doc.pian_id && (this.state.hasRights(doc.pristupnost, doc.organizace) || doc.entity === 'dokument')) {
-        const coords = doc.loc_rpt[0].split(',');
+      if (!doc.pian_id) {
+        doc.loc_rpt.forEach(loc_rpt => {
+        const coords = loc_rpt.split(',');
         const mrk = this.addMarker({
           id: doc.ident_cely,
           isPian: false,
@@ -1014,11 +1015,12 @@ export class MapaComponent implements OnInit, OnDestroy {
         // } else {
         //   mrk.addTo(this.markers);
         // }
-          mrk.addTo(this.markers);
-
+        mrk.addTo(this.markers);
+      });
       }
 
     });
+    console.log(this.markersList)
     this.loadingMarkers = false;
     setTimeout(() => {
       this.state.loading = false;

@@ -218,6 +218,9 @@ export class MapViewComponent {
   }
 
   paramsChanged() {
+    if (!this.markersActive) {
+      return;
+    }
     const mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
     this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     this.pianIdChanged = this.currentPianId !== this.route.snapshot.queryParamMap.get('pian_id');
@@ -323,7 +326,7 @@ export class MapViewComponent {
     });
 
     map.addControl(L.control.zoom(this.zoomOptions));
-    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
+    L.control.scale({ position: 'bottomright', imperial: false }).addTo(this.map);
 
 
     this.markers.clearLayers();
@@ -352,6 +355,8 @@ export class MapViewComponent {
       if (e.name === this.dataLayerName) {
         this.markersActive = false;
         this.clusters.clearLayers();
+        this.markers.clearLayers();
+        this.map.removeLayer(this.heatmapLayer);
       }
     });
 
@@ -792,6 +797,9 @@ export class MapViewComponent {
             markerInList.options.docIds.push(docId);
           }
         });
+        if (markerInList.options.docIds.includes(this.currentMapId)) {
+          markerInList.setIcon(this.hitIcon);
+        }
         return;
       }
 
@@ -997,16 +1005,22 @@ export class MapViewComponent {
   }
 
 
-  setPianId(pian_id: string, docId: string[]) {
+  setPianId(pian_id: string, docIds: string[]) {
     this.zone.run(() => {
       if (this.usingMeasure) {
         return;
+      }
+      if (pian_id === this.currentPianId) {
+        return;
+      }
+      if (!docIds.includes(this.currentMapId)) {
+        this.state.mapResult = null;
       }
       this.markersList = [];
       //this.opened = true;
       this.state.setFacetChanged();
       this.pianIdChanged = true;
-      const mapId = docId.length === 1 ? docId[0] : null;
+      const mapId = docIds.length === 1 ? docIds[0] : null;
       this.router.navigate([], { queryParams: { pian_id, mapId, page: 0 }, queryParamsHandling: 'merge' });
     });
   }
@@ -1030,7 +1044,6 @@ export class MapViewComponent {
       wJson.id = ident_cely;
       wJson.docIds = docIds;
       if (wJson.type !== 'Point') {
-        console.log(wJson)
         const layer = geoJSON((wJson as any), {
           style: () => ({
             color: this.config.mapOptions.shape.color,
@@ -1063,6 +1076,7 @@ export class MapViewComponent {
       }
       const doc = res.response.docs.find(d => d.ident_cely === docId);
       this.state.mapResult = doc;
+      this.clearSelectedMarker();
       this.setMarkers(res.response.docs, false, true);
       if (zoom) {
         this.zoomOnMapResult(doc);

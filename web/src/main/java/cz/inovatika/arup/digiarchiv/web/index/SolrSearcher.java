@@ -129,15 +129,15 @@ public class SolrSearcher {
 
         int rows = Options.getInstance().getClientConf().getInt("defaultRows");
         if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-            rows = Math.max(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200), Integer.parseInt(request.getParameter("rows")));            
+            // rows = Math.max(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200), Integer.parseInt(request.getParameter("rows")));   
+            rows = Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200);
             
         } else if (request.getParameter("rows") != null) {
             rows = Integer.parseInt(request.getParameter("rows"));
         }
         query.setRows(rows);
-        int start = 0;
         if (request.getParameter("page") != null) {
-            start = (Integer.parseInt(request.getParameter("page"))) * rows;
+            int start = (Integer.parseInt(request.getParameter("page"))) * rows;
             query.setStart(start);
         }
 
