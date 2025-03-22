@@ -111,6 +111,11 @@ public class DokumentCast {
                             k,
                             doc.getString("pristupnost"));
                     IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("projekt_okres"));
+                    JSONArray f_kraj = pr_chranene_udaje.getJSONArray("f_kraj");
+                    for (int j = 0; j < f_kraj.length(); j++) {
+                        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", f_kraj.getString(j)); 
+                    }
+                    
 
                     JSONObject li = new JSONObject()
                             .put("pristupnost", doc.getString("pristupnost"))

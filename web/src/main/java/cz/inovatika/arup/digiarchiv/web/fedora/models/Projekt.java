@@ -201,6 +201,7 @@ public class Projekt implements FedoraModel {
         IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
 
         IndexUtils.addRefField(idoc, "projekt_okres", projekt_okres);
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(projekt_okres.getId()).getString("kraj_nazev")); 
         IndexUtils.addVocabField(idoc, "projekt_typ_projektu", projekt_typ_projektu);
         IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
         IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
