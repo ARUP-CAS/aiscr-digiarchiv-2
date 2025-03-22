@@ -730,6 +730,7 @@
     "kategorie",
     "f_typ_dokumentu",
     "pian_ident_cely",
+    "pian_id",
     "obdobi_poradi",
     "lokalita_zachovalost",
     "extra_data_datum_vzniku",

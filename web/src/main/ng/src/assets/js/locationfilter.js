@@ -378,9 +378,9 @@ L.LocationFilter = L.Layer.extend({
       // Initialize corners
       var bounds;
       if (this._sw && this._ne) {
-          bounds = new L.LatLngBounds(this._sw, this._ne);
+         bounds = new L.LatLngBounds(this._sw, this._ne);
       } else if (this.options.bounds) {
-          bounds = this.options.bounds;
+         bounds = this.options.bounds;
       } else {
           bounds = this._map.getBounds();
       }
@@ -455,6 +455,10 @@ L.LocationFilter = L.Layer.extend({
 
       // Remove rectangle layer from map
       this._map.removeLayer(this._layer);
+
+      // reset corners
+      this._sw = null;
+      this._ne = null;
 
       this._enabled = false;
 

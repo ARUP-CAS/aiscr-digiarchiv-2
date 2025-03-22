@@ -227,7 +227,14 @@ export class MapViewComponent {
     this.pianIdChanged = this.currentPianId !== this.route.snapshot.queryParamMap.get('pian_id');
     this.currentPianId = this.route.snapshot.queryParamMap.get('pian_id');
     if (!this.route.snapshot.queryParamMap.has('vyber')) {
-      this.locationFilter.disable();
+      this.locationFilter?.disable();
+    } else if (this.locationFilter) {
+      const loc_rpt = this.route.snapshot.queryParamMap.get('vyber').split(',');
+      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+      this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
+      this.locationFilter.setBounds(this.state.locationFilterBounds);
+      
     }
     if (this.pianIdChanged) {
       this.clearData();
@@ -307,7 +314,6 @@ export class MapViewComponent {
     }
 
     this.locationFilter = new L.LocationFilter({
-      bounds: this.state.locationFilterBounds,
       enable: this.state.locationFilterBounds !== null,
       adjustButton: false,
       buttonPosition: 'topright',
@@ -317,6 +323,11 @@ export class MapViewComponent {
       }
     });
 
+    if (this.state.locationFilterBounds) {
+      this.locationFilter.setBounds(this.state.locationFilterBounds);
+    }
+    
+    
     map.addLayer(this.locationFilter);
 
     L.control.polylineMeasure({
@@ -389,24 +400,24 @@ export class MapViewComponent {
 
     this.locationFilter.on('change', (e) => {
       if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds())) {
+        this.state.locationFilterBounds = this.locationFilter.getBounds();
         this.updateVyber();
       }
     });
 
-    this.locationFilter.on('enabled', () => {
-      if (!this.state.locationFilterEnabled) {
-        this.state.locationFilterEnabled = true;
-        this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
-        this.updateVyber();
-      }
+    this.locationFilter.on('enableClick', () => {
+      this.state.locationFilterEnabled = true;
+      this.state.locationFilterBounds = this.map.getBounds().pad(this.config.mapOptions.selectionInitPad)
+      // this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
+      this.updateVyber();
     });
 
-    this.locationFilter.on('disabled', () => {
+    this.locationFilter.on('disableClick', () => {
       if (this.state.isMapaCollapsed) {
         return;
       }
       this.state.locationFilterEnabled = false;
-      this.state.locationFilterBounds = null;
+      this.state.locationFilterBounds = this.map.getBounds().pad(this.config.mapOptions.selectionInitPad);
       this.updateVyber();
     });
 
@@ -456,9 +467,9 @@ export class MapViewComponent {
     this.stopLoadingMarkers();
 
 
-    if (this.locationFilter.isEnabled()) {
-      this.state.locationFilterBounds = this.locationFilter.getBounds();
-    }
+    // if (this.locationFilter?.isEnabled()) {
+    //   this.state.locationFilterBounds = this.locationFilter.getBounds();
+    // }
     const queryParams: any = { page: 0 };
     if (this.state.locationFilterEnabled) {
         queryParams.vyber = this.state.locationFilterBounds.getSouthWest().lat + ',' +

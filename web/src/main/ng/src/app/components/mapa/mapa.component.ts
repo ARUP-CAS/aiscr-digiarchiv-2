@@ -642,14 +642,16 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.clusters.clearLayers();
     } else if (count > this.maxNumMarkers) {
       this.showType = 'cluster';
+      this.markersList = [];
+      this.markers.clearLayers();
       if (oldType !== this.showType) {
         this.clusters.clearLayers();
       }
     } else {
       this.showType = 'marker';
+      this.clusters.clearLayers();
       if (oldType !== this.showType) {
         this.markers.clearLayers();
-        this.clusters.clearLayers();
       }
     }
 
