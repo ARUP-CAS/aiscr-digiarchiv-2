@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web.fedora;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.inovatika.arup.digiarchiv.web.*;
 import java.io.File;
 import java.io.IOException;
@@ -173,7 +174,7 @@ public class FedoraServlet extends HttpServlet {
                 JSONObject json = new JSONObject();
                 try {
                     FedoraHarvester fh = new FedoraHarvester();
-                    String[] entities = new String[]{"adb", "pian", "ext_zdroj", "let", "archeologicky_zaznam", "projekt", "samostatny_nalez", "dokument"};
+                    String[] entities = new String[]{"adb", "pian", "ext_zdroj", "let", "archeologicky_zaznam", "samostatny_nalez", "dokument", "projekt"};
                     json = fh.indexModels(entities);
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
@@ -236,6 +237,23 @@ public class FedoraServlet extends HttpServlet {
                 try {
                     FedoraHarvester fh = new FedoraHarvester();
                     json.put("model", fh.getId(req.getParameter("id")));
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
+        },
+        
+        
+        GET_ID_PARSED {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    FedoraHarvester fh = new FedoraHarvester();
+                    FedoraModel o = fh.getIdParsed(req.getParameter("id"));
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    return new JSONObject(objectMapper.writeValueAsString(o));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }

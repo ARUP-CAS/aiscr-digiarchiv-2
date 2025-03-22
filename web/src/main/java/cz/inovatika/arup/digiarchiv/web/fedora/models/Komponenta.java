@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,13 +71,14 @@ public class Komponenta {
     DocumentObjectBinder dob = new DocumentObjectBinder();
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
-    IndexUtils.addVocabField(kdoc, "komponenta_areal", komponenta_areal);
+    IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
     for (Vocab a : komponenta_aktivita) {
         // IndexUtils.addVocabField(kdoc, "aktivita", a);
         IndexUtils.addJSONField(kdoc, "komponenta_aktivita", a);
     }
     if (!komponenta_nalez_objekt.isEmpty()) {
-      komponenta_typ_nalezu = "objekt";
+      // komponenta_typ_nalezu = "objekt";
+      komponenta_typ_nalezu = IndexUtils.getTypNalezu("objekt");
     }
     for (NalezObjekt no : komponenta_nalez_objekt) {
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_objekt", no);
@@ -84,7 +86,8 @@ public class Komponenta {
         idoc.addField("nalez_dokumentu_poznamka", no.poznamka);
     }
     if (!komponenta_nalez_predmet.isEmpty()) {
-      komponenta_typ_nalezu = "predmet";
+      // komponenta_typ_nalezu = "predmet";
+      komponenta_typ_nalezu = "HES-001126";
     }
     for (NalezPredmet np : komponenta_nalez_predmet) {
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_predmet", np);

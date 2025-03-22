@@ -4,7 +4,7 @@
   </a> 
   <mat-card-header>
     <mat-card-title fxLayout="row" fxLayoutGap="16px">
-      <div fxFlex (click)="service.showInMap(result, false)">
+      <div fxFlex (click)="service.showInMap(result, false, false, isChild)">
         <a *ngIf="!state.isMapaCollapsed && !isChild && !mapDetail"><mat-icon>info</mat-icon></a>
         <mat-icon class="app-entity-samostatny_nalez" [matTooltip]="'entities.samostatny_nalez.title' | translate">{{ config.entityIcons["samostatny_nalez"] }}</mat-icon>
         <ng-container [ngSwitch]="isChild">
@@ -19,13 +19,15 @@
   <mat-card-content [class.app-detail-closed]="!detailExpanded">
     <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16" fxFlexFill>
       <div *ngIf="imgSrc" class="app-thumb">
-        <a (click)="viewFiles()">
+        <a *ngIf="!isChild && (state.isMapaCollapsed || result.ident_cely === state.mapResult?.ident_cely)" (click)="viewFiles()">
           <img [src]="imgSrc" /> 
         </a>
       </div>
       <div *ngIf="!imgSrc && state.itemView === 'col' && !isDocumentDialogOpen" fxFlex class="app-thumb app-thumb-missing" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
+
+      
       <div fxFlex class="app-metadata">
         <div *ngIf="result.samostatny_nalez_predano_organizace || result.samostatny_nalez_evidencni_cislo || result.pristupnost">
           <ng-container *ngIf="result.samostatny_nalez_predano_organizace">
@@ -42,6 +44,10 @@
             <app-inline-filter [isChild]="isChild" [field]="'pristupnost'" [value]="result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter> 
           </ng-container>
         </div>
+        
+      <div *ngIf="result.samostatny_nalez_igsn">
+        <label class="app-label">{{ 'ISGN' | translate }}:</label>&#160;{{ result.samostatny_nalez_igsn }}
+      </div>
         <div>
           <ng-container *ngIf="result.samostatny_nalez_obdobi"><label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.samostatny_nalez_obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
@@ -136,21 +142,7 @@
             </table>
         </mat-expansion-panel>
     
-        <mat-expansion-panel *ngIf="result.samostatny_nalez_projekt" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
-          <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
-            <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}:
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          
-          <cdk-virtual-scroll-viewport *ngIf="vsSize > 0 && !state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
-            [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
-            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-          </cdk-virtual-scroll-viewport>
-          <ng-container *ngIf="state.printing">
-            <app-projekt *ngFor="let projekt of result.valid_projekt" [result]="projekt" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-          </ng-container>
-        </mat-expansion-panel>
+        <app-related [related]="related"></app-related>
       </mat-accordion>
     </div>
   </mat-card-content>

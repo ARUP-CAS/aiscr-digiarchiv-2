@@ -14,7 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -24,9 +26,12 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -36,6 +41,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
 import org.json.JSONObject;
+import org.xml.sax.InputSource;
 
 /**
  *
@@ -43,18 +49,50 @@ import org.json.JSONObject;
  */
 public class OAIRequest {
 
-    private static Transformer dcTransformer;
+    private static final Map<String, Transformer> dcTransformers = new HashMap<>();
+    private static Transformer forbiddenTransformer;
     private static Transformer emptyTransformer;
+    private static final Map<String, Transformer> versionTransformers = new HashMap<>();
 
-    private static Transformer getTransformer() throws TransformerConfigurationException {
-        if (dcTransformer == null) {
+    private static Transformer getDcTransformer(String xmlns_amcr) throws TransformerConfigurationException {
+        if (dcTransformers.get(xmlns_amcr) == null) {
             TransformerFactory factory = TransformerFactory.newInstance();
-            Source xslt = new StreamSource(Options.getInstance().getDCXslt());
-            dcTransformer = factory.newTransformer(xslt);
-            dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
-            dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
+            String xsltStr;
+            try {
+                xsltStr = FileUtils.readFileToString(Options.getInstance().getDCXslt(), "UTF-8");
+                xsltStr = xsltStr.replace("##AMCRVERSION##", xmlns_amcr);
+                Source xslt = new StreamSource(new StringReader(xsltStr));
+                Transformer dcTransformer = factory.newTransformer(xslt);
+                dcTransformer.setOutputProperty("omit-xml-declaration", "yes");
+                dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
+                dcTransformers.put(xmlns_amcr, dcTransformer);
+            } catch (IOException ex) {
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        return dcTransformer;
+        return dcTransformers.get(xmlns_amcr);
+    }
+
+    private static Transformer get404Transformer() throws TransformerConfigurationException {
+        if (forbiddenTransformer == null) {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Source xslt = new StreamSource(Options.getInstance().getForbiddenXslt());
+            forbiddenTransformer = factory.newTransformer(xslt);
+            forbiddenTransformer.setOutputProperty("omit-xml-declaration", "yes");
+        }
+        return forbiddenTransformer;
+    }
+
+    private static Transformer getVersionTransformer(String version) throws TransformerConfigurationException {
+        if (versionTransformers.get(version) == null) {
+            //TransformerFactory factory = TransformerFactory.newDefaultInstance();
+            TransformerFactory factory = new net.sf.saxon.TransformerFactoryImpl();
+            Source xslt = new StreamSource(Options.getInstance().getVersionXslt(version));
+            Transformer t = factory.newTransformer(xslt);
+            t.setOutputProperty("omit-xml-declaration", "yes");
+            versionTransformers.put(version, t);
+        }
+        return versionTransformers.get(version);
     }
 
     private static Transformer getTransformer2() throws TransformerConfigurationException {
@@ -68,50 +106,54 @@ public class OAIRequest {
     }
 
     public static String headerOAI() {
-        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?><?xml-stylesheet type=\"text/xsl\" href=\"oai2.xsl\" ?><OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
+        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"
+                + "<?xml-stylesheet type=\"text/xsl\" href=\"/oai2.xsl\" ?>\n"
+                + "<OAI-PMH xmlns=\"http://www.openarchives.org/OAI/2.0/\" \n"
+                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n"
+                + "xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd\">\n";
     }
 
     public static String responseDateTag() {
-        return "<responseDate>" + ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT) + "</responseDate>";
+        return "<responseDate>" + ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT) + "</responseDate>\n";
     }
 
-    public static String requestTag(HttpServletRequest req) {
+    public static String requestTag(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
         ret.append("<request ");
         for (String p : req.getParameterMap().keySet()) {
             ret.append(p).append("=\"").append(req.getParameter(p)).append("\" ");
         }
-        ret.append(">").append(Options.getInstance().getJSONObject("OAI").getString("baseUrl")).append("/oai</request>");
+        ret.append(">").append(Options.getInstance().getJSONObject("OAI").getString("baseUrl")).append("/oai</request>\n");
         return ret.toString();
     }
 
-    public static String identify(HttpServletRequest req) {
+    public static String identify(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
         ret.append(headerOAI())
                 .append(responseDateTag())
-                .append(requestTag(req))
+                .append(requestTag(req, version))
                 .append(Options.getInstance().getOAIIdentify())
                 .append("</OAI-PMH>");
         return ret.toString();
     }
 
-    public static String listSets(HttpServletRequest req) {
+    public static String listSets(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
         ret.append(headerOAI())
                 .append(responseDateTag())
-                .append(requestTag(req))
+                .append(requestTag(req, version))
                 .append(Options.getInstance().getOAIListSets())
                 .append("</OAI-PMH>");
         return ret.toString();
     }
 
-    public static String metadataFormats(HttpServletRequest req) {
+    public static String metadataFormats(HttpServletRequest req, String version) {
         try {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             String identifier = req.getParameter("identifier");
             if (identifier != null) {
                 if (identifier.length() < prefix.length()) {
-                    return idDoesNotExist(req);
+                    return idDoesNotExist(req, version);
                 }
                 String id = identifier.substring(prefix.length());
                 SolrQuery query = new SolrQuery("*")
@@ -119,14 +161,14 @@ public class OAIRequest {
                 QueryResponse resp = IndexUtils.getClientBin().query("oai", query);
 
                 if (resp.getResults().getNumFound() == 0) {
-                    return idDoesNotExist(req);
+                    return idDoesNotExist(req, version);
                 }
             }
 
             StringBuilder ret = new StringBuilder();
             ret.append(headerOAI())
                     .append(responseDateTag())
-                    .append(requestTag(req))
+                    .append(requestTag(req, version))
                     .append(Options.getInstance().getOAIListMetadataFormats())
                     .append("</OAI-PMH>");
             return ret.toString();
@@ -177,28 +219,28 @@ public class OAIRequest {
         }
     }
 
-    private static String idDoesNotExist(HttpServletRequest req) {
+    private static String idDoesNotExist(HttpServletRequest req, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"idDoesNotExist\" />"
                 + "</OAI-PMH>";
     }
 
-    private static String noRecordsMatch(HttpServletRequest req) {
+    private static String noRecordsMatch(HttpServletRequest req, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"noRecordsMatch\" />"
                 + "</OAI-PMH>";
     }
 
-    private static String badArgument(HttpServletRequest req) {
+    private static String badArgument(HttpServletRequest req, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">Invalid arguments</error>"
                 + "</OAI-PMH>";
     }
 
-    private static String badArgument(HttpServletRequest req, String msg) {
+    private static String badArgument(HttpServletRequest req, String msg, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                 + "<error code=\"badArgument\">" + msg + "</error>"
@@ -212,22 +254,22 @@ public class OAIRequest {
         return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set);
     }
 
-    public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers) {
+    public static String listRecords(HttpServletRequest req, boolean onlyIdentifiers, String version) {
         List<String> validParams = List.of("verb", "resumptionToken", "metadataPrefix", "from", "until", "set");
         List<String> params = Collections.list(req.getParameterNames());
 
         for (String name : params) {
             if (validParams.indexOf(name) < 0) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
         }
 
         for (String name : validParams) {
             if (req.getParameter(name) != null && req.getParameterValues(name).length > 1) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
             if (req.getParameter(name) != null && "".equals(req.getParameter(name))) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
         }
 
@@ -236,7 +278,7 @@ public class OAIRequest {
         if (resumptionToken != null) {
 
             if (req.getParameterMap().size() > 2) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
 
             JSONObject solrRt = retrieveResumptionToken(resumptionToken);
@@ -272,7 +314,7 @@ public class OAIRequest {
         JSONObject conf = Options.getInstance().getJSONObject("OAI");
         ret.append(headerOAI())
                 .append(responseDateTag())
-                .append(requestTag(req));
+                .append(requestTag(req, version));
         if (onlyIdentifiers) {
             ret.append("<ListIdentifiers>");
         } else {
@@ -331,7 +373,7 @@ public class OAIRequest {
             query.addFilterQuery("model:"
                     + model);
 
-            if (from != null && until != null && !"*".equals(from) && !"*".equals(until) ) {
+            if (from != null && until != null && !"*".equals(from) && !"*".equals(until)) {
                 if (from.length() != until.length()) {
                     return badArgument(req, "The request has different granularities for the from and until parameters.");
                 }
@@ -357,10 +399,10 @@ public class OAIRequest {
 
             SolrDocumentList docs = resp.getResults();
             if (docs.getNumFound() == 0) {
-                return noRecordsMatch(req);
+                return noRecordsMatch(req, version);
             }
             for (SolrDocument doc : docs) {
-                appendRecord(ret, doc, req, onlyIdentifiers, metadataPrefix);
+                appendRecord(ret, doc, req, onlyIdentifiers, metadataPrefix, version);
             }
 
             String nextCursorMark = resp.getNextCursorMark();
@@ -395,13 +437,13 @@ public class OAIRequest {
 
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         }
         if (onlyIdentifiers) {
             ret.append("</ListIdentifiers>");
@@ -412,14 +454,14 @@ public class OAIRequest {
         return ret.toString();
     }
 
-    public static String getRecord(HttpServletRequest req) {
+    public static String getRecord(HttpServletRequest req, String version) {
 
         List<String> validParams = List.of("verb", "metadataPrefix", "identifier");
         List<String> params = Collections.list(req.getParameterNames());
 
         for (String name : params) {
             if (validParams.indexOf(name) < 0) {
-                return badArgument(req);
+                return badArgument(req, version);
             }
         }
 
@@ -445,13 +487,13 @@ public class OAIRequest {
         StringBuilder ret = new StringBuilder();
         ret.append(headerOAI())
                 .append(responseDateTag())
-                .append(requestTag(req));
+                .append(requestTag(req, version));
 
-        ret.append("<GetRecord>");
+        ret.append("<GetRecord>\n");
         try {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             if (req.getParameter("identifier").length() < prefix.length()) {
-                return idDoesNotExist(req);
+                return idDoesNotExist(req, version);
             }
             String id = req.getParameter("identifier").substring(prefix.length());
             SolrQuery query = new SolrQuery("*")
@@ -459,23 +501,23 @@ public class OAIRequest {
             QueryResponse resp = IndexUtils.getClientBin().query("oai", query);
 
             if (resp.getResults().getNumFound() == 0) {
-                return idDoesNotExist(req);
+                return idDoesNotExist(req, version);
             }
             SolrDocument doc = resp.getResults().get(0);
 
-            appendRecord(ret, doc, req, false, metadataPrefix);
+            appendRecord(ret, doc, req, false, metadataPrefix, version);
         } catch (SolrServerException | IOException ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
-            return badArgument(req);
+            return badArgument(req, version);
         }
-        ret.append("</GetRecord></OAI-PMH>");
+        ret.append("</GetRecord>\n</OAI-PMH>");
         return ret.toString();
     }
 
-    private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req, boolean onlyIdentifiers, String metadataPrefix) {
+    private static void appendRecord(StringBuilder ret, SolrDocument doc, HttpServletRequest req, boolean onlyIdentifiers, String metadataPrefix, String version) {
         String id = (String) doc.getFieldValue("ident_cely");
         Date datestamp = (Date) doc.getFieldValue("datestamp");
         boolean isDeleted = false;
@@ -489,39 +531,57 @@ public class OAIRequest {
             model = "archeologicky_zaznam:" + model;
         }
         ret.append("<record>");
-        ret.append("<header").append(status).append(">")
+        ret.append("<header").append(status).append(">\n")
                 .append("<identifier>")
                 .append(Options.getInstance().getJSONObject("OAI").getString("baseUrl"))
                 .append("/id/")
                 .append(id)
-                .append("</identifier>")
+                .append("</identifier>\n")
                 .append("<datestamp>")
                 .append(datestamp.toInstant().toString())
-                .append("</datestamp>");
+                .append("</datestamp>\n");
         if (model != null) {
             ret.append("<setSpec>")
                     .append(model)
-                    .append("</setSpec>");
+                    .append("</setSpec>\n");
         }
 
         // <setSpec>projekt</setSpec> <!-- "projekt" | "archeologicky_zaznam" | "let" | "adb" | "dokument" | "ext_zdroj" | "pian" | "samostatny_nalez" | "uzivatel" | "heslo" | "ruian_kraj" | "ruian_okres" | "ruian_katastr" | "organizace | "osoba -->
-        ret.append("</header>");
+        ret.append("</header>\n");
 
         if (!onlyIdentifiers && !isDeleted) {
 
-            ret.append("<metadata>");
+            ret.append("<metadata>\n");
             String xml = filter(req, doc);
+            int pos1 = xml.indexOf("xmlns:amcr=");
+            int pos2 = xml.indexOf("\"", pos1 + 14);
+            String xmlns_amcr = xml.substring(pos1 + "xmlns:amcr=\"".length(), pos2);
+
+            if (shoulTransformVersion(version, xmlns_amcr)) {
+                try {
+                    xml = transformByVersion(xml, version);
+                    // Change xmlns_amcr to the new
+                    if ("/v2".equals(version)) {
+                        xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.0/";
+                    } else if ("/v2.1".equals(version)) {
+                        xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.1/";
+                    }                    
+                } catch (TransformerException ex) {
+                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
             if (!xml.equals(ERROR_404_MSG) && "oai_dc".equals(metadataPrefix)) {
                 try {
-                    xml = transformToDC(xml);
+                    xml = transformToDC(xml, xmlns_amcr);
                 } catch (TransformerException ex) {
                     Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             ret.append(xml);
-            ret.append("</metadata>");
+            ret.append("</metadata>\n");
         }
-        ret.append("</record>");
+        ret.append("</record>\n");
     }
 
     private static final String ERROR_404_MSG = "<amcr:amcr xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:gml=\"https://www.opengis.net/gml/3.2\" xmlns:amcr=\"https://api.aiscr.cz/schema/amcr/2.0/\" xsi:schemaLocation=\"https://api.aiscr.cz/schema/amcr/2.0/ https://api.aiscr.cz/schema/amcr/2.0/amcr.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd\">\n"
@@ -538,12 +598,12 @@ public class OAIRequest {
         String model = (String) doc.getFieldValue("model");
 
         FedoraModel fm = FedoraModel.getFedoraModel(model);
+        String xml = (String) doc.getFieldValue("xml");
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
             long stav = 0;
             if (doc.containsKey("stav")) {
                 stav = (long) doc.getFieldValue("stav");
             }
-            String xml = (String) doc.getFieldValue("xml");
             String ret = xml;
             if (ret.contains("<amcr:oznamovatel>")
                     && ("C".compareToIgnoreCase(userPristupnost) > 0
@@ -578,17 +638,46 @@ public class OAIRequest {
                 return ret;
             }
         } else {
-            return ERROR_404_MSG;
+            //return ERROR_404_MSG;
+            try {
+                return transformToForbidden(xml);
+            } catch (TransformerException ex) {
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                return ERROR_404_MSG;
+            }
         }
 
     }
 
-    private static String transformToDC(String xml) throws TransformerException {
+    private static String transformToForbidden(String xml) throws TransformerException {
+
+        Source text = new StreamSource(new StringReader(xml));
+        StringWriter sw = new StringWriter();
+        get404Transformer().transform(text, new StreamResult(sw));
+        String e404 = sw.toString();
+        return e404;
+    }
+
+    private static boolean shoulTransformVersion(String version, String xmlns_amcr) {
+
+        return (("/v2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
+                || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr)));
+    }
+
+    private static String transformByVersion(String xml, String version) throws TransformerException {
+
+        Source text = new SAXSource(new InputSource(new StringReader(xml)));
+        StringWriter sw = new StringWriter();
+        getVersionTransformer(version).transform(text, new StreamResult(sw));
+        return sw.toString();
+    }
+
+    private static String transformToDC(String xml, String xmlns_amcr) throws TransformerException {
 
         Source text = new StreamSource(new StringReader(xml));
         StringWriter sw = new StringWriter();
 
-        getTransformer().transform(text, new StreamResult(sw));
+        getDcTransformer(xmlns_amcr).transform(text, new StreamResult(sw));
 
         Pattern emptyValueTag = Pattern.compile("\\s*<dc:\\w+.*/>");
         Pattern emptyTagMultiLine = Pattern.compile("\\s*<\\w+>\n*\\s*</\\w+>");

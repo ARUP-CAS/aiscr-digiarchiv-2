@@ -116,6 +116,19 @@ public class ExtraData {
 //<xs:element name="geom_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- ST_SRID("{geom}") | ST_AsText("{geom}") -->
     @JacksonXmlProperty(localName = "geom_wkt")
     public WKT geom_wkt;
+    
+//<xs:element name="geom_system" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "geom_system")
+    public String geom_system;
+    
+//<xs:element name="geom_sjtsk_gml" minOccurs="0" maxOccurs="1" type="amcr:gmlType"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "geom_sjtsk_gml")
+    public Object geom_sjtsk_gml;
+    
+//<xs:element name="geom_sjtsk_wkt" minOccurs="0" maxOccurs="1" type="amcr:wktType"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "geom_sjtsk_wkt")
+    public WKT geom_sjtsk_wkt;
+      
 
     public void fillSolrFields(SolrInputDocument idoc, String prefix, String pristupnost) {
 
@@ -144,7 +157,14 @@ public class ExtraData {
             geom_gml = FedoraModel.getAsXml(geom_gml);
             // System.out.println(xml);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.WARNING, null, ex);
+        }
+        
+        try {
+            geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml);
+            // System.out.println(xml);
+        } catch (JsonProcessingException ex) {
+            LOGGER.log(Level.WARNING, null, ex);
         }
 
         if (geom_wkt != null) {
@@ -153,8 +173,8 @@ public class ExtraData {
             final WKTReader reader = new WKTReader();
             try {
                 Geometry geometry = reader.read(wktStr);
-        // Point p = geometry.getCentroid();
-        Point p = geometry.getInteriorPoint();
+                // Point p = geometry.getCentroid();
+                Point p = geometry.getInteriorPoint();
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

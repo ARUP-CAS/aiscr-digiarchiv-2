@@ -42,6 +42,11 @@ public class Dokument implements FedoraModel {
 //<xs:element name="pristupnost" minOccurs="0" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost.ident_cely}" | "{pristupnost.heslo}" -->
     @JacksonXmlProperty(localName = "pristupnost")
     public Vocab pristupnost;
+    
+//<xs:element name="doi" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "doi")
+    @Field
+    public String dokument_doi;
 
 //<xs:element name="let" minOccurs="0" maxOccurs="1" type="amcr:refType"/> <!-- "{let.ident_cely}" | "{let.ident_cely}" -->
     @JacksonXmlProperty(localName = "let")
@@ -201,6 +206,7 @@ public class Dokument implements FedoraModel {
                 idoc.addField("soubor_filepath", s.path);
                 idoc.addField("soubor_rozsah", s.rozsah);
                 idoc.addField("soubor_size_mbytes", s.size_mb);
+                idoc.addField("soubor_mimetype", s.mimetype);
     
             }
 //            if (!idocs.isEmpty()) {
@@ -272,18 +278,19 @@ public class Dokument implements FedoraModel {
     private void addLet(SolrInputDocument idoc) throws Exception {
 
         IndexUtils.addVocabField(idoc, "dokument_let_ident_cely", dokument_let);
-        SolrQuery query = new SolrQuery("ident_cely:\"" + dokument_let.getId() + "\"");
+        SolrQuery query = new SolrQuery("ident_cely:\"" + dokument_let.getId() + "\"")
+                .setFields("*,let_letiste_start:[json],let_letiste_cil:[json],let_dohlednost:[json],let_organizace:[json],let_pocasi:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", dokument_let.getId());
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
-                SolrSearcher.addFieldNonRepeat(idoc, "dokument_let", doc.toString());
-                for (String key : doc.keySet()) {
-                    if (key.startsWith("let_")) {
-                        SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
-                    }
-                    
-                }
+                SolrSearcher.addFieldNonRepeat(idoc, "dokument_let", doc.toString()); 
+//                for (String key : doc.keySet()) {
+//                    if (key.startsWith("let_")) {
+//                        SolrSearcher.addFieldNonRepeat(idoc, key, doc.opt(key));
+//                    }
+//                    
+//                }
             }
         }
     }
@@ -296,7 +303,7 @@ public class Dokument implements FedoraModel {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
-            IndexUtils.addByPath(idoc, orig, dest, Arrays.asList(SolrSearcher.prSufixAll));
+            IndexUtils.addByPath(idoc, orig, dest, Arrays.asList(SolrSearcher.prSufixAll), false);
         }
         
     }
@@ -306,13 +313,18 @@ public class Dokument implements FedoraModel {
 
         for (Object f : indexFields) {
             String s = (String) f;
-            for (String sufix : SolrSearcher.prSufixAll) {
-                if (idoc.containsKey(s)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+            if (s.contains(".")) {
+                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
+            } else {
+                for (String sufix : SolrSearcher.prSufixAll) {
+                    if (idoc.containsKey(s)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    }
+                    if (idoc.containsKey(s + "_" + sufix)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    }
                 }
-                if (idoc.containsKey(s + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
-                }
+                
             }
         } 
         for (String sufix : SolrSearcher.prSufixAll) {

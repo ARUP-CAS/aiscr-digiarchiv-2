@@ -46,10 +46,8 @@ export class DokumentComponent implements OnInit, OnChanges {
 
   bibTex: string;
 
-  itemSize = 133;
-  vsSize = 0;
-  numChildren = 0;
-  math = Math;
+  relationsChecked = false;
+  related: {entity: string, ident_cely: string}[] = [];
 
   okresy: string[] = [];
 
@@ -63,12 +61,12 @@ export class DokumentComponent implements OnInit, OnChanges {
 
   ngOnChanges(c) {
     if (c.result) {
-      this.setVsize();
+      this.checkRelations();
       this.hasDetail = false;
-      this.detailExpanded = this.inDocument;
-    }
-    if (this.mapDetail) {
-      this.getFullId();
+      this.detailExpanded = this.inDocument;// && !this.mapDetail;
+      if (this.mapDetail) {
+        this.getFullId();
+      }
     }
   }
 
@@ -101,12 +99,9 @@ export class DokumentComponent implements OnInit, OnChanges {
     this.service.currentLang.subscribe(l => {
       this.setBibTex();
     });
-    this.setVsize();
     if (this.inDocument) {
-      this.state.loading = this.result.dokument_cast_archeologicky_zaznam.length > 0;
       this.state.documentProgress = 0;
-      this.getArchZaznam();
-      this.getProjekts();
+      this.state.loading = false;
     }
   }
 
@@ -114,67 +109,30 @@ export class DokumentComponent implements OnInit, OnChanges {
     return Array.isArray(obj)
  }
 
-  setVsize() {
-    this.numChildren = 0;
-    if (this.result.dokument_cast_archeologicky_zaznam) {
-      this.numChildren += this.result.dokument_cast_archeologicky_zaznam.length;
-    }
-
-    if (this.result.dokument_cast_projekt) {
-      this.numChildren += this.result.dokument_cast_projekt.length;
-    }
-
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+ checkRelations() {
+  if (!this.result.ident_cely || this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+    return;
   }
-
-  getProjekts() {
-    if (this.result.dokument_cast_projekt && this.result.dokument_cast_projekt.length > 0) {
-        this.service.getIdAsChild(this.result.dokument_cast_projekt, "projekt").subscribe((res: any) => {
-          this.result.valid_projekt = res.response.docs;
-          this.checkLoading();
-        });
-    }
-  }
-
-  getArchZaznam() {
-    this.result.akce = [];
-    this.result.lokalita = [];
-    this.numChildren = this.result.dokument_cast_archeologicky_zaznam.length;
-    this.state.documentProgress = 0;
-    if (this.result.dokument_cast_akce) {
-      for (let i = 0; i < this.result.dokument_cast_akce.length; i = i + 10) {
-        const ids = this.result.dokument_cast_akce.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          //this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
-        });
-      }
-    }
-    if (this.result.dokument_cast_lokalita) {
-      for (let i = 0; i < this.result.dokument_cast_lokalita.length; i = i + 10) {
-        const ids = this.result.dokument_cast_lokalita.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          //this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) / this.numChildren * 100;
-          this.state.loading = (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
-        });
-      }
-    }
-  }
-
+  this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+    this.result.dokument_cast_archeologicky_zaznam = res.dokument_cast_archeologicky_zaznam;
+    this.result.dokument_cast_projekt = res.dokument_cast_projekt;
+    this.relationsChecked = true;
+    this.related = [];
+    res.id_akce.forEach((ident_cely: string) => {
+      this.related.push({entity: 'akce', ident_cely})
+    });
+    res.id_lokalita.forEach((ident_cely: string) => {
+      this.related.push({entity: 'lokalita', ident_cely})
+    });
+    res.dokument_cast_projekt.forEach((ident_cely: string) => {
+      this.related.push({entity: 'projekt', ident_cely})
+    });
+  });
+}
 
   imageLoaded() {
     this.state.imagesLoaded++;
-    this.state.imagesLoading =  this.state.imagesLoaded < this.state.numImages;
-  }
-
-  checkLoading() {
-    this.state.loading =  (this.result.akce.length + this.result.lokalita.length + this.result.dokument_cast_projekt.length) < this.numChildren;
+    // this.state.imagesLoading =  this.state.imagesLoaded < this.state.numImages;
   }
 
   setBibTex() {
@@ -185,7 +143,8 @@ export class DokumentComponent implements OnInit, OnChanges {
       title = {Dokument ${this.result.ident_cely}},
       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
       year = {${this.result.dokument_rok_vzniku}},
-      note = {${organizace}}
+      note = {${organizace}},
+      doi = {${this.result.dokument_doi}}
     }`;
   }
 
@@ -202,9 +161,9 @@ export class DokumentComponent implements OnInit, OnChanges {
       if (this.result.dokument_cast) {
         this.result.dokument_cast.sort((dc1, dc2) => dc1.ident_cely.localeCompare(dc2.ident_cely) );
       }
-      this.setVsize();
-      this.getArchZaznam();
-      this.getProjekts();
+      // this.setVsize();
+      // this.getArchZaznam();
+      // this.getProjekts();
       this.hasDetail = true;
     });
   }

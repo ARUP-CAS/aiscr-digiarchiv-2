@@ -123,7 +123,7 @@ public class ImageSupport {
         //ImageIO.write(sourceImage, "png", destImageFile);
         g2d.dispose();
 
-        System.out.println("The tex watermark is added to the image.");
+        // System.out.println("The tex watermark is added to the image.");
 
 //    } catch (IOException ex) {
 //        System.err.println(ex);

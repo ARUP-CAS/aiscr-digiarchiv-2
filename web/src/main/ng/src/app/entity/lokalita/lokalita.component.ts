@@ -25,11 +25,8 @@ export class LokalitaComponent implements OnInit, OnChanges {
   hasDetail: boolean;
   bibTex: string;
 
-  math = Math;
-
-  itemSize = 133;
-  vsSize = 0;
-  numChildren = 0;
+  relationsChecked = false;
+  related: {entity: string, ident_cely: string}[] = [];
 
   constructor(
     private datePipe: DatePipe,
@@ -45,52 +42,46 @@ export class LokalitaComponent implements OnInit, OnChanges {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
-       author = {AMČR}, 
+       author = {Archeologický informační systém České republiky}, 
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       note = {Archeologická mapa České republiky [cit. ${now}]}
+       note = {Archeologická mapa České republiky [cit. ${now}]},
+       doi = {${this.result.lokalita_igsn}}
      }`;
      if (this.inDocument) {
-      this.setVsize();
+      // this.checkRelations();
       this.state.documentProgress = 0;
-      this.state.loading = true;
-      this.getDokuments();
+      this.state.loading = false;
       this.getExtZdroj();
      }
   }
 
+  checkRelations() {
+    if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+      return;
+    }
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.az_dokument = res.az_dokument;
+      this.result.akce_projekt = res.akce_projekt;
+      this.relationsChecked = true;
+      this.related = [];
+      res.az_dokument.forEach((ident_cely: string) => {
+        this.related.push({entity: 'dokument', ident_cely})
+      });
+      
+    });
+  }
+
   ngOnChanges(c) {
     if (c.result) {
-      this.setVsize();
+      this.checkRelations();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
+      // this.getExtZdroj();
     }
     if (this.mapDetail) {
       this.getFullId();
     }
-  }
-
-  setVsize() {
-    this.numChildren = 0;
-      if (this.result.az_dokument) {
-        this.numChildren += this.result.az_dokument.length;
-      }
-      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-  }
-
-  getDokuments() {
-    if (this.result.az_dokument && this.result.az_dokument.length > 0) {
-      this.result.valid_dokument = [];
-      for (let i = 0; i < this.result.az_dokument.length; i=i+10) {
-        const ids = this.result.az_dokument.slice(i, i+10);
-        this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
-          this.result.valid_dokument = this.result.valid_dokument.concat(res.response.docs);
-          this.state.documentProgress = this.result.valid_dokument.length / this.numChildren *100;
-          this.state.loading = (this.result.valid_dokument.length) < this.numChildren;
-        });
-      }
-    }
-    this.state.loading = false;
   }
 
   getExtZdroj() {
@@ -123,8 +114,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
   getFullId() {
     this.service.getId(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      this.setVsize();
-      this.getDokuments();
+      // this.getDokuments();
       this.getExtZdroj();
       this.hasDetail = true;
     });

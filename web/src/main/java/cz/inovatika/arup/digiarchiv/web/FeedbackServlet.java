@@ -6,6 +6,10 @@
 package cz.inovatika.arup.digiarchiv.web;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.mail.SimpleEmail;
@@ -40,14 +44,52 @@ public class FeedbackServlet extends HttpServlet {
           throws ServletException, IOException {
       response.setContentType("application/json;charset=UTF-8");
       JSONObject js = new JSONObject(IOUtils.toString(request.getInputStream(), "UTF-8"));
+      
+      if (js.has("reCaptchaMsg")) {
+          String r = verifyRecaptcha(js.getString("reCaptchaMsg"), js.getString("key"));
+          response.getWriter().println(r);
+          return;
+      }
+    
       String systemMail = Options.getInstance().getJSONObject("mail").getString("destMail");
       sendMail(js.getString("name"), systemMail, js.getString("text"), js.getString("ident_cely"), js.getString("mail")).toString();
       response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text"), js.getString("ident_cely"), systemMail).toString());
   }
+  
+  private static String verifyRecaptcha(String reCaptchaMsg, String key){
+      
+//      {
+//  "event": {
+//    "token": "TOKEN",
+//    "expectedAction": "USER_ACTION",
+//    "siteKey": "6Ld-VoUdAAAAAHJBY8-h6I-h6Gf2nFwY-gY4ndre",
+//  }
+//}
+      
+        try {
+            String apikey = Options.getInstance().getString("reCaptchaApiKey");
+            HttpClient client = HttpClient.newHttpClient();
+            JSONObject body =new JSONObject();
+            JSONObject event = new JSONObject().put("token", reCaptchaMsg).put("siteKey",  key).put("expectedAction", "USER_ACTION");
+            body.put("event", event);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://recaptchaenterprise.googleapis.com/v1/projects/ais-cr-1684933938335/assessments?key=" + apikey ))
+                    .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                    //.header("Content-Type", "application/json")
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            String r = response.body();
+            return r;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return ex.toString();
+        }
+    }
+
 
   private JSONObject sendMail(String fromName, String fromMail, String text, String ident_cely, String toMail) {
     JSONObject ret = new JSONObject();
-    try {
+     try {
       SimpleEmail email = new SimpleEmail();
       JSONObject mail = Options.getInstance().getJSONObject("mail");
       email.setHostName(mail.getString("smtp.host")); 

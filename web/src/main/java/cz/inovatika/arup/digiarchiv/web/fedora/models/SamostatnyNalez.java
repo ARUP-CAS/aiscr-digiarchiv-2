@@ -9,6 +9,7 @@ import cz.inovatika.arup.digiarchiv.web.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -118,12 +119,10 @@ public class SamostatnyNalez implements FedoraModel {
 
 //<xs:element name="geom_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_updated_at}" -->
     @JacksonXmlProperty(localName = "geom_updated_at")
-    @Field
     public Date samostatny_nalez_geom_updated_at;
 
 //<xs:element name="geom_sjtsk_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_sjtsk_updated_at}" -->
     @JacksonXmlProperty(localName = "geom_sjtsk_updated_at")
-    @Field
     public Date samostatny_nalez_geom_sjtsk_updated_at;
 
 //<xs:element name="pristupnost" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost.ident_cely}" | "{pristupnost.heslo}" -->
@@ -141,6 +140,11 @@ public class SamostatnyNalez implements FedoraModel {
 //<xs:element name="soubor" minOccurs="0" maxOccurs="unbounded" type="amcr:souborType"/>  <!-- "{soubory.soubory}" -->  
     @JacksonXmlProperty(localName = "soubor")
     public List<Soubor> soubor = new ArrayList();
+    
+//<xs:element name="igsn" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "igsn")
+    @Field
+    public String samostatny_nalez_igsn;
 
     @Override
     public String coreName() {
@@ -164,6 +168,7 @@ public class SamostatnyNalez implements FedoraModel {
         }
 
         IndexUtils.addRefField(idoc, fieldPrefix + "okres", okres);
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(okres.getId()).getString("kraj_nazev")); 
         IndexUtils.addVocabField(idoc, fieldPrefix + "projekt", projekt);
         IndexUtils.addVocabField(idoc, fieldPrefix + "okolnosti", okolnosti);
         IndexUtils.addVocabField(idoc, fieldPrefix + "obdobi", obdobi);
@@ -186,6 +191,7 @@ public class SamostatnyNalez implements FedoraModel {
                 idoc.addField("soubor_filepath", s.path);
                 idoc.addField("soubor_rozsah", s.rozsah);
                 idoc.addField("soubor_size_bytes", s.size_mb);
+                idoc.addField("soubor_mimetype", s.mimetype);
 
             }
 //            if (!idocs.isEmpty()) {
@@ -220,20 +226,12 @@ public class SamostatnyNalez implements FedoraModel {
 
     public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("facets").toList();
-        // List<String> prSufixAll = new ArrayList<>();
 
         for (Object f : indexFields) {
             String s = (String) f;
             String dest = s.split(":")[0];
             String orig = s.split(":")[1];
-            if (idoc.containsKey(orig)) {
-                IndexUtils.addFieldNonRepeat(idoc, dest, idoc.getFieldValues(orig));
-            }
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(orig + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, dest + sufix, idoc.getFieldValues(orig + "_" + sufix));
-                }
-            }
+            IndexUtils.addByPath(idoc, orig, dest, prSufix, false);
         }
     }
 
@@ -242,17 +240,18 @@ public class SamostatnyNalez implements FedoraModel {
 
         for (Object f : indexFields) {
             String s = (String) f;
-
-            if (idoc.containsKey(s)) {
+            if (s.contains(".")) {
+                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
+            } else {
                 for (String sufix : SolrSearcher.prSufixAll) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    if (idoc.containsKey(s)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+                    }
+                    if (idoc.containsKey(s + "_" + sufix)) {
+                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+                    }
                 }
-            }
-
-            for (String sufix : prSufix) {
-                if (idoc.containsKey(s + "_" + sufix)) {
-                    IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
-                }
+                
             }
         }
 
@@ -360,9 +359,9 @@ class SnChraneneUdaje {
 
         IndexUtils.setSecuredJSONField(idoc, "samostatny_nalez_chranene_udaje", this);
 
-        if (katastr != null) {
-            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
-        }
+//        if (katastr != null) {
+//            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), pristupnost);
+//        }
         IndexUtils.addRefField(idoc, "katastr_sort", katastr);
 
         if (lokalizace != null) {

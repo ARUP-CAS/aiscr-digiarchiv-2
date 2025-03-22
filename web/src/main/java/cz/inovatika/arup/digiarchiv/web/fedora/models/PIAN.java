@@ -53,12 +53,10 @@ public class PIAN implements FedoraModel {
 
 //  <xs:element name="geom_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_updated_at}" -->
   @JacksonXmlProperty(localName = "geom_updated_at")
-  @Field
   public Date pian_geom_updated_at;
 
 //  <xs:element name="geom_sjtsk_updated_at" minOccurs="0" maxOccurs="1" type="xs:dateTime"/> <!-- "{geom_sjtsk_updated_at}" -->
   @JacksonXmlProperty(localName = "geom_sjtsk_updated_at")
-  @Field
   public Date pian_geom_sjtsk_updated_at;
 
 //  <xs:element name="pristupnost_pom" minOccurs="1" maxOccurs="1" type="amcr:vocabType"/> <!-- "{pristupnost_pom.ident_cely}" | "{pristupnost_pom.heslo}" -->

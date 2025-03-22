@@ -60,7 +60,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.state.loading = true;
         this.service.print();
       }
-    }, 1000);
+    }, 2000);
   }
 
   setTitle() {
@@ -73,7 +73,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.loading = true;
     this.state.imagesLoaded = 0;
     this.state.hasError = false;
-    this.service.getId(id).subscribe((resp: SolrResponse) => {
+    this.service.getId(id, true).subscribe((resp: SolrResponse) => {
       if (resp.error) {
         this.state.loading = false;
         this.loading = false;
@@ -84,15 +84,26 @@ export class DocumentComponent implements OnInit, AfterViewInit {
       this.state.setSearchResponse(resp);
       if (resp.response.numFound > 0) {
         this.result = resp.response.docs[0];
+        this.state.entity = this.result.entity;
         if (this.result.autor) {
           this.result.autorFormatted = this.result.autor.join(' – ');
         }
 
         this.state.setMapResult(this.result, false);
         this.setTitle();
+        if (this.result.entity === 'lokalita' && this.result.lokalita_igsn) {
+          this.link = 'https://doi.org/' + this.result.lokalita_igsn;
+        } else if (this.result.samostatny_nalez_igsn) {
+          this.link = 'https://doi.org/' + this.result.samostatny_nalez_igsn;
+        } else if (this.result.dokument_doi) {
+          this.link = 'https://doi.org/' + this.result.dokument_doi;
+        } else {
+          this.link = this.config.serverUrl + 'id/' + id;
+        }
+        
       }
-      this.link = this.config.serverUrl + 'id/' + id;
       this.loading = false;
+      this.state.loading = false;
     });
   }
 

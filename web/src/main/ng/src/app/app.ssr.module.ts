@@ -61,6 +61,7 @@ import { DocumentDialogComponent } from './components/document-dialog/document-d
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { InlineFilterComponent } from './components/inline-filter/inline-filter.component';
+import { RelatedComponent } from './components/related/related.component';
 import { NalezComponent } from './components/nalez/nalez.component';
 import { JednotkaDokumentuComponent } from './entity/jednotka-dokumentu/jednotka-dokumentu.component';
 import { MapaShimComponent } from './components/mapa-shim/mapa-shim.component';
@@ -84,6 +85,8 @@ import { BarChart } from 'echarts/charts';
 import { LineChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
+import { MapViewShimComponent } from './components/mapa-shim/map-view-shim.component';
+import { MapViewContainerComponent } from './pages/map-view/map-view-container.component';
 echarts.use([TitleComponent, TooltipComponent, GridComponent, BarChart, LineChart, LegendComponent, CanvasRenderer]);
 
 registerLocaleData(localeCs, 'cs');
@@ -178,6 +181,8 @@ const providers: any[] = [
     NalezComponent,
     JednotkaDokumentuComponent,
     MapaShimComponent,
+    MapViewContainerComponent,
+    MapViewShimComponent,
     Knihovna3dComponent,
     VyskovyBodComponent,
     BibtextDialogComponent,
@@ -187,7 +192,8 @@ const providers: any[] = [
     CitationComponent,
     ResultActionsComponent,
     StatsComponent,
-    ConsentSheet
+    ConsentSheet,
+    RelatedComponent
   ],
   imports: [
     CommonModule,

@@ -14,7 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
@@ -34,6 +36,18 @@ public class IndexUtils {
     private static Http2SolrClient _solrBin;
     private static Http2SolrClient _solrNoOp;
 
+    
+    static Map<String, String> nalezTypy;
+    
+    public static String getTypNalezu(String typ) {
+        if (nalezTypy == null) {
+            nalezTypy = new HashMap();
+            nalezTypy.put("objekt", Options.getInstance().getString("nalez_objekt_id"));
+            nalezTypy.put("predmet", Options.getInstance().getString("nalez_predmet_id"));
+        }
+        return nalezTypy.get(typ);
+    }
+    
     public synchronized static Http2SolrClient getClientNoOp() {
         try {
             if (_solrNoOp == null) {
@@ -230,15 +244,14 @@ public class IndexUtils {
         }
     }
 
-    public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix) {
-        boolean secured = path.contains("chranene_udaje");
+    public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix, boolean isSecured) {
+        boolean secured = path.contains("chranene_udaje") || isSecured;
         String[] parts = path.split("\\.", 2);
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
         if (vals == null) {
             return;
         }
         if (parts.length > 1) {
-
             for (Object o : vals) {
                 try {
                     Object jpReturns = JsonPath.read((String) o, "$." + parts[1]);
@@ -263,8 +276,8 @@ public class IndexUtils {
                             addFieldNonRepeat(idoc, field, jpReturns);
                         }
                     }
-                } catch (com.jayway.jsonpath.PathNotFoundException pnfex) {
-                    return;
+                } catch (Exception pnfex) {
+                    LOGGER.log(Level.FINE, "No value for ", o);
                 }
 
             }

@@ -72,6 +72,9 @@ public class FedoraHarvester {
     }
 
     private String readStatusFile(String type) throws IOException {
+        if (type.contains("/")) {
+            return "none";
+        }
         File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_" + "status.txt");
         if (f.exists() && f.canRead()) {
             return FileUtils.readFileToString(f, "UTF-8");
@@ -162,7 +165,7 @@ public class FedoraHarvester {
         }
         String status = readStatusFile("update");
         if (STATUS_RUNNING.equals(status)) {
-            LOGGER.log(Level.INFO, "Update is still running");
+            LOGGER.log(Level.INFO, "Update is still running. Start is {0}", from);
             ret.put("msg", "Update is still running");
             return ret;
         }
@@ -179,16 +182,20 @@ public class FedoraHarvester {
         if (newSolr) {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
         }
+        
+        int total = 0;
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
         String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        searchFedora(baseQuery, false, "update", true);
+        JSONObject searchJSON = searchFedora(baseQuery, false, "update", true);
+        total += searchJSON.optInt("total", 0);
 
         // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
         baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
                 + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        searchFedora(baseQuery, true, "update", false);
+        searchJSON = searchFedora(baseQuery, true, "update", false);
+        total += searchJSON.optInt("total", 0);
         if (newSolr) {
             solr.close();
         }
@@ -198,11 +205,15 @@ public class FedoraHarvester {
         ret.put("request time", FormatUtils.formatInterval(requestTime));
         ret.put("process time", FormatUtils.formatInterval(processTime));
         ret.put("errors", errors);
-        LOGGER.log(Level.INFO, "Update finished in {0}", interval);
 
         writeRetToFile("update", start);
         writeStatusFile("update", STATUS_FINISHED);
-        return ret;
+        if (total > 0) {
+            LOGGER.log(Level.INFO, "Running update for changes after start");
+            update(start.toString(), false);
+        }
+        LOGGER.log(Level.INFO, "Update finished in {0}", interval);
+        return ret; 
     }
 
     private JSONObject searchFedora(String baseQuery, boolean isDeleted, String indexType, boolean withRelated) throws IOException {
@@ -237,6 +248,7 @@ public class FedoraHarvester {
 
             checkLists(0, indexed, "update", indexed);
             ret.put("items", json);
+            ret.put("total", indexed);
             solr.commit("oai");
             solr.commit("entities");
 
@@ -341,7 +353,7 @@ public class FedoraHarvester {
                 if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", true)) {
                     searchModel(model);
                 } else {
-                    processModel(model);
+                    processModel(model); 
                 }
             }
             solr.commit("oai");
@@ -426,6 +438,24 @@ public class FedoraHarvester {
         LOGGER.log(Level.FINE, "Index by ID {0} finished in {1}", new Object[]{id, interval});
 
         return ret;
+    }
+
+    public FedoraModel getIdParsed(String id) throws IOException {
+        try {
+
+            LOGGER.log(Level.INFO, "Processing record {0}", id);
+            String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
+            String model = FedoraModel.getModel(xml);
+            Class clazz = FedoraModel.getModelClass(model);
+            if (clazz != null) {
+                return FedoraModel.parseXml(xml, clazz);
+            }
+            return null;
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public String getId(String id) throws IOException {

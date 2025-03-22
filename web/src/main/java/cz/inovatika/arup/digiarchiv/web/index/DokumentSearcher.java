@@ -84,23 +84,37 @@ public class DokumentSearcher implements EntitySearcher {
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
             JSONArray dokument_cast_archeologicky_zaznam = new JSONArray();
+            JSONArray id_akce = new JSONArray();
+            JSONArray id_lokalita = new JSONArray();
+            
             if (doc.has("dokument_cast_archeologicky_zaznam")) {
                 // String fq = "{!join to=ident_cely from=dokument_cast_archeologicky_zaznam}ident_cely:\"" + doc.getString("ident_cely") + "\"";
                 String fq = "az_dokument:\"" + doc.getString("ident_cely") + "\"";
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery(fq)
                         .setRows(10000)
-                        .setFields("ident_cely");
+                        .setFields("ident_cely,entity");
                 try {
                     JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
                     for (int a = 0; a < ja.length(); a++) {
                         dokument_cast_archeologicky_zaznam.put(ja.getJSONObject(a).getString("ident_cely"));
+                        
+                        if ("akce".equals(ja.getJSONObject(a).getString("entity"))) {
+                            id_akce.put(ja.getJSONObject(a).getString("ident_cely"));
+                        }
+
+                        if ("lokalita".equals(ja.getJSONObject(a).getString("entity"))) {
+                            id_lokalita.put(ja.getJSONObject(a).getString("ident_cely"));
+                        }
+                        
                     }
                 } catch (SolrServerException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
             doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
+            doc.put("id_akce", id_akce);
+            doc.put("id_lokalita", id_lokalita);
 
             JSONArray dokument_cast_projekt = new JSONArray();
             if (doc.has("dokument_cast_projekt")) {
@@ -244,7 +258,7 @@ public class DokumentSearcher implements EntitySearcher {
 
     @Override
     public String[] getRelationsFields() {
-        return new String[]{"ident_cely", "dokument_cast_archeologicky_zaznam"};
+        return new String[]{"ident_cely,dokument_cast_archeologicky_zaznam,dokument_cast_projekt"};
     }
 
     public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
@@ -296,7 +310,6 @@ public class DokumentSearcher implements EntitySearcher {
                 doc.remove("loc");
                 doc.remove("lat");
                 doc.remove("lng");
-                doc.remove("parent_akce_katastr");
                 doc.remove("dok_jednotka");
 
                 Object[] keys = doc.keySet().toArray();

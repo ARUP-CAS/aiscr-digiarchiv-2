@@ -24,7 +24,7 @@ export class VyskovyBodComponent implements OnInit {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
       `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
-       author = {AMČR},
+       author = {Archeologický informační systém České republiky},
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}

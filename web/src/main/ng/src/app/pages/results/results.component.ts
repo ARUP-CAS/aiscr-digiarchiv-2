@@ -219,6 +219,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   loadingFinished() {
-    this.cd.detectChanges()
+    setTimeout(() => {
+      this.state.loading = false;
+      this.cd.detectChanges();
+    }, 100)
+    
   }
 }

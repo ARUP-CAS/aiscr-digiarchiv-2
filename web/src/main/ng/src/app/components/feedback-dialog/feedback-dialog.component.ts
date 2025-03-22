@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-feedback-dialog',
@@ -20,6 +21,7 @@ export class FeedbackDialogComponent implements OnInit {
   text: string;
   ident_cely: string;
   reCaptchaValid = false;
+  reCaptchaMsg = '';
 
   constructor(
     public dialogRef: MatDialogRef<FeedbackDialogComponent>,
@@ -43,7 +45,18 @@ export class FeedbackDialogComponent implements OnInit {
   }
 
   public resolved(captchaResponse: string): void {
-    this.reCaptchaValid = true;
+    this.reCaptchaMsg = captchaResponse;
+    if (!this.reCaptchaMsg) {
+      return;
+    }
+    this.service.verifyRecaptcha(this.reCaptchaMsg).subscribe((res: any)=>{
+      //console.log(res);
+      if (res.tokenProperties?.valid && res.riskAnalysis?.score > this.config.reCaptchaScore) {
+        this.reCaptchaValid = true;
+      }
+      
+    });
+    
   }
 
   errored(captchaResponse: any): void {
@@ -51,6 +64,10 @@ export class FeedbackDialogComponent implements OnInit {
   }
 
   sendFeedback() {
+    // this.service.verifyRecaptcha(this.reCaptchaMsg).subscribe((res: any)=>{
+    //   console.log(res);
+    // });
+
       this.service.feedback(this.name, this.mail, this.text, this.ident_cely).subscribe((res: any)=>{
         if(res.hasError) {
           alert(this.service.getTranslation('dialog.alert.feedback_failed') + ": " + res.error);

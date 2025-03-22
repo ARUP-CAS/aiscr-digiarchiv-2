@@ -9,7 +9,7 @@ import { Subject, Observable, of } from 'rxjs';
 import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { Crumb } from 'src/app/shared/crumb';
-import { ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
@@ -30,6 +30,7 @@ export class AppService {
     private dialog: MatDialog,
     private windowRef: AppWindowRef,
     private decimalPipe: DecimalPipe,
+    private route: ActivatedRoute,
     private router: Router,
     private config: AppConfiguration,
     private state: AppState,
@@ -89,6 +90,7 @@ export class AppService {
     
     this.state.isFacetsCollapsed = true;
     document.getElementById('content-scroller').scrollTo(0,0);
+    this.state.setFacetChanged();
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
@@ -428,6 +430,11 @@ export class AppService {
 
 
 
+  verifyRecaptcha(reCaptchaMsg: string) {
+    const url = '/feedback';
+    return this.post(url, { reCaptchaMsg, key: environment.recaptcha.siteKey });
+  }
+  
   feedback(name: string, mail: string, text: string, ident_cely: string) {
     const url = '/feedback';
     return this.post(url, { name, mail, text, ident_cely });
@@ -667,9 +674,11 @@ export class AppService {
   setMapResult(result, mapDetail) {
     if (!result && mapDetail) {
       // zavirame kartu
-      this.state.closingMapResult = true;
+
+      const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
+      this.state.closingMapResult = inResults;
       this.state.mapResult = result;
-      let url = '/results';
+      let url = '/map';
       const p: any = {};
       p.mapId = null;
       p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
@@ -680,8 +689,8 @@ export class AppService {
     }
   }
 
-  showInMap(result: any, isMapDetail = true, force = false) {
-    if ((!force && this.state.isMapaCollapsed) || isMapDetail) {
+  showInMap(result: any, isMapDetail = true, force = false, isChild = false) {
+    if ((!force && this.state.isMapaCollapsed) || isMapDetail || isChild) {
       return;
     }
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;
@@ -692,7 +701,7 @@ export class AppService {
     const p: any = {};
     p.mapa = true;
     p.mapId = result.ident_cely;
-    let url = '/results';
+    let url = '/map';
     if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
       url = '/id/' + this.state.documentId;

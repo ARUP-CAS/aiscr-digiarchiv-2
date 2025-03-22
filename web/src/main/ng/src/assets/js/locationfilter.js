@@ -56,7 +56,7 @@ L.Control.Button = L.Class.extend({
 
   setText: function(text) {
       this._button.title = text;
-      // this._button.innerHTML = text;
+      this._button.innerHTML = text;
   }
 });
 
@@ -357,6 +357,18 @@ L.LocationFilter = L.Layer.extend({
       this._map.zoomOut();
   },
 
+  updateText: function() {
+
+    if (!this._enableButton) {
+          return;
+    }
+    if (this._enabled) {
+        this._enableButton.setText(this.options.enableButton.disableText);
+    } else {
+        this._enableButton.setText(this.options.enableButton.enableText);
+    }
+  },
+
   /* Enable the location filter */
   enable: function() {
       if (this._enabled) {
@@ -366,9 +378,9 @@ L.LocationFilter = L.Layer.extend({
       // Initialize corners
       var bounds;
       if (this._sw && this._ne) {
-          bounds = new L.LatLngBounds(this._sw, this._ne);
+         bounds = new L.LatLngBounds(this._sw, this._ne);
       } else if (this.options.bounds) {
-          bounds = this.options.bounds;
+         bounds = this.options.bounds;
       } else {
           bounds = this._map.getBounds();
       }
@@ -443,6 +455,10 @@ L.LocationFilter = L.Layer.extend({
 
       // Remove rectangle layer from map
       this._map.removeLayer(this._layer);
+
+      // reset corners
+      this._sw = null;
+      this._ne = null;
 
       this._enabled = false;
 

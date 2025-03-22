@@ -128,6 +128,11 @@ public class ExtZdroj implements FedoraModel {
     @JacksonXmlProperty(localName = "poznamka")
     @Field
     public String ext_zdroj_poznamka;
+    
+//<xs:element name="doi" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- added in v2.1 -->
+    @JacksonXmlProperty(localName = "doi")
+    @Field
+    public String ext_zdroj_doi;
 
 //  <xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
     @JacksonXmlProperty(localName = "historie")

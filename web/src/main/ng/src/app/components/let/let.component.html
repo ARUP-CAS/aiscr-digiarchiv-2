@@ -15,8 +15,8 @@
         <tr *ngIf="result.let_letiste_start || result.let_letiste_cil">
           <th class="app-label">{{ 'card.desc.Trasa' | translate }}:</th>
           <td>
-            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
-            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil" [heslar]="'a'"></app-inline-filter>
+            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start.id" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
+            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil.id" [heslar]="'a'"></app-inline-filter>
           </td>
         </tr>
         <tr *ngIf="result.let_ucel_letu">
@@ -33,7 +33,7 @@
         </tr>
         <tr *ngIf="result.let_organizace">
           <th class="app-label">{{ 'card.desc.Organizace' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_organizace'" [value]="result.let_organizace" [heslar]="'organizace'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_organizace'" [value]="result.let_organizace.id" [heslar]="'organizace'"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.let_uzivatelske_oznaceni">
           <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
@@ -49,11 +49,11 @@
         </tr>
         <tr *ngIf="result.let_pocasi">
           <th class="app-label">{{ 'card.desc.Počasí' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.let_pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.let_pocasi.id" [heslar]="'pocasi'"></app-inline-filter></td>
         </tr>
         <tr *ngIf="result.let_dohlednost">
           <th class="app-label">{{ 'card.desc.Dohlednost' | translate }}:</th>
-          <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.let_dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
+          <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.let_dohlednost.id" [heslar]="'dohlednost'"></app-inline-filter></td>
         </tr>
       </tbody>
     </table>

@@ -53,7 +53,7 @@
    <field name="lng_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="lat_D" type="pfloat" indexed="true" stored="true" multiValued="true" />
    <field name="pian_id" type="string" indexed="true" stored="true" multiValued="true" /> 
-   <field name="pian_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <field name="pian_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="location_info" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor" type="string" indexed="false" stored="true" multiValued="true" docValues="false" /> 
    
@@ -64,9 +64,10 @@
    <field name="soubor_filepath" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_nazev" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_id" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="soubor_mimetype" type="string" indexed="false" stored="true" multiValued="true" /> 
    
    <!-- Dokument fields -->
-   <field name="dokument_let" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="dokument_let" type="string_big" indexed="false" stored="true" multiValued="false" />
    <field name="dokument_let_ident_cely" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_typ_dokumentu" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="dokument_material_originalu" type="string" indexed="true" stored="true" multiValued="false" />
@@ -96,6 +97,7 @@
    <field name="dokument_cast_projekt" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="dokument_az_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="true" /> 
    <dynamicField name="dokument_az_chranene_udaje_*" type="string_big" indexed="false" stored="true" multiValued="true" /> 
+   <field name="dokument_doi" type="string" indexed="true" stored="true" multiValued="false" />
 
   
    <!-- Archeologicky zaznam, akce and lokalita fields -->
@@ -146,18 +148,9 @@
 
    <dynamicField name="lokalita_popis_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
    <dynamicField name="lokalita_poznamka_*" type="text_general" indexed="true" stored="true" multiValued="true" /> 
+   <field name="lokalita_igsn" type="string" indexed="true" stored="true" multiValued="false" /> 
    
-   <!--
-   Musime prejmenovat pro projekt. Akce ma nevalidni data pro tyto pole.
-   Misto toho pouzivame datum_zahajeni_v a datum_ukonceni_v
-   <field name="datum_zahajeni" type="pdate" indexed="true" stored="true" />
-   <field name="datum_ukonceni" type="pdate" indexed="true" stored="true" />
-   -->
-   <field name="datum_prihlaseni" type="pdate" indexed="true" stored="true" />
-   <field name="datum_zapisu_zahajeni" type="pdate" indexed="true" stored="true" />
-   <field name="datum_zapisu_ukonceni" type="pdate" indexed="true" stored="true" />
-   <field name="datum_navrhu_archivace" type="pdate" indexed="true" stored="true" />
-   
+  
    
    <!-- Samostatny nalez fields -->
    <field name="samostatny_nalez_okres" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -175,8 +168,6 @@
    <field name="samostatny_nalez_predano_organizace" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_datum_nalezu" type="pdate" indexed="true" stored="true" multiValued="false" />
    <field name="samostatny_nalez_geom_system" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="samostatny_nalez_geom_updated_at" type="pdate" indexed="true" stored="true" multiValued="false" />
-   <field name="samostatny_nalez_geom_sjtsk_updated_at" type="pdate" indexed="true" stored="true" multiValued="false" />
    <field name="samostatny_nalez_nalezce" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_chranene_udaje" type="string" indexed="false" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_katastr_A" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -187,6 +178,9 @@
    <field name="samostatny_nalez_lokalizace_B" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_lokalizace_C" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_lokalizace_D" type="string" indexed="true" stored="true" multiValued="false" />  -->
+
+   <field name="samostatny_nalez_igsn" type="string" indexed="true" stored="true" multiValued="false" /> 
+   
    
    <dynamicField name="samostatny_nalez_lokalizace_*" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    
@@ -301,8 +295,6 @@
    
    
    <field name="pian_geom_system" type="string" indexed="false" stored="true" multiValued="false" /> 
-   <field name="pian_geom_updated_at" type="pdate" indexed="true" stored="true" />
-   <field name="pian_geom_sjtsk_updated_at" type="pdate" indexed="true" stored="true" />
    <field name="pian_chranene_udaje" type="string_big" indexed="false" stored="true" multiValued="false" /> 
    
    <field name="f_pian_typ" type="string" indexed="true" stored="true" multiValued="true" /> 
@@ -338,6 +330,7 @@
    <field name="ext_zdroj_autor" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="ext_zdroj_editor" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="ext_zdroj_ext_odkaz" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="ext_zdroj_doi" type="string" indexed="true" stored="true" multiValued="false" /> 
    
    
    <!-- dokumentacni_jednotka fields -->
@@ -372,20 +365,14 @@
    <field name="let_letiste_cil" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="let_pocasi" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="let_dohlednost" type="string" indexed="true" stored="true" multiValued="false" /> 
-   <field name="let_ident_cely" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_fotoaparat" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_typ_letounu" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_ucel_letu" type="text_general" indexed="true" stored="true" multiValued="true" />
-   <field name="let_uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="let_ident_cely" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_fotoaparat" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_typ_letounu" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_ucel_letu" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_uzivatelske_oznaceni" type="text_general" indexed="true" stored="true" multiValued="false" />
+   <field name="let_datum" type="pdate" indexed="true" stored="true"  multiValued="false" />
 
    <field name="let_dokument" type="string" indexed="true" stored="true" multiValued="true" /> 
-	
-   
-   <field name="typ_nalezu" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
-   <field name="adv_jmeno" type="lowercase_cs" indexed="true" stored="true" multiValued="true" />
-   
-   <!-- obdobi integer for filters --> 
-   <field name="obdobi_poradi" type="pint" indexed="true" stored="true" multiValued="true" /> 
    
    <!-- pole pro stats -->
    <field name="datum_zverejneni" type="pdate" indexed="true" stored="true" />
@@ -395,7 +382,6 @@
    <field name="rok_vzniku" type="pint" indexed="true" stored="true"  multiValued="true" />
    <field name="rok_vydani" type="pint" indexed="true" stored="true"  multiValued="true" />
    <!-- <field name="extra_data_datum_vzniku" type="pdate" indexed="true" stored="true"  multiValued="true" /> -->
-   <field name="let_datum" type="pdate" indexed="true" stored="true"  multiValued="true" />
    <!--<str name="stats.field">samostatny_nalez_datum_nalezu</str>-->
 
    
@@ -418,6 +404,7 @@
 
    <field name="f_organizace" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_okres" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_kraj" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <field name="f_katastr" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_katastr_A" type="string" indexed="true" stored="true" multiValued="true" /> 
@@ -509,6 +496,10 @@
    <field name="f_dj_typ" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_nalezove_okolnosti" type="string" indexed="true" stored="true" multiValued="true" />
 
+   <field name="f_mimetype" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_ez_typ" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_ez_autor" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="f_ez_casopis" type="string" indexed="true" stored="true" multiValued="true" />
    
    <!-- sort fields -->
    <field name="autor_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
@@ -599,121 +590,6 @@
  <uniqueKey>ident_cely</uniqueKey>
 
 
-<!--
-<copyField source="okres" dest="f_okres" />
-<copyField source="*_okres" dest="f_okres" />
-<copyField source="katastr" dest="f_katastr" />
-<copyField source="*_katastr" dest="f_katastr" />
-<copyField source="dalsi_katastry" dest="f_katastr" />
-
-<copyField source="obdobi" dest="f_obdobi" />
-
-<copyField source="areal" dest="f_areal" />
-
-
-<copyField source="druh_nalezu" dest="f_druh_nalezu" />
-<copyField source="*druh_nalezu" dest="f_druh_nalezu" />
-<copyField source="nalez_kategorie" dest="f_kategorie" />
-<copyField source="*specifikace" dest="f_specifikace" />
-<copyField source="dok_jednotka_typ" dest="f_dok_jednotka_typ" />
-
-<copyField source="dj_typ" dest="f_dj_typ" />
-<copyField source="*_aktivita" dest="f_aktivita" />
-<copyField source="*_obdobi" dest="f_obdobi" />
-<copyField source="*_areal" dest="f_areal" />
-<copyField source="*specifikace" dest="f_specifikace" />
-<copyField source="*typ_nalezu" dest="f_typ_nalezu" />
-<copyField source="*druh_nalezu" dest="f_druh_nalezu" />
-<copyField source="*objekt_druh" dest="f_druh_nalezu" />
-<copyField source="*predmet_druh" dest="f_druh_nalezu" />
-
-<copyField source="okres" dest="f_okres" />
-<copyField source="*_okres" dest="f_okres" />
-<copyField source="typ_dokumentu" dest="f_typ_dokumentu" /> 
-<copyField source="autor" dest="f_autor" />
-<copyField source="*adb_autor_popisu" dest="f_autor" />
-<copyField source="*adb_autor_revize" dest="f_autor" />
-
-<copyField source="extra_data_osoby" dest="f_osoby" />
-
-<copyField source="*_vedouci" dest="f_vedouci" />
-<copyField source="vedouci_akce" dest="f_vedouci" />
-<copyField source="vedouci_akce_ostatni" dest="f_vedouci" />
-<copyField source="vedouci_projektu" dest="f_vedouci" />
-<copyField source="vedouci_akce_ostatni_jmeno" dest="f_vedouci" />
-
-<copyField source="nalezce" dest="f_nalezce" />
-
-<copyField source="let_pozorovatel" dest="f_pozorovatel" />
-	   
-
-<copyField source="autor" dest="adv_jmeno" />
-<copyField source="neident_akce_vedouci" dest="adv_jmeno" />
-<copyField source="extra_data_osoby" dest="adv_jmeno" />
-<copyField source="akce_vedouci_akce" dest="adv_jmeno" />
-<copyField source="akce_vedouci_akce_ostatni" dest="adv_jmeno" />
-
-<copyField source="rok_vzniku" dest="f_rok_vzniku" />
-<copyField source="rok_vydani" dest="f_rok_vydani" />
-
-<copyField source="*_obdobi_poradi" dest="obdobi_poradi" />
-
-<copyField source="organizace" dest="f_organizace" />
-<copyField source="organizace_ostatni" dest="f_organizace" />
-<copyField source="organizace_prihlaseni" dest="f_organizace" />
-<copyField source="predano_organizace" dest="f_organizace" />
-<copyField source="vedouci_akce_ostatni_organizace" dest="f_organizace" />
-
-<copyField source="let_pozorovatel" dest="f_let_pozorovatel" />
-<copyField source="let_organizace" dest="f_let_organizace" />
-<copyField source="let_pilot" dest="f_let_pilot" />
-<copyField source="let_letiste_start" dest="f_let_letiste_start" />
-<copyField source="let_letiste_cil" dest="f_let_letiste_cil" />
-<copyField source="let_pocasi" dest="f_let_pocasi" />
-<copyField source="let_dohlednost" dest="f_let_dohlednost" />
-
-<copyField source="tvar_tvar" dest="f_tvar" />
-
-<copyField source="jazyk_dokumentu" dest="f_jazyk_dokumentu" />
-<copyField source="material_originalu" dest="f_material_dokumentu" />
-
-<copyField source="posudek" dest="f_typ_dokumentu_posudek" />
-<copyField source="rada" dest="f_rada" />
-<copyField source="ulozeni_originalu" dest="f_ulozeni_originalu" />
-
-
-<copyField source="extra_data_zachovalost" dest="f_zachovalost" />
-<copyField source="zachovalost" dest="f_zachovalost" />
-<copyField source="jistota" dest="f_jistota" />
-<copyField source="extra_data_nahrada" dest="f_nahrada" />
-<copyField source="extra_data_zeme" dest="f_zeme" />
-<copyField source="extra_data_format" dest="f_format" />
-<copyField source="extra_data_udalost_typ" dest="f_udalost_typ" />
-
-<copyField source="typ_projektu" dest="f_typ_projektu" />
-<copyField source="kulturni_pamatka" dest="f_kulturni_pamatka" />
-
-<copyField source="okolnosti" dest="f_nalezove_okolnosti" />
-
-<copyField source="typ_lokality" dest="f_typ_lokality" />
-<copyField source="druh" dest="f_druh_lokality" />
-
-<copyField source="*_adb_typ_sondy" dest="f_adb_typ_sondy" />
-<copyField source="*_adb_podnet" dest="f_adb_podnet" />
-<copyField source="*_pian_typ" dest="f_pian_typ" />
-<copyField source="*_pian_presnost" dest="f_pian_presnost" />
-<copyField source="*_pian_zm10" dest="f_pian_zm10" />
-
-<copyField source="poznamka" dest="f_poznamka" />
-<copyField source="podnazev" dest="f_podnazev" />
-
-
-<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
-<copyField source="datum_ukonceni_v" dest="datum_provedeni" /> 
-<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
-<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
-<copyField source="datum_zahajeni_v" dest="datum_provedeni" /> 
--->
 
     <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"

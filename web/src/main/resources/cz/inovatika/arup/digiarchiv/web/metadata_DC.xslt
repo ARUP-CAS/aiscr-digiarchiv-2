@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:amcr="https://api.aiscr.cz/schema/amcr/2.0/">
+<xsl:stylesheet version="1.0" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 
+                xmlns:gml="http://www.opengis.net/gml/3.2" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                exclude-result-prefixes="amcr"
+                xmlns:amcr="##AMCRVERSION##"
+>
     <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
     <xsl:param name="base_url">https://api.aiscr.cz/</xsl:param>
     <xsl:variable name="base_url_id"><xsl:value-of select="$base_url"/>/id/</xsl:variable>
-    <xsl:template match="/">
-        <oai_dc:dc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+    <xsl:template match="/" >
+        <oai_dc:dc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                   xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 
+                   xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
             <xsl:apply-templates select="amcr:amcr" />
         </oai_dc:dc>
     </xsl:template>
@@ -122,6 +133,9 @@
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:archeologicky_zaznam/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:lokalita/amcr:igsn">
+            <dc:identifier>doi:<xsl:value-of select="."/></dc:identifier> <!-- doi:{amcr:archeologicky_zaznam/amcr:lokalita/amcr:igsn} -->
+        </xsl:for-each>
         <dc:subject xml:lang="cs">archeologický záznam</dc:subject> <!-- archeologický záznam -->
         <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- Stav: {amcr:archeologicky_zaznam/amcr:stav} -->
         <xsl:if test="amcr:chranene_udaje/amcr:uzivatelske_oznaceni"><dc:description xml:lang="cs">Označení: <xsl:value-of select="amcr:chranene_udaje/amcr:uzivatelske_oznaceni"/></dc:description></xsl:if> <!-- Označení: {amcr:archeologicky_zaznam/amcr:chranene_udaje/amcr:uzivatelske_oznaceni} -->
@@ -372,6 +386,9 @@
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:dokument/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:doi">
+            <dc:identifier>doi:<xsl:value-of select="."/></dc:identifier> <!-- doi:{amcr:dokument/amcr:doi} -->
+        </xsl:for-each>
         <dc:subject xml:lang="cs">dokument</dc:subject> <!-- "dokument" -->
         <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:dokument/amcr:stav} -->
         <xsl:if test="amcr:oznaceni_originalu"><dc:description xml:lang="cs">Označení: <xsl:value-of select="amcr:oznaceni_originalu"/></dc:description></xsl:if> <!-- Označení: {amcr:dokument/amcr:oznaceni_originalu} -->
@@ -595,6 +612,9 @@
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:ext_zdroj/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:doi">
+            <dc:identifier>doi:<xsl:value-of select="."/></dc:identifier> <!-- doi:{amcr:ext_zdroj/amcr:doi} -->
+        </xsl:for-each>
         <dc:subject xml:lang="cs">externí zdroj</dc:subject> 
         <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:ext_zdroj/amcr:stav_pom} -->
         <xsl:if test="amcr:misto"><dc:description xml:lang="cs">Místo vydání: <xsl:value-of select="amcr:misto"/></dc:description></xsl:if> <!-- Místo vydání: {amcr:ext_zdroj/amcr:misto} -->
@@ -719,6 +739,9 @@
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:samostatny_nalez/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:igsn">
+            <dc:identifier>doi:<xsl:value-of select="."/></dc:identifier> <!-- doi:{amcr:samostatny_nalez/amcr:igsn} -->
+        </xsl:for-each>
         <dc:subject xml:lang="cs">samostatný nález</dc:subject> 
         <dc:description xml:lang="cs">Stav: <xsl:value-of select="amcr:stav"/></dc:description> <!-- "Stav: "{amcr:samostatny_nalez/amcr:stav_pom} -->
         <xsl:if test="amcr:evidencni_cislo"><dc:description xml:lang="cs">Evideční číslo: <xsl:value-of select="amcr:evidencni_cislo"/></dc:description></xsl:if> <!-- Evideční číslo: {amcr:samostatny_nalez/amcr:evidencni_cislo} -->
@@ -813,6 +836,9 @@
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:uzivatel/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:orcid">
+            <dc:identifier><xsl:value-of select="."/></dc:identifier> <!-- {amcr:uzivatel/amcr:orcid} -->
+        </xsl:for-each>
         <dc:subject xml:lang="cs">uživatel</dc:subject>
         <dc:title><xsl:value-of select="amcr:prijmeni"/>, <xsl:value-of select="amcr:jmeno"/></dc:title>
         <dc:description xml:lang="cs">Email: <xsl:value-of select="amcr:email"/></dc:description> <!-- Email: {amcr:uzivatel/amcr:email} -->
@@ -982,6 +1008,9 @@
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:organizace/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:ror">
+            <dc:identifier><xsl:value-of select="."/></dc:identifier> <!-- {amcr:organizace/amcr:ror} -->
+        </xsl:for-each>
         <dc:subject xml:lang="cs">organizace</dc:subject> <!-- "organizace" -->
         <dc:title xml:lang="cs"><xsl:value-of select="amcr:nazev"/></dc:title> <!-- {amcr:organizace/amcr:nazev} -->
         <dc:title xml:lang="en"><xsl:value-of select="amcr:nazev_en"/></dc:title> <!-- {amcr:organizace/amcr:nazev_en} -->
@@ -1017,6 +1046,12 @@
         <dc:identifier>
             <xsl:value-of select="amcr:ident_cely"/>
         </dc:identifier> <!-- {amcr:osoba/amcr:ident_cely} -->
+        <xsl:for-each select="amcr:orcid">
+            <dc:identifier><xsl:value-of select="."/></dc:identifier> <!-- {amcr:osoba/amcr:orcid} -->
+        </xsl:for-each>
+        <xsl:for-each select="amcr:wikidata">
+            <dc:identifier><xsl:value-of select="."/></dc:identifier> <!-- {amcr:osoba/amcr:wikidata} -->
+        </xsl:for-each>
         <dc:subject xml:lang="cs">osoba</dc:subject>
         <dc:title><xsl:value-of select="amcr:vypis_cely"/></dc:title> <!-- {amcr:osoba/amcr:vypis_cely} -->
         <dc:coverage><xsl:value-of select="amcr:rok_narozeni"/>-<xsl:value-of select="amcr:rok_umrti"/></dc:coverage> <!-- {amcr:osoba/amcr:rok_narozeni}-{amcr:osoba/amcr:rok_umrti} -->

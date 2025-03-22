@@ -300,7 +300,8 @@
       "vyber": "Map selection",
       "f_nahrada": "Document - replacement copy",
       "f_udalost_typ": "Document - type of event",
-      "adb_vyskovy_bod_typ": "ADP - type of elevation point"
+      "adb_vyskovy_bod_typ": "ADP - type of elevation point",
+      "f_kraj": "Region"
     }
   },
 
@@ -473,7 +474,8 @@
     },
     "button": {
       "Skrýt detail": "Hide detail",
-      "Zobrazit detail": "Show detail"
+      "Zobrazit detail": "Show detail",
+      "Zobrazit vsechny": "Load all records"
     },
     "panelTitle": {
       "Popis dokumentu": "Document description",
@@ -513,7 +515,7 @@
       "Citujte jako": "Cite as",
       "Dokument": "Document",
       "Dostupné z": "Available at",
-      "AMČR: Záznam": "AMCR: Record",
+      "AMČR: Záznam": "Archaeological Information System of the Czech Republic: Record",
       "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic"
     },
     "note": {
@@ -524,6 +526,7 @@
 
   "sidenav": {
     "tab": {
+      "Info": "The displayed results correspond to the current map window.",
       "Filtry": "Filters",
       "Výsledky": "Results"
     },
@@ -535,11 +538,13 @@
 
   "map": {
     "desc": {
-      "select area": "Select area",
-      "remove selection": "Remove selection",
+      "select area": "Filter area",
+      "remove selection": "Cancel selection",
       "zoom in": "Zoom in",
       "zoom out": "Zoom out",
-      "info": "The map displays records with accessibility corresponding to your user role. Only users with higher privileges can see hidden records."
+      "info": "The map displays records with accessibility corresponding to your user role. Only users with higher privileges can see hidden records.",
+      "measureOn": "Turn on PolylineMeasure",
+      "measureOff": "Turn off PolylineMeasure"
     },
     "tooltip": {
       "Odstranit tento filtr": "Remove this filter"
@@ -549,6 +554,7 @@
       "cuzk_orto": "ČÚZK - Orthophotomap",
       "cuzk_stin": "ČÚZK - DMR 5G Hillshade",
       "openstreet": "OpenStreetMap",
+      "data": "Show records",
       "cuzk_katastr_mapa": "ČÚZK - Cadastral  Map",
       "cuzk_katastr_uzemi": "ČÚZK - Cadastral Territory"
     },
@@ -634,7 +640,7 @@
       "Citujte jako": "Cite as",
       "Dokument": "Document",
       "Dostupné z": "Available at",
-      "AMČR: Záznam": "AMCR: Record",
+      "AMČR: Záznam": "Archaeological Information System of the Czech Republic: Record",
       "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic",
       "stránka z": "page from"
     },

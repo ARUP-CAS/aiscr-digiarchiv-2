@@ -147,6 +147,7 @@
         <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
           <mat-icon>last_page</mat-icon>
         </button>
+        <div style="padding: 15px;">{{ 'sidenav.tab.Info' | translate }}</div>
         <mat-tab-group [selectedIndex]="1">
           <mat-tab [label]="'sidenav.tab.Filtry' | translate">
             <div class="app-facets">

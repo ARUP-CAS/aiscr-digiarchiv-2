@@ -25,10 +25,8 @@ export class ProjektComponent implements OnInit, OnChanges {
   hasRights: boolean;
   bibTex: string;
 
-  itemSize = 133;
-  vsSize = 0;
-  numChildren = 0;
-  math = Math;
+  relationsChecked = false;
+  related: {entity: string, ident_cely: string}[] = [];
 
   constructor(
     private datePipe: DatePipe,
@@ -42,139 +40,66 @@ export class ProjektComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.bibTex = 
-     `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
-       author = {AMČR},
+    this.bibTex =
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+       author = {Archeologický informační systém České republiky},
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-     this.setVsize();
-     if (this.inDocument) {
-       this.state.loading = false;
-       this.state.documentProgress = 0;
-       this.getArchZaznam();
-       this.getSamostatnyNalez();
-       this.getDokument();
-     }
-  } 
-
-  setVsize() {
-    this.numChildren = 0;
-    if (this.result.projekt_archeologicky_zaznam) {
-      this.numChildren += this.result.projekt_archeologicky_zaznam.length;
-    }
-    if (this.result.projekt_samostatny_nalez) {
-      this.numChildren += this.result.projekt_samostatny_nalez.length;
-    }
-    if (this.result.projekt_dokument) {
-      this.numChildren += this.result.projekt_dokument.length;
-    }
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize); 
-  }
-
-  getDokument() {
-    this.result.valid_projekt_dokument = [];
-    if (this.result.projekt_dokument) {
-      for (let i = 0; i < this.result.projekt_dokument.length; i=i+10) {
-        const ids = this.result.projekt_dokument.slice(i, i+10);
-        this.service.getIdAsChild(ids, "dokument").subscribe((res: any) => {
-          this.result.valid_projekt_dokument = this.result.valid_projekt_dokument.concat(res.response.docs);
-          if (res.response.docs.length < ids.length) {
-            // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - ids.length + res.response.docs.length; 
-            this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-          }
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-          if (!this.state.loading) {
-            this.result.valid_projekt_dokument.sort((a:any, b:any) => a.ident_cely.localeCompare(b.ident_cely))
-          }
-        });
-      }
+    
+    if (this.inDocument) {
+      
     }
   }
 
-  getSamostatnyNalez() {
-    this.result.valid_samostatny_nalez = [];
-    if (this.result.projekt_samostatny_nalez) {
-      for (let i = 0; i < this.result.projekt_samostatny_nalez.length; i=i+10) {
-        const ids = this.result.projekt_samostatny_nalez.slice(i, i+10);
-        this.service.getIdAsChild(ids, "samostatny_nalez").subscribe((res: any) => {
-          this.result.valid_samostatny_nalez = this.result.valid_samostatny_nalez.concat(res.response.docs);
-          if (res.response.docs.length < ids.length) {
-            // To znamena, ze v indexu nejsou zaznamy odkazovane. Snizime pocet 
-            this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-            this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-          }
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-          if (!this.state.loading) {
-            this.result.valid_samostatny_nalez.sort((a:any, b:any) => a.ident_cely.localeCompare(b.ident_cely))
-          }
-        });
-      }
+  checkRelations() {
+    if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+      return;
     }
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.projekt_archeologicky_zaznam = res.projekt_archeologicky_zaznam;
+      this.result.projekt_samostatny_nalez = res.projekt_samostatny_nalez;
+      this.result.projekt_dokument = res.projekt_dokument;
+      this.relationsChecked = true;
+      this.related = [];
+      res.id_akce.forEach((ident_cely: string) => {
+        this.related.push({entity: 'akce', ident_cely})
+      });
+      res.id_lokalita.forEach((ident_cely: string) => {
+        this.related.push({entity: 'lokalita', ident_cely})
+      });
+      res.projekt_samostatny_nalez.forEach((ident_cely: string) => {
+        this.related.push({entity: 'samostatny_nalez', ident_cely})
+      });
+      res.projekt_dokument.forEach((ident_cely: string) => {
+        this.related.push({entity: 'dokument', ident_cely})
+      });
+    });
   }
 
 
   ngOnChanges(c) {
     if (c.result) {
-      this.setVsize();
+      this.checkRelations();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
-      this.getFullId();
+      this.getFullId(false);
     }
   }
 
-  getFullId() {
-    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+  getFullId(shouldLog: boolean) {
+    this.service.getId(this.result.ident_cely, shouldLog).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      
-      this.state.loading = (this.result.projekt_archeologicky_zaznam.length + this.result.projekt_samostatny_nalez.length) < this.numChildren;
-      this.state.documentProgress = 0;
-      this.setVsize();
-      this.getArchZaznam();
-      this.getSamostatnyNalez();
-      this.getDokument();
       this.hasDetail = true;
     });
   }
 
-  getArchZaznam() {
-    this.result.akce = [];
-    this.result.lokalita = [];
-    if (this.result.id_akce) {
-      for (let i = 0; i < this.result.id_akce.length; i = i + 10) {
-        const ids = this.result.id_akce.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-        });
-      }
-    }
-    if (this.result.id_lokalita) {
-      for (let i = 0; i < this.result.id_lokalita.length; i = i + 10) {
-        const ids = this.result.id_lokalita.slice(i, i + 10);
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this.result.akce = this.result.akce.concat(res.response.docs.filter(d => d.entity === 'akce'));
-          this.result.lokalita = this.result.lokalita.concat(res.response.docs.filter(d => d.entity === 'lokalita'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) / this.numChildren *100;
-          this.state.loading = (this.result.akce.length + this.result.valid_samostatny_nalez.length + this.result.valid_projekt_dokument.length) < this.numChildren;
-        });
-      }
-    }
-  }
-
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.getFullId();
+      this.getFullId(true);
     }
     this.detailExpanded = !this.detailExpanded;
   }
@@ -214,14 +139,14 @@ export class ProjektComponent implements OnInit, OnChanges {
       data: this.result.ident_cely,
       panelClass: 'app-feedback-dialog'
     });
-  } 
+  }
 
   formatDate(s: string) {
     // [2023-05-26, 2023-05-26]
     // (d)d.(m)m.rrrr - (d)d.(m)m.rrrr
-    let parts = s.replace('[','').replace(']','').split(',');
+    let parts = s.replace('[', '').replace(']', '').split(',');
     console.log()
     return this.datePipe.transform(parts[0].trim(), 'd.M.yyyy') + ' - ' + this.datePipe.transform(parts[1].trim(), 'd.M.yyyy');
   }
-  
+
 }

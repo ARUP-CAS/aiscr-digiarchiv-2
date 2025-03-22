@@ -19,7 +19,7 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-@WebServlet(name = "OAIServlet", urlPatterns = {"/oai"})
+@WebServlet(name = "OAIServlet", urlPatterns = {"/oai/*"})
 public class OAIServlet extends HttpServlet {
 
     public static final Logger LOGGER = Logger.getLogger(OAIServlet.class.getName());
@@ -37,6 +37,7 @@ public class OAIServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/xml;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        String version = request.getPathInfo();
         try {
             String actionNameParam = request.getParameter("verb");
             if (actionNameParam != null) {
@@ -59,7 +60,7 @@ public class OAIServlet extends HttpServlet {
                     }
                     
                 }
-                String xml = actionToDo.doPerform(request, response);
+                String xml = actionToDo.doPerform(request, response, version);
                 out.println(xml);
             } else {
                 String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
@@ -73,7 +74,7 @@ public class OAIServlet extends HttpServlet {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                     + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"badVerb\">Illegal OAI verb</error>"
-                    + "</OAI-PMH>";
+                    + "</OAI-PMH>"; 
             out.print(xml);
         } catch (SecurityException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
@@ -89,42 +90,42 @@ public class OAIServlet extends HttpServlet {
     enum Actions {
         Identify {
             @Override
-            String doPerform(HttpServletRequest req, HttpServletResponse response) throws Exception {
-                return OAIRequest.identify(req);
+            String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
+                return OAIRequest.identify(req, version);
             }
         },
         ListSets {
             @Override
-            String doPerform(HttpServletRequest req, HttpServletResponse response) throws Exception {
-                return OAIRequest.listSets(req);
+            String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
+                return OAIRequest.listSets(req, version);
             }
         },
         ListMetadataFormats {
             @Override
-            String doPerform(HttpServletRequest req, HttpServletResponse response) throws Exception {
-                return OAIRequest.metadataFormats(req);
+            String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
+                return OAIRequest.metadataFormats(req, version);
             }
         },
         GetRecord {
             @Override
-            String doPerform(HttpServletRequest req, HttpServletResponse response) throws Exception {
-                return OAIRequest.getRecord(req);
+            String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
+                return OAIRequest.getRecord(req, version);
             }
         },
         ListIdentifiers {
             @Override
-            String doPerform(HttpServletRequest req, HttpServletResponse response) throws Exception {
-                return OAIRequest.listRecords(req, true);
+            String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
+                return OAIRequest.listRecords(req, true, version);
             }
         },
         ListRecords {
             @Override
-            String doPerform(HttpServletRequest req, HttpServletResponse response) throws Exception {
-                return OAIRequest.listRecords(req, false);
+            String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
+                return OAIRequest.listRecords(req, false, version);
             }
         };
 
-        abstract String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception;
+        abstract String doPerform(HttpServletRequest request, HttpServletResponse response, String version) throws Exception;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

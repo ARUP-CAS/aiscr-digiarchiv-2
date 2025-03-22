@@ -300,7 +300,8 @@
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
       "f_udalost_typ": "Dokument - typ události",
-      "adb_vyskovy_bod_typ": "ADB - typ výškového bodu"
+      "adb_vyskovy_bod_typ": "ADB - typ výškového bodu",
+      "f_kraj": "Kraj"
     }
   },
 
@@ -473,7 +474,8 @@
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
-      "Zobrazit detail": "Zobrazit detail"
+      "Zobrazit detail": "Zobrazit detail",
+      "Zobrazit vsechny": "Načíst všechny záznamy"
     },
     "panelTitle": {
       "Popis dokumentu": "Popis dokumentu",
@@ -513,7 +515,7 @@
       "Citujte jako": "Citujte jako",
       "Dokument": "Dokument",
       "Dostupné z": "Dostupné z",
-      "AMČR: Záznam" : "AMČR: Záznam",
+      "AMČR: Záznam" : "Archeologický informační systém České republiky: Záznam",
       "Archeologická mapa České republiky": "Archeologická mapa České republiky"
     },
     "note": {
@@ -524,6 +526,7 @@
 
   "sidenav": {
     "tab": {
+      "Info": "Zobrazené výsledky odpovídají aktuálnímu výřezu mapy.",
       "Filtry": "Filtry",
       "Výsledky": "Výsledky"
     },
@@ -535,11 +538,13 @@
 
   "map": {
     "desc": {
-      "select area": "Vybrat oblast",
-      "remove selection": "Zrušit výběr",
+      "select area": "Filtrovat oblast",
+      "remove selection": "Zrušit filtr",
       "zoom in": "Přiblížit",
       "zoom out": "Oddálit",
-      "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním."
+      "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním.",
+      "measureOn": "Měření vzdálenosti",
+      "measureOff": "Ukončít měření vzdálenosti"
     },
     "tooltip": {
       "Odstranit tento filtr": "Zrušit tento filtr"
@@ -549,6 +554,7 @@
       "cuzk_orto": "ČÚZK - Ortofotomapa",
       "cuzk_stin": "ČÚZK - Stínovaný reliéf 5G",
       "openstreet": "OpenStreetMap",
+      "data": "Zobrazit záznamy",
       "cuzk_katastr_mapa": "ČÚZK - Katastrální mapa",
       "cuzk_katastr_uzemi": "ČÚZK - Katastrální území"
     },
@@ -634,7 +640,7 @@
       "Citujte jako": "Citujte jako",
       "Dokument": "Dokument",
       "Dostupné z": "Dostupné z",
-      "AMČR: Záznam" : "AMČR: Záznam",
+      "AMČR: Záznam" : "Archeologický informační systém České republiky: Záznam",
       "Archeologická mapa České republiky": "Archeologická mapa České republiky",
       "stránka z": "stránka z"
     },

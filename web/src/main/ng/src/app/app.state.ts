@@ -61,7 +61,7 @@ export class AppState {
   // loading = true;
 
   solrResponse: SolrResponse;
-  loading: boolean;
+  loading: boolean = true;
   switchingMap = false;
   closingMapResult = false;
   facetsLoading = false;
@@ -209,7 +209,8 @@ export class AppState {
   }
 
   setFacetChanged() {
-    this.facetsSubject.next('facets');
+    this.stats = null;
+    this.facetsSubject.next('direct');
   }
 
   setFacetPivots(resp: SolrResponse) {

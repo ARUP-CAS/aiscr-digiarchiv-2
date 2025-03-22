@@ -5,7 +5,15 @@
 	 [leafletLayersControlOptions]="{position: 'topright'}">
 		<!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
 		<div [leafletLayer]="markers"></div>
+		<!-- <div [leafletLayer]="idmarkers"></div> -->
+		<div [leafletLayer]="clusters"></div>
 	</div> 
+
+	<mat-card class="app-active-pian-facet" *ngIf="loadingMarkers">
+		<mat-card-content>
+			<a [matTooltip]="'map.tooltip.Zastavit' | translate" (click)="stopLoadingMarkers()"><mat-icon style="margin-right: 0px !important">stop</mat-icon></a>
+		</mat-card-content>
+	</mat-card>
 
 	<mat-card class="app-active-pian-facet" *ngIf="state.pianId">
 		<mat-card-content>

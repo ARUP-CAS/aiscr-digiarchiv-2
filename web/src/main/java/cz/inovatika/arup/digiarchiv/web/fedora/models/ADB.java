@@ -83,7 +83,7 @@ public class ADB implements FedoraModel {
 
 //<xs:element name="chranene_udaje" minOccurs="0" maxOccurs="1" type="amcr:adb-chranene_udajeType"/> <!-- SELF -->
     @JacksonXmlProperty(localName = "chranene_udaje")
-    private ADBChraneneUdaje adb_chranene_udaje;
+    public ADBChraneneUdaje adb_chranene_udaje;
 
     @Override
     public String coreName() {
@@ -105,8 +105,8 @@ public class ADB implements FedoraModel {
         IndexUtils.addVocabField(idoc, "adb_typ_sondy", adb_typ_sondy);
         IndexUtils.addVocabField(idoc, "adb_podnet", adb_podnet);
         
-        IndexUtils.addVocabField(idoc, "f_adb_typ_sondy", adb_typ_sondy);
-        IndexUtils.addVocabField(idoc, "f_adb_podnet", adb_podnet);
+//        IndexUtils.addVocabField(idoc, "f_adb_typ_sondy", adb_typ_sondy);
+//        IndexUtils.addVocabField(idoc, "f_adb_podnet", adb_podnet);
         
         IndexUtils.addRefField(idoc, "adb_autor_popisu", adb_autor_popisu);
         IndexUtils.addRefField(idoc, "adb_autor_revize", adb_autor_revize);
@@ -116,7 +116,6 @@ public class ADB implements FedoraModel {
         }
         
 
-        
         // Add value of vocab fields
         for (String sufix : SolrSearcher.prSufixAll) {
             idoc.addField("text_all_" + sufix, ident_cely);

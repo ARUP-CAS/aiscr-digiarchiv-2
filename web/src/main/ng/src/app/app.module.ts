@@ -89,6 +89,9 @@ import { LineChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import 'echarts/theme/macarons.js';
+import { RelatedComponent } from './components/related/related.component';
+import { MapViewComponent } from './pages/map-view/map-view.component';
+import { MapViewContainerComponent } from './pages/map-view/map-view-container.component';
 
 echarts.use([TitleComponent, TooltipComponent, GridComponent, BarChart, LineChart, LegendComponent, CanvasRenderer]);
 
@@ -206,7 +209,10 @@ const providers: any[] =[
     CitationComponent,
     ResultActionsComponent,
     StatsComponent,
-    ConsentSheet
+    ConsentSheet,
+    RelatedComponent,
+    MapViewComponent,
+    MapViewContainerComponent
   ],
   imports: [
     CommonModule,

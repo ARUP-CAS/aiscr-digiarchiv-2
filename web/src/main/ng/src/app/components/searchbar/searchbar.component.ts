@@ -55,7 +55,14 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     // if ()
     p.q = this.state.q ? (this.state.q !== '' ? this.state.q : null) : null;
     p.page = 0;
-    this.router.navigate(['/results'], { queryParams: p, queryParamsHandling: 'merge' });
+    p.mapId = null;
+    this.state.mapResult = null;
+    let url = '/results';
+    if (this.router.isActive('map', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+      url = '/map';
+    }
+    this.state.setFacetChanged();
+    this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
   }
 
   changeShowWithoutThumbs() {
@@ -79,24 +86,25 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.mapa = !this.state.isMapaCollapsed;
     p.loc_rpt = null;
 
+    let url = '/results';
     if (p.mapa) {
-      if (this.router.isActive('/id', false)) {
+      url = '/map';
+      if (this.router.isActive('/id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
         p.loc_rpt = null;
         p.vyber = null;
       } else {
         const lat = this.state.stats.lat;
         const lng = this.state.stats.lng;
-        if (lat.max === lat.min) {
-          lat.min = lat.min - 0.05;
-          lat.max = lat.max + 0.05;
-          lng.min = lng.min - 0.05;
-          lng.max = lng.max + 0.05;
-        }
+        // if (lat.max === lat.min) {
+        //   lat.min = lat.min - 0.05;
+        //   lat.max = lat.max + 0.05;
+        //   lng.min = lng.min - 0.05;
+        //   lng.max = lng.max + 0.05;
+        // }
         p.loc_rpt = lat.min + ',' + lng.min +
           ',' + lat.max + ',' + lng.max;
       }
     } else {
-
       p.loc_rpt = null;
       p.pian_id = null;
       p.mapa = null;
@@ -106,8 +114,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
         p.vyber = null;
       }
     }
-    let url = '/results';
-    if (this.router.isActive('/id', false)) {
+    if (this.router.isActive('/id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;
       p.vyber = null;

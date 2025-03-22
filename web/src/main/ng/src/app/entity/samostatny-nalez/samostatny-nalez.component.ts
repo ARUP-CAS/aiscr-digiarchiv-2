@@ -27,10 +27,8 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   imgSrc: string;
   bibTex: string;
 
-  math = Math;
-  itemSize = 133;
-  vsSize = 0;
-  numChildren = 0;
+  relationsChecked = false;
+  related: {entity: string, ident_cely: string}[] = [];
   
 
   constructor(
@@ -59,68 +57,53 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex = 
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
-       author = {AMČR}, 
+       author = {Archeologický informační systém České republiky}, 
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
-       note = {Archeologická mapa České republiky [cit. ${now}]}
+       note = {Archeologická mapa České republiky [cit. ${now}]},
+       doi = {${this.result.samostatny_nalez_igsn}}
      }`;
      if (this.inDocument) {
-      this.setVsize();
-      this.state.documentProgress = 0;
-      this.state.loading = true;
-      this.getProjekts();
+      //this.checkRelations();
      }
   }  
 
-  setVsize() {
-      if (this.result.samostatny_nalez_projekt) {
-        this.numChildren = 1;
-      }
-      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-  }
-
-  getProjekts() {
-    if (this.result.samostatny_nalez_projekt) {
-      this.result.valid_projekt = [];
-        this.service.getIdAsChild([this.result.samostatny_nalez_projekt], "projekt").subscribe((res: any) => {
-          this.result.valid_projekt = this.result.valid_projekt.concat(res.response.docs);
-          this.state.loading = false;
-        });
-    } else {
-      this.state.loading = false;
+  checkRelations() {
+    if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+      return;
     }
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.samostatny_nalez_projekt = res.samostatny_nalez_projekt;
+      this.relationsChecked = true;
+      this.related = [];
+      if (res.samostatny_nalez_projekt) {
+        this.related.push({entity: 'projekt', ident_cely: res.samostatny_nalez_projekt})
+      }
+    });
   }
 
   ngOnChanges(c) {
     if (c.result) {
-      this.setVsize();
+      this.checkRelations();
       this.hasDetail = false;
       this.detailExpanded = this.inDocument;
     }
     if (this.mapDetail) {
-      this.getFullId();
+      this.getFullId(false);
     }
   }
 
-  getFullId() {
-    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+  getFullId(shouldLog: boolean) {
+    this.service.getId(this.result.ident_cely, shouldLog).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      this.setVsize();
-      this.state.documentProgress = 0;
-      this.state.loading = true;
-      this.getProjekts();
+      
       this.hasDetail = true;
-      // if (this.result.loc_rpt) {
-      //   const coords = this.result.loc_rpt[0].split(',');
-      //   this.result.centroid_e = coords[0];
-      //   this.result.centroid_n = coords[1];
-      // }
     });
   }
 
   toggleDetail() {
     if (!this.hasDetail && !this.inDocument) {
-      this.getFullId();
+      this.getFullId(true);
     }
     this.detailExpanded = !this.detailExpanded;
   }

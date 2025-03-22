@@ -108,11 +108,11 @@ public class Let implements FedoraModel {
         idoc.setField("searchable", true);
         IndexUtils.setDateStamp(idoc, ident_cely);
         IndexUtils.addRefField(idoc, "let_pozorovatel", let_pozorovatel);
-        IndexUtils.addVocabField(idoc, "let_organizace", let_organizace);
-        IndexUtils.addVocabField(idoc, "let_letiste_start", let_letiste_start);
-        IndexUtils.addVocabField(idoc, "let_letiste_cil", let_letiste_cil);
-        IndexUtils.addVocabField(idoc, "let_pocasi", let_pocasi);
-        IndexUtils.addVocabField(idoc, "let_dohlednost", let_dohlednost);
+        IndexUtils.addJSONField(idoc, "let_organizace", let_organizace);
+        IndexUtils.addJSONField(idoc, "let_letiste_start", let_letiste_start);
+        IndexUtils.addJSONField(idoc, "let_letiste_cil", let_letiste_cil);
+        IndexUtils.addJSONField(idoc, "let_pocasi", let_pocasi);
+        IndexUtils.addJSONField(idoc, "let_dohlednost", let_dohlednost);
         for (Vocab v : let_dokument) {
             IndexUtils.addVocabField(idoc, "let_dokument", v);
         }

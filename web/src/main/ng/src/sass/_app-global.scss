@@ -275,3 +275,44 @@ a {
   height: 14px ;
   width: 14px ;
 }
+
+.enable-button {
+  width: 105px !important;
+  padding-left: 10px;
+}
+
+.map-pin{
+  width:12px; 
+  height:20px;
+  background-image:url("~/assets/img/pin.png");
+  background-size: 12px 20px;
+  left: -6px;
+  top: -20px;
+}
+
+.map-pin-hit{
+  width:12px; 
+  height:20px;
+  background-image:url("~/assets/img/pin-hit.png");
+  background-size: 12px 20px;
+  left: -6px;
+  top: -20px;
+}
+
+.map-pin-point{
+  width:12px; 
+  height:20px;
+  background-image:url("~/assets/img/pin-point.png");
+  background-size: 12px 20px;
+  left: -6px;
+  top: -20px;
+}
+
+.map-pin-hit-point{
+  width:12px; 
+  height:20px;
+  background-image:url("~/assets/img/pin-hit-point.png");
+  background-size: 12px 20px;
+  left: -6px;
+  top: -20px;
+}

@@ -19,12 +19,12 @@ export class PianComponent implements OnInit {
   @Input() mapDetail: boolean;
   @Input() isDocumentDialogOpen: boolean;
   @Input() inDocument = false;
+  hasDetail: boolean;
   hasRights: boolean;
   bibTex: string;
 
-  
-  numChildren = 0;
-  dokLoaded = 0;
+  relationsChecked = false;
+  related: {entity: string, ident_cely: string}[] = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -46,8 +46,14 @@ export class PianComponent implements OnInit {
       });
     }
 
-     
+  }
 
+  ngOnChanges(c) {
+    if (c.result) {
+      this.checkRelations();
+      this.hasDetail = false;
+      this.detailExpanded = this.inDocument;
+    }
   }
 
   initProperties() {
@@ -58,11 +64,28 @@ export class PianComponent implements OnInit {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
-       author = {AMČR}, 
+       author = {Archeologický informační systém České republiky}, 
        title = {Záznam ${this.result.ident_cely}},
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+  }
+
+  checkRelations() {
+    if (this.isChild) {
+      return;
+    }
+    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
+      this.result.az_dj_pian = res.az_dj_pian;
+      this.relationsChecked = true;
+      this.related = [];
+      res.id_akce.forEach((ident_cely: string) => {
+        this.related.push({entity: 'akce', ident_cely})
+      });
+      res.id_lokalita.forEach((ident_cely: string) => {
+        this.related.push({entity: 'lokalita', ident_cely})
+      });
+    });
   }
 
   toggleFav() {

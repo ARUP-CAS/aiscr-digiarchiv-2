@@ -104,13 +104,18 @@ public class DokumentCast {
                 JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
                 if (doc.has("projekt_chranene_udaje")) {
 
-                    JSONObject az_chranene_udaje = doc.getJSONObject("projekt_chranene_udaje");
-                    String k = az_chranene_udaje.getJSONObject("hlavni_katastr").optString("value");
+                    JSONObject pr_chranene_udaje = doc.getJSONObject("projekt_chranene_udaje");
+                    String k = pr_chranene_udaje.getJSONObject("hlavni_katastr").optString("value");
                     IndexUtils.addSecuredFieldNonRepeat(idoc,
                             "f_katastr",
                             k,
                             doc.getString("pristupnost"));
                     IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("projekt_okres"));
+                    JSONArray f_kraj = pr_chranene_udaje.getJSONArray("f_kraj");
+                    for (int j = 0; j < f_kraj.length(); j++) {
+                        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", f_kraj.getString(j)); 
+                    }
+                    
 
                     JSONObject li = new JSONObject()
                             .put("pristupnost", doc.getString("pristupnost"))
@@ -118,14 +123,21 @@ public class DokumentCast {
                             .put("okres", doc.getString("projekt_okres"));
                     IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
 
-                    JSONArray dalsi_katastr = az_chranene_udaje.getJSONArray("dalsi_katastr");
+                    JSONArray dalsi_katastr = pr_chranene_udaje.getJSONArray("dalsi_katastr");
 
                     for (int j = 0; j < dalsi_katastr.length(); j++) {
                         k = dalsi_katastr.getJSONObject(j).optString("value");
                         if (k != null) {
                             SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
-                            String okres = SolrSearcher.getOkresByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            //String okres = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            
+                            JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                            String okres = kat.getString("okres_nazev");
+                            String kraj = kat.getString("kraj_nazev");
+            
+            
                             IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+                            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                             JSONObject li2 = new JSONObject()
                                     .put("pristupnost", doc.getString("pristupnost"))
                                     .put("katastr", k)
@@ -175,8 +187,11 @@ public class DokumentCast {
                     k = dalsi_katastr.getJSONObject(j).optString("value");
                     if (k != null) {
                         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
-                            String okres = SolrSearcher.getOkresByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
-                            IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+                        JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
+                        String okres = kat.getString("okres_nazev");
+                        String kraj = kat.getString("kraj_nazev");
+                        IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+                        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                         JSONObject li2 = new JSONObject()
                                 .put("pristupnost", doc.getString("pristupnost"))
                                 .put("katastr", k)
@@ -216,6 +231,7 @@ public class DokumentCast {
 
     private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
+        idoc.addField("pian_ident_cely", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
                 .setFields("*,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
