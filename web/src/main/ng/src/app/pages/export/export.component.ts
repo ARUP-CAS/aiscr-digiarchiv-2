@@ -65,6 +65,9 @@ export class ExportComponent implements OnInit {
     this.state.loading = true;
     const p = Object.assign({}, params);
     p.rows = this.config.exportRowsLimit;
+    if (!p['entity']) {
+      p['entity'] = 'dokument';
+    }
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       this.state.loading = false;
       if (resp.error) {
