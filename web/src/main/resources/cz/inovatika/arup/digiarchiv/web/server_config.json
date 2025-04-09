@@ -254,6 +254,7 @@
       "full_text": [
         "ident_cely",
         "f_katastr",
+        "f_okres",
         "dokument_autor",
         "dokument_rok_vzniku",
         "dokument_popis",
