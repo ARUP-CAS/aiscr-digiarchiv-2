@@ -159,61 +159,66 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    public JSONObject update(String from, boolean newSolr) throws Exception {
-        if (newSolr) {
-            ret = new JSONObject();
-        }
-        String status = readStatusFile("update");
-        if (STATUS_RUNNING.equals(status)) {
-            LOGGER.log(Level.INFO, "Update is still running. Start is {0}", from);
-            ret.put("msg", "Update is still running");
-            return ret;
-        }
-        writeStatusFile("update", STATUS_RUNNING);
-        Instant start = Instant.now();
-        String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
-        String lastDate = from;
-        if (lastDate == null) {
-            lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
-        }
-        // lastDate = "2024-07-30T15:37:05.633Z";
-        ret.put("lastDate", lastDate);
+    public JSONObject update(String from, boolean newSolr) throws IOException {
+        try {
+            if (newSolr) {
+                ret = new JSONObject();
+            }
+            String status = readStatusFile("update");
+            if (STATUS_RUNNING.equals(status)) {
+                LOGGER.log(Level.INFO, "Update is still running. Start is {0}", from);
+                ret.put("msg", "Update is still running");
+                return ret;
+            }
+            writeStatusFile("update", STATUS_RUNNING);
+            Instant start = Instant.now();
+            String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
+            String lastDate = from;
+            if (lastDate == null) {
+                lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
+            }
+            // lastDate = "2024-07-30T15:37:05.633Z";
+            ret.put("lastDate", lastDate);
 
-        if (newSolr) {
-            solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
-        }
-        
-        int total = 0;
+            if (newSolr) {
+                solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
+            }
 
-        // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
-        String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
-                + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        JSONObject searchJSON = searchFedora(baseQuery, false, "update", true);
-        total += searchJSON.optInt("total", 0);
+            int total = 0;
 
-        // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
-        baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
-                + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
-        searchJSON = searchFedora(baseQuery, true, "update", false);
-        total += searchJSON.optInt("total", 0);
-        if (newSolr) {
-            solr.close();
-        }
-        Instant end = Instant.now();
-        String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
-        ret.put("ellapsed time", interval);
-        ret.put("request time", FormatUtils.formatInterval(requestTime));
-        ret.put("process time", FormatUtils.formatInterval(processTime));
-        ret.put("errors", errors);
+            // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
+            String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
+                    + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
+            JSONObject searchJSON = searchFedora(baseQuery, false, "update", true);
+            total += searchJSON.optInt("total", 0);
 
-        writeRetToFile("update", start);
-        writeStatusFile("update", STATUS_FINISHED);
-        if (total > 0) {
-            LOGGER.log(Level.INFO, "Running update for changes after start");
-            update(start.toString(), false);
+            // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
+            baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
+                    + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
+            searchJSON = searchFedora(baseQuery, true, "update", false);
+            total += searchJSON.optInt("total", 0);
+            Instant end = Instant.now();
+            String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
+            ret.put("ellapsed time", interval);
+            ret.put("request time", FormatUtils.formatInterval(requestTime));
+            ret.put("process time", FormatUtils.formatInterval(processTime));
+            ret.put("errors", errors);
+
+            writeRetToFile("update", start);
+            writeStatusFile("update", STATUS_FINISHED);
+            if (total > 0) {
+                LOGGER.log(Level.INFO, "Running update for changes after start");
+                update(start.toString(), false);
+            }
+            if (newSolr) {
+                solr.close();
+            }
+            LOGGER.log(Level.INFO, "Update finished in {0}", interval);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            writeStatusFile("update", STATUS_FINISHED);
         }
-        LOGGER.log(Level.INFO, "Update finished in {0}", interval);
-        return ret; 
+        return ret;
     }
 
     private JSONObject searchFedora(String baseQuery, boolean isDeleted, String indexType, boolean withRelated) throws IOException {
@@ -350,10 +355,10 @@ public class FedoraHarvester {
         try {
             solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
             for (String model : models) {
-                if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", true)) {
+                if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", false)) {
                     searchModel(model);
                 } else {
-                    processModel(model); 
+                    processModel(model);
                 }
             }
             solr.commit("oai");
@@ -371,6 +376,7 @@ public class FedoraHarvester {
             LOGGER.log(Level.INFO, "Index models finished in {0}", interval);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
+            writeStatusFile("index", STATUS_FINISHED);
             errors.put(ex);
             if (solr != null) {
                 solr.close();
@@ -535,38 +541,43 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    public JSONObject searchModel(String model) throws Exception {
-        LOGGER.log(Level.INFO, "Searching model {0}", model);
-        ret = new JSONObject();
+    public JSONObject searchModel(String model) throws IOException {
+        try {
+            LOGGER.log(Level.INFO, "Searching model {0}", model);
+            ret = new JSONObject();
 //        String status = readStatusFile("update");
 //        if (STATUS_RUNNING.equals(status)) {
 //            LOGGER.log(Level.INFO, "Update is still running");
 //            ret.put("msg", "Update is still running");
 //            return ret;
 //        }
-        writeStatusFile("models", STATUS_RUNNING);
-        Instant start = Instant.now();
-        String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
+            writeStatusFile("models", STATUS_RUNNING);
+            Instant start = Instant.now();
+            String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
 
-        // rest/fcr:search?condition=fedora_id%3DAMCR%2Fmodel%2Fdokument%2Fmember%2F*&offset=0&max_results=100
-        String baseQuery = "condition=";
-        if ("deleted".equals(model)) {
-            baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8");
-        } else {
-            baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + model + "/member/*", "UTF8");
+// rest/fcr:search?condition=fedora_id%3DAMCR%2Fmodel%2Fdokument%2Fmember%2F*&offset=0&max_results=100
+            String baseQuery = "condition=";
+            if ("deleted".equals(model)) {
+                baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8");
+            } else {
+                baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + model + "/member/*", "UTF8");
+            }
+            searchFedora(baseQuery, "deleted".equals(model), model, false);
+            update(start.toString(), false);
+            Instant end = Instant.now();
+            String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
+            ret.put("ellapsed time", interval);
+            ret.put("request time", FormatUtils.formatInterval(requestTime));
+            ret.put("process time", FormatUtils.formatInterval(processTime));
+            ret.put("errors", errors);
+            LOGGER.log(Level.INFO, "Update finished in {0}", interval);
+
+            writeStatusFile("models", STATUS_FINISHED);
+            writeRetToFile("models", start);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            writeStatusFile("update", STATUS_FINISHED);
         }
-        searchFedora(baseQuery, "deleted".equals(model), model, false);
-        update(start.toString(), false);
-        Instant end = Instant.now();
-        String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
-        ret.put("ellapsed time", interval);
-        ret.put("request time", FormatUtils.formatInterval(requestTime));
-        ret.put("process time", FormatUtils.formatInterval(processTime));
-        ret.put("errors", errors);
-        LOGGER.log(Level.INFO, "Update finished in {0}", interval);
-
-        writeRetToFile("models", start);
-        writeStatusFile("models", STATUS_FINISHED);
         return ret;
     }
 
@@ -669,7 +680,7 @@ public class FedoraHarvester {
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
-            // LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, null, ex);
             errors.put(id + ":  " + ex);
             throw ex;
         }

@@ -94,7 +94,8 @@ public class ArcheologickyZaznam implements FedoraModel {
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
         IndexUtils.addRefField(idoc, "az_okres", az_okres);
         IndexUtils.addRefField(idoc, "okres_sort", az_okres);
-        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(az_okres.getId()).getString("kraj_nazev")); 
+        String kraj_nazev = SolrSearcher.getKrajByOkres(az_okres.getId()).getString("kraj_nazev");
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj_nazev);  
 
         if (az_chranene_udaje != null) {
             az_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
