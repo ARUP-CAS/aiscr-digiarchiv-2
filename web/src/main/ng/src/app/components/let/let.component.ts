@@ -36,11 +36,6 @@ export class LetComponent implements OnInit {
       this.setData();
     }
 
-    // this.service.getIdAsChild([id], "let").subscribe((res: any) => {
-    //   this.result = res.response.docs[0];
-    //   this.setData();
-    // });
-
 
   }
   setData() {
