@@ -135,6 +135,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.noPoradiFacets;
     }
 
+    public get commonFacets() {
+        return this.config.commonFacets;
+    }
+
     server = '';
 
     constructor(

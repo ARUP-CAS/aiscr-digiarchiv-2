@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web;
 
+import cz.inovatika.arup.digiarchiv.web.fedora.models.Uzivatel;
 import cz.inovatika.arup.digiarchiv.web.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web.index.EntitySearcher;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
@@ -414,6 +415,8 @@ public class SearchServlet extends HttpServlet {
 //                            jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
 //                        }
 //                    }
+
+                    Uzivatel.updateUI(request); 
                     return jo.toString();
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);

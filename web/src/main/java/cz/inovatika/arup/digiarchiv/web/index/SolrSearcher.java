@@ -605,6 +605,23 @@ public class SolrSearcher {
         }
     }
 
+    public static JSONObject getUIUzivatele(String ident_cely) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
+                    .setRows(1).setFields("ui:[json]");
+            JSONObject jo = json(client, "uzivatel_ui", query);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONObject("ui");
+            } else {
+                return null;
+            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     public static JSONObject getOrganizace(String ident_cely) {
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*")
