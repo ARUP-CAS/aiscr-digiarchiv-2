@@ -301,7 +301,8 @@
       "f_nahrada": "Dokument - náhradní kopie",
       "f_udalost_typ": "Dokument - typ události",
       "adb_vyskovy_bod_typ": "ADB - typ výškového bodu",
-      "f_kraj": "Kraj"
+      "f_kraj": "Kraj",
+      "commonFacets": "Obvyklé dotazy"
     }
   },
 
@@ -819,5 +820,9 @@
     "interval_week": "Týden",
     "interval_month": "Měsíc",
     "id_count": "{{count}} z {{total}}"
+  },
+  "commonFacets": {
+    "Negativní zjištění": "Negativní zjištění",
+    "Pozitivní zjištění": "Pozitivní zjištění"
   }
 }

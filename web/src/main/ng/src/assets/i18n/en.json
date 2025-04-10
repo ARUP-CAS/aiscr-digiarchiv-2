@@ -301,7 +301,8 @@
       "f_nahrada": "Document - replacement copy",
       "f_udalost_typ": "Document - type of event",
       "adb_vyskovy_bod_typ": "ADP - type of elevation point",
-      "f_kraj": "Region"
+      "f_kraj": "Region",
+      "commonFacets": "Common queries"
     }
   },
 
@@ -819,5 +820,9 @@
     "interval_week": "Week",
     "interval_month": "Month",
     "id_count": "{{count}} of {{total}}"
+  },
+  "commonFacets": {
+    "Negativní zjištění": "Negative evidence",
+    "Pozitivní zjištění": "Pozitive evidence"
   }
 }

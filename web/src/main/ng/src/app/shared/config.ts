@@ -75,4 +75,5 @@ export class Configuration {
 
   choiceApi: {label: string, metadataPrefix: string, url: string, useParent: boolean}[];
   feedBackMaxLength: number;
+  commonFacets: {name: string, field: string, value: string}[];
 }

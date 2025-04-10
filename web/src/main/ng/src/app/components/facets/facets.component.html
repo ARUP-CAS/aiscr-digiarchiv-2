@@ -23,6 +23,24 @@
   <app-facets-dynamic></app-facets-dynamic>
   <app-facets-search></app-facets-search>
 
+    <mat-expansion-panel *ngIf="config.commonFacets.length > 0" class="app-scroll" [expanded]="expandedFacets['commonFacets']">
+      <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight" (click)="expandedFacets['commonFacets'] = !expandedFacets['commonFacets']">
+        <mat-panel-title>
+          {{ 'facet.field.commonFacets' | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <mat-list role="list">
+            <mat-list-item *ngFor="let cf of config.commonFacets" class="app-list-table" >
+              <div class="app-list-content">
+                <a (click)="clickCommonFacet(cf)">
+                  {{ 'commonFacets.' + cf.name | translate}}
+                </a>
+              </div>
+            </mat-list-item>
+        </mat-list>
+      </ng-template>
+    </mat-expansion-panel> 
 
   <ng-container *ngFor="let facetField of facetsSorted">
     <mat-expansion-panel *ngIf="facetField.values.length > 0" class="app-scroll" [expanded]="state.areFacetsFiltered || expandedFacets[facetField.field]">
