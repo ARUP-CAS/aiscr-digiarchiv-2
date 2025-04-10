@@ -1078,8 +1078,5 @@
     }
   ],
   "feedBackMaxLength": 4000,
-  "commonFacets": [
-    {"name": "Negativní zjištění", "field":"az_dj_negativni_jednotka", "value": "1:not"},
-    {"name": "Pozitivní zjištění", "field":"az_dj_negativni_jednotka",  "value": "0:or"}
-  ]
+  "commonFacets": []
 }
