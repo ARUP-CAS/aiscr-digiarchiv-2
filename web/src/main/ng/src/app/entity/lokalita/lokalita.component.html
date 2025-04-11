@@ -1,5 +1,5 @@
 <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-lokalita]="!isChild && !isDocumentDialogOpen">
-  <a *ngIf="mapDetail" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+  <a *ngIf="mapDetail && !isChild" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   <mat-card-header>
