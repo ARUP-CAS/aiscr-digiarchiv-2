@@ -822,7 +822,7 @@
     "id_count": "{{count}} z {{total}}"
   },
   "commonFacets": {
-    "Negativní zjištění": "Negativní zjištění",
-    "Pozitivní zjištění": "Pozitivní zjištění"
+    "noevidence": "Negativní zjištění",
+    "posevidence": "Pozitivní zjištění"
   }
 }

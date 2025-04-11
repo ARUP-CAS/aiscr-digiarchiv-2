@@ -11,7 +11,12 @@
   <div  *ngIf="facet.field === 'separator'" class="app-and-separator">
   <span>-- AND --</span>
   </div>
-  <div *ngIf="facet.field !== 'separator'" class="app-display-table">
+  <div  *ngIf="facet.field === 'cf'" >
+    <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeCommonFacet(facet.display)">
+      <mat-icon>close</mat-icon>{{ 'commonFacets.' + facet.display | translate}}
+    </a>
+  </div>
+  <div *ngIf="facet.field !== 'separator' && facet.field !== 'cf'" class="app-display-table">
     <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
       <mat-icon>close</mat-icon>
     </a>

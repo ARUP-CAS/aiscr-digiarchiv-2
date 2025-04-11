@@ -130,7 +130,7 @@ public class SolrSearcher {
         if (Boolean.parseBoolean(request.getParameter("mapa"))) {
             // rows = Math.max(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200), Integer.parseInt(request.getParameter("rows")));   
             rows = Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200);
-            
+
         } else if (request.getParameter("rows") != null) {
             rows = Integer.parseInt(request.getParameter("rows"));
         }
@@ -148,7 +148,15 @@ public class SolrSearcher {
             }
         }
 
-        // query.addFacetField("lokalita_jistota");
+        JSONArray commonFacets = Options.getInstance().getClientConf().getJSONArray("commonFacets");
+        for (Object s : commonFacets) {
+            JSONObject cf = (JSONObject) s;
+            if (request.getParameter(cf.getString("name")) != null) {
+                query.addFilterQuery(cf.getString("value"));
+            }
+
+        }
+
         if (request.getParameter("sort") != null) {
             query.setParam("sort", request.getParameter("sort"));
         } else {
@@ -458,14 +466,14 @@ public class SolrSearcher {
                 JSONObject doc = ja.getJSONObject(i);
                 okresy.put(doc.getString("kod"), doc.getString("nazev"));
             }
-            
+
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static String getOkresNazev(String ruian) {
-        
+
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + ruian + "\"")
@@ -475,52 +483,52 @@ public class SolrSearcher {
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("nazev");
             } else {
-                return null; 
+                return null;
             }
 //            }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
         }
-        
+
     }
-    
+
     public static JSONObject getKrajNazevBykod(String kod) {
-        
+
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            SolrQuery query = new SolrQuery("*") 
+            SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + kod + "\"")
                     .setRows(1).setFields("nazev,kod");
             JSONObject jo = json(client, "ruian", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             } else {
-                return null; 
+                return null;
             }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
         }
     }
-    
+
     public static JSONObject getKrajByOkres(String ruianOkresu) {
-        
+
         try {
-            SolrQuery query = new SolrQuery("*") 
+            SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + ruianOkresu + "\"")
                     // .addFilterQuery("{!join fromIndex=ruian to=kod from=kraj}kod:\"" + ruianOkresu + "\"")
-                    .setRows(1).setFields("kraj_nazev,kraj"); 
+                    .setRows(1).setFields("kraj_nazev,kraj");
             JSONObject jo = json(IndexUtils.getClientNoOp(), "ruian", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             } else {
-                return null; 
+                return null;
             }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
         }
-        
+
     }
 
     private static void initKatastry() {
@@ -536,12 +544,12 @@ public class SolrSearcher {
                 JSONObject doc = ja.getJSONObject(i);
                 katastry.put(doc.getString("kod"), doc);
             }
-            
+
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static JSONObject getOkresNazevByKatastr(String ruian) {
         if (katastry == null) {
             initKatastry();

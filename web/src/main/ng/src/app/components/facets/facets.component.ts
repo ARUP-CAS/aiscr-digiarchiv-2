@@ -218,13 +218,12 @@ export class FacetsComponent implements OnInit {
     facet.operator = op;
   }
 
-  clickCommonFacet(cf: {name: string, field:string, value: string}) {
-    console.log(cf)
+  clickCommonFacet(cf: {name: string, value: string}) {
     this.state.isFacetsCollapsed = true;
     this.state.setFacetChanged();
     document.getElementById('content-scroller').scrollTo(0,0);
     const params: any = {};
-    params[cf.field] = cf.value;
+    params[cf.name] = true;
     params.page = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
