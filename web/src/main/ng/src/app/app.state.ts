@@ -348,16 +348,7 @@ export class AppState {
       this.logged = true;
       this.user = res;
 
-      if (this.user.ui?.rows) {
-        this.rows = this.user.ui.rows;
-      }
-
-      if (this.user.ui?.sort) {
-        this.sort = this.sorts.find(s => (s.field) === this.user.ui.sort);
-        if (!this.sort) {
-          this.sort = this.sorts[0];
-        }
-      }
+      
       // for (const first in res) {
       //   if (res[first]) {
       //     this.user = res[first];
