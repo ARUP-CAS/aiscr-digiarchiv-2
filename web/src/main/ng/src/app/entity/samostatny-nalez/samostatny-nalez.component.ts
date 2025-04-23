@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { Router } from '@angular/router';
 import { AppConfiguration } from 'src/app/app-configuration';
 import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { AppService } from 'src/app/app.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 
@@ -32,6 +32,7 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private datePipe: DatePipe,
     private dialog: MatDialog,
     private router: Router,
@@ -69,6 +70,9 @@ export class SamostatnyNalezComponent implements OnInit, OnChanges {
   }  
 
   checkRelations() {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
     if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
       return;
     }

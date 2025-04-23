@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { AppService } from 'src/app/app.service';
 import { AppState } from 'src/app/app.state';
 import { AppConfiguration } from 'src/app/app-configuration';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FileViewerComponent } from 'src/app/components/file-viewer/file-viewer.component';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 import { Console } from 'console';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-dokument',
@@ -52,6 +53,7 @@ export class DokumentComponent implements OnInit, OnChanges {
   okresy: string[] = [];
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private dialog: MatDialog,
     private router: Router,
     public config: AppConfiguration,
@@ -110,6 +112,9 @@ export class DokumentComponent implements OnInit, OnChanges {
  }
 
  checkRelations() {
+     if (!isPlatformBrowser(this.platformId)) {
+       return;
+     }
   if (!this.result.ident_cely || this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
     return;
   }

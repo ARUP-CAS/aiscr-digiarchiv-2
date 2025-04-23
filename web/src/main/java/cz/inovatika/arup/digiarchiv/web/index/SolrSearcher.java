@@ -73,15 +73,21 @@ public class SolrSearcher {
                     .addFilterQuery(fq);
         }
         if (request.getParameter("loc_rpt") != null) {
-            // loc_rpt=48.93993884224734,12.204711914062502,50.64177902497231,18.7877197265625
+            
             String[] coords = request.getParameter("loc_rpt").split(",");
-            String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
             String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+            
+            //Check Czech limits for heatmap generation
+            double c1 = Math.max(12.30, Double.parseDouble(coords[1]));
+            double c0 = Math.max(48.50, Double.parseDouble(coords[0]));
+            double c3 = Math.min(18.80, Double.parseDouble(coords[3]));
+            double c2 = Math.min(51.0, Double.parseDouble(coords[2]));
+            String geom = "[" + c1 + " " + c0 + " TO " + c3 + " " + c2 + "]";
 
-            double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
+            double dist = Math.max((c3 - c1) * .005, .02);
             query.setParam("facet.heatmap.geom", geom)
-                    //.setParam("facet.heatmap.distErr", dist + "")
-                    .setParam("facet.heatmap.distErr", "0.04")
+                    .setParam("facet.heatmap.distErr", dist + "")
+                    //.setParam("facet.heatmap.distErr", "0.04")
                     .addFilterQuery(fq);
         }
         if (request.getParameter("vyber") == null && request.getParameter("loc_rpt") == null) {
