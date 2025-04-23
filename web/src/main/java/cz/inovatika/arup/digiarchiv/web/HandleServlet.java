@@ -79,9 +79,11 @@ public class HandleServlet extends HttpServlet {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         } else {
+            response.setContentType("text/html;charset=UTF-8"); 
+            response.setCharacterEncoding("UTF-8");
             try (PrintWriter out = response.getWriter()) {
-                response.setContentType("text/html;charset=UTF-8");
                 String url = "http://localhost:4000/id/" + id;
+                
                 try (InputStream inputStream = RESTHelper.inputStream(url)) {
                     out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
                 }
