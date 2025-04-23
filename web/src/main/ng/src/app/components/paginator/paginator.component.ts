@@ -24,11 +24,11 @@ export class PaginatorComponent implements OnInit {
     this.pageIndex = this.state.page + 1;
 
 
-    if (this.state.user.ui?.[this.state.entity]?.rows) {
+    if (this.state.user?.ui?.[this.state.entity]?.rows) {
       this.state.rows = this.state.user.ui[this.state.entity].rows;
     }
 
-    if (this.state.user.ui?.[this.state.entity]?.sort) {
+    if (this.state.user?.ui?.[this.state.entity]?.sort) {
       this.state.sort = this.state.sorts.find(s => (s.field) === this.state.user.ui[this.state.entity].sort);
       if (!this.state.sort) {
         this.state.sort = this.state.sorts[0];

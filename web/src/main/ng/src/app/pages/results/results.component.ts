@@ -171,7 +171,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       this.state.setSearchResponse(resp);
 
-      if (p.rows) {
+      if (p.rows && this.state.user?.ui?.[this.state.entity]) {
         this.state.user.ui[this.state.entity].rows = p.rows;
       }
 
