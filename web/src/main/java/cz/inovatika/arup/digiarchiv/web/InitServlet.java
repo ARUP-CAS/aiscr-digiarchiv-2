@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
 
 /**
  *
@@ -83,6 +84,16 @@ public class InitServlet extends HttpServlet {
         // clear index status. In case of restart while running
         writeStatusFile("index", "inited");
         writeStatusFile("update", "inited");
+        
+        try {
+            //Init locales
+            I18n.getInstance().getLocale("cs");
+            I18n.getInstance().getLocale("en");
+            LOGGER.log(Level.FINE, "Locales loaded"); 
+        } catch (IOException | JSONException ex) {
+            LOGGER.log(Level.SEVERE, "Error loading locales");
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
 
         LOGGER.log(Level.INFO, "CONFIG_DIR is -> {0}", CONFIG_DIR);
     }

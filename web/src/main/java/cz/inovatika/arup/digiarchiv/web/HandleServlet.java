@@ -211,7 +211,7 @@ public class HandleServlet extends HttpServlet {
                 if (!id.contains("thumb")) {
                     LogAnalytics.log(request, doc.getString("path"), "file", doc.getString("entity"));
                 }
-                is.close();
+                is.close(); 
                 return true;
 
             } catch (Exception ex) {
@@ -401,6 +401,7 @@ public class HandleServlet extends HttpServlet {
 //                doc.put("mimetype", sdoc.optString("mimetype"));
 //                doc.put("path", sdoc.optString("path"));
 //                doc.put("nazev", sdoc.optString("nazev"));
+                sdoc.put("entity", doc.optString("entity"));
                 return sdoc;
             }
         }

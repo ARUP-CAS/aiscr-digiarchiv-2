@@ -105,6 +105,8 @@ public class I18n {
     }
 
     def.put("heslar", heslarDoc);
+    
+    inputStream.close(); 
 
     locales.put(locale, def);
 
