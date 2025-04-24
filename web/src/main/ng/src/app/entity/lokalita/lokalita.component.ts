@@ -1,11 +1,11 @@
 import { AppService } from 'src/app/app.service';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { DocumentDialogComponent } from 'src/app/components/document-dialog/document-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppConfiguration } from 'src/app/app-configuration';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { FeedbackDialogComponent } from 'src/app/components/feedback-dialog/feedback-dialog.component';
 
 @Component({
@@ -29,6 +29,7 @@ export class LokalitaComponent implements OnInit, OnChanges {
   related: {entity: string, ident_cely: string}[] = [];
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private datePipe: DatePipe,
     public service: AppService,
     public state: AppState,
@@ -57,6 +58,9 @@ export class LokalitaComponent implements OnInit, OnChanges {
   }
 
   checkRelations() {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
     if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
       return;
     }

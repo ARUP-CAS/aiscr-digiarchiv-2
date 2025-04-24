@@ -72,6 +72,9 @@ export class PianComponent implements OnInit {
   }
 
   checkRelations() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     if (this.isChild) {
       return;
     }

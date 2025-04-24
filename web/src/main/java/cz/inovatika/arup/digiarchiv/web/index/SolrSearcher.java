@@ -73,15 +73,21 @@ public class SolrSearcher {
                     .addFilterQuery(fq);
         }
         if (request.getParameter("loc_rpt") != null) {
-            // loc_rpt=48.93993884224734,12.204711914062502,50.64177902497231,18.7877197265625
+            
             String[] coords = request.getParameter("loc_rpt").split(",");
-            String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
             String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
+            
+            //Check Czech limits for heatmap generation
+            double c1 = Math.max(12.30, Double.parseDouble(coords[1]));
+            double c0 = Math.max(48.50, Double.parseDouble(coords[0]));
+            double c3 = Math.min(18.80, Double.parseDouble(coords[3]));
+            double c2 = Math.min(51.0, Double.parseDouble(coords[2]));
+            String geom = "[" + c1 + " " + c0 + " TO " + c3 + " " + c2 + "]";
 
-            double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
+            double dist = Math.max((c3 - c1) * .005, .02);
             query.setParam("facet.heatmap.geom", geom)
-                    //.setParam("facet.heatmap.distErr", dist + "")
-                    .setParam("facet.heatmap.distErr", "0.04")
+                    .setParam("facet.heatmap.distErr", dist + "")
+                    //.setParam("facet.heatmap.distErr", "0.04")
                     .addFilterQuery(fq);
         }
         if (request.getParameter("vyber") == null && request.getParameter("loc_rpt") == null) {
@@ -130,7 +136,7 @@ public class SolrSearcher {
         if (Boolean.parseBoolean(request.getParameter("mapa"))) {
             // rows = Math.max(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200), Integer.parseInt(request.getParameter("rows")));   
             rows = Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200);
-            
+
         } else if (request.getParameter("rows") != null) {
             rows = Integer.parseInt(request.getParameter("rows"));
         }
@@ -148,7 +154,15 @@ public class SolrSearcher {
             }
         }
 
-        // query.addFacetField("lokalita_jistota");
+        JSONArray commonFacets = Options.getInstance().getClientConf().getJSONArray("commonFacets");
+        for (Object s : commonFacets) {
+            JSONObject cf = (JSONObject) s;
+            if (request.getParameter(cf.getString("name")) != null) {
+                query.addFilterQuery(cf.getString("value"));
+            }
+
+        }
+
         if (request.getParameter("sort") != null) {
             query.setParam("sort", request.getParameter("sort"));
         } else {
@@ -458,14 +472,14 @@ public class SolrSearcher {
                 JSONObject doc = ja.getJSONObject(i);
                 okresy.put(doc.getString("kod"), doc.getString("nazev"));
             }
-            
+
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static String getOkresNazev(String ruian) {
-        
+
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + ruian + "\"")
@@ -475,52 +489,52 @@ public class SolrSearcher {
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("nazev");
             } else {
-                return null; 
+                return null;
             }
 //            }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
         }
-        
+
     }
-    
+
     public static JSONObject getKrajNazevBykod(String kod) {
-        
+
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            SolrQuery query = new SolrQuery("*") 
+            SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + kod + "\"")
                     .setRows(1).setFields("nazev,kod");
             JSONObject jo = json(client, "ruian", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             } else {
-                return null; 
+                return null;
             }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
         }
     }
-    
+
     public static JSONObject getKrajByOkres(String ruianOkresu) {
-        
+
         try {
-            SolrQuery query = new SolrQuery("*") 
+            SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + ruianOkresu + "\"")
                     // .addFilterQuery("{!join fromIndex=ruian to=kod from=kraj}kod:\"" + ruianOkresu + "\"")
-                    .setRows(1).setFields("kraj_nazev,kraj"); 
+                    .setRows(1).setFields("kraj_nazev,kraj");
             JSONObject jo = json(IndexUtils.getClientNoOp(), "ruian", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             } else {
-                return null; 
+                return null;
             }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;
         }
-        
+
     }
 
     private static void initKatastry() {
@@ -536,12 +550,12 @@ public class SolrSearcher {
                 JSONObject doc = ja.getJSONObject(i);
                 katastry.put(doc.getString("kod"), doc);
             }
-            
+
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static JSONObject getOkresNazevByKatastr(String ruian) {
         if (katastry == null) {
             initKatastry();
@@ -599,6 +613,23 @@ public class SolrSearcher {
                 return null;
             }
 //            }
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public static JSONObject getUIUzivatele(String ident_cely) {
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
+                    .setRows(1).setFields("ui:[json]");
+            JSONObject jo = json(client, "uzivatel_ui", query);
+            if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+                return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONObject("ui");
+            } else {
+                return null;
+            }
         } catch (IOException | SolrServerException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return null;

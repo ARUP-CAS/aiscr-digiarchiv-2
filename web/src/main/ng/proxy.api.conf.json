@@ -20,7 +20,7 @@
     "secure": false
   },
   
-  "/assets/config_.json": {
+  "/assets/config.json": {
     "target": "http://localhost:8080/assets/config.json",
     "pathRewrite": {
       "^/api":""

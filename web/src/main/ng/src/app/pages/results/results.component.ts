@@ -170,6 +170,15 @@ export class ResultsComponent implements OnInit, OnDestroy {
         return;
       }
       this.state.setSearchResponse(resp);
+
+      if (p.rows) {
+        this.state.ui.rows = p.rows;
+      }
+
+      if (this.state.ui?.sort?.[this.state.entity]) {
+        this.state.sort = this.state.sorts_by_entity.find(s => (s.field) === this.state.ui.sort[this.state.entity]);
+      }
+
       this.setTitle();
       this.docs = resp.response.docs;
       if (this.state.isMapaCollapsed) {

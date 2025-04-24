@@ -1,14 +1,20 @@
 package cz.inovatika.arup.digiarchiv.web.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import cz.inovatika.arup.digiarchiv.web.LoginServlet;
+import cz.inovatika.arup.digiarchiv.web.Options;
 import cz.inovatika.arup.digiarchiv.web.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONObject;
@@ -18,6 +24,8 @@ import org.json.JSONObject;
  * @author alberto
  */
 public class Uzivatel implements FedoraModel {
+    
+    public static final Logger LOGGER = Logger.getLogger(Uzivatel.class.getName());
 
     @Field
     public String entity = "uzivatel";
@@ -105,6 +113,8 @@ public class Uzivatel implements FedoraModel {
 
     @JacksonXmlProperty(localName = "cteni_dokumentu")
     public boolean cteni_dokumentu;
+    
+    public String ui;
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) {
@@ -136,6 +146,48 @@ public class Uzivatel implements FedoraModel {
     public void setCteniDokumentu() {
         // set cteni_dokumentu podle organizace
         cteni_dokumentu = SolrSearcher.getOrganizace(organizace.getId()).optBoolean("cteni_dokumentu");
+    } 
+    
+    public static void updateUI(HttpServletRequest request) {
+        String userId = LoginServlet.userId(request);
+        if (userId == null) {
+            return;
+        }
+        JSONObject user = LoginServlet.user(request);
+        
+        JSONObject ui = SolrSearcher.getUIUzivatele(userId);
+        if (ui == null) {
+            ui = new JSONObject();
+            ui.put("sort", new JSONObject());
+        } else if (!ui.has("sort")) {
+            ui.put("sort", new JSONObject());
+        }
+        String entity = "dokument";
+        if (request.getParameter("entity") != null) {
+            entity = request.getParameter("entity");
+        }
+        
+        if (request.getParameter("rows") != null) {
+            ui.put("rows", Integer.parseInt(request.getParameter("rows")));
+        }
+        if (request.getParameter("sort") != null) {
+            ui.getJSONObject("sort").put(entity, request.getParameter("sort"));
+        }
+        
+        user.put("ui", ui);
+        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+          SolrInputDocument idoc = new SolrInputDocument();
+          idoc.setField("ident_cely", userId);
+          idoc.setField("ui", ui.toString());
+          client.add("uzivatel_ui", idoc);
+          client.commit("uzivatel_ui");
+        } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public JSONObject getUI() {
+        return SolrSearcher.getUIUzivatele(ident_cely);
     }
 
     public void setPristupnost() {

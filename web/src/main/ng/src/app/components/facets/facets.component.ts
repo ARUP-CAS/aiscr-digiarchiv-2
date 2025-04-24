@@ -162,13 +162,30 @@ export class FacetsComponent implements OnInit {
     this.router.navigate([], { queryParams: { hideWithoutThumbs: val, page: 0 }, queryParamsHandling: 'merge' });
   }
 
+  changeEntity(entity) {
+    if (this.state.user) {
+      // Get sort from ui
+      this.service.getLogged(true).subscribe((resp: any) => {
+        if (resp.ui) {
+          this.state.ui = resp.ui;
+        }
+        this.setEntity(entity)
+      });
+    } else {
+      this.setEntity(entity)
+    }
+
+  }
+
   setEntity(entity) {
     this.state.isFacetsCollapsed = true;
     this.state.setFacetChanged();
     document.getElementById('content-scroller').scrollTo(0,0);
     // Validate sort param sort
-    const sortParam = this.state.sort.field;
+    const sortParam = this.state.ui?.sort?.[entity] ? this.state.ui.sort[entity] : null;
+
     let sort = this.config.sorts.find(s => ((s.field) === sortParam) && (!s.entity || s.entity.length === 0 || s.entity.includes(entity)));
+
     if (!sort) {
       sort = this.config.sorts.find(s => !s.entity || s.entity.length === 0 || s.entity.includes(entity));
     }
@@ -216,6 +233,16 @@ export class FacetsComponent implements OnInit {
       }
     }
     facet.operator = op;
+  }
+
+  clickCommonFacet(cf: {name: string, value: string}) {
+    this.state.isFacetsCollapsed = true;
+    this.state.setFacetChanged();
+    document.getElementById('content-scroller').scrollTo(0,0);
+    const params: any = {};
+    params[cf.name] = true;
+    params.page = 0;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
   applyFilters() {

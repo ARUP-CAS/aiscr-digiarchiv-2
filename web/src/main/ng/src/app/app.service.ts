@@ -567,6 +567,12 @@ export class AppService {
       }
     });
     this.state.breadcrumbs.pop();
+
+    this.config.commonFacets.forEach(cf => {
+      if (params.has(cf.name)) {
+        this.state.breadcrumbs.push(new Crumb('cf', cf.name, cf.name));
+      }
+    })
   }
 
   // shouldTranslate(field: string) {

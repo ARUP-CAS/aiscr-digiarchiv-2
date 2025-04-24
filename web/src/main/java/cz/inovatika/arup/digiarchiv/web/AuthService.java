@@ -51,8 +51,6 @@ public class AuthService {
 
         return response.body();
     }
-    
-    
 
     public static JSONObject login(String user, String pwd) throws URISyntaxException, IOException, InterruptedException, Exception {
         String token = getToken(user, pwd);
@@ -65,7 +63,9 @@ public class AuthService {
                     uz.setPristupnost();
                     uz.setCteniDokumentu();
                     ObjectMapper objectMapper = new ObjectMapper();
-                    return new JSONObject(objectMapper.writeValueAsString(uz));
+                    JSONObject u = new JSONObject(objectMapper.writeValueAsString(uz));
+                    u.put("ui", uz.getUI());
+                    return u;
                 } else if (tokenJSON.has("non_field_errors")) {
                     return new JSONObject().put("error", "dialog.alert.Špatné přihlašovací údaje");
                 } else {
@@ -79,7 +79,6 @@ public class AuthService {
             return new JSONObject().put("error", "invalid token");
         }
     }
-    
     
 //    public static JSONObject loginBasic(HttpServletRequest req) throws URISyntaxException, IOException, InterruptedException, Exception {
 //        String token = getToken(user, pwd);

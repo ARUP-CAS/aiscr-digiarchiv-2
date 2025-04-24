@@ -79,9 +79,11 @@ public class HandleServlet extends HttpServlet {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         } else {
+            response.setContentType("text/html;charset=UTF-8"); 
+            response.setCharacterEncoding("UTF-8");
             try (PrintWriter out = response.getWriter()) {
-                response.setContentType("text/html;charset=UTF-8");
                 String url = "http://localhost:4000/id/" + id;
+                
                 try (InputStream inputStream = RESTHelper.inputStream(url)) {
                     out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
                 }
@@ -211,7 +213,7 @@ public class HandleServlet extends HttpServlet {
                 if (!id.contains("thumb")) {
                     LogAnalytics.log(request, doc.getString("path"), "file", doc.getString("entity"));
                 }
-                is.close();
+                is.close(); 
                 return true;
 
             } catch (Exception ex) {
@@ -401,6 +403,7 @@ public class HandleServlet extends HttpServlet {
 //                doc.put("mimetype", sdoc.optString("mimetype"));
 //                doc.put("path", sdoc.optString("path"));
 //                doc.put("nazev", sdoc.optString("nazev"));
+                sdoc.put("entity", doc.optString("entity"));
                 return sdoc;
             }
         }

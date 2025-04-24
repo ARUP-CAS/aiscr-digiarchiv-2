@@ -1,5 +1,5 @@
 <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" [class.app-entity-lokalita]="!isChild && !isDocumentDialogOpen">
-  <a *ngIf="mapDetail" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+  <a *ngIf="mapDetail && !isChild" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   <mat-card-header>
@@ -53,7 +53,7 @@
         </ng-container>
       </div>
       <div *ngIf="result.lokalita_igsn">
-        <label class="app-label">{{ 'ISGN' | translate }}:</label>&#160;{{ result.lokalita_igsn }}
+        <label class="app-label">{{ 'IGSN' | translate }}:</label>&#160;{{ result.lokalita_igsn }}
       </div>
       <div *ngIf="result.az_chranene_udaje?.dalsi_katastr?.length > 0">
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
@@ -124,7 +124,7 @@
           </ul>
         </mat-expansion-panel>
 
-        <app-related [related]="related"></app-related>
+        <app-related [related]="related" [mapDetail]="mapDetail"></app-related>
       </mat-accordion>
     </div>
   </mat-card-content>

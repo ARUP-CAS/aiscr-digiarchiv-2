@@ -79,6 +79,8 @@ export class RelatedComponent implements OnInit {
           this.state.loading = false;
         }
       });
+    } else {
+      this.state.loading = false;
     }
   }
 

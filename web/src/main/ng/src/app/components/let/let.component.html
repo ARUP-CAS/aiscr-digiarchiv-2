@@ -15,8 +15,8 @@
         <tr *ngIf="result.let_letiste_start || result.let_letiste_cil">
           <th class="app-label">{{ 'card.desc.Trasa' | translate }}:</th>
           <td>
-            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start.id" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
-            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil.id" [heslar]="'a'"></app-inline-filter>
+            <app-inline-filter *ngIf="result.let_letiste_start" [field]="'f_let_letiste_start'" [value]="result.let_letiste_start.id" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
+            <app-inline-filter *ngIf="result.let_letiste_cil" [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil.id" [heslar]="'a'"></app-inline-filter>
           </td>
         </tr>
         <tr *ngIf="result.let_ucel_letu">
@@ -59,7 +59,7 @@
     </table>
   </mat-expansion-panel>
   <mat-card *ngSwitchCase="true" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
-    <a *ngIf="mapDetail" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+    <a *ngIf="mapDetail && !isChild" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
     </a>
     <mat-card-header>
@@ -80,8 +80,8 @@
           </ng-container>
           <ng-container *ngIf="result.let_letiste_start || result.let_letiste_cil">
             <label class="app-label">{{ 'card.desc.Trasa' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
-            <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil" [heslar]="'a'"></app-inline-filter>
+            <app-inline-filter *ngIf="result.let_letiste_start" [field]="'f_let_letiste_start'" [value]="result.let_letiste_start" [heslar]="'a'"></app-inline-filter>&#160;-&#160; 
+            <app-inline-filter *ngIf="result.let_letiste_cil" [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil" [heslar]="'a'"></app-inline-filter>
             <span class="app-pipe"></span>
           </ng-container>
         </div>

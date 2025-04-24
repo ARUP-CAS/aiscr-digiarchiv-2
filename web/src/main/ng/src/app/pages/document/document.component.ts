@@ -46,7 +46,6 @@ export class DocumentComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (this.state.printing || this.router.isActive('print', false)) {
-      // this.state.printing = false;
       this.tryPrint();
     }
   }

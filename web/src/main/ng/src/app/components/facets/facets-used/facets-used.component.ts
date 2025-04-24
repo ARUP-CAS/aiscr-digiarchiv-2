@@ -21,9 +21,16 @@ export class FacetsUsedComponent implements OnInit {
     private service: AppService) { }
 
   ngOnInit(): void {
+    
     this.service.currentLang.subscribe(() => {
       this.service.setCrumbs(this.route.snapshot.queryParamMap);
     });
+  }
+
+  removeCommonFacet(name: string) {
+    const params: any = {};
+    params[name] = null;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
   removeFacet(crumb: Crumb) {

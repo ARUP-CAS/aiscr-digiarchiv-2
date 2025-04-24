@@ -22,6 +22,19 @@ export class PaginatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageIndex = this.state.page + 1;
+
+
+    if (this.state.ui?.rows) {
+      this.state.rows = this.state.ui.rows;
+    }
+
+    if (this.state.ui?.sort?.[this.state.entity]) {
+      this.state.sort = this.state.sorts_by_entity.find(s => (s.field) === this.state.ui.sort[this.state.entity]);
+      if (!this.state.sort) {
+        this.state.sort = this.state.sorts_by_entity[0];
+      }
+    }
+
   }
 
   pageChanged(e: PageEvent) {
@@ -45,6 +58,12 @@ export class PaginatorComponent implements OnInit {
 
   sortBy(sort: Sort) {
     this.state.sort = sort;
+
+    if (this.state.ui) {
+      this.state.ui.rows = this.state.rows;
+      this.state.ui.sort[this.state.entity] = sort.field;
+    }
+
     this.router.navigate([], { queryParams: { sort: sort.field }, queryParamsHandling: 'merge' });
   }
 

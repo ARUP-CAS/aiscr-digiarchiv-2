@@ -2,12 +2,13 @@
   "context": "",
   "isTest": false,
   "defaultLang": "cs",
+  "amcr": "",
+  "amcr_server": "https://amcr.aiscr.cz/",
   "serverUrl": "https://digiarchiv.aiscr.cz/",
   "registrationUrl": "https://amcr.aiscr.cz/accounts/register/",
   "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/",
   "accountUrl": "https://amcr.aiscr.cz/uzivatel/edit/",
   "restorePassword": "https://amcr.aiscr.cz/accounts/password_reset",
-  "recaptchaKey": "",
   "reCaptchaScore": -1,
   "mapOptions": {
     "docsForMarker": 500,
@@ -1076,5 +1077,6 @@
       "useParent": false
     }
   ],
-  "feedBackMaxLength": 4000
+  "feedBackMaxLength": 4000,
+  "commonFacets": []
 }

@@ -73,6 +73,9 @@ export class AkceComponent implements OnInit, OnChanges {
   }
 
   checkRelations() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
       return;
     }

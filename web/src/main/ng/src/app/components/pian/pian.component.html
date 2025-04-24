@@ -19,7 +19,7 @@
     </div>
   </mat-expansion-panel>
   <mat-card *ngIf="inDocument" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
-    <a *ngIf="mapDetail" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+    <a *ngIf="mapDetail && !isChild" (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
     </a>
     <mat-card-header>
@@ -94,7 +94,7 @@
             </table>
           </mat-expansion-panel>
 
-          <app-related [related]="related"></app-related>
+          <app-related [related]="related" [mapDetail]="mapDetail"></app-related>
           <!-- <mat-expansion-panel *ngIf="result.akce?.length > 0 || result.lokalita?.length > 0 " [expanded]="true" class="app-panel-souvisejici-zaznamy">
             <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
               <mat-panel-title>
