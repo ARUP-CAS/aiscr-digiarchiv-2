@@ -2,8 +2,6 @@
   "context": "",
   "isTest": false,
   "defaultLang": "cs",
-  "amcr": "",
-  "amcr_server": "https://amcr.aiscr.cz/",
   "serverUrl": "https://digiarchiv.aiscr.cz/",
   "registrationUrl": "https://amcr.aiscr.cz/accounts/register/",
   "helpUrl": "https://amcr-help.aiscr.cz/digiarchiv/",
