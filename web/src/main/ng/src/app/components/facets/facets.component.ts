@@ -162,6 +162,21 @@ export class FacetsComponent implements OnInit {
     this.router.navigate([], { queryParams: { hideWithoutThumbs: val, page: 0 }, queryParamsHandling: 'merge' });
   }
 
+  changeEntity(entity) {
+    if (this.state.user) {
+      // Get sort from ui
+      this.service.getLogged(true).subscribe((resp: any) => {
+        if (resp.ui) {
+          this.state.ui = resp.ui;
+        }
+        this.setEntity(entity)
+      });
+    } else {
+      this.setEntity(entity)
+    }
+
+  }
+
   setEntity(entity) {
     this.state.isFacetsCollapsed = true;
     this.state.setFacetChanged();

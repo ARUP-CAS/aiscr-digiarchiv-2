@@ -70,6 +70,15 @@ export class HomeComponent implements OnInit {
       this.state.numFound = resp.response.numFound;
 
     });
+
+    if (this.state.user) {
+      // Get sort from ui
+      this.service.getLogged(true).subscribe((resp: any) => {
+        if (resp.ui) {
+          this.state.ui = resp.ui;
+        }
+      });
+    }
   }
 
   searchEntity() {
