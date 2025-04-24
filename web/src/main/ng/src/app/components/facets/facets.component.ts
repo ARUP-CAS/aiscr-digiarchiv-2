@@ -167,7 +167,7 @@ export class FacetsComponent implements OnInit {
     this.state.setFacetChanged();
     document.getElementById('content-scroller').scrollTo(0,0);
     // Validate sort param sort
-    const sortParam = this.state.user?.ui?.[entity]?.sort ? this.state.user.ui[entity].sort : this.state.sort.field;
+    const sortParam = this.state.ui?.[entity]?.sort ? this.state.ui[entity].sort : null;
 
     let sort = this.config.sorts.find(s => ((s.field) === sortParam) && (!s.entity || s.entity.length === 0 || s.entity.includes(entity)));
 

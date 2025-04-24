@@ -23,7 +23,7 @@
         {{state.sort ? ('paginator.sortBy.' + state.sort.label | translate) : ('' | translate)  }} &#160;
         <mat-icon [matTooltip]="'paginator.dir.' + state.sort.dir | translate" class="app-small-icon">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
       </mat-select-trigger>
-      <mat-option *ngFor="let sort of state.sorts" (click)="sortBy(sort)" [value]="sort">
+      <mat-option *ngFor="let sort of state.sorts_by_entity" (click)="sortBy(sort)" [value]="sort">
         {{ 'paginator.sortBy.' + sort.label | translate }} <mat-icon>{{ sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
       </mat-option>
     </mat-select>

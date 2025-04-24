@@ -101,9 +101,10 @@ export class AppState {
   rows: number;
   page = 0;
   pageChanged = false;
-  totalPages: number;
-  sorts: Sort[];
+  totalPages: number
+  sorts_by_entity: Sort[];
   sort: Sort;
+  ui: {[entity: string]: {sort: string, rows:number}} = {};
 
   // Pokud uzivatel zvoli jine razeni pro danou facetu, napr: {"obdobi": "poradi"}
   facetSort: {[facetname: string]: string} = {};
@@ -268,7 +269,7 @@ export class AppState {
     this.hideWithoutThumbs = params.has('hideWithoutThumbs') ? params.get('hideWithoutThumbs') === 'true' : false;
     this.inFavorites = params.has('inFavorites') ? params.get('inFavorites') === 'true' : false;
     this.entity = params.has('entity') ? params.get('entity') : 'dokument';
-    this.sorts = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
+    this.sorts_by_entity = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
     this.page = params.has('page') ? +params.get('page') : 0;
     this.isMapaCollapsed = params.has('mapa') ? params.get('mapa') === 'false' : true;
     if (this.isMapaCollapsed) {
@@ -280,13 +281,13 @@ export class AppState {
 
     // this.sort = null;
     if (params.has('sort')) {
-      this.sort = this.sorts.find(s => (s.field) === params.get('sort'));
+      this.sort = this.sorts_by_entity.find(s => (s.field) === params.get('sort'));
     } else if(this.sort) {
       // this.sort could be from another entity. Check validity
-      this.sort = this.sorts.find(s => s.field === this.sort.field);
+      this.sort = this.sorts_by_entity.find(s => s.field === this.sort.field);
     }
     if (!this.sort) {
-      this.sort = this.sorts[0];
+      this.sort = this.sorts_by_entity[0];
     }
 
   }
@@ -347,11 +348,16 @@ export class AppState {
     if (res.error) {
       this.logged = false;
       this.user = null;
+      this.ui = {};
     } else {
       this.logged = true;
       this.user = res;
 
       
+      if (this.user.ui) {
+        this.ui = this.user.ui;
+      }
+
       // for (const first in res) {
       //   if (res[first]) {
       //     this.user = res[first];

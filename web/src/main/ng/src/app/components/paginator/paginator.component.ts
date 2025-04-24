@@ -24,14 +24,14 @@ export class PaginatorComponent implements OnInit {
     this.pageIndex = this.state.page + 1;
 
 
-    if (this.state.user?.ui?.[this.state.entity]?.rows) {
-      this.state.rows = this.state.user.ui[this.state.entity].rows;
+    if (this.state.ui?.[this.state.entity]?.rows) {
+      this.state.rows = this.state.ui[this.state.entity].rows;
     }
 
-    if (this.state.user?.ui?.[this.state.entity]?.sort) {
-      this.state.sort = this.state.sorts.find(s => (s.field) === this.state.user.ui[this.state.entity].sort);
+    if (this.state.ui?.[this.state.entity]?.sort) {
+      this.state.sort = this.state.sorts_by_entity.find(s => (s.field) === this.state.ui[this.state.entity].sort);
       if (!this.state.sort) {
-        this.state.sort = this.state.sorts[0];
+        this.state.sort = this.state.sorts_by_entity[0];
       }
     }
 
@@ -59,8 +59,8 @@ export class PaginatorComponent implements OnInit {
   sortBy(sort: Sort) {
     this.state.sort = sort;
 
-    if (this.state.user?.ui) {
-      this.state.user.ui[this.state.entity].sort = sort.field;
+    if (this.state.ui) {
+      this.state.ui[this.state.entity] = {sort: sort.field, rows: this.state.rows};
     }
 
     this.router.navigate([], { queryParams: { sort: sort.field }, queryParamsHandling: 'merge' });
