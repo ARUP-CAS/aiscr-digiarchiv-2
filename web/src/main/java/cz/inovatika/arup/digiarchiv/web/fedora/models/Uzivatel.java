@@ -158,24 +158,22 @@ public class Uzivatel implements FedoraModel {
         JSONObject ui = SolrSearcher.getUIUzivatele(userId);
         if (ui == null) {
             ui = new JSONObject();
+            ui.put("sort", new JSONObject());
+        } else if (!ui.has("sort")) {
+            ui.put("sort", new JSONObject());
         }
         String entity = "dokument";
         if (request.getParameter("entity") != null) {
             entity = request.getParameter("entity");
         }
         
-        JSONObject uiEntity = new JSONObject();
         if (request.getParameter("rows") != null) {
-            uiEntity.put("rows", Integer.parseInt(request.getParameter("rows")));
+            ui.put("rows", Integer.parseInt(request.getParameter("rows")));
         }
         if (request.getParameter("sort") != null) {
-            uiEntity.put("sort", request.getParameter("sort"));
-        }
-        if (uiEntity.isEmpty()) {
-            return;
+            ui.getJSONObject("sort").put(entity, request.getParameter("sort"));
         }
         
-        ui.put(entity, uiEntity);
         user.put("ui", ui);
         try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrInputDocument idoc = new SolrInputDocument();

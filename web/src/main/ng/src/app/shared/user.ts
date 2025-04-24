@@ -7,6 +7,6 @@ export class User {
   cteni_dokumentu: boolean;
   skupina: {lang: string, value:string}[];
   organizace: {id: string, value:string};
-  ui: {[entity: string]: {sort: string, rows:number}};
+  ui: { sort: {[entity: string]:string}, rows?:number} = {sort:{}};
 }
 

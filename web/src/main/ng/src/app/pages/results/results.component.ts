@@ -171,12 +171,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       this.state.setSearchResponse(resp);
 
-      if (p.rows && this.state.ui?.[this.state.entity]) {
-        this.state.ui[this.state.entity].rows = p.rows;
+      if (p.rows) {
+        this.state.ui.rows = p.rows;
       }
 
-      if (this.state.ui?.[this.state.entity]?.sort) {
-        this.state.sort = this.state.sorts_by_entity.find(s => (s.field) === this.state.ui[this.state.entity].sort);
+      if (this.state.ui?.sort?.[this.state.entity]) {
+        this.state.sort = this.state.sorts_by_entity.find(s => (s.field) === this.state.ui.sort[this.state.entity]);
       }
 
       this.setTitle();

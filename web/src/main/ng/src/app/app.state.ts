@@ -104,7 +104,7 @@ export class AppState {
   totalPages: number
   sorts_by_entity: Sort[];
   sort: Sort;
-  ui: {[entity: string]: {sort: string, rows:number}} = {};
+  ui: { sort: {[entity: string]:string}, rows?:number} = {sort:{}};
 
   // Pokud uzivatel zvoli jine razeni pro danou facetu, napr: {"obdobi": "poradi"}
   facetSort: {[facetname: string]: string} = {};
@@ -348,7 +348,7 @@ export class AppState {
     if (res.error) {
       this.logged = false;
       this.user = null;
-      this.ui = {};
+      this.ui = {sort:{}};
     } else {
       this.logged = true;
       this.user = res;
