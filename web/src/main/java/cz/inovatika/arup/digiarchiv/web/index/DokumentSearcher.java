@@ -268,7 +268,10 @@ public class DokumentSearcher implements EntitySearcher {
             pristupnost = "D";
         }
         SolrSearcher.addFilters(request, query, pristupnost);
-        query.set("df", "text_all_A");
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        query.set("df", "text_all_" + pristupnost); 
 
         if (Boolean.parseBoolean(request.getParameter("mapa"))) {
             SolrSearcher.addLocationParams(request, query);
