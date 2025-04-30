@@ -58,7 +58,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.mapId = null;
     this.state.mapResult = null;
     let url = '/results';
-    if (this.router.isActive('map', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+    if (this.router.isActive('map', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
       url = '/map';
     }
     this.state.setFacetChanged();
@@ -89,9 +89,14 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     let url = '/results';
     if (p.mapa) {
       url = '/map';
-      if (this.router.isActive('/id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+      if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
         p.loc_rpt = null;
         p.vyber = null;
+      } else if (this.state.locationFilterEnabled) {
+        p.loc_rpt = this.state.locationFilterBounds.getSouthWest().lat + ',' +
+          this.state.locationFilterBounds.getSouthWest().lng + ',' +
+          this.state.locationFilterBounds.getNorthEast().lat + ',' +
+          this.state.locationFilterBounds.getNorthEast().lng;
       } else {
         const lat = this.state.stats.lat;
         const lng = this.state.stats.lng;
@@ -114,7 +119,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
         p.vyber = null;
       }
     }
-    if (this.router.isActive('/id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+    if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;
       p.vyber = null;
