@@ -219,6 +219,7 @@ public class SolrSearcher {
         //LOGGER.log(Level.INFO, "query: {0}", query );
     }
 
+    static Map<String, String> ops = Map.of("or", "", "and", "+", "not", "-");
     private static void addFilterNoQuotes(SolrQuery query, String field, String[] values, String pristupnost) {
         String fq = field;
         if (Options.getInstance().getJSONArray("securedFilters").toList().contains(field)) {
@@ -237,7 +238,12 @@ public class SolrSearcher {
                         val = "1:" + val;
                     }
                 }
-                fq += op + "\"" + val + "\" ";
+                if ("-".equals(op)) {
+                    fq += op + "\"" + val + "\" AND * ";
+                } else {
+                    fq += op + "\"" + val + "\" ";
+                }
+                
                 //fq += op + val + " ";
             } else {
                 fq += val + " ";
@@ -249,14 +255,16 @@ public class SolrSearcher {
         // query.addFilterQuery("{!tag=" + field + "F}" + field + ":(" + String.join(" OR ", values) + ")");
     }
 
-    static Map<String, String> ops = Map.of("or", "", "and", "+", "not", "-");
-
     private static void addFilter(SolrQuery query, String field, String[] values) {
         String fq = "{!tag=" + field + "F}" + field + ":(";
         for (int i = 0; i < values.length; i++) {
             // values[i] = "\"" + values[i] + "\"";
             String[] parts = values[i].split(":");
-            fq += (parts.length == 2 ? ops.get(parts[1]) : "") + "\"" + parts[0] + "\" ";
+            if ("not".equals(parts[1])) {
+                fq += (parts.length == 2 ? ops.get(parts[1]) : "") + "\"" + parts[0] + "\" AND *";
+            } else {
+                fq += (parts.length == 2 ? ops.get(parts[1]) : "") + "\"" + parts[0] + "\" ";
+            }
         }
         fq += ")";
         // query.addFilterQuery("{!tag=" + field + "F}" + field + ":(" + String.join(" OR ", values) + ")");
