@@ -234,6 +234,8 @@ public class Options {
             file = "amcr_2.1_2.0.xslt";
         } else if ("/v2.1".equals(version)) {
             file = "amcr_2.0_2.1.xslt";
+        } else if ("/v2.2".equals(version)) {
+            file = "amcr_2.1_2.2.xslt";
         }
       String path = InitServlet.CONFIG_DIR + File.separator + file;
       File f = new File(path);
