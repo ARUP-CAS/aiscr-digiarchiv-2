@@ -1253,6 +1253,9 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string) {
+    if (presnost === 'HES-000864') {
+      return;
+    }
     if (!geom_wkt_c) {
       return;
     }
