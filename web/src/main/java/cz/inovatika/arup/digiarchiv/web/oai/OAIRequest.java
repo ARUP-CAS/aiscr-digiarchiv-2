@@ -660,7 +660,7 @@ public class OAIRequest {
         return e404;
     }
 
-    private static boolean shoulTransformVersion(String version, String xmlns_amcr) {
+    private static boolean shoulTransformVersion(String version, String xmlns_amcr) { 
 
         return !(("/v2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
                 || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
