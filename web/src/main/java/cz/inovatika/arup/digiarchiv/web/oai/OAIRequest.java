@@ -565,6 +565,8 @@ public class OAIRequest {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.0/";
                     } else if ("/v2.1".equals(version)) {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.1/";
+                    } else if ("/v2.2".equals(version)) {
+                        xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.2/";
                     }                    
                 } catch (TransformerException ex) {
                     Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
@@ -660,8 +662,9 @@ public class OAIRequest {
 
     private static boolean shoulTransformVersion(String version, String xmlns_amcr) {
 
-        return (("/v2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
-                || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr)));
+        return !(("/v2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
+                || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
+                || ("/v2.2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.2/".equals(xmlns_amcr)));
     }
 
     private static String transformByVersion(String xml, String version) throws TransformerException {
