@@ -32,15 +32,20 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.service.currentLang.subscribe(res => {
-      const parts = this.router.url.split('?');
-      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'export-mapa?' + str;
+      this.setExportUrl();
     });
     this.route.queryParams.subscribe(val => {
-      const parts = this.router.url.split('?');
-      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'export-mapa?' + str;
+      this.setExportUrl();
     });
+  }
+
+  setExportUrl() {
+    const parts = this.router.url.split('?');
+      let str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
+      if (str.indexOf('entity=') < 0) {
+        str += '&entity=' + this.state.entity;
+      }
+      this.exportUrl = 'export-mapa?' + str;
   }
 
   ngAfterViewInit() {

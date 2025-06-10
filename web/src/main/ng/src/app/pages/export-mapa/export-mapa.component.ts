@@ -72,6 +72,9 @@ export class ExportMapaComponent implements OnInit {
     p.isExport = true;
     p.noFacets = true;
     p.noStats = true;
+    if (!p['entity']) {
+      p['entity'] = 'dokument';
+    }
     this.state.loading = true;
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       
