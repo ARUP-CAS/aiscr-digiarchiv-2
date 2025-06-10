@@ -1,13 +1,7 @@
 {
     "solrhost": "http://localhost:8983/solr/",
-    "core": "amcr/",
-    "exportCore": "export/",
-    "csvRelationsCore": "relations/",
-    "dokumentsCore": "dokument/",
 
-    "imagesDir": "~/.amcr/",
     "thumbsDir": "~/.amcr/thumbs/",
-    "thesauriDir": "/home/alberto/.amcr/thesauri/",
     "thumbWidth": 100,
     "thumbHeight": 100,
     "mediumHeight": 1000,
@@ -16,10 +10,7 @@
     "fedora": {
         "api.point": "http://192.168.8.33:8080/rest/AMCR-test/",
         "search.point": "http://192.168.8.33:8080/rest/fcr:search?",
-        "models": ["heslo", "ruian_kraj", "ruian_okres", "ruian_katastr", "organizace", "osoba", "uzivatel", "adb", "pian", "ext_zdroj", "let", "archeologicky_zaznam", "projekt", "samostatny_nalez", "dokument", "deleted"],
         "user": "",
-        "pwd": "",
-        "search_fedora_id_prefix": "AMCR-test/"
-    },
-    "fedoraServer": "http://192.168.8.33:8080/"
+        "pwd": ""
+    }
 }

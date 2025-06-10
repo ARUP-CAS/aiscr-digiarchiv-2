@@ -26,7 +26,6 @@ public class Options {
     public static String DEFAULT_CONFIG_FILE = "config.json";
 
     private static Options _sharedInstance = null;
-    private JSONObject client_conf;
     private JSONObject server_conf;
 
     public synchronized static Options getInstance() {
@@ -46,19 +45,8 @@ public class Options {
     }
 
     public Options() throws IOException, JSONException {
-        client_conf = new JSONObject();
         server_conf = new JSONObject();
         String json;
-//        File fdef = FileUtils.toFile(Options.class.getResource("config.json"));
-//        if (fdef != null && fdef.exists()) {
-//            json = FileUtils.readFileToString(fdef, "UTF-8");
-//            client_conf = new JSONObject(json);
-//            
-//        }
-            
-            client_conf = new JSONObject(IOUtils.toString(
-                    this.getClass().getResourceAsStream("config.json"),
-                    "UTF-8"));
 
         if (System.getProperty("amcr_app_dir") != null) {
             CONFIG_DIR = System.getProperty("amcr_app_dir");
@@ -69,7 +57,7 @@ public class Options {
 
         //Get server options
         File fserver = new File(getClass().getResource("server_config.json").getPath());
-        if (fserver != null && fserver.exists()) {
+        if ( fserver.exists()) {
             String sjson = FileUtils.readFileToString(fserver, "UTF-8");
             server_conf = new JSONObject(sjson);
         } else {
@@ -84,14 +72,7 @@ public class Options {
 
         if (f.exists() && f.canRead()) {
             json = FileUtils.readFileToString(f, "UTF-8");
-            JSONObject customClientConf = new JSONObject(json).getJSONObject("client");
-            Iterator keys = customClientConf.keys();
-            while (keys.hasNext()) {
-                String key = (String) keys.next();
-                LOGGER.log(Level.FINE, "key {0} will be overrided", key);
-                client_conf.put(key, customClientConf.get(key));
-            }
-            JSONObject customServerConf = new JSONObject(json).getJSONObject("server");
+            JSONObject customServerConf = new JSONObject(json);
             Iterator keys2 = customServerConf.keys();
             while (keys2.hasNext()) {
                 String key = (String) keys2.next();
@@ -101,10 +82,6 @@ public class Options {
         }
         LOGGER.log(Level.FINE, "Configuration is : {0} ", server_conf.toString());
 
-    }
-
-    public JSONObject getClientConf() {
-        return client_conf;
     }
 
     public String getString(String key, String defVal) {
