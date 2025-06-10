@@ -197,9 +197,6 @@ export class StatsComponent implements OnInit {
       splitLine: {
         show: true,
       },
-      axisLabel: {
-        interval: this.interval !== 'DAY' ? 0 : null,
-      },
     };
     this.chartOptions.series = this.series;
     this.chartOptions.legend = { data: this.legend, bottom: 0 };
