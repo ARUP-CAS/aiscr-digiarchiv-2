@@ -343,7 +343,7 @@ public class ProjektSearcher implements EntitySearcher {
         fields.addAll(headerFields);
         fields.addAll(detailFields);
 
-        fields.add("projekt_hlavni_katastr:projekt_hlavni_katastr_" + pristupnost);
+        fields.add("projekt_hlavni_katastr:projekt_chranene_udaje_hlavni_katastr_" + pristupnost);
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
 
