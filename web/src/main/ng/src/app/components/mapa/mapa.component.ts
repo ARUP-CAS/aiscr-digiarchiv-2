@@ -1022,7 +1022,6 @@ export class MapaComponent implements OnInit, OnDestroy {
       }
 
     });
-    console.log(this.markersList)
     this.loadingMarkers = false;
     setTimeout(() => {
       this.state.loading = false;
@@ -1044,7 +1043,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       this.piansList = [];
       this.markers.clearLayers();
     }
-    const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
+    const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez' || this.state.entity === 'pian';
 
     if (byLoc) {
       this.setMarkersByLoc(docs, isId)
