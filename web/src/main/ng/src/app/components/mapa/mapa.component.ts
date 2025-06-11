@@ -997,6 +997,7 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   setMarkersByLoc(docs: SolrDocument[], isId: boolean) {
     const pianIds: { id: string, docId: string }[] = [];
+    let shapeLayer;
     docs.forEach(doc => {
 
       if (!doc.pian_id) {
@@ -1018,12 +1019,19 @@ export class MapaComponent implements OnInit, OnDestroy {
         //   mrk.addTo(this.markers);
         // }
         mrk.addTo(this.markers);
+        if (doc.pian_chranene_udaje?.geom_wkt) {
+          shapeLayer = this.addShapeLayer(doc.ident_cely, doc.pian_presnost, doc.pian_chranene_udaje?.geom_wkt.value);
+        }
+        
       });
       }
-
     });
     this.loadingMarkers = false;
     setTimeout(() => {
+      if (shapeLayer) {
+        console.log(shapeLayer.getBounds())
+        this.map.fitBounds(shapeLayer.getBounds());
+      }
       this.state.loading = false;
       this.loadingFinished.emit();
     }, 100)
@@ -1253,10 +1261,10 @@ export class MapaComponent implements OnInit, OnDestroy {
 
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string) {
     if (presnost === 'HES-000864') {
-      return;
+      return null;
     }
     if (!geom_wkt_c) {
-      return;
+      return null;
     }
     const wkt = new Wkt.Wkt();
     wkt.read(geom_wkt_c);
@@ -1270,15 +1278,17 @@ export class MapaComponent implements OnInit, OnDestroy {
           fillOpacity: this.config.mapOptions.shape.fillOpacity
         })
       });
-      const pianInList = this.piansList.find(p => p.id === ident_cely);
+      // const pianInList = this.piansList.find(p => p.id === ident_cely);
       // layer.pianId = ident_cely;
-      layer.on('click', (e) => {
-        this.setPianId(ident_cely, pianInList.docIds);
-      });
-      layer.bindTooltip(this.popUpHtml(ident_cely, presnost, pianInList.docIds));
+      // layer.on('click', (e) => {
+      //   this.setPianId(ident_cely, pianInList.docIds);
+      // });
+      // layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
       // layer.addTo(this.overlays);
       layer.addTo(this.markers);
+      return layer;
     }
+    return null;
   }
 
 }
