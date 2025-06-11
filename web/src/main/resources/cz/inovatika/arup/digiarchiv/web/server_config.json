@@ -72,11 +72,6 @@
     "smtp.pwd": "heslo"
   },
   "thumbsDir": "/var/lib/digiarchiv/thumbs/",
-  "dynamicThumbs": false,
-  "thumbWidth": 100,
-  "thumbHeight": 100,
-  "mediumHeight": 1000,
-  "maxPixels": 10000000,
   "watermark.alpha": 0,
   "sessionTimeout": 3600,
   "indexSecLevel": "E",

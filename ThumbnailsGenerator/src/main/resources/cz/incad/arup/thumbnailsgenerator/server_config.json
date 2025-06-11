@@ -1,15 +1,13 @@
 {
     "solrhost": "http://localhost:8983/solr/",
-
-    "thumbsDir": "~/.amcr/thumbs/",
+    "thumbsDir": "/var/lib/digiarchiv/thumbs/",
     "thumbWidth": 100,
     "thumbHeight": 100,
     "mediumHeight": 1000,
     "maxPixels": 5000000,
-    "watermark.alpha": 0.5,
     "fedora": {
-        "api.point": "http://192.168.8.33:8080/rest/AMCR-test/",
-        "search.point": "http://192.168.8.33:8080/rest/fcr:search?",
+        "api.point": "https://fedora.aiscr.cz/rest/AMCR/",
+        "search.point": "https://fedora.aiscr.cz/rest/fcr:search?",
         "user": "",
         "pwd": ""
     }
