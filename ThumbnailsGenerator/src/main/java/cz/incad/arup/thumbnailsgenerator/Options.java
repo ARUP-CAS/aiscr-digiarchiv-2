@@ -72,7 +72,7 @@ public class Options {
 
         if (f.exists() && f.canRead()) {
             json = FileUtils.readFileToString(f, "UTF-8");
-            JSONObject customServerConf = new JSONObject(json);
+            JSONObject customServerConf = new JSONObject(json).getJSONObject("server");
             Iterator keys2 = customServerConf.keys();
             while (keys2.hasNext()) {
                 String key = (String) keys2.next();
