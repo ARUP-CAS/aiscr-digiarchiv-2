@@ -1260,7 +1260,7 @@ export class MapaComponent implements OnInit, OnDestroy {
   }
 
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string) {
-    if (presnost === 'HES-000864') {
+    if (this.config.mapOptions.skipShapePrecisionIds.includes(presnost)) {
       return null;
     }
     if (!geom_wkt_c) {
