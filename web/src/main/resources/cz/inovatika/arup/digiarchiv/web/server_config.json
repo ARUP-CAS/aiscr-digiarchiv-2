@@ -78,7 +78,7 @@
   "allowedIP": [
     ""
   ],
-  "requestInterval": 5000,
+  "requestInterval": 500,
   "statsIpFilter": ["0:0:0:0:0:0:0:1", "127.0.0.1", "66.249.64.*", "66.249.65.*", "66.249.66.*", "66.249.68.*", "66.249.69.*", "66.249.7*"],
   "nalez_objekt_id": "HES-001125",
   "nalez_predmet_id": "HES-001126",
