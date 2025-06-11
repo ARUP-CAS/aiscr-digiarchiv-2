@@ -83,7 +83,10 @@ public class OAIRequest {
         return forbiddenTransformer;
     }
 
-    private static Transformer getVersionTransformer(String version) throws TransformerConfigurationException {
+    private static Transformer getVersionTransformer(String old_version, String new_version) throws TransformerConfigurationException {
+        String version = old_version + "_" + new_version;
+        System.out.println(version);
+        System.out.println("AAAAAAAAAAAAA");
         if (versionTransformers.get(version) == null) {
             //TransformerFactory factory = TransformerFactory.newDefaultInstance();
             TransformerFactory factory = new net.sf.saxon.TransformerFactoryImpl();
@@ -556,12 +559,15 @@ public class OAIRequest {
             int pos1 = xml.indexOf("xmlns:amcr=");
             int pos2 = xml.indexOf("\"", pos1 + 14);
             String xmlns_amcr = xml.substring(pos1 + "xmlns:amcr=\"".length(), pos2);
-
-            if (shoulTransformVersion(version, xmlns_amcr)) {
+            
+            boolean tr = shoulTransformVersion(version, xmlns_amcr);
+            System.out.println(tr);
+            if (tr) {
+                String old_version = xmlns_amcr.substring(xmlns_amcr.length() - 4, xmlns_amcr.length() -1);
                 try {
-                    xml = transformByVersion(xml, version);
+                    xml = transformByVersion(xml, old_version, version.substring(2));
                     // Change xmlns_amcr to the new
-                    if ("/v2".equals(version)) {
+                    if ("/v2.0".equals(version)) {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.0/";
                     } else if ("/v2.1".equals(version)) {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.1/";
@@ -662,16 +668,16 @@ public class OAIRequest {
 
     private static boolean shoulTransformVersion(String version, String xmlns_amcr) { 
 
-        return !(("/v2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
+        return !(("/v2.0".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
                 || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
                 || ("/v2.2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.2/".equals(xmlns_amcr)));
     }
 
-    private static String transformByVersion(String xml, String version) throws TransformerException {
+    private static String transformByVersion(String xml, String old_version, String new_version) throws TransformerException {
 
         Source text = new SAXSource(new InputSource(new StringReader(xml)));
         StringWriter sw = new StringWriter();
-        getVersionTransformer(version).transform(text, new StreamResult(sw));
+        getVersionTransformer(old_version, new_version).transform(text, new StreamResult(sw));
         return sw.toString();
     }
 
