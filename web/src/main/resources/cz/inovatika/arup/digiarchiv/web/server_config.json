@@ -61,7 +61,7 @@
     "user": "",
     "pwd": "",
     "search_fedora_id_prefix": "AMCR/",
-    "useSearch": true
+    "useSearch": false
   },
   "mail": {
     "smtp.host": "xxx",
