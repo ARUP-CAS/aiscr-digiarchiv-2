@@ -21,9 +21,9 @@ public class AppState {
         if (id.contains("thumb")) {
             return true;
         }
-        int interval = Options.getInstance().getInt("requestInterval", 60);
+        int interval = Options.getInstance().getInt("requestInterval", 5000);
         return !ipsRunning.containsKey(ip) && 
-               (!ipsTimes.containsKey(ip) || ipsTimes.get(ip).isBefore(Instant.now().minus(interval, ChronoUnit.SECONDS)));
+               (!ipsTimes.containsKey(ip) || ipsTimes.get(ip).isBefore(Instant.now().minus(interval, ChronoUnit.MILLIS)));
     } 
     
     public static synchronized long canGetFileInterval(String ip, String id) {
@@ -33,9 +33,9 @@ public class AppState {
         if(ipsRunning.containsKey(ip)) {
             return -1; // "Downloading file in progress. Try later.";
         }
-        int interval = Options.getInstance().getInt("requestInterval", 60);
+        int interval = Options.getInstance().getInt("requestInterval", 5000);
         if (ipsTimes.containsKey(ip)) {
-            return Duration.between(Instant.now(), ipsTimes.get(ip).plus(interval, ChronoUnit.SECONDS)).toSeconds();
+            return Duration.between(Instant.now(), ipsTimes.get(ip).plus(interval, ChronoUnit.MILLIS)).toSeconds();
         }
         return 0;
     }
