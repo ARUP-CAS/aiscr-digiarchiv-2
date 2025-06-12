@@ -149,6 +149,9 @@ public class Uzivatel implements FedoraModel {
     } 
     
     public static void updateUI(HttpServletRequest request) {
+        if (Boolean.parseBoolean(request.getParameter("mapa")) ) {
+            return;
+        }
         String userId = LoginServlet.userId(request);
         if (userId == null) {
             return;
@@ -167,7 +170,7 @@ public class Uzivatel implements FedoraModel {
             entity = request.getParameter("entity");
         }
         
-        if (request.getParameter("rows") != null) {
+        if (request.getParameter("rows") != null) { 
             ui.put("rows", Integer.parseInt(request.getParameter("rows")));
         }
         if (request.getParameter("sort") != null) {

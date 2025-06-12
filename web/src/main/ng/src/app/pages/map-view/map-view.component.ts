@@ -1055,6 +1055,9 @@ export class MapViewComponent {
   }
 
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docIds: string[]) {
+    if (this.config.mapOptions.skipShapePrecisionIds.includes(presnost)) {
+      return;
+    }
     if (!geom_wkt_c) {
       return;
     }

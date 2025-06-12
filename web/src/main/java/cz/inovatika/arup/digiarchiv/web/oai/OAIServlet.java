@@ -38,6 +38,9 @@ public class OAIServlet extends HttpServlet {
         response.setContentType("text/xml;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String version = request.getPathInfo();
+        if ("/v2".equals(version)) {
+            version = "/v2.0";
+        }
         try {
             String actionNameParam = request.getParameter("verb");
             if (actionNameParam != null) {

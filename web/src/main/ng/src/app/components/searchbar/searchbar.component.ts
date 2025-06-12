@@ -32,15 +32,20 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.service.currentLang.subscribe(res => {
-      const parts = this.router.url.split('?');
-      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'export-mapa?' + str;
+      this.setExportUrl();
     });
     this.route.queryParams.subscribe(val => {
-      const parts = this.router.url.split('?');
-      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'export-mapa?' + str;
+      this.setExportUrl();
     });
+  }
+
+  setExportUrl() {
+    const parts = this.router.url.split('?');
+      let str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
+      if (str.indexOf('entity=') < 0) {
+        str += '&entity=' + this.state.entity;
+      }
+      this.exportUrl = 'export-mapa?' + str;
   }
 
   ngAfterViewInit() {
@@ -58,7 +63,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.mapId = null;
     this.state.mapResult = null;
     let url = '/results';
-    if (this.router.isActive('map', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+    if (this.router.isActive('map', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
       url = '/map';
     }
     this.state.setFacetChanged();
@@ -89,9 +94,14 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     let url = '/results';
     if (p.mapa) {
       url = '/map';
-      if (this.router.isActive('/id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+      if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
         p.loc_rpt = null;
         p.vyber = null;
+      } else if (this.state.locationFilterEnabled) {
+        p.loc_rpt = this.state.locationFilterBounds.getSouthWest().lat + ',' +
+          this.state.locationFilterBounds.getSouthWest().lng + ',' +
+          this.state.locationFilterBounds.getNorthEast().lat + ',' +
+          this.state.locationFilterBounds.getNorthEast().lng;
       } else {
         const lat = this.state.stats.lat;
         const lng = this.state.stats.lng;
@@ -114,7 +124,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
         p.vyber = null;
       }
     }
-    if (this.router.isActive('/id', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'})) {
+    if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
       url = '/id/' + this.state.documentId;
       p.loc_rpt = null;
       p.vyber = null;

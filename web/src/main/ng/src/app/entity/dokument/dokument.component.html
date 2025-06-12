@@ -187,7 +187,7 @@
                   <th class="app-label">{{ 'card.desc.Objekt/kontext' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.cislo_objektu }}</td>
                 </tr>
-                <tr *ngIf="result.dokument_extra_data.geom_system">
+                <tr *ngIf="result.dokument_extra_data.geom_system && (result.dokument_extra_data.geom_gml || result.dokument_extra_data.geom_wkt)">
                   <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
                   <td>{{ result.dokument_extra_data.geom_system }}</td>
                 </tr>

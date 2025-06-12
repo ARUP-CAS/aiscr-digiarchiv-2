@@ -229,12 +229,26 @@ public class Options {
   }
   
   public File getVersionXslt(String version) {
-      String file = "";
-      if ("/v2".equals(version)) {
-            file = "amcr_2.1_2.0.xslt";
-        } else if ("/v2.1".equals(version)) {
-            file = "amcr_2.0_2.1.xslt";
-        }
+      String file = version + ".xslt";
+//      switch (version) {
+//          case "/v2.0":
+//          case "2.1_2.0":
+//              file = "amcr_2.1_2.0.xslt";
+//              break;
+//          case "/v2.1":
+//          case "2.0_2.1":
+//              file = "amcr_2.0_2.1.xslt";
+//              break;
+//          case "/v2.2":
+//          case "2.1_2.2":
+//              file = "amcr_2.1_2.2.xslt";
+//              break;
+//          case "2.2_2.1":
+//              file = "amcr_2.2_2.1.xslt";
+//              break;
+//          default:
+//              break;
+//      }
       String path = InitServlet.CONFIG_DIR + File.separator + file;
       File f = new File(path);
       if (f.exists() && f.canRead()) {

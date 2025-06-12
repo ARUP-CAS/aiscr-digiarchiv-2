@@ -33,7 +33,15 @@
       "ruian_katastr",
       "organizace",
       "osoba"
-    ]
+    ],
+    "versionTransformations": {
+        "2.0_2.1":["amcr_2.0_2.1"],
+        "2.0_2.2":["amcr_2.0_2.1", "amcr_2.1_2.2"],
+        "2.1_2.0":["amcr_2.1_2.0"],
+        "2.1_2.2":["amcr_2.1_2.2"],
+        "2.2_2.0":["amcr_2.2_2.1", "amcr_2.1_2.0"],
+        "2.2_2.1":["amcr_2.2_2.1"]
+    }
   },
   "auth": "https://amcr.aiscr.cz/api/",
   "reCaptchaApiKey": "",
@@ -61,7 +69,7 @@
     "user": "",
     "pwd": "",
     "search_fedora_id_prefix": "AMCR/",
-    "useSearch": true
+    "useSearch": false
   },
   "mail": {
     "smtp.host": "xxx",
@@ -72,18 +80,13 @@
     "smtp.pwd": "heslo"
   },
   "thumbsDir": "/var/lib/digiarchiv/thumbs/",
-  "dynamicThumbs": false,
-  "thumbWidth": 100,
-  "thumbHeight": 100,
-  "mediumHeight": 1000,
-  "maxPixels": 10000000,
   "watermark.alpha": 0,
   "sessionTimeout": 3600,
   "indexSecLevel": "E",
   "allowedIP": [
     ""
   ],
-  "requestInterval": 5,
+  "requestInterval": 500,
   "statsIpFilter": ["0:0:0:0:0:0:0:1", "127.0.0.1", "66.249.64.*", "66.249.65.*", "66.249.66.*", "66.249.68.*", "66.249.69.*", "66.249.7*"],
   "nalez_objekt_id": "HES-001125",
   "nalez_predmet_id": "HES-001126",

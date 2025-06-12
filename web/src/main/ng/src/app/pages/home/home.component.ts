@@ -76,13 +76,26 @@ export class HomeComponent implements OnInit {
       this.service.getLogged(true).subscribe((resp: any) => {
         if (resp.ui) {
           this.state.ui = resp.ui;
+          this
         }
       });
     }
   }
 
+  getSortByEntity(entity: string): string {
+    if (this.state.ui?.sort?.[entity]) {
+      return this.state.ui.sort[entity];
+    } else {
+      this.state.sort = this.state.sorts_by_entity.find(s => (s.field) === this.state.ui.sort[this.state.entity]);
+      if (!this.state.sort) {
+        this.state.sort = this.state.sorts_by_entity[0];
+      }
+      return this.state.sort.field;
+    }
+  }
+
   searchEntity() {
-    
+
   }
 
   setTitle() {

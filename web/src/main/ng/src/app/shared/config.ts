@@ -59,6 +59,7 @@ export class Configuration {
       fillOpacity: number
     },
     selectionInitPad: number;
+    skipShapePrecisionIds: string[];
   };
   hideMenuWidth: number;
 
