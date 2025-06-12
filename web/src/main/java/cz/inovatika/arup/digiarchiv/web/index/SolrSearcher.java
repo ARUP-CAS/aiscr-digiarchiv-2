@@ -260,10 +260,14 @@ public class SolrSearcher {
         for (int i = 0; i < values.length; i++) {
             // values[i] = "\"" + values[i] + "\"";
             String[] parts = values[i].split(":");
-            if ("not".equals(parts[1])) {
-                fq += (parts.length == 2 ? ops.get(parts[1]) : "") + "\"" + parts[0] + "\" AND *";
+            if (parts.length == 2) {
+                if ("not".equals(parts[1])) {
+                    fq += ops.get(parts[1]) + "\"" + parts[0] + "\" AND *";
+                } else {
+                    fq += ops.get(parts[1]) + "\"" + parts[0] + "\" ";
+                }
             } else {
-                fq += (parts.length == 2 ? ops.get(parts[1]) : "") + "\"" + parts[0] + "\" ";
+                fq += "\"" + parts[0] + "\" ";
             }
         }
         fq += ")";
