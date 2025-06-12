@@ -33,7 +33,15 @@
       "ruian_katastr",
       "organizace",
       "osoba"
-    ]
+    ],
+    "versionTransformations": {
+        "2.0_2.1":["amcr_2.0_2.1"],
+        "2.0_2.2":["amcr_2.0_2.1", "amcr_2.1_2.2"],
+        "2.1_2.0":["amcr_2.1_2.0"],
+        "2.1_2.2":["amcr_2.1_2.2"],
+        "2.2_2.0":["amcr_2.2_2.1", "amcr_2.1_2.0"],
+        "2.2_2.1":["amcr_2.2_2.1"]
+    }
   },
   "auth": "https://amcr.aiscr.cz/api/",
   "reCaptchaApiKey": "",

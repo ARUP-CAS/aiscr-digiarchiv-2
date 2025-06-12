@@ -40,6 +40,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.xml.sax.InputSource;
 
@@ -83,19 +84,16 @@ public class OAIRequest {
         return forbiddenTransformer;
     }
 
-    private static Transformer getVersionTransformer(String old_version, String new_version) throws TransformerConfigurationException {
-        String version = old_version + "_" + new_version;
-        System.out.println(version);
-        System.out.println("AAAAAAAAAAAAA");
-        if (versionTransformers.get(version) == null) {
+    private static Transformer getVersionTransformer(String versionXslt) throws TransformerConfigurationException {
+        if (versionTransformers.get(versionXslt) == null) {
             //TransformerFactory factory = TransformerFactory.newDefaultInstance();
             TransformerFactory factory = new net.sf.saxon.TransformerFactoryImpl();
-            Source xslt = new StreamSource(Options.getInstance().getVersionXslt(version));
+            Source xslt = new StreamSource(Options.getInstance().getVersionXslt(versionXslt));
             Transformer t = factory.newTransformer(xslt);
             t.setOutputProperty("omit-xml-declaration", "yes");
-            versionTransformers.put(version, t);
+            versionTransformers.put(versionXslt, t);
         }
-        return versionTransformers.get(version);
+        return versionTransformers.get(versionXslt);
     }
 
     private static Transformer getTransformer2() throws TransformerConfigurationException {
@@ -561,7 +559,6 @@ public class OAIRequest {
             String xmlns_amcr = xml.substring(pos1 + "xmlns:amcr=\"".length(), pos2);
             
             boolean tr = shoulTransformVersion(version, xmlns_amcr);
-            System.out.println(tr);
             if (tr) {
                 String old_version = xmlns_amcr.substring(xmlns_amcr.length() - 4, xmlns_amcr.length() -1);
                 try {
@@ -668,17 +665,23 @@ public class OAIRequest {
 
     private static boolean shoulTransformVersion(String version, String xmlns_amcr) { 
 
-        return !(("/v2.0".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
+        return !(version==null || 
+                ("/v2.0".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
                 || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
                 || ("/v2.2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.2/".equals(xmlns_amcr)));
     }
 
-    private static String transformByVersion(String xml, String old_version, String new_version) throws TransformerException {
-
-        Source text = new SAXSource(new InputSource(new StringReader(xml)));
-        StringWriter sw = new StringWriter();
-        getVersionTransformer(old_version, new_version).transform(text, new StreamResult(sw));
-        return sw.toString();
+    private static String transformByVersion(String xml, String start_version, String end_version) throws TransformerException {
+        String tr = start_version + "_" + end_version;
+        JSONArray ja = Options.getInstance().getJSONObject("OAI").getJSONObject("versionTransformations").getJSONArray(tr);
+        String ret = xml;
+        for (int i = 0; i< ja.length(); i++) {
+            Source text = new SAXSource(new InputSource(new StringReader(ret)));
+            StringWriter sw = new StringWriter();
+            getVersionTransformer(ja.getString(i)).transform(text, new StreamResult(sw));
+            ret = sw.toString();
+        }
+        return ret;
     }
 
     private static String transformToDC(String xml, String xmlns_amcr) throws TransformerException {
