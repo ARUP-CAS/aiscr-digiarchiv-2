@@ -57,7 +57,7 @@ public class ImageSupport {
         try {
             String dest = getDestDir(f) + "sha.txt";
             File shaFile = new File(dest);
-            FileUtils.writeStringToFile(shaFile, sha, "UTF-8", true);
+            FileUtils.writeStringToFile(shaFile, sha, "UTF-8", false);
         } catch (IOException ex) {
             Logger.getLogger(ImageSupport.class.getName()).log(Level.SEVERE, null, ex);
         }
