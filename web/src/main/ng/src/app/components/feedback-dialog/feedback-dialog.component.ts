@@ -12,6 +12,7 @@ import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RecaptchaModule } from "ng-recaptcha-2";
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
@@ -19,6 +20,7 @@ import { RecaptchaModule } from "ng-recaptcha-2";
     MatDialogModule,
     FormsModule,
     MatFormFieldModule,
+    MatInputModule,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,

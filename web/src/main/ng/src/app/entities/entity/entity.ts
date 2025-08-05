@@ -28,6 +28,7 @@ import { FileViewerComponent } from '../../components/file-viewer/file-viewer.co
 })
 export class Entity {
 
+  viewType = input<any>();
 
   protected _result: any;
   result = input<any>();
@@ -63,6 +64,7 @@ export class Entity {
     effect(() => {
       this._detailExpanded = this.detailExpanded();
       this._result = this.result();
+      
       if (this._result) {
 
         if (this._result.loc_rpt) {

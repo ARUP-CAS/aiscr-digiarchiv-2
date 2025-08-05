@@ -16,6 +16,7 @@ import { Sort } from '../../shared/config';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
@@ -27,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatTooltipModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatInputModule,
     MatDialogModule,
     MatPaginatorModule,
     MatButtonModule

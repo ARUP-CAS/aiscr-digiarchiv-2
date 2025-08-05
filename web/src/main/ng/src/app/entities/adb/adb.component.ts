@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -16,6 +16,7 @@ import { AppState } from '../../app.state';
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
 import { AkceComponent } from '../akce/akce.component';
+import { LokalitaComponent } from "../lokalita/lokalita.component";
 
 @Component({
   imports: [
@@ -24,7 +25,8 @@ import { AkceComponent } from '../akce/akce.component';
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule,
     ResultActionsComponent,
-    AkceComponent
+    forwardRef(() => AkceComponent),
+    forwardRef(() => LokalitaComponent)
 ],
   selector: 'app-adb',
   templateUrl: './adb.component.html',

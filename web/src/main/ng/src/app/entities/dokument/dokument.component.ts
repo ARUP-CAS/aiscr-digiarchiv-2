@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { Entity } from '../entity/entity';
@@ -28,7 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
     InlineFilterComponent, DatePipe, MatButtonModule,
     ResultActionsComponent,
     MatAccordion,
-    RelatedComponent
+    forwardRef(() => RelatedComponent)
 ],
   selector: 'app-dokument',
   templateUrl: './dokument.component.html',

@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -30,11 +30,11 @@ import { LokalitaComponent } from "../lokalita/lokalita.component";
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule,
     ResultActionsComponent,
-    AkceComponent,
-    AdbComponent,
-    KomponentaComponent,
-    PianComponent,
-    LokalitaComponent
+    forwardRef(() => AkceComponent),
+    forwardRef(() => AdbComponent),
+    forwardRef(() => KomponentaComponent),
+    forwardRef(() => PianComponent),
+    forwardRef(() => LokalitaComponent)
 ],
   selector: 'app-dok-jednotka',
   templateUrl: './dok-jednotka.component.html',

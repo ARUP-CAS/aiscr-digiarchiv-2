@@ -1,9 +1,7 @@
-
 import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Entity } from '../entity/entity';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule, MatAccordion } from '@angular/material/expansion';
@@ -14,11 +12,17 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { DocumentDialogComponent } from '../../components/document-dialog/document-dialog.component';
+import { FeedbackDialogComponent } from '../../components/feedback-dialog/feedback-dialog.component';
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { RelatedComponent } from '../../components/related/related.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
-import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
-import { ExterniZdrojComponent } from "../externi-zdroj/externi-zdroj.component";
+import { DokJednotkaComponent } from '../dok-jednotka/dok-jednotka.component';
+import { Entity } from '../entity/entity';
+import { ExterniZdrojComponent } from '../externi-zdroj/externi-zdroj.component';
 
 @Component({
   imports: [
@@ -26,19 +30,17 @@ import { ExterniZdrojComponent } from "../externi-zdroj/externi-zdroj.component"
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, DatePipe, MatButtonModule,
-    MatAccordion,
     ResultActionsComponent,
-    forwardRef(() => RelatedComponent),
-    forwardRef(() => DokJednotkaComponent),
-    forwardRef(() => ExterniZdrojComponent)
+    MatAccordion,
+    forwardRef(() => RelatedComponent)
 ],
-  selector: 'app-akce',
-  templateUrl: './akce.component.html',
-  styleUrls: ['./akce.component.scss']
+  selector: 'app-projekt',
+  templateUrl: './projekt.component.html',
+  styleUrls: ['./projekt.component.scss']
 })
-export class AkceComponent extends Entity {
-
-  override setBibTex() {
+export class ProjektComponent extends Entity {
+  
+override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
       `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
@@ -48,79 +50,49 @@ export class AkceComponent extends Entity {
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
-  
+
   override checkRelations() {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
     if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
       return;
     }
     this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
-      this._result.az_dokument = res.az_dokument;
-      this._result.akce_projekt = res.akce_projekt;
+      this._result.projekt_archeologicky_zaznam = res.projekt_archeologicky_zaznam;
+      this._result.projekt_samostatny_nalez = res.projekt_samostatny_nalez;
+      this._result.projekt_dokument = res.projekt_dokument;
       this.relationsChecked = true;
       this.related = [];
-      res.az_dokument.forEach((ident_cely: string) => {
+      res.id_akce.forEach((ident_cely: string) => {
+        this.related.push({entity: 'akce', ident_cely})
+      });
+      res.id_lokalita.forEach((ident_cely: string) => {
+        this.related.push({entity: 'lokalita', ident_cely})
+      });
+      res.projekt_samostatny_nalez.forEach((ident_cely: string) => {
+        this.related.push({entity: 'samostatny_nalez', ident_cely})
+      });
+      res.projekt_dokument.forEach((ident_cely: string) => {
         this.related.push({entity: 'dokument', ident_cely})
       });
-
-      if (res.akce_projekt) {
-        this.related.push({entity: 'projekt', ident_cely: res.akce_projekt})
-      }
     });
   }
 
-  getExtZdroj() {
-    if (this._result.az_ext_zdroj) {
-      const orig = JSON.parse(JSON.stringify(this._result.az_ext_zdroj));
-      this._result.az_ext_zdroj = [];
-      for (let i = 0; i < orig.length; i = i + 20) {
-        const ids = orig.slice(i, i + 20);
-        this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
-          this._result.az_ext_odkaz.forEach((eo:any) => {
-            const ez = res.response.docs.find((ez: any) => eo.ext_zdroj.id === ez.ident_cely);
-            ez.ext_odkaz_paginace = eo.paginace;
-            this._result.az_ext_zdroj.push(ez);
-          });
-
-          this._result.az_ext_zdroj.sort((ez1: any, ez2: any) => {
-            let res = 0;
-            res = ez1.ext_zdroj_autor[0].localeCompare(ez2.ext_zdroj_autor[0], 'cs');
-            if (res === 0) {
-              res = ez1.ext_zdroj_rok_vydani_vzniku - ez2.ext_zdroj_rok_vydani_vzniku;
-            }
-            if (res === 0) {
-              res = ez1.ext_zdroj_nazev.localeCompare(ez2.ext_zdroj_nazev);
-            }
-            return res;
-          })
-        });
-      }
-    }
-  }
 
   override getFullId() {
     this.service.getId(this._result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
-      this.getExtZdroj();
       this.hasDetail = true;
     });
   }
 
-  cropped(s: string) {
-    if (s.length > 100) {
-      return s.slice(0, 100) + '(...)'
-    } else {
-      return s;
-    }
+  formatDate(s: string) {
+    // [2023-05-26, 2023-05-26]
+    // (d)d.(m)m.rrrr - (d)d.(m)m.rrrr
+    let parts = s.replace('[', '').replace(']', '').split(',');
+    console.log()
+    return this.datePipe.transform(parts[0].trim(), 'd.M.yyyy') + ' - ' + this.datePipe.transform(parts[1].trim(), 'd.M.yyyy');
   }
 
-  pian(id: string) {
-    return this._result.pian.filter((p: any) => p.ident_cely === id);
-  }
-
-  adb(id: string) {
-    return this._result.adb.filter((p: any) => p.ident_cely === id);
-  }
 }

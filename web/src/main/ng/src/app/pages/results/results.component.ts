@@ -1,13 +1,13 @@
 import { SolrDocument } from './../../shared/solr-document';
 import { HttpParams } from '@angular/common/http';
 import { SolrResponse } from './../../shared/solr-response';
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute, ParamMap, Params, RouterModule } from '@angular/router';
 // import { trigger, transition, style, animate } from '@angular/animations';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { NgZone } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -26,6 +26,10 @@ import { PaginatorComponent } from "../../components/paginator/paginator.compone
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { DokumentComponent } from "../../entities/dokument/dokument.component";
 import { MatButtonModule } from '@angular/material/button';
+import { SamostatnyNalezComponent } from "../../entities/samostatny-nalez/samostatny-nalez.component";
+import { AkceComponent } from "../../entities/akce/akce.component";
+import { LokalitaComponent } from "../../entities/lokalita/lokalita.component";
+import { EntityContainer } from "../../entities/entity-container/entity-container";
 
 @Component({
   imports: [
@@ -36,7 +40,11 @@ import { MatButtonModule } from '@angular/material/button';
     FacetsUsedComponent,
     FacetsComponent,
     PaginatorComponent,
-    DokumentComponent
+    DokumentComponent,
+    SamostatnyNalezComponent,
+    AkceComponent,
+    LokalitaComponent,
+    EntityContainer
 ],
   selector: 'app-results', 
   // animations: [
@@ -76,6 +84,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   vsSize = 0;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private titleService: Title,
     private route: ActivatedRoute,
     private router: Router,
@@ -115,7 +124,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       if (val.typ === 'map') {
         this.docs = this.state.solrResponse.response.docs;
         setTimeout(() => {
-          this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+          this.vsSize = this.leftElement ? this.leftElement.nativeElement.clientHeight - 107 : 400;
         }, 100);
       }
     }));
@@ -125,16 +134,20 @@ export class ResultsComponent implements OnInit, OnDestroy {
     // });
 
     // set side nav map breakpoint
-    this.matcher = this.mediaMatcher.matchMedia(this.sideNavMapBreakPoint);
-    this.matcher.addEventListener('change', (e) => {
-      this.myListener(e);
-    });
+    if (isPlatformBrowser(this.platformId)){
+      this.matcher = this.mediaMatcher.matchMedia(this.sideNavMapBreakPoint);
+      this.matcher.addEventListener('change', (e) => {
+        this.myListener(e);
+      });
+    }
   }
 
   ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)){
     this.matcher.removeEventListener('change', (e) => {
       this.myListener(e);
     });
+    }
     
     this.subs.forEach(s => s.unsubscribe());
   }
@@ -168,7 +181,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     if (params['mapa']) {
       // Zpracuje mapa
       // setTimeout(() => {
-      //   this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      //   this.vsSize = this.leftElement ? this.leftElement.nativeElement.clientHeight - 107 : 400;
       // }, 100);
       return;
     }
@@ -213,7 +226,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.hasResultsInOther = this.config.entities.findIndex(e => this.state.totals[e] > 0) > -1;
       setTimeout(() => {
-        this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+        this.vsSize = this.leftElement ? this.leftElement.nativeElement.clientHeight - 107 : 400;
       }, 100);
 
       p['noFacets'] = 'false';

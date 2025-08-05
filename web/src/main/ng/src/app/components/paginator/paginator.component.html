@@ -10,7 +10,7 @@
 
   <mat-form-field fxFlex="70px" class="app-page-num"><!--fxHide_sm fxHide_xs-->
     <mat-label>{{ 'paginator.desc.Číslo stránky' | translate }}</mat-label>
-    <input matInput type="text" [(ngModel)]="pageIndex" (keyup.enter)="setPage()">
+    <input matInput type="text" [(ngModel)]="pageIndex" (keyup.enter)="setPage()" name="pageIndex">
     <a matSuffix [matTooltip]="'paginator.tooltip.Přejděte číslo stránky' | translate" (click)="setPage()">
       <mat-icon>send</mat-icon>
     </a>

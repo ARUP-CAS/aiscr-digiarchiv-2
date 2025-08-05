@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
@@ -26,7 +26,7 @@ import { ResultActionsComponent } from '../../components/result-actions/result-a
     InlineFilterComponent, DatePipe, MatButtonModule,
     ResultActionsComponent,
     MatAccordion,
-    RelatedComponent
+    forwardRef(() => RelatedComponent)
 ],
   selector: 'app-samostatny-nalez',
   templateUrl: './samostatny-nalez.component.html',

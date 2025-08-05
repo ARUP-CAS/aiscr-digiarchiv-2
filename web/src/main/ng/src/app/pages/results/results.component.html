@@ -56,7 +56,7 @@
     </div>
   </div>
 
-  @if (!loading || !state.isMapaCollapsed) {
+  @if (!loading) {
     <div #leftElement class="app-display-table app-container">
       @if (state.isMapaCollapsed) {
         <div class="app-table-cell app-left" [class.app-facets-opened]="!state.isFacetsCollapsed">
@@ -180,10 +180,10 @@
                       @switch(state.entity) {
                         @case ('dokument') { <app-dokument [result]="result"></app-dokument> }
                         @case ('knihovna_3d') { <app-dokument [result]="result"></app-dokument> }
-                        <!-- @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-                        @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
+                        @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
+                        <!-- @case ('projekt') { <app-projekt [result]="result"></app-projekt> } -->
                         @case ('akce') { <app-akce [result]="result"></app-akce> }
-                        @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> } -->
+                        @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> }
                       }
                     }
                   </div>
@@ -232,28 +232,14 @@
                           [style.height.px]="vsSize" [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)"
                           [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
                           <ng-container *cdkVirtualFor="let result of state.solrResponse.response.docs">
-                            @switch(state.entity) {
-                              @case ('dokument') { <app-dokument [result]="result"></app-dokument> }
-                              @case ('knihovna_3d') { <app-dokument [result]="result"></app-dokument> }
-                              <!-- @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-                              @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
-                              @case ('akce') { <app-akce [result]="result"></app-akce> }
-                              @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> } -->
-                            }
+                            <app-entity-container [result]="result"></app-entity-container>
                           </ng-container>
                         </cdk-virtual-scroll-viewport>
                       }
                       @if (!state.isMapaCollapsed && state.solrResponse?.response) {
                         <div>
                           @for (result of state.solrResponse.response.docs; track result) {
-                            this._resul@switch(state.entity) {
-                            @case ('dokument') { <app-dokument [result]="result"></app-dokument> }
-                            @case ('knihovna_3d') { <app-dokument [result]="result"></app-dokument> }
-                            <!-- @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-                            @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
-                            @case ('akce') { <app-akce [result]="result"></app-akce> }
-                            @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> } -->
-                          }
+                            <app-entity-container [result]="result"></app-entity-container>
                         }
                       </div>
                     }

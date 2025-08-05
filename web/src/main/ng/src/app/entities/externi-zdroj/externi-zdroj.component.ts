@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -25,10 +25,10 @@ import { LokalitaComponent } from "../lokalita/lokalita.component";
     TranslateModule, RouterModule, FlexLayoutModule, CommonModule,
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
-    InlineFilterComponent, MatButtonModule,
-    ResultActionsComponent, ScrollingModule,
-    AkceComponent,
-    LokalitaComponent
+    InlineFilterComponent, MatButtonModule, ScrollingModule,
+    ResultActionsComponent,
+    forwardRef(() => AkceComponent),
+    forwardRef(() => LokalitaComponent)
 ],
   selector: 'app-externi-zdroj',
   templateUrl: './externi-zdroj.component.html',

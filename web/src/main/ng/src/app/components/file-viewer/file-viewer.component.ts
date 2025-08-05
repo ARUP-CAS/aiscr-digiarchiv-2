@@ -28,12 +28,14 @@ import {
 } from '@ngu/carousel';
 import { LicenseDialogComponent } from '../license-dialog/license-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 @Component({
   imports: [
     TranslateModule, RouterModule, FlexLayoutModule, FormsModule,
-    MatCardModule, MatIconModule,  MatButtonModule,
+    MatCardModule, MatIconModule,  MatButtonModule, MatFormFieldModule, MatInputModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
     NguCarousel,
     NguCarousel,

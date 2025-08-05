@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,7 +35,7 @@ import { RelatedComponent } from "../../components/related/related.component";
     InlineFilterComponent,
     MatButtonModule,
     ResultActionsComponent,
-    RelatedComponent
+    forwardRef(() => RelatedComponent)
 ],
   selector: 'app-pian',
   templateUrl: './pian.component.html',

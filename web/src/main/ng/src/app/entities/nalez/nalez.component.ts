@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,7 +7,9 @@ import { InlineFilterComponent } from "../../components/inline-filter/inline-fil
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, CommonModule,
+    TranslateModule,
+    RouterModule,
+    FlexLayoutModule,
     InlineFilterComponent
 ],
   selector: 'app-nalez',

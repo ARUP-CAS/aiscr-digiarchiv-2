@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
@@ -22,15 +22,15 @@ import { ExterniZdrojComponent } from "../externi-zdroj/externi-zdroj.component"
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, FlexLayoutModule, DatePipe,
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
-    InlineFilterComponent, DatePipe, MatButtonModule,
+    InlineFilterComponent, MatButtonModule,
     ResultActionsComponent,
     MatAccordion,
-    RelatedComponent,
-    DokJednotkaComponent,
-    ExterniZdrojComponent
+    forwardRef(() => RelatedComponent),
+    forwardRef(() => DokJednotkaComponent),
+    forwardRef(() => ExterniZdrojComponent)
 ],
   selector: 'app-lokalita',
   templateUrl: './lokalita.component.html',

@@ -22,13 +22,14 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatRadioModule} from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
     TranslateModule, RouterModule, FlexLayoutModule, FormsModule, MatFormFieldModule,
     MatCardModule, MatIconModule, MatExpansionModule, MatMenuModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
-    MatDatepickerModule, MatRadioModule, MatButtonModule
+    MatDatepickerModule, MatRadioModule, MatButtonModule, MatInputModule
   ],
   selector: 'app-facets-dynamic',
   templateUrl: './facets-dynamic.component.html',

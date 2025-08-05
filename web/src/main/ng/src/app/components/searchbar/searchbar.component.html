@@ -2,7 +2,8 @@
   <div class="app-container">
     <div fxLayout="row" fxLayoutGap="32px" class="app-search-form" fxLayoutAlign="start center">
       <div fxFlex class="app-fx-left">
-        <input type="text" [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above" />
+        <input type="text" [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" 
+        name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above" />
         <span fxFlex class="app-controls">
           <span class="app-mobile-controls fxHide_gt-xs">
             <a (click)="toggleMapa()">
