@@ -41,7 +41,7 @@ export class DokumentComponent extends Entity {
      if (!isPlatformBrowser(this.platformId)) {
        return;
      }
-  if (!this._result.ident_cely || this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+  if (!this._result.ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
     return;
   }
   this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {

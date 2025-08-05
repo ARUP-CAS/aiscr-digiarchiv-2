@@ -392,7 +392,7 @@
                       </ul>
                     </mat-expansion-panel>
                   }
-                  @for (dokument_cast of _result.dokument_cast; track dokument_cast) {
+                  @for (dokument_cast of _result.dokument_cast; track dokument_cast.ident_cely) {
                     <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
                       <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
                         <mat-panel-title>

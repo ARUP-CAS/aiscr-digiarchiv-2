@@ -48,7 +48,7 @@ export class RelatedComponent implements OnInit {
   }
 
   
-  public children: {entity: string, result: any}[] = [];
+  public children: {entity: string, ident_cely: string, result: any}[] = [];
   numChildren: number = 0;
   
   itemSize = 133;
@@ -85,7 +85,7 @@ export class RelatedComponent implements OnInit {
 
       this.service.getIdAsChild(ids.map(e => e.ident_cely), entity).subscribe((res: any) => {
         res.response.docs.forEach((result: any) => {
-          this.children.push({entity, result})
+          this.children.push({entity, ident_cely: result.ident_cely, result})
         });
         this.state.documentProgress = this.children.length / this.numChildren * 100;
         this.state.loading = (this.children.length) < this.numChildren;

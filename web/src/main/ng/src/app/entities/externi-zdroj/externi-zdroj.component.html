@@ -58,17 +58,17 @@
                     @if (vsSize > 0 && !state.printing) {
                       <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'"
                         [minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
-                        @for (lok of result.lokalita; track lok) {
+                        @for (lok of result.lokalita; track lok.ident_cely) {
                           <app-lokalita [result]="lok" [isChild]="true"  class="app-related-item"></app-lokalita>
                         }
                         <app-akce *cdkVirtualFor="let akce of result.akce" [result]="akce" [isChild]="true"  class="app-related-item"></app-akce>
                       </cdk-virtual-scroll-viewport>
                     }
                     @if (vsSize > 0 && state.printing) {
-                      @for (lok of result.lokalita; track lok) {
+                      @for (lok of result.lokalita; track lok.ident_cely) {
                         <app-lokalita [result]="lok" [isChild]="true"  class="app-related-item"></app-lokalita>
                       }
-                      @for (akce of result.akce; track akce) {
+                      @for (akce of result.akce; track akce.ident_cely) {
                         <app-akce [result]="akce" [isChild]="true"  class="app-related-item"></app-akce>
                       }
                     }

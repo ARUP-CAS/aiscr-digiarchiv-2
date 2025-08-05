@@ -40,13 +40,13 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [isChild]="true" class="app-related-item"></app-dok-jednotka> -->
-            @for (akce of result.akce; track akce) {
+            @for (akce of result.akce; track akce.ident_cely) {
               <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
             }
-            @for (lok of result.lokalita; track lok) {
+            @for (lok of result.lokalita; track lok.ident_cely) {
               <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
             }
-            @for (dokument of result.dokument; track dokument) {
+            @for (dokument of result.dokument; track dokument.ident_cely) {
               <app-dokument [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
             }
           </mat-expansion-panel>
@@ -78,7 +78,7 @@
   }
 
   @if (result.komponenta_aktivita?.length > 0) {
-    &#160;(@for (aktivita of result.komponenta_aktivita; track aktivita; let last = $last) {
+    &#160;(@for (aktivita of result.komponenta_aktivita; track aktivita.id; let last = $last) {
     <app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>
     @if (!last) {
       <span>,&#160;</span>

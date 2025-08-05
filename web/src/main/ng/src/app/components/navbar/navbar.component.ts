@@ -15,11 +15,13 @@ import { AppState } from '../../app.state';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 @Component({
   imports: [
     TranslateModule,
     FormsModule,
+    RouterModule,
     FlexLayoutModule,
     MatIconModule,
     MatListModule,

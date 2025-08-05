@@ -48,10 +48,10 @@
                 {{ 'card.panelTitle.Související záznamy' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
-            @for (akce of result.akce; track akce) {
+            @for (akce of result.akce; track akce.ident_cely) {
               <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
             }
-            @for (lok of result.lokalita; track lok) {
+            @for (lok of result.lokalita; track lok.ident_cely) {
               <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
             }
           </mat-expansion-panel>
@@ -92,7 +92,7 @@
         @if (result.adb_ident_cely) {
           <app-adb [result]="result.adb_ident_cely" [isChild]="true"></app-adb>
         }
-        @for (komponenta of result.dj_komponenta; track komponenta) {
+        @for (komponenta of result.dj_komponenta; track komponenta.ident_cely) {
           <app-komponenta [result]="komponenta"></app-komponenta>
         }
       </mat-accordion>

@@ -105,7 +105,7 @@ export class Entity {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    if (!this._result.ident_cely || this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+    if (!this._result.ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
 

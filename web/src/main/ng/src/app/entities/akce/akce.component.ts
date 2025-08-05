@@ -53,7 +53,7 @@ export class AkceComponent extends Entity {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    if (this.isChild || (!this.state.isMapaCollapsed && !this.mapDetail)) {
+    if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
     this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {

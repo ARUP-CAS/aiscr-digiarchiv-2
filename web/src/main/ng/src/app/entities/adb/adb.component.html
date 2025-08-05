@@ -113,10 +113,10 @@
         {{ 'card.panelTitle.Související záznamy' | translate }}:
       </mat-panel-title>
     </mat-expansion-panel-header>
-    @for (akce of result.akce; track akce) {
+    @for (akce of result.akce; track akce.ident_cely){
       <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
     }
-    @for (lok of result.lokalita; track lok) {
+    @for (lok of result.lokalita; track lok.ident_cely) {
       <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
     }
   </mat-expansion-panel>
@@ -209,7 +209,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="app-list-inside">
-                @for (vb of result.adb_chranene_udaje.vyskovy_bod; track vb) {
+                @for (vb of result.adb_chranene_udaje.vyskovy_bod; track vb.ident_cely) {
                   <li>
                     <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
                     (<app-inline-filter [field]="'adb_vyskovy_bod_typ'" [value]="vb.typ.id" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
@@ -254,10 +254,10 @@
               {{ 'card.panelTitle.Související záznamy' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
-          @for (akce of result.akce; track akce) {
+          @for (akce of result.akce; track akce.ident_cely) {
             <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
           }
-          @for (lok of result.lokalita; track lok) {
+          @for (lok of result.lokalita; track lok.ident_cely) {
             <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
           }
         </mat-expansion-panel>
