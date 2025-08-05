@@ -1,0 +1,4 @@
+<ng-container *ngIf="result.druh"><app-inline-filter [field]="'f_druh_nalezu'" [value]="result.druh.id" [heslar]="'f_druh_nalezu'"></app-inline-filter></ng-container>
+<ng-container *ngIf="result.kategorie">&#160;(<app-inline-filter [field]="'f_kategorie'" [value]="result.kategorie" [heslar]="'nalez_kategorie'"></app-inline-filter>)</ng-container>
+<ng-container *ngIf="result.specifikace">&#160;–&#160;<app-inline-filter [field]="'f_specifikace'" [value]="result.specifikace.id" [heslar]="'specifikace_objektu_druha'"></app-inline-filter></ng-container>
+<ng-container *ngIf="result.pocet || result.poznamka">&#160;({{ result.pocet }}<ng-container *ngIf="result.poznamka"><ng-container *ngIf="result.pocet">;&#160;</ng-container>{{ result.poznamka }}</ng-container>)</ng-container>

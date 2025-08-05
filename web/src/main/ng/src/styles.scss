@@ -2,7 +2,15 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+
+@use "angular-material-css-vars" as mat-css-vars;
+@use 'scss/app-variables';
 @use 'scss/app-layout';
+@use 'scss/app-flex-layout';
+@use 'scss/app-global';
+@use 'scss/app-mat-override';
+
+@include mat-css-vars.init-material-css-vars(); 
 
 html {
   @include mat.theme((

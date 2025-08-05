@@ -1,0 +1,32 @@
+// --- MIXINS ---
+
+// set icon size
+@mixin setIcon($size: null, $color: null, $position: null) {
+  @if ($size != null) {
+    font-size: #{$size}px;
+    height: #{$size}px;
+    width: #{$size}px;  
+  }
+  @if ($color != null) {
+    color: $color !important;
+  }
+  @if ($position != null) {
+    vertical-align: $position !important;  
+  }  
+}
+
+// set checkbox density
+@mixin setCheckBoxDensity($val: null) {
+  @if ($val != null) {
+    .mat-mdc-checkbox {
+      //--mat-checkbox-state-layer-size: calc(40px - #{$val}px * 2);
+    
+      .mdc-checkbox__background {
+        width: calc(18px - #{$val}px);
+        height: calc(18px - #{$val}px);
+        top: calc((var(--mat-checkbox-state-layer-size, 40px) - calc(18px - #{$val}px)) / 2);
+        left: calc((var(--mat-checkbox-state-layer-size, 40px) - calc(18px - #{$val}px)) / 2);  
+      }
+    }
+  }  
+}
