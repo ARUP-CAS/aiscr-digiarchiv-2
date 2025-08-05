@@ -1,6 +1,7 @@
-import { AppService } from 'src/app/app.service';
+
 import { Component, OnInit, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-free-text',

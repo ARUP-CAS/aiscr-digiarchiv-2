@@ -1,12 +1,24 @@
-import { Crumb } from 'src/app/shared/crumb';
-import { AppService } from 'src/app/app.service';
-import { Router, ActivatedRoute } from '@angular/router';
+
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppState } from 'src/app/app.state';
-import { Sort } from 'src/app/shared/config';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../../app-configuration';
+import { AppService } from '../../../app.service';
+import { AppState } from '../../../app.state';
+import { Crumb } from '../../../shared/crumb';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule, 
+    MatCardModule, MatIconModule, MatTooltipModule, MatListModule,
+    MatButtonModule
+],
   selector: 'app-facets-used',
   templateUrl: './facets-used.component.html',
   styleUrls: ['./facets-used.component.scss']

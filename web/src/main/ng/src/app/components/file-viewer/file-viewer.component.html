@@ -1,31 +1,37 @@
 <h1 mat-dialog-title>
   <div class="app-list-files-wrapper">
-    <ng-container *ngFor="let file of files; let idx = index">
+    @for (file of files; track file; let idx = $index) {
       <a (click)="selectFile(file, idx)" [class.active]="file === selectedFile">{{ file.nazev }}</a>&#160;
-    </ng-container>
+    }
   </div>
-	<a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
+  <a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
 </h1>
 <div mat-dialog-content>
-  <div fxLayout="row" fxLayoutAlign="start baseline" class="app-toolbar-wrapper" *ngIf="selectedFile">
-    <div fxFlex class="app-controls">
-      <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
-      <span class="app-pipe"></span>
-      <mat-form-field>
-        <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()"  />
-      </mat-form-field>
-      {{ 'dialog.citation.stránka z' | translate }} <strong>{{ selectedFile?.rozsah }}</strong>
-      <span *ngIf="currentPage < selectedFile.rozsah" class="app-pipe"></span>
-      <a *ngIf="currentPage < selectedFile.rozsah" (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
+  @if (selectedFile) {
+    <div fxLayout="row" fxLayoutAlign="start baseline" class="app-toolbar-wrapper">
+      <div fxFlex class="app-controls">
+        <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
+        <span class="app-pipe"></span>
+        <mat-form-field>
+          <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()"  />
+        </mat-form-field>
+        {{ 'dialog.citation.stránka z' | translate }} <strong>{{ selectedFile?.rozsah }}</strong>
+        @if (currentPage < selectedFile.rozsah) {
+          <span class="app-pipe"></span>
+        }
+        @if (currentPage < selectedFile.rozsah) {
+          <a (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
+        }
+      </div>
+      <div class="app-metadata">
+        {{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile.size_mb}}MB</strong><span class="app-pipe"></span><!--
+        -->{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong><span class="app-pipe"></span>
+        @if (selectedFile !== null) {
+          <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile.nazev"><mat-icon>get_app</mat-icon></a>
+        }
+      </div>
     </div>
-    <div class="app-metadata">
-      {{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile.size_mb}}MB</strong><span class="app-pipe"></span><!--
-      -->{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong><span class="app-pipe"></span>
-      <ng-container *ngIf="selectedFile !== null">
-        <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile.nazev"><mat-icon>get_app</mat-icon></a>  
-      </ng-container>
-    </div>
-  </div>
+  }
   <mat-card class="app-card-info app-row-gap-16">
     <mat-card-content>
       {{ 'dialog.desc.viewerInfo' | translate }}

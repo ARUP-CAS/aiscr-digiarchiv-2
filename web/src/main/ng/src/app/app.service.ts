@@ -1,19 +1,18 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { map, catchError, finalize } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppState } from 'src/app/app.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Observable, of } from 'rxjs';
-import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
-import { Crumb } from 'src/app/shared/crumb';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
+// import {latLng, latLngBounds} from "leaflet";
+import { AppWindowRef } from './app.window-ref';
+import { AppConfiguration } from './app-configuration';
+import { AppState } from './app.state';
+import { Crumb } from './shared/crumb';
+import { environment } from '../environments/environment';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
-declare var L;
 
 @Injectable({
   providedIn: 'root'
@@ -220,7 +219,7 @@ export class AppService {
     return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }
 
-  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<Object> {
+  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType: any = null): Observable<Object> {
     // const r = re ? re : 'json';
     this.state.hasError = false;
     const options = { params, responseType, withCredentials: true };
@@ -238,9 +237,9 @@ export class AppService {
         }))
         .pipe(finalize(() => this.stopLoading()))
         .pipe(catchError(err => this.handleError(err, this)));
-    }
 
   }
+}
 
   private post(url: string, obj: any) {
     return this.http.post<any>(`api${url}`, obj);
@@ -489,10 +488,10 @@ export class AppService {
       this.state.breadcrumbs.push(new Crumb('vyber', value, this.formatLocation(value)));
       this.state.breadcrumbs.push(new Crumb('separator', '', ''));
 
-      const loc_rpt = value.split(',');
-      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
-      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
-      this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
+      const loc_rpt: any = value.split(',');
+      // const southWest = latLng(loc_rpt[0], loc_rpt[1]);
+      // const northEast = latLng(loc_rpt[2], loc_rpt[3]);
+      // this.state.locationFilterBounds = latLngBounds(southWest, northEast);
 
       // }
     } else {
@@ -605,9 +604,9 @@ export class AppService {
     const idx2 = val.split(',')[1];
     // const v1 = this.config.obdobi[idx1].poradi;
     // const v2 = this.config.obdobi[idx2].poradi;
-    const ob1 = this.config.obdobi.find(o => (o.poradi + '') === (idx1 + ''));
+    const ob1 = this.config.obdobi.find((o: { poradi: string; }) => (o.poradi + '') === (idx1 + ''));
     const d1 = this.getTranslation(ob1.nazev);
-    const ob2 = this.config.obdobi.find(o => (o.poradi + '') === (idx2 + ''));
+    const ob2 = this.config.obdobi.find((o: { poradi: string; }) => (o.poradi + '') === (idx2 + ''));
     const d2 = this.getTranslation(ob2.nazev);
     return this.getTranslation('from') + ' ' + d1 + ' ' + this.getTranslation('to') + ' ' + d2;
   }
@@ -643,8 +642,8 @@ export class AppService {
   }
 
   getBoundsByResults() {
-    const lat = this.state.stats.lat;
-    const lng = this.state.stats.lng;
+    const lat = this.state.stats['lat'];
+    const lng = this.state.stats['lng'];
     if (lat.max === lat.min) {
       lat.min = lat.min - 0.05;
       lat.max = lat.max + 0.05;
@@ -663,7 +662,7 @@ export class AppService {
     let lngMin = 180;
 
     // 50.66795366897923,13.808275906582654
-    result.loc_rpt.forEach(m => {
+    result.loc_rpt.forEach((m: any) => {
       const latlng = m.split(',');
       latMax = Math.max(latMax, latlng[0]);
       latMin = Math.min(latMin, latlng[0]);
@@ -672,12 +671,12 @@ export class AppService {
 
     });
 
-    const southWest = L.latLng(latMin, lngMin);
-    const northEast = L.latLng(latMax, lngMax);
-    return L.latLngBounds(southWest, northEast);
+    // const southWest = latLng(latMin, lngMin);
+    // const northEast = latLng(latMax, lngMax);
+    // return latLngBounds(southWest, northEast);
   }
 
-  setMapResult(result, mapDetail) {
+  setMapResult(result: any, mapDetail: any) {
     if (!result && mapDetail) {
       // zavirame kartu
 

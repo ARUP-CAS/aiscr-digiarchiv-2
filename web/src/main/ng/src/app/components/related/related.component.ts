@@ -1,10 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppService } from 'src/app/app.service';
-import { AppState } from 'src/app/app.state';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { EntityContainer } from "../../entities/entity-container/entity-container";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule,
+    MatCardModule, MatIconModule, ScrollingModule,
+    MatProgressBarModule, MatTooltipModule, MatExpansionModule,
+    EntityContainer, MatButtonModule
+],
   selector: 'app-related',
   templateUrl: './related.component.html',
   styleUrls: ['./related.component.scss']
@@ -68,7 +84,7 @@ export class RelatedComponent implements OnInit {
       const ids: {entity: string, ident_cely: string}[] = this.toProcess.splice(0, entitySize);
 
       this.service.getIdAsChild(ids.map(e => e.ident_cely), entity).subscribe((res: any) => {
-        res.response.docs.forEach(result => {
+        res.response.docs.forEach((result: any) => {
           this.children.push({entity, result})
         });
         this.state.documentProgress = this.children.length / this.numChildren * 100;

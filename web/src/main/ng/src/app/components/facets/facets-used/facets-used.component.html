@@ -7,33 +7,53 @@
       </a>
     </div>
   </h3>
-  <mat-list-item role="listitem" *ngFor="let facet of state.breadcrumbs" >
-  <div  *ngIf="facet.field === 'separator'" class="app-and-separator">
-  <span>-- AND --</span>
-  </div>
-  <div  *ngIf="facet.field === 'cf'" >
-    <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeCommonFacet(facet.display)">
-      <mat-icon>close</mat-icon>{{ 'commonFacets.' + facet.display | translate}}
-    </a>
-  </div>
-  <div *ngIf="facet.field !== 'separator' && facet.field !== 'cf'" class="app-display-table">
-    <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
-      <mat-icon>close</mat-icon>
-    </a>
-    <span class="app-facet-name">
-      <span *ngIf="facet.operator && facet.operator !== 'or'" [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">
-        <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>
-      </span>
-      <ng-container *ngIf="facet.field !== 'q'">{{ 'facet.field.' + facet.field | translate}}:&#160;</ng-container>
-      <span *ngIf="facet.display" class="app-font-bold">{{ facet.display }}</span> 
-      <span *ngIf="facet.field === 'az_dj_negativni_jednotka'" class="app-font-bold">
-        {{ facet.value === '1' ? ('negativní' | translate) : ('pozitivní' | translate) }}
-      </span>
-      <span *ngIf="facet.field === 'dokument_cast_komponenta_dokument_jistota'" class="app-font-bold">
-        {{ facet.value === '1' ? ('Ano' | translate) : ('Ne' | translate) }}
-      </span>
-      <span *ngIf="!facet.display && facet.field !== 'az_dj_negativni_jednotka' && facet.field !== 'dokument_cast_komponenta_dokument_jistota'" class="app-font-bold">{{ facet.value | translateHeslar : facet.field}}</span> 
-    </span> 
-  </div>
-  </mat-list-item>
+  @for (facet of state.breadcrumbs; track facet) {
+    <mat-list-item role="listitem" >
+      @if (facet.field === 'separator') {
+        <div  class="app-and-separator">
+          <span>-- AND --</span>
+        </div>
+      }
+      @if (facet.field === 'cf') {
+        <div  >
+          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeCommonFacet(facet.display)">
+            <mat-icon>close</mat-icon>{{ 'commonFacets.' + facet.display | translate}}
+          </a>
+        </div>
+      }
+      @if (facet.field !== 'separator' && facet.field !== 'cf') {
+        <div class="app-display-table">
+          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
+            <mat-icon>close</mat-icon>
+          </a>
+          <span class="app-facet-name">
+            @if (facet.operator && facet.operator !== 'or') {
+              <span [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">
+                <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>
+              </span>
+            }
+            @if (facet.field !== 'q') {
+              {{ 'facet.field.' + facet.field | translate}}:&#160;
+            }
+            @if (facet.display) {
+              <span class="app-font-bold">{{ facet.display }}</span>
+            }
+            @if (facet.field === 'az_dj_negativni_jednotka') {
+              <span class="app-font-bold">
+                {{ facet.value === '1' ? ('negativní' | translate) : ('pozitivní' | translate) }}
+              </span>
+            }
+            @if (facet.field === 'dokument_cast_komponenta_dokument_jistota') {
+              <span class="app-font-bold">
+                {{ facet.value === '1' ? ('Ano' | translate) : ('Ne' | translate) }}
+              </span>
+            }
+            @if (!facet.display && facet.field !== 'az_dj_negativni_jednotka' && facet.field !== 'dokument_cast_komponenta_dokument_jistota') {
+              <span class="app-font-bold">{{ facet.value | translate}}</span>
+            }
+          </span>
+        </div>
+      }
+    </mat-list-item>
+  }
 </mat-list>

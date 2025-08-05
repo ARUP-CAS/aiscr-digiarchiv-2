@@ -1,204 +1,275 @@
-<div class="app-display-table app-loading" *ngIf="state.loading" style="position: absolute; z-index:1000;">
-  <div class="app-table-cell app-clean-pd" >
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+@if (state.loading) {
+  <div class="app-display-table app-loading" style="position: absolute; z-index:1000;">
+    <div class="app-table-cell app-clean-pd">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    @if (state.documentProgress && state.isMapaCollapsed) {
+      <div class="app-loading-progress">{{ state.documentProgress |
+      number : '1.0-0' }}%</div>
+    }
   </div>
-  <div *ngIf="state.documentProgress && state.isMapaCollapsed" class="app-loading-progress">{{ state.documentProgress | number : '1.0-0' }}%</div>
-</div>
+}
 
-<div fxLayout="row" fxLayoutAlign="start center" class="app-mobile-action-toolbar app-pl-4 app-pr-4" [class.app-mb-4]="state.numFound === 0 && state.isFacetsCollapsed">
+<div fxLayout="row" fxLayoutAlign="start center" class="app-mobile-action-toolbar app-pl-4 app-pr-4"
+  [class.app-mb-4]="state.numFound === 0 && state.isFacetsCollapsed">
   <a (click)="setFacetsOpened()" fxFlex class="app-d-inline-flex">
     <mat-icon>{{ state.isFacetsCollapsed ? 'filter_alt' : 'filter_alt_off' }}</mat-icon>
   </a>
   <div class="app-d-inline-flex">
-    <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate" class="app-d-inline-flex">
-      <mat-icon [ngSwitch]="state.itemView">
-        <ng-container *ngSwitchCase="'row'">reorder</ng-container>
-        <ng-container *ngSwitchCase="'col'">apps</ng-container>
-        <ng-container *ngSwitchDefault>tv</ng-container>
+    <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate"
+      class="app-d-inline-flex">
+      <mat-icon>
+        @switch (state.itemView) {
+          @case ('row') {
+            reorder
+          }
+          @case ('col') {
+            apps
+          }
+          @default {
+            tv
+          }
+        }
       </mat-icon>
-    </a><span class="app-pipe"></span>
-    <mat-menu #menuView="matMenu">
-      <button mat-menu-item (click)="setItemView('row')">
-        <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
-      </button>
-      <button mat-menu-item (click)="setItemView('col')">
-        <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
-      </button>
-      <button mat-menu-item (click)="setItemView('default')">
-        <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
-      </button>
-    </mat-menu>
-    <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank" class="app-d-inline-flex">
-      <mat-icon>get_app</mat-icon>
-    </a>
-    <span class="app-pipe"></span>
-    <a  *ngIf="state.logged" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
-      <mat-icon>grade</mat-icon>
-    </a>
-  </div>
-</div>
-
-<div #leftElement class="app-display-table app-container" *ngIf="!loading || !state.isMapaCollapsed">
-  <ng-container *ngIf="state.isMapaCollapsed">
-    <div class="app-table-cell app-left" [class.app-facets-opened]="!state.isFacetsCollapsed">
-      <div fxLayout="row" fxFlexFill>
-        <div fxFlex class="app-facets">
-          <div *ngIf="state.facetsLoading" class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
-          <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
-          <app-facets></app-facets>
-        </div>
-      </div>
-    </div>
-    <div class="app-table-cell app-right" [class.app-results-opened]="state.isFacetsCollapsed">
-      <mat-card *ngIf="state.hasError" class="app-card-info">
-        <mat-card-content>
-          {{ 'dialog.alert.search_error' | translate }}&#160;
-          <!-- <br />
-          {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }} -->
-        </mat-card-content>
-      </mat-card>
-      <ng-container  *ngIf="!state.hasError">
-      <mat-card *ngIf="state.numFound === 0" class="app-card-info">
-        <mat-card-content>
-          <strong>{{ state.numFound }}</strong>
-          {{ 'card.citation.nalezených výsledků v entitě' | translate }}&#160;
-          <span class="app-info-badge" [ngClass]="'app-entity-' + state.entity">
-            <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity] }}</mat-icon><strong>{{ 'entities.' + state.entity + '.title' | translate }}</strong>
-          </span><br />
-          {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }}<ng-container *ngIf="hasResultsInOther || inFav">,</ng-container>
-          <ng-container *ngIf="hasResultsInOther">
-            {{ 'card.citation.nebo se přepněte do jiné entity, kde jsme nalezli výsledky' | translate }}:
-            <p></p>
-            <ng-container *ngFor="let entity of config.entities">
-              <div *ngIf="state.totals[entity] > 0" class="app-info-badge app-cursor-pointer" [ngClass]="'app-entity-' + entity" (click)="setEntity(entity)">
-                  <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
-                  <strong>{{ 'entities.' + entity + '.title' | translate }}</strong>
-                  &#160;<span *ngIf="state.totals">({{ state.totals[entity] }})</span>   
-              </div>
-            </ng-container>
-          </ng-container>
-          <ng-container *ngIf="inFav">
-            {{ 'nebo' | translate }} {{ 'card.citation.zrušit volbu' | translate }} "{{ 'card.desc.Favorites' | translate }}".
-            <a  *ngIf="state.inFavorites" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'card.tooltip.Favorites' | translate">
-              <mat-icon>grade</mat-icon>
-            </a>
-          </ng-container> 
-        </mat-card-content>
-      </mat-card>
-      <div *ngIf="state.numFound > 0" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center" class="app-toolbar">
-        <div fxFlex="0 0 150px" class="app-action-links">
-          <!-- <a (click)="showChartBar()"
-          [matTooltip]="isChartBarCollapsed ? ('toolbar.tooltip.Zobrazit časovou osu' | translate) : ('toolbar.tooltip.Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
-          <span class="app-pipe"></span> -->
-          <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate">
-            <mat-icon [ngSwitch]="state.itemView">
-              <ng-container *ngSwitchCase="'row'">reorder</ng-container>
-              <ng-container *ngSwitchCase="'col'">apps</ng-container>
-              <ng-container *ngSwitchDefault>tv</ng-container>
-            </mat-icon>
-          </a><span class="app-pipe"></span>
-          <mat-menu #menuView="matMenu">
-            <button mat-menu-item (click)="setItemView('row')">
-              <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
-            </button>
-            <button mat-menu-item (click)="setItemView('col')">
-              <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
-            </button>
-            <button mat-menu-item (click)="setItemView('default')">
-              <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
-            </button>
-          </mat-menu>
-          <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank"><mat-icon>get_app</mat-icon></a>
-          <span class="app-pipe"></span>
-          <a  *ngIf="state.logged" (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'toolbar.tooltip.Favorites' | translate">
-            <mat-icon>grade</mat-icon>
-          </a>
-        </div>
-        <div fxFlex="0 0 calc(100% - 166px)" class="app-paginator">
-          <app-paginator></app-paginator>
-        </div>
-      </div>
-      <div *ngIf="state.numFound > 0" fxLayout="row" [class]="'app-view-' + state.itemView">
-        <div fxFlex>
-          <ng-container *ngFor="let result of docs">
-            <ng-container [ngSwitch]="state.entity">
-              <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-              <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
-              <!-- <app-knihovna3d *ngSwitchCase="'knihovna_3d'" [result]="result"></app-knihovna3d> -->
-              <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
-              <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
-              <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
-              <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
-            </ng-container>
-          </ng-container>
-        </div>
-      </div>
-      <div *ngIf="state.numFound > 0" fxLayout="row">
-        <div fxFlex>
-          <app-paginator></app-paginator>
-        </div>
-      </div>
-      </ng-container>
-    </div> 
-  </ng-container>
-  <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
-    <mat-sidenav-container class="app-sidenav-container">
-      <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="overflow-x: hidden;"><!--[(opened)]="opened"-->
-        <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
-          <mat-icon>last_page</mat-icon>
+      </a><span class="app-pipe"></span>
+      <mat-menu #menuView="matMenu">
+        <button mat-menu-item (click)="setItemView('row')">
+          <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
         </button>
-        <div style="padding: 15px;">{{ 'sidenav.tab.Info' | translate }}</div>
-        <mat-tab-group [selectedIndex]="1">
-          <mat-tab [label]="'sidenav.tab.Filtry' | translate">
-            <div class="app-facets">
-              <app-facets-used *ngIf="isActiveFacet()"></app-facets-used>
+        <button mat-menu-item (click)="setItemView('col')">
+          <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
+        </button>
+        <button mat-menu-item (click)="setItemView('default')">
+          <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
+        </button>
+      </mat-menu>
+      <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank" class="app-d-inline-flex">
+        <mat-icon>get_app</mat-icon>
+      </a>
+      <span class="app-pipe"></span>
+      @if (state.logged) {
+        <a (click)="toggleFavorites()" [class.app-color-fav]="inFav"
+          [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
+          <mat-icon>grade</mat-icon>
+        </a>
+      }
+    </div>
+  </div>
+
+  @if (!loading || !state.isMapaCollapsed) {
+    <div #leftElement class="app-display-table app-container">
+      @if (state.isMapaCollapsed) {
+        <div class="app-table-cell app-left" [class.app-facets-opened]="!state.isFacetsCollapsed">
+          <div fxLayout="row" fxFlexFill>
+            <div fxFlex class="app-facets">
+              @if (state.facetsLoading) {
+                <div class="app-display-table app-loading"><mat-progress-bar
+                mode="indeterminate"></mat-progress-bar></div>
+              }
+              @if (isActiveFacet()) {
+                <app-facets-used></app-facets-used>
+              }
               <app-facets></app-facets>
             </div>
-          </mat-tab>
-          <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
-            <div *ngIf="!state.isMapaCollapsed && state.numFound > config.mapOptions.docsForMarker">
-              <mat-card class="app-result-item app-row-gap-16">
-                {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
-              </mat-card>
-            </div>
-            <ng-container *ngIf="state.isMapaCollapsed || (state.solrResponse && state.numFound <= config.mapOptions.docsForMarker)">
-              <app-paginator></app-paginator>
-              <cdk-virtual-scroll-viewport *ngIf="state.isMapaCollapsed && vsSize > 0" [itemSize]="itemSize" [style.height.px]="vsSize" 
-              [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
-                <ng-container *cdkVirtualFor="let result of state.solrResponse.response.docs">
-                  <ng-container [ngSwitch]="state.entity">
-                    <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-                    <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
-                    <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
-                    <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
-                    <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
-                    <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
-                  </ng-container>
-                </ng-container>
-              </cdk-virtual-scroll-viewport>
-              <div *ngIf="!state.isMapaCollapsed && state.solrResponse?.response">
-                  <ng-container *ngFor="let result of state.solrResponse.response.docs">
-                    <ng-container [ngSwitch]="state.entity">
-                      <app-dokument *ngSwitchCase="'dokument'" [result]="result"></app-dokument>
-                      <app-dokument *ngSwitchCase="'knihovna_3d'" [result]="result"></app-dokument>
-                      <app-samostatny-nalez *ngSwitchCase="'samostatny_nalez'" [result]="result" ></app-samostatny-nalez>
-                      <app-projekt *ngSwitchCase="'projekt'" [result]="result"></app-projekt>
-                      <app-akce *ngSwitchCase="'akce'" [result]="result"></app-akce>
-                      <app-lokalita *ngSwitchCase="'lokalita'" [result]="result"></app-lokalita>
-                    </ng-container>
-                  </ng-container>
+          </div>
+        </div>
+        <div class="app-table-cell app-right" [class.app-results-opened]="state.isFacetsCollapsed">
+          @if (state.hasError) {
+            <mat-card class="app-card-info">
+              <mat-card-content>
+                {{ 'dialog.alert.search_error' | translate }}&#160;
+                <!-- <br />
+                {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }} -->
+              </mat-card-content>
+            </mat-card>
+          }
+          @if (!state.hasError) {
+            @if (state.numFound === 0) {
+              <mat-card class="app-card-info">
+                <mat-card-content>
+                  <strong>{{ state.numFound }}</strong>
+                  {{ 'card.citation.nalezených výsledků v entitě' | translate }}&#160;
+                  <span class="app-info-badge" [ngClass]="'app-entity-' + state.entity">
+                    <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity]
+                      }}</mat-icon><strong>{{ 'entities.' + state.entity + '.title' | translate }}</strong>
+                    </span><br />
+                    {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }}@if (hasResultsInOther || inFav) {
+                    ,
+                  }
+                  @if (hasResultsInOther) {
+                    {{ 'card.citation.nebo se přepněte do jiné entity, kde jsme nalezli výsledky' | translate }}:
+                    <p></p>
+                    @for (entity of config.entities; track entity) {
+                      @if (state.totals[entity] > 0) {
+                        <div class="app-info-badge app-cursor-pointer"
+                          [ngClass]="'app-entity-' + entity" (click)="setEntity(entity)">
+                          <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
+                          <strong>{{ 'entities.' + entity + '.title' | translate }}</strong>
+                          &#160;@if (state.totals) {
+                          <span>({{ state.totals[entity] }})</span>
+                        }
+                      </div>
+                    }
+                  }
+                }
+                @if (inFav) {
+                  {{ 'nebo' | translate }} {{ 'card.citation.zrušit volbu' | translate }} "{{ 'card.desc.Favorites' |
+                  translate }}".
+                  @if (state.inFavorites) {
+                    <a (click)="toggleFavorites()" [class.app-color-fav]="inFav"
+                      [matTooltip]="'card.tooltip.Favorites' | translate">
+                      <mat-icon>grade</mat-icon>
+                    </a>
+                  }
+                }
+              </mat-card-content>
+            </mat-card>
+          }
+          @if (state.numFound > 0) {
+            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center"
+              class="app-toolbar">
+              <div fxFlex="0 0 150px" class="app-action-links">
+                <!-- <a (click)="showChartBar()"
+                [matTooltip]="isChartBarCollapsed ? ('toolbar.tooltip.Zobrazit časovou osu' | translate) : ('toolbar.tooltip.Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
+                <span class="app-pipe"></span> -->
+                <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate">
+                  <mat-icon>
+                    @switch (state.itemView) {
+                      @case ('row') {
+                        reorder
+                      }
+                      @case ('col') {
+                        apps
+                      }
+                      @default {
+                        tv
+                      }
+                    }
+                  </mat-icon>
+                  </a><span class="app-pipe"></span>
+                  <mat-menu #menuView="matMenu">
+                    <button mat-menu-item (click)="setItemView('row')">
+                      <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
+                    </button>
+                    <button mat-menu-item (click)="setItemView('col')">
+                      <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
+                    </button>
+                    <button mat-menu-item (click)="setItemView('default')">
+                      <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
+                    </button>
+                  </mat-menu>
+                  <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate"
+                    target="_blank"><mat-icon>get_app</mat-icon></a>
+                    <span class="app-pipe"></span>
+                    @if (state.logged) {
+                      <a (click)="toggleFavorites()" [class.app-color-fav]="inFav"
+                        [matTooltip]="'toolbar.tooltip.Favorites' | translate">
+                        <mat-icon>grade</mat-icon>
+                      </a>
+                    }
+                  </div>
+                  <div fxFlex="0 0 calc(100% - 166px)" class="app-paginator">
+                    <app-paginator></app-paginator>
+                  </div>
                 </div>
-            </ng-container>
-          </mat-tab>
-        </mat-tab-group>
-      </mat-sidenav>
-    
-      <mat-sidenav-content style="margin-left: 0 !important;">
-        <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
-          <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
-        </button>
-        <app-mapa [showResults]="opened" (loadingFinished)="loadingFinished()"></app-mapa>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+              }
+              @if (state.numFound > 0) {
+                <div fxLayout="row" [class]="'app-view-' + state.itemView">
+                  <div fxFlex>
+                    @for (result of docs; track result) {
+                      @switch(state.entity) {
+                        @case ('dokument') { <app-dokument [result]="result"></app-dokument> }
+                        @case ('knihovna_3d') { <app-dokument [result]="result"></app-dokument> }
+                        <!-- @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
+                        @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
+                        @case ('akce') { <app-akce [result]="result"></app-akce> }
+                        @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> } -->
+                      }
+                    }
+                  </div>
+                </div>
+              }
+              @if (state.numFound > 0) {
+                <div fxLayout="row">
+                  <div fxFlex>
+                    <app-paginator></app-paginator>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        }
+        @if (!state.isMapaCollapsed) {
+          <div class="app-table-cell">
+            <mat-sidenav-container class="app-sidenav-container">
+              <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="overflow-x: hidden;"><!--[(opened)]="opened"-->
+                <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn"
+                  [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
+                  <mat-icon>last_page</mat-icon>
+                </button>
+                <div style="padding: 15px;">{{ 'sidenav.tab.Info' | translate }}</div>
+                <mat-tab-group [selectedIndex]="1">
+                  <mat-tab [label]="'sidenav.tab.Filtry' | translate">
+                    <div class="app-facets">
+                      @if (isActiveFacet()) {
+                        <app-facets-used></app-facets-used>
+                      }
+                      <app-facets></app-facets>
+                    </div>
+                  </mat-tab>
+                  <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
+                    @if (!state.isMapaCollapsed && state.numFound > config.mapOptions.docsForMarker) {
+                      <div>
+                        <mat-card class="app-result-item app-row-gap-16">
+                          {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
+                        </mat-card>
+                      </div>
+                    }
+                    @if (state.isMapaCollapsed || (state.solrResponse && state.numFound <= config.mapOptions.docsForMarker)) {
+                      <app-paginator></app-paginator>
+                      @if (state.isMapaCollapsed && vsSize > 0) {
+                        <cdk-virtual-scroll-viewport [itemSize]="itemSize"
+                          [style.height.px]="vsSize" [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)"
+                          [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
+                          <ng-container *cdkVirtualFor="let result of state.solrResponse.response.docs">
+                            @switch(state.entity) {
+                              @case ('dokument') { <app-dokument [result]="result"></app-dokument> }
+                              @case ('knihovna_3d') { <app-dokument [result]="result"></app-dokument> }
+                              <!-- @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
+                              @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
+                              @case ('akce') { <app-akce [result]="result"></app-akce> }
+                              @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> } -->
+                            }
+                          </ng-container>
+                        </cdk-virtual-scroll-viewport>
+                      }
+                      @if (!state.isMapaCollapsed && state.solrResponse?.response) {
+                        <div>
+                          @for (result of state.solrResponse.response.docs; track result) {
+                            this._resul@switch(state.entity) {
+                            @case ('dokument') { <app-dokument [result]="result"></app-dokument> }
+                            @case ('knihovna_3d') { <app-dokument [result]="result"></app-dokument> }
+                            <!-- @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
+                            @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
+                            @case ('akce') { <app-akce [result]="result"></app-akce> }
+                            @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> } -->
+                          }
+                        }
+                      </div>
+                    }
+                  }
+                </mat-tab>
+              </mat-tab-group>
+            </mat-sidenav>
+            <mat-sidenav-content style="margin-left: 0 !important;">
+              <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
+                <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate
+              }}</span>
+            </button>
+            <!-- <app-mapa [showResults]="opened" (loadingFinished)="loadingFinished()"></app-mapa> -->
+          </mat-sidenav-content>
+        </mat-sidenav-container>
+      </div>
+    }
   </div>
-</div>
+}

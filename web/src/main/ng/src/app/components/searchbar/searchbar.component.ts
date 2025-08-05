@@ -1,14 +1,37 @@
-import { AppConfiguration } from 'src/app/app-configuration';
-import { Condition } from 'src/app/shared/condition';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AppState } from 'src/app/app.state';
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
-import { AppService } from 'src/app/app.service';
-import { AppWindowRef } from 'src/app/app.window-ref';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { AppWindowRef } from '../../app.window-ref';
+import { Condition } from '../../shared/condition';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatMenuModule} from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
 
 @Component({
+  imports: [
+    TranslateModule,
+    FormsModule,
+    MatIconModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatMenuModule,
+    MatButtonModule
+],
   selector: 'app-searchbar',
   templateUrl: './searchbar.component.html',
   styleUrls: ['./searchbar.component.scss']
@@ -103,8 +126,8 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
           this.state.locationFilterBounds.getNorthEast().lat + ',' +
           this.state.locationFilterBounds.getNorthEast().lng;
       } else {
-        const lat = this.state.stats.lat;
-        const lng = this.state.stats.lng;
+        const lat = this.state.stats['lat'];
+        const lng = this.state.stats['lng'];
         // if (lat.max === lat.min) {
         //   lat.min = lat.min - 0.05;
         //   lat.max = lat.max + 0.05;

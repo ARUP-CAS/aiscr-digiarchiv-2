@@ -1,13 +1,21 @@
 import { Component, OnInit, Output, EventEmitter, ViewContainerRef, Inject, TemplateRef } from '@angular/core';
-import { AppService } from 'src/app/app.service';
-import { AppState } from 'src/app/app.state';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { DOCUMENT } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
+  imports: [
+    TranslateModule,
+    MatIconModule,
+    MatListModule
+],
   selector: 'app-sidenav-list',
   templateUrl: './sidenav-list.component.html',
   styleUrls: ['./sidenav-list.component.scss']
@@ -56,10 +64,6 @@ export class SidenavListComponent implements OnInit {
   logoClicked() {
     this.state.isMapaCollapsed = true;
     this.document.body.classList.remove('app-view-map');
-  }
-
-  focusp(e, el) {
-    el.focus();
   }
 
   showLogin() {

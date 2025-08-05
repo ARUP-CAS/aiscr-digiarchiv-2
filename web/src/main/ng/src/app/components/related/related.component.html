@@ -1,30 +1,37 @@
-<mat-expansion-panel *ngIf="numChildren > 0" [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
-    <mat-expansion-panel-header [expandedHeight]="config.uiVars.panelHeightInCard" [collapsedHeight]="config.uiVars.panelHeightInCard">
+@if (numChildren > 0) {
+  <mat-expansion-panel [expanded]="true" class="app-panel-souvisejici-zaznamy virtual">
+    <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
       <mat-panel-title>
         {{ 'card.panelTitle.Související záznamy' | translate }}: {{ numChildren }}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    
-    <cdk-virtual-scroll-viewport *ngIf="!state.printing" [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'" 
-      [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
-      <div *ngFor="let child of children; let idx = index">
-        <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
-        <app-lokalita *ngIf="child.entity === 'lokalita'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
-        <app-dokument *ngIf="child.entity === 'dokument'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
-        <app-projekt *ngIf="child.entity === 'projekt'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-        <app-samostatny-nalez *ngIf="child.entity === 'samostatny_nalez'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-samostatny-nalez>
-      </div>
-      <button mat-button color="primary" fxFlexFill fxLayoutAlign="center center" *ngIf="toProcess?.length > 0" (click)="loadAll()">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
-    </cdk-virtual-scroll-viewport>
-    
-    <ng-container *ngIf="state.printing" >
-        <ng-container *ngFor="let child of children">
-            <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+    @if (!state.printing) {
+      <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'"
+        [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
+        @for (child of children; track child; let idx = $index) {
+          <div>
+            <app-entity-container [entity]="child.entity" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-entity-container>
+            <!-- <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-lokalita *ngIf="child.entity === 'lokalita'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
             <app-dokument *ngIf="child.entity === 'dokument'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
             <app-projekt *ngIf="child.entity === 'projekt'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-            <app-samostatny-nalez *ngIf="child.entity === 'samostatny_nalez'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-samostatny-nalez>
-        </ng-container>
-    </ng-container>
-    
+            <app-samostatny-nalez *ngIf="child.entity === 'samostatny_nalez'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-samostatny-nalez> -->
+          </div>
+        }
+        @if (toProcess?.length > 0) {
+          <button mat-button color="primary" fxFlexFill fxLayoutAlign="center center" (click)="loadAll()">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
+        }
+      </cdk-virtual-scroll-viewport>
+    }
+    @if (state.printing) {
+      @for (child of children; track child) {
+        <app-entity-container [entity]="child.entity" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-entity-container>
+        <!-- <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
+        <app-lokalita *ngIf="child.entity === 'lokalita'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
+        <app-dokument *ngIf="child.entity === 'dokument'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
+        <app-projekt *ngIf="child.entity === 'projekt'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
+        <app-samostatny-nalez *ngIf="child.entity === 'samostatny_nalez'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-samostatny-nalez> -->
+      }
+    }
   </mat-expansion-panel>
+}

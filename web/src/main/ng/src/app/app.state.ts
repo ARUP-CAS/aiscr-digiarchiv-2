@@ -1,15 +1,14 @@
 
-import { AppConfiguration } from 'src/app/app-configuration';
-import { SolrResponse } from 'src/app/shared/solr-response';
 
-import { Observable, Subject, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { Params, ParamMap } from '@angular/router';
-import { NavigationExtras } from '@angular/router';
-import { Configuration, Sort } from './shared/config';
-import { User } from 'src/app/shared/user';
-import { Crumb } from 'src/app/shared/crumb';
-import { Condition } from 'src/app/shared/condition';
+import { Sort } from './shared/config';
 import { MatDialogRef } from '@angular/material/dialog';
+import { AppConfiguration } from './app-configuration';
+import { Condition } from './shared/condition';
+import { Crumb } from './shared/crumb';
+import { SolrResponse } from './shared/solr-response';
+import { User } from './shared/user';
 
 export class AppState {
 
@@ -79,7 +78,7 @@ export class AppState {
 
   totals: { [entity: string]: number } = {};
 
-  facetRanges;
+  facetRanges: unknown;
   currentObdobiOd: number;
   currentObdobiDo: number;
 
@@ -95,7 +94,7 @@ export class AppState {
     }[]
   }[] = [];
 
-  heatMaps;
+  heatMaps:any;
 
   q: string;
   rows: number;
@@ -141,12 +140,12 @@ export class AppState {
       this.stats[k].from = this.stats[k].min;
       this.stats[k].until = this.stats[k].max;
     });
-    this.stats.datum_provedeni = {
-      min: this.stats.datum_provedeni_od.min,
-      max: this.stats.datum_provedeni_do.max,
-      count: this.stats.datum_provedeni_od.count,
-      from: this.stats.datum_provedeni_od.min,
-      until: this.stats.datum_provedeni_do.max
+    this.stats['datum_provedeni'] = {
+      min: this.stats['datum_provedeni_od'].min,
+      max: this.stats['datum_provedeni_do'].max,
+      count: this.stats['datum_provedeni_od'].count,
+      from: this.stats['datum_provedeni_od'].min,
+      until: this.stats['datum_provedeni_do'].max
     };
 
     if (resp.facet_counts) {
@@ -163,7 +162,7 @@ export class AppState {
     }
   }
 
-  setFacets(resp) {
+  setFacets(resp: any) {
     if (this.page !== 0 && this.heatMaps?.loc_rpt) {
       return;
     }
@@ -229,14 +228,14 @@ export class AppState {
         const field = f.split(',')[0];
         switch (field) {
           case 'dokument_kategorie_dokumentu':
-            const fp = { field, values: [], count: -1 };
+            const fp: any = { field: field, values: [], count: -1 };
             pivots[f].forEach(f1 => {
               fp.values.push(f1);
             });
             this.facetPivots.push(fp);
             break;
           default:
-            const facetPivoted = {};
+            const facetPivoted: any = {};
             pivots[f].forEach(f1 => {
               if (this.getUserPristupnost().localeCompare(f1.value) > -1) {
                 f1.pivot.forEach(f2 => {
@@ -249,7 +248,7 @@ export class AppState {
               }
             });
             const fpKeys = Object.keys(facetPivoted);
-            const values = [];
+            const values: any = [];
             fpKeys.forEach(k => {
               values.push(facetPivoted[k]);
             });
@@ -261,7 +260,7 @@ export class AppState {
 
   }
 
-  setRouteChanged(val) {
+  setRouteChanged(val: any) {
     this.routeSubject.next(val);
   }
 
@@ -323,7 +322,7 @@ export class AppState {
     }
   }
 
-  setMapResult(result, mapDetail) {
+  setMapResult(result: any, mapDetail: any) {
     const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
     this.mapResult = result;
     // if (!result && !this.isMapaCollapsed) {
@@ -338,7 +337,7 @@ export class AppState {
     }
   }
 
-  changeMapView(sidenav) {
+  changeMapView(sidenav: any) {
     sidenav.toggle();
     this.mapViewSubject.next('');
   }

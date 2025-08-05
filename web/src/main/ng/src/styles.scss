@@ -1,13 +1,20 @@
-// --- ROOT SCSS ---
-@import "sass/app-theme-default";
-@import "sass/app-variables";
-@import "sass/app-mixins";
-@import "sass/app-gaps";
-@import "sass/app-global";
-@import "sass/app-mat-override";
-@import "sass/app-layout";
-@import "sass/app-adv-search";
-@import "sass/app-file-viewer";
-@import "sass/app-login-dialog";
-@import "sass/app-document-dialog";
-@import "sass/app-print";
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@use 'scss/app-layout';
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$blue-palette,
+      tertiary: mat.$red-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; font-size: 14px; }

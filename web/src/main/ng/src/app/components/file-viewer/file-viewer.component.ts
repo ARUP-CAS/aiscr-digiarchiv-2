@@ -1,16 +1,44 @@
-import { AppState } from 'src/app/app.state';
-import { AppWindowRef } from 'src/app/app.window-ref';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppService } from 'src/app/app.service';
 import { Component, OnInit, Inject, ViewChild, PLATFORM_ID } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { SolrDocument } from 'src/app/shared/solr-document';
-import { File } from 'src/app/shared/file';
-import { NguCarousel, NguCarouselConfig } from '@ngu/carousel';
-import { LicenseDialogComponent } from '../license-dialog/license-dialog.component';
+//import { NguCarousel, NguCarouselConfig } from '@ngu/carousel';
 import { isPlatformBrowser } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { AppWindowRef } from '../../app.window-ref';
+import { SolrDocument } from '../../shared/solr-document';
+import { File } from '../../shared/file';
+import {
+  NguCarousel, 
+  NguCarouselConfig, 
+  NguCarouselDefDirective,
+  NguCarouselNextDirective,
+  NguCarouselPrevDirective,
+  NguItemComponent
+} from '@ngu/carousel';
+import { LicenseDialogComponent } from '../license-dialog/license-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule, FormsModule,
+    MatCardModule, MatIconModule,  MatButtonModule,
+    MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
+    NguCarousel,
+    NguCarousel,
+    NguCarouselDefDirective
+  ],
   selector: 'app-file-viewer',
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss']
@@ -57,7 +85,7 @@ export class FileViewerComponent implements OnInit {
 
   ngOnInit(): void {
     this.setData();
-    this.service.logViewer(this.data.ident_cely, this.data.entity).subscribe(() => {});
+    this.service.logViewer(this.data.ident_cely, this.data['entity']).subscribe(() => {});
   }
 
   selectFile(file: File, idx: number) {
@@ -72,7 +100,7 @@ export class FileViewerComponent implements OnInit {
     }, 10);
   }
 
-  public carouselItemsLoad(j) {
+  public carouselItemsLoad(j: number) {
     this.carouselItems = [];
     const len = this.selectedFile.pages.length;
     const max = Math.min(len, this.currentPage + 4 );
@@ -165,7 +193,9 @@ export class FileViewerComponent implements OnInit {
       // this.rolling = false;
       // const fs: any[] = JSON.parse(this.data.soubor);
 
-      this.data.soubor.forEach(f => {
+      // this.rolling = false;
+      // const fs: any[] = JSON.parse(this.data.soubor);
+      this.data['soubor'].forEach((f: any) => {
         const file = new File();
         file.id = f.id;
         file.nazev = f.nazev;

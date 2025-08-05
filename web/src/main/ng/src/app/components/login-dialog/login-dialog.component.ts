@@ -1,11 +1,29 @@
+
 import { Component, OnInit, Inject } from '@angular/core';
-import { AppState } from 'src/app/app.state';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppService } from 'src/app/app.service';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { FormsModule } from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  imports: [
+    TranslateModule,
+    FormsModule,
+    MatIconModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatButtonModule
+],
   selector: 'app-login-dialog',
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.scss']
@@ -72,7 +90,7 @@ export class LoginDialogComponent implements OnInit {
     alert('TODO');
   }
 
-  focusp(e, el) {
+  focusp(el: HTMLInputElement) {
     el.focus();
   }
 

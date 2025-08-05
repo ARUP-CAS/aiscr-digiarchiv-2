@@ -1,0 +1,21 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav role="navigation">
+    <mat-nav-list>
+      <app-sidenav-list (sidenavClose)="sidenav.close()"></app-sidenav-list>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content id="content-scroller">
+    @if (!isExport) {
+      <header>
+        <app-navbar (sidenavToggle)="sidenav.toggle()"></app-navbar>
+        @if(!isStats) { <app-searchbar></app-searchbar> }
+      </header>
+    }
+    <main>
+      <router-outlet /> 
+    </main>
+    @if(!isExport) { 
+      <app-footer></app-footer>
+    }
+  </mat-sidenav-content>
+</mat-sidenav-container>

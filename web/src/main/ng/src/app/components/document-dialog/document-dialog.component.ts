@@ -1,8 +1,20 @@
+
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppService } from 'src/app/app.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppService } from '../../app.service';
 
 @Component({
+  imports: [
+    TranslateModule,
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule
+],
   selector: 'app-document-dialog',
   templateUrl: './document-dialog.component.html',
   styleUrls: ['./document-dialog.component.scss']

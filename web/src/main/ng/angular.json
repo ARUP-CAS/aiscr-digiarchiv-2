@@ -15,23 +15,24 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/ng/browser",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
+            "allowedCommonJsDependencies": [
+              "leaflet"
             ],
+            "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
               "src/assets",
               {
                 "glob": "**/*",
                 "input": "./node_modules/leaflet/dist/images",
                 "output": "assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "public"
               }
             ],
             "styles": [
@@ -40,137 +41,69 @@
               "./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
               "src/styles.scss"
             ],
-            "scripts": [
-              "./node_modules/leaflet/dist/leaflet.js",
-              "./node_modules/heatmap.js/build/heatmap.js",
-              "./node_modules/leaflet-heatmap/leaflet-heatmap.js",
-              "./node_modules/leaflet.polylinemeasure/Leaflet.PolylineMeasure.js",
-              "./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"
-            ]
+            "scripts": [],
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ng:build:production"
+              "buildTarget": "ng:build:production"
             },
             "development": {
-              "browserTarget": "ng:build:development"
+              "buildTarget": "ng:build:development"
             }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "ng:build"
-          }
+          "builder": "@angular/build:extract-i18n"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
             ],
             "styles": [
               "src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/ng/server",
-            "main": "server.ts",
-            "tsConfig": "tsconfig.server.json",
-            "inlineStyleLanguage": "scss"
-          },
-          "configurations": {
-            "production": {
-              "outputHashing": "media"
-            },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "sourceMap": true,
-              "extractLicenses": false,
-              "vendorChunk": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
-          "configurations": {
-            "development": {
-              "browserTarget": "ng:build:development",
-              "serverTarget": "ng:server:development"
-            },
-            "production": {
-              "browserTarget": "ng:build:production",
-              "serverTarget": "ng:server:production"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
-          "options": {
-            "routes": [
-              "/"
             ]
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "ng:build:production",
-              "serverTarget": "ng:server:production"
-            },
-            "development": {
-              "browserTarget": "ng:build:development",
-              "serverTarget": "ng:server:development"
-            }
-          },
-          "defaultConfiguration": "production"
+          }
         }
       }
     }
-  },
-  "cli": {
-    "analytics": false
   }
 }

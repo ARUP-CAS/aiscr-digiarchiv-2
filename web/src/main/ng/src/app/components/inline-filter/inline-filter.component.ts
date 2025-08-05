@@ -1,9 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
-import { AppService } from 'src/app/app.service';
-import { AppConfiguration } from 'src/app/app-configuration';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  imports: [
+    TranslateModule, CommonModule, FormsModule, FlexLayoutModule,
+    MatIconModule, MatButtonModule
+  ],
   selector: 'app-inline-filter',
   templateUrl: './inline-filter.component.html',
   styleUrls: ['./inline-filter.component.scss']

@@ -1,20 +1,29 @@
-<ng-container *ngIf="result.entity === 'dokument' || result.entity === 'knihovna_3d'">
+@if (result.entity === 'dokument' || result.entity === 'knihovna_3d') {
   <br />
   <strong>{{'card.citation.Citujte jako' | translate}}:</strong>
   {{ result.autorFormatted }} {{result.dokument_rok_vzniku}}: {{'card.citation.Dokument' | translate}}
-  {{ result.ident_cely }}. {{ result.organizace | translateHeslar : 'f_organizace' }}.
-  
-  <ng-container *ngIf="result.dokument_doi"><a target="_blank" [href]="'https://doi.org/' + result.dokument_doi">https://doi.org/{{result.dokument_doi}}</a></ng-container>
-  <ng-container *ngIf="!result.dokument_doi">{{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a></ng-container>
-</ng-container>  
-<ng-container *ngIf="result.entity !== 'dokument' && result.entity !== 'knihovna_3d'">
+  {{ result.ident_cely }}. {{ result.organizace | translate }}.
+  @if (result.dokument_doi) {
+    <a target="_blank" [href]="'https://doi.org/' + result.dokument_doi">https://doi.org/{{result.dokument_doi}}</a>
+  }
+  @if (!result.dokument_doi) {
+    {{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a>
+  }
+}
+@if (result.entity !== 'dokument' && result.entity !== 'knihovna_3d') {
   <br />
   <strong>{{'card.citation.Citujte jako' | translate}}:</strong>
   {{'card.citation.AMČR: Záznam' | translate}}
   {{ result.ident_cely }}
   [cit. {{now | date : 'yyyy-MM-dd'}}].
   {{ 'card.citation.Archeologická mapa České republiky' | translate }}.
-  <ng-container *ngIf="result.lokalita_igsn"><a target="_blank" [href]="'https://doi.org/' + result.lokalita_igsn">https://doi.org/{{result.lokalita_igsn}}</a></ng-container>
-  <ng-container *ngIf="result.samostatny_nalez_igsn"><a target="_blank" [href]="'https://doi.org/' + result.samostatny_nalez_igsn">https://doi.org/{{result.samostatny_nalez_igsn}}</a></ng-container>
-  <ng-container *ngIf="!result.samostatny_nalez_igsn && !result.lokalita_igsn">{{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a></ng-container>
-</ng-container>
+  @if (result.lokalita_igsn) {
+    <a target="_blank" [href]="'https://doi.org/' + result.lokalita_igsn">https://doi.org/{{result.lokalita_igsn}}</a>
+  }
+  @if (result.samostatny_nalez_igsn) {
+    <a target="_blank" [href]="'https://doi.org/' + result.samostatny_nalez_igsn">https://doi.org/{{result.samostatny_nalez_igsn}}</a>
+  }
+  @if (!result.samostatny_nalez_igsn && !result.lokalita_igsn) {
+    {{ 'card.citation.Dostupné z' | translate }}: <a [href]="link">{{link}}</a>
+  }
+}

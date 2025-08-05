@@ -1,0 +1,10 @@
+@switch(entity()) {
+    @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
+     [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
+    @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
+     [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
+    <!-- @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
+    @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
+    @case ('akce') { <app-akce [result]="result"></app-akce> }
+    @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> } -->
+}
