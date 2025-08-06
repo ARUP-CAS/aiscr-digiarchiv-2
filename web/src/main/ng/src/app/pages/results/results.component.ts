@@ -4,7 +4,7 @@ import { SolrResponse } from './../../shared/solr-response';
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute, ParamMap, Params, RouterModule } from '@angular/router';
-// import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { NgZone } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -47,20 +47,20 @@ import { EntityContainer } from "../../entities/entity-container/entity-containe
     EntityContainer
 ],
   selector: 'app-results', 
-  // animations: [
-  //   trigger(
-  //     'enterAnimation', [
-  //     transition(':enter', [
-  //       style({ transform: 'translateY(100%)', height: 0 }),
-  //       animate('100ms', style({ transform: 'translateY(0)', height: 120 }))
-  //     ]),
-  //     transition(':leave', [
-  //       style({ transform: 'translateY(0)', height: 120 }),
-  //       animate('100ms', style({ transform: 'translateY(100%)', height: 0 }))
-  //     ])
-  //   ]
-  //   )
-  // ],
+  animations: [
+    trigger(
+      'enterAnimation', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)', height: 0 }),
+        animate('100ms', style({ transform: 'translateY(0)', height: 120 }))
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)', height: 120 }),
+        animate('100ms', style({ transform: 'translateY(100%)', height: 0 }))
+      ])
+    ]
+    )
+  ],
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
 })
@@ -239,15 +239,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
       // Math.min(9*itemSize, docs.length * itemSize)
     });
 
-  }
-
-
-  isActiveFacet() {
-    if (this.state.breadcrumbs?.length === 0) {
-      return false;
-    } else {
-      return true;
-    }
   }
 
   showChartBar() {

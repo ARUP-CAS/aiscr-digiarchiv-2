@@ -1,504 +1,451 @@
-// --- MATERIAL OVERRIDE ---
+// --- MAT OVERRIDE ---
 
-@use "app-mixins";
-@use "app-mixins-alert";
-@use "app-mixins-icon-size"; 
-@use '@angular/material' as mat; 
+@import './app-mixins';
+@import './app-variables-old'; 
 
-
-// icon
-.mat-icon {
-  @include app-mixins-icon-size.setIconSize();
+// toolbar
+.mat-toolbar {
+  font-size: inherit;
 }
-
 
 // card
-.mat-mdc-card {
-  &.app-alert {
-    @include app-mixins-alert.setAlertCard();
+.mat-card {
+  @include setEntityColor(card);
 
-    .mat-mdc-card-content {
-      display: flex;
-      flex-direction: row;
-      align-items: start;
-      justify-content: center;
+  .app-link-close {
+    position: absolute;
+    top: $app-gap;
+    right: $app-gap;
 
-       .mat-icon {
-        @include app-mixins.setIcon(18);
-        flex: 1 1 26px;
-        box-sizing: border-box;
-        max-width: 26px;
-        min-width: 26px;
+    @include setLinkColor($app-color-darknes);
+  }
+
+  .mat-card-header {
+    .app-last-change {
+      font-size: 12px;
+      color: $app-gray-6;
+      font-weight: normal;
+    }
+
+    .mat-card-header-text {
+      @extend .app-clean-mg, .app-w-100 !optional;
+
+      .mat-icon {
+        margin-right: $app-gap-icon;
+        vertical-align: bottom;
       }
 
-      .app-text {
-        word-break: break-all;
+      .mat-card-title {
+        font-size: $app-card-title-font-size;
+        font-weight: 700;
+
+        .app-count {
+          font-weight: normal;
+          color: $app-gray-5;
+        }
       }
     }
   }
 
-  .mat-mdc-card-actions {
-    padding: 0 16px 16px 16px;
+  .mat-card-content {
+    .app-metadata {
+      .mat-icon {
+        @include setIcon(18);
+        @extend .app-clean-mg !optional;
+      }
+    }
+
+    // specific behavior for expansion panel in first level of card
+    .app-card-detail {
+      margin-top: $app-gap-half;
+
+      &>.mat-accordion {
+        &> :not(.mat-expansion-panel-spacing) {
+          &:not(:last-child) {
+            margin-bottom: 2px;
+          }
+        }
+      }
+    }
+
+    // general expansion panel behavior of card
+    .mat-expansion-panel {
+      @extend .mat-elevation-z0 !optional;
+
+      &.app-panel-souvisejici-zaznamy {
+        .mat-expansion-panel-content {
+          max-height: 635px;
+          overflow-y: auto;
+
+          .mat-expansion-panel-body {
+            $val: calc(2 * #{$app-gap});
+
+            .app-related-item {
+              display: block;
+
+              &:last-child {
+                .app-card-child {
+                  border-bottom: none !important;
+                  margin-bottom: -16px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &.virtual {
+        .mat-expansion-panel-content {
+          .mat-expansion-panel-body {
+            padding: 16px 0;
+          }
+        }
+      }
+
+
+
+      &.mat-expansion-panel-spacing {
+        @extend .app-clean-mg !optional;
+      }
+
+      &.app-panel-inner {
+        .mat-expansion-panel-header {
+          @extend .app-clean-bg, .app-clean-pd !optional;
+          margin-top: 4px;
+
+          .mat-expansion-panel-header-title {
+            color: $app-gray-9;
+            flex-wrap: wrap;
+
+            .mat-icon {
+              @include setIcon($size: 20);
+            }
+          }
+        }
+
+        .mat-expansion-panel-content {
+          .mat-expansion-panel-body {
+            /* padding-top: 2px;
+            padding-bottom: 0; */
+            padding: 2px 20px 0px 20px; // issue #44
+          }
+        }
+      }
+
+      .mat-expansion-panel-header {
+        background-color: $app-gray-1  !important;
+        flex-direction: row-reverse;
+
+        .mat-expansion-indicator {
+          margin-right: $app-gap;
+        }
+      }
+
+      .mat-expansion-panel-content {
+        .mat-expansion-panel-body {
+          padding-top: $app-gap;
+
+          .mat-icon {
+            @include setIcon($size: 20, $position: text-bottom);
+          }
+
+          table {
+            border-spacing: 0;
+
+            th,
+            td {
+              vertical-align: top;
+            }
+
+            th {
+              padding-left: 0;
+              text-align: left;
+              padding-right: $app-gap-icon;
+              min-width: 130px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mat-card-actions {
+    @extend .app-clean-mg !optional;
+    padding-top: 0;
+
+    .mat-button-base {
+      &:not(:first-child) {
+        margin: 0 0 0 $app-gap-button;
+      }
+
+      &.mat-flat-button {
+        background-color: $app-gray-1;
+
+        a {
+          display: inline-flex;
+          color: currentColor;
+        }
+      }
+
+      @media #{$lt-sm} {
+        margin-bottom: 8px !important;
+      }
+    }
+
+    @media #{$lt-sm} {
+      margin-bottom: -8px !important;
+    }
+
+    @media #{$lt-lg} {
+      flex-wrap: wrap;
+
+      .app-metadata {
+        margin-bottom: 8px;
+      }
+
+      &>div {
+        flex: 0 0 100%;
+      }
+    }
+  }
+
+  &.app-card-info {
+    background-color: $app-card-info-bg;
+
+    .mat-card-content {
+      color: $app-color-info;
+
+      .app-text {
+        vertical-align: super;
+        font-weight: bold;
+      }
+
+      .app-info-badge {
+        @include setEntityColor(cardInfoBadge);
+
+        .mat-icon {
+          margin-right: $app-gap-icon;
+          @include setIcon(18, inherit, bottom);
+        }
+      }
+    }
+  }
+
+  &.app-card-child {
+    @extend .app-clean-shadow, .app-clean-radius !optional;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: 1px solid $app-gray-3;
+  }
+}
+
+// table
+.mat-table {
+  width: 100%;
+}
+
+
+// expansion panel
+.mat-expansion-panel {
+  .mat-expansion-panel-header {
+    font-weight: 700;
+  }
+
+  .mat-list-item-content {
+    .mat-icon {
+      &:not(.app-icon-op) {
+        @include setIcon(18, $position: bottom);
+        color: $app-primary-color-darker;
+      }
+    }
+  }
+
+  .mat-expansion-panel-header,
+  .mat-expansion-panel-body {
+    .app-facets & {
+      padding-left: $app-gap;
+      padding-right: $app-gap;
+    }
   }
 }
 
 
-// table
-.mat-mdc-table {
-  .mat-mdc-header-cell {
-    &.mat-column-isLocked {
-      padding: 0 8px;
-    }
+// mat list
+.mat-list {
+  .mat-subheader {
+    font-size: 15px;
   }
 
-  .mat-mdc-header-cell,
-  .mat-mdc-cell {
-    padding-left: 8px;
-    padding-right: 4px;
-
-    &.app-col-filter {
-      padding-right: 8px !important;
-    
-      .app-filter-wrapper {
-        position: relative;
-      
-        input {
-          width: 100%;
-          border-radius: 0 !important;
-          border: 0;
-          background-color: transparent;
-          padding-right: 20px;
-
-          &:focus {
-            outline: none;
-          }
-        }
-      
-        .app-clear {
-          position: absolute;
-          top: 2px;
-          right: 0;
-    
-          &.app-select {
-            right: 14px;
-          }
-      
-          .mat-icon {
-            color: var(--app-color-warn);
-            font-size: 16px;
-            width: 16px;
-            height: 16px;
-          }
-        }
-
-        .mat-mdc-select {
-          width: 100%;
-
-          .mat-mdc-select-value {
-            padding-right: 10px;
-          }
-        }
-    
-        mat-label {
-          position: absolute;
-          left: 0;
-          top: 0;
-          font-weight: initial;
-          font-size: 14px;
-        }
+  .mat-list-item {
+    .mat-icon {
+      &:not(.app-icon-op) {
+        margin-right: $app-gap-icon  !important;
       }
-    }
-  }
-
-  .mat-mdc-icon-button {
-    &.mat-mdc-button-base {
-      border-radius: 0;
-      --mat-icon-button-state-layer-size: calc(var(--mat-table-header-container-height) - 1px);
-      width: var(--mat-icon-button-state-layer-size);
-      height: var(--mat-icon-button-state-layer-size);
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center !important;
-
-      .mat-icon {
-        &.app-16 {
-          @include app-mixins.setIcon(16);
-        }
-
-        &.app-18 {
-          @include app-mixins.setIcon(18);
-        }
-      }
-    }
-    
-    .mat-mdc-button-persistent-ripple {
-      border-radius: 0;
     }
   }
 
   .mat-icon {
-    @include app-mixins.setIcon(20, $position: sub);
-  }
-
-  a {
-    &.app-icon-copy {
-      color: var(--app-color-primary);
-    }
-
-    .mat-icon {
-      @include app-mixins.setIcon(16);
+    &:not(.app-icon-op) {
+      @include setIcon(18, $position: text-top);
     }
   }
 
-  .mat-mdc-row {
-    &.app-selected {
-      background-color: var(--app-color-item-selected) !important;
-    }
+  &.app-list-view-facet {
+    .mat-list-item {
+      height: $app-list-view-facet-item-height;
+      color: $app-list-view-facet-item-color;
 
-    &.app-invalid {
-      background-color: rgba(var(--app-color-item-invalid-no-rgb), .1) !important;
-
-      .mat-icon {
-        color: var(--app-color-item-invalid);
-      }
-    }
-
-    &.app-repre {
-      font-weight: 700;
-    }
-
-    .mat-mdc-cell {
-      &.mat-column-actions,
-      &.mat-column-action {
-        width: 60px;
-        text-align: right;
-      }
-
-      .app-text-cutter-wrapper {
-        display: flex;
-      }
-
-      .app-text-cutter {
-        //@extend .app-pr-4;
-        position: absolute;
-        max-width: 100%;
-        align-self: center;
-      }
-    }
-  }
-
-  &.app-striped {
-    .mat-mdc-row {
-      &:nth-child(odd) {
-        &:not(.app-selected) {
-          background-color: var(--app-color-gray-1);
+      a {
+        &:hover {
+          color: $app-primary-color-darker;
         }
       }
     }
   }
 
-  &.app-hover {
-    .mat-mdc-row {
+  &.app-list-view-admin {
+    @extend .app-clean-pd !optional;
+
+    .mat-list-item {
+      height: $app-list-view-facet-item-height;
+
+      .mat-list-item-content {
+        @extend .app-clean-pd !optional;
+
+        .mat-icon {
+          color: $app-color-warning;
+        }
+      }
+
       &:hover {
-        &:not(.app-selected, .app-row-detail) {
-          background-color: var(--app-color-gray-2);
-        }
+        color: $app-primary-color-darker;
       }
     }
   }
-
-  &.app-resize {
-    table-layout: fixed;
-    min-width: auto;
-    width: fit-content;
-
-    &.app-resizing {
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
+}
 
 
-    .mat-mdc-header-cell {
-      position: relative;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+// mat tree
+.mat-tree {
+  @extend .app-clean-bg !optional;
+  margin-left: -5px;
 
-      .mat-sort-header-content {
-        display: inline-block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+  .mat-tree-node {
+    min-height: $app-list-view-facet-item-height;
+    color: $app-list-view-facet-item-color;
+    font-size: initial;
 
-      .app-resize-holder {
-        cursor: col-resize;
-        width: 10px;
-        height: 100%;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 1;
+    a {
+      color: $app-list-view-facet-item-color;
 
-        &:after {
-          content: '';
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          right: 0;
-          border-right: 1px solid var(--app-default-border-color);
-        }
+      &:hover {
+        color: $app-primary-color-darker;
       }
     }
 
-    .mat-mdc-cell {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-
-  &.app-expanded {
-    .mat-mdc-row {
-      &.app-row-expanded-parent {
-        background-color: var(--app-color-item-bg);
-      }
-
-      &.app-row-detail {
-        height: 0;
-    
-        td {
-          border: 0;
-    
-          .app-detail {
-            overflow: hidden;
-          }
-        }  
-    
-        &.app-row-expanded {
-          td {
-            border-bottom: 1px solid var(--app-table-border-color);
-            background-color: var(--app-color-item-bg);
-          }
-        }
-      }
+    .mat-icon-button {
+      width: $app-list-view-facet-item-height;
+      height: $app-list-view-facet-item-height;
+      line-height: $app-list-view-facet-item-height;
+      margin-right: $app-gap-icon;
     }
 
-    .app-toggle-button {
-      transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .app-toggle-button-expanded {
-      transform: rotate(180deg);
-    }
-  }
-
-  .mat-mdc-checkbox {
-    --mat-checkbox-state-layer-size: calc(30px - 2px * 2) !important;
-  }
-}
-
-
-// paginator
-.mat-mdc-paginator {
-  .app-toolbar & {
-    background-color: transparent;
-  }
-
-  .app-oa-y & {
-    position: sticky;
-    bottom: 0;
-  }
-}
-
-// menu
-.mat-mdc-menu-item {
-  min-height: var(--app-menu-item-height) !important;
-}
-
-// select
-.mat-mdc-option {
-  min-height: var(--app-menu-item-height) !important;
-  line-height: var(--app-menu-item-height) !important;
-
-  .mdc-list-item__primary-text {
-    white-space: nowrap !important;
-    display: inline-block;
-    flex-grow: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-
-// button
-.mat-mdc-button-base {
-  &.mat-mdc-outlined-button {
-    background-color: var(--app-color-gray-1);
-  }  
-}
-
-.mat-mdc-unelevated-button {
-  &:not(:disabled) {
-    &.mat-warn {
-      --mat-button-filled-label-text-color: var(--app-coloe-lightnes) !important;
+    .mat-checkbox {
+      margin-right: $app-gap-icon;
     }
   }
 }
 
 
-// radio button
-.mat-mdc-radio-group {
-  .app-toolbar & {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
+// dialog
+.cdk-overlay-container {
+  z-index: 1099;
 }
 
 
-// form field
-.mat-mdc-form-field {
-  .mat-mdc-form-field-icon-suffix {
-    display: flex;
-    padding-right: 4px;
-    @include mat.icon-button-density(-6);
+// ident badge
+.app-ident-badge {
+  margin-right: 2px;
+  color: $app-gray-9;
 
-    .mat-mdc-icon-button {
-      --mat-icon-button-icon-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  .mat-icon {
+    $size: 18;
+    font-size: #{$size}px !important;
+    height: #{$size}px !important;
+    width: #{$size}px !important;
+    vertical-align: sub !important;
+    color: $app-badge-color;
 
-      .mat-icon {
-        @include app-mixins.setIcon(18);
-      }
+    .mat-card-title & {
+      @extend .app-clean-mg !optional;
     }
   }
 
-  .mat-mdc-form-field-bottom-align {
-    // --mat-form-field-subscript-text-line-height: 0;
-    // height: 8px;
+  &:hover {
+    text-decoration: underline;
+    color: $app-badge-color;
+  }
 
-    &::before {
-      height: 0;
+  &.app-inbody {
+    &:not(:hover) {
+      color: currentColor;
+    }
+  }
+}
+
+// ident format (in map view - result list)
+.app-ident-format {
+  word-break: break-all;
+}
+
+// filter badge
+.app-filter-badge {
+  color: currentColor;
+
+  .mat-icon {
+    $size: 18;
+    font-size: #{$size}px !important;
+    height: #{$size}px !important;
+    width: #{$size}px !important;
+    vertical-align: sub !important;
+    color: $app-badge-color;
+
+    .mat-card-title & {
+      @extend .app-clean-mg !optional;
     }
   }
 
-  &.app-datepicker {
-    $app-width: 160px;
-    flex: 1 1 $app-width;
-    max-width: $app-width;
-    min-width: $app-width;
+  &:hover {
+    text-decoration: underline;
+    color: $app-badge-color;
   }
 }
 
-
-/* ::ng-deep .mat-mdc-checkbox {
-  min-height: 24px; // or your desired row height
-  height: 24px;
+// in facets used
+.app-and-separator {
+  span {
+    font-size: 13px;
+    color: $app-gray-5;
+    margin-left: 25px;
+  }
 }
 
-::ng-deep .mat-mdc-checkbox .mdc-form-field {
-  align-items: center;
+// mat-menu-panel
+.mat-menu-panel {
+  max-width: 320px !important;
 }
 
-::ng-deep .mat-mdc-checkbox .mdc-label {
-  line-height: 24px;
-  padding-top: 0;
-  padding-bottom: 0;
-} */
-
-
-:root {
-  /* .app-form-field-dens-6 {
-    @include mat.form-field-density(-6);
-  } */
-
-  // mat form field
-  @include mat.form-field-density(-6);
-
-
-  // checkbox
-  @include app-mixins.setCheckBoxDensity(2);
-  @include mat.checkbox-overrides((
-    selected-icon-color: var(--app-color-primary),
-    selected-hover-icon-color: var(--app-color-primary),
-    selected-focus-icon-color: var(--app-color-primary),
-    selected-pressed-state-layer-color: var(--app-color-primary),
-    selected-focus-state-layer-color: var(--app-color-primary),
-    state-layer-size: 26px
-  ));
-
-
-  // slide toggle
-  @include mat.slide-toggle-overrides((
-    // handle-height: 16px,
-    // handle-width: 16px,
-    track-height: 10px,
-    track-width: 30px,
-    with-icon-handle-size: 2px,
-    unselected-icon-size: 12px,
-    selected-icon-size: 12px
-  ));
-  
-  .mat-mdc-slide-toggle .mdc-switch__handle:has(.mdc-switch__icons) {
-    --mat-slide-toggle-with-icon-handle-size: var(--app-slide-toggle-size);
-    --mat-slide-toggle-pressed-handle-size: var(--app-slide-toggle-size);
-  }
-
-  .mdc-switch__handle-track {
-    --mat-slide-toggle-handle-width: var(--app-slide-toggle-size);
-  }
-
-
-  // dialog
-  @include mat.dialog-overrides((
-    headline-padding: 0 24px,
-    actions-padding: 0 24px 24px 24px
-  ));
-
-
-  
-  // radio button
-  .mat-mdc-radio-group {
-    // .app-toolbar & {
-    //   display: flex;
-    //   flex-direction: row;
-    //   align-items: center;
-    // }
-
-    .mat-mdc-radio-button {
-      --mat-radio-state-layer-size: calc(var(--app-toolbar-radio-button-size) * 2);
-      margin-right: 8px;
-
-      .mdc-radio__background::before {
-        top: calc(-1 * (var(--mat-radio-state-layer-size, 40px) - var(--app-toolbar-radio-button-size)) / 2) !important;
-        left: calc(-1 * (var(--mat-radio-state-layer-size, 40px) - var(--app-toolbar-radio-button-size)) / 2) !important;
-      }
-    
-      .mdc-radio {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-    
-        .mat-mdc-radio-touch-target {
-          height: var(--app-toolbar-height);
-          width: var(--app-toolbar-height);
-        }
-    
-        .mdc-radio__background {
-          height: var(--app-toolbar-radio-button-size);
-          width: var(--app-toolbar-radio-button-size);
-    
-          .mdc-radio__inner-circle {
-            border-width: calc(var(--app-toolbar-radio-button-size) / 2);
-          }
-        }
-      }
+// mat form field
+.mat-form-field {
+  &.mat-form-field-appearance-fill {
+    .mat-form-field-infix {
+      padding: 0.25em 0 0.75em 0;
+      padding: 0.1em 0 0.65em 0;
     }
   }
-  
+}
+
+// tooltip
+.mat-tooltip {
+  font-size: 14px !important;
 }

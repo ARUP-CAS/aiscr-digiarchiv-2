@@ -102,7 +102,7 @@ export class AkceComponent extends Entity {
 
   override getFullId() {
     this.service.getId(this._result.ident_cely).subscribe((res: any) => {
-      this.result = res.response.docs[0];
+      this._result = res.response.docs[0];
       this.getExtZdroj();
       this.hasDetail = true;
     });

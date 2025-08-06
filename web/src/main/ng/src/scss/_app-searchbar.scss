@@ -1,0 +1,108 @@
+// --- SEARCHBAR ---
+
+app-searchbar {
+  .app-searchbar-wrapper {
+    padding: 0 $app-gap;
+    display: flex;
+    align-items: center;
+    height: $app-searchbar-height;
+    position: relative;
+    z-index: 1002;
+    background: $app-color-lightnes url('/src/assets/img/bg-hatching.png') repeat;
+    //box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.05), 0px 8px 10px 1px rgba(0, 0, 0, 0), 0px 3px 14px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.07);
+  }
+
+  .app-fx-left {
+    display: flex;
+    align-items: center;
+    height: $app-searchbar-field-height;
+    background-color: $app-searchbar-field-bg;
+    border-radius: $app-border-radius;
+    color: $app-searchbar-field-color;
+    border: 1px solid $app-gray-3;
+
+    // mq
+    @media #{$gt-sm} {
+      max-width: $app-searchbar-field-max-width;
+    }
+
+    &:focus-within {
+      box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
+    }
+
+    .mat-icon {
+      margin-left: $app-searchbar-field-icon-gap;
+      margin-right: $app-searchbar-field-icon-gap;
+      vertical-align: middle;
+      color: $app-primary-color;
+
+      &.app-icon-clear {
+        margin-right: 0 !important;
+      }
+    }
+
+    input {
+      @extend .app-clean-border, .app-clean-pd, .app-clean-bg !optional;
+      padding-left: $app-gap !important;
+      width: calc(100% - 45px);
+      height: 100%;
+
+      &:focus {
+        outline: none;
+      }
+
+      @media #{$xs} {
+        width: calc(100% - 140px);
+      }
+    }
+
+    .app-controls {
+      text-align: right;
+
+      .app-mobile-controls {
+        .mat-icon {
+          color: $app-gray-5;
+          margin-right: 0;
+        }
+      }
+
+      @media #{$xs} {
+        & > a {
+          border-left: 1px solid $app-gray-4;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
+  .app-fx-right {
+    text-align: right;
+
+    // mq
+    @media #{$gt-sm} {
+      flex: 1 1 0%;
+    }
+    
+    .mat-flat-button {
+      line-height: $app-searchbar-field-height;
+      height: $app-searchbar-field-height;
+      margin-right: $app-gap-button;
+
+      &:last-child {
+        margin-right: 0 !important;
+      }
+
+      // mq
+      @media #{$gt-md} {
+        &:nth-child(2) {
+          margin-right: calc(#{$app-gap} * 2);
+        }
+      }
+
+      &.app-active {
+        background-color: $app-color-warning;
+      }
+    }
+  }
+}

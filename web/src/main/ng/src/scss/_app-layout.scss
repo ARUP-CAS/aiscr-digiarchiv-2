@@ -1,27 +1,180 @@
 // --- LAYOUT ---
 
-html {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-*, *:before, *:after {
-  -webkit-box-sizing: inherit;
-  -moz-box-sizing: inherit;
-  box-sizing: inherit;
-}
-
-html, body { 
+@import './app-mixins';
+@import './app-variables-old';
+html,
+body {
   height: 100%;
 }
 
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-  .app-content-wrapper {
-    padding: var(--app-default-wrapper);
+// sidenav
+mat-sidenav-container, 
+mat-sidenav-content, 
+mat-sidenav {
+  height: 100%;
+}
+ 
+mat-sidenav {
+  @import "./app-sidenav-list";
+  width: 250px;
+}
+
+// header
+header {
+  @import "./app-navbar";
+  @import "./app-searchbar";
+}
+
+// main wrapper
+main {
+  display: block;
+  min-height: calc(100% - (#{$app-navbar-height} + #{$app-searchbar-height} + #{$app-footer-height})); // pripoctena velikost paticky
+  background-color: $app-main-bg-color;
+
+  @import "./app-home";
+  @import "./app-results";
+  @import "./app-stats";
+  @import "./app-result-item";
+  @import "./app-mapa";
+  @import "./app-export";
+  @import "./app-facets";
+  @import "./app-paginator";
+  @import "./app-sidenav-container";
+}
+
+@import "./app-footer";
+
+// display table layout
+.app-display-table {
+  display: block;
+  width: calc(100% - (#{$app-gap} * 2)) !important;
+  height: inherit;
+  min-height: calc(100% - #{$app-footer-height});
+
+  // for view map resize container
+  .app-view-map & {
+    width: 100% !important;
+    position: relative;
+
+    .app-map {
+      height: 100%;
+    }
+  }
+
+  &.app-loading {
+    width: 100% !important;
+    height: auto;
+    min-height: auto;
+  }
+
+  .app-table-cell {
+    display: block;
+    padding: $app-gap-double 0; // _pridano
+
+    .app-view-map & {
+      padding: 0;
+    }
+
+    &.app-left {
+      width: 100%;
+
+      @media #{$gt-sm} {
+        padding-right: $app-gap-double;
+      }
+
+      @media #{$lt-md} {
+        padding: $app-gap 0 0 0;
+      }
+    }
+
+    &.app-right {
+      padding-bottom: $app-gap;
+      
+      @media #{$lt-md} {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+// container
+.app-container {
+  margin: 0 auto;
+  max-width: $app-container;
+  width: 100%;
+
+  &.app-fluid {
+    max-width: 100%;
+  }
+
+  // for view map resize container
+  .app-view-map & {
+    max-width: 100%;
+  }
+}
+
+// mq
+@media #{$gt-sm} {
+  .app-display-table {
+    display: table;
+    height: calc(100% - #{$app-footer-height});
+
+    .app-table-cell {
+      display: table-cell;
+      padding: calc(2 * #{$app-gap}) 0;
+      vertical-align: top;
+
+      // for view map resize container
+      /* .app-view-map & {
+        padding: 0;
+      } */
+
+      &.app-left {
+        width: $app-table-cell-left-width;
+      }
+    }
+  }
+}
+
+// --- fxHide FIX (using own class instead fx attributs) -> https://github.com/angular/flex-layout/issues/1228 ---
+@media #{$md} {
+  .fxHide_md {
+    display: none !important;
+  }
+}
+
+@media #{$sm} {
+  .fxHide_sm {
+    display: none !important;
+  }
+}
+
+@media #{$xs} {
+  .fxHide_xs {
+    display: none !important;
+  }
+}
+
+@media #{$gt-md} {
+  .fxHide_gt-md {
+    display: none !important;
+  }
+}
+
+@media #{$gt-sm} {
+  .fxHide_gt-sm {
+    display: none !important;
+  }
+}
+
+@media #{$gt-xs} {
+  .fxHide_gt-xs {
+    display: none !important;
   }
 }
 

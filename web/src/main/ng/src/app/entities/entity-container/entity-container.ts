@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, forwardRef, input } from '@angular/core';
 import { AppState } from '../../app.state';
 import { DokumentComponent } from "../dokument/dokument.component";
 import { SamostatnyNalezComponent } from "../samostatny-nalez/samostatny-nalez.component";
@@ -27,15 +27,26 @@ import { Entity } from '../entity/entity';
 @Component({
   selector: 'app-entity-container',
   imports: [
-     TranslateModule, RouterModule, FlexLayoutModule, DatePipe,
+     TranslateModule, RouterModule, FlexLayoutModule,
      MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
       MatProgressBarModule, MatTooltipModule, MatExpansionModule,
-      ResultActionsComponent,
-      DokumentComponent, SamostatnyNalezComponent, ProjektComponent, AkceComponent, LokalitaComponent, RelatedComponent,
-      MatCardModule, MatButtonModule, MatIconModule, ResultActionsComponent],
+      forwardRef(() => DokumentComponent), 
+      forwardRef(() => SamostatnyNalezComponent), 
+      forwardRef(() => ProjektComponent), 
+      forwardRef(() => AkceComponent), 
+      forwardRef(() => LokalitaComponent), 
+      MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './entity-container.html',
   styleUrl: './entity-container.scss'
 })
-export class EntityContainer extends Entity {
+export class EntityContainer  {
   entity = input<string>();
+  result = input<any>();
+
+  inDocument = input<boolean>(false);
+  detailExpanded = input<boolean>(false);
+  _detailExpanded: boolean;
+  isChild = input<boolean>(false);
+  mapDetail = input<boolean>(false);
+  isDocumentDialogOpen = input<boolean>(false);
 }

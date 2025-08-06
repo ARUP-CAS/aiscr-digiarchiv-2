@@ -1,0 +1,28 @@
+// --- PAGINATOR ---
+
+app-paginator {
+  .mat-paginator {
+    .mat-paginator-range-label {
+      margin: 0 10px;
+    }
+  }
+
+  .app-page-num {
+    font-size: 12px;
+    margin-right: $app-gap;
+
+    .mat-form-field-suffix {
+      a {
+        color: $app-gray-6;
+
+        .mat-icon {
+          @include setIcon($size: 14, $position: bottom)
+        }   
+      }  
+    }
+  }
+
+  .app-sorting {
+    font-size: 12px;
+  }
+}

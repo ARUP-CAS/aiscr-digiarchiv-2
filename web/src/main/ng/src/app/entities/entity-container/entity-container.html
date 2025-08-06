@@ -1,4 +1,4 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()"
+<!-- <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()"
     [class.app-entity-projekt]="!isChild() && !isDocumentDialogOpen">
     @if (mapDetail && !isChild()) {
     <a (click)="service.setMapResult(null, true)" class="app-link-close"
@@ -90,14 +90,32 @@
                 @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"
                     [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
                     [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-                @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-                @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
-                @case ('akce') { <app-akce [result]="result"></app-akce> }
-                @case ('lokalita') { <app-lokalita [result]="result"  [viewType]="'expanded'"></app-lokalita> }
+                @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result()"></app-samostatny-nalez> }
+                @case ('projekt') { <app-projekt [result]="result()"></app-projekt> }
+                @case ('akce') { <app-akce [result]="result()"></app-akce> }
+                @case ('lokalita') { <app-lokalita [result]="result()"></app-lokalita> }
                 }
                 <app-related [related]="related" [mapDetail]="mapDetail()"></app-related>
             </mat-accordion>
         </div>
     </mat-card-content>
     }
-</mat-card>
+</mat-card> -->
+
+@if(result()) {
+    @switch(entity()) {
+        @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
+            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
+        @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"
+            [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
+            [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
+        @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
+            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-samostatny-nalez> }
+        @case ('projekt') { <app-projekt [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
+            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-projekt> }
+        @case ('akce') { <app-akce [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
+            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-akce> }
+        @case ('lokalita') { <app-lokalita [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
+            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-lokalita> }
+    }
+}

@@ -1,0 +1,24 @@
+// --- DOCUMENT DIALOG ---
+
+.app-document-dialog {
+  .mat-dialog-container {
+    @extend .app-clean-pd;
+
+    .mat-dialog-content {
+      @extend .app-clean-pd, .app-clean-mg;
+    }
+
+    .app-table-cell {
+      @extend .app-clean-pd;
+
+      .app-entity-first-child {
+        & > .mat-card {
+          @extend .app-clean-shadow;
+          padding-left: 0;
+          padding-right: 0;
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+  }
+}
