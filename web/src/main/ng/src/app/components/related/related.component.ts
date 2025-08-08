@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, input } from '@angular/core';
+import { Component, Input, OnInit, forwardRef, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,9 +17,9 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   imports: [
     TranslateModule, RouterModule, FlexLayoutModule,
-    MatCardModule, MatIconModule, ScrollingModule,
+    MatCardModule, MatIconModule, MatButtonModule, ScrollingModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
-    EntityContainer, MatButtonModule
+    forwardRef(() => EntityContainer)
 ],
   selector: 'app-related',
   templateUrl: './related.component.html',

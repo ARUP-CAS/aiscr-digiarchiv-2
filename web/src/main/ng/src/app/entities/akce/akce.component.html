@@ -1,4 +1,4 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" [class.app-entity-akce]="!isChild() && !isDocumentDialogOpen">
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" [class.app-entity-akce]="!isChild() && !isDocumentDialogOpen()">
   @if (mapDetail && !isChild()) {
     <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
@@ -31,7 +31,7 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content [class.app-detail-closed]="!_detailExpanded">
-        @if (state.itemView === 'col' && !isDocumentDialogOpen && !isChild()) {
+        @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
           <div class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
             <mat-icon>image_not_supported</mat-icon>
           </div>
