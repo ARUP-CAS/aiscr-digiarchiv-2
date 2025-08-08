@@ -37,9 +37,7 @@
           @if (!state.isMapaCollapsed) {
 <mat-icon class="fxHide_sm fxHide_xs">clear</mat-icon>
 }
-          <span class="fxHide_sm fxHide_xs">@if (!state.isMapaCollapsed) {
-&#160;
-}{{ state.isMapaCollapsed ? ('searchbar.button.Otevřít mapu' | translate) : ('searchbar.button.Zavřít mapu' | translate) }}</span>
+          <span class="fxHide_sm fxHide_xs">@if (!state.isMapaCollapsed) {&#160;} {{ state.isMapaCollapsed ? ('searchbar.button.Otevřít mapu' | translate) : ('searchbar.button.Zavřít mapu' | translate) }}</span>
           <mat-icon class="fxHide_gt-sm">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
         </button>
         <!-- temporary commented based David agreement

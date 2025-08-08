@@ -3,8 +3,7 @@ import { HttpParams } from '@angular/common/http';
 import { SolrResponse } from './../../shared/solr-response';
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, NavigationEnd, ActivatedRoute, ParamMap, Params, RouterModule } from '@angular/router';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { Router, ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { NgZone } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -24,11 +23,7 @@ import { FacetsUsedComponent } from "../../components/facets/facets-used/facets-
 import { FacetsComponent } from "../../components/facets/facets.component";
 import { PaginatorComponent } from "../../components/paginator/paginator.component";
 import {ScrollingModule} from '@angular/cdk/scrolling';
-import { DokumentComponent } from "../../entities/dokument/dokument.component";
 import { MatButtonModule } from '@angular/material/button';
-import { SamostatnyNalezComponent } from "../../entities/samostatny-nalez/samostatny-nalez.component";
-import { AkceComponent } from "../../entities/akce/akce.component";
-import { LokalitaComponent } from "../../entities/lokalita/lokalita.component";
 import { EntityContainer } from "../../entities/entity-container/entity-container";
 
 @Component({
@@ -40,27 +35,9 @@ import { EntityContainer } from "../../entities/entity-container/entity-containe
     FacetsUsedComponent,
     FacetsComponent,
     PaginatorComponent,
-    // DokumentComponent,
-    // SamostatnyNalezComponent,
-    // AkceComponent,
-    // LokalitaComponent,
     EntityContainer
 ],
   selector: 'app-results', 
-  animations: [
-    trigger(
-      'enterAnimation', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)', height: 0 }),
-        animate('100ms', style({ transform: 'translateY(0)', height: 120 }))
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateY(0)', height: 120 }),
-        animate('100ms', style({ transform: 'translateY(100%)', height: 0 }))
-      ])
-    ]
-    )
-  ],
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
 })

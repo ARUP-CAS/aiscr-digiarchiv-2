@@ -12,7 +12,7 @@
       <ng-container>
         <div fxLayout="row wrap" class="app-entities-wrapper" [class.app-doctype-expanded]="showingCat">
           @for (entity of config.entities; track entity; let index = $index) {
-            <mat-card [class]="'app-entity-' + entity + ' app-' + index" class="app-card-entity" [matTooltip]="'entities.' + entity + '.desc' | translate">
+            <mat-card [class]="'app-entity-' + entity + ' app-' + index" class="app-card-entity mat-elevation-z3" [matTooltip]="'entities.' + entity + '.desc' | translate">
               <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity, sort: getSortByEntity(entity)}" class="app-cursor-pointer">
                 <mat-card-title fxLayout="row">
                   <a fxFlex>

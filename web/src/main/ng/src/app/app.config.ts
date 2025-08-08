@@ -14,46 +14,33 @@ import { firstValueFrom, tap } from 'rxjs';
 import { Configuration } from './shared/config';
 import { DatePipe, DecimalPipe, isPlatformBrowser } from '@angular/common';
 
-// const intializeAppFn = () => {
-//   const configService = inject(AppConfiguration);
-//   console.log("Initializing app");
-//   return configService.load();
-// };
+import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
+
+export const MY_FORMATS = {
+  parse: {
+    // dateInput: 'YYYY-MM-DD',
+    dateInput: 'DD.MM.YYYY'
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-
-    // provideAppInitializer(() => {
-    //   let server = '';
-    //   const platformId = inject(PLATFORM_ID);
-    //   console.log(platformId)
-    //   console.log(!isPlatformBrowser(platformId))
-    //   if ('browser' !== platformId) {
-    //         const args = process.argv;
-    //         console.log('args -> ' + args)
-    //         if (args.length > 2 && args[2].startsWith('http')) {
-    //             server = args[2];
-    //         }
-
-    //     }
-    //   const http = inject(HttpClient);
-    //   const configService = inject(AppConfiguration);
-    //   // return configService.load();
-    //   return firstValueFrom(
-    //     http
-    //       .get(server + "assets/config.json")
-    //       .pipe(tap(user => { 
-    //         // console.log(user);
-    //         configService.config = user as Configuration;
-    //       }))
-    //   );
-    // }),
     provideAppInitializer(() => inject(AppConfiguration).load()),
     provideRouter(routes), 
     provideClientHydration(withEventReplay()),
+
+    {provide: DateAdapter, useClass: MomentDateAdapter,deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
     
     provideTranslateService({
       loader: provideTranslateHttpLoader({

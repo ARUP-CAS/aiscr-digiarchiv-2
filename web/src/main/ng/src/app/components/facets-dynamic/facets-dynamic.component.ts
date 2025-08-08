@@ -23,6 +23,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 
 @Component({
   imports: [
@@ -31,6 +32,7 @@ import { MatInputModule } from '@angular/material/input';
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
     MatDatepickerModule, MatRadioModule, MatButtonModule, MatInputModule
   ],
+  providers: [provideMomentDateAdapter()],
   selector: 'app-facets-dynamic',
   templateUrl: './facets-dynamic.component.html',
   styleUrls: ['./facets-dynamic.component.scss']
