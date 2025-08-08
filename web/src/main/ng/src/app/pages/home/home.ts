@@ -75,7 +75,7 @@ export class Home implements OnInit {
     this.service.getHome().subscribe((resp: any) => {
       // this.fillBoxes(resp);
       if (resp.error) {
-        this.state.loading = false;
+        this.state.loading.set(false);;
         this.loading = false;
         return;
       }

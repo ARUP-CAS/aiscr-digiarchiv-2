@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -17,6 +17,7 @@ import { InlineFilterComponent } from '../../components/inline-filter/inline-fil
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
 import { AkceComponent } from '../akce/akce.component';
 import { LokalitaComponent } from "../lokalita/lokalita.component";
+import { Entity } from '../entity/entity';
 
 @Component({
   imports: [
@@ -32,43 +33,16 @@ import { LokalitaComponent } from "../lokalita/lokalita.component";
   templateUrl: './adb.component.html',
   styleUrls: ['./adb.component.scss']
 })
-export class AdbComponent implements OnInit {
+export class AdbComponent extends Entity {
 
-  @Input() result: any;
-  @Input() detailExpanded: boolean;
-  @Input() isChild: boolean;
-  @Input() inDocument = false;
-  @Input() onlyHead = false;
-
-  bibTex: string;
-
-  constructor(
-    private datePipe: DatePipe,
-    public service: AppService,
-    public state: AppState
-  ) { }
-
-  ngOnInit(): void {
+  override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result().ident_cely},
        author = {Archeologický informační systém České republiky},
-       title = {Záznam ${this.result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       title = {Záznam ${this.result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
-    if (this.result?.ident_cely) { 
-    } else {
-      const pianid = this.result.id ? this.result.id : this.result;
-
-      this.service.getIdAsChild([pianid], "adb").subscribe((res: any) => {
-        this.result = res.response.docs[0]; 
-      });
-    }
   }
-
-  toggleDetail() {
-    this.detailExpanded = !this.detailExpanded;
-  }
-
 }

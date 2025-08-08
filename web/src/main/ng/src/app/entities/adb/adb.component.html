@@ -1,83 +1,83 @@
-@if (!inDocument) {
+@if (!inDocument()) {
   <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner app-mb-4">
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
         <div fxFlex>
           {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;
-          @if (!isChild) {
-            <span >{{ result.ident_cely }}</span>
+          @if (!isChild()) {
+            <span >{{ result().ident_cely }}</span>
           }
-          @if (isChild) {
-            <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+          @if (isChild()) {
+            <a [routerLink]="'/id/' + result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result().ident_cely }} <mat-icon>link</mat-icon></a>
           }
-          <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
+          <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result().ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
         </div>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    @if (result.adb_typ_sondy) {
+    @if (result().adb_typ_sondy) {
       <div>
         <label class="app-label">{{ 'card.desc.Typ sondy' | translate }}:</label>&#160;
-        <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result.adb_typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
+        <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result().adb_typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
       </div>
     }
-    @if (result.adb_chranene_udaje?.uzivatelske_oznaceni_sondy) {
+    @if (result().adb_chranene_udaje?.uzivatelske_oznaceni_sondy) {
       <div>
-        <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.uzivatelske_oznaceni_sondy }}
+        <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.uzivatelske_oznaceni_sondy }}
       </div>
     }
-    @if (result.adb_chranene_udaje?.trat) {
+    @if (result().adb_chranene_udaje?.trat) {
       <div>
-        <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.trat }}
+        <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.trat }}
       </div>
     }
-    @if (result.adb_chranene_udaje?.cislo_popisne) {
+    @if (result().adb_chranene_udaje?.cislo_popisne) {
       <div>
-        <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.cislo_popisne }}
+        <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.cislo_popisne }}
       </div>
     }
-    @if (result.adb_chranene_udaje?.parcelni_cislo) {
+    @if (result().adb_chranene_udaje?.parcelni_cislo) {
       <div>
-        <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.parcelni_cislo }}
+        <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.parcelni_cislo }}
       </div>
     }
-    @if (result.adb_podnet) {
+    @if (result().adb_podnet) {
       <div>
         <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;
-        <app-inline-filter [field]="'f_adb_podnet'" [value]="result.adb_podnet" [heslar]="'podnet'"></app-inline-filter>
+        <app-inline-filter [field]="'f_adb_podnet'" [value]="result().adb_podnet" [heslar]="'podnet'"></app-inline-filter>
       </div>
     }
-    @if (result.adb_stratigraficke_jednotky) {
+    @if (result().adb_stratigraficke_jednotky) {
       <div>
-        <label class="app-label">{{ 'card.desc.Počet SJ' | translate }}:</label>&#160;{{ result.adb_stratigraficke_jednotky }}
+        <label class="app-label">{{ 'card.desc.Počet SJ' | translate }}:</label>&#160;{{ result().adb_stratigraficke_jednotky }}
       </div>
     }
-    @if (result.adb_autor_popisu) {
+    @if (result().adb_autor_popisu) {
       <div>
-        <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ result.adb_autor_popisu }}
+        <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ result().adb_autor_popisu }}
       </div>
     }
-    @if (result.adb_rok_popisu) {
+    @if (result().adb_rok_popisu) {
       <div>
-        <label class="app-label">{{ 'card.desc.Rok popisu' | translate }}:</label>&#160;{{ result.adb_rok_popisu }}
+        <label class="app-label">{{ 'card.desc.Rok popisu' | translate }}:</label>&#160;{{ result().adb_rok_popisu }}
       </div>
     }
-    @if (result.adb_autor_revize) {
+    @if (result().adb_autor_revize) {
       <div>
-        <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ result.adb_autor_revize }}
+        <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ result().adb_autor_revize }}
       </div>
     }
-    @if (result.adb_rok_revize > 0) {
+    @if (result().adb_rok_revize > 0) {
       <div>
-        <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result.adb_rok_revize }}
+        <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result().adb_rok_revize }}
       </div>
     }
-    @if (result.adb_chranene_udaje?.poznamka) {
+    @if (result().adb_chranene_udaje?.poznamka) {
       <div>
-        <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.poznamka }}
+        <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.poznamka }}
       </div>
     }
-    @if (result.adb_chranene_udaje?.vyskovy_bod && result.adb_chranene_udaje?.vyskovy_bod.length > 0) {
+    @if (result().adb_chranene_udaje?.vyskovy_bod && result().adb_chranene_udaje?.vyskovy_bod.length > 0) {
       <mat-accordion multi="true">
         <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
           <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
@@ -87,7 +87,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ul class="app-list-inside">
-            @for (vb of result.adb_chranene_udaje.vyskovy_bod; track vb) {
+            @for (vb of result().adb_chranene_udaje.vyskovy_bod; track vb) {
               <li>
                 <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
                 (<app-inline-filter [field]="'adb_vyskovy_bod_typ'" [value]="vb.typ.id" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
@@ -106,100 +106,100 @@
     </mat-accordion>
   }
 </mat-expansion-panel>
-@if (result.akce || result.lokalita) {
+@if (result().akce || result().lokalita) {
   <mat-expansion-panel [expanded]="true" class="app-panel-souvisejici-zaznamy">
     <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
       <mat-panel-title>
         {{ 'card.panelTitle.Související záznamy' | translate }}:
       </mat-panel-title>
     </mat-expansion-panel-header>
-    @for (akce of result.akce; track akce.ident_cely){
+    @for (akce of result().akce; track akce.ident_cely){
       <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
     }
-    @for (lok of result.lokalita; track lok.ident_cely) {
+    @for (lok of result().lokalita; track lok.ident_cely) {
       <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
     }
   </mat-expansion-panel>
 }
 }
 
-@if (inDocument) {
-  <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" >
+@if (inDocument()) {
+  <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" >
     <mat-card-header>
       <mat-card-title fxLayout="row" fxLayoutGap="16px">
         <div fxFlex>
           {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;
-          <span>{{ result.ident_cely }}</span>
+          <span>{{ result().ident_cely }}</span>
           <!-- <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a> -->
-          <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
+          <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + result().ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
         </div>
       </mat-card-title>
     </mat-card-header>
-    @if (detailExpanded) {
-      <mat-card-content [class.app-detail-closed]="!detailExpanded">
-        @if (result.adb_typ_sondy) {
+    @if (_detailExpanded) {
+      <mat-card-content [class.app-detail-closed]="!_detailExpanded">
+        @if (result().adb_typ_sondy) {
           <div>
             <label class="app-label">{{ 'card.desc.Typ sondy' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result.adb_typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
+            <app-inline-filter [field]="'f_adb_typ_sondy'" [value]="result().adb_typ_sondy" [heslar]="'typ_sondy'"></app-inline-filter>
           </div>
         }
-        @if (result.adb_chranene_udaje?.uzivatelske_oznaceni_sondy) {
+        @if (result().adb_chranene_udaje?.uzivatelske_oznaceni_sondy) {
           <div>
-            <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.uzivatelske_oznaceni_sondy }}
+            <label class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.uzivatelske_oznaceni_sondy }}
           </div>
         }
-        @if (result.adb_chranene_udaje?.trat) {
+        @if (result().adb_chranene_udaje?.trat) {
           <div>
-            <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.trat }}
+            <label class="app-label">{{ 'card.desc.Ulice/trať' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.trat }}
           </div>
         }
-        @if (result.adb_chranene_udaje?.cislo_popisne) {
+        @if (result().adb_chranene_udaje?.cislo_popisne) {
           <div>
-            <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.cislo_popisne }}
+            <label class="app-label">{{ 'card.desc.Číslo popisné' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.cislo_popisne }}
           </div>
         }
-        @if (result.adb_chranene_udaje?.parcelni_cislo) {
+        @if (result().adb_chranene_udaje?.parcelni_cislo) {
           <div>
-            <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.parcelni_cislo }}
+            <label class="app-label">{{ 'card.desc.Parcelní číslo' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.parcelni_cislo }}
           </div>
         }
-        @if (result.adb_podnet) {
+        @if (result().adb_podnet) {
           <div>
             <label class="app-label">{{ 'card.desc.Projekt - podnět' | translate }}:</label>&#160;
-            <app-inline-filter [field]="'f_adb_podnet'" [value]="result.adb_podnet" [heslar]="'podnet'"></app-inline-filter>
+            <app-inline-filter [field]="'f_adb_podnet'" [value]="result().adb_podnet" [heslar]="'podnet'"></app-inline-filter>
           </div>
         }
-        @if (result.adb_stratigraficke_jednotky) {
+        @if (result().adb_stratigraficke_jednotky) {
           <div>
-            <label class="app-label">{{ 'card.desc.Počet SJ' | translate }}:</label>&#160;{{ result.adb_stratigraficke_jednotky }}
+            <label class="app-label">{{ 'card.desc.Počet SJ' | translate }}:</label>&#160;{{ result().adb_stratigraficke_jednotky }}
           </div>
         }
-        @if (result.adb_autor_popisu) {
+        @if (result().adb_autor_popisu) {
           <div>
-            <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ result.adb_autor_popisu }}
+            <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ result().adb_autor_popisu }}
           </div>
         }
-        @if (result.adb_rok_popisu) {
+        @if (result().adb_rok_popisu) {
           <div>
-            <label class="app-label">{{ 'card.desc.Rok popisu' | translate }}:</label>&#160;{{ result.adb_rok_popisu }}
+            <label class="app-label">{{ 'card.desc.Rok popisu' | translate }}:</label>&#160;{{ result().adb_rok_popisu }}
           </div>
         }
-        @if (result.adb_autor_revize) {
+        @if (result().adb_autor_revize) {
           <div>
-            <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ result.adb_autor_revize }}
+            <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ result().adb_autor_revize }}
           </div>
         }
-        @if (result.adb_rok_revize > 0) {
+        @if (result().adb_rok_revize > 0) {
           <div>
-            <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result.adb_rok_revize }}
+            <label class="app-label">{{ 'card.desc.Rok revize' | translate }}:</label>&#160;{{ result().adb_rok_revize }}
           </div>
         }
-        @if (result.adb_chranene_udaje?.poznamka) {
+        @if (result().adb_chranene_udaje?.poznamka) {
           <div>
-            <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result.adb_chranene_udaje.poznamka }}
+            <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ result().adb_chranene_udaje.poznamka }}
           </div>
         }
-        @if (result.adb_chranene_udaje?.vyskovy_bod && result.adb_chranene_udaje?.vyskovy_bod.length > 0) {
+        @if (result().adb_chranene_udaje?.vyskovy_bod && result().adb_chranene_udaje?.vyskovy_bod.length > 0) {
           <mat-accordion multi="true">
             <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
@@ -209,7 +209,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="app-list-inside">
-                @for (vb of result.adb_chranene_udaje.vyskovy_bod; track vb.ident_cely) {
+                @for (vb of result().adb_chranene_udaje.vyskovy_bod; track vb.ident_cely) {
                   <li>
                     <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
                     (<app-inline-filter [field]="'adb_vyskovy_bod_typ'" [value]="vb.typ.id" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
@@ -229,35 +229,35 @@
       }
     </mat-card-content>
   }
-  @if (!isChild) {
+  @if (!isChild()) {
     <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
       <div fxFlex class="app-metadata">
-        @if (result.akce?.length > 0) {
-          {{ 'card.desc.Počet akcí' | translate }}: <strong>{{result.akce?.length}}</strong>
+        @if (result().akce?.length > 0) {
+          {{ 'card.desc.Počet akcí' | translate }}: <strong>{{result().akce?.length}}</strong>
           <span class="app-pipe"></span>
         }
-        @if (result.lokalita?.length > 0) {
-          {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{result.lokalita.length}}</strong>
+        @if (result().lokalita?.length > 0) {
+          {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{result().lokalita.length}}</strong>
           <span class="app-pipe"></span>
         }
       </div>
-      <app-result-actions [inDocument]="inDocument" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
+      <app-result-actions [inDocument]="inDocument()" [result]="result()" [detailExpanded]="_detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
       [bibTex]="bibTex" ></app-result-actions>
     </mat-card-actions>
   }
-  @if (detailExpanded) {
-    <mat-card-content [class.app-detail-closed]="!detailExpanded">
-      @if (result.akce || result.lokalita) {
+  @if (_detailExpanded) {
+    <mat-card-content [class.app-detail-closed]="!_detailExpanded">
+      @if (result().akce || result().lokalita) {
         <mat-expansion-panel [expanded]="true" class="app-panel-souvisejici-zaznamy">
           <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
             <mat-panel-title>
               {{ 'card.panelTitle.Související záznamy' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
-          @for (akce of result.akce; track akce.ident_cely) {
+          @for (akce of result().akce; track akce.ident_cely) {
             <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
           }
-          @for (lok of result.lokalita; track lok.ident_cely) {
+          @for (lok of result().lokalita; track lok.ident_cely) {
             <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
           }
         </mat-expansion-panel>

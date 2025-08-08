@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, Input, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, forwardRef, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ import { FeedbackDialogComponent } from '../../components/feedback-dialog/feedba
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
 import { RelatedComponent } from "../../components/related/related.component";
+import { Entity } from '../entity/entity';
 
 @Component({
   imports: [
@@ -41,75 +42,28 @@ import { RelatedComponent } from "../../components/related/related.component";
   templateUrl: './pian.component.html',
   styleUrls: ['./pian.component.scss']
 })
-export class PianComponent implements OnInit {
+export class PianComponent extends Entity {
 
-  @Input() result: any;
-  @Input() detailExpanded: boolean;
-  @Input() isChild: boolean;
-  @Input() mapDetail: boolean;
-  @Input() isDocumentDialogOpen: boolean;
-  @Input() inDocument = false;
-  hasDetail: boolean;
-  hasRights: boolean;
-  bibTex: string;
-
-  relationsChecked = false;
-  related: {entity: string, ident_cely: string}[] = [];
-
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: any,
-    private datePipe: DatePipe,
-    public state: AppState,
-    public service: AppService,
-    public config: AppConfiguration,
-    private dialog: MatDialog
-  ) {}
-
-  ngOnInit(): void {
-    if (this.result?.ident_cely) {
-      this.initProperties();
-    } else {
-      const pianid = this.result.id ? this.result.id : this.result;
-      this.service.getIdAsChild([pianid], "pian").subscribe((res: any) => {
-        this.result = res.response.docs[0];
-        this.initProperties();
-      });
-    }
-
-  }
-
-  ngOnChanges(c: any) {
-    if (c.result) {
-      this.checkRelations();
-      this.hasDetail = false;
-      this.detailExpanded = this.inDocument;
-    }
-  }
-
-  initProperties() {
-    if (!this.result) {
-      return;
-    }
-    // this.hasRights = this.state.hasRights(this.result.pristupnost, this.result.organizace);
+  override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-     `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+     `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
        author = {Archeologický informační systém České republiky}, 
-       title = {Záznam ${this.result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       title = {Záznam ${this._result.ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
 
-  checkRelations() {
+  override checkRelations() {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    if (this.isChild) {
+    if (this.isChild()) {
       return;
     }
-    this.service.checkRelations(this.result.ident_cely).subscribe((res: any) => {
-      this.result.az_dj_pian = res.az_dj_pian;
+    this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
+      this._result.az_dj_pian = res.az_dj_pian;
       this.relationsChecked = true;
       this.related = [];
       res.id_akce.forEach((ident_cely: string) => {
@@ -121,27 +75,4 @@ export class PianComponent implements OnInit {
     });
   }
 
-  toggleFav() {
-    if (this.result.isFav) {
-      this.service.removeFav(this.result.ident_cely).subscribe(res => {
-        this.result.isFav = false;
-      });
-    } else {
-      this.service.addFav(this.result.ident_cely).subscribe(res => {
-        this.result.isFav = true;
-      });
-    }
-  }
-
-  openFeedback() {
-    this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
-      width: '900px',
-      data: this.result.ident_cely,
-      panelClass: 'app-feedback-dialog'
-    });
-  } 
-
-  toggleDetail() {
-    this.detailExpanded = !this.detailExpanded;
-  }
 }

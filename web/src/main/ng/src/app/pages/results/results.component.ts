@@ -40,10 +40,10 @@ import { EntityContainer } from "../../entities/entity-container/entity-containe
     FacetsUsedComponent,
     FacetsComponent,
     PaginatorComponent,
-    DokumentComponent,
-    SamostatnyNalezComponent,
-    AkceComponent,
-    LokalitaComponent,
+    // DokumentComponent,
+    // SamostatnyNalezComponent,
+    // AkceComponent,
+    // LokalitaComponent,
     EntityContainer
 ],
   selector: 'app-results', 
@@ -185,7 +185,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       // }, 100);
       return;
     }
-    this.state.loading = true;
+    this.state.loading.set(true);;
     const p = Object.assign({}, params);
     this.state.switchingMap = false;
     this.state.documentProgress = 0;
@@ -201,7 +201,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     p['noFacets'] = 'true';
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       if (resp.error) {
-        this.state.loading = false;
+        this.state.loading.set(false);;
         this.state.facetsLoading = false;
         this.loading = false;
         this.state.hasError = true;
@@ -221,7 +221,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.setTitle();
       this.docs = resp.response.docs;
       if (this.state.isMapaCollapsed) {
-        this.state.loading = false;
+        this.state.loading.set(false);;
       }
       this.loading = false;
       this.hasResultsInOther = this.config.entities.findIndex(e => this.state.totals[e] > 0) > -1;
@@ -259,7 +259,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   loadingFinished() {
     setTimeout(() => {
-      this.state.loading = false;
+      this.state.loading.set(false);;
       this.cd.detectChanges();
     }, 100)
     

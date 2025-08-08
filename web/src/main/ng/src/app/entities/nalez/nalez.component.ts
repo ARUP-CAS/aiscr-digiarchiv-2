@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
@@ -18,7 +18,7 @@ import { InlineFilterComponent } from "../../components/inline-filter/inline-fil
 })
 export class NalezComponent implements OnInit {
 
-  @Input() result: any;
+  readonly result = input<any>();
 
   constructor() { }
 

@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AppService } from '../../app.service';
 
@@ -10,7 +10,7 @@ import { AppService } from '../../app.service';
 })
 export class FreeTextComponent implements OnInit {
 
-  @Input() id: string;
+  readonly id = input<string>();
   text: SafeHtml;
 
   constructor(
@@ -26,7 +26,7 @@ export class FreeTextComponent implements OnInit {
   }
 
   setText() {
-    this.service.getText(this.id).subscribe(t => {
+    this.service.getText(this.id()).subscribe(t => {
       this.text = this.sanitized.bypassSecurityTrustHtml(t);
     });
   }

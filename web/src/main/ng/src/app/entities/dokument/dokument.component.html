@@ -34,7 +34,7 @@
         }
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content [class.app-detail-closed]="!detailExpanded()">
+    <mat-card-content [class.app-detail-closed]="!_detailExpanded">
       <div fxLayout="row" fxLayoutGap="16px" class="app-row-gap-16" fxFlexFill>
         @if (imgSrc) {
           <div class="app-thumb">
@@ -161,10 +161,10 @@
             }
           </div>
           <app-result-actions [inDocument]="inDocument()" [result]="result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"
-          [detailExpanded]="detailExpanded()" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
+          [detailExpanded]="_detailExpanded" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
         </mat-card-actions>
       }
-      @if (detailExpanded && !isChild()) {
+      @if (_detailExpanded && !isChild()) {
         <mat-card-content>
           <div class="app-card-detail">
             <mat-accordion multi="true">

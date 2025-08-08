@@ -38,16 +38,16 @@
     &.app-panel-date-range,
     &.app-panel-year-range,
     &.app-panel-filter-by-field {
-      .mat-card {
+      .mat-mdc-card {
         @extend .app-clean-bg, .app-clean-pd !optional;
     
-        .mat-card-content {
-          .mat-form-field {
-            &.mat-form-field-appearance-fill {
-              .mat-form-field-wrapper {
+        .mat-mdc-card-content {
+          .mat-mdc-form-field {
+            &.mat-mdc-form-field-appearance-fill {
+              .mat-mdc-form-field-wrapper {
                 margin-bottom: -1.3437em;
       
-                .mat-form-field-flex {
+                .mat-mdc-form-field-flex {
                   @extend .app-clean-pd !optional;
                   border-radius: $app-border-radius;
                   background-color: $app-color-lightnes;
@@ -55,19 +55,19 @@
                   padding-left: $app-gap !important;
                   align-items: center;
     
-                  .mat-form-field-suffix {
+                  .mat-mdc-form-field-suffix {
                     .mat-icon {
                       margin-top: 3px;
                     }
                   }
                 }
       
-                .mat-form-field-underline {
+                .mat-mdc-form-field-underline {
                   &:before {
                     background-color: transparent;
                   }
       
-                  .mat-form-field-ripple {
+                  .mat-mdc-form-field-ripple {
                     background-color: transparent;
                   } 
                 }
@@ -77,7 +77,7 @@
             &.mat-focused {
               box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
     
-              .mat-form-field-ripple {
+              .mat-mdc-form-field-ripple {
                 background-color: transparent;
               }
             }
@@ -94,13 +94,13 @@
 
     &.app-panel-year-range,
     &.app-panel-filter-by-field {
-      .mat-form-field-infix {
+      .mat-mdc-form-field-infix {
         width: auto;
       }
     }
 
     &.app-panel-filter-by-field {
-      .mat-form-field {
+      .mat-mdc-form-field {
         .mat-select {
           .mat-select-arrow-wrapper {
             transform: none;
@@ -122,7 +122,7 @@
     }
   }
 
-  .mat-list {
+  .mat-mdc-list {
     @extend .app-clean-pd !optional;
 
     a {
@@ -130,7 +130,7 @@
     }
 
     &:not(.app-list-used-facet) {
-      .mat-list-item {
+      .mat-mdc-list-item {
         &.app-facet-entity {
           @include setEntityColor(facet);
           @extend .app-font-family-rc !optional;
@@ -179,7 +179,7 @@
         }
 
     
-        .mat-list-item-content {
+        .mat-mdc-list-item-content {
           @extend .app-clean-pd !optional;
 
           span {
@@ -194,7 +194,7 @@
           // min-height: 22px;
           overflow: hidden;
           
-          .mat-list-item-content {
+          .mat-mdc-list-item-content {
             display: table;
 
             .mat-checkbox,

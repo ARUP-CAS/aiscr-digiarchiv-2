@@ -1,29 +1,40 @@
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
-@use "angular-material-css-vars" as mat-css-vars;
-@use 'scss/app-variables-old';
-@use 'scss/app-variables';
-@use 'scss/app-layout';
-@use 'scss/app-flex-layout';
-@use 'scss/app-global';
-@use 'scss/app-mat-override';
+// @use "angular-material-css-vars" as mat-css-vars;
 
-@include mat-css-vars.init-material-css-vars(); 
+@use "scss/scss_theme-colors";
+@use "scss/app-variables-old";
+@use "scss/app-variables";
+//@use "scss/app-flex-layout";
+@use "scss/app-global";
+// @use "scss/app-mat-override-old";
+@use "scss/app-mat-override";
+@use "scss/app-layout";
 
-html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$blue-palette,
-      tertiary: mat.$red-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-}
+
+@use "scss/app-adv-search";
+@use "scss/app-file-viewer";
+@use "scss/app-login-dialog";
+@use "scss/app-document-dialog";
+@use "scss/app-print";
+
+
+// @include mat-css-vars.init-material-css-vars(); 
+
+// html {
+//   @include mat.theme((
+//     color: (
+//       theme-type: light,
+//       primary: mat.$blue-palette,
+//       tertiary: mat.$red-palette,
+//     ),
+//     typography: Roboto,
+//     density: 0,
+//   ));
+// }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; font-size: 14px; }

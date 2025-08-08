@@ -72,7 +72,7 @@ export class LokalitaComponent extends Entity {
 
   override getFullId() {
     this.service.getId(this._result.ident_cely).subscribe((res: any) => {
-      this.result = res.response.docs[0];
+      this._result = res.response.docs[0];
       // this.getDokuments();
       this.getExtZdroj();
       this.hasDetail = true;
@@ -88,8 +88,10 @@ export class LokalitaComponent extends Entity {
         this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
           this._result.az_ext_odkaz.forEach((eo:any) => {
             const ez = res.response.docs.find((ez: any) => eo.ext_zdroj.id === ez.ident_cely);
+            if (ez) {
             ez.ext_odkaz_paginace = eo.paginace;
             this._result.az_ext_zdroj.push(ez);
+            }
           });
 
           this._result.az_ext_zdroj.sort((ez1: any, ez2: any) => {

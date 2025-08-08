@@ -103,7 +103,7 @@
 </mat-card> -->
 
 @if(result()) {
-    @switch(entity()) {
+    @switch(result().entity) {
         @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
             [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
         @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"

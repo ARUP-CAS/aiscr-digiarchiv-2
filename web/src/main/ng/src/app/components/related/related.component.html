@@ -10,8 +10,7 @@
         [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
         @for (child of children; track child.ident_cely; let idx = $index) {
           <div>
-            {{ child.ident_cely }}
-            <app-entity-container [entity]="child.entity" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-entity-container>
+            <app-entity-container [result]="child.result" [isChild]="true" [mapDetail]="mapDetail()" class="app-related-item"></app-entity-container>
             <!-- <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
             <app-lokalita *ngIf="child.entity === 'lokalita'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
             <app-dokument *ngIf="child.entity === 'dokument'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
@@ -26,8 +25,7 @@
     }
     @if (state.printing) {
       @for (child of children; track child.ident_cely) {
-        {{ child.ident_cely }}
-        <app-entity-container [entity]="child.entity" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-entity-container>
+        <app-entity-container [result]="child.result" [isChild]="true" [mapDetail]="mapDetail()" class="app-related-item"></app-entity-container>
         <!-- <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
         <app-lokalita *ngIf="child.entity === 'lokalita'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
         <app-dokument *ngIf="child.entity === 'dokument'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>

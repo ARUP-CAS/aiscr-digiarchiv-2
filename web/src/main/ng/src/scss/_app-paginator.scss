@@ -1,8 +1,8 @@
 // --- PAGINATOR ---
 
 app-paginator {
-  .mat-paginator {
-    .mat-paginator-range-label {
+  .mat-mdc-paginator {
+    .mat-mdc-paginator-range-label {
       margin: 0 10px;
     }
   }
@@ -11,7 +11,7 @@ app-paginator {
     font-size: 12px;
     margin-right: $app-gap;
 
-    .mat-form-field-suffix {
+    .mat-mdc-form-field-suffix {
       a {
         color: $app-gray-6;
 

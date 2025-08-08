@@ -1,6 +1,6 @@
 <div>
-  @if (!mapDetail && (result.chranene_udaje || result.loc_rpt || result.loc)) {
-    <button mat-flat-button (click)="service.showInMap(result, false, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
+  @if (!mapDetail() && (result().chranene_udaje || result().loc_rpt || result().loc)) {
+    <button mat-flat-button (click)="service.showInMap(result(), false, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
       <mat-icon>map</mat-icon>
     </button>
   }
@@ -8,7 +8,7 @@
     <mat-icon>link</mat-icon>
   </button>
   <mat-menu #links="matMenu">
-    <a mat-menu-item [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
+    <a mat-menu-item [routerLink]="'/id/' + result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
       {{ 'card.menu.Persistentní odkaz' | translate }}
     </a>
     @for (item of config.choiceApi; track item) {
@@ -24,17 +24,17 @@
     <a mat-menu-item  (click)="showCitation()" [matTooltip]="'Zobrazit citaci'">
       {{ 'card.menu.Zobrazit citaci' | translate }}
     </a>
-    @if (bibTex) {
-      <a mat-menu-item   (click)="service.showBiBText(result.ident_cely, bibTex)" [matTooltip]="'BibTeX'">
+    @if (bibTex()) {
+      <a mat-menu-item   (click)="service.showBiBText(result().ident_cely, bibTex())" [matTooltip]="'BibTeX'">
         {{ 'BibTeX' }}
       </a>
     }
   </mat-menu>
-  <a mat-flat-button target="_blank" [href]="'print/'+result.ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
+  <a mat-flat-button target="_blank" [href]="'print/'+result().ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
     <mat-icon>print</mat-icon>
   </a>
   @if (state.logged) {
-    <button mat-flat-button (click)="toggleFav()" [class.app-color-fav]="result.isFav" [matTooltip]="result.isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
+    <button mat-flat-button (click)="toggleFav()" [class.app-color-fav]="result().isFav" [matTooltip]="result().isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
       <mat-icon>grade</mat-icon>
     </button>
   }
@@ -43,21 +43,21 @@
   </button>
   <a mat-flat-button
     target="stats"
-    routerLink="/stats" [queryParams]="{ident_cely: result.ident_cely}"
+    routerLink="/stats" [queryParams]="{ident_cely: result().ident_cely}"
     [matTooltip]="'navbar.desc.stats' | translate">
     <mat-icon>query_stats</mat-icon>
   </a>
-  @if (!isDocumentDialogOpen && !inDocument) {
-    <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded ? 'app-rotate-up' : 'app-rotate-down'">
-      {{(detailExpanded ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+  @if (!isDocumentDialogOpen() && !inDocument()) {
+    <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded() ? 'app-rotate-up' : 'app-rotate-down'">
+      {{(detailExpanded() ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
     </button>
   }
-  @if (state.itemView === 'col' && !isDocumentDialogOpen && !inDocument) {
+  @if (state.itemView === 'col' && !isDocumentDialogOpen() && !inDocument()) {
     <button mat-flat-button class="app-col-detail" (click)="openDocument()">
       {{ 'card.button.Zobrazit detail' | translate }}
     </button>
   }
-  @if (state.itemView === 'col' && isDocumentDialogOpen && !inDocument) {
+  @if (state.itemView === 'col' && isDocumentDialogOpen() && !inDocument()) {
     <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false">
       {{ 'card.button.Skrýt detail' | translate }}
     </button>

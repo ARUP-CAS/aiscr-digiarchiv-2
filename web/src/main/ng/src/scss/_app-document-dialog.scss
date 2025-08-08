@@ -2,18 +2,18 @@
 
 .app-document-dialog {
   .mat-dialog-container {
-    @extend .app-clean-pd;
+    @extend .app-clean-pd !optional;
 
     .mat-dialog-content {
-      @extend .app-clean-pd, .app-clean-mg;
+      @extend .app-clean-pd, .app-clean-mg !optional;
     }
 
     .app-table-cell {
-      @extend .app-clean-pd;
+      @extend .app-clean-pd !optional;
 
       .app-entity-first-child {
-        & > .mat-card {
-          @extend .app-clean-shadow;
+        & > .mat-mdc-card {
+          @extend .app-clean-shadow !optional;
           padding-left: 0;
           padding-right: 0;
           margin-bottom: 0 !important;

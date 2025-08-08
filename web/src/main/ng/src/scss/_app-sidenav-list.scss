@@ -3,7 +3,7 @@
 @import './app-variables-old';
 
 app-sidenav-list {
-  .mat-list-item {
+  .mat-mdc-list-item {
     background-color: transparent !important;
 
     &.app-active {

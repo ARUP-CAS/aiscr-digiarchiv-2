@@ -93,7 +93,7 @@ export class Entity {
     });
     if (this.inDocument) {
       this.state.documentProgress = 0;
-      this.state.loading = false;
+      this.state.loading.set(false);;
     }
   }
 

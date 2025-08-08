@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,13 +28,13 @@ import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.comp
 })
 export class ResultActionsComponent {
 
-  @Input() result: any;
-  @Input() bibTex: string;
-  @Input() isDocumentDialogOpen: boolean;
-  @Input() detailExpanded: boolean;
-  @Input() inDocument: boolean;
-  @Input() mapDetail: boolean;
-  @Input() ident_cely_api: any;
+  readonly result = input<any>();
+  readonly bibTex = input<string>();
+  readonly isDocumentDialogOpen = input<boolean>();
+  readonly detailExpanded = input<boolean>();
+  readonly inDocument = input<boolean>();
+  readonly mapDetail = input<boolean>();
+  readonly ident_cely_api = input<any>();
 
   @Output() onToggleDetail  = new EventEmitter<string>();
 
@@ -49,7 +49,8 @@ export class ResultActionsComponent {
   ) { }
 
   apiIdentCely(item:{label: string, metadataPrefix: string, url: string, useParent: boolean}) {
-    return (item.useParent && this.ident_cely_api) ? this.ident_cely_api : this.result.ident_cely;
+    const ident_cely_api = this.ident_cely_api();
+    return (item.useParent && ident_cely_api) ? ident_cely_api : this.result().ident_cely;
   }
 
   toggleDetail() {
@@ -57,13 +58,14 @@ export class ResultActionsComponent {
   }
 
   toggleFav() {
-    if (this.result.isFav) {
-      this.service.removeFav(this.result.ident_cely).subscribe(res => {
-        this.result.isFav = false;
+    const result = this.result();
+    if (result.isFav) {
+      this.service.removeFav(result.ident_cely).subscribe(res => {
+        this.result().isFav = false;
       });
     } else {
-      this.service.addFav(this.result.ident_cely).subscribe(res => {
-        this.result.isFav = true;
+      this.service.addFav(result.ident_cely).subscribe(res => {
+        this.result().isFav = true;
       });
     }
   }
@@ -71,7 +73,7 @@ export class ResultActionsComponent {
   openDocument() {
     this.state.dialogRef = this.dialog.open(DocumentDialogComponent, {
       width: '900px',
-      data: this.result,
+      data: this.result(),
       panelClass: 'app-document-dialog'
     });
   }
@@ -79,7 +81,7 @@ export class ResultActionsComponent {
   openFeedback() {
     this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
       width: '900px',
-      data: this.result.ident_cely,
+      data: this.result().ident_cely,
       panelClass: 'app-feedback-dialog'
     });
   }
@@ -87,7 +89,7 @@ export class ResultActionsComponent {
   showCitation() {
     this.state.dialogRef = this.dialog.open(BibtextDialogComponent, {
       width: '900px',
-      data: {result: this.result, link: this.config.serverUrl + 'id/' + this.result.ident_cely},
+      data: {result: this.result(), link: this.config.serverUrl + 'id/' + this.result().ident_cely},
       panelClass: 'app-feedback-dialog'
     });
     

@@ -1,5 +1,9 @@
 // --- FILE VIEWER ---
 
+
+@import './app-mixins';
+@import './app-variables-old';
+
 app-file-viewer {
   .mat-dialog-title {
     position: relative;
@@ -36,7 +40,7 @@ app-file-viewer {
         @include setIcon($position: middle);  
         }
        
-        .mat-form-field {
+        .mat-mdc-form-field {
           width: 30px;
           font-weight: bold;
         }

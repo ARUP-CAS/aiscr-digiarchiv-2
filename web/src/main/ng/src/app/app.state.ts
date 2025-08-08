@@ -9,6 +9,7 @@ import { Condition } from './shared/condition';
 import { Crumb } from './shared/crumb';
 import { SolrResponse } from './shared/solr-response';
 import { User } from './shared/user';
+import { signal } from '@angular/core';
 
 export class AppState {
 
@@ -60,7 +61,7 @@ export class AppState {
   // loading = true;
 
   solrResponse: SolrResponse;
-  loading: boolean = true;
+  loading = signal<boolean>(true);
   switchingMap = false;
   closingMapResult = false;
   facetsLoading = false;

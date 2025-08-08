@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef, input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -22,6 +22,7 @@ import { AdbComponent } from "../adb/adb.component";
 import { KomponentaComponent } from "../komponenta/komponenta.component";
 import { PianComponent } from "../pian/pian.component";
 import { LokalitaComponent } from "../lokalita/lokalita.component";
+import { Entity } from '../entity/entity';
 
 @Component({
   imports: [
@@ -40,36 +41,20 @@ import { LokalitaComponent } from "../lokalita/lokalita.component";
   templateUrl: './dok-jednotka.component.html',
   styleUrls: ['./dok-jednotka.component.scss']
 })
-export class DokJednotkaComponent implements OnInit {
+export class DokJednotkaComponent extends Entity {
 
-  @Input() result: any;
-  @Input() detailExpanded: boolean;
-  @Input() isChild: boolean;
-  @Input() pians: any[];
-  @Input() adbs: any[];
-  @Input() inDocument = false;
-
-  bibTex: string;
-
-  constructor(
-    private datePipe: DatePipe,
-    private service: AppService,
-    public state: AppState,
-    public config: AppConfiguration
-  ) {}
-
-  ngOnInit(): void {
+  override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+      `@misc{https://digiarchiv.aiscr.cz/id/${this.result().ident_cely},
        author = {Archeologický informační systém České republiky},
-       title = {Záznam ${this.result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       title = {Záznam ${this.result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
 
-  toggleDetail() {
-    this.detailExpanded = !this.detailExpanded;
-  }
+  readonly pians = input<any[]>();
+  readonly adbs = input<any[]>();
+
 }

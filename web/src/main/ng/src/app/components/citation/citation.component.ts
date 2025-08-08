@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
 
@@ -13,15 +13,16 @@ import { FlexLayoutModule } from 'ngx-flexible-layout';
 })
 export class CitationComponent implements OnInit {
 
-  @Input() result:any;
-  @Input() link: string;
+  readonly result = input<any>();
+  readonly link = input<string>();
   now = new Date();
 
   constructor() { }
 
   ngOnInit(): void {
-    if (this.result?.autor) {
-      this.result.autorFormatted = this.result.autor.join(' – ');
+    const result = this.result();
+    if (result?.autor) {
+      result.autorFormatted = result.autor.join(' – ');
     }
   }
 

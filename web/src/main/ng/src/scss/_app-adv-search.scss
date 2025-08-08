@@ -1,5 +1,9 @@
 // --- ADV SEARCH ---
 
+
+@import './app-mixins';
+@import './app-variables-old';
+
 app-adv-search {
   .app-add-condition {
     .mat-icon {

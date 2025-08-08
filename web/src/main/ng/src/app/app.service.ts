@@ -41,7 +41,7 @@ export class AppService {
       if (this.windowRef.nativeWindow.print) {
         this.windowRef.nativeWindow.print();
         this.state.printing = false;
-        this.state.loading = false;
+        this.state.loading.set(false);
       }
     }
   }
@@ -155,7 +155,7 @@ export class AppService {
   }
 
   stopLoading() {
-    // this.state.loading = false;
+    // this.state.loading.set(false);;
     // this.state.facetsLoading = false;
   }
 
@@ -214,7 +214,7 @@ export class AppService {
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
     this.state.hasError = true;
-    this.state.loading = false;
+    this.state.loading.set(false);;
     this.state.facetsLoading = false;
     return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }

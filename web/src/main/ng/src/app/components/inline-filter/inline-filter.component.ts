@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -20,12 +20,12 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class InlineFilterComponent implements OnInit {
 
-  @Input() field: string;
-  @Input() value: any;
-  @Input() heslar: string;
-  @Input() isChild: boolean;
-  @Input() isDate = false;
-  @Input() isYear= false;
+  readonly field = input<string>();
+  readonly value = input<any>();
+  readonly heslar = input<string>();
+  readonly isChild = input<boolean>();
+  readonly isDate = input(false);
+  readonly isYear = input(false);
   isDocument: boolean;
 
   constructor(
@@ -38,13 +38,13 @@ export class InlineFilterComponent implements OnInit {
   }
 
   addFilter(event: any) {
-    let v = this.value + '';
-    const filter = this.config.filterFields.find(ff => ff.field === this.field);
+    let v = this.value() + '';
+    const filter = this.config.filterFields.find(ff => ff.field === this.field());
     if (filter && filter.type === 'date') {
     // if (this.config.dateFacets.includes(this.field)) {
       v += ',' + v;
     }
-    this.service.addFilter(this.field, v, 'and');
+    this.service.addFilter(this.field(), v, 'and');
     event.stopPropagation();
   }
 

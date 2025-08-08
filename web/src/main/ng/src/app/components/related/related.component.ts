@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class RelatedComponent implements OnInit {
 
-  @Input() mapDetail: boolean;
+  readonly mapDetail = input<boolean>();
 
   public ids: {entity: string, ident_cely: string}[];
   @Input() set related(value: {entity: string, ident_cely: string}[]) {
@@ -39,7 +39,7 @@ export class RelatedComponent implements OnInit {
     });
     this.toProcess = JSON.parse(JSON.stringify(this.ids));
     if (this.state.printing || this.router.isActive('print', false)) {
-      this.state.loading = true;
+      this.state.loading.set(true);;
       this.getRecords(true)
     } else {
       this.getRecords(false);
@@ -88,15 +88,15 @@ export class RelatedComponent implements OnInit {
           this.children.push({entity, ident_cely: result.ident_cely, result})
         });
         this.state.documentProgress = this.children.length / this.numChildren * 100;
-        this.state.loading = (this.children.length) < this.numChildren;
-        if ((loadAll && this.state.loading) || (entitySize < this.loadSize)) {
+        this.state.loading.set((this.children.length) < this.numChildren);
+        if ((loadAll && this.state.loading()) || (entitySize < this.loadSize)) {
           this.getRecords(loadAll)
         } else {
-          this.state.loading = false;
+          this.state.loading.set(false);;
         }
       });
     } else {
-      this.state.loading = false;
+      this.state.loading.set(false);;
     }
   }
 
