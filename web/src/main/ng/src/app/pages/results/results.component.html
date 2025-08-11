@@ -62,7 +62,7 @@
         <div class="app-table-cell app-left" [class.app-facets-opened]="!state.isFacetsCollapsed">
           <div fxLayout="row" fxFlexFill>
             <div fxFlex class="app-facets">
-              @if (state.facetsLoading) {
+              @if (state.facetsLoading()) {
                 <div class="app-display-table app-loading"><mat-progress-bar
                 mode="indeterminate"></mat-progress-bar></div>
               }

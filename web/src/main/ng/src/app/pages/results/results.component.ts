@@ -162,12 +162,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
       // }, 100);
       return;
     }
-    this.state.loading.set(true);;
+    this.state.loading.set(true);
+    this.state.facetsLoading.set(true);
     const p = Object.assign({}, params);
     this.state.switchingMap = false;
     this.state.documentProgress = 0;
     this.loading = true;
-    this.state.facetsLoading = true;
     this.state.hasError = false;
     
     if (!p['entity']) {
@@ -178,8 +178,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
     p['noFacets'] = 'true';
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       if (resp.error) {
-        this.state.loading.set(false);;
-        this.state.facetsLoading = false;
+        this.state.loading.set(false);
+        this.state.facetsLoading.set(false);
         this.loading = false;
         this.state.hasError = true;
         this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.search_error');
@@ -210,7 +210,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       p['onlyFacets'] = 'true';
       this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
         this.state.setFacets(resp);
-        this.state.facetsLoading = false;
+        this.state.facetsLoading.set(false);
       });
       
       // Math.min(9*itemSize, docs.length * itemSize)

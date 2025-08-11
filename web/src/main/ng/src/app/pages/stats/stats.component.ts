@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -25,9 +25,19 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   imports: [
-    TranslateModule, CommonModule, RouterModule, FlexLayoutModule, FormsModule,
-    MatProgressBarModule, MatTooltipModule, MatFormFieldModule, MatDatepickerModule,
-    MatIconModule, MatInputModule, MatCardModule, MatListModule, MatSelectModule,
+    TranslateModule,
+    RouterModule,
+    FlexLayoutModule,
+    FormsModule,
+    MatProgressBarModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatInputModule,
+    MatCardModule,
+    MatListModule,
+    MatSelectModule,
     MatButtonModule,
     NgxEchartsDirective
 ],

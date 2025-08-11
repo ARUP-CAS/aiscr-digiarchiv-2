@@ -214,8 +214,8 @@ export class AppService {
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
     this.state.hasError = true;
-    this.state.loading.set(false);;
-    this.state.facetsLoading = false;
+    this.state.loading.set(false);
+    this.state.facetsLoading.set(false);
     return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }
 
@@ -655,27 +655,7 @@ export class AppService {
 
   }
 
-  getBoundsByDoc(result: any) {
-    let latMax = 0;
-    let latMin = 90;
-    let lngMax = 0;
-    let lngMin = 180;
-
-    // 50.66795366897923,13.808275906582654
-    result.loc_rpt.forEach((m: any) => {
-      const latlng = m.split(',');
-      latMax = Math.max(latMax, latlng[0]);
-      latMin = Math.min(latMin, latlng[0]);
-      lngMax = Math.max(lngMax, latlng[1]);
-      lngMin = Math.min(lngMin, latlng[1]);
-
-    });
-
-    // const southWest = latLng(latMin, lngMin);
-    // const northEast = latLng(latMax, lngMax);
-    // return latLngBounds(southWest, northEast);
-  }
-
+  
   setMapResult(result: any, mapDetail: any) {
     if (!result && mapDetail) {
       // zavirame kartu

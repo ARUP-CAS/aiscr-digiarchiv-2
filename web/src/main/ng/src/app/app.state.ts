@@ -55,16 +55,11 @@ export class AppState {
   locationFilterBounds: any; // Vyber na mape
   mapBounds: any;
 
-
-  // public loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  // public loading: Observable<boolean> = this._loading.asObservable();
-  // loading = true;
-
   solrResponse: SolrResponse;
   loading = signal<boolean>(true);
+  facetsLoading = signal<boolean>(true);
   switchingMap = false;
   closingMapResult = false;
-  facetsLoading = false;
   hasError = false;
   imagesLoading: boolean;
   imagesLoaded = 0;
