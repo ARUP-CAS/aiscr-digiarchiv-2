@@ -23,19 +23,40 @@ import { DatePipe } from '@angular/common';
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { Entity } from '../entity/entity';
+import { PianComponent } from "../pian/pian.component";
+import { ExterniZdrojComponent } from "../externi-zdroj/externi-zdroj.component";
+import { AdbComponent } from "../adb/adb.component";
+import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
+import { KomponentaComponent } from "../komponenta/komponenta.component";
+import { JednotkaDokumentuComponent } from "../jednotka-dokumentu/jednotka-dokumentu.component";
+import { DokumentCastComponent } from "../dokument-cast/dokument-cast.component";
+import { LetComponent } from "../let/let.component";
+import { VyskovyBodComponent } from "../vyskovy-bod/vyskovy-bod.component";
+import { KomponentaDokumentComponent } from "../komponenta-dokument/komponenta-dokument.component";
 
 @Component({
   selector: 'app-entity-container',
   imports: [
-     TranslateModule, RouterModule, FlexLayoutModule,
-     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
-      MatProgressBarModule, MatTooltipModule, MatExpansionModule,
-      forwardRef(() => DokumentComponent), 
-      forwardRef(() => SamostatnyNalezComponent), 
-      forwardRef(() => ProjektComponent), 
-      forwardRef(() => AkceComponent), 
-      forwardRef(() => LokalitaComponent), 
-      MatCardModule, MatButtonModule, MatIconModule],
+    TranslateModule, RouterModule, FlexLayoutModule,
+    MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
+    MatProgressBarModule, MatTooltipModule, MatExpansionModule,
+    forwardRef(() => DokumentComponent),
+    forwardRef(() => SamostatnyNalezComponent),
+    forwardRef(() => ProjektComponent),
+    forwardRef(() => AkceComponent),
+    forwardRef(() => LokalitaComponent),
+    MatCardModule, MatButtonModule, MatIconModule,
+    PianComponent,
+    ExterniZdrojComponent,
+    AdbComponent,
+    DokJednotkaComponent,
+    KomponentaComponent,
+    JednotkaDokumentuComponent,
+    DokumentCastComponent,
+    LetComponent,
+    VyskovyBodComponent,
+    KomponentaDokumentComponent
+],
   templateUrl: './entity-container.html',
   styleUrl: './entity-container.scss'
 })

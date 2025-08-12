@@ -1,0 +1,151 @@
+<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
+  @if (mapDetail && !isChild) {
+    <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+      <mat-icon>clear</mat-icon>
+    </a>
+  }
+  <mat-card-header>
+    <mat-card-title>
+      @if (!state.isMapaCollapsed && !isChild && !mapDetail) {
+        <a><mat-icon>info</mat-icon></a>
+      }
+      @if (isChild) {
+        <mat-icon class="app-entity-akce" [matTooltip]="'entities.akce.title' | translate">turned_in</mat-icon>
+      }
+      {{ 'card.title.Část dokumentu' | translate }}&#160;
+      @switch (isChild) {
+        @case (true) {
+          <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+        }
+        @default {
+          <span class="app-ident-format">{{ result.ident_cely }}</span>
+        }
+      }
+      @if (result.poznamka) {
+        ({{ result.poznamka }})
+      }
+      <span class="app-pipe"></span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (state.itemView === 'col' && !isDocumentDialogOpen && !isChild) {
+      <div class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+        <mat-icon>image_not_supported</mat-icon>
+      </div>
+    }
+    <div class="app-metadata app-row-gap-16">
+
+      @if (result.akce || result.lokalita) {
+        <label class="app-label">{{ 'card.desc.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
+        @if (result.akce) {
+          <a [routerLink]="'/id/' + result.akce.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.akce.ident_cely }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
+        }
+        @if (result.vazba_druha_akce) {
+          <a [routerLink]="'/id/' + result.vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.vazba_druha_akce }} <mat-icon>link</mat-icon></a>
+        }
+        @if (result.lokalita) {
+          <a [routerLink]="'/id/' + result.lokalita.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.lokalita.ident_cely }} <mat-icon>link</mat-icon></a>
+        }
+        @if (result.vazba_druha_lokalita) {
+          <a [routerLink]="'/id/' + result.vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
+        }
+      }
+
+      <mat-accordion multi="true">
+        @for (kd of result.dokument_cast_komponenta; track kd) {
+          <app-komponenta  [result]="kd"></app-komponenta>
+        }
+        @if (result.dokument_cast_neident_akce) {
+          <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+            <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+              <mat-panel-title>
+                <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+                {{ 'card.panelTitle.Neidentifikovaná akce' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table>
+              @if (result.dokument_cast_neident_akce.katastr || result.dokument_cast_neident_akce.okres) {
+                <tr>
+                  <th class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</th>
+                  <td>
+                    <app-inline-filter [isChild]="isChild" [field]="'f_katastr'" [value]="result.dokument_cast_neident_akce.katastr.value"></app-inline-filter>
+                    @if (result.dokument_cast_neident_akce.okres) {
+                      &#160;(<app-inline-filter [isChild]="isChild" [field]="'f_okres'" [value]="result.dokument_cast_neident_akce.okres.value"></app-inline-filter>)
+                    }</td>
+                  </tr>
+                }
+                @for (v of result.dokument_cast_neident_akce.vedouci; track v) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Vedoucí akce' | translate }}:</th>
+                    <td>{{ v.value }}</td>
+                  </tr>
+                }
+                @if (result.dokument_cast_neident_akce.rok_zahajeni || result.dokument_cast_neident_akce.rok_ukonceni) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
+                    <td>{{ result.dokument_cast_neident_akce.rok_zahajeni }}@if (result.dokument_cast_neident_akce.rok_ukonceni) {
+                      -{{ result.dokument_cast_neident_akce.rok_ukonceni }}
+                    }</td>
+                  </tr>
+                }
+                @if (result.dokument_cast_neident_akce.lokalizace) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
+                    <td>{{ result.dokument_cast_neident_akce.lokalizace }}</td>
+                  </tr>
+                }
+                @if (result.dokument_cast_neident_akce.popis) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Popis' | translate }}:</th>
+                    <td>{{ result.dokument_cast_neident_akce.popis }}</td>
+                  </tr>
+                }
+                @if (result.dokument_cast_neident_akce.poznamka) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
+                    <td>{{ result.dokument_cast_neident_akce.poznamka }}</td>
+                  </tr>
+                }
+                @if (result.dokument_cast_neident_akce.pian) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Pian' | translate }}:</th>
+                    <td>{{ result.dokument_cast_neident_akce.pian }}</td>
+                  </tr>
+                }
+              </table>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      </div>
+    </mat-card-content>
+
+    @if (!isChild) {
+      <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
+        <div fxFlex></div>
+        <!-- <app-result-actions [inDocument]="inDocument" [result]="result" [bibTex]="''" [isDocumentDialogOpen]="false"
+      [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions> -->
+      <app-result-actions [inDocument]="inDocument" [result]="result" [isDocumentDialogOpen]="isDocumentDialogOpen"  (onToggleDetail)="toggleDetail()"
+        [bibTex]="bibTex"
+      [detailExpanded]="detailExpanded" [mapDetail]="false" [ident_cely_api]="result.ident_cely.substr(0, result.ident_cely.lastIndexOf('-'))" ></app-result-actions>
+    </mat-card-actions>
+  }
+
+  @if (detailExpanded && !isChild) {
+    <mat-card-content>
+      <div class="app-card-detail">
+        @if (result.dokument && !isChild) {
+          <mat-expansion-panel [expanded]="true" class="app-panel-souvisejici-zaznamy">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+              <mat-panel-title>
+                {{ 'card.panelTitle.Související záznamy' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @for (dokument of result.dokument; track dokument) {
+              <app-dokument [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
+            }
+          </mat-expansion-panel>
+        }
+      </div>
+    </mat-card-content>
+  }
+</mat-card>

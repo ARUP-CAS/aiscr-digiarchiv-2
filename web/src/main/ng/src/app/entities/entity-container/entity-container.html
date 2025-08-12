@@ -1,106 +1,4 @@
-<!-- <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()"
-    [class.app-entity-projekt]="!isChild() && !isDocumentDialogOpen()">
-    @if (mapDetail && !isChild()) {
-    <a (click)="service.setMapResult(null, true)" class="app-link-close"
-        [matTooltip]="'card.tooltip.Zavřít' | translate">
-        <mat-icon>clear</mat-icon>
-    </a>
-    }
-    <mat-card-header>
-        <mat-card-title fxLayout="row" fxLayoutGap="16px">
-            <div fxFlex (click)="service.showInMap(result, false, false, isChild())">
-                @if (!state.isMapaCollapsed && !isChild() && !mapDetail) {
-                <a><mat-icon>info</mat-icon></a>
-                }
-                <mat-icon class="app-entity-projekt" [matTooltip]="'entities.projekt.title' | translate">{{
-                    config.entityIcons["projekt"] }}</mat-icon>
 
-                @if (isChild()) {
-                <a [routerLink]="'/id/' + result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank"
-                    class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{
-                    result().ident_cely }} <mat-icon>link</mat-icon></a>
-                }
-                @if (!isChild()) {
-                <span class="app-ident-format">{{ result().ident_cely }}</span>
-                }
-                <span class="app-pipe"></span>
-
-                @switch(entity()) {
-                @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-                    [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-                    [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-                @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-                    [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-                    [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-                @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-                @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
-                @case ('akce') { <app-akce [result]="result"></app-akce> }
-                @case ('lokalita') { <app-lokalita [result]="result" [viewType]="'header'"></app-lokalita> }
-                }
-
-            </div>
-            @if (state.isMapaCollapsed && !isChild() || mapDetail) {
-            <div class="app-last-change" [matTooltip]="result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
-                'card.desc.Poslední změna' | translate }}: {{ result().datestamp | date : 'yyyy-MM-dd' }}</div>
-            }
-        </mat-card-title>
-    </mat-card-header>
-    <mat-card-content [class.app-detail-closed]="!detailExpanded()">
-        @switch(entity()) {
-        @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-            [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-            [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-        @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-            [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-            [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-        @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-        @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
-        @case ('akce') { <app-akce [result]="result"></app-akce> }
-        @case ('lokalita') { <app-lokalita [result]="result" [viewType]="'content'"></app-lokalita> }
-        }
-    </mat-card-content>
-
-    @if (!isChild()) {
-    <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
-        @switch(entity()) {
-        @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-            [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-            [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-        @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-            [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-            [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-        @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-        @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
-        @case ('akce') { <app-akce [result]="result"></app-akce> }
-        @case ('lokalita') { <app-lokalita [result]="result" [viewType]="'details'"></app-lokalita> }
-        }
-        <app-result-actions [inDocument]="inDocument()" [result]="result" [bibTex]="bibTex"
-            [isDocumentDialogOpen]="isDocumentDialogOpen()" [detailExpanded]="detailExpanded()"
-            [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
-    </mat-card-actions>
-    }
-    @if (detailExpanded && !isChild()) {
-    <mat-card-content>
-        <div class="app-card-detail">
-            <mat-accordion multi="true">
-                @switch(entity()) {
-                @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-                    [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-                    [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-                @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-                    [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-                    [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-                @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result()"></app-samostatny-nalez> }
-                @case ('projekt') { <app-projekt [result]="result()"></app-projekt> }
-                @case ('akce') { <app-akce [result]="result()"></app-akce> }
-                @case ('lokalita') { <app-lokalita [result]="result()"></app-lokalita> }
-                }
-                <app-related [related]="related()" [mapDetail]="mapDetail()"></app-related>
-            </mat-accordion>
-        </div>
-    </mat-card-content>
-    }
-</mat-card> -->
 
 @if(result()) {
     @switch(result().entity) {
@@ -117,5 +15,38 @@
             [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-akce> }
         @case ('lokalita') { <app-lokalita [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
             [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-lokalita> }
+
+            
+        @case('jednotka_dokumentu') {
+            <app-jednotka-dokumentu [result]="result" [detailExpanded]="true" [inDocument]="true"></app-jednotka-dokumentu>
+          }
+        @case('dokument_cast') {
+            <app-dokument-cast [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument-cast>
+          }
+        @case('let') {
+            <app-let [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
+          }
+        @case('pian') {
+            <app-pian [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
+          }
+        @case('ext_zdroj') {
+            <app-externi-zdroj [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
+          }
+          @case('adb') {
+              <app-adb [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
+            }
+          @case('vyskovy_bod') {
+              <app-vyskovy-bod [result]="result" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
+            }
+          @case('dokumentacni_jednotka') {
+              <app-dok-jednotka [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
+            }
+          @case('komponenta') {
+              <app-komponenta [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
+            }
+          @case('komponenta_dokument') {
+              <app-komponenta-dokument [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta-dokument>
+            }
     }
 }
+

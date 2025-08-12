@@ -703,7 +703,7 @@ export class MapViewComponent {
       this.map.removeLayer(this.heatmapLayer);
     }
     if (!this.state.heatMaps?.loc_rpt) {
-      //this.state.loading = false;
+      //this.state.loading.set(false);
       return;
     }
     // const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
@@ -1143,7 +1143,7 @@ export class MapViewComponent {
   }
 
   getMarkerById(docId: string, setResponse: boolean, zoom: boolean) {
-    //this.state.loading = true;
+    //this.state.loading.set(true);
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
 
     this.service.getId(docId, false).subscribe((res: any) => {

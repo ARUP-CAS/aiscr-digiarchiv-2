@@ -1,0 +1,89 @@
+@if (state.loading) {
+  <div class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
+}
+@if (docs.length > 0) {
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          @if (format) {
+            @if (hasPian) {
+              <th>{{'export.desc.Pian'| translate}}</th>
+            }
+            @if (hasPian) {
+              <th>{{'export.desc.Přesnost'| translate}}</th>
+            }
+            @if (hasPian) {
+              <th>{{'export.desc.PIAN - typ'| translate}}</th>
+            }
+            @if (hasPian) {
+              <th>{{'export.desc.PIAN - Základní mapa 1:10 000'| translate}}</th>
+            }
+            @if (hasPian) {
+              <th>{{'export.desc.Definiční bod (WGS-84)' | translate}}</th>
+            }
+            <th >{{'export.desc.' + format | translate}}</th>
+          }
+          @for (field of config.exportFields[state.entity]; track field) {
+            <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of docs; track r; let idx = $index) {
+          <tr>
+            <td>{{idx + 1}}</td>
+            @if (format) {
+              @if (hasPian) {
+                <td>{{r.pian.ident_cely}}</td>
+              }
+              @if (hasPian) {
+                <td>{{r.pian.pian_presnost | translate}}</td>
+              }
+              @if (hasPian) {
+                <td>{{r.pian.pian_typ | translate}}</td>
+              }
+              @if (hasPian) {
+                <td>{{r.pian.pian_chranene_udaje.zm10}}</td>
+              }
+              @if (hasPian) {
+                <td>{{ r.pian.lat }} : {{ r.pian.lng }}</td>
+              }
+              <td >{{r.geometrie}}</td>
+            }
+            @for (field of config.exportFields[state.entity]; track field) {
+              <td>
+                @if (field.byPath) {
+                  @if (field.heslar) {
+                    {{ getByPath(r, field.name) | translate}}
+                  }
+                  @if (!field.heslar && field.type === 'date') {
+                    {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
+                  }
+                  @if (!field.heslar && field.type !== 'date') {
+                    {{ getByPath(r, field.name) }}
+                  }
+                }
+                @if (!field.byPath) {
+                  @if (field.type === 'boolean') {
+                    {{r[field.name] + '' | translate}}
+                  }
+                  @if (field.heslar) {
+                    {{r[field.name] | translate}}
+                  }
+                  @if (!field.heslar && field.type === 'date') {
+                    {{r[field.name] | date : 'yyyy-MM-dd'}}
+                  }
+                  @if (!field.heslar && field.type !== 'date' && field.type !== 'boolean') {
+                    {{r[field.name]}}
+                  }
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
