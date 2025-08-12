@@ -1,4 +1,4 @@
-@if (state.loading) {
+@if (state.loading()) {
   <div class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
 }
 @if (docs.length > 0) {

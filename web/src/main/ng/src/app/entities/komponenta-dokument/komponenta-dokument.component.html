@@ -1,84 +1,133 @@
-<ng-container *ngIf="!inDocument">
+@if(!inDocument){
   <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
-</ng-container>
-<mat-card *ngIf="inDocument" class="app-result-item app-row-gap-16" [class.app-card-child]="isChild">
-  <mat-card-header>
-    <mat-card-title>
-      <ng-container *ngTemplateOutlet="titleTmpl"></ng-container>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-actions *ngIf="!isChild" fxLayout="row" fxLayoutAlign="start end">
-    <div fxFlex class="app-metadata">
-
-      <ng-container *ngIf="result.dokument?.length > 0">
-        {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.dokument?.length}}</strong>
-        <span class="app-pipe"></span>
-      </ng-container>
-      <ng-container *ngIf="result.knihovna_3d?.length > 0">
-        {{ 'card.desc.Počet 3D dokumentů' | translate }}: <strong>{{result.knihovna_3d.length}}</strong>
-        <span class="app-pipe"></span>
-      </ng-container>
-
-    </div>
-    <app-result-actions [inDocument]="inDocument" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"></app-result-actions>
-  </mat-card-actions>
-  <mat-card-content *ngIf="detailExpanded">
-    <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
-  </mat-card-content>
-</mat-card>
-
+}
+@if(inDocument){
+  <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild">
+    <mat-card-header>
+      <mat-card-title>
+        <ng-container *ngTemplateOutlet="titleTmpl"></ng-container>
+      </mat-card-title>
+    </mat-card-header>
+    @if(!isChild){
+      <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
+        <div fxFlex class="app-metadata">
+          @if(result.dokument?.length > 0){
+            <ng-container>
+              {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.dokument?.length}}</strong>
+              <span class="app-pipe"></span>
+            </ng-container>
+          }
+          @if(result.knihovna_3d?.length > 0){
+            <ng-container>
+              {{ 'card.desc.Počet 3D dokumentů' | translate }}: <strong>{{result.knihovna_3d.length}}</strong>
+              <span class="app-pipe"></span>
+            </ng-container>
+          }
+        </div>
+        <app-result-actions [inDocument]="inDocument" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true"
+        (onToggleDetail)="toggleDetail()"></app-result-actions>
+      </mat-card-actions>
+    }
+    @if (detailExpanded) {
+      <mat-card-content>
+        <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
+      </mat-card-content>
+    }
+  </mat-card>
+}
 <ng-template #titleTmpl let-panel let-panelHeader>
-  <mat-icon *ngIf=""panel (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-      {{ 'card.panelTitle.Komponenta' | translate }}&#160;<ng-container *ngIf="result.ident_cely"><a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>&#160;–&#160;</ng-container>
-      <ng-container *ngIf="result.obdobi">
-        <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi" [heslar]="'obdobi_druha'"></app-inline-filter>
-      </ng-container>
-      <ng-container *ngIf="result.jistota || result.presna_datace">(<ng-container *ngIf="result.jistota">{{ result.jistota | translate }};</ng-container>{{ result.presna_datace }})</ng-container>
-      <ng-container *ngIf="result.areal">&#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'" [value]="result.areal" [heslar]="'areal_druha'"></app-inline-filter></ng-container>
-      <ng-container *ngIf="result.aktivita?.length > 0">
-        &#160;(<ng-container *ngFor="let ak of result.aktivita; let last = last;"> <app-inline-filter [isChild]="isChild" [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
-        <span *ngIf="!last">,&#160; </span></ng-container>)
-      </ng-container>
+  @if(panel){
+    <mat-icon  (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+  }
+  {{ 'card.panelTitle.Komponenta' | translate }}&#160;
+  @if (result.ident_cely) {
+    <a
+      [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank"
+      class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }}
+      <mat-icon>link</mat-icon></a>&#160;–&#160;
+    }
+    @if (result.obdobi) {
+      <app-inline-filter [isChild]="isChild" [field]="'f_obdobi'" [value]="result.obdobi"
+      [heslar]="'obdobi_druha'"></app-inline-filter>
+    }
+    @if (result.jistota || result.presna_datace) {
+      (@if (result.jistota) {
+      {{ result.jistota |
+      translate }};
+      }{{ result.presna_datace }})
+    }
+    @if (result.areal) {
+      &#160;–&#160;<app-inline-filter [isChild]="isChild" [field]="'f_areal'"
+    [value]="result.areal" [heslar]="'areal_druha'"></app-inline-filter>
+  }
+  @if (result.aktivita?.length > 0) {
+    &#160;(@for (ak of result.aktivita; track ak; let last = $last) {
+    <app-inline-filter [isChild]="isChild"
+    [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
+    @if (!last) {
+      <span>,&#160; </span>
+    }
+    })
+  }
 </ng-template>
 
 <ng-template #contentTmpl>
-  
+
   <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument">
-    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
-      <mat-panel-title *ngIf="!inDocument">
-        <ng-container *ngTemplateOutlet="titleTmpl; context:{panel:panel, panelHeader:panelHeader}"></ng-container>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <ng-container *ngIf="result.poznamka">{{ result.poznamka }}</ng-container>
-    <mat-expansion-panel #panel *ngIf="result.nalez_dokumentu" [expanded]="true" hideToggle class="app-panel-inner">
-      <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader
+      (click)="panelHeader._toggle()">
+      @if (!inDocument) {
         <mat-panel-title>
-          <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-          {{ 'card.panelTitle.Nálezy' | translate }}:
+          <ng-container *ngTemplateOutlet="titleTmpl; context:{panel:panel, panelHeader:panelHeader}"></ng-container>
         </mat-panel-title>
-      </mat-expansion-panel-header>
-      <ul class="app-list-inside">
-        <ng-container *ngIf="result.nalez_dokumentu.length">
-          <li *ngFor="let nalez_dokumentu of result.nalez_dokumentu">
-            <app-nalez [result]="nalez_dokumentu"></app-nalez>
-          </li>
-        </ng-container>
-        <ng-container *ngIf="!result.nalez_dokumentu.length">
-          <li>
-            <app-nalez [result]="result.nalez_dokumentu"></app-nalez>
-          </li>
-        </ng-container>
-      </ul>
-    </mat-expansion-panel>
+      }
+    </mat-expansion-panel-header>
+    @if (result.poznamka) {
+      {{ result.poznamka }}
+    }
+    @if (result.nalez_dokumentu) {
+      <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+        <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+          <mat-panel-title>
+            <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+            {{ 'card.panelTitle.Nálezy' | translate }}:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul class="app-list-inside">
+          @if (result.nalez_dokumentu.length) {
+            @for (nalez_dokumentu of result.nalez_dokumentu; track nalez_dokumentu) {
+              <li>
+                <app-nalez [result]="nalez_dokumentu"></app-nalez>
+              </li>
+            }
+          }
+          @if (!result.nalez_dokumentu.length) {
+            <li>
+              <app-nalez [result]="result.nalez_dokumentu"></app-nalez>
+            </li>
+          }
+        </ul>
+      </mat-expansion-panel>
+    }
   </mat-expansion-panel>
 
-  <mat-expansion-panel *ngIf="(result.dokument || result.knihovna_3d)  && !isChild" [expanded]="true" class="app-panel-souvisejici-zaznamy">
-    <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
-      <mat-panel-title>
-        {{ 'card.panelTitle.Související záznamy' | translate }}:
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <app-dokument *ngIf="result.dokument" [result]="result.dokument[0]" [isChild]="true" class="app-related-item"></app-dokument>
-    <app-dokument *ngIf="result.knihovna_3d" [result]="result.knihovna_3d[0]" [isChild]="true" class="app-related-item"></app-dokument>
-  </mat-expansion-panel> 
+  @if ((result.dokument || result.knihovna_3d)  && !isChild) {
+    <mat-expansion-panel [expanded]="true"
+      class="app-panel-souvisejici-zaznamy">
+      <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
+        [collapsedHeight]="config.uiVars['panelHeightInCard']">
+        <mat-panel-title>
+          {{ 'card.panelTitle.Související záznamy' | translate }}:
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      @if (result.dokument) {
+        <app-dokument [result]="result.dokument[0]" [isChild]="true"
+        class="app-related-item"></app-dokument>
+      }
+      @if (result.knihovna_3d) {
+        <app-dokument [result]="result.knihovna_3d[0]" [isChild]="true"
+        class="app-related-item"></app-dokument>
+      }
+    </mat-expansion-panel>
+  }
 </ng-template>
