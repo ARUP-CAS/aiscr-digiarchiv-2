@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, forwardRef, input } from '@angular/core';
+import { Component, Input, OnInit, effect, forwardRef, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,23 +29,25 @@ export class RelatedComponent implements OnInit {
 
   readonly mapDetail = input<boolean>();
 
+  readonly related = input<{entity: string, ident_cely: string}[]>();
+
   public ids: {entity: string, ident_cely: string}[];
-  @Input() set related(value: {entity: string, ident_cely: string}[]) {
-    this.ids = value;
-    this.numChildren = this.ids.length;
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-    this.ids.sort((c1,c2) => {
-      return c1.ident_cely.localeCompare(c2.ident_cely)
-    });
-    this.toProcess = JSON.parse(JSON.stringify(this.ids));
-    if (this.state.printing || this.router.isActive('print', false)) {
-      this.state.loading.set(true);;
-      this.getRecords(true)
-    } else {
-      this.getRecords(false);
-    }
+  // @Input() set related(value: {entity: string, ident_cely: string}[]) {
+  //   this.ids = value;
+  //   this.numChildren = this.ids.length;
+  //   this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+  //   this.ids.sort((c1,c2) => {
+  //     return c1.ident_cely.localeCompare(c2.ident_cely)
+  //   });
+  //   this.toProcess = JSON.parse(JSON.stringify(this.ids));
+  //   if (this.state.printing || this.router.isActive('print', false)) {
+  //     this.state.loading.set(true);;
+  //     this.getRecords(true)
+  //   } else {
+  //     this.getRecords(false);
+  //   }
     
-  }
+  // }
 
   
   public children: {entity: string, ident_cely: string, result: any}[] = [];
@@ -62,7 +64,23 @@ export class RelatedComponent implements OnInit {
     public config: AppConfiguration,
     public state: AppState,
     private service: AppService
-  ){}
+  ){
+    effect(() => {
+    this.ids = this.related();
+    this.numChildren = this.ids.length;
+    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+    this.ids.sort((c1,c2) => {
+      return c1.ident_cely.localeCompare(c2.ident_cely)
+    });
+    this.toProcess = JSON.parse(JSON.stringify(this.ids));
+    if (this.state.printing || this.router.isActive('print', false)) {
+      this.state.loading.set(true);;
+      this.getRecords(true)
+    } else {
+      this.getRecords(false);
+    }
+    });
+  }
 
   ngOnInit(): void {
   }

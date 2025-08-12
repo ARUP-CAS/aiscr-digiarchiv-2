@@ -48,16 +48,18 @@ export class DokumentComponent extends Entity {
     this._result.dokument_cast_archeologicky_zaznam = res.dokument_cast_archeologicky_zaznam;
     this._result.dokument_cast_projekt = res.dokument_cast_projekt;
     this.relationsChecked = true;
-    this.related = [];
+    
+    const related: { entity: string; ident_cely: string; }[] = [];
     res.id_akce.forEach((ident_cely: string) => {
-      this.related.push({entity: 'akce', ident_cely})
+      related.push({entity: 'akce', ident_cely})
     });
     res.id_lokalita.forEach((ident_cely: string) => {
-      this.related.push({entity: 'lokalita', ident_cely})
+      related.push({entity: 'lokalita', ident_cely})
     });
     res.dokument_cast_projekt.forEach((ident_cely: string) => {
-      this.related.push({entity: 'projekt', ident_cely})
+      related.push({entity: 'projekt', ident_cely})
     });
+    this.related.set(related);
   });
 }
 

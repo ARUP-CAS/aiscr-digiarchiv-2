@@ -95,7 +95,7 @@
                 @case ('akce') { <app-akce [result]="result()"></app-akce> }
                 @case ('lokalita') { <app-lokalita [result]="result()"></app-lokalita> }
                 }
-                <app-related [related]="related" [mapDetail]="mapDetail()"></app-related>
+                <app-related [related]="related()" [mapDetail]="mapDetail()"></app-related>
             </mat-accordion>
         </div>
     </mat-card-content>

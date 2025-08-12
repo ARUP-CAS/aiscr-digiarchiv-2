@@ -60,14 +60,16 @@ export class AkceComponent extends Entity {
       this._result.az_dokument = res.az_dokument;
       this._result.akce_projekt = res.akce_projekt;
       this.relationsChecked = true;
-      this.related = [];
+      const related: { entity: string; ident_cely: string; }[] = [];
       res.az_dokument.forEach((ident_cely: string) => {
-        this.related.push({entity: 'dokument', ident_cely})
+        related.push({entity: 'dokument', ident_cely})
       });
 
       if (res.akce_projekt) {
-        this.related.push({entity: 'projekt', ident_cely: res.akce_projekt})
+        related.push({entity: 'projekt', ident_cely: res.akce_projekt})
       }
+      
+      this.related.set(related);
     });
   }
 

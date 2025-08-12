@@ -63,19 +63,21 @@ override setBibTex() {
       this._result.projekt_samostatny_nalez = res.projekt_samostatny_nalez;
       this._result.projekt_dokument = res.projekt_dokument;
       this.relationsChecked = true;
-      this.related = [];
+      
+      const related: { entity: string; ident_cely: string; }[] = [];
       res.id_akce.forEach((ident_cely: string) => {
-        this.related.push({entity: 'akce', ident_cely})
+        related.push({entity: 'akce', ident_cely})
       });
       res.id_lokalita.forEach((ident_cely: string) => {
-        this.related.push({entity: 'lokalita', ident_cely})
+        related.push({entity: 'lokalita', ident_cely})
       });
       res.projekt_samostatny_nalez.forEach((ident_cely: string) => {
-        this.related.push({entity: 'samostatny_nalez', ident_cely})
+        related.push({entity: 'samostatny_nalez', ident_cely})
       });
       res.projekt_dokument.forEach((ident_cely: string) => {
-        this.related.push({entity: 'dokument', ident_cely})
+        related.push({entity: 'dokument', ident_cely})
       });
+      this.related.set(related);
     });
   }
 

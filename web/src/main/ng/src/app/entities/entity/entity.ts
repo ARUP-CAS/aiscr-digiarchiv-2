@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, computed, effect, Inject, input, PLATFORM_ID, Signal } from '@angular/core';
+import { Component, computed, effect, Inject, input, PLATFORM_ID, signal, Signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -48,7 +48,7 @@ export class Entity {
   bibTex: string;
 
   relationsChecked = false;
-  related: { entity: string, ident_cely: string }[] = [];
+  related = signal<{ entity: string, ident_cely: string }[]>([]);
 
   okresy: string[] = [];
 

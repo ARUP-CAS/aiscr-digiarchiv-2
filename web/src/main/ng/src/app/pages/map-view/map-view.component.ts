@@ -6,10 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 //import * as L from 'leaflet'
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import L, { Control, geoJSON, LatLngBounds, Map, Marker, marker, tileLayer } from 'leaflet';
+import { Control, geoJSON, LatLngBounds, Map, Marker, marker, tileLayer } from 'leaflet';
 
 import 'leaflet.markercluster';
-import '../../../assets/js/locationfilter.js';
+// import { locationFilter } from './location';
+// import 'leaflet.locationfilter';
+import './locationfilter.js';
 import 'leaflet.polylinemeasure';
 declare var HeatmapOverlay: any;
 import 'wicket';
@@ -39,6 +41,9 @@ import { FacetsUsedComponent } from "../../components/facets/facets-used/facets-
 import { FacetsComponent } from "../../components/facets/facets.component";
 import { PaginatorComponent } from "../../components/paginator/paginator.component";
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatButtonModule } from '@angular/material/button';
+
+declare var L: any;
 
 export class AppMarkerOptions {
   id: string;
@@ -57,7 +62,7 @@ export class AppMarkerOptions {
     LeafletModule, MatCardModule, MatExpansionModule, MatCheckboxModule,
     MatFormFieldModule, MatSelectModule, MatInputModule, MatListModule,
     MatIconModule, MatProgressBarModule, MatTooltipModule, MatTabsModule,
-    MatSidenavModule, ScrollingModule,
+    MatSidenavModule, ScrollingModule, MatButtonModule,
     EntityContainer, FacetsUsedComponent, FacetsComponent, PaginatorComponent],
   selector: 'app-map-view',
   templateUrl: './map-view.component.html',
@@ -343,22 +348,24 @@ export class MapViewComponent {
       this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
     }
 
-    // this.locationFilter = new L.LocationFilter({
-    //   enable: this.state.locationFilterBounds !== null,
-    //   adjustButton: false,
-    //   buttonPosition: 'topright',
-    //   enableButton: {
-    //     enableText: this.service.getTranslation('map.desc.select area'),
-    //     disableText: this.service.getTranslation('map.desc.remove selection')
-    //   }
-    // });
+    this.locationFilter = new L.LocationFilter({
+      enable: this.state.locationFilterBounds !== null,
+      adjustButton: false,
+      buttonPosition: 'topright',
+      enableButton: {
+        enableText: this.service.getTranslation('map.desc.select area'),
+        disableText: this.service.getTranslation('map.desc.remove selection')
+      }
+    });
 
-    // if (this.state.locationFilterBounds) {
-    //   this.locationFilter.setBounds(this.state.locationFilterBounds);
-    // }
+    console.log(this.locationFilter )
+
+    if (this.state.locationFilterBounds) {
+      this.locationFilter.setBounds(this.state.locationFilterBounds);
+    }
 
 
-    // map.addLayer(this.locationFilter);
+    map.addLayer(this.locationFilter);
 
     L.control.polylineMeasure({
       position: 'topright',
@@ -434,28 +441,28 @@ export class MapViewComponent {
       this.updateBounds();
     });
 
-    // this.locationFilter.on('change', (e: any) => {
-    //   if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds())) {
-    //     this.state.locationFilterBounds = this.locationFilter.getBounds();
-    //     this.updateVyber();
-    //   }
-    // });
+    this.locationFilter.on('change', (e: any) => {
+      if (JSON.stringify(this.state.locationFilterBounds) !== JSON.stringify(this.locationFilter.getBounds())) {
+        this.state.locationFilterBounds = this.locationFilter.getBounds();
+        this.updateVyber();
+      }
+    });
 
-    // this.locationFilter.on('enableClick', () => {
-    //   this.state.locationFilterEnabled = true;
-    //   this.state.locationFilterBounds = this.map.getBounds().pad(this.config.mapOptions.selectionInitPad)
-    //   // this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
-    //   this.updateVyber();
-    // });
+    this.locationFilter.on('enableClick', () => {
+      this.state.locationFilterEnabled = true;
+      this.state.locationFilterBounds = this.map.getBounds().pad(this.config.mapOptions.selectionInitPad)
+      // this.locationFilter.setBounds(this.map.getBounds().pad(this.config.mapOptions.selectionInitPad));
+      this.updateVyber();
+    });
 
-    // this.locationFilter.on('disableClick', () => {
-    //   if (this.state.isMapaCollapsed) {
-    //     return;
-    //   }
-    //   this.state.locationFilterEnabled = false;
-    //   this.state.locationFilterBounds = this.map.getBounds().pad(this.config.mapOptions.selectionInitPad);
-    //   this.updateVyber();
-    // });
+    this.locationFilter.on('disableClick', () => {
+      if (this.state.isMapaCollapsed) {
+        return;
+      }
+      this.state.locationFilterEnabled = false;
+      this.state.locationFilterBounds = this.map.getBounds().pad(this.config.mapOptions.selectionInitPad);
+      this.updateVyber();
+    });
 
     this.mapReady = true;
     setTimeout(() => {

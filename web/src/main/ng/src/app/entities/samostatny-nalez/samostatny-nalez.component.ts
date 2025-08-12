@@ -56,10 +56,12 @@ export class SamostatnyNalezComponent extends Entity {
     this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
       this._result.samostatny_nalez_projekt = res.samostatny_nalez_projekt;
       this.relationsChecked = true;
-      this.related = [];
+      
+      const related: { entity: string; ident_cely: string; }[] = [];
       if (res.samostatny_nalez_projekt) {
-        this.related.push({entity: 'projekt', ident_cely: res.samostatny_nalez_projekt})
+        related.push({entity: 'projekt', ident_cely: res.samostatny_nalez_projekt})
       }
+      this.related.set(related);
     });
   }
 

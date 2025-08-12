@@ -65,13 +65,15 @@ export class PianComponent extends Entity {
     this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
       this._result.az_dj_pian = res.az_dj_pian;
       this.relationsChecked = true;
-      this.related = [];
+      
+      const related: { entity: string; ident_cely: string; }[] = [];
       res.id_akce.forEach((ident_cely: string) => {
-        this.related.push({entity: 'akce', ident_cely})
+        related.push({entity: 'akce', ident_cely})
       });
       res.id_lokalita.forEach((ident_cely: string) => {
-        this.related.push({entity: 'lokalita', ident_cely})
+        related.push({entity: 'lokalita', ident_cely})
       });
+      this.related.set(related);
     });
   }
 
