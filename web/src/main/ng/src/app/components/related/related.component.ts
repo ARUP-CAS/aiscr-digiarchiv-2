@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, effect, forwardRef, input } from '@angular/core';
+import { Component, Input, OnInit, effect, forwardRef, input, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatCardModule, MatIconModule, MatButtonModule, ScrollingModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     forwardRef(() => EntityContainer)
-],
+  ],
   selector: 'app-related',
   templateUrl: './related.component.html',
   styleUrls: ['./related.component.scss']
@@ -29,34 +29,17 @@ export class RelatedComponent implements OnInit {
 
   readonly mapDetail = input<boolean>();
 
-  readonly related = input<{entity: string, ident_cely: string}[]>();
+  readonly related = input<{ entity: string, ident_cely: string }[]>();
 
-  public ids: {entity: string, ident_cely: string}[];
-  // @Input() set related(value: {entity: string, ident_cely: string}[]) {
-  //   this.ids = value;
-  //   this.numChildren = this.ids.length;
-  //   this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-  //   this.ids.sort((c1,c2) => {
-  //     return c1.ident_cely.localeCompare(c2.ident_cely)
-  //   });
-  //   this.toProcess = JSON.parse(JSON.stringify(this.ids));
-  //   if (this.state.printing || this.router.isActive('print', false)) {
-  //     this.state.loading.set(true);;
-  //     this.getRecords(true)
-  //   } else {
-  //     this.getRecords(false);
-  //   }
-    
-  // }
+  public ids: { entity: string, ident_cely: string }[];
 
-  
-  public children: {entity: string, ident_cely: string, result: any}[] = [];
+  public children = signal<{ entity: string, ident_cely: string, result: any }[]>([]);
   numChildren: number = 0;
-  
+
   itemSize = 133;
   vsSize = 0;
   math = Math;
-  toProcess: {entity: string, ident_cely: string}[];
+  toProcess = signal<{ entity: string, ident_cely: string }[]>([]);
   loadSize = 20;
 
   constructor(
@@ -64,21 +47,21 @@ export class RelatedComponent implements OnInit {
     public config: AppConfiguration,
     public state: AppState,
     private service: AppService
-  ){
+  ) {
     effect(() => {
-    this.ids = this.related();
-    this.numChildren = this.ids.length;
-    this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
-    this.ids.sort((c1,c2) => {
-      return c1.ident_cely.localeCompare(c2.ident_cely)
-    });
-    this.toProcess = JSON.parse(JSON.stringify(this.ids));
-    if (this.state.printing || this.router.isActive('print', false)) {
-      this.state.loading.set(true);;
-      this.getRecords(true)
-    } else {
-      this.getRecords(false);
-    }
+      this.ids = this.related();
+      this.numChildren = this.ids.length;
+      this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
+      this.ids.sort((c1, c2) => {
+        return c1.ident_cely.localeCompare(c2.ident_cely)
+      });
+      this.toProcess.set(JSON.parse(JSON.stringify(this.ids)));
+      if (this.state.printing() || this.router.isActive('print', false)) {
+        this.state.loading.set(true);;
+        this.getRecords(true)
+      } else {
+        this.getRecords(false);
+      }
     });
   }
 
@@ -87,26 +70,28 @@ export class RelatedComponent implements OnInit {
 
   getRecords(loadAll: boolean) {
 
-    if (this.toProcess.length > 0) {
-      const entity = this.toProcess[0].entity;
+    if (this.toProcess().length > 0) {
+      const entity = this.toProcess()[0].entity;
       let entitySize = 0;
-      const max = Math.min(this.loadSize, this.toProcess.length);
-      for (let i = 0; i < max; i++ ) {
-        if (entity === this.toProcess[i].entity) {
+      const max = Math.min(this.loadSize, this.toProcess().length);
+      for (let i = 0; i < max; i++) {
+        if (entity === this.toProcess()[i].entity) {
           entitySize++;
         } else {
           break;
         }
       }
 
-      const ids: {entity: string, ident_cely: string}[] = this.toProcess.splice(0, entitySize);
+      const ids: { entity: string, ident_cely: string }[] = this.toProcess().splice(0, entitySize);
 
       this.service.getIdAsChild(ids.map(e => e.ident_cely), entity).subscribe((res: any) => {
+        const ch: { entity: string; ident_cely: any; result: any; }[] = [];
         res.response.docs.forEach((result: any) => {
-          this.children.push({entity, ident_cely: result.ident_cely, result})
+          ch.push({ entity, ident_cely: result.ident_cely, result })
         });
-        this.state.documentProgress = this.children.length / this.numChildren * 100;
-        this.state.loading.set((this.children.length) < this.numChildren);
+        this.children.set(ch);
+        this.state.documentProgress = this.children().length / this.numChildren * 100;
+        this.state.loading.set((this.children().length) < this.numChildren);
         if ((loadAll && this.state.loading()) || (entitySize < this.loadSize)) {
           this.getRecords(loadAll)
         } else {

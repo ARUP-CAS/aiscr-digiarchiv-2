@@ -5,32 +5,22 @@
         {{ 'card.panelTitle.Související záznamy' | translate }}: {{ numChildren }}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    @if (!state.printing) {
+    @if (!state.printing()) {
       <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'"
         [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
-        @for (child of children; track child.ident_cely; let idx = $index) {
+        @for (child of children(); track child.ident_cely; let idx = $index) {
           <div>
             <app-entity-container [result]="child.result" [isChild]="true" [mapDetail]="mapDetail()" class="app-related-item"></app-entity-container>
-            <!-- <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
-            <app-lokalita *ngIf="child.entity === 'lokalita'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
-            <app-dokument *ngIf="child.entity === 'dokument'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
-            <app-projekt *ngIf="child.entity === 'projekt'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-            <app-samostatny-nalez *ngIf="child.entity === 'samostatny_nalez'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-samostatny-nalez> -->
           </div>
         }
-        @if (toProcess?.length > 0) {
+        @if (toProcess()?.length > 0) {
           <button mat-button color="primary" fxFlexFill fxLayoutAlign="center center" (click)="loadAll()">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
         }
       </cdk-virtual-scroll-viewport>
     }
-    @if (state.printing) {
-      @for (child of children; track child.ident_cely) {
+    @if (state.printing()) {
+      @for (child of children(); track child.ident_cely) {
         <app-entity-container [result]="child.result" [isChild]="true" [mapDetail]="mapDetail()" class="app-related-item"></app-entity-container>
-        <!-- <app-akce *ngIf="child.entity === 'akce'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-akce>
-        <app-lokalita *ngIf="child.entity === 'lokalita'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-lokalita>
-        <app-dokument *ngIf="child.entity === 'dokument'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-dokument>
-        <app-projekt *ngIf="child.entity === 'projekt'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-projekt>
-        <app-samostatny-nalez *ngIf="child.entity === 'samostatny_nalez'" [result]="child.result" [isChild]="true" [mapDetail]="mapDetail" class="app-related-item"></app-samostatny-nalez> -->
       }
     }
   </mat-expansion-panel>

@@ -44,7 +44,6 @@ export class AppState {
   itemView = 'default';
   isMapaCollapsed = true;
   timelineOpened = true;
-  printing = false;
   documentId: string;
   isFacetsCollapsed = true;
 
@@ -58,6 +57,7 @@ export class AppState {
   solrResponse: SolrResponse;
   loading = signal<boolean>(true);
   facetsLoading = signal<boolean>(true);
+  printing = signal<boolean>(false);
   switchingMap = false;
   closingMapResult = false;
   hasError = false;

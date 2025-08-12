@@ -40,7 +40,7 @@ export class AppService {
     if (isPlatformBrowser(this.platformId)) {
       if (this.windowRef.nativeWindow.print) {
         this.windowRef.nativeWindow.print();
-        this.state.printing = false;
+        this.state.printing.set(false);
         this.state.loading.set(false);
       }
     }

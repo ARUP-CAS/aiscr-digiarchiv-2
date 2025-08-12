@@ -82,7 +82,7 @@ export class JednotkaDokumentuComponent implements OnInit {
     if (this.inDocument) {
       this.service.print();
     } else {
-      this.state.printing = true;
+      this.state.printing.set(true);
       this.router.navigate(['/id', this.result.ident_cely]);
     }
   }
