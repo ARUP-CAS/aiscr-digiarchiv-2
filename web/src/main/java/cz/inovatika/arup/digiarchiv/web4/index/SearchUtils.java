@@ -117,8 +117,7 @@ public class SearchUtils {
     }
 
     public static JSONObject searchOrIndex(SolrQuery query, String core, String id) throws Exception {
-        try {
-            HttpJdkSolrClient client = IndexUtils.getClientNoOp();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             JSONObject json = json(query, client, core, false);
             if (json.getJSONObject("response").getInt("numFound") > 0) {
                 return json;
@@ -139,8 +138,7 @@ public class SearchUtils {
     }
 
     public static JSONObject searchById(SolrQuery query, String core, String id, boolean onlySearchable) {
-        try {
-            HttpJdkSolrClient client = IndexUtils.getClientNoOp();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             JSONObject json = json(query, client, core, onlySearchable);
             return json;
         } catch (Exception ex) {
@@ -148,11 +146,11 @@ public class SearchUtils {
         }
     }
 
-    public static JSONObject json(SolrQuery query, HttpJdkSolrClient client, String core) { 
+    public static JSONObject json(SolrQuery query, SolrClient client, String core) { 
         return json(query, client, core, true);
     }
 
-    public static JSONObject json(SolrQuery query, HttpJdkSolrClient client, String core, boolean onlySearchable) { 
+    public static JSONObject json(SolrQuery query, SolrClient client, String core, boolean onlySearchable) { 
         query.set("wt", "json");
         query.addFilterQuery("-is_deleted:true");
         if (onlySearchable) {
@@ -179,7 +177,7 @@ public class SearchUtils {
         }
     }
 
-    public static String csv(SolrQuery query, HttpJdkSolrClient client, String core) {
+    public static String csv(SolrQuery query, SolrClient client, String core) {
         query.set("wt", "csv");
         String qt = query.get("qt");
         try {

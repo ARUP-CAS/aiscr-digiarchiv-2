@@ -6,7 +6,7 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.SolrClient;
 import org.json.JSONObject;
 
 /**
@@ -14,6 +14,6 @@ import org.json.JSONObject;
  * @author alberto
  */
 public interface ComponentSearcher {
-  public void getRelated(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request);
+  public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request);
   public boolean isRelatedSearchable();
 }

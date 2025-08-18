@@ -2,7 +2,7 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,7 +18,7 @@ public class KomponentaDokumentSearcher implements ComponentSearcher {
   private boolean parentSearchable;
 
   @Override
-  public void getRelated(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+  public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fields = "*";

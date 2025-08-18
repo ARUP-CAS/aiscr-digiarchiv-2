@@ -23,6 +23,7 @@ import { AkceComponent } from '../akce/akce.component';
 import { LokalitaComponent } from '../lokalita/lokalita.component';
 import { KomponentaComponent } from "../komponenta/komponenta.component";
 import { DokumentComponent } from "../dokument/dokument.component";
+import { Entity } from '../entity/entity';
 
 @Component({
   imports: [
@@ -38,88 +39,17 @@ import { DokumentComponent } from "../dokument/dokument.component";
   templateUrl: './dokument-cast.component.html',
   styleUrls: ['./dokument-cast.component.scss']
 })
-export class DokumentCastComponent implements OnInit {
+export class DokumentCastComponent extends Entity {
 
-  @Input() result: any;
-  @Input() detailExpanded: boolean;
-  @Input() isChild: boolean;
-  @Input() mapDetail: boolean;
-  @Input() isDocumentDialogOpen: boolean;
-  @Input() inDocument = false;
-  hasRights: boolean;
-
-  bibTex: string;
-
-  constructor(
-    private datePipe: DatePipe,
-    private router: Router,
-    public service: AppService,
-    public state: AppState,
-    private dialog: MatDialog,
-    public config: AppConfiguration
-  ) { }
-  
-  ngOnInit(): void {
+  override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-      `@misc{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely},
+      `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
        author = {Archeologický informační systém České republiky},
-       title = {Záznam ${this.result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result.ident_cely}},
+       title = {Záznam ${this._result.ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
 
-
-  toggleFav() {
-    if (this.result.isFav) {
-      this.service.removeFav(this.result.ident_cely).subscribe(res => {
-        this.result.isFav = false;
-      });
-    } else {
-      this.service.addFav(this.result.ident_cely).subscribe(res => {
-        this.result.isFav = true;
-      });
-    }
-  }
-
-  gotoDoc() {
-    this.state.itemView = 'default';
-    if (this.state.dialogRef) {
-      this.state.dialogRef.close();
-    }
-    this.router.navigate(['/id', this.result.ident_cely]);
-  }
-
-  print() {
-    if (this.inDocument) {
-      this.service.print();
-    } else {
-      this.state.printing.set(true);
-      this.router.navigate(['/id', this.result.ident_cely]);
-    }
-  }
-  
-
-  openDocument() {
-    this.state.dialogRef = this.dialog.open(DocumentDialogComponent, {
-      width: '900px',
-      data: this.result,
-      panelClass: 'app-document-dialog'
-    });
-  }
-
-  openFeedback() {
-    this.state.dialogRef = this.dialog.open(FeedbackDialogComponent, {
-      width: '900px',
-      data: this.result.ident_cely,
-      panelClass: 'app-feedback-dialog'
-    });
-  }
-
-  
-
-  toggleDetail() {
-    this.detailExpanded = !this.detailExpanded;
-  }
 }

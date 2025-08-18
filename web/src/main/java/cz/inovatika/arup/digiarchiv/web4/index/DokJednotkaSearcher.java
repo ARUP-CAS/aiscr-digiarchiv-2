@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +23,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     private boolean parentSearchable;
 
     @Override
-    public void getRelated(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
         PIANSearcher ps = new PIANSearcher();
         String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -97,7 +97,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void getChilds(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
         
     }
 
@@ -112,7 +112,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void checkRelations(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
         
     }
 

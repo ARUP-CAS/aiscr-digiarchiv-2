@@ -539,12 +539,12 @@ public class SolrSearcher {
 
     public static JSONObject getKrajByOkresSolr(String ruianOkresu) {
 
-        try {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("kod:\"" + ruianOkresu + "\"")
                     // .addFilterQuery("{!join fromIndex=ruian to=kod from=kraj}kod:\"" + ruianOkresu + "\"")
                     .setRows(1).setFields("kraj_nazev,kraj");
-            JSONObject jo = json(IndexUtils.getClientNoOp(), "ruian", query);
+            JSONObject jo = json(client, "ruian", query);
             if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                 return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
             } else {
@@ -758,7 +758,7 @@ public class SolrSearcher {
         return new JSONObject((String) resp.get("response"));
     }
 
-    public static JSONObject getById(HttpJdkSolrClient client, String id, String fields, String filter) {
+    public static JSONObject getById(SolrClient client, String id, String fields, String filter) {
         try {
             SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");
             if (filter != null) {
@@ -776,11 +776,11 @@ public class SolrSearcher {
         return null;
     }
 
-    public static JSONObject getById(HttpJdkSolrClient client, String id, String fields) {
+    public static JSONObject getById(SolrClient client, String id, String fields) {
         return SolrSearcher.getById(client, id, fields, null);
     }
 
-    public static boolean existsById(HttpJdkSolrClient client, String id) {
+    public static boolean existsById(SolrClient client, String id) {
         try {
             SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");
             query.setRequestHandler("/search");
@@ -792,7 +792,7 @@ public class SolrSearcher {
         }
     }
 
-    public static void addChildField(HttpJdkSolrClient client, JSONObject doc, String idField, String newField, String queryFields, String filter) {
+    public static void addChildField(SolrClient client, JSONObject doc, String idField, String newField, String queryFields, String filter) {
         if (doc.has(idField)) {
             Object obj = doc.get(idField);
             if (obj instanceof JSONArray) {
@@ -813,11 +813,11 @@ public class SolrSearcher {
         }
     }
 
-    public static void addChildField(HttpJdkSolrClient client, JSONObject doc, String idField, String newField, String queryFields) {
+    public static void addChildField(SolrClient client, JSONObject doc, String idField, String newField, String queryFields) {
         SolrSearcher.addChildField(client, doc, idField, newField, queryFields, null);
     }
 
-    public static void addChildFieldByEntity(HttpJdkSolrClient client, JSONObject doc, String idField, String queryFields) {
+    public static void addChildFieldByEntity(SolrClient client, JSONObject doc, String idField, String queryFields) {
         if (doc.has(idField)) {
             Object obj = doc.get(idField);
             if (obj instanceof JSONArray) {
@@ -838,7 +838,7 @@ public class SolrSearcher {
         }
     }
 
-    public static void addFavorites(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public static void addFavorites(JSONObject jo, SolrClient client, HttpServletRequest request) {
         if (!jo.has("response")) {
             return;
         }
@@ -851,7 +851,7 @@ public class SolrSearcher {
         }
     }
 
-    public static void addIsFavorite(HttpJdkSolrClient client, JSONObject doc, String username) {
+    public static void addIsFavorite(SolrClient client, JSONObject doc, String username) {
         String ident_cely = doc.getString("ident_cely");
         SolrQuery query = new SolrQuery("uniqueid:" + username + "_" + ident_cely).setRows(1);
         JSONObject jo = SearchUtils.json(query, client, "favorites");

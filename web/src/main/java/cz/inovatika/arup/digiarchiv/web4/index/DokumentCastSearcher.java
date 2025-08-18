@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.SolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +23,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     private boolean parentSearchable = true;
 
     @Override
-    public void getRelated(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         String fields = "*,ident_cely,entity,dokument_cast_archeologicky_zaznam,dokument_cast_neident_akce:[json]";
@@ -99,7 +99,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void getChilds(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
     }
 
@@ -114,7 +114,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void checkRelations(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
     }
 

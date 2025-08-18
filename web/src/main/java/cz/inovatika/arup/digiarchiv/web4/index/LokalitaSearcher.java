@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -69,7 +70,7 @@ public class LokalitaSearcher implements EntitySearcher {
     }
 
     @Override
-    public void checkRelations(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
         JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < docs.length(); i++) {
             JSONObject doc = docs.getJSONObject(i);
@@ -96,7 +97,7 @@ public class LokalitaSearcher implements EntitySearcher {
     }
 
     @Override
-    public void getChilds(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
         if (jo.has("response")) {
             JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
             for (int i = 0; i < ja.length(); i++) {
@@ -120,7 +121,7 @@ public class LokalitaSearcher implements EntitySearcher {
         }
     }
 
-    public void addPians(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
             pristupnost = "D";
@@ -161,8 +162,7 @@ public class LokalitaSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try { 
-            HttpJdkSolrClient client = IndexUtils.getClientNoOp();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -190,8 +190,7 @@ public class LokalitaSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-        try {
-            HttpJdkSolrClient client = IndexUtils.getClientNoOp();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");

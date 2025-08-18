@@ -2,12 +2,12 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
-import static cz.inovatika.arup.digiarchiv.web4.index.LokalitaSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,7 +33,7 @@ public class LetSearcher implements EntitySearcher {
     }
 
     @Override
-    public void checkRelations(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
     }
 
     @Override
@@ -42,7 +42,7 @@ public class LetSearcher implements EntitySearcher {
     }
 
     @Override
-    public void getChilds(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request) {
+    public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
@@ -64,8 +64,7 @@ public class LetSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try {
-            HttpJdkSolrClient client = IndexUtils.getClientNoOp();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery()
                     .setFacet(true);
             setQuery(request, query);
@@ -82,8 +81,7 @@ public class LetSearcher implements EntitySearcher {
 
     @Override
     public String export(HttpServletRequest request) {
-        try {
-            HttpJdkSolrClient client = IndexUtils.getClientNoOp();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             return SearchUtils.csv(query, client, "entities");

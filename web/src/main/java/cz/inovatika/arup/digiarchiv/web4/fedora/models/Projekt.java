@@ -14,9 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
@@ -139,115 +141,115 @@ public class Projekt implements FedoraModel {
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
-        String pr = SearchUtils.getPristupnostMap().get(pristupnost.getId());
-        idoc.setField("pristupnost", pr);
-        boolean searchable = false;
-        if (!projekt_dokument.isEmpty()) {
-            // check if related are searchable
-            String fq = "";
-            for (Vocab pd : projekt_dokument) {
-                fq += "\"" + pd.getId() + "\",";
-            }
-            fq += "KKK";
-            SolrQuery query = new SolrQuery("*")
-                    .setRows(1)
-                    .addFilterQuery("entity:dokument")
-                    .addFilterQuery("ident_cely:(" + fq + ")");
-            try {
-                JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
-                if (!ja.isEmpty()) {
-                    searchable = true;
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            String pr = SearchUtils.getPristupnostMap().get(pristupnost.getId());
+            idoc.setField("pristupnost", pr);
+            boolean searchable = false;
+            if (!projekt_dokument.isEmpty()) {
+                // check if related are searchable
+                String fq = "";
+                for (Vocab pd : projekt_dokument) {
+                    fq += "\"" + pd.getId() + "\",";
                 }
-            } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-            }
-        }
-        if (!projekt_samostatny_nalez.isEmpty()) {
-            // check if related are searchable
-            SolrQuery query = new SolrQuery("*")
-                    .setRows(2000)
-                    .addFilterQuery("entity:samostatny_nalez")
-                    .addFilterQuery("samostatny_nalez_projekt:\"" + ident_cely + "\"");
-            try {
-                JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
-                if (!ja.isEmpty()) {
-                    searchable = true;
-                    addLocFromSN(ja, idoc);
-                }
-            } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-            }
-        }
-
-        if (!searchable && !projekt_archeologicky_zaznam.isEmpty()) {
-            SolrQuery query = new SolrQuery("*")
-                    .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
-                    .setRows(1)
-                    .setFields("ident_cely,entity");
-            try {
-                JSONArray ja = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query).getJSONObject("response").getJSONArray("docs");
-                if (!ja.isEmpty()) {
-                    searchable = true;
-                }
-            } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-            }
-        }
-
-        idoc.setField("searchable", searchable);
-        IndexUtils.setDateStamp(idoc, ident_cely);
-        IndexUtils.setDateStampFromHistory(idoc, historie);
-
-        IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
-
-        IndexUtils.addRefField(idoc, "projekt_okres", projekt_okres);
-        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(projekt_okres.getId()).getString("kraj_nazev")); 
-        IndexUtils.addVocabField(idoc, "projekt_typ_projektu", projekt_typ_projektu);
-        IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
-        IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
-        IndexUtils.addVocabField(idoc, "projekt_kulturni_pamatka", projekt_kulturni_pamatka);
-        IndexUtils.addSecuredFieldNonRepeat(idoc, "f_uzivatelske_oznaceni", projekt_uzivatelske_oznaceni, "A");
-
-        if (projekt_datum_zahajeni != null) {
-            IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_od", projekt_datum_zahajeni);
-            IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_do", projekt_datum_zahajeni);
-            String ukonceni = "*";
-            if (projekt_datum_ukonceni != null) {
-                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_provedeni_do", projekt_datum_ukonceni);
-                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_ukonceni", projekt_datum_ukonceni);
-                if (!projekt_datum_ukonceni.before(projekt_datum_zahajeni)) {
-                    ukonceni = projekt_datum_ukonceni.toInstant().toString();
+                fq += "KKK";
+                SolrQuery query = new SolrQuery("*")
+                        .setRows(1)
+                        .addFilterQuery("entity:dokument")
+                        .addFilterQuery("ident_cely:(" + fq + ")");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    if (!ja.isEmpty()) {
+                        searchable = true;
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
-            IndexUtils.addFieldNonRepeat(idoc, "datum_provedeni", "[" + projekt_datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
-        }
+            if (!projekt_samostatny_nalez.isEmpty()) {
+                // check if related are searchable
+                SolrQuery query = new SolrQuery("*")
+                        .setRows(2000)
+                        .addFilterQuery("entity:samostatny_nalez")
+                        .addFilterQuery("samostatny_nalez_projekt:\"" + ident_cely + "\"");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    if (!ja.isEmpty()) {
+                        searchable = true;
+                        addLocFromSN(ja, idoc);
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
 
-        for (Vocab v : projekt_archeologicky_zaznam) {
-            idoc.addField("projekt_archeologicky_zaznam", v.getValue());
-            addArch(idoc, v.getValue());
-        }
+            if (!searchable && !projekt_archeologicky_zaznam.isEmpty()) {
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
+                        .setRows(1)
+                        .setFields("ident_cely,entity");
+                try {
+                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+                    if (!ja.isEmpty()) {
+                        searchable = true;
+                    }
+                } catch (SolrServerException | IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+            idoc.setField("searchable", searchable);
+            IndexUtils.setDateStamp(idoc, ident_cely);
+            IndexUtils.setDateStampFromHistory(idoc, historie);
 
-        for (Vocab v : projekt_samostatny_nalez) {
-            idoc.addField("projekt_samostatny_nalez", v.getValue());
-        }
+            IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
 
-        for (Vocab v : projekt_dokument) {
-            idoc.setField("projekt_dokument", v.getValue());
-        }
+            IndexUtils.addRefField(idoc, "projekt_okres", projekt_okres);
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(projekt_okres.getId()).getString("kraj_nazev"));
+            IndexUtils.addVocabField(idoc, "projekt_typ_projektu", projekt_typ_projektu);
+            IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
+            IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
+            IndexUtils.addVocabField(idoc, "projekt_kulturni_pamatka", projekt_kulturni_pamatka);
+            IndexUtils.addSecuredFieldNonRepeat(idoc, "f_uzivatelske_oznaceni", projekt_uzivatelske_oznaceni, "A");
 
-        //List<SolrInputDocument> idocs = new ArrayList<>();
-        for (Soubor s : soubor) {
+            if (projekt_datum_zahajeni != null) {
+                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_od", projekt_datum_zahajeni);
+                IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_zahajeni_do", projekt_datum_zahajeni);
+                String ukonceni = "*";
+                if (projekt_datum_ukonceni != null) {
+                    IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_provedeni_do", projekt_datum_ukonceni);
+                    IndexUtils.addFieldNonRepeat(idoc, "projekt_datum_ukonceni", projekt_datum_ukonceni);
+                    if (!projekt_datum_ukonceni.before(projekt_datum_zahajeni)) {
+                        ukonceni = projekt_datum_ukonceni.toInstant().toString();
+                    }
+                }
+                IndexUtils.addFieldNonRepeat(idoc, "datum_provedeni", "[" + projekt_datum_zahajeni.toInstant().toString() + " TO " + ukonceni + "]");
+            }
+
+            for (Vocab v : projekt_archeologicky_zaznam) {
+                idoc.addField("projekt_archeologicky_zaznam", v.getValue());
+                addArch(idoc, v.getValue());
+            }
+
+            for (Vocab v : projekt_samostatny_nalez) {
+                idoc.addField("projekt_samostatny_nalez", v.getValue());
+            }
+
+            for (Vocab v : projekt_dokument) {
+                idoc.setField("projekt_dokument", v.getValue());
+            }
+
+            //List<SolrInputDocument> idocs = new ArrayList<>();
+            for (Soubor s : soubor) {
 //                SolrInputDocument djdoc = s.createSolrDoc();
 //                idocs.add(djdoc);
-            IndexUtils.addJSONField(idoc, "soubor", s);
+                IndexUtils.addJSONField(idoc, "soubor", s);
 
-            idoc.addField("soubor_id", s.id);
-            idoc.addField("soubor_nazev", s.nazev);
-            idoc.addField("soubor_filepath", s.path);
-            idoc.addField("soubor_rozsah", s.rozsah);
-            idoc.addField("soubor_size_bytes", s.size_mb);
+                idoc.addField("soubor_id", s.id);
+                idoc.addField("soubor_nazev", s.nazev);
+                idoc.addField("soubor_filepath", s.path);
+                idoc.addField("soubor_rozsah", s.rozsah);
+                idoc.addField("soubor_size_bytes", s.size_mb);
 
-        }
+            }
 //            if (!idocs.isEmpty()) {
 //                IndexUtils.getClientBin().add("soubor", idocs, 10);
 //            }
@@ -255,13 +257,14 @@ public class Projekt implements FedoraModel {
 //            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 
-        if (projekt_chranene_udaje != null) {
-            projekt_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
-        }
+            if (projekt_chranene_udaje != null) {
+                projekt_chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
+            }
 
-        setSortFields(idoc);
-        setFacets(idoc, SolrSearcher.getSufixesByLevel((String) idoc.getFieldValue("pristupnost")));
-        setFullText(idoc);
+            setSortFields(idoc);
+            setFacets(idoc, SolrSearcher.getSufixesByLevel((String) idoc.getFieldValue("pristupnost")));
+            setFullText(idoc);
+        }
     }
 
     private void setSortFields(SolrInputDocument idoc) {
@@ -301,7 +304,6 @@ public class Projekt implements FedoraModel {
 //                }
 //            }
 //        }
-        
         for (Object f : indexFields) {
             String s = (String) f;
             if (s.contains(".")) {
@@ -315,7 +317,7 @@ public class Projekt implements FedoraModel {
                         IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
                     }
                 }
-                
+
             }
         }
 
@@ -362,7 +364,7 @@ public class Projekt implements FedoraModel {
                             // idoc.addField("pian_id", pians.optString(j));
                             addPian(idoc, pristupnost, pians.optString(j));
                         }
-                    } 
+                    }
 
                     for (String f : facetFields) {
                         if (azDoc.has(f)) {
@@ -505,7 +507,7 @@ class ProjektChraneneUdaje {
     public String kulturni_pamatka_popis;
 
     public List<String> okresy = new ArrayList<>();
-    public List<String> kraje = new ArrayList<>(); 
+    public List<String> kraje = new ArrayList<>();
 
     public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
 

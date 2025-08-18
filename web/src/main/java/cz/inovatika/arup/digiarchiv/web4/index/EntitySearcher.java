@@ -6,7 +6,7 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.SolrClient;
 import org.json.JSONObject;
 
 /**
@@ -19,8 +19,8 @@ public interface EntitySearcher {
   public String[] getSearchFields(String pristupnost);
   public void filter(JSONObject jo, String pristupnost, String org);
   public void processAsChild(HttpServletRequest request, JSONObject jo);
-  public void getChilds(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request);
+  public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request);
   public String[] getChildSearchFields(String pristupnost);
   public String[] getRelationsFields();
-  public void checkRelations(JSONObject jo, HttpJdkSolrClient client, HttpServletRequest request);
+  public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request);
 }

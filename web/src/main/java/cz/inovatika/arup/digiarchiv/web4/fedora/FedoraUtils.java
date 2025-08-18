@@ -96,7 +96,7 @@ public class FedoraUtils {
     return response.body();
   }
   
-  public static InputStream requestInputStream(String url) throws URISyntaxException, IOException, InterruptedException {
+  public static InputStream requestInputStream(String url) throws Exception {
     //HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
@@ -104,7 +104,7 @@ public class FedoraUtils {
             .header("Authorization", auth_header())
             .version(HttpClient.Version.HTTP_1_1)
             .build();
-    HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+    HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream()); 
     return response.body();
   }
   

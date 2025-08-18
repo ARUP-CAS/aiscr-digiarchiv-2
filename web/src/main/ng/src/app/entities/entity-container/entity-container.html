@@ -18,34 +18,34 @@
 
             
         @case('jednotka_dokumentu') {
-            <app-jednotka-dokumentu [result]="result" [detailExpanded]="true" [inDocument]="true"></app-jednotka-dokumentu>
+            <app-jednotka-dokumentu [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-jednotka-dokumentu>
           }
         @case('dokument_cast') {
-            <app-dokument-cast [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument-cast>
+            <app-dokument-cast [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-dokument-cast>
           }
         @case('let') {
-            <app-let [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
+            <app-let [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-let>
           }
         @case('pian') {
-            <app-pian [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
+            <app-pian [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-pian>
           }
         @case('ext_zdroj') {
-            <app-externi-zdroj [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
+            <app-externi-zdroj [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
           }
           @case('adb') {
-              <app-adb [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
+              <app-adb [result]="result()" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
             }
           @case('vyskovy_bod') {
-              <app-vyskovy-bod [result]="result" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
+              <app-vyskovy-bod [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
             }
           @case('dokumentacni_jednotka') {
-              <app-dok-jednotka [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
+              <app-dok-jednotka [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
             }
           @case('komponenta') {
-              <app-komponenta [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
+              <app-komponenta [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
             }
           @case('komponenta_dokument') {
-              <app-komponenta-dokument [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta-dokument>
+              <app-komponenta-dokument [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-komponenta-dokument>
             }
     }
 }

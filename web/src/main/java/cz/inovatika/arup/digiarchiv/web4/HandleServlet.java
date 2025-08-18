@@ -28,7 +28,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -38,6 +40,7 @@ import org.json.JSONObject;
  */
 @WebServlet(name = "HandleServlet", urlPatterns = {"/id/*"})
 public class HandleServlet extends HttpServlet {
+
     public static final Logger LOGGER = Logger.getLogger(HandleServlet.class.getName());
 
     /**
@@ -63,16 +66,16 @@ public class HandleServlet extends HttpServlet {
                 // Check if IP call could run by time limits
                 String ip = request.getRemoteAddr();
                 long retryTime = AppState.canGetFileInterval(ip, id);
-                    if (retryTime > 0) {
-                        response.setStatus(429); // 429 Too Many Requests
-                        response.addHeader("Retry-After", retryTime + "");
-                        response.getWriter().print("Try in " + retryTime + " seconds.");
-                        return;
-                    } else if (retryTime == -1){
-                        response.setStatus(429); // 429 Too Many Requests
-                        response.getWriter().print("Downloading file still in progress. Try later.");
-                        return;
-                    }
+                if (retryTime > 0) {
+                    response.setStatus(429); // 429 Too Many Requests
+                    response.addHeader("Retry-After", retryTime + "");
+                    response.getWriter().print("Try in " + retryTime + " seconds.");
+                    return;
+                } else if (retryTime == -1) {
+                    response.setStatus(429); // 429 Too Many Requests
+                    response.getWriter().print("Downloading file still in progress. Try later.");
+                    return;
+                }
                 AppState.writeGetFileStarted(ip, id);
                 boolean success = getFile(id, request, response);
                 // Logs IP ends time
@@ -82,20 +85,19 @@ public class HandleServlet extends HttpServlet {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         } else {
-            response.setContentType("text/html;charset=UTF-8"); 
+            response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 String url = "http://localhost:4000/id/" + id;
-                
+
 //                try (InputStream inputStream = RESTHelper.inputStream(url)) {
 //                    out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
 //                }
-                
                 HttpRequest hrequest = HttpRequest.newBuilder()
-                .uri(new URI(url))
-                .header("Authorization", Options.getInstance().getJSONObject("hiko").getString("bearer"))
-                .GET()
-                .build();
+                        .uri(new URI(url))
+                        .header("Authorization", Options.getInstance().getJSONObject("hiko").getString("bearer"))
+                        .GET()
+                        .build();
 
                 try (HttpClient httpclient = HttpClient
                         .newBuilder()
@@ -103,14 +105,14 @@ public class HandleServlet extends HttpServlet {
                     HttpResponse<String> hresponse = httpclient.send(hrequest, HttpResponse.BodyHandlers.ofString());
                     out.println(hresponse.body());
                 }
-        
+
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "Error processing {0}", request.getRequestURI());
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
     }
-    
+
     private static boolean getPdfPage(JSONObject soubor, String page, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         try (OutputStream out = response.getOutputStream()) {
@@ -191,7 +193,7 @@ public class HandleServlet extends HttpServlet {
                     LOGGER.log(Level.WARNING, "{0} not allowed", id);
                     return false;
                 }
- 
+
                 String mime = doc.optString("mimetype");
                 if (id.contains("page")) {
                     String page = id.substring(id.lastIndexOf("/") + 1);
@@ -204,7 +206,6 @@ public class HandleServlet extends HttpServlet {
                         return false;
                     }
                 }
-                
 
                 String filename = doc.getString("nazev");
 
@@ -218,7 +219,7 @@ public class HandleServlet extends HttpServlet {
                     response.setContentType("image/png");
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
                 } else {
-                    url += "/orig"; 
+                    url += "/orig";
                     response.setContentType(mime);
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
                 }
@@ -230,7 +231,7 @@ public class HandleServlet extends HttpServlet {
                 if (!id.contains("thumb")) {
                     LogAnalytics.log(request, doc.getString("path"), "file", doc.getString("entity"));
                 }
-                is.close(); 
+                is.close();
                 return true;
 
             } catch (Exception ex) {
@@ -245,8 +246,8 @@ public class HandleServlet extends HttpServlet {
     private static boolean isAllowed(String id, JSONObject doc, JSONObject user) {
         if (id.contains("thumb") && !id.contains("page")) {
             return true;
-        } 
-        
+        }
+
         String entity = doc.optString("entity");
         int stav = doc.optInt("stav");
         String docPr = doc.getString("pristupnost");
@@ -284,7 +285,7 @@ public class HandleServlet extends HttpServlet {
                     return true;
                 } else if (userPr.equalsIgnoreCase("B")) {
                     if (docPr.compareToIgnoreCase("B") <= 0 && stav == 3) {
-                        return true; 
+                        return true;
                     }
 
                     JSONArray h = doc.getJSONArray("historie");
@@ -379,49 +380,48 @@ public class HandleServlet extends HttpServlet {
 
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2
         String soubor_filepath = "rest/AMCR/record/" + id;
-        
-        
-        if (id.contains("thumb") && !id.contains("page") && !id.endsWith("thumb")) { 
+
+        if (id.contains("thumb") && !id.contains("page") && !id.endsWith("thumb")) {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/1            
             LOGGER.log(Level.WARNING, "{0} is invalid", id);
             return new JSONObject().put("invalid", true);
         }
-        
+
         if (id.contains("thumb")) {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/page/1            
             soubor_filepath = soubor_filepath.substring(0, soubor_filepath.indexOf("/thumb"));
         }
 
-        SolrQuery query = new SolrQuery("*")
-                .addSort("datestamp", SolrQuery.ORDER.desc)
-                .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,soubor:[json],historie:[json]")
-                .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"");
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*")
+                    .addSort("datestamp", SolrQuery.ORDER.desc)
+                    .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,soubor:[json],historie:[json]")
+                    .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"");
+            JSONObject json = SolrSearcher.jsonSelect(client, "entities", query);
+            if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
+                LOGGER.log(Level.WARNING, "{0} not found", id);
+                return new JSONObject().put("not_found", true);
+            }
+            JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 
-        JSONObject json = SolrSearcher.jsonSelect(IndexUtils.getClientNoOp(), "entities", query);
-        if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
-            LOGGER.log(Level.WARNING, "{0} not found", id);
-            return new JSONObject().put("not_found", true);
-        }
-        JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-        
-        
-        if (!isAllowed(id, doc, user)) {
-            
-            LOGGER.log(Level.WARNING, "{0} not allowed", id);
-            return new JSONObject().put("not_allowed", true);
-        }
+            if (!isAllowed(id, doc, user)) {
 
-        JSONArray soubor = doc.getJSONArray("soubor");
-        for (int i = 0; i < soubor.length(); i++) {
-            JSONObject sdoc = soubor.getJSONObject(i);
-            if (soubor_filepath.equals(sdoc.optString("path"))) {
+                LOGGER.log(Level.WARNING, "{0} not allowed", id);
+                return new JSONObject().put("not_allowed", true);
+            }
+
+            JSONArray soubor = doc.getJSONArray("soubor");
+            for (int i = 0; i < soubor.length(); i++) {
+                JSONObject sdoc = soubor.getJSONObject(i);
+                if (soubor_filepath.equals(sdoc.optString("path"))) {
 //                doc.put("id", sdoc.optString("id"));
 //                doc.put("mimetype", sdoc.optString("mimetype"));
 //                doc.put("path", sdoc.optString("path"));
 //                doc.put("nazev", sdoc.optString("nazev"));
-                sdoc.put("entity", doc.optString("entity"));
-                return sdoc;
+                    sdoc.put("entity", doc.optString("entity"));
+                    return sdoc;
+                }
             }
         }
         return new JSONObject().put("not_found", true);

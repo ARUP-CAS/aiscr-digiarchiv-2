@@ -70,7 +70,7 @@ public class IndexUtils {
         return nalezTypy.get(typ);
     }
 
-    public synchronized static HttpJdkSolrClient getClientNoOp() {
+    public synchronized static HttpJdkSolrClient getClientNoOpKKK() {
         try {
             if (_solrNoOp == null) {
                 NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();

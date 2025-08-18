@@ -3,7 +3,6 @@ package cz.inovatika.arup.digiarchiv.web4;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web4.imagging.ImageAccess;
 import cz.inovatika.arup.digiarchiv.web4.imagging.ImageSupport;
-import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,7 +22,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -80,36 +81,40 @@ public class ImageServlet extends HttpServlet {
 
     }
 
-    private static void emptyImg(HttpServletResponse response, OutputStream out, ServletContext ctx) throws IOException {
+    private static void emptyImg(HttpServletResponse response, ServletContext ctx) throws IOException {
         String empty = ctx.getRealPath(File.separator) + "/assets/img/empty.png";
         response.setContentType("image/png");
         BufferedImage bi = ImageIO.read(new File(empty));
-        ImageIO.write(bi, "png", out);
+         
+        ImageIO.write(bi, "png", response.getOutputStream());
     }
 
     private static JSONObject getDocument(String id) throws Exception {
-        SolrQuery query = new SolrQuery("*") 
-                .addSort("datestamp", SolrQuery.ORDER.desc)
-                .setFields("entity,soubor:[json]")
-                .addFilterQuery("soubor_id:\"" + id + "\"")
-                .addFilterQuery("searchable:true");
+        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery("*") 
+                    .addSort("datestamp", SolrQuery.ORDER.desc)
+                    .setFields("entity,soubor:[json]")
+                    .addFilterQuery("soubor_id:\"" + id + "\"")
+                    .addFilterQuery("searchable:true");
 
-        JSONObject json = SolrSearcher.json(IndexUtils.getClientNoOp(), "entities", query);
-        if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
-            LOGGER.log(Level.WARNING, "{0} not found", id);
+            JSONObject json = SolrSearcher.json(solr, "entities", query);
+            if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
+                LOGGER.log(Level.WARNING, "{0} not found", id);
+                return null;
+            }
+            JSONArray soubor = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONArray("soubor");
+            String entity = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+            for (int i = 0; i< soubor.length(); i++) {
+                JSONObject doc = soubor.getJSONObject(i);
+                if (id.equals(doc.optString("id"))) {
+                    doc.put("entity", entity);
+                    return doc;
+                }
+            }
+        } catch (Exception ex) {
             return null;
         }
-        JSONArray soubor = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONArray("soubor");
-        String entity = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
-        for (int i = 0; i< soubor.length(); i++) {
-            JSONObject doc = soubor.getJSONObject(i);
-            if (id.equals(doc.optString("id"))) {
-                doc.put("entity", entity);
-                return doc;
-            }
-        }
         return null;
-
     }
 
     private static void writeImg(HttpServletResponse response, String id, String imgSize, ServletContext ctx) throws Exception {
@@ -119,7 +124,7 @@ public class ImageServlet extends HttpServlet {
 
         JSONObject doc = getDocument(id);
         if (doc == null) {
-            emptyImg(response, response.getOutputStream(), ctx);
+            emptyImg(response, ctx);
             return;
         }
 
@@ -131,7 +136,7 @@ public class ImageServlet extends HttpServlet {
             url = url.substring(url.indexOf("record"));
         }
         
-        InputStream is = FedoraUtils.requestInputStream(url);
+        InputStream is = FedoraUtils.requestInputStream(url); 
 
         if (is != null) {
             // String mime = getServletContext().getMimeType(f.getName());
@@ -146,7 +151,7 @@ public class ImageServlet extends HttpServlet {
                 ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
             } else {
                 LOGGER.log(Level.FINE, "Response is not image {0}. ", id);
-                emptyImg(response, response.getOutputStream(), ctx);
+                emptyImg(response, ctx);
             }
             is.close();   
 
@@ -155,7 +160,7 @@ public class ImageServlet extends HttpServlet {
             //File file = new File(Options.getInstance().getString("thumbsDir") + File.separator + "missed.txt");
             //FileUtils.writeStringToFile(file, id + System.getProperty("line.separator"), "UTF-8", true);
             //LOGGER.log(Level.WARNING, "{0} not found", id);
-            emptyImg(response, response.getOutputStream(), ctx);
+            emptyImg(response, ctx);
         }
     }
 
@@ -169,12 +174,13 @@ public class ImageServlet extends HttpServlet {
                     try {
                         writeImg(response, id, "thumb", ctx);
                     } catch (Exception ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
-                        emptyImg(response, response.getOutputStream(), ctx);
+                        LOGGER.log(Level.SEVERE, "Error getting thumb from fedora"); 
+                        LOGGER.log(Level.SEVERE, null, ex);    
+                        emptyImg(response, ctx);
                     }
                 } else {
                     LOGGER.info("no id");
-                    emptyImg(response, response.getOutputStream(), ctx);
+                    emptyImg(response, ctx);
                 }
 
             }
@@ -182,17 +188,17 @@ public class ImageServlet extends HttpServlet {
         MEDIUM {
             @Override
             void doPerform(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws Exception {
-                String id = request.getParameter("id");
+                String id = request.getParameter("id"); 
                 if (id != null && !id.equals("")) {
                     try {
                         writeImg(response, id, "thumb-large", ctx);
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
-                        emptyImg(response, response.getOutputStream(), ctx);
+                        emptyImg(response, ctx);
                     }
                 } else {
                     LOGGER.info("no id");
-                    emptyImg(response, response.getOutputStream(), ctx);
+                    emptyImg(response, ctx);
                 }
 
             }
@@ -238,13 +244,13 @@ public class ImageServlet extends HttpServlet {
 
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
-                        emptyImg(response, response.getOutputStream(), ctx);
+                        emptyImg(response, ctx);
                     } finally {
                         f.delete(); 
                     }
                 } else {
                     LOGGER.info("no id");
-                    emptyImg(response, response.getOutputStream(), ctx);
+                    emptyImg(response, ctx);
                 }
 
             }
