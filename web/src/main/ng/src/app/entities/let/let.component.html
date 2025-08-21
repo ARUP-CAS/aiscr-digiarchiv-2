@@ -1,154 +1,153 @@
 
-@switch (inDocument) {
-  @case (false) {
+  @if (!inDocument()) {
     <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
       <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
         <mat-panel-title>
           <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-          {{ 'card.panelTitle.Let' | translate }}&#160;<a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a>
+          {{ 'card.panelTitle.Let' | translate }}&#160;<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <table>
         <tbody>
-          @if (result.let_datum || result.let_hodina_zacatek || result.let_hodina_konec) {
+          @if (_result.let_datum || _result.let_hodina_zacatek || _result.let_hodina_konec) {
             <tr>
               <th class="app-label">{{ 'card.desc.Datum a čas' | translate }}:</th>
-              <td>{{ result.let_datum | date : 'yyyy-MM-dd' }} {{ result.let_hodina_zacatek }} - {{ result.let_hodina_konec }}</td>
+              <td>{{ _result.let_datum | date : 'yyyy-MM-dd' }} {{ _result.let_hodina_zacatek }} - {{ _result.let_hodina_konec }}</td>
             </tr>
           }
-          @if (result.let_letiste_start || result.let_letiste_cil) {
+          @if (_result.let_letiste_start || _result.let_letiste_cil) {
             <tr>
               <th class="app-label">{{ 'card.desc.Trasa' | translate }}:</th>
               <td>
-                @if (result.let_letiste_start) {
-                  <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start.id" [heslar]="'a'"></app-inline-filter>
+                @if (_result.let_letiste_start) {
+                  <app-inline-filter [field]="'f_let_letiste_start'" [value]="_result.let_letiste_start.id" [heslar]="'a'"></app-inline-filter>
                   }&#160;-&#160;
-                  @if (result.let_letiste_cil) {
-                    <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil.id" [heslar]="'a'"></app-inline-filter>
+                  @if (_result.let_letiste_cil) {
+                    <app-inline-filter [field]="'f_let_letiste_cil'" [value]="_result.let_letiste_cil.id" [heslar]="'a'"></app-inline-filter>
                   }
                 </td>
               </tr>
             }
-            @if (result.let_ucel_letu) {
+            @if (_result.let_ucel_letu) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Účel letu' | translate }}:</th>
-                <td>{{ result.let_ucel_letu }}</td>
+                <td>{{ _result.let_ucel_letu }}</td>
               </tr>
             }
-            @if (result.let_pozorovatel) {
+            @if (_result.let_pozorovatel) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Let - pozorovatel' | translate }}:</th>
-                <td><app-inline-filter [field]="'f_let_pozorovatel'" [value]="result.let_pozorovatel"></app-inline-filter></td>
+                <td><app-inline-filter [field]="'f_let_pozorovatel'" [value]="_result.let_pozorovatel"></app-inline-filter></td>
               </tr>
             }
-            @if (result.let_pilot) {
+            @if (_result.let_pilot) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Pilot' | translate }}:</th>
-                <td><app-inline-filter [field]="'f_let_pilot'" [value]="result.let_pilot"></app-inline-filter></td>
+                <td><app-inline-filter [field]="'f_let_pilot'" [value]="_result.let_pilot"></app-inline-filter></td>
               </tr>
             }
-            @if (result.let_organizace) {
+            @if (_result.let_organizace) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Organizace' | translate }}:</th>
-                <td><app-inline-filter [field]="'f_let_organizace'" [value]="result.let_organizace.id" [heslar]="'organizace'"></app-inline-filter></td>
+                <td><app-inline-filter [field]="'f_let_organizace'" [value]="_result.let_organizace.id" [heslar]="'organizace'"></app-inline-filter></td>
               </tr>
             }
-            @if (result.let_uzivatelske_oznaceni) {
+            @if (_result.let_uzivatelske_oznaceni) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                <td>{{ result.let_uzivatelske_oznaceni }}</td>
+                <td>{{ _result.let_uzivatelske_oznaceni }}</td>
               </tr>
             }
-            @if (result.let_fotoaparat) {
+            @if (_result.let_fotoaparat) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Fotoaparát' | translate }}:</th>
-                <td>{{ result.let_fotoaparat }}</td>
+                <td>{{ _result.let_fotoaparat }}</td>
               </tr>
             }
-            @if (result.let_typ_letounu) {
+            @if (_result.let_typ_letounu) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Typ letounu' | translate }}:</th>
-                <td>{{ result.let_typ_letounu}}</td>
+                <td>{{ _result.let_typ_letounu}}</td>
               </tr>
             }
-            @if (result.let_pocasi) {
+            @if (_result.let_pocasi) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Počasí' | translate }}:</th>
-                <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.let_pocasi.id" [heslar]="'pocasi'"></app-inline-filter></td>
+                <td><app-inline-filter [field]="'f_let_pocasi'" [value]="_result.let_pocasi.id" [heslar]="'pocasi'"></app-inline-filter></td>
               </tr>
             }
-            @if (result.let_dohlednost) {
+            @if (_result.let_dohlednost) {
               <tr>
                 <th class="app-label">{{ 'card.desc.Dohlednost' | translate }}:</th>
-                <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.let_dohlednost.id" [heslar]="'dohlednost'"></app-inline-filter></td>
+                <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="_result.let_dohlednost.id" [heslar]="'dohlednost'"></app-inline-filter></td>
               </tr>
             }
           </tbody>
         </table>
       </mat-expansion-panel>
     }
-    @case (true) {
-      <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild" (click)="state.setMapResult(result, mapDetail)">
-        @if (mapDetail && !isChild) {
+    @if (inDocument()) {
+      <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" (click)="state.setMapResult(_result, mapDetail())">
+        @if (mapDetail() && !isChild()) {
           <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
             <mat-icon>clear</mat-icon>
           </a>
         }
         <mat-card-header>
           <mat-card-title>
-            {{ 'card.title.Let' | translate }}&#160;{{ result.ident_cely }}
-            <span class="app-pipe"></span>{{ result.let_pozorovatel }}
-            <span class="app-pipe"></span>{{ result.let_datum | date : 'dd.MM.yyyy' }}
+            {{ 'card.title.Let' | translate }}&#160;{{ _result.ident_cely }}
+            <span class="app-pipe"></span>{{ _result.let_pozorovatel }}
+            <span class="app-pipe"></span>{{ _result.let_datum | date : 'dd.MM.yyyy' }}
             <span class="app-pipe"></span>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div class="app-metadata app-row-gap-16">
-            @if (result.let_hodina_zacatek || result.let_hodina_konec || result.let_letiste_start || result.let_letiste_cil) {
+            @if (_result.let_hodina_zacatek || _result.let_hodina_konec || _result.let_letiste_start || _result.let_letiste_cil) {
               <div>
-                @if (result.let_hodina_zacatek || result.let_hodina_konec) {
+                @if (_result.let_hodina_zacatek || _result.let_hodina_konec) {
                   <label class="app-label">{{ 'card.desc.Čas' | translate }}:</label>&#160;
-                  {{ result.let_hodina_zacatek }}-{{ result.let_hodina_konec }}
+                  {{ _result.let_hodina_zacatek }}-{{ _result.let_hodina_konec }}
                   <span class="app-pipe"></span>
                 }
-                @if (result.let_letiste_start || result.let_letiste_cil) {
+                @if (_result.let_letiste_start || _result.let_letiste_cil) {
                   <label class="app-label">{{ 'card.desc.Trasa' | translate }}:</label>&#160;
-                  @if (result.let_letiste_start) {
-                    <app-inline-filter [field]="'f_let_letiste_start'" [value]="result.let_letiste_start" [heslar]="'a'"></app-inline-filter>
+                  @if (_result.let_letiste_start) {
+                    <app-inline-filter [field]="'f_let_letiste_start'" [value]="_result.let_letiste_start" [heslar]="'a'"></app-inline-filter>
                     }&#160;-&#160;
-                    @if (result.let_letiste_cil) {
-                      <app-inline-filter [field]="'f_let_letiste_cil'" [value]="result.let_letiste_cil" [heslar]="'a'"></app-inline-filter>
+                    @if (_result.let_letiste_cil) {
+                      <app-inline-filter [field]="'f_let_letiste_cil'" [value]="_result.let_letiste_cil" [heslar]="'a'"></app-inline-filter>
                     }
                     <span class="app-pipe"></span>
                   }
                 </div>
               }
-              @if (result.let_organizace) {
+              @if (_result.let_organizace) {
                 <div>
                   <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
-                  <app-inline-filter [field]="'f_organizace'" [value]="result.let_organizace" [heslar]="'organizace'"></app-inline-filter>
+                  <app-inline-filter [field]="'f_organizace'" [value]="_result.let_organizace" [heslar]="'organizace'"></app-inline-filter>
                 </div>
               }
-              @if (result.let_ucel_letu) {
+              @if (_result.let_ucel_letu) {
                 <div class="app-truncate-text">
                   <label class="app-label">{{ 'card.desc.Účel letu' | translate }}:</label>&#160;
-                  {{ result.let_ucel_letu }}
+                  {{ _result.let_ucel_letu }}
                 </div>
               }
             </div>
           </mat-card-content>
-          @if (!isChild) {
+          @if (!isChild()) {
             <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
               <div fxFlex class="app-metadata">
-                @if (result.let_dokument?.length > 0) {
-                  {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{result.let_dokument?.length}}</strong>
+                @if (_result.let_dokument?.length > 0) {
+                  {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{_result.let_dokument?.length}}</strong>
                   <span class="app-pipe"></span>
                 }
               </div>
-              <app-result-actions [inDocument]="inDocument" [bibTex]="bibTex" [result]="result" [detailExpanded]="detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"></app-result-actions>
+              <app-result-actions [inDocument]="inDocument()" [bibTex]="bibTex" [result]="result" [detailExpanded]="detailExpanded()" [mapDetail]="true" (onToggleDetail)="toggleDetail()"></app-result-actions>
             </mat-card-actions>
           }
-          @if (detailExpanded) {
+          @if (detailExpanded()) {
             <mat-card-content>
               <div class="app-card-detail">
                 <mat-accordion multi="true">
@@ -160,59 +159,59 @@
                     </mat-expansion-panel-header>
                     <table>
                       <tbody>
-                        @if (result.let_ucel_letu) {
+                        @if (_result.let_ucel_letu) {
                           <tr>
                             <th class="app-label">{{ 'card.desc.Účel letu' | translate }}:</th>
-                            <td>{{ result.let_ucel_letu }}</td>
+                            <td>{{ _result.let_ucel_letu }}</td>
                           </tr>
                         }
-                        @if (result.let_pilot) {
+                        @if (_result.let_pilot) {
                           <tr>
                             <th class="app-label">{{ 'card.desc.Pilot' | translate }}:</th>
-                            <td>{{ result.let_pilot }}</td>
+                            <td>{{ _result.let_pilot }}</td>
                           </tr>
                         }
-                        @if (result.let_uzivatelske_oznaceni) {
+                        @if (_result.let_uzivatelske_oznaceni) {
                           <tr>
                             <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
-                            <td>{{ result.let_uzivatelske_oznaceni }}</td>
+                            <td>{{ _result.let_uzivatelske_oznaceni }}</td>
                           </tr>
                         }
-                        @if (result.let_fotoaparat) {
+                        @if (_result.let_fotoaparat) {
                           <tr>
                             <th class="app-label">{{ 'card.desc.Fotoaparát' | translate }}:</th>
-                            <td>{{ result.let_fotoaparat }}</td>
+                            <td>{{ _result.let_fotoaparat }}</td>
                           </tr>
                         }
-                        @if (result.let_typ_letounu) {
+                        @if (_result.let_typ_letounu) {
                           <tr>
                             <th class="app-label">{{ 'card.desc.Typ letounu' | translate }}:</th>
-                            <td>{{ result.let_typ_letounu}}</td>
+                            <td>{{ _result.let_typ_letounu}}</td>
                           </tr>
                         }
-                        @if (result.let_pocasi) {
+                        @if (_result.let_pocasi) {
                           <tr>
                             <th class="app-label">{{ 'card.desc.Počasí' | translate }}:</th>
-                            <td><app-inline-filter [field]="'f_let_pocasi'" [value]="result.let_pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
+                            <td><app-inline-filter [field]="'f_let_pocasi'" [value]="_result.let_pocasi" [heslar]="'pocasi'"></app-inline-filter></td>
                           </tr>
                         }
-                        @if (result.let_dohlednost) {
+                        @if (_result.let_dohlednost) {
                           <tr>
                             <th class="app-label">{{ 'card.desc.Dohlednost' | translate }}:</th>
-                            <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="result.let_dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
+                            <td><app-inline-filter [field]="'f_let_dohlednost'" [value]="_result.let_dohlednost" [heslar]="'dohlednost'"></app-inline-filter></td>
                           </tr>
                         }
                       </tbody>
                     </table>
                   </mat-expansion-panel>
-                  @if (result.let_dokument?.length > 0) {
+                  @if (_result.let_dokument?.length > 0) {
                     <mat-expansion-panel [expanded]="true" class="app-panel-souvisejici-zaznamy">
                       <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
                         <mat-panel-title>
                           {{ 'card.panelTitle.Související záznamy' | translate }}:
                         </mat-panel-title>
                       </mat-expansion-panel-header>
-                      @for (dok of result.dokument; track dok) {
+                      @for (dok of _result.dokument; track dok) {
                         <app-dokument [result]="dok" [isChild]="true" class="app-related-item"></app-dokument>
                       }
                     </mat-expansion-panel>
@@ -223,7 +222,6 @@
           }
         </mat-card>
       }
-    }
 
 
 

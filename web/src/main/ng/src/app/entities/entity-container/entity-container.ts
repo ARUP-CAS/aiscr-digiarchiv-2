@@ -18,17 +18,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
-import { DatePipe } from '@angular/common';
-import { AppConfiguration } from '../../app-configuration';
-import { AppService } from '../../app.service';
-import { Entity } from '../entity/entity';
 import { PianComponent } from "../pian/pian.component";
 import { ExterniZdrojComponent } from "../externi-zdroj/externi-zdroj.component";
 import { AdbComponent } from "../adb/adb.component";
 import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
 import { KomponentaComponent } from "../komponenta/komponenta.component";
-import { JednotkaDokumentuComponent } from "../jednotka-dokumentu/jednotka-dokumentu.component";
 import { DokumentCastComponent } from "../dokument-cast/dokument-cast.component";
 import { LetComponent } from "../let/let.component";
 import { VyskovyBodComponent } from "../vyskovy-bod/vyskovy-bod.component";
@@ -51,7 +45,6 @@ import { KomponentaDokumentComponent } from "../komponenta-dokument/komponenta-d
     AdbComponent,
     DokJednotkaComponent,
     KomponentaComponent,
-    JednotkaDokumentuComponent,
     DokumentCastComponent,
     LetComponent,
     VyskovyBodComponent,

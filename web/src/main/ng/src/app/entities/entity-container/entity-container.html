@@ -16,10 +16,6 @@
         @case ('lokalita') { <app-lokalita [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
             [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-lokalita> }
 
-            
-        @case('jednotka_dokumentu') {
-            <app-jednotka-dokumentu [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-jednotka-dokumentu>
-          }
         @case('dokument_cast') {
             <app-dokument-cast [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-dokument-cast>
           }

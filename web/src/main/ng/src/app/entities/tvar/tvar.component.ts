@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
@@ -13,16 +13,12 @@ import { FlexLayoutModule } from 'ngx-flexible-layout';
 })
 export class TvarComponent implements OnInit {
   
-  @Input() tvar: string;
-  @Input() poznamka: string = null;
+  tvar = input<string>();
+  poznamka = input<string>();
 
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  hasPoznamka(): boolean{
-    return this.poznamka !== null && this.poznamka !== '';
   }
 
 }
