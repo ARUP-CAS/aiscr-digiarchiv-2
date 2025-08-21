@@ -3,7 +3,6 @@ package cz.inovatika.arup.digiarchiv.web4;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Uzivatel;
 import cz.inovatika.arup.digiarchiv.web4.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web4.index.EntitySearcher;
-import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.PIANSearcher;
 import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
@@ -84,7 +83,8 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
                 JSONObject json = new JSONObject();
-                try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+                try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost"))
+                        .build()) {
                     String pristupnost = LoginServlet.pristupnost(request.getSession());
                     if ("E".equals(pristupnost)) {
                         pristupnost = "D";

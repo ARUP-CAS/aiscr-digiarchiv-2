@@ -3,17 +3,20 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraHarvester;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.NoOpResponseParser;
+import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
+
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -86,25 +89,7 @@ public class SearchUtils {
         }
     }
 
-//    public static JSONObject json(SolrQuery query, String coreUrl) {
-//        query.set("wt", "json");
-//        query.setRequestHandler("/search");
-//        String jsonResponse;
-//        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(coreUrl).build()) {
-//            QueryRequest qreq = new QueryRequest(query);
-//            // qreq.setPath();
-//            NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-//            dontMessWithSolr.setWriterType("json");
-//            client.setParser(dontMessWithSolr);
-//            NamedList<Object> qresp = client.request(qreq);
-//            jsonResponse = (String) qresp.get("response");
-//            client.close();
-//            return new JSONObject(jsonResponse);
-//        } catch (SolrServerException | IOException ex) {
-//            LOGGER.log(Level.SEVERE, null, ex);
-//            return new JSONObject().put("error", ex);
-//        }
-//    }
+
 
     public static SolrDocumentList docs(SolrQuery query, String coreUrl) {
         query.set("wt", "json");
@@ -166,11 +151,10 @@ public class SearchUtils {
             if (qt != null) {
                 qreq.setPath(qt);
             }
-            NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-            dontMessWithSolr.setWriterType("json");
-            NamedList<Object> qresp = client.request(qreq, core);
-            jsonResponse = (String) qresp.get("response");
-            return new JSONObject(jsonResponse);
+            qreq.setResponseParser(new InputStreamResponseParser("json")); 
+            NamedList<Object> resp = client.request(qreq, core);
+            InputStream is = (InputStream) resp.get("stream");
+            return new JSONObject(IOUtils.toString(is, "UTF-8")); 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return new JSONObject().put("error", ex);
@@ -185,11 +169,10 @@ public class SearchUtils {
             if (qt != null) {
                 qreq.setPath(qt);
             }
-            NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-            dontMessWithSolr.setWriterType("csv");
-            // client.setParser(dontMessWithSolr);
-            NamedList<Object> qresp = client.request(qreq, core);
-            return (String) qresp.get("response");
+            qreq.setResponseParser(new InputStreamResponseParser("csv")); 
+            NamedList<Object> resp = client.request(qreq, core);
+            InputStream is = (InputStream) resp.get("stream");
+            return IOUtils.toString(is, "UTF-8"); 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return ex.toString();

@@ -89,7 +89,7 @@ public class I18n {
     Options opts = Options.getInstance();
     
     //Load Solr keys
-    JSONObject heslarDoc = new JSONObject();
+    //JSONObject heslarDoc = new JSONObject();
     String urlHeslar = opts.getString("solrhost", "http://localhost:8983/solr/")
             + "heslar/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + locale;
 //    InputStream inputStream = RESTHelper.inputStream(urlHeslar);
@@ -97,7 +97,7 @@ public class I18n {
 //    JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
     JSONArray docs = getFromSolr(urlHeslar);
     for (int i = 0; i < docs.length(); i++) {
-      heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getString(locale));
+      def.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).getString(locale));
     }
     
     // Organizace
@@ -112,7 +112,7 @@ public class I18n {
 //    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
     docs = getFromSolr(urlOrg);
     for (int i = 0; i < docs.length(); i++) {
-      heslarDoc.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
+      def.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
     }
     
     //Pristupnost indexujeme zkratky
@@ -124,10 +124,10 @@ public class I18n {
     docs = getFromSolr(urlPr);
     for (int i = 0; i < docs.length(); i++) {
       // heslarDoc.put("pristupnost_" + docs.getJSONObject(i).getString("zkratka").toUpperCase(), docs.getJSONObject(i).getString(locale));
-      heslarDoc.put(docs.getJSONObject(i).getString("zkratka"), docs.getJSONObject(i).getString(locale));
+      def.put(docs.getJSONObject(i).getString("zkratka"), docs.getJSONObject(i).getString(locale));
     }
 
-    def.put("heslar", heslarDoc);
+    // def.put("heslar", heslarDoc);
     
     // inputStream.close(); 
 

@@ -20,6 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { FacetsDynamicComponent } from "../facets-dynamic/facets-dynamic.component";
 import { FacetsSearchComponent } from "./facets-search/facets-search.component";
+import { MatButtonModule } from '@angular/material/button';
 
 interface FacetNode {
   field: string;
@@ -44,7 +45,7 @@ interface ExampleFlatNode {
     TranslateModule, RouterModule, FlexLayoutModule,
     MatCardModule, MatIconModule, MatExpansionModule, MatMenuModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, ScrollingModule,
-    FacetsDynamicComponent,
+    FacetsDynamicComponent, MatButtonModule,
     FacetsSearchComponent
 ],
   selector: 'app-facets',

@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
-import static cz.inovatika.arup.digiarchiv.web4.SearchServlet.LOGGER;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,11 +12,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.NoOpResponseParser;
+import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -478,7 +479,7 @@ public class SolrSearcher {
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_okres")
                     .setRows(100);
-                    //.setFields("kod, nazev");
+            //.setFields("kod, nazev");
             JSONObject jo = json(client, "ruian", query);
             JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
             for (int i = 0; i < ja.length(); i++) {
@@ -529,7 +530,7 @@ public class SolrSearcher {
             return null;
         }
     }
-    
+
     public static JSONObject getKrajByOkres(String ruianOkresu) {
         if (okresy == null) {
             initOkresy();
@@ -664,13 +665,11 @@ public class SolrSearcher {
                     .setRows(5000);
 
             QueryRequest req = new QueryRequest(query);
-
-            NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
-            rawJsonResponseParser.setWriterType("json");
-            req.setResponseParser(rawJsonResponseParser);
-
+            req.setResponseParser(new InputStreamResponseParser("json"));
             NamedList<Object> resp = client.request(req, "heslar");
-            JSONArray docs = new JSONObject((String) resp.get("response"))
+            InputStream is = (InputStream) resp.get("stream");
+
+            JSONArray docs = new JSONObject(IOUtils.toString(is, "UTF-8"))
                     .getJSONObject("response").getJSONArray("docs");
             // return (String) resp.get("response");
 
@@ -738,24 +737,21 @@ public class SolrSearcher {
         query.setRequestHandler("/search");
         QueryRequest req = new QueryRequest(query);
 
-        NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
-        rawJsonResponseParser.setWriterType("json");
-        req.setResponseParser(rawJsonResponseParser);
-
+        req.setResponseParser(new InputStreamResponseParser("json"));
         NamedList<Object> resp = client.request(req, core);
-        return new JSONObject((String) resp.get("response"));
+        InputStream is = (InputStream) resp.get("stream");
+        return new JSONObject(IOUtils.toString(is, "UTF-8"));
+
     }
 
     public static JSONObject jsonSelect(SolrClient client, String core, SolrQuery query) throws SolrServerException, IOException {
         query.setRequestHandler("/select");
         QueryRequest req = new QueryRequest(query);
 
-        NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
-        rawJsonResponseParser.setWriterType("json");
-        req.setResponseParser(rawJsonResponseParser);
-
+        req.setResponseParser(new InputStreamResponseParser("json"));
         NamedList<Object> resp = client.request(req, core);
-        return new JSONObject((String) resp.get("response"));
+        InputStream is = (InputStream) resp.get("stream");
+        return new JSONObject(IOUtils.toString(is, "UTF-8"));
     }
 
     public static JSONObject getById(SolrClient client, String id, String fields, String filter) {

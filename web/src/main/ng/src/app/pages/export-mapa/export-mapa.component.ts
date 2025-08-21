@@ -67,7 +67,7 @@ export class ExportMapaComponent implements OnInit {
     // }, doc);
     // return res;
     try {
-      return eval('doc.' + path)
+      return window.eval('doc.' + path)
     } catch (e: any) {
       return '';
     }

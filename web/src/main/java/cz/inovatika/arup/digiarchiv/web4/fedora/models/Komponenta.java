@@ -85,7 +85,7 @@ public class Komponenta {
         idoc.addField("nalez_dokumentu_pocet", no.pocet);
         idoc.addField("nalez_dokumentu_poznamka", no.poznamka);
     }
-    if (!komponenta_nalez_predmet.isEmpty()) {
+    if (!komponenta_nalez_predmet.isEmpty()) { 
       // komponenta_typ_nalezu = "predmet";
       komponenta_typ_nalezu = "HES-001126";
     }

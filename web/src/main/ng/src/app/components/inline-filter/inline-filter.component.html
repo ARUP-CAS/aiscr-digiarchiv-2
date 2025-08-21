@@ -16,7 +16,7 @@
       {{value() | date : 'yyyy-MM-dd'}}
     }
   }
-  @if (!isChild()) {
+  @if (!isChild()) { 
     @if (!isDocument && !isDate() && !isYear()) {
       <a (click)="addFilter($event)" class="app-filter-badge">{{heslar() ? (value() | translate) : value() }} <mat-icon>filter_alt</mat-icon></a>
     }

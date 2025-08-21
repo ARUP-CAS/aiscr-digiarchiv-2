@@ -1,17 +1,16 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.io.FileUtils;
+import org.apache.solr.client.solrj.SolrClient;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -33,7 +32,7 @@ public class LogAnalytics {
     public static final Logger LOGGER = Logger.getLogger(LogAnalytics.class.getName());
 
     public static void log(HttpServletRequest request, String ident_cely, String type, String entity) {
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {  
             JSONObject user = LoginServlet.user(request);
             String ip = request.getRemoteAddr();
             SolrInputDocument idoc = new SolrInputDocument();
@@ -55,7 +54,7 @@ public class LogAnalytics {
     public static JSONObject stats(HttpServletRequest request) {
         NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
         dontMessWithSolr.setWriterType("json");
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost"))
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost"))
                 .withResponseParser(dontMessWithSolr).build()) {
             // request.getParameter("id"), request.getParameter("type")
             SolrQuery query = new SolrQuery()
@@ -141,7 +140,7 @@ public class LogAnalytics {
         }
     }
 
-    public static JSONObject json(SolrQuery query, Http2SolrClient client, String core) {
+    public static JSONObject json(SolrQuery query, SolrClient client, String core) {
         query.setRequestHandler("/select");
         String qt = query.get("qt");
         query.set("wt", "json");
@@ -167,7 +166,7 @@ public class LogAnalytics {
         int totalDocs = 0;
         int rows = 100;
         JSONObject jo = new JSONObject();
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) { 
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) { 
 
             SolrQuery query = new SolrQuery("*")
                     //.addFilterQuery("-entity:*") 
