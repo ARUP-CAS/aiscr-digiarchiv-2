@@ -88,8 +88,8 @@ public class DokumentCast {
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
 
         try {
-            IndexUtils.getClientBinIndex().add("entities", kdoc, 10);
-        } catch (SolrServerException | IOException ex) {
+            IndexUtils.addAndCommit("entities", kdoc);
+        } catch (Exception ex) {
             Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing dokument_cast {0}", ident_cely);
             // Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
         }

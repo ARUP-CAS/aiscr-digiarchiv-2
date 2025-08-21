@@ -212,9 +212,9 @@ class ADBChraneneUdaje {
     
             }
             if (!idocs.isEmpty()) {
-                IndexUtils.getClientBinIndex().add("entities", idocs, 10);
+                IndexUtils.addAndCommit("entities", idocs);
             }
-        } catch (SolrServerException | IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
         }
         IndexUtils.setSecuredJSONField(idoc, "adb_chranene_udaje", this);

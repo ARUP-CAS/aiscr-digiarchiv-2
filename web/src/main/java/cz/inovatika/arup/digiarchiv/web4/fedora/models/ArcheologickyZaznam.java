@@ -146,7 +146,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                 }
             }
             if (!djdocs.isEmpty()) {
-                IndexUtils.getClientBinIndex().add("entities", djdocs, 10);
+                IndexUtils.addAndCommit("entities", djdocs);
             }
         } catch (Exception ex) {
             Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);

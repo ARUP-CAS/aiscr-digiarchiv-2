@@ -103,8 +103,8 @@ public class Komponenta {
     idoc.addField("komponenta_dokument_poznamka", komponenta_poznamka);
     
     try {
-        IndexUtils.getClientBinIndex().add("entities", kdoc, 10);
-    } catch (SolrServerException | IOException ex) {
+        IndexUtils.addAndCommit("entities", kdoc);
+    } catch (Exception ex) {
         Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
         // Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
     }

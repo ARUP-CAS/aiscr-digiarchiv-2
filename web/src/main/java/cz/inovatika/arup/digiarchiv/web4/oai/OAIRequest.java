@@ -32,8 +32,11 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -149,7 +152,7 @@ public class OAIRequest {
     }
 
     public static String metadataFormats(HttpServletRequest req, String version) {
-        try {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             String identifier = req.getParameter("identifier");
             if (identifier != null) {
@@ -159,7 +162,7 @@ public class OAIRequest {
                 String id = identifier.substring(prefix.length());
                 SolrQuery query = new SolrQuery("*")
                         .addFilterQuery("ident_cely:\"" + id + "\"");
-                QueryResponse resp = IndexUtils.getClientBinSearch().query("oai", query);
+                QueryResponse resp = client.query("oai", query);
 
                 if (resp.getResults().getNumFound() == 0) {
                     return idDoesNotExist(req, version);
@@ -180,7 +183,7 @@ public class OAIRequest {
     }
 
     private static void storeResumptionToken(String token, JSONObject data) {
-        try {
+        try (SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrInputDocument idoc = new SolrInputDocument();
             idoc.setField("id", token);
             idoc.setField("type", "resumptionToken");
@@ -193,8 +196,8 @@ public class OAIRequest {
             idoc.setField("data", data.toString());
             idoc.setField("expiration", d);
             data.put("expiration", d);
-            IndexUtils.getClientBinIndex().add("work", idoc);
-            IndexUtils.getClientBinIndex().commit("work");
+            client.add("work", idoc);
+            client.commit("work");
         } catch (Exception ex) {
             Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -202,12 +205,12 @@ public class OAIRequest {
     }
 
     private static JSONObject retrieveResumptionToken(String resumptionToken) {
-        try {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("id:" + resumptionToken)
                     .setFields("data:[json]")
                     .addFilterQuery("type:resumptionToken")
                     .addFilterQuery("expiration:[NOW TO *]");
-            QueryResponse resp = IndexUtils.getClientBinSearch().query("work", query);
+            QueryResponse resp = client.query("work", query);
             SolrDocumentList docs = resp.getResults();
             if (docs.isEmpty()) {
                 return null;
@@ -322,7 +325,7 @@ public class OAIRequest {
             ret.append("<ListRecords>");
         }
 
-        try {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String model = req.getParameter("set");
             String from = req.getParameter("from");
             String until = req.getParameter("until");
@@ -396,7 +399,7 @@ public class OAIRequest {
                 query.addFilterQuery("datestamp:[" + from + " TO " + until + "]");
             }
             query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursor);
-            QueryResponse resp = IndexUtils.getClientBinSearch().query("oai", query);
+            QueryResponse resp = client.query("oai", query);
 
             SolrDocumentList docs = resp.getResults();
             if (docs.getNumFound() == 0) {
@@ -491,7 +494,7 @@ public class OAIRequest {
                 .append(requestTag(req, version));
 
         ret.append("<GetRecord>\n");
-        try {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             if (req.getParameter("identifier").length() < prefix.length()) {
                 return idDoesNotExist(req, version);
@@ -499,7 +502,7 @@ public class OAIRequest {
             String id = req.getParameter("identifier").substring(prefix.length());
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("ident_cely:\"" + id + "\"");
-            QueryResponse resp = IndexUtils.getClientBinSearch().query("oai", query);
+            QueryResponse resp = client.query("oai", query);
 
             if (resp.getResults().getNumFound() == 0) {
                 return idDoesNotExist(req, version);

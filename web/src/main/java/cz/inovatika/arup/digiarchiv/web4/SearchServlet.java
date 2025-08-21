@@ -210,7 +210,6 @@ public class SearchServlet extends HttpServlet {
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                     json.put("error", ex);
-                    IndexUtils.closeClient();
                 }
                 return json.toString();
             }
@@ -399,7 +398,6 @@ public class SearchServlet extends HttpServlet {
                     JSONObject jo = searcher.search(request);
                     // searcher.checkRelations(jo, IndexUtils.getClientNoOp(), request);
                     if (jo.has("error")) {
-                        IndexUtils.closeClient();
                         return jo.toString();
                     }
                     // Remove stats in case of one result, without access
@@ -417,7 +415,6 @@ public class SearchServlet extends HttpServlet {
                     return jo.toString();
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
-                    IndexUtils.closeClient();
                     return new JSONObject().put("error", ex).toString();
                 }
 

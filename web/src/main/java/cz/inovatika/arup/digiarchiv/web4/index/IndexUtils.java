@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
@@ -39,10 +40,6 @@ import org.json.JSONObject;
 public class IndexUtils {
 
     private static final Logger LOGGER = Logger.getLogger(IndexUtils.class.getName());
-
-    private static HttpJdkSolrClient _solrBin;
-    private static HttpJdkSolrClient _solrNoOp;
-    private static Http2SolrClient _solrBinIndex;
 
     static Map<String, String> nalezTypy;
     
@@ -70,73 +67,21 @@ public class IndexUtils {
         return nalezTypy.get(typ);
     }
 
-    public synchronized static HttpJdkSolrClient getClientNoOpKKK() {
-        try {
-            if (_solrNoOp == null) {
-                NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-                dontMessWithSolr.setWriterType("json");
-                _solrNoOp = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost"))
-                        .withResponseParser(dontMessWithSolr)
-                        .build();
-            }
-        } catch (Exception ex) {
-            _solrNoOp = null;
-            LOGGER.log(Level.SEVERE, null, ex);
-        }
-        return _solrNoOp;
-    }
-
-    public synchronized static Http2SolrClient getClientBinIndex() {
-        try {
-            if (_solrBinIndex == null) {
-                _solrBinIndex = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build();
-            }
-        } catch (Exception ex) {
-            _solrBinIndex = null;
-            LOGGER.log(Level.SEVERE, null, ex);
-        }
-        return _solrBinIndex;
-    }
-
-    public synchronized static HttpJdkSolrClient getClientBinSearch() {
-        try {
-            if (_solrBin == null) {
-                _solrBin = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build();
-            }
-        } catch (Exception ex) {
-            _solrBin = null;
-            LOGGER.log(Level.SEVERE, null, ex);
-        }
-        return _solrBin;
-    }
-
-    public static void commitClientNoOp(String collection) {
-        try {
-            if (_solrNoOp != null) {
-                _solrNoOp.commit(collection);
-                _solrNoOp.close();
-                _solrNoOp = null;
-            }
+    
+    public static void addAndCommit(String collection, List<SolrInputDocument> idocs) {
+        try (SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            client.add(collection, idocs, 10);
+            // client.commit(collection);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
 
-    public static void closeClient() {
-        try {
-            if (_solrBin != null) {
-                _solrBin.close();
-                _solrBin = null;
-            }
-            if (_solrNoOp != null) {
-                _solrNoOp.close();
-                _solrNoOp = null;
-            }
-            if (_solrBinIndex != null) {
-                _solrBinIndex.close();
-                _solrBinIndex = null; 
-            }
-        } catch (IOException ex) {
+    public static void addAndCommit(String collection, SolrInputDocument idoc) {
+        try (SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            client.add(collection, idoc, 10);
+            // client.commit(collection);
+        } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
