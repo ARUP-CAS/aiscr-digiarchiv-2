@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, PLATFORM_ID, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 //import { NguCarousel, NguCarouselConfig } from '@ngu/carousel';
 import { isPlatformBrowser } from '@angular/common';
@@ -51,7 +51,7 @@ export class FileViewerComponent implements OnInit {
   // rolling = false;
   // result: any;
 
-  files: File[] = [];
+  files = signal<File[]>([]);
   selectedFile: File = null; 
 
   currentPage: number = 1;
@@ -188,7 +188,7 @@ export class FileViewerComponent implements OnInit {
 
 
     this.selectedFile = null;
-    this.files = [];
+    const files: File[] = [];
     this.showing = false;
 
     setTimeout(() => {
@@ -197,6 +197,7 @@ export class FileViewerComponent implements OnInit {
 
       // this.rolling = false;
       // const fs: any[] = JSON.parse(this.data.soubor);
+      console.log(this.data['soubor'])
       this.data['soubor'].forEach((f: any) => {
         const file = new File();
         file.id = f.id;
@@ -209,13 +210,14 @@ export class FileViewerComponent implements OnInit {
         file.pages = new Array(file.rozsah);
         file.filepath = f.filepath;
         // file.setSize(true);
-        this.files.push(file);
-        this.files.sort((a, b) => {
+        files.push(file);
+        files.sort((a, b) => {
           return a.nazev.localeCompare(b.nazev);
         });
       });
+      this.files.set(files);
       this.fileid = new Date().getTime();
-      this.selectFile(this.files[0], 0);
+      this.selectFile(this.files()[0], 0);
       // this.selectedFile = this.files[0];
       // this.currentPage = 1;
       this.showing = true;

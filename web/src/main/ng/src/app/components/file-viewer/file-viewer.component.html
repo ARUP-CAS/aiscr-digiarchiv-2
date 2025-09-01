@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>
   <div class="app-list-files-wrapper">
-    @for (file of files; track file; let idx = $index) {
-      <a (click)="selectFile(file, idx)" [class.active]="file === selectedFile">{{ file.nazev }}</a>&#160;
+    @for (file of files(); track file; let idx = $index) {
+      <a (click)="selectFile(file, idx)" [class.active]="file.id === selectedFile?.id">{{ file.nazev }}</a>&#160;
     }
   </div>
   <a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>

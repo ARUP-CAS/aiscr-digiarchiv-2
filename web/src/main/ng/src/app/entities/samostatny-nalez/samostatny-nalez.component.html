@@ -19,7 +19,7 @@
           <span class="app-ident-format">{{ _result.ident_cely }}</span>
         }
         <span class="app-pipe"></span>
-        <app-inline-filter isChild]="isChild()" [field]="'f_nalezce'" [value]="_result.samostatny_nalez_nalezce"></app-inline-filter><span class="app-pipe"></span>{{ _result.samostatny_nalez_datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
+        <app-inline-filter [isChild]="isChild()" [field]="'f_nalezce'" [value]="_result.samostatny_nalez_nalezce"></app-inline-filter><span class="app-pipe"></span>{{ _result.samostatny_nalez_datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail) {
         <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
@@ -54,7 +54,7 @@
           <div>
             @if (_result.samostatny_nalez_predano_organizace) {
               <label class="app-label">{{ 'card.desc.Předáno organizaci' | translate }}:</label>&#160;
-              <app-inline-filter isChild]="isChild()" [field]="'samostatny_nalez_predano_organizace'" [value]="_result.samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
+              <app-inline-filter [isChild]="isChild()" [field]="'samostatny_nalez_predano_organizace'" [value]="_result.samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
               <span class="app-pipe"></span>
             }
             @if (_result.samostatny_nalez_evidencni_cislo) {
@@ -63,7 +63,7 @@
             }
             @if (_result.pristupnost) {
               <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
-              <app-inline-filter isChild]="isChild()" [field]="'pristupnost'" [value]="_result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+              <app-inline-filter [isChild]="isChild()" [field]="'pristupnost'" [value]="_result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
             }
           </div>
         }
@@ -76,7 +76,7 @@
         <div>
           @if (_result.samostatny_nalez_obdobi) {
             <label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
-            <app-inline-filter isChild]="isChild()" [field]="'f_obdobi'" [value]="_result.samostatny_nalez_obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
+            <app-inline-filter [isChild]="isChild()" [field]="'f_obdobi'" [value]="_result.samostatny_nalez_obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
           }
           @if (_result.samostatny_nalez_presna_datace && _result.samostatny_nalez_presna_datace !== '') {
             ({{_result.samostatny_nalez_presna_datace}})
@@ -84,9 +84,9 @@
           <ng-container>
             <span class="app-pipe"></span>
             <label class="app-label">{{ 'card.desc.Nález' | translate }}:</label>&#160;
-            <app-inline-filter isChild]="isChild()" [field]="'f_druh_nalezu'" [value]="_result.samostatny_nalez_druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
+            <app-inline-filter [isChild]="isChild()" [field]="'f_druh_nalezu'" [value]="_result.samostatny_nalez_druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
             @if (_result.samostatny_nalez_specifikace) {
-              (<app-inline-filter isChild]="isChild()" [field]="'f_specifikace'"
+              (<app-inline-filter [isChild]="isChild()" [field]="'f_specifikace'"
             [value]="_result.samostatny_nalez_specifikace" [heslar]="'specifikace_objektu_druha'" ></app-inline-filter>)
           }
         </ng-container>
@@ -94,12 +94,12 @@
       <div>
         @if (_result.samostatny_nalez_chranene_udaje) {
           <label class="app-label">{{'card.desc.Katastr (okres)' | translate}}:</label>&#160;
-          <app-inline-filter isChild]="isChild()" [field]="'f_katastr'" [value]="_result.samostatny_nalez_chranene_udaje.katastr.value"></app-inline-filter>&#160;
-          (<app-inline-filter isChild]="isChild()" [field]="'f_okres'" [value]="_result.samostatny_nalez_okres"></app-inline-filter>)
+          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.samostatny_nalez_chranene_udaje.katastr.value"></app-inline-filter>&#160;
+          (<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.samostatny_nalez_okres"></app-inline-filter>)
         }
         @if (!_result.samostatny_nalez_chranene_udaje) {
           <label class="app-label">{{'card.desc.Okres' | translate}}:</label>&#160;
-          (<app-inline-filter isChild]="isChild()" [field]="'f_okres'" [value]="_result.samostatny_nalez_okres"></app-inline-filter>)
+          (<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.samostatny_nalez_okres"></app-inline-filter>)
         }
       </div>
     </div>
@@ -147,7 +147,7 @@
               @if (_result.samostatny_nalez_okolnosti) {
                 <tr>
                   <th class="app-label">{{ 'card.desc.Nálezové okolnosti' | translate }}:</th>
-                  <td><app-inline-filter isChild]="isChild()" [field]="'f_nalezove_okolnosti'" [value]="_result.samostatny_nalez_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
+                  <td><app-inline-filter [isChild]="isChild()" [field]="'f_nalezove_okolnosti'" [value]="_result.samostatny_nalez_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
                 </tr>
               }
               @if (_result.hasOwnProperty('samostatny_nalez_hloubka')) {

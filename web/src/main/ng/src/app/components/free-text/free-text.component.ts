@@ -1,5 +1,5 @@
 
-import { Component, OnInit, input } from '@angular/core';
+import { Component, OnInit, effect, input, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AppService } from '../../app.service';
 
@@ -11,23 +11,30 @@ import { AppService } from '../../app.service';
 export class FreeTextComponent implements OnInit {
 
   readonly id = input<string>();
-  text: SafeHtml;
+  text = signal<SafeHtml>('');
 
   constructor(
     private sanitized: DomSanitizer,
     private service: AppService
-  ) { }
+  ) { 
+    effect(() => {
+      const id = this.id();
+      if (id) {
+        this.setText();
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.service.currentLang.subscribe(r => {
       this.setText();
     });
-    this.setText();
+    
   }
 
   setText() {
     this.service.getText(this.id()).subscribe(t => {
-      this.text = this.sanitized.bypassSecurityTrustHtml(t);
+      this.text.set(this.sanitized.bypassSecurityTrustHtml(t));
     });
   }
 
