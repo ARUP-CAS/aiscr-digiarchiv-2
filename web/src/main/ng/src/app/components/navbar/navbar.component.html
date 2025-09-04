@@ -1,18 +1,18 @@
 <mat-toolbar class="app-navbar">
   <div class="app-container">
-    <div fxLayout="row" fxFlexFill>
-      <div fxFlex class="app-fx-left">
+    <div class="app-fxLayout app-row app-fill">
+      <div class="app-fxFlex app-fx-left">
         <a class="app-logo" (click)="logoClicked()" routerLink="home" [title]="'navbar.desc.logo_desc' | translate">
           <img [src]="'assets/img/logo-da-amcr-' + state.currentLang + '.png'" [alt]="'navbar.desc.logo_desc' | translate" />
         </a>
       </div>
-      <div fxFlex class="app-fx-right">
-        <div fxLayout="row" fxLayoutAlign="end" fxFlexFill class="fxHide_gt-sm"><!--fxHide.gt-sm-->
+      <div class="app-fx-right">
+        <div class="app-fxLayout app-row app-fill app-end-h fxHide_gt-sm"><!--fxHide.gt-sm-->
           <a (click)="onToggleSidenav()" class="app-sidenav-link">
             <mat-icon>menu</mat-icon>
           </a>
         </div>
-        <div fxLayout="row" fxLayoutAlign="end" fxFlexFill class="fxHide_sm fxHide_xs"><!--fxHide.sm fxHide.xs-->
+        <div class="app-fxLayout app-row app-fill app-end-h fxHide_sm fxHide_xs"><!--fxHide.sm fxHide.xs-->
           <a routerLink="home" routerLinkActive="app-active">
             <mat-icon>home</mat-icon>
             Home

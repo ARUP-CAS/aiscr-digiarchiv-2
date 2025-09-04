@@ -13,7 +13,6 @@ import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 
@@ -22,7 +21,6 @@ import { RouterModule } from '@angular/router';
     TranslateModule,
     FormsModule,
     RouterModule,
-    FlexLayoutModule,
     MatIconModule,
     MatListModule,
     MatProgressBarModule,
