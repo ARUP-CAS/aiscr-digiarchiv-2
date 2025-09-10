@@ -6,7 +6,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
-
+import axios from 'axios';
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
@@ -23,6 +23,41 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
+
+const args = process.argv;
+let apiServer = '';
+console.log(args)
+if (args.length > 2) {
+  apiServer = args[2];
+} else {
+  console.log('Api server paramater missing. Start nodejs process as "node server/main.js "http://apiserverurl"');
+  // process.exit();
+}
+
+app.get('/api/img/{*splat}', (req, res) => {
+    res.redirect(apiServer + req.url);
+});
+
+app.get('/api/{*splat}', (req, res) => {
+  //console.log(apiServer + req.url);
+
+  axios.get(apiServer + req.url)
+    .then(function (response) {
+      // handle success
+      //console.log(response);
+      res.send(response.data);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .finally(function () {
+      // always executed
+    });
+
+});
+
+
 
 /**
  * Serve static files from /browser
