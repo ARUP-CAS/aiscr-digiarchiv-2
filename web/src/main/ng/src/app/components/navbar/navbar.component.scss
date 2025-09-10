@@ -1,0 +1,62 @@
+@use "../../../scss/app-mixins";
+
+.mat-toolbar {
+  height: var(--app-navbar-height);
+  background-color: var(--app-color-lightnes);
+  align-items: unset;
+  position: relative;
+  z-index: 1090;
+  border-bottom: 1px solid var(--app-color-gray-2);
+
+  a {
+    &:not(.app-logo) {
+      font-weight: normal;
+      text-decoration: unset;
+      color: var(--app-color-gray-6);
+      padding: 4px 15px !important;
+      border-radius: var(--app-default-border-radius);
+    }
+
+    &.app-active {
+      color: var(--app-color-primary);
+      font-weight: bold;
+      border-radius: 0;
+    }
+
+    &.app-sidenav-link {
+      padding-right: 0 !important;
+      color: var(--app-color-darknes);
+      margin-top: 16px !important;
+
+      .mat-icon {
+        @include app-mixins.setIcon(24);
+      }
+    }
+
+    .mat-icon {
+      @include app-mixins.setIcon(20, inherit, sub);
+      margin-right: 4px;
+    } 
+  }
+
+  .app-left {
+    position: relative;
+  }
+
+  .app-right {
+    padding-bottom: 30px;
+
+    a {
+      @extend .app-clean-mg !optional;
+    }
+
+    span {
+      color: var(--app-color-gray-6);
+    }
+
+    .app-pipe {
+      border-color: var(--app-color-gray-3);
+      margin: 0;
+    }
+  }
+}
