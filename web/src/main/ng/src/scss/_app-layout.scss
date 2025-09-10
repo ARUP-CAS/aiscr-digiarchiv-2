@@ -2,6 +2,7 @@
 
 @import './app-mixins';
 @import './app-variables-old';
+
 html,
 body {
   height: 100%;
@@ -32,9 +33,7 @@ header {
 
 // main wrapper
 main {
-  display: block;
-  min-height: calc(100% - (#{$app-navbar-height} + #{$app-searchbar-height} + #{$app-footer-height})); // pripoctena velikost paticky
-  background-color: $app-main-bg-color;
+  background-color: var(--app-color-lightnes);
 
   @import "./app-home";
   @import "./app-results";

@@ -5,7 +5,7 @@
 
 app-navbar {
   .app-navbar {
-    height: $app-navbar-height;
+    height: var(--app-navbar-height);
     background-color: $app-navbar-bg-color;
     align-items: unset;
     position: relative;
@@ -17,7 +17,7 @@ app-navbar {
         font-weight: normal;
         text-decoration: unset;
         color: $app-navbar-link-color;
-        margin-right: $app-gap;
+        //margin-right: $app-gap;
         padding: 4px 15px !important;
         border-radius: $app-border-radius;
       }
