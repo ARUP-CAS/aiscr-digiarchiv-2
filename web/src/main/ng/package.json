@@ -27,7 +27,7 @@
     "@angular/material-moment-adapter": "^14.0.5",
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
-    "@angular/platform-server": "^16.0.0",
+    "@angular/platform-server": "^18.2.14",
     "@angular/router": "^16.0.0",
     "@asymmetrik/ngx-leaflet": "^16.0.1",
     "@asymmetrik/ngx-leaflet-markercluster": "^16.0.0",
