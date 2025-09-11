@@ -42,7 +42,7 @@
     .mat-mdc-card-content {
       .mat-expansion-panel {
         .mat-expansion-panel-header {
-          border: 1px solid $app-gray-4;
+          border: 1px solid var(--app-color-gray-4);
         }
   
         &.app-panel-inner {
@@ -77,15 +77,15 @@
     }
 
     &.app-card-info {
-      border: 1px solid $app-gray-3;
+      border: 1px solid var(--app-color-gray-3);
       margin-bottom: $app-gap;
       background-color: transparent !important;
 
       .mat-mdc-card-content {
-        color: $app-gray-6 !important;
+        color: var(--app-color-gray-6) !important;
 
         a {
-          color: $app-gray-6 !important;
+          color: var(--app-color-gray-6) !important;
         }
       }
     }

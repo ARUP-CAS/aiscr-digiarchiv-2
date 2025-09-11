@@ -30,7 +30,7 @@
   .mat-mdc-card-header {
     .app-last-change {
       font-size: 12px;
-      color: $app-gray-6;
+      color: var(--app-color-gray-6);
       font-weight: normal;
     }
 
@@ -48,7 +48,7 @@
 
         .app-count {
           font-weight: normal;
-          color: $app-gray-5;
+          color: var(--app-color-gray-5);
         }
       }
     }
@@ -121,7 +121,7 @@
           margin-top: 4px;
 
           .mat-expansion-panel-header-title {
-            color: $app-gray-9;
+            color: var(--app-color-gray-9);
             flex-wrap: wrap;
 
             .mat-icon {
@@ -140,7 +140,7 @@
       }
 
       .mat-expansion-panel-header {
-        background-color: $app-gray-1  !important;
+        background-color: var(--app-color-gray-1)  !important;
         flex-direction: row-reverse;
 
         .mat-expansion-indicator {
@@ -186,7 +186,7 @@
       }
 
       &.mat-flat-button {
-        background-color: $app-gray-1;
+        background-color: var(--app-color-gray-1);
 
         a {
           display: inline-flex;
@@ -220,7 +220,7 @@
     background-color: $app-card-info-bg;
 
     .mat-mdc-card-content {
-      color: $app-color-info;
+      color: var(--app-color-info);
 
       .app-text {
         vertical-align: super;
@@ -242,7 +242,7 @@
     @extend .app-clean-shadow, .app-clean-radius !optional;
     padding-top: 0;
     padding-bottom: 0;
-    border-bottom: 1px solid $app-gray-3;
+    border-bottom: 1px solid var(--app-color-gray-3);
   }
 }
 
@@ -262,7 +262,7 @@
     .mat-icon {
       &:not(.app-icon-op) {
         @include setIcon(18, $position: bottom);
-        color: $app-primary-color-darker;
+        color: var(--app-color-primary-darker-rgb);
       }
     }
   }
@@ -304,7 +304,7 @@
 
       a {
         &:hover {
-          color: $app-primary-color-darker;
+          color: var(--app-color-primary-darker-rgb);
         }
       }
     }
@@ -320,12 +320,12 @@
         @extend .app-clean-pd !optional;
 
         .mat-icon {
-          color: $app-color-warning;
+          color: var(--app-color-warning);
         }
       }
 
       &:hover {
-        color: $app-primary-color-darker;
+        color: var(--app-color-primary-darker-rgb);
       }
     }
   }
@@ -346,7 +346,7 @@
       color: $app-list-view-facet-item-color;
 
       &:hover {
-        color: $app-primary-color-darker;
+        color: var(--app-color-primary-darker-rgb);
       }
     }
 
@@ -373,7 +373,7 @@
 // ident badge
 .app-ident-badge {
   margin-right: 2px;
-  color: $app-gray-9;
+  color: var(--app-color-gray-9);
 
   .mat-icon {
     $size: 18;
@@ -432,7 +432,7 @@
 .app-and-separator {
   span {
     font-size: 13px;
-    color: $app-gray-5;
+    color: var(--app-color-gray-5);
     margin-left: 25px;
   }
 }

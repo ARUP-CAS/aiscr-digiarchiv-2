@@ -58,7 +58,7 @@
         .app-thumb {
           @extend .app-clean-mg !optional;
           width: 100%;
-          background-color: $app-gray-2;
+          background-color: var(--app-color-gray-2);
           text-align: center;
 
           img {

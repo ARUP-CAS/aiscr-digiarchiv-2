@@ -14,8 +14,8 @@ app-facets-search {
             .mat-mdc-form-field-flex {
               @extend .app-clean-pd !optional;
               border-radius: $app-border-radius;
-              background-color: $app-color-lightnes;
-              border: 1px solid $app-gray-4;
+              background-color: var(--app-color-lightnes);
+              border: 1px solid var(--app-color-gray-4);
               padding-left: $app-gap !important;
               align-items: center;
 

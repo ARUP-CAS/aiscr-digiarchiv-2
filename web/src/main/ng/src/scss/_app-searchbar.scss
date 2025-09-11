@@ -8,7 +8,7 @@ app-searchbar {
     height: $app-searchbar-height;
     position: relative;
     z-index: 1002;
-    background: $app-color-lightnes url('/assets/img/bg-hatching.png') repeat;
+    background: var(--app-color-lightnes) url('/assets/img/bg-hatching.png') repeat;
     //box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.05), 0px 8px 10px 1px rgba(0, 0, 0, 0), 0px 3px 14px 2px rgba(0, 0, 0, 0.05);
     box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.07);
   }
@@ -20,7 +20,7 @@ app-searchbar {
     background-color: $app-searchbar-field-bg;
     border-radius: $app-border-radius;
     color: $app-searchbar-field-color;
-    border: 1px solid $app-gray-3;
+    border: 1px solid var(--app-color-gray-3);
 
     // mq
     @media #{$gt-sm} {
@@ -35,7 +35,7 @@ app-searchbar {
       margin-left: $app-searchbar-field-icon-gap;
       margin-right: $app-searchbar-field-icon-gap;
       vertical-align: middle;
-      color: $app-primary-color;
+      color: var(--app-primary-color);
 
       &.app-icon-clear {
         margin-right: 0 !important;
@@ -62,14 +62,14 @@ app-searchbar {
 
       .app-mobile-controls {
         .mat-icon {
-          color: $app-gray-5;
+          color: var(--app-color-gray-5);
           margin-right: 0;
         }
       }
 
       @media #{$xs} {
         & > a {
-          border-left: 1px solid $app-gray-4;
+          border-left: 1px solid var(--app-color-gray-4);
           margin-left: 10px;
         }
       }
@@ -101,7 +101,7 @@ app-searchbar {
       }
 
       &.app-active {
-        background-color: $app-color-warning;
+        background-color: var(--app-color-warning);
       }
     }
   }

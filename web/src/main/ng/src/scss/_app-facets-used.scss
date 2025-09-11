@@ -9,12 +9,12 @@ app-facets-used,
     
     .mat-subheader {
       @extend .app-font-bold !optional;
-      color: $app-primary-color;
+      color: var(--app-primary-color);
       height: 0;
       padding-right: 8px;
 
       .mat-icon {
-        color: $app-color-warning;
+        color: var(--app-color-warning);
         margin-left: $app-gap-icon;
       }
     }
@@ -40,7 +40,7 @@ app-facets-used,
 
       .mat-icon {
         &:hover {
-          color: $app-color-warning;
+          color: var(--app-color-warning);
         }
       }
     }

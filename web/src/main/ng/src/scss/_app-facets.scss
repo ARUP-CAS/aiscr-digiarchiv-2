@@ -8,7 +8,7 @@
   @import "./app-facets-used";
   //@import "./app-facets-date";
 
-  /* background-color: $app-color-lightnes;
+  /* background-color: var(--app-color-lightnes);
   border-radius: $app-border-radius; */
   
   .mat-expansion-panel {
@@ -23,7 +23,7 @@
       .mat-expansion-panel-header {
         .app-count {
           font-weight: normal;
-          color: $app-gray-5;
+          color: var(--app-color-gray-5);
         }
       }
 
@@ -53,8 +53,8 @@
                 .mat-mdc-form-field-flex {
                   @extend .app-clean-pd !optional;
                   border-radius: $app-border-radius;
-                  background-color: $app-color-lightnes;
-                  border: 1px solid $app-gray-4;
+                  background-color: var(--app-color-lightnes);
+                  border: 1px solid var(--app-color-gray-4);
                   padding-left: $app-gap !important;
                   align-items: center;
     
@@ -88,7 +88,7 @@
 
           /* .mat-flat-button {
             &:not(.app-apply-filter) {
-              background-color: $app-gray-2;
+              background-color: var(--app-color-gray-2);
             }
           } */
         }
@@ -186,7 +186,7 @@
           @extend .app-clean-pd !optional;
 
           span {
-            color: $app-gray-5;
+            color: var(--app-color-gray-5);
             font-size: 14px;
             margin-left: calc(#{$app-gap} / 2);  
           }
@@ -220,7 +220,7 @@
   .mat-tree {
     .mat-tree-node {
       & > span {
-        color: $app-gray-5;
+        color: var(--app-color-gray-5);
         font-size: 14px;
         margin-left: calc(#{$app-gap} / 2);  
       }

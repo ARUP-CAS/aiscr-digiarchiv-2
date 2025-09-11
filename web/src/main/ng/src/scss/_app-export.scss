@@ -2,7 +2,7 @@
 
 app-export, app-export-mapa {
   display: block;
-  background-color: $app-color-lightnes;
+  background-color: var(--app-color-lightnes);
   padding: $app-searchbar-field-icon-gap;
 
   table {
@@ -17,18 +17,18 @@ app-export, app-export-mapa {
 
     thead {
       tr {
-        border-bottom: 2px solid $app-gray-3;
+        border-bottom: 2px solid var(--app-color-gray-3);
       }
     }
 
     tbody {
       tr {
         &:nth-child(even) {
-          background-color: $app-gray-1;
+          background-color: var(--app-color-gray-1);
         }
 
         &:hover {
-          background-color: $app-gray-3;
+          background-color: var(--app-color-gray-3);
         }
       }
     }

@@ -13,7 +13,7 @@ app-paginator {
 
     .mat-mdc-form-field-suffix {
       a {
-        color: $app-gray-6;
+        color: var(--app-color-gray-6);
 
         .mat-icon {
           @include setIcon($size: 14, $position: bottom)
