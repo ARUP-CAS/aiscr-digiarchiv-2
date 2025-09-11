@@ -17,8 +17,8 @@
 
   .app-link-close {
     position: absolute;
-    top: $app-gap;
-    right: $app-gap;
+    top: 16px;
+    right: 16px;
 
     color: var(--app-color-darknes);
 
@@ -64,7 +64,7 @@
 
     // specific behavior for expansion panel in first level of card
     .app-card-detail {
-      margin-top: $app-gap-half;
+      margin-top: 8px;
 
       &>.mat-accordion {
         &> :not(.mat-expansion-panel-spacing) {
@@ -85,7 +85,7 @@
           overflow-y: auto;
 
           .mat-expansion-panel-body {
-            $val: calc(2 * #{$app-gap});
+            $val: calc(2 * 16px);
 
             .app-related-item {
               display: block;
@@ -144,13 +144,13 @@
         flex-direction: row-reverse;
 
         .mat-expansion-indicator {
-          margin-right: $app-gap;
+          margin-right: 16px;
         }
       }
 
       .mat-expansion-panel-content {
         .mat-expansion-panel-body {
-          padding-top: $app-gap;
+          padding-top: 16px;
 
           .mat-icon {
             @include setIcon($size: 20, $position: text-bottom);
@@ -270,8 +270,8 @@
   .mat-expansion-panel-header,
   .mat-expansion-panel-body {
     .app-facets & {
-      padding-left: $app-gap;
-      padding-right: $app-gap;
+      padding-left: 16px;
+      padding-right: 16px;
     }
   }
 }

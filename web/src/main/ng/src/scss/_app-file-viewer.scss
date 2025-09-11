@@ -18,7 +18,7 @@ app-file-viewer {
           background-color: var(--app-primary-color);
           color: var(--app-color-lightnes);
           border-radius: $app-border-radius;
-          padding: $app-gap-icon $app-gap-half;
+          padding: $app-gap-icon 8px;
         }
       }
     }

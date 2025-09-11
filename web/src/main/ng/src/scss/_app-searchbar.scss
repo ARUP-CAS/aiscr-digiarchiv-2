@@ -2,7 +2,7 @@
 
 app-searchbar {
   .app-searchbar-wrapper {
-    padding: 0 $app-gap;
+    padding: 0 16px;
     display: flex;
     align-items: center;
     height: $app-searchbar-height;
@@ -44,7 +44,7 @@ app-searchbar {
 
     input {
       @extend .app-clean-border, .app-clean-pd, .app-clean-bg !optional;
-      padding-left: $app-gap !important;
+      padding-left: 16px!important;
       width: calc(100% - 45px);
       height: 100%;
 
@@ -96,7 +96,7 @@ app-searchbar {
       // mq
       @media #{$gt-md} {
         &:nth-child(2) {
-          margin-right: calc(#{$app-gap} * 2);
+          margin-right: calc(16px * 2);
         }
       }
 

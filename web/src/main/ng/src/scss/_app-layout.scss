@@ -51,7 +51,7 @@ main {
 // display table layout
 .app-display-table {
   display: block;
-  width: calc(100% - (#{$app-gap} * 2)) !important;
+  width: calc(100% - (16px * 2)) !important;
   height: inherit;
   min-height: calc(100% - #{$app-footer-height});
 
@@ -73,7 +73,7 @@ main {
 
   .app-table-cell {
     display: block;
-    padding: $app-gap-double 0; // _pridano
+    padding: 32px 0; // _pridano
 
     .app-view-map & {
       padding: 0;
@@ -83,16 +83,16 @@ main {
       width: 100%;
 
       @media #{$gt-sm} {
-        padding-right: $app-gap-double;
+        padding-right: 32px;
       }
 
       @media #{$lt-md} {
-        padding: $app-gap 0 0 0;
+        padding: 16px0 0 0;
       }
     }
 
     &.app-right {
-      padding-bottom: $app-gap;
+      padding-bottom: 16px;
       
       @media #{$lt-md} {
         padding-top: 0;
@@ -125,7 +125,7 @@ main {
 
     .app-table-cell {
       display: table-cell;
-      padding: calc(2 * #{$app-gap}) 0;
+      padding: calc(2 * 16px) 0;
       vertical-align: top;
 
       // for view map resize container

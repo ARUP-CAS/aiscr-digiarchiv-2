@@ -17,7 +17,7 @@
 
     &.app-scroll {
       &.mat-expanded {
-        padding-bottom: $app-gap;
+        padding-bottom: 16px;
       }
 
       .mat-expansion-panel-header {
@@ -55,7 +55,7 @@
                   border-radius: $app-border-radius;
                   background-color: var(--app-color-lightnes);
                   border: 1px solid var(--app-color-gray-4);
-                  padding-left: $app-gap !important;
+                  padding-left: 16px!important;
                   align-items: center;
     
                   .mat-mdc-form-field-suffix {
@@ -137,7 +137,7 @@
         &.app-facet-entity {
           @include app-mixins-entity-color.setEntityColor(facet);
           @extend .app-font-family-rc !optional;
-          margin-bottom: $app-gap-half;
+          margin-bottom: 8px;
           border-radius: $app-border-radius;
           height: $app-facet-entity-height;
 
@@ -168,7 +168,7 @@
               border-right: 1px solid;
               border-top: 1px solid;
               border-bottom: 1px solid;
-              padding-left: $app-gap;
+              padding-left: 16px;
 
               strong {
                 font-weight: normal;
@@ -188,7 +188,7 @@
           span {
             color: var(--app-color-gray-5);
             font-size: 14px;
-            margin-left: calc(#{$app-gap} / 2);  
+            margin-left: calc(16px / 2);  
           }
         }
 
@@ -222,7 +222,7 @@
       & > span {
         color: var(--app-color-gray-5);
         font-size: 14px;
-        margin-left: calc(#{$app-gap} / 2);  
+        margin-left: calc(16px / 2);  
       }
 
       &.app-node-child {
@@ -236,11 +236,11 @@
 
     &:not(.app-facet-dynamic) {
       margin-left: $app-gap-icon;
-      margin-top: $app-gap-half;
+      margin-top: 8px;
     }
 
     &.app-facet-dynamic {
-      margin-top: $app-gap;
+      margin-top: 16px;
     }
   }
 }

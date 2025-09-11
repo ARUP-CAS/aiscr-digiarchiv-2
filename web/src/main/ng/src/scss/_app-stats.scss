@@ -3,7 +3,7 @@
 app-stats {
   // searchbar
   .app-searchbar-wrapper {
-    padding: 0 $app-gap;
+    padding: 0 16px;
     display: flex;
     align-items: center;
     height: $app-searchbar-height;
@@ -24,7 +24,7 @@ app-stats {
             border-radius: $app-border-radius;
             background-color: var(--app-color-lightnes);
             border: 1px solid var(--app-color-gray-4);
-            padding-left: $app-gap !important;
+            padding-left: 16px!important;
             align-items: center;
 
             .mat-mdc-form-field-suffix {

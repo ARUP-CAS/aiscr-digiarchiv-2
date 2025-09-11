@@ -35,8 +35,8 @@
     .app-result-item {
       @extend .app-clean-shadow, .app-clean-radius !optional;
       border-bottom: 1px solid var(--app-color-gray-2);
-      padding-top: calc(#{$app-gap} / 2);
-      padding-bottom: calc(#{$app-gap} / 2);
+      padding-top: calc(16px / 2);
+      padding-bottom: calc(16px / 2);
 
       &:hover {
         background-color: var(--app-color-gray-2);

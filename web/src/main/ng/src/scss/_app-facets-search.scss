@@ -16,7 +16,7 @@ app-facets-search {
               border-radius: $app-border-radius;
               background-color: var(--app-color-lightnes);
               border: 1px solid var(--app-color-gray-4);
-              padding-left: $app-gap !important;
+              padding-left: 16px!important;
               align-items: center;
 
               .mat-mdc-form-field-suffix {
