@@ -1,5 +1,8 @@
 // --- MAT OVERRIDE ---
 
+@use "app-mixins-entity-color";
+@use 'app-variables';
+
 @import './app-mixins';
 @import './app-variables-old';
 
@@ -10,14 +13,18 @@
 
 // card
 .mat-mdc-card {
-  @include setEntityColor(card);
+  @include app-mixins-entity-color.setEntityColor(card);
 
   .app-link-close {
     position: absolute;
     top: $app-gap;
     right: $app-gap;
 
-    @include setLinkColor($app-color-darknes);
+    color: var(--app-color-darknes);
+
+    &:hover {
+      color: rgba(var(--app-color-darknes-rgb), .7);
+    }
   }
 
   .mat-mdc-card-header {
@@ -221,7 +228,7 @@
       }
 
       .app-info-badge {
-        @include setEntityColor(cardInfoBadge);
+        @include app-mixins-entity-color.setEntityColor(cardInfoBadge);
 
         .mat-icon {
           margin-right: $app-gap-icon;

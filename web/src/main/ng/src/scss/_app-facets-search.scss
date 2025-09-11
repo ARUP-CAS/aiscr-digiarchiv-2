@@ -3,7 +3,7 @@
 app-facets-search {
   .mat-mdc-card {
     @extend .app-clean-bg !optional;
-    @include set-border(bottom, 1, solid, #{$app-gray-3});
+    border: 1px solid var(--app-color-gray-3);
 
     .mat-mdc-card-content {
       .mat-mdc-form-field {

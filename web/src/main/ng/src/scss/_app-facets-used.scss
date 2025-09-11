@@ -3,7 +3,7 @@
 app-facets-used,
 .app-facets-used {
   .mat-mdc-list {
-    @include set-border(bottom, 1, solid, #{$app-gray-3});
+    border: 1px solid var(--app-color-gray-3);
     padding: 10px 0 $app-gap 0 !important;
     margin-top: $app-gap;
     

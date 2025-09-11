@@ -13,6 +13,10 @@
   --app-color-info: #ff6f00;
   --app-color-fav: #f9a825;
 
+  // operators
+  --app-color-badge-or: #00897b;
+  --app-color-badge-and: #8e24aa;
+  --app-color-badge-not: var(--app-color-warning);
 
   // gray pallete
   --app-color-gray-0: #FAFAFA;
@@ -63,28 +67,14 @@ $iconSize: (
   "23": 23,
 );
 
-// alerts
-$alerts: (
-  warn: (
-    color: var(--palette-warn-500),
-    bg: var(--palette-warn-50),
-    border: var(--palette-warn-100)
-  ),
-  info: (
-    color: #856404,
-    bg: #fff3cd,
-    border: rgba(var(--app-color-info-no-rgb), .15)
-  )
-  ,
-  success: (
-    color: var(--app-color-success),
-    bg: rgba(var(--app-color-success-no-rgb), .1),
-    border: rgba(var(--app-color-success-no-rgb), .2)
-  ),
-  message: (
-    color: var(--app-color-gray-7),
-    bg: rgba(#616161, .1),
-    border: rgba(#616161, .2)
-  )
+// entity colors
+$entities: (
+  "dokument": #5882c4,
+  "projekt": #F39225,
+  "akce": #247e4b,
+  "lokalita": #951E7A,
+  "samostatny_nalez": #85140E,
+  "knihovna_3d": #778e98,
+  "let":  #15968c,
+  "ext_zdroj": #E7302A
 );
-

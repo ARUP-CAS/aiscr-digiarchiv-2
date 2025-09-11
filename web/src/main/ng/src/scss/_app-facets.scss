@@ -1,5 +1,8 @@
 // --- FACETS ---
 
+@use "app-mixins-entity-color";
+@use 'app-variables';
+
 .app-facets {
   @import "./app-facets-search";
   @import "./app-facets-used";
@@ -10,7 +13,7 @@
   
   .mat-expansion-panel {
     @extend .mat-elevation-z0, .app-clean-mg, .app-clean-radius, .app-clean-bg !optional;
-    @include set-border(bottom, 1, solid, #{$app-gray-3});
+    border: 1px solid var(--app-color-gray-3);
 
     &.app-scroll {
       &.mat-expanded {
@@ -132,7 +135,7 @@
     &:not(.app-list-used-facet) {
       .mat-mdc-list-item {
         &.app-facet-entity {
-          @include setEntityColor(facet);
+          @include app-mixins-entity-color.setEntityColor(facet);
           @extend .app-font-family-rc !optional;
           margin-bottom: $app-gap-half;
           border-radius: $app-border-radius;
