@@ -1,0 +1,50 @@
+// --- SEARCHBAR ---
+
+.app-searchbar-wrapper {
+  height: var(--app-searchbar-height);
+  position: relative;
+  z-index: 1002;
+  background: var(--app-color-lightnes) url('/assets/img/bg-hatching.png') repeat;
+  box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.07);
+}
+
+.app-left {
+  .app-btn-map {
+    border-right: 1px solid var(--app-color-gray-4);
+  }
+
+  // mq
+  @media only screen and (min-width: 960px) {
+    max-width: var(--app-searchbar-field-max-width);
+  }
+}
+
+.app-right {
+  text-align: right;
+
+  // mq
+  @media only screen and (min-width: 960px) {
+    flex: 1 1 0%;
+  }
+
+  @media only screen and (max-width: 959px) {
+    .mdc-button {
+      .mat-icon {
+        margin: 0 !important;
+      }
+    }
+  }
+  
+  .mdc-button {
+    &.app-active {
+      background-color: var(--app-color-warning);
+    }
+
+    // mq
+    @media only screen and (min-width: 1280px) {
+      &:nth-child(2) {
+       // margin-right: calc(16px * 2);
+      }
+    }
+  }
+}

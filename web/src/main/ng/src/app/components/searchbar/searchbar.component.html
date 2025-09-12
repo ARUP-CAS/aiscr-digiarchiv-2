@@ -1,7 +1,7 @@
-<div class="app-searchbar-wrapper">
+<div class="app-fxLayout app-row app-center-v app-pl-4 app-pr-4 app-searchbar-wrapper">
   <div class="app-container">
-    <div fxLayout="row" fxLayoutGap="32px" class="app-search-form" fxLayoutAlign="start center">
-      <div fxFlex class="app-fx-left">
+    <div class="app-fxLayout app-row app-center-v app-search-form">
+      <!-- <div class="app-fxFlex app-fx-left">
         <input type="text" [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" 
         name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above" />
         <span fxFlex class="app-controls">
@@ -14,10 +14,15 @@
             <mat-icon>search</mat-icon>
           </a>
         </span>
-      </div>
-      <div class="app-fx-right fxHide_xs">
+      </div> -->
+      <mat-form-field class="app-fxFlex app-left" appearance="outline">
+        <input matInput [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above">
+        <mat-icon matSuffix (click)="toggleMapa()" class="app-mobile-controls fxHide_gt-xs app-cursor-pointer app-btn-map">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
+        <mat-icon matSuffix (click)="search()" class="app-cursor-pointer">search</mat-icon>
+      </mat-form-field>
+      <div class="app-right fxHide_xs">
         @if (!state.isMapaCollapsed) {
-          <button mat-flat-button color="primary" [matMenuTriggerFor]="exports">
+          <button mat-flat-button color="primary" [matMenuTriggerFor]="exports" class="app-ml-2">
             <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
             <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
             <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>
@@ -30,23 +35,16 @@
           </a>
         }
         </mat-menu>
-        <button mat-flat-button color="primary" (click)="toggleMapa()" [class.app-active]="!state.isMapaCollapsed">
+        <button mat-flat-button (click)="toggleMapa()" class="app-ml-2" [class.app-active]="!state.isMapaCollapsed">
           @if (state.isMapaCollapsed) {
-<mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">map</mat-icon>
-}
+            <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">map</mat-icon>
+          }
           @if (!state.isMapaCollapsed) {
-<mat-icon class="fxHide_sm fxHide_xs">clear</mat-icon>
-}
+            <mat-icon class="fxHide_sm fxHide_xs">clear</mat-icon>
+          }
           <span class="fxHide_sm fxHide_xs">@if (!state.isMapaCollapsed) {&#160;} {{ state.isMapaCollapsed ? ('searchbar.button.Otevřít mapu' | translate) : ('searchbar.button.Zavřít mapu' | translate) }}</span>
           <mat-icon class="fxHide_gt-sm">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
         </button>
-        <!-- temporary commented based David agreement
-        <mat-checkbox [checked]="!state.hideWithoutThumbs" (change)="changeShowWithoutThumbs()" class="fxHide_md fxHide_sm fxHide_xs">
-          {{ 'showWithoutThumbs' | translate }}
-        </mat-checkbox>
-        <button mat-flat-button color="primary" (click)="changeShowWithoutThumbs()" class="fxHide_gt-md">
-          <mat-icon>{{ state.hideWithoutThumbs ? 'visibility_off' : 'visibility_on' }}</mat-icon>
-        </button> -->
       </div>
     </div>
   </div>

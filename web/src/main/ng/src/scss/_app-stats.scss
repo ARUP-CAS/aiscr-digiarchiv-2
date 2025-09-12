@@ -6,7 +6,7 @@ app-stats {
     padding: 0 16px;
     display: flex;
     align-items: center;
-    height: $app-searchbar-height;
+    height: var(--app-searchbar-height);
     position: relative;
     z-index: 1002;
     background: var(--app-color-lightnes) url('/src/assets/img/bg-hatching.png') repeat;
