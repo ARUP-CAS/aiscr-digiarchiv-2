@@ -3,7 +3,6 @@ package cz.inovatika.arup.digiarchiv.web4.oai;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
-import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -26,7 +25,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -35,7 +33,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -183,7 +180,7 @@ public class OAIRequest {
     }
 
     private static void storeResumptionToken(String token, JSONObject data) {
-        try (SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrInputDocument idoc = new SolrInputDocument();
             idoc.setField("id", token);
             idoc.setField("type", "resumptionToken");

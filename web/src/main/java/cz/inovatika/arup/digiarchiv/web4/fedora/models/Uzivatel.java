@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONObject;
@@ -178,7 +178,7 @@ public class Uzivatel implements FedoraModel {
         }
         
         user.put("ui", ui);
-        try (Http2SolrClient client = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
           SolrInputDocument idoc = new SolrInputDocument();
           idoc.setField("ident_cely", userId);
           idoc.setField("ui", ui.toString());

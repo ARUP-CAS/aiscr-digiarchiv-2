@@ -86,10 +86,11 @@
     <build>
         <plugins>
             
-<!--            <plugin>
+            
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <id>exec-npm-install</id>
@@ -100,7 +101,7 @@
                             <workingDirectory>${project.basedir}/src/main/ng</workingDirectory>  
                             <arguments>
                                 <argument>run</argument>
-                                <argument>build:ssr</argument>
+                                <argument>build</argument>
                             </arguments>
                         </configuration>
                         <goals>
@@ -112,7 +113,7 @@
       
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.5.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -123,7 +124,6 @@
                                 <include>*.gz</include>
                                 <include>*.map</include>
                                 <include>index.html</include>
-                                <include>index.ssr.html</include>
                                 <include>assets/*/**</include>
                                 <include>server/*/**</include>
                             </includes>
@@ -197,14 +197,14 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <sourceFile>src/main/ng/dist/ng/browser/index.html</sourceFile>
-                            <destinationFile>${project.basedir}/src/main/webapp/index.ssr.html</destinationFile>
+                            <sourceFile>src/main/ng/dist/ng/browser/index.csr.html</sourceFile>
+                            <destinationFile>${project.basedir}/src/main/webapp/index.html</destinationFile>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
     
-             Insert jsp pageEncoding tag to index.html 
+<!--             Insert jsp pageEncoding tag to index.html -->
             <plugin> 
                 <groupId>com.google.code.maven-replacer-plugin</groupId> 
                 <artifactId>replacer</artifactId> 
@@ -234,23 +234,6 @@
                             </replacements> 
                         </configuration> 
                     </execution>  
-          
-                    <execution> 
-                        <id>replace-for-index-ssr</id>
-                        <phase>prepare-package</phase> 
-                        <goals> 
-                            <goal>replace</goal> 
-                        </goals>  
-                        <configuration> 
-                            <file>${project.basedir}/src/main/webapp/index.ssr.html</file> 
-                            <replacements>  
-                                <replacement> 
-                                    <token>base href="/"</token> 
-                                    <value>base href="${context.name}/"</value> 
-                                </replacement> 
-                            </replacements> 
-                        </configuration> 
-                    </execution> 
 	  
                     <execution> 
                         <id>replace-for-config</id>
@@ -293,34 +276,14 @@
                             </replacements> 
                         </configuration> 
                     </execution> 
-          
-                    <execution> 
-                        <id>replace-for-styles</id>
-                        <phase>prepare-package</phase> 
-                        <goals> 
-                            <goal>replace</goal> 
-                        </goals> 
-            
-                        <configuration> 
-                            <includes>
-                                <include>${project.basedir}/src/main/webapp/styles.*.css</include>
-                            </includes> 
-                            <replacements> 
-                                <replacement> 
-                                    <token>/assets/fonts/</token> 
-                                    <value>assets/fonts/</value> 
-                                </replacement> 
-                            </replacements> 
-                        </configuration>  
-                    </execution> 
                 </executions>
             </plugin>
             
-            -->
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.12.1</version>
+                <version>3.14.0</version>
                 <configuration>
                     <source>17</source>
                     <target>17</target>

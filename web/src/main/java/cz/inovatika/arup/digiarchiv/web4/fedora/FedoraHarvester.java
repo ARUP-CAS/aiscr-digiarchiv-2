@@ -26,8 +26,9 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
-import org.apache.solr.client.solrj.impl.Http2SolrClient;
+// import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient; 
+import org.apache.solr.client.solrj.impl.HttpSolrClient; 
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -117,7 +118,7 @@ public class FedoraHarvester {
      */
     public JSONObject harvest() throws IOException {
         Instant start = Instant.now();
-        try (SolrClient solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             ret = new JSONObject();
             getModels(solr);
             solr.commit("oai");
@@ -150,7 +151,7 @@ public class FedoraHarvester {
      */
     
     public JSONObject update(String from) throws IOException {
-        try (SolrClient solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             ret = new JSONObject();
             return update(from, solr);
         }
@@ -295,7 +296,7 @@ public class FedoraHarvester {
      */
     public JSONObject indexDeleted() throws IOException {
         Instant start = Instant.now();
-        try (SolrClient solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             processModel("deleted", solr);
 
             solr.commit("oai");
@@ -327,7 +328,7 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexModels(String[] models) throws Exception {
-        try (SolrClient solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             indexModels(models, solr); 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -375,7 +376,7 @@ public class FedoraHarvester {
 //        String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
         String solrResp = IndexUtils.requestSolr(url);
         JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
-        try (SolrClient solr = new Http2SolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             for (int i = 0; i < docs.length(); i++) {
                 String id = docs.getJSONObject(i).getString("ident_cely");
                 try {
@@ -719,7 +720,7 @@ public class FedoraHarvester {
     }
 
     private void processRecord(String id, String model) throws Exception {
-        try {
+        try { 
             // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
             // returns xml
             LOGGER.log(Level.FINE, "Processing record {0}", id);
@@ -812,12 +813,14 @@ public class FedoraHarvester {
 
     private void checkLists(int size, int indexed, String model, int totalInModel, SolrClient solr) throws SolrServerException, IOException {
         if (idocsEntities.size() > size) {
+            LOGGER.log(Level.INFO, "Entities {0}", idocsEntities.size());
             solr.add("entities", idocsEntities);
             solr.commit("entities");
             idocsEntities.clear();
             LOGGER.log(Level.INFO, "Indexed {0} of {1} -> {2}", new Object[]{indexed, totalInModel, model});
         }
         if (idocsDeleted.size() > size) {
+            LOGGER.log(Level.INFO, "deleted {0}", idocsDeleted.size());
             solr.add("deleted", idocsDeleted);
             solr.commit("deleted");
             idocsDeleted.clear();
@@ -833,6 +836,7 @@ public class FedoraHarvester {
             }
         }
         if (idocsOAI.size() > size) {
+            LOGGER.log(Level.INFO, "OAI {0}", idocsOAI.size());
             solr.add("oai", idocsOAI);
             solr.commit("oai");
             idocsOAI.clear();

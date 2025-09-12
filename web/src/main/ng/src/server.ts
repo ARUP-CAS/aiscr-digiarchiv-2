@@ -7,7 +7,7 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 import axios from 'axios';
-const browserDistFolder = join(import.meta.dirname, '../browser');
+const browserDistFolder = join(import.meta.dirname, '..');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();

@@ -95,7 +95,6 @@ public class HandleServlet extends HttpServlet {
 //                }
                 HttpRequest hrequest = HttpRequest.newBuilder()
                         .uri(new URI(url))
-                        .header("Authorization", Options.getInstance().getJSONObject("hiko").getString("bearer"))
                         .GET()
                         .build();
 
