@@ -4,14 +4,14 @@
       <app-sidenav-list (sidenavClose)="sidenav.close()"></app-sidenav-list>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content id="content-scroller">
+  <mat-sidenav-content id="content-scroller" class="app-fxLayout app-column app-fill">
     @if (!isExport) {
       <header>
         <app-navbar (sidenavToggle)="sidenav.toggle()"></app-navbar>
         @if(!isStats) { <app-searchbar></app-searchbar> }
       </header>
     }
-    <main>
+    <main class="app-fxFlex">
       <router-outlet /> 
     </main>
     @if(!isExport) { 

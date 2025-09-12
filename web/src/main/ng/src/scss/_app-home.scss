@@ -1,6 +1,6 @@
 // --- HOME ---
-@import './app-mixins';
-@import './app-variables-old';
+@use "app-mixins-entity-color";
+@use 'app-variables';
 
 app-home {
   .app-entities-wrapper {
@@ -24,7 +24,7 @@ app-home {
           &.app-card-entity {
             &.app-2,
             &.app-4 {
-              margin-right: $app-gap-double !important;
+              margin-right: 32px !important;
             }  
 
             &.app-1,
@@ -49,7 +49,7 @@ app-home {
         .mat-mdc-card {
           &.app-card-entity {
             &.app-1 {
-              margin-right: $app-gap-double !important;
+              margin-right: 32px !important;
             }
 
             &.app-2,
@@ -95,12 +95,12 @@ app-home {
       }
     
       &.app-card-entity {
-        @include setEntityColor(home_card);
+        @include app-mixins-entity-color.setEntityColor(home_card);
         flex: 1 1 100%;
         min-width: 100%;
         box-sizing: border-box;
-        margin-right: $app-gap-double;
-        color: $app-color-lightnes;
+        margin-right: 32px;
+        color: var(--app-color-lightnes);
   
         &.app-5 {
           margin-right: 0;
@@ -109,8 +109,8 @@ app-home {
         // mq
         @media #{$xxs} {
           $flex-width: 50%;
-          flex: 1 1 calc(#{$flex-width} - #{$app-gap-double});
-          min-width: calc(#{$flex-width} - #{$app-gap-double});
+          flex: 1 1 calc(#{$flex-width} - 32px);
+          min-width: calc(#{$flex-width} - 32px);
 
           &.app-1,
           &.app-3 {
@@ -120,8 +120,8 @@ app-home {
 
         @media #{$sm} {
           $flex-width: 33.3333%;
-          flex: 1 1 calc(#{$flex-width} - #{$app-gap-double});
-          min-width: calc(#{$flex-width} - #{$app-gap-double});
+          flex: 1 1 calc(#{$flex-width} - 32px);
+          min-width: calc(#{$flex-width} - 32px);
 
           &.app-2 {
             margin-right: 0;
@@ -130,12 +130,16 @@ app-home {
 
         @media #{$gt-sm} {
           $flex-width: 16.6666%;
-          flex: 1 1 calc(#{$flex-width} - #{$app-gap-double});
-          min-width: calc(#{$flex-width} - #{$app-gap-double});
+          flex: 1 1 calc(#{$flex-width} - 32px);
+          min-width: calc(#{$flex-width} - 32px);
         }
 
         a {
-          @include setLinkColor($app-color-lightnes);
+          color: var(--app-color-lightnes);
+
+          &:hover {
+            color: rgba(var(--app-color-lightnes-rgb), .7);
+          }
         }
   
         .mat-mdc-card-title {
@@ -163,14 +167,13 @@ app-home {
             font-weight: bold;
           }
           
-          @include setEntityColor(ico);
+          @include app-mixins-entity-color.setEntityColor(ico);
 
           .app-icon-inside {
             position: absolute;
             right: 0;
             bottom: -3px;
-            background-color: $app-color-lightnes;
-            //border: 1px solid rgba($app-color-lightnes, .6);
+            background-color: var(--app-color-lightnes);
             min-height: 20px;
             min-width: 20px;
             border-radius: 50%;
@@ -191,9 +194,9 @@ app-home {
         flex: 1 1 $flex-width;
         min-width: $flex-width;
         box-sizing: border-box;
-        margin-bottom: $app-gap !important;
-        margin-right: $app-gap;
-        background-color: $app-gray-2;
+        margin-bottom: 16px !important;
+        margin-right: 16px;
+        background-color: var(--app-color-gray-2);
 
         &:nth-child(5) {
           margin-right: 0 !important;
@@ -202,13 +205,13 @@ app-home {
         // mq
         @media #{$sm} {
           $flex-width: 50%;
-          flex: 1 1 calc(#{$flex-width} - #{$app-gap});
-          min-width: calc(#{$flex-width} - #{$app-gap});
+          flex: 1 1 calc(#{$flex-width} - 16px);
+          min-width: calc(#{$flex-width} - 16px);
 
           &:nth-child(-n+3) {
             $flex-width: 33.3333%;
-            flex: 1 1 calc(#{$flex-width} - #{$app-gap});
-            min-width: calc(#{$flex-width} - #{$app-gap});
+            flex: 1 1 calc(#{$flex-width} - 16px);
+            min-width: calc(#{$flex-width} - 16px);
           }
 
           &:nth-child(3) {
@@ -218,13 +221,17 @@ app-home {
 
         @media #{$gt-sm} {
           $flex-width: 20%;
-          flex: 1 1 calc(#{$flex-width} - #{$app-gap});
-          min-width: calc(#{$flex-width} - #{$app-gap});
+          flex: 1 1 calc(#{$flex-width} - 16px);
+          min-width: calc(#{$flex-width} - 16px);
         }
 
         .mat-mdc-card-title {
           a {
-            @include setLinkColor($app-color-darknes);
+            color: var(--app-color-darknes);
+
+            &:hover {
+              color: rgba(var(--app-color-darknes-rgb), .7);
+            }
           }
         }
         
@@ -251,7 +258,7 @@ app-home {
       $flex-width: 100%;
       flex: 1 1 $flex-width !important;
       min-width: $flex-width;
-      margin-right: $app-gap-double;
+      margin-right: 32px;
 
       &:last-child {
         margin-right: 0;
@@ -259,13 +266,13 @@ app-home {
 
       @media #{$gt-xs} {
         $flex-width: 50%;
-        flex: 1 1 calc(#{$flex-width} - #{$app-gap-double});
-        min-width: calc(#{$flex-width} - #{$app-gap-double});
+        flex: 1 1 calc(#{$flex-width} - 32px);
+        min-width: calc(#{$flex-width} - 32px);
       }
     }
 
     .app-fx-left {
-      margin-bottom: $app-gap-double;
+      margin-bottom: 32px;
 
       @media #{$gt-xs} {
         margin-bottom: 0;  
@@ -277,7 +284,7 @@ app-home {
 
       .mat-mdc-card {
         position: unset;
-        height: calc(100% - #{$app-gap-double});
+        height: calc(100% - 32px);
         overflow: hidden;
 
         @media #{$gt-xs} {

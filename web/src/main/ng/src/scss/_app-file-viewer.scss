@@ -15,10 +15,10 @@ app-file-viewer {
         font-size: 16px !important;
 
         &.active {
-          background-color: $app-primary-color;
-          color: $app-color-lightnes;
-          border-radius: $app-border-radius;
-          padding: $app-gap-icon $app-gap-half;
+          background-color: var(--app-primary-color);
+          color: var(--app-color-lightnes);
+          border-radius: var(--app-border-radius);
+          padding: var(--app-gap-icon) 8px;
         }
       }
     }
@@ -27,7 +27,7 @@ app-file-viewer {
       position: absolute;
       top: 5px;
       right: 0;
-      color: $app-color-darknes;
+      color: var(--app-color-darknes);
     }
   }
 

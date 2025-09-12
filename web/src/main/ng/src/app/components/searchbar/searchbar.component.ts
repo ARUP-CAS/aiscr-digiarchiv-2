@@ -3,7 +3,7 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -30,7 +30,9 @@ import {MatInputModule} from '@angular/material/input';
     MatToolbarModule,
     MatTooltipModule,
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
 ],
   selector: 'app-searchbar',
   templateUrl: './searchbar.component.html',

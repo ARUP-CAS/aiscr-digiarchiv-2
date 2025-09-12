@@ -22,8 +22,16 @@
   ));
 
   @include mat.form-field-overrides((
-    container-height: 48px
+    container-height: 40px,
+    container-vertical-padding: 8px,
+    container-text-size: 14px,
+    container-text-tracking: 0,
+    outlined-outline-color: var(--app-color-gray-3)
   ));
+
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--app-color-lightnes);
+  }
 
   @include mat.progress-bar-overrides((
     active-indicator-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
@@ -34,7 +42,6 @@
     filled-container-shape: 3px,
     protected-container-shape: 3px,
     outlined-container-shape: 3px
-
   ));
 
   @include mat.expansion-overrides((

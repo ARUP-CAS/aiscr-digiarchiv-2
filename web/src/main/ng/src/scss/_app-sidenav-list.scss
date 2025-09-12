@@ -7,15 +7,15 @@ app-sidenav-list {
     background-color: transparent !important;
 
     &.app-active {
-      color: $app-primary-color;
-      background-color: $app-gray-1 !important;
+      color: var(--app-primary-color);
+      background-color: var(--app-color-gray-1) !important;
       font-weight: bold;
       border-radius: 0;
     }
 
     .mat-icon {
       @include setIcon(20, inherit, sub);
-      margin-right: $app-gap-icon;
+      margin-right: var(--app-gap-icon);
     } 
   }
 }

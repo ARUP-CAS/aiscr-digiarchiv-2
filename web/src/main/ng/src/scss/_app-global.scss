@@ -1,15 +1,19 @@
 // --- GLOBAL ---
 
-@import './app-mixins';
-@import './app-variables-old';
+@use 'app-mixins';
+@use "app-mixins-gap";
+@use "app-mixins-entity-color";
+@use 'app-variables';
+
+@include app-mixins-gap.setGap();
 
 a {
   cursor: pointer;
   text-decoration: none;
-  color: $app-primary-color;
+  color: var(--app-color-primary);
 
   &:hover {
-    color: darken($app-primary-color, 10);
+    opacity: rgba(var(--app-color-primary) .8);
     text-decoration: none;
   }
 
@@ -28,10 +32,6 @@ a {
 }
 
 // cleaners
-.app-cleanfix {
-  @include cleanfix();
-}
-
 .app-clean-mg {
   margin: 0 !important;
 }
@@ -58,21 +58,21 @@ a {
 
 // colors
 .app-color-warning {
-  color: $app-color-warning !important;
+  color: var(--app-color-waring) !important;
 }
 
 .app-color-info {
-  color: $app-color-info !important;
+  color: var(--app-color-info) !important;
 }
 
 .app-color-fav {
-  color: $app-color-fav !important;
+  color: var(--app-color-fav) !important;
 }
 
 // common
 .app-pipe {
-  border-left: 1px solid $app-gray-4;
-  margin: 0 calc(#{$app-gap} / 2);
+  border-left: 1px solid var(--app-color-gray-4);
+  margin: 0 calc(16px / 2);
 
   &:last-child {
     display: none;
@@ -90,15 +90,15 @@ a {
 }
 
 .app-row-gap-8 {
-  margin-bottom: calc(#{$app-gap} / 2) !important;
+  margin-bottom: calc(16px / 2) !important;
 }
 
 .app-row-gap-16 {
-  margin-bottom: $app-gap !important;
+  margin-bottom: 16px !important;
 }
 
 .app-row-gap-32 {
-  margin-bottom: calc(2 * #{$app-gap}) !important;
+  margin-bottom: calc(2 * 16px) !important;
 }
 
 .app-full-width {
@@ -114,19 +114,19 @@ a {
 }
 
 .app-gap-icon-right {
-  margin-right: $app-gap-icon;
+  margin-right: 4px;
 }
 
 .app-gap-icon-left {
-  margin-left: $app-gap-icon;
+  margin-left: 4px;
 }
 
 .app-gap-button-right {
-  margin-right: calc(#{$app-gap} / 2);
+  margin-right: calc(16px / 2);
 }
 
 .app-icon-18 {
-  @include setIcon(18, $position: text-bottom);
+  @include app-mixins.setIcon(18, $position: text-bottom);
 }
 
 .app-rotate-up {
@@ -145,7 +145,7 @@ a {
 
 .app-facets,
 .app-result-item {
-  @include setEntityColor(ico);
+  @include app-mixins-entity-color.setEntityColor(ico);
 }
 
 .app-label {
@@ -185,13 +185,13 @@ a {
 }
 
 .app-count {
-  color: $app-gray-6;
+  color: var(--app-color-gray-6);
   font-size: 14px;
   margin-left: calc(16px / 2);
 }
 
 .app-icon-ap {
-  margin-left: $app-gap-icon;
+  margin-left: 4px;
 
   img {
     height: 12px;
@@ -211,16 +211,16 @@ a {
   }
   
   .mat-icon {
-    color: $app-accent-color !important;
+    color: var(--app-color-accent) !important;
   }
 }
 
 .app-badge-op {
   display: inline-flex;
-  margin-right: $app-gap-half;
+  margin-right: 8px;
   font-size: 10px !important;
   font-weight: 500;
-  color: $app-color-lightnes !important;
+  color: var(--app-color-lightnes) !important;
   width: 28px;
   justify-content: center;
   border-radius: 4px;
@@ -230,19 +230,19 @@ a {
 
   .mat-icon {
     @extend .app-clean-mg;
-    @include setIcon(14, $app-color-lightnes);
+    @include app-mixins.setIcon(14, var(--app-color-lightnes));
   }
 
   &.or {
-    background-color: $app-badge-or;
+    background-color: var(--app-color-badge-or);
   }
 
   &.and {
-    background-color: $app-badge-and;
+    background-color: var(--app-color-badge-and);
   }
 
   &.not {
-    background-color: $app-badge-not;
+    background-color: var(--app-color-badge-not);
   }
 
   &.app-in-facet-dynamic {

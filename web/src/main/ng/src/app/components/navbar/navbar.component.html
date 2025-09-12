@@ -1,12 +1,12 @@
-<mat-toolbar class="app-navbar">
+<mat-toolbar>
   <div class="app-container">
     <div class="app-fxLayout app-row app-fill">
-      <div class="app-fxFlex app-fx-left">
+      <div class="app-fxFlex app-fxLayout app-row app-center-v app-left">
         <a class="app-logo" (click)="logoClicked()" routerLink="home" [title]="'navbar.desc.logo_desc' | translate">
           <img [src]="'assets/img/logo-da-amcr-' + state.currentLang + '.png'" [alt]="'navbar.desc.logo_desc' | translate" />
         </a>
       </div>
-      <div class="app-fx-right">
+      <div class="app-right">
         <div class="app-fxLayout app-row app-fill app-end-h fxHide_gt-sm"><!--fxHide.gt-sm-->
           <a (click)="onToggleSidenav()" class="app-sidenav-link">
             <mat-icon>menu</mat-icon>

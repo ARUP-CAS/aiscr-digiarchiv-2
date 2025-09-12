@@ -8,7 +8,7 @@
     width: calc(#{$app-table-cell-left-width} + 40px);
 
     .mat-drawer-inner-container {
-      background-color: $app-color-lightnes;
+      background-color: var(--app-color-lightnes);
       width: $app-table-cell-left-width;
       box-shadow: 0 -1px 24px rgb(0 0 0 / 40%);
 
@@ -34,12 +34,12 @@
 
     .app-result-item {
       @extend .app-clean-shadow, .app-clean-radius !optional;
-      border-bottom: 1px solid $app-gray-2;
-      padding-top: calc(#{$app-gap} / 2);
-      padding-bottom: calc(#{$app-gap} / 2);
+      border-bottom: 1px solid var(--app-color-gray-2);
+      padding-top: calc(16px / 2);
+      padding-bottom: calc(16px / 2);
 
       &:hover {
-        background-color: $app-gray-2;
+        background-color: var(--app-color-gray-2);
       }
 
       &.app-row-gap-16 {
@@ -66,7 +66,7 @@
 
     app-paginator {
       & > div {
-        border-bottom: 1px solid $app-gray-3;
+        border-bottom: 1px solid var(--app-color-gray-3);
       }
 
       .mat-mdc-paginator-container {
@@ -90,8 +90,8 @@
 
   .app-btn {
     position: absolute;
-    top: $app-gap-map;
-    left: $app-gap-map;
+    top: var(--app-gap-map);
+    left: var(--app-gap-map);
     z-index: 1092;
     min-width: 0;
     line-height: 28px;
@@ -108,12 +108,12 @@
 
   .app-view-card-info {
     position: absolute;
-    top: $app-gap-top-card-info;
-    right: $app-gap-top-card-info;
+    top: var(--app-gap-top-card-info);
+    right: var(--app-gap-top-card-info);
     z-index: 1002;
     width: 850px;
     margin-left: 142px;
-    max-height: calc(100% - #{$app-gap-top-card-info});
+    max-height: calc(100% - var(--app-gap-top-card-info));
     overflow-y: auto;
 
     .mat-mdc-card-title {
@@ -121,17 +121,17 @@
     }
 
     @media #{$lt-md} {
-      width: calc(100% - (16px + #{$app-gap-map}));
+      width: calc(100% - (16px + var(--app-gap-map)));
     }
   }
 
   .app-active-pian-facet {
     @extend .app-clean-shadow !optional;
     position: absolute;
-    top: calc(#{$app-gap-map} - 2px);
+    top: calc(var(--app-gap-map) - 2px);
     right: 130px;
     z-index: 1002;
-    padding: 0 $app-gap-icon;
+    padding: 0 var(--app-gap-icon);
     min-height: 30px;
     line-height: 30px;
     border: 2px solid #ccc;
@@ -139,7 +139,7 @@
     a {
       .mat-icon {
         @extend .app-mr-1 !optional;
-        color: $app-color-warning;
+        color: var(--app-color-warning);
         @include setIcon($size: 18, $position: middle);
       }
     }

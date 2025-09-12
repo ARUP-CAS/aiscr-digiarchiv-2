@@ -17,7 +17,7 @@
     flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
     box-sizing: border-box;
     max-width: calc(#{$flex-width} - #{$flex-gap});
-    margin-right: $app-gap;
+    margin-right: 16px;
 
     &:nth-child(4n) {
       margin-right: 0;
@@ -58,7 +58,7 @@
         .app-thumb {
           @extend .app-clean-mg !optional;
           width: 100%;
-          background-color: $app-gray-2;
+          background-color: var(--app-color-gray-2);
           text-align: center;
 
           img {

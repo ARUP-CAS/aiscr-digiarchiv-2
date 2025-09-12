@@ -1,26 +1,29 @@
 // --- FACETS ---
 
+@use "app-mixins-entity-color";
+@use 'app-variables';
+
 .app-facets {
   @import "./app-facets-search";
   @import "./app-facets-used";
   //@import "./app-facets-date";
 
-  /* background-color: $app-color-lightnes;
-  border-radius: $app-border-radius; */
+  /* background-color: var(--app-color-lightnes);
+  border-radius: var(--app-border-radius); */
   
   .mat-expansion-panel {
     @extend .mat-elevation-z0, .app-clean-mg, .app-clean-radius, .app-clean-bg !optional;
-    @include set-border(bottom, 1, solid, #{$app-gray-3});
+    border: 1px solid var(--app-color-gray-3);
 
     &.app-scroll {
       &.mat-expanded {
-        padding-bottom: $app-gap;
+        padding-bottom: 16px;
       }
 
       .mat-expansion-panel-header {
         .app-count {
           font-weight: normal;
-          color: $app-gray-5;
+          color: var(--app-color-gray-5);
         }
       }
 
@@ -49,10 +52,10 @@
       
                 .mat-mdc-form-field-flex {
                   @extend .app-clean-pd !optional;
-                  border-radius: $app-border-radius;
-                  background-color: $app-color-lightnes;
-                  border: 1px solid $app-gray-4;
-                  padding-left: $app-gap !important;
+                  border-radius: var(--app-border-radius);
+                  background-color: var(--app-color-lightnes);
+                  border: 1px solid var(--app-color-gray-4);
+                  padding-left: 16px!important;
                   align-items: center;
     
                   .mat-mdc-form-field-suffix {
@@ -85,7 +88,7 @@
 
           /* .mat-flat-button {
             &:not(.app-apply-filter) {
-              background-color: $app-gray-2;
+              background-color: var(--app-color-gray-2);
             }
           } */
         }
@@ -132,10 +135,10 @@
     &:not(.app-list-used-facet) {
       .mat-mdc-list-item {
         &.app-facet-entity {
-          @include setEntityColor(facet);
+          @include app-mixins-entity-color.setEntityColor(facet);
           @extend .app-font-family-rc !optional;
-          margin-bottom: $app-gap-half;
-          border-radius: $app-border-radius;
+          margin-bottom: 8px;
+          border-radius: var(--app-border-radius);
           height: $app-facet-entity-height;
 
           &:hover {
@@ -149,8 +152,8 @@
             }
 
             .app-fx-left {
-              border-top-left-radius: $app-border-radius;
-              border-bottom-left-radius: $app-border-radius;
+              border-top-left-radius: var(--app-border-radius);
+              border-bottom-left-radius: var(--app-border-radius);
               justify-content: center; 
 
               .mat-icon {
@@ -160,12 +163,12 @@
             }
 
             .app-fx-right {
-              border-top-right-radius: $app-border-radius;
-              border-bottom-right-radius: $app-border-radius;
+              border-top-right-radius: var(--app-border-radius);
+              border-bottom-right-radius: var(--app-border-radius);
               border-right: 1px solid;
               border-top: 1px solid;
               border-bottom: 1px solid;
-              padding-left: $app-gap;
+              padding-left: 16px;
 
               strong {
                 font-weight: normal;
@@ -183,9 +186,9 @@
           @extend .app-clean-pd !optional;
 
           span {
-            color: $app-gray-5;
+            color: var(--app-color-gray-5);
             font-size: 14px;
-            margin-left: calc(#{$app-gap} / 2);  
+            margin-left: calc(16px / 2);  
           }
         }
 
@@ -217,9 +220,9 @@
   .mat-tree {
     .mat-tree-node {
       & > span {
-        color: $app-gray-5;
+        color: var(--app-color-gray-5);
         font-size: 14px;
-        margin-left: calc(#{$app-gap} / 2);  
+        margin-left: calc(16px / 2);  
       }
 
       &.app-node-child {
@@ -232,12 +235,12 @@
     line-height: 28px;
 
     &:not(.app-facet-dynamic) {
-      margin-left: $app-gap-icon;
-      margin-top: $app-gap-half;
+      margin-left: var(--app-gap-icon);
+      margin-top: 8px;
     }
 
     &.app-facet-dynamic {
-      margin-top: $app-gap;
+      margin-top: 16px;
     }
   }
 }

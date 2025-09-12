@@ -1,5 +1,8 @@
 // --- MAT OVERRIDE ---
 
+@use "app-mixins-entity-color";
+@use 'app-variables';
+
 @import './app-mixins';
 @import './app-variables-old';
 
@@ -10,20 +13,24 @@
 
 // card
 .mat-mdc-card {
-  @include setEntityColor(card);
+  @include app-mixins-entity-color.setEntityColor(card);
 
   .app-link-close {
     position: absolute;
-    top: $app-gap;
-    right: $app-gap;
+    top: 16px;
+    right: 16px;
 
-    @include setLinkColor($app-color-darknes);
+    color: var(--app-color-darknes);
+
+    &:hover {
+      color: rgba(var(--app-color-darknes-rgb), .7);
+    }
   }
 
   .mat-mdc-card-header {
     .app-last-change {
       font-size: 12px;
-      color: $app-gray-6;
+      color: var(--app-color-gray-6);
       font-weight: normal;
     }
 
@@ -31,7 +38,7 @@
       @extend .app-clean-mg, .app-w-100 !optional;
 
       .mat-icon {
-        margin-right: $app-gap-icon;
+        margin-right: var(--app-gap-icon);
         vertical-align: bottom;
       }
 
@@ -41,7 +48,7 @@
 
         .app-count {
           font-weight: normal;
-          color: $app-gray-5;
+          color: var(--app-color-gray-5);
         }
       }
     }
@@ -57,7 +64,7 @@
 
     // specific behavior for expansion panel in first level of card
     .app-card-detail {
-      margin-top: $app-gap-half;
+      margin-top: 8px;
 
       &>.mat-accordion {
         &> :not(.mat-expansion-panel-spacing) {
@@ -78,7 +85,7 @@
           overflow-y: auto;
 
           .mat-expansion-panel-body {
-            $val: calc(2 * #{$app-gap});
+            $val: calc(2 * 16px);
 
             .app-related-item {
               display: block;
@@ -114,7 +121,7 @@
           margin-top: 4px;
 
           .mat-expansion-panel-header-title {
-            color: $app-gray-9;
+            color: var(--app-color-gray-9);
             flex-wrap: wrap;
 
             .mat-icon {
@@ -133,17 +140,17 @@
       }
 
       .mat-expansion-panel-header {
-        background-color: $app-gray-1  !important;
+        background-color: var(--app-color-gray-1)  !important;
         flex-direction: row-reverse;
 
         .mat-expansion-indicator {
-          margin-right: $app-gap;
+          margin-right: 16px;
         }
       }
 
       .mat-expansion-panel-content {
         .mat-expansion-panel-body {
-          padding-top: $app-gap;
+          padding-top: 16px;
 
           .mat-icon {
             @include setIcon($size: 20, $position: text-bottom);
@@ -160,7 +167,7 @@
             th {
               padding-left: 0;
               text-align: left;
-              padding-right: $app-gap-icon;
+              padding-right: var(--app-gap-icon);
               min-width: 130px;
             }
           }
@@ -175,11 +182,11 @@
 
     .mat-mdc-button-base {
       &:not(:first-child) {
-        margin: 0 0 0 $app-gap-button;
+        margin: 0 0 0 var(--app-gap-button);
       }
 
       &.mat-flat-button {
-        background-color: $app-gray-1;
+        background-color: var(--app-color-gray-1);
 
         a {
           display: inline-flex;
@@ -213,7 +220,7 @@
     background-color: $app-card-info-bg;
 
     .mat-mdc-card-content {
-      color: $app-color-info;
+      color: var(--app-color-info);
 
       .app-text {
         vertical-align: super;
@@ -221,10 +228,10 @@
       }
 
       .app-info-badge {
-        @include setEntityColor(cardInfoBadge);
+        @include app-mixins-entity-color.setEntityColor(cardInfoBadge);
 
         .mat-icon {
-          margin-right: $app-gap-icon;
+          margin-right: var(--app-gap-icon);
           @include setIcon(18, inherit, bottom);
         }
       }
@@ -235,7 +242,7 @@
     @extend .app-clean-shadow, .app-clean-radius !optional;
     padding-top: 0;
     padding-bottom: 0;
-    border-bottom: 1px solid $app-gray-3;
+    border-bottom: 1px solid var(--app-color-gray-3);
   }
 }
 
@@ -255,7 +262,7 @@
     .mat-icon {
       &:not(.app-icon-op) {
         @include setIcon(18, $position: bottom);
-        color: $app-primary-color-darker;
+        color: var(--app-color-primary-darker-rgb);
       }
     }
   }
@@ -263,8 +270,8 @@
   .mat-expansion-panel-header,
   .mat-expansion-panel-body {
     .app-facets & {
-      padding-left: $app-gap;
-      padding-right: $app-gap;
+      padding-left: 16px;
+      padding-right: 16px;
     }
   }
 }
@@ -279,7 +286,7 @@
   .mat-mdc-list-item {
     .mat-icon {
       &:not(.app-icon-op) {
-        margin-right: $app-gap-icon  !important;
+        margin-right: var(--app-gap-icon)  !important;
       }
     }
   }
@@ -297,7 +304,7 @@
 
       a {
         &:hover {
-          color: $app-primary-color-darker;
+          color: var(--app-color-primary-darker-rgb);
         }
       }
     }
@@ -313,12 +320,12 @@
         @extend .app-clean-pd !optional;
 
         .mat-icon {
-          color: $app-color-warning;
+          color: var(--app-color-warning);
         }
       }
 
       &:hover {
-        color: $app-primary-color-darker;
+        color: var(--app-color-primary-darker-rgb);
       }
     }
   }
@@ -339,7 +346,7 @@
       color: $app-list-view-facet-item-color;
 
       &:hover {
-        color: $app-primary-color-darker;
+        color: var(--app-color-primary-darker-rgb);
       }
     }
 
@@ -347,11 +354,11 @@
       width: $app-list-view-facet-item-height;
       height: $app-list-view-facet-item-height;
       line-height: $app-list-view-facet-item-height;
-      margin-right: $app-gap-icon;
+      margin-right: var(--app-gap-icon);
     }
 
     .mat-checkbox {
-      margin-right: $app-gap-icon;
+      margin-right: var(--app-gap-icon);
     }
   }
 }
@@ -366,7 +373,7 @@
 // ident badge
 .app-ident-badge {
   margin-right: 2px;
-  color: $app-gray-9;
+  color: var(--app-color-gray-9);
 
   .mat-icon {
     $size: 18;
@@ -425,7 +432,7 @@
 .app-and-separator {
   span {
     font-size: 13px;
-    color: $app-gray-5;
+    color: var(--app-color-gray-5);
     margin-left: 25px;
   }
 }

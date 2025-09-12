@@ -9,11 +9,11 @@ app-paginator {
 
   .app-page-num {
     font-size: 12px;
-    margin-right: $app-gap;
+    margin-right: 16px;
 
     .mat-mdc-form-field-suffix {
       a {
-        color: $app-gray-6;
+        color: var(--app-color-gray-6);
 
         .mat-icon {
           @include setIcon($size: 14, $position: bottom)

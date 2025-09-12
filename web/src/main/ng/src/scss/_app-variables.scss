@@ -1,31 +1,23 @@
 // --- VARIABLES ---
 
 :root {
-  // config
-  --app-color-info: #856404;
-  --app-color-info-no-rgb: 133, 100, 4;
-  --app-color-success: #2E7D32;
-  --app-color-success-no-rgb: 46, 125, 50;
-  --app-color-disabled: var(--app-color-gray-4);
-  --app-color-item-bg: var(--app-color-gray-1);
-  --app-color-item-selected: rgba(var(--app-color-primary-no-rgb), .2);
-  --app-color-item-active: var(--app-color-gray-8);
-  --app-color-item-invalid: var(--app-color-warn);
-  --app-color-item-invalid-no-rgb: var(--palette-warn-500-no-rgb);
-  --app-color-item-hover: var(--palette-primary-50);
-  --app-color-item-dragover-allowed: var(--app-color-success);
-  --app-color-item-dragover-noallowed: var(--app-color-warn);
-
-  // basic colors
-  --app-color-primary: var(--palette-primary-500);
-  --app-color-primary-no-rgb: 69, 106, 165;
-  --app-color-accent: var(--palette-accent-500) ;
-  --app-color-warn: var(--palette-warn-500);
-
   --app-color-lightnes: #ffffff;
   --app-color-lightnes-rgb: 255, 255, 255;
   --app-color-darknes: #000000;
   --app-color-darknes-rgb: 0, 0, 0;
+  --app-color-primary: #0d47a1;
+  --app-color-primary-darker-rgb: rgba(9,50,114);
+  --app-color-accent: #ff4081;
+  --app-color-lightnes: #ffffff;
+  --app-color-darknes: #000000;
+  --app-color-warning: #f44336;
+  --app-color-info: #ff6f00;
+  --app-color-fav: #f9a825;
+
+  // operators
+  --app-color-badge-or: #00897b;
+  --app-color-badge-and: #8e24aa;
+  --app-color-badge-not: var(--app-color-warning);
 
   // gray pallete
   --app-color-gray-0: #FAFAFA;
@@ -39,80 +31,26 @@
   --app-color-gray-8: #424242;
   --app-color-gray-9: #212121;
 
+  --app-default-border-radius: 4px;
+
+  // mobile
+  --app-mobile-action-toolbar-height: 46px; 
+
   // custom
-  --app-default-border-color: var(--app-color-gray-3);
-  --app-default-bg: var(--app-color-gray-1); 
-  --app-default-wrapper: 8px;
-
-  // components
-  --app-navbar-active-item-color: #{rgba(var(--app-color-lightnes-rgb), .15)};
-  --app-navbar-session-color: #{rgba(var(--app-color-lightnes-rgb), .3)};
-
-  --app-toolbar-height: 34px;
-  --app-toolbar-color: var(--app-color-gray-7);
-  --app-toolbar-border-color: var(--app-default-border-color);
-  --app-toolbar-bg-color: var(--app-default-bg);
-  --app-toolbar-button-bg-active: var(--app-toolbar-border-color);
-  --app-toolbar-button-height: var(--app-toolbar-height);
-  --app-toolbar-radio-button-size: 14px;
-  
-  --app-breadcrumbsbar-height: 40px;
-
-  --app-menu-item-height: 28px;
-
-  --app-badge-height: 18px;
-  --app-badge-model-bg: #607D8B;
-
-  // form
-  --app-form-bg-color: var(--app-color-gray-2);
-  --app-form-border-color-top-level: var(--app-color-gray-5);
-  --app-form-border-color: #d3d2d2;
-  --app-form-gap: 8px;
-  --app-form-header-height: 40px;
-  --app-form-title-weight: 600;
-  --app-form-header-button-color: var(--app-color-gray-7);
-  --app-form-field-border-color: var(--app-color-gray-3);
+  --app-navbar-height: 80px;
 
   // layout
-  --app-layout-active-color: 46, 125, 50;
-  --app-layout-disabled-color: 216, 67, 21;
-  --app-layout-gap: 16px;
+  --app-gap-icon: 5px;
+  --app-gap-button: 8px;
+  --app-gap-map: 12px;
+  --app-gap-top-card-info: 52px;
+  --app-container: 1280px;
+  --app-border-radius: 4px;
+  --app-component-height: 40px;
 
-  // footer
-  --app-footer-bg-color: var(--app-color-darknes);
-  --app-footer-color: var(--app-color-gray-5);
+  --app-searchbar-height: 90px; // 110 puvodni
+  --app-searchbar-field-max-width: 640px;
 
-  // silde toggle button
-  --app-slide-toggle-size: 16px;
-
-  // scrollbar
-  --app-scrollbar-track-bg: var(--app-color-lightnes);
-  --app-scrollbar-thumb-bg: var(--app-color-primary);
-
-  // mat override
-  --mat-toolbar-standard-height: 56px;
-  --mat-button-text-horizontal-padding: 16px;
-  --mat-card-outlined-container-shape: 0;
-
-  --mat-table-header-container-height: 28px;
-  --mat-table-row-item-container-height: 28px;
-  --mat-table-row-item-label-text-size: 13px;
-  --mat-table-header-headline-size: 12px;
-  --mat-table-header-headline-color: var(--app-color-gray-7);
-
-  --mat-paginator-container-size: 0;
-
-  --mat-icon-button-disabled-icon-color: var(--app-color-gray-4);
-
-/*   --mat-checkbox-selected-hover-icon-color: var(--app-color-primary);
-  --mat-checkbox-selected-icon-color: var(--app-color-primary);
-  --mat-checkbox-selected-focus-icon-color: var(--app-color-primary);
-  --mat-checkbox-selected-pressed-icon-color: var(--app-color-primary);
-  --mat-checkbox-selected-focus-state-layer-color: var(--app-color-primary);
-  --mat-checkbox-selected-hover-state-layer-color: var(--app-color-primary);
-  --mat-checkbox-selected-pressed-state-layer-color: var(--app-color-primary); */
-
-  --mat-dialog-actions-padding: 24px;
 }
 
 
@@ -143,66 +81,14 @@ $iconSize: (
   "23": 23,
 );
 
-// alerts
-$alerts: (
-  warn: (
-    color: var(--palette-warn-500),
-    bg: var(--palette-warn-50),
-    border: var(--palette-warn-100)
-  ),
-  info: (
-    color: #856404,
-    bg: #fff3cd,
-    border: rgba(var(--app-color-info-no-rgb), .15)
-  )
-  ,
-  success: (
-    color: var(--app-color-success),
-    bg: rgba(var(--app-color-success-no-rgb), .1),
-    border: rgba(var(--app-color-success-no-rgb), .2)
-  ),
-  message: (
-    color: var(--app-color-gray-7),
-    bg: rgba(#616161, .1),
-    border: rgba(#616161, .2)
-  )
+// entity colors
+$entities: (
+  "dokument": #5882c4,
+  "projekt": #F39225,
+  "akce": #247e4b,
+  "lokalita": #951E7A,
+  "samostatny_nalez": #85140E,
+  "knihovna_3d": #778e98,
+  "let":  #15968c,
+  "ext_zdroj": #E7302A
 );
-
-// states
-$states: (
-  sentiment_satisfied: var(--app-color-info),
-  mood_bad: var(--app-color-warn),
-  mood: var(--app-color-success),
-
-  LOADING: #546E7A,
-  LOADED:  var(--app-color-success),
-  LOADING_FAILED: var(--app-color-warn),
-  INGESTING: #546E7A,
-  INGESTED: var(--app-color-success),
-  INGESTING_FAILED: var(--app-color-warn),
-  EXPORT_PLANNED: var(--app-color-info),
-  EXPORTING: #546E7A,
-  EXPORT_DONE: var(--app-color-success),
-  EXPORT_FAILED: var(--app-color-warn),
-  EXPORT_VALID_WARNING: var(--app-color-warn),
-  REINDEXING: #546E7A,
-  REINDEX_DONE: var(--app-color-success),
-  REINDEX_FAILED: var(--app-color-warn),
-  UPLOADING: #546E7A,
-  UPLOAD_DONE: var(--app-color-success),
-  UPLOAD_FAILED: var(--app-color-warn),
-  STOPPED: #546E7A,
-  WAITING: #009688,
-  INTERNAL_DONE: var(--app-color-success),
-  INTERNAL_RUNNING: #546E7A,
-  INTERNAL_PLANNED: var(--app-color-info),
-  INTERNAL_FAILED: var(--app-color-warn),
-  IMPORT_PLANNED: var(--app-color-info),
-  EXTERNAL_RUNNING: #546E7A,
-  EXTERNAL_PLANNED: var(--app-color-info),
-  EXTERNAL_FAILED: var(--app-color-warn),
-  EXTERNAL_DONE: var(--app-color-success),
-  model: #546E7A,
-  default: var(--app-color-gray-6),
-);
-
