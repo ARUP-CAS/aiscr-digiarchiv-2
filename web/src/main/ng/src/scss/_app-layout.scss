@@ -26,11 +26,6 @@ mat-sidenav {
   width: 250px;
 }
 
-// header
-header {
-  @import "./app-searchbar";
-}
-
 // main wrapper
 main {
   background-color: var(--app-color-lightnes);
