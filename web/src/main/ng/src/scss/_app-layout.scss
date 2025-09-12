@@ -104,7 +104,7 @@ main {
 // container
 .app-container {
   margin: 0 auto;
-  max-width: $app-container;
+  max-width: var(--app-container);
   width: 100%;
 
   &.app-fluid {

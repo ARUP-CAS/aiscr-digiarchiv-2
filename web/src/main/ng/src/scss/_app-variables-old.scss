@@ -1,21 +1,12 @@
 // --- VARIABLES ---
 
-// layout
-$app-gap-icon: 5px !default;
-$app-gap-button: 8px !default;
-$app-gap-map: 12px !default;
-$app-gap-top-card-info: 52px !default;
-$app-container: 1280px !default;
-$app-border-radius: 4px !default;
-$app-component-height: 40px !default;
-
 // searchbar
 $app-searchbar-height: 90px !default; // 110 puvodni
-$app-searchbar-field-height: $app-component-height !default;
+$app-searchbar-field-height: 40px !default;
 $app-searchbar-field-max-width: 640px !default;
 $app-searchbar-field-color: var(--app-color-darknes) !default;
 $app-searchbar-field-bg: var(--app-color-lightnes) !default;
-$app-searchbar-field-icon-gap: calc(#{$app-gap-icon} * 2) !default;
+$app-searchbar-field-icon-gap: calc(var(--app-gap-icon) * 2) !default;
 
 // main
 $app-table-cell-left-width: 350px !default;
@@ -26,7 +17,7 @@ $app-list-view-facet-item-height: 22px !default;
 $app-list-view-facet-item-color: var(--app-color-gray-6) !default;
 
 // facet entities
-$app-facet-entity-height: $app-component-height !default;
+$app-facet-entity-height: 40px !default;
 $app-facet-entity-border-color-opacity: .3 !default;
 $app-facet-entity-bg-color-opacity: .1 !default;
 

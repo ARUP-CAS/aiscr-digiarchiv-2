@@ -9,7 +9,7 @@
   //@import "./app-facets-date";
 
   /* background-color: var(--app-color-lightnes);
-  border-radius: $app-border-radius; */
+  border-radius: var(--app-border-radius); */
   
   .mat-expansion-panel {
     @extend .mat-elevation-z0, .app-clean-mg, .app-clean-radius, .app-clean-bg !optional;
@@ -52,7 +52,7 @@
       
                 .mat-mdc-form-field-flex {
                   @extend .app-clean-pd !optional;
-                  border-radius: $app-border-radius;
+                  border-radius: var(--app-border-radius);
                   background-color: var(--app-color-lightnes);
                   border: 1px solid var(--app-color-gray-4);
                   padding-left: 16px!important;
@@ -138,7 +138,7 @@
           @include app-mixins-entity-color.setEntityColor(facet);
           @extend .app-font-family-rc !optional;
           margin-bottom: 8px;
-          border-radius: $app-border-radius;
+          border-radius: var(--app-border-radius);
           height: $app-facet-entity-height;
 
           &:hover {
@@ -152,8 +152,8 @@
             }
 
             .app-fx-left {
-              border-top-left-radius: $app-border-radius;
-              border-bottom-left-radius: $app-border-radius;
+              border-top-left-radius: var(--app-border-radius);
+              border-bottom-left-radius: var(--app-border-radius);
               justify-content: center; 
 
               .mat-icon {
@@ -163,8 +163,8 @@
             }
 
             .app-fx-right {
-              border-top-right-radius: $app-border-radius;
-              border-bottom-right-radius: $app-border-radius;
+              border-top-right-radius: var(--app-border-radius);
+              border-bottom-right-radius: var(--app-border-radius);
               border-right: 1px solid;
               border-top: 1px solid;
               border-bottom: 1px solid;
@@ -235,7 +235,7 @@
     line-height: 28px;
 
     &:not(.app-facet-dynamic) {
-      margin-left: $app-gap-icon;
+      margin-left: var(--app-gap-icon);
       margin-top: 8px;
     }
 

@@ -18,7 +18,7 @@ app-searchbar {
     align-items: center;
     height: $app-searchbar-field-height;
     background-color: $app-searchbar-field-bg;
-    border-radius: $app-border-radius;
+    border-radius: var(--app-border-radius);
     color: $app-searchbar-field-color;
     border: 1px solid var(--app-color-gray-3);
 
@@ -87,7 +87,7 @@ app-searchbar {
     .mat-flat-button {
       line-height: $app-searchbar-field-height;
       height: $app-searchbar-field-height;
-      margin-right: $app-gap-button;
+      margin-right: var(--app-gap-button);
 
       &:last-child {
         margin-right: 0 !important;

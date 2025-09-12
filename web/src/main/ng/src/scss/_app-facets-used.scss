@@ -15,7 +15,7 @@ app-facets-used,
 
       .mat-icon {
         color: var(--app-color-warning);
-        margin-left: $app-gap-icon;
+        margin-left: var(--app-gap-icon);
       }
     }
 

@@ -90,8 +90,8 @@
 
   .app-btn {
     position: absolute;
-    top: $app-gap-map;
-    left: $app-gap-map;
+    top: var(--app-gap-map);
+    left: var(--app-gap-map);
     z-index: 1092;
     min-width: 0;
     line-height: 28px;
@@ -108,12 +108,12 @@
 
   .app-view-card-info {
     position: absolute;
-    top: $app-gap-top-card-info;
-    right: $app-gap-top-card-info;
+    top: var(--app-gap-top-card-info);
+    right: var(--app-gap-top-card-info);
     z-index: 1002;
     width: 850px;
     margin-left: 142px;
-    max-height: calc(100% - #{$app-gap-top-card-info});
+    max-height: calc(100% - var(--app-gap-top-card-info));
     overflow-y: auto;
 
     .mat-mdc-card-title {
@@ -121,17 +121,17 @@
     }
 
     @media #{$lt-md} {
-      width: calc(100% - (16px + #{$app-gap-map}));
+      width: calc(100% - (16px + var(--app-gap-map)));
     }
   }
 
   .app-active-pian-facet {
     @extend .app-clean-shadow !optional;
     position: absolute;
-    top: calc(#{$app-gap-map} - 2px);
+    top: calc(var(--app-gap-map) - 2px);
     right: 130px;
     z-index: 1002;
-    padding: 0 $app-gap-icon;
+    padding: 0 var(--app-gap-icon);
     min-height: 30px;
     line-height: 30px;
     border: 2px solid #ccc;

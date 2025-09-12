@@ -38,7 +38,7 @@
       @extend .app-clean-mg, .app-w-100 !optional;
 
       .mat-icon {
-        margin-right: $app-gap-icon;
+        margin-right: var(--app-gap-icon);
         vertical-align: bottom;
       }
 
@@ -167,7 +167,7 @@
             th {
               padding-left: 0;
               text-align: left;
-              padding-right: $app-gap-icon;
+              padding-right: var(--app-gap-icon);
               min-width: 130px;
             }
           }
@@ -182,7 +182,7 @@
 
     .mat-mdc-button-base {
       &:not(:first-child) {
-        margin: 0 0 0 $app-gap-button;
+        margin: 0 0 0 var(--app-gap-button);
       }
 
       &.mat-flat-button {
@@ -231,7 +231,7 @@
         @include app-mixins-entity-color.setEntityColor(cardInfoBadge);
 
         .mat-icon {
-          margin-right: $app-gap-icon;
+          margin-right: var(--app-gap-icon);
           @include setIcon(18, inherit, bottom);
         }
       }
@@ -286,7 +286,7 @@
   .mat-mdc-list-item {
     .mat-icon {
       &:not(.app-icon-op) {
-        margin-right: $app-gap-icon  !important;
+        margin-right: var(--app-gap-icon)  !important;
       }
     }
   }
@@ -354,11 +354,11 @@
       width: $app-list-view-facet-item-height;
       height: $app-list-view-facet-item-height;
       line-height: $app-list-view-facet-item-height;
-      margin-right: $app-gap-icon;
+      margin-right: var(--app-gap-icon);
     }
 
     .mat-checkbox {
-      margin-right: $app-gap-icon;
+      margin-right: var(--app-gap-icon);
     }
   }
 }

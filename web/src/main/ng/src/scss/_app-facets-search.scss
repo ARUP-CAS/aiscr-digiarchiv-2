@@ -13,14 +13,14 @@ app-facets-search {
   
             .mat-mdc-form-field-flex {
               @extend .app-clean-pd !optional;
-              border-radius: $app-border-radius;
+              border-radius: var(--app-border-radius);
               background-color: var(--app-color-lightnes);
               border: 1px solid var(--app-color-gray-4);
               padding-left: 16px!important;
               align-items: center;
 
               .mat-mdc-form-field-suffix {
-                margin-right: $app-gap-icon;
+                margin-right: var(--app-gap-icon);
                 
                 .mat-icon {
                   margin-top: 3px;

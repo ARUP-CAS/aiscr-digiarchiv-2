@@ -17,8 +17,8 @@ app-file-viewer {
         &.active {
           background-color: var(--app-primary-color);
           color: var(--app-color-lightnes);
-          border-radius: $app-border-radius;
-          padding: $app-gap-icon 8px;
+          border-radius: var(--app-border-radius);
+          padding: var(--app-gap-icon) 8px;
         }
       }
     }

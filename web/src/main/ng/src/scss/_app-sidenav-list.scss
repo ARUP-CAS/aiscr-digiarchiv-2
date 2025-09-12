@@ -15,7 +15,7 @@ app-sidenav-list {
 
     .mat-icon {
       @include setIcon(20, inherit, sub);
-      margin-right: $app-gap-icon;
+      margin-right: var(--app-gap-icon);
     } 
   }
 }
