@@ -10,7 +10,7 @@
 
   @include mat.toolbar-overrides((
     container-background-color: var(--mat-sys-primary),
-    container-text-color: white,
+    container-text-color: var(--app-color-lightnes),
     title-text-size: 14px,
     //standard-height: 80px
   ));
@@ -21,6 +21,7 @@
     list-item-one-line-container-height: 32px
   ));
 
+
   @include mat.form-field-overrides((
     container-height: 40px,
     container-vertical-padding: 8px,
@@ -28,6 +29,7 @@
     container-text-tracking: 0,
     outlined-outline-color: var(--app-color-gray-3)
   ));
+
 
   .mat-mdc-text-field-wrapper {
     background-color: var(--app-color-lightnes);
@@ -38,29 +40,28 @@
     track-color: #{map.get(map.get(my-theme.$primary-palette, error),10)}
   ));
 
+
   @include mat.button-overrides((
     filled-container-shape: 3px,
     protected-container-shape: 3px,
     outlined-container-shape: 3px
   ));
 
+
   @include mat.expansion-overrides((
     container-shape: 0px,
     container-background-color: none
   ));
 
+
   @include mat.card-overrides((
     elevated-container-shape: 3px,
-    outlined-container-shape: 3px,
-
-    elevated-container-color: var(--app-color-lightnes),
-
+    elevated-container-color: var(--app-color-lightnes), 
     title-text-font: 'Roboto Condensed, sans-serif',
     title-text-size: 16px,
     title-text-weight: 700,
     title-text-line-height: 20px,
     title-text-tracking: 0,
-
     subtitle-text-font: 'Roboto Condensed, sans-serif',
     subtitle-text-size: 14px,
     subtitle-text-color: var(--app-color-gray-6),
@@ -68,6 +69,15 @@
     subtitle-text-tracking: 0,
   ));
 
+
+  @include mat.menu-overrides((
+    container-shape: 3px,
+    container-color: var(--app-color-lightnes)
+  ));
+  .mat-mdc-menu-panel {
+    min-width: 100%;
+    max-width: 100%;
+  }
 }
 
 @for $i from 0 through 5 {

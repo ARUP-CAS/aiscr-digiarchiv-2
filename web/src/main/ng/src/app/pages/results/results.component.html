@@ -4,55 +4,53 @@
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
     @if (state.documentProgress && state.isMapaCollapsed) {
-      <div class="app-loading-progress">{{ state.documentProgress |
-      number : '1.0-0' }}%</div>
+      <div class="app-loading-progress">
+        {{ state.documentProgress | number : '1.0-0' }}%
+      </div>
     }
   </div>
 }
 
-<div fxLayout="row" fxLayoutAlign="start center" class="app-mobile-action-toolbar app-pl-4 app-pr-4"
-  [class.app-mb-4]="state.numFound === 0 && state.isFacetsCollapsed">
-  <a (click)="setFacetsOpened()" fxFlex class="app-d-inline-flex">
-    <mat-icon>{{ state.isFacetsCollapsed ? 'filter_alt' : 'filter_alt_off' }}</mat-icon>
-  </a>
-  <div class="app-d-inline-flex">
-    <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate"
-      class="app-d-inline-flex">
-      <mat-icon>
-        @switch (state.itemView) {
-          @case ('row') {
-            reorder
+  <div class="app-fxLayout app-row app-center-v app-mobile-action-toolbar app-pl-4 app-pr-4" [class.app-mb-4]="state.numFound === 0 && state.isFacetsCollapsed">
+    <a (click)="setFacetsOpened()" class="app-fxFlex app-d-inline-flex">
+      <mat-icon>{{ state.isFacetsCollapsed ? 'filter_alt' : 'filter_alt_off' }}</mat-icon>
+    </a>
+    <div class="app-d-inline-flex">
+      <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate" class="app-d-inline-flex">
+        <mat-icon>
+          @switch (state.itemView) {
+            @case ('row') {
+              reorder
+            }
+            @case ('col') {
+              apps
+            }
+            @default {
+              tv
+            }
           }
-          @case ('col') {
-            apps
-          }
-          @default {
-            tv
-          }
-        }
-      </mat-icon>
-      </a><span class="app-pipe"></span>
-      <mat-menu #menuView="matMenu">
-        <button mat-menu-item (click)="setItemView('row')">
-          <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
-        </button>
-        <button mat-menu-item (click)="setItemView('col')">
-          <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
-        </button>
-        <button mat-menu-item (click)="setItemView('default')">
-          <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
-        </button>
-      </mat-menu>
-      <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank" class="app-d-inline-flex">
-        <mat-icon>get_app</mat-icon>
-      </a>
-      <span class="app-pipe"></span>
-      @if (state.logged) {
-        <a (click)="toggleFavorites()" [class.app-color-fav]="inFav"
-          [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
-          <mat-icon>grade</mat-icon>
+        </mat-icon>
+        </a><span class="app-pipe"></span>
+        <mat-menu #menuView="matMenu">
+          <button mat-menu-item (click)="setItemView('row')">
+            <mat-icon>reorder</mat-icon>{{ 'toolbar.menu.row' | translate }}
+          </button>
+          <button mat-menu-item (click)="setItemView('col')">
+            <mat-icon>apps</mat-icon>{{ 'toolbar.menu.col' | translate }}
+          </button>
+          <button mat-menu-item (click)="setItemView('default')">
+            <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
+          </button>
+        </mat-menu>
+        <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank" class="app-d-inline-flex">
+          <mat-icon>get_app</mat-icon>
         </a>
-      }
+        <span class="app-pipe"></span>
+        @if (state.logged) {
+          <a (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
+            <mat-icon>grade</mat-icon>
+          </a>
+        }
     </div>
   </div>
 
@@ -60,11 +58,10 @@
     <div #leftElement class="app-display-table app-container">
       @if (state.isMapaCollapsed) {
         <div class="app-table-cell app-left" [class.app-facets-opened]="!state.isFacetsCollapsed">
-          <div fxLayout="row" fxFlexFill>
-            <div fxFlex class="app-facets">
+          <div class="app-fxLayout app-row app-fill">
+            <div class="app-fxFlex app-facets">
               @if (state.facetsLoading()) {
-                <div class="app-display-table app-loading"><mat-progress-bar
-                mode="indeterminate"></mat-progress-bar></div>
+                <div class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
               }
               @if (state.breadcrumbs?.length > 0) {
                 <app-facets-used></app-facets-used>
@@ -78,8 +75,6 @@
             <mat-card class="app-card-info">
               <mat-card-content>
                 {{ 'dialog.alert.search_error' | translate }}&#160;
-                <!-- <br />
-                {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }} -->
               </mat-card-content>
             </mat-card>
           }
@@ -90,8 +85,7 @@
                   <strong>{{ state.numFound }}</strong>
                   {{ 'card.citation.nalezených výsledků v entitě' | translate }}&#160;
                   <span class="app-info-badge" [ngClass]="'app-entity-' + state.entity">
-                    <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity]
-                      }}</mat-icon><strong>{{ 'entities.' + state.entity + '.title' | translate }}</strong>
+                    <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity] }}</mat-icon><strong>{{ 'entities.' + state.entity + '.title' | translate }}</strong>
                     </span><br />
                     {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }}@if (hasResultsInOther || inFav) {
                     ,
@@ -101,8 +95,7 @@
                     <p></p>
                     @for (entity of config.entities; track entity) {
                       @if (state.totals[entity] > 0) {
-                        <div class="app-info-badge app-cursor-pointer"
-                          [ngClass]="'app-entity-' + entity" (click)="setEntity(entity)">
+                        <div class="app-info-badge app-cursor-pointer" [ngClass]="'app-entity-' + entity" (click)="setEntity(entity)">
                           <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
                           <strong>{{ 'entities.' + entity + '.title' | translate }}</strong>
                           &#160;@if (state.totals) {
@@ -116,8 +109,7 @@
                   {{ 'nebo' | translate }} {{ 'card.citation.zrušit volbu' | translate }} "{{ 'card.desc.Favorites' |
                   translate }}".
                   @if (state.inFavorites) {
-                    <a (click)="toggleFavorites()" [class.app-color-fav]="inFav"
-                      [matTooltip]="'card.tooltip.Favorites' | translate">
+                    <a (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'card.tooltip.Favorites' | translate">
                       <mat-icon>grade</mat-icon>
                     </a>
                   }
@@ -126,12 +118,8 @@
             </mat-card>
           }
           @if (state.numFound > 0) {
-            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center"
-              class="app-toolbar">
-              <div fxFlex="0 0 150px" class="app-action-links">
-                <!-- <a (click)="showChartBar()"
-                [matTooltip]="isChartBarCollapsed ? ('toolbar.tooltip.Zobrazit časovou osu' | translate) : ('toolbar.tooltip.Skrýt časovou osu' | translate)"><mat-icon>bar_chart</mat-icon></a>
-                <span class="app-pipe"></span> -->
+            <div class="app-fxLayout app-row app-center-v app-gap-4 app-toolbar">
+              <div class="app-fxFlex app-action-links"><!--fxFlex="0 0 150px"-->
                 <a [matMenuTriggerFor]="menuView" [matTooltip]="'toolbar.tooltip.' + state.itemView | translate">
                   <mat-icon>
                     @switch (state.itemView) {
@@ -158,8 +146,7 @@
                       <mat-icon>tv</mat-icon>{{ 'toolbar.menu.default' | translate }}
                     </button>
                   </mat-menu>
-                  <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate"
-                    target="_blank"><mat-icon>get_app</mat-icon></a>
+                  <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank"><mat-icon>get_app</mat-icon></a>
                     <span class="app-pipe"></span>
                     @if (state.logged) {
                       <a (click)="toggleFavorites()" [class.app-color-fav]="inFav"
@@ -168,14 +155,14 @@
                       </a>
                     }
                   </div>
-                  <div fxFlex="0 0 calc(100% - 166px)" class="app-paginator">
+                  <div class="app-paginator"><!--fxFlex="0 0 calc(100% - 166px)"-->
                     <app-paginator></app-paginator>
                   </div>
                 </div>
               }
               @if (state.numFound > 0) {
-                <div fxLayout="row" [class]="'app-view-' + state.itemView">
-                  <div fxFlex>
+                <div class="app-fxLayout app-row" [class]="'app-view-' + state.itemView">
+                  <div class="app-fxFlex">
                     @for (result of docs; track result) {
                       <app-entity-container [result]="result"></app-entity-container>
                       <!-- @switch(state.entity) {
@@ -191,8 +178,8 @@
                 </div>
               }
               @if (state.numFound > 0) {
-                <div fxLayout="row">
-                  <div fxFlex>
+                <div class="app-fxLayout app-row">
+                  <div class="app-fxFlex">
                     <app-paginator></app-paginator>
                   </div>
                 </div>
@@ -200,6 +187,8 @@
             }
           </div>
         }
+
+        <!--todo-->
         @if (!state.isMapaCollapsed) {
           <div class="app-table-cell">
             <mat-sidenav-container class="app-sidenav-container">
