@@ -259,8 +259,8 @@
     flex-flow: nowrap;
   }
 
-  .app-fx-left,
-  .app-fx-right {
+  .app-left,
+  .app-right {
     $flex-width: 100%;
     flex: 1 1 $flex-width !important;
     min-width: $flex-width;
@@ -277,7 +277,7 @@
     }
   }
 
-  .app-fx-left {
+  .app-left {
     margin-bottom: 32px;
 
     @media only screen and (min-width: 600px) {
@@ -285,7 +285,7 @@
     }
   }
 
-  .app-fx-right {
+  .app-right {
     position: relative;
 
     .mat-mdc-card {

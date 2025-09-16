@@ -59,7 +59,13 @@
     title-text-size: 16px,
     title-text-weight: 700,
     title-text-line-height: 20px,
-    title-text-tracking: 0
+    title-text-tracking: 0,
+
+    subtitle-text-font: 'Roboto Condensed, sans-serif',
+    subtitle-text-size: 14px,
+    subtitle-text-color: var(--app-color-gray-6),
+    subtitle-text-weight: 400,
+    subtitle-text-tracking: 0,
   ));
 
 }

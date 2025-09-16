@@ -66,6 +66,12 @@
   }
 }
 
+.app-fxFlex-100w {
+  flex: 1 1 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
 .app-jc-start {
   justify-content: start !important;
 }
