@@ -8,122 +8,90 @@
 
 <div class="app-display-table app-container">
   <div class="app-table-cell">
-    
-    
-        <div fxLayout="row wrap" class="app-entities-wrapper" [class.app-doctype-expanded]="showingCat">
-          @for (entity of config.entities; track entity; let index = $index) {
-            <mat-card [class]="'app-entity-' + entity + ' app-' + index" class="app-card-entity mat-elevation-z3" [matTooltip]="'entities.' + entity + '.desc' | translate">
-              <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity, sort: getSortByEntity(entity)}" class="app-cursor-pointer">
-                <mat-card-title fxLayout="row">
-                  <a fxFlex>
-                    <mat-icon fxFlex="28px">{{ config.entityIcons[entity] }}</mat-icon><span>{{ 'entities.' + entity + '.title' | translate }}</span>
-                  </a>
-                </mat-card-title>
-              </mat-card-header>
-              <mat-card-actions>
-                <span>{{ totals()[entity] }}</span> {{'card.desc.záznamů' | translate}}
-                @if(entity === 'dokument') {
-                  <a (click)="showingCat = !showingCat" [class]="'app-icon-inside app-entity-' + entity" [ngClass]="showingCat ? 'app-rotate-up' : 'app-rotate-down'" [matTooltip]="showingCat ? 'Sbalit kategorie' : 'Rozbalit kategorie'">
-                    <mat-icon>
-                      expand_more
-                    </mat-icon>
-                  </a>
-                }
-              </mat-card-actions>
-            </mat-card>
-            @if(showingCat && index < 3) {
-              <mat-card fxFlex="100%" class="app-doctype" 
-              [class.app-doctype-0]="index === 0" [class.app-doctype-1]="index === 1" [class.app-doctype-2]="index === 2">
-                <mat-card-content fxLayout="row wrap">
-                  @for (doctype of kategories; track doctype) {
-                    <mat-card fxFlex class="app-card-doctype mat-elevation-z0">
-                      <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
-                        <mat-card-title>
-                          <a>
-                            <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
-                          </a>
-                        </mat-card-title>
-                        <mat-card-subtitle>
-                          <span>{{ totals().kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
-                        </mat-card-subtitle>
-                      </mat-card-header>
-                    </mat-card>
-                  }
-                </mat-card-content>
-              </mat-card>
+    <div class="app-fxLayout app-row app-wrap app-entities-wrapper" [class.app-doctype-expanded]="showingCat">
+      @for (entity of config.entities; track entity; let index = $index) {
+        <mat-card [class]="'app-entity-' + entity + ' app-' + index" class="app-fxLayout app-column aoo-fill app-card-entity mat-elevation-z3" [matTooltip]="'entities.' + entity + '.desc' | translate">
+          <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity, sort: getSortByEntity(entity)}" class="app-cursor-pointer">
+            <mat-card-title class="app-fxLayout app-row">
+              <a class="app-fxFlex">
+                <mat-icon fxFlex="28px">{{ config.entityIcons[entity] }}</mat-icon><span>{{ 'entities.' + entity + '.title' | translate }}</span>
+              </a>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-actions>
+            <span class="app-mr-1">{{ totals()[entity] }}</span> {{'card.desc.záznamů' | translate}}
+            @if(entity === 'dokument') {
+              <a (click)="showingCat = !showingCat" [class]="'app-icon-inside app-entity-' + entity" [ngClass]="showingCat ? 'app-rotate-up' : 'app-rotate-down'" [matTooltip]="showingCat ? 'Sbalit kategorie' : 'Rozbalit kategorie'">
+                <mat-icon>
+                  expand_more
+                </mat-icon>
+              </a>
             }
-          }
-          @if(showingCat) {
-            <mat-card fxFlex="100%" class="app-doctype app-doctype-5">
-              <mat-card-content fxLayout="row wrap">
-                @for (doctype of kategories; track doctype) {
-                  <mat-card fxFlex class="app-card-doctype mat-elevation-z0">
-                    <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
-                      <mat-card-title>
-                        <a>
-                          <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
-                        </a>
-                      </mat-card-title>
-                      <mat-card-subtitle>
-                        <span>{{ totals().kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
-                      </mat-card-subtitle>
-                    </mat-card-header>
-                  </mat-card>
-                }
-              </mat-card-content>
-            </mat-card>
-          }
-
-        </div>
-        <div fxLayout="row" class="app-desc-wrapper">
-          <mat-card fxFlex class="app-fx-left">
-            <mat-card-header>
-              <mat-card-title>{{ 'card.title.O projektu' | translate }}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <app-free-text [id]="'about'" ></app-free-text>
+          </mat-card-actions>
+        </mat-card>
+        @if(showingCat && index < 3) {
+          <mat-card fxFlex="100%" class="app-doctype" 
+          [class.app-doctype-0]="index === 0" [class.app-doctype-1]="index === 1" [class.app-doctype-2]="index === 2">
+            <mat-card-content fxLayout="row wrap">
+              @for (doctype of kategories; track doctype) {
+                <mat-card class="app-fxFlex app-card-doctype mat-elevation-z0">
+                  <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
+                    <mat-card-title>
+                      <a>
+                        <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
+                      </a>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                      <span>{{ totals().kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                    </mat-card-subtitle>
+                  </mat-card-header>
+                </mat-card>
+              }
             </mat-card-content>
           </mat-card>
-          <div fxFlex class="app-fx-right">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>{{ 'card.title.Aktuality' | translate }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <app-free-text [id]="'news'" ></app-free-text>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
+        }
+      }
+      @if(showingCat) {
+        <mat-card fxFlex="100%" class="app-doctype app-doctype-5">
+          <mat-card-content fxLayout="row wrap">
+            @for (doctype of kategories; track doctype) {
+              <mat-card class="app-fxFlex app-card-doctype mat-elevation-z0">
+                <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
+                  <mat-card-title>
+                    <a>
+                      <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
+                    </a>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    <span>{{ totals().kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
 
-        <!-- <h1>test</h1>
-        text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />
-        text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br /> -->
-
-    <!-- <ng-container *ngIf="!state.isMapaCollapsed">
-    <mat-sidenav-container class="app-sidenav-container">
-      <mat-sidenav #sidenav mode="side" [(opened)]="opened">
-        <mat-tab-group>
-          <mat-tab label="Filters">
-            <div class="app-facets">
-              <app-facets-search></app-facets-search>
-              <app-facets-used></app-facets-used>
-              <app-facets></app-facets>
-            </div>
-          </mat-tab>
-          <mat-tab label="Results">
-            Results
-          </mat-tab>
-        </mat-tab-group>
-      </mat-sidenav>
-
-      <mat-sidenav-content>
-        <button mat-raised-button (click)="sidenav.toggle()" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'">
-          <mat-icon>last_page</mat-icon>
-        </button>
-        <app-mapa></app-mapa>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  </ng-container> -->
-</div>
+    <div class="app-fxLayout app-row app-fill app-desc-wrapper">
+      <mat-card class="app-fxFlex app-fx-left">
+        <mat-card-header>
+          <mat-card-title>{{ 'card.title.O projektu' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-free-text [id]="'about'" ></app-free-text>
+        </mat-card-content>
+      </mat-card>
+      <div class="app-fxFlex app-fx-right">
+        <mat-card class="app-h-100">
+          <mat-card-header>
+            <mat-card-title>{{ 'card.title.Aktuality' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <app-free-text [id]="'news'" ></app-free-text>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
 </div>

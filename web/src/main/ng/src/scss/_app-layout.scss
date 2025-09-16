@@ -28,9 +28,8 @@ mat-sidenav {
 
 // main wrapper
 main {
-  background-color: var(--app-color-lightnes);
+  background-color: var(--app-color-gray-1);
 
-  @import "./app-home";
   @import "./app-results";
   @import "./app-stats";
   @import "./app-result-item";

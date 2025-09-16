@@ -51,7 +51,15 @@
 
   @include mat.card-overrides((
     elevated-container-shape: 3px,
-    outlined-container-shape: 3px
+    outlined-container-shape: 3px,
+
+    elevated-container-color: var(--app-color-lightnes),
+
+    title-text-font: 'Roboto Condensed, sans-serif',
+    title-text-size: 16px,
+    title-text-weight: 700,
+    title-text-line-height: 20px,
+    title-text-tracking: 0
   ));
 
 }

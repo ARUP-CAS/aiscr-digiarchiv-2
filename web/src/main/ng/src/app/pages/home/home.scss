@@ -1,0 +1,306 @@
+// --- HOME ---
+@use "../../../scss/app-mixins";
+@use "../../../scss/app-mixins-entity-color";
+
+.app-entities-wrapper {
+  &.app-doctype-expanded {
+    // mq - categories behavior
+    @media only screen and (max-width: 399px) {
+      .mat-mdc-card {
+        &.app-doctype-0 {
+          display: block !important;
+        }
+
+        &.app-doctype-5 {
+          display: none !important;
+        }
+      }
+    }
+
+    @media only screen and (min-width: 400px) and (max-width: 599px) {
+      .mat-mdc-card {
+        &.app-card-entity {
+          &.app-2,
+          &.app-4 {
+            margin-right: 32px !important;
+          }  
+
+          &.app-1,
+          &.app-3 {
+            margin-right: 0 !important;
+          }       
+        }
+
+        &.app-doctype-1 {
+          display: block;
+        }
+
+        &.app-doctype-0,
+        &.app-doctype-2,
+        &.app-doctype-5 {
+          display: none;
+        }
+      }
+    }
+
+    @media only screen and (min-width: 600px) and (max-width: 959px) {
+      .mat-mdc-card {
+        &.app-card-entity {
+          &.app-1 {
+            margin-right: 32px !important;
+          }
+
+          &.app-2,
+          &.app-5 {
+            margin-right: 0 !important;
+          }   
+        }
+        
+        &.app-doctype-2 {
+          display: block;
+        }
+
+        &.app-doctype-0,
+        &.app-doctype-1,
+        &.app-doctype-5 {
+          display: none;
+        }
+      }
+    }
+
+    .mat-mdc-card-content {
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  // split mat-card-actions into 2 lines
+  @media only screen and (min-width: 960px) and (max-width: 1159px) {
+    .mat-mdc-card {
+      &.app-card-entity {
+        .mat-mdc-card-actions {
+          span {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  .mat-mdc-card {
+    min-height: 116px;
+    @extend .app-row-gap-32, .app-font-family-rc !optional;
+    margin-bottom: 32px;
+
+    &.app-doctype-0,
+    &.app-doctype-1,
+    &.app-doctype-2 {
+      display: none;
+    }
+  
+    &.app-card-entity {
+      @include app-mixins-entity-color.setEntityColor(home_card);
+      flex: 1 1 100%;
+      min-width: 100%;
+      box-sizing: border-box;
+      margin-right: 32px;
+      color: var(--app-color-lightnes);
+
+      &.app-5 {
+        margin-right: 0;
+      }
+
+      // mq
+      @media only screen and (min-width: 400px) and (max-width: 599px) {
+        $flex-width: 50%;
+        flex: 1 1 calc(#{$flex-width} - 32px);
+        min-width: calc(#{$flex-width} - 32px);
+
+        &.app-1,
+        &.app-3 {
+          margin-right: 0 !important;
+        }
+      }
+
+      @media only screen and (min-width: 600px) and (max-width: 959px) {
+        $flex-width: 33.3333%;
+        flex: 1 1 calc(#{$flex-width} - 32px);
+        min-width: calc(#{$flex-width} - 32px);
+
+        &.app-2 {
+          margin-right: 0;
+        }
+      }
+
+      @media only screen and (min-width: 960px) {
+        $flex-width: 16.6666%;
+        flex: 1 1 calc(#{$flex-width} - 32px);
+        min-width: calc(#{$flex-width} - 32px);
+      }
+
+      a {
+        color: var(--app-color-lightnes);
+
+        &:hover {
+          color: rgba(var(--app-color-lightnes-rgb), .7);
+        }
+      }
+
+      .mat-mdc-card-title {
+        min-height: 48px;
+
+        span {
+          margin-top: 4px;
+        }
+      }
+
+      .mat-mdc-card-subtitle {
+        @extend .app-clean-mg !optional;
+      }
+
+      .mat-mdc-card-title {
+        .mat-icon {
+          @include app-mixins.setIcon(28);
+        }
+      }
+
+      .mat-mdc-card-actions {
+        position: relative;
+        padding: 0 16px;
+        font-family: Roboto Condensed, sans-serif;
+
+        span {
+          font-weight: bold;
+        }
+        
+        @include app-mixins-entity-color.setEntityColor(ico);
+
+        .app-icon-inside {
+          position: absolute;
+          right: 16px;
+          background-color: var(--app-color-lightnes);
+          min-height: 20px;
+          min-width: 20px;
+          border-radius: 50%;
+          display: inline-flex;
+          text-decoration: none;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    } 
+  }
+
+  .app-doctype {
+    padding-bottom: 0;
+    
+    .app-card-doctype {
+      $flex-width: 100%;
+      flex: 1 1 $flex-width;
+      min-width: $flex-width;
+      box-sizing: border-box;
+      margin-bottom: 16px !important;
+      margin-right: 16px;
+      background-color: var(--app-color-gray-2);
+
+      &:nth-child(5) {
+        margin-right: 0 !important;
+      }
+
+      // mq
+      @media only screen and (min-width: 600px) and (max-width: 959px) {
+        $flex-width: 50%;
+        flex: 1 1 calc(#{$flex-width} - 16px);
+        min-width: calc(#{$flex-width} - 16px);
+
+        &:nth-child(-n+3) {
+          $flex-width: 33.3333%;
+          flex: 1 1 calc(#{$flex-width} - 16px);
+          min-width: calc(#{$flex-width} - 16px);
+        }
+
+        &:nth-child(3) {
+          margin-right: 0 !important;
+        }
+      }
+
+      @media only screen and (min-width: 960px) {
+        $flex-width: 20%;
+        flex: 1 1 calc(#{$flex-width} - 16px);
+        min-width: calc(#{$flex-width} - 16px);
+      }
+
+      .mat-mdc-card-title {
+        a {
+          color: var(--app-color-darknes);
+
+          &:hover {
+            color: rgba(var(--app-color-darknes-rgb), .7);
+          }
+        }
+      }
+      
+      .mat-mdc-card-subtitle {
+        @extend .app-clean-mg !optional;
+
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+.app-desc-wrapper {
+  flex-flow: wrap;
+
+  @media only screen and (min-width: 600px) {
+    flex-flow: nowrap;
+  }
+
+  .app-fx-left,
+  .app-fx-right {
+    $flex-width: 100%;
+    flex: 1 1 $flex-width !important;
+    min-width: $flex-width;
+    margin-right: 32px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    @media only screen and (min-width: 600px) {
+      $flex-width: 50%;
+      flex: 1 1 calc(#{$flex-width} - 32px);
+      min-width: calc(#{$flex-width} - 32px);
+    }
+  }
+
+  .app-fx-left {
+    margin-bottom: 32px;
+
+    @media only screen and (min-width: 600px) {
+      margin-bottom: 0;  
+    }
+  }
+
+  .app-fx-right {
+    position: relative;
+
+    .mat-mdc-card {
+      position: unset;
+      height: calc(100% - 32px);
+      overflow: hidden;
+
+      @media only screen and (min-width: 600px) {
+        position: absolute;
+      }
+
+      .mat-mdc-card-content {
+        height: 87%;
+        overflow: auto;
+      }
+    }
+  }
+} 

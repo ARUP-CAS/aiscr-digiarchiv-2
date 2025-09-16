@@ -15,7 +15,6 @@ import { RouterModule } from '@angular/router';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { FreeTextComponent } from "../../components/free-text/free-text.component";
-import { FlexLayoutModule } from 'ngx-flexible-layout';
 
 export class Box {
   label: string;
@@ -29,7 +28,7 @@ export class Box {
 @Component({
   selector: 'app-home',
   imports: [
-    TranslateModule, CommonModule, RouterModule, FlexLayoutModule,
+    TranslateModule, CommonModule, RouterModule,
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule,
     FreeTextComponent
