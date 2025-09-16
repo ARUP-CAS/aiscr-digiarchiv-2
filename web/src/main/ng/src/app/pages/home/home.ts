@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Component, HostListener, OnInit, signal, TemplateRef, ViewContainerRef } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -46,7 +46,7 @@ export class Home implements OnInit {
   inPop = false;
 
   loading: boolean = false;
-  totals: any = {};
+  totals = signal<any>({});
   kategories: string[];
 
   showingCat: boolean;
@@ -79,7 +79,7 @@ export class Home implements OnInit {
         this.loading = false;
         return;
       }
-      this.totals = resp;
+      this.totals.set(resp);
       this.kategories = Object.keys(resp.kategorie).filter(s => s !== 'ddata3d');
 
       this.state.stats = resp.stats.stats_fields;

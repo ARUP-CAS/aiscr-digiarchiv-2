@@ -21,7 +21,7 @@
                 </mat-card-title>
               </mat-card-header>
               <mat-card-actions>
-                <span>{{ totals[entity] }}</span> {{'card.desc.záznamů' | translate}}
+                <span>{{ totals()[entity] }}</span> {{'card.desc.záznamů' | translate}}
                 @if(entity === 'dokument') {
                   <a (click)="showingCat = !showingCat" [class]="'app-icon-inside app-entity-' + entity" [ngClass]="showingCat ? 'app-rotate-up' : 'app-rotate-down'" [matTooltip]="showingCat ? 'Sbalit kategorie' : 'Rozbalit kategorie'">
                     <mat-icon>
@@ -31,8 +31,9 @@
                 }
               </mat-card-actions>
             </mat-card>
-            @if(showingCat && index === 0) {
-              <mat-card fxFlex="100%" class="app-doctype app-doctype-0">
+            @if(showingCat && index < 3) {
+              <mat-card fxFlex="100%" class="app-doctype" 
+              [class.app-doctype-0]="index === 0" [class.app-doctype-1]="index === 1" [class.app-doctype-2]="index === 2">
                 <mat-card-content fxLayout="row wrap">
                   @for (doctype of kategories; track doctype) {
                     <mat-card fxFlex class="app-card-doctype mat-elevation-z0">
@@ -43,47 +44,7 @@
                           </a>
                         </mat-card-title>
                         <mat-card-subtitle>
-                          <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
-                        </mat-card-subtitle>
-                      </mat-card-header>
-                    </mat-card>
-                  }
-                </mat-card-content>
-              </mat-card>
-            }
-            @if(showingCat && index === 1) {
-              <mat-card fxFlex="100%" class="app-doctype app-doctype-1">
-                <mat-card-content fxLayout="row wrap">
-                  @for (doctype of kategories; track doctype) {
-                    <mat-card fxFlex class="app-card-doctype mat-elevation-z0">
-                      <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
-                        <mat-card-title>
-                          <a>
-                            <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
-                          </a>
-                        </mat-card-title>
-                        <mat-card-subtitle>
-                          <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
-                        </mat-card-subtitle>
-                      </mat-card-header>
-                    </mat-card>
-                  }
-                </mat-card-content>
-              </mat-card>
-            }
-            @if(showingCat && index === 2) {
-              <mat-card fxFlex="100%" class="app-doctype app-doctype-2">
-                <mat-card-content fxLayout="row wrap">
-                  @for (doctype of kategories; track doctype) {
-                    <mat-card fxFlex class="app-card-doctype mat-elevation-z0">
-                      <mat-card-header routerLink="/results" [queryParams]="{'dokument_kategorie_dokumentu' : doctype, 'entity': 'dokument'}" class="app-cursor-pointer">
-                        <mat-card-title>
-                          <a>
-                            <mat-icon>{{ config.entityIcons[doctype] }}</mat-icon>{{ 'dokument_kategorie_dokumentu.' + doctype | translate }}
-                          </a>
-                        </mat-card-title>
-                        <mat-card-subtitle>
-                          <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                          <span>{{ totals().kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
                         </mat-card-subtitle>
                       </mat-card-header>
                     </mat-card>
@@ -104,7 +65,7 @@
                         </a>
                       </mat-card-title>
                       <mat-card-subtitle>
-                        <span>{{ totals.kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
+                        <span>{{ totals().kategorie[doctype] }}</span> {{ 'záznamů' | translate }}
                       </mat-card-subtitle>
                     </mat-card-header>
                   </mat-card>
@@ -114,7 +75,7 @@
           }
 
         </div>
-       <!--  <div fxLayout="row" class="app-desc-wrapper">
+        <div fxLayout="row" class="app-desc-wrapper">
           <mat-card fxFlex class="app-fx-left">
             <mat-card-header>
               <mat-card-title>{{ 'card.title.O projektu' | translate }}</mat-card-title>
@@ -133,7 +94,7 @@
               </mat-card-content>
             </mat-card>
           </div>
-        </div> -->
+        </div>
 
         <!-- <h1>test</h1>
         text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />text<br />
