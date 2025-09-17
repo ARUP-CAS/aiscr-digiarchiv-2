@@ -29,11 +29,22 @@
     container-text-tracking: 0,
     outlined-outline-color: var(--app-color-gray-3)
   ));
-
-
   .mat-mdc-text-field-wrapper {
     background-color: var(--app-color-lightnes);
   }
+
+
+  @include mat.select-overrides((
+    panel-background-color: var(--app-color-lightnes),
+    trigger-text-size: 12px,
+  ));
+  .mat-mdc-select-panel {
+    .mat-mdc-option {
+      //min-height: 30px;
+      //width: 400px;
+    }
+  }
+
 
   @include mat.progress-bar-overrides((
     active-indicator-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
@@ -78,6 +89,11 @@
     min-width: 100%;
     max-width: 100%;
   }
+
+
+   @include mat.paginator-overrides((
+    container-background-color: transparent,
+  ));
 }
 
 @for $i from 0 through 5 {

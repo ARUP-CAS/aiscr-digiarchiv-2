@@ -7,6 +7,10 @@
 
 @include app-mixins-gap.setGap();
 
+.app-color-primary {
+  color: var(--app-color-primary) !important;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;

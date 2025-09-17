@@ -1,0 +1,20 @@
+@use "../../../scss/app-mixins";
+
+.app-num {
+  width: 90px;
+  font-size: 12px;
+  margin-right: 16px;
+
+  .mat-icon {
+    @include app-mixins.setIcon($size: 18)
+  }   
+}
+
+.app-sort {
+  width: 170px;
+
+  .mat-mdc-select {
+    font-size: 12px !important;
+  }
+}
+
