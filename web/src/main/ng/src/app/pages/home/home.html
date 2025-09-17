@@ -13,7 +13,7 @@
         <mat-card [class]="'app-entity-' + entity + ' app-' + index" class="app-fxLayout app-column aoo-fill app-card-entity mat-elevation-z3" [matTooltip]="'entities.' + entity + '.desc' | translate">
           <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity, sort: getSortByEntity(entity)}" class="app-cursor-pointer">
             <mat-card-title class="app-fxLayout app-row">
-              <a class="app-fxLayout app-row">
+              <a class="app-fxLayout app-row app-gap-2">
                 <mat-icon>{{ config.entityIcons[entity] }}</mat-icon><span>{{ 'entities.' + entity + '.title' | translate }}</span>
               </a>
             </mat-card-title>
