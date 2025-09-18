@@ -1,9 +1,9 @@
-<mat-card class="mat-elevation-z0">
-  <mat-card-content>
-    <mat-form-field class="app-full-width" appearance="fill">
-      <input matInput [placeholder]="'facet.input.Hledej ve filtrech' | translate" (input)="changed($event)" [(ngModel)]="state.facetFilterValue" name="facetFilter" />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  </mat-card-content>
-</mat-card>
+<div class="app-pl-4 app-pr-4">
+  <mat-form-field class="app-w-100" appearance="outline">
+    <input matInput [placeholder]="'facet.input.Hledej ve filtrech' | translate" (input)="changed($event)" [(ngModel)]="state.facetFilterValue" name="facetFilter" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+    
+
 
