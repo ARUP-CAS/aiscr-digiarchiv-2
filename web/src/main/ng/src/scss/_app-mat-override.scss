@@ -53,6 +53,16 @@
     protected-container-shape: 3px,
     outlined-container-shape: 3px
   ));
+  .app-btn-facet {
+    @include mat.button-overrides((
+      filled-container-height: 28px
+    ));
+  }
+  .app-btn-accent {
+    @include mat.button-overrides((
+      filled-container-color: var(--app-color-accent)
+    ));
+  }
 
 
   @include mat.expansion-overrides((

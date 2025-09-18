@@ -11,6 +11,10 @@
   color: var(--app-color-primary) !important;
 }
 
+.app-color-accent {
+  color: var(--app-color-primary) !important;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;
@@ -32,6 +36,14 @@ a {
     cursor: not-allowed;
     opacity: 0.3;
     text-decoration: none;
+  }
+
+  &.app-color-primary {
+    color: var(--app-color-primary) !important;
+  }
+
+  &.app-color-accent {
+    color: var(--app-color-accent) !important;
   }
 }
 
@@ -210,22 +222,6 @@ a {
   }
 }
 
-.app-btn-op-dropdown {
-  vertical-align: text-bottom;
-
-  &.app-in-facet-dynamic {
-    margin-right: 8px !important;
-    align-self: center;
-
-    .app-badge-op {
-      @extend .app-clean-mg;
-    }
-  }
-  
-  .mat-icon {
-    color: var(--app-color-accent) !important;
-  }
-}
 
 .app-badge-op {
   display: inline-flex;
@@ -255,10 +251,6 @@ a {
 
   &.not {
     background-color: var(--app-color-badge-not);
-  }
-
-  &.app-in-facet-dynamic {
-    vertical-align: text-top;
   }
 }
 
