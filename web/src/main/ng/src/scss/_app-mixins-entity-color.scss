@@ -1,27 +1,10 @@
 // --- MIXINS ---
-//@use "sass:map";
-@use 'app-variables' as *;
-
-/* $entities: (
-  "dokument": #5882c4,
-  "projekt": #F39225,
-  "akce": #247e4b,
-  "lokalita": #951E7A,
-  "samostatny_nalez": #85140E,
-  "knihovna_3d": #778e98,
-  "let":  #15968c,
-  "ext_zdroj": #E7302A
-); */
+@use 'app-vars-entity-color' as *;
 
 // set entity color
 @mixin setEntityColor($type) {
   @each $entity, $color in $entities {
-    @if ($type == ico) {
-      .app-entity-#{$entity} {
-        color: $color !important; 
-      }    
-    }
-    @else if ($type == card) {
+    @if ($type == card) {
       &.app-entity-#{$entity} {
         border-left: 4px solid #{$color} !important;
       }   
@@ -30,48 +13,6 @@
       &.app-entity-#{$entity} {
         color: $color !important;
       }   
-    }
-    @else if ($type == home_card) {
-      &.app-entity-#{$entity} {
-        background-color: $color !important;
-      } 
-    }
-    @else if ($type == facet) {
-      &.#{$entity} {
-        color: $color;
-        background-color: rgba($color, .1);
-
-        &:hover,
-        &.active {
-          color: var(--app-color-lightnes);
-          border-color: $color;
-          background-color: $color;
-
-          strong {
-            font-weight: 600;
-          }
-
-          .app-fx-wrapper {
-            .app-fx-right {
-              padding-left: 0;
-            }
-          }
-        }
-
-        .app-fx-wrapper {
-          .app-fx-left {
-            background-color: $color;
-
-            .mat-icon {
-              color: var(--app-color-lightnes) !important;
-            }
-          }
-
-          .app-fx-right {
-            border-color: rgba($color, .3);
-          }
-        }
-      }    
     }
   }
 }

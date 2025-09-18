@@ -5,8 +5,8 @@
 
 
 :root {
-
-  --mat-standard-button-toggle-shape: 1px;
+  //--mat-standard-button-toggle-shape: 1px;
+  
 
   @include mat.toolbar-overrides((
     container-background-color: var(--mat-sys-primary),
@@ -17,8 +17,10 @@
 
 
   @include mat.list-overrides((
-    list-item-hover-label-text-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
-    list-item-one-line-container-height: 32px
+    //list-item-hover-label-text-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
+    //list-item-label-text-color: var(--app-color-lightnes),
+    //list-item-hover-label-text-color: var(--app-color-lightnes),
+    //list-item-one-line-container-height: var(--app-facet-entity-height)
   ));
 
 
@@ -38,12 +40,6 @@
     panel-background-color: var(--app-color-lightnes),
     trigger-text-size: 12px,
   ));
-  .mat-mdc-select-panel {
-    .mat-mdc-option {
-      //min-height: 30px;
-      //width: 400px;
-    }
-  }
 
 
   @include mat.progress-bar-overrides((
@@ -61,8 +57,16 @@
 
   @include mat.expansion-overrides((
     container-shape: 0px,
-    container-background-color: none
+    container-background-color: transparent,
+    container-elevation-shadow: none
   ));
+  .mat-expansion-panel {
+    border-bottom: 1px solid var(--app-color-gray-3);
+
+    .mat-expansion-panel-body {
+      padding: 0 16px 16px;
+    }
+  }
 
 
   @include mat.card-overrides((
@@ -96,11 +100,13 @@
   ));
 }
 
+
 @for $i from 0 through 5 {
-    mat-card.mat-elevation-z#{$i} {
-        @include mat.elevation($i);
-    }
+  mat-card.mat-elevation-z#{$i} {
+    @include mat.elevation($i);
+  }
 }
+
 
 // form field
 .mat-mdc-form-field {

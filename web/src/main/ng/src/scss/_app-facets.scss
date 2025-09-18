@@ -13,7 +13,7 @@
   
   .mat-expansion-panel {
     @extend .mat-elevation-z0, .app-clean-mg, .app-clean-radius, .app-clean-bg !optional;
-    border: 1px solid var(--app-color-gray-3);
+    border-bottom: 1px solid var(--app-color-gray-3);
 
     &.app-scroll {
       &.mat-expanded {

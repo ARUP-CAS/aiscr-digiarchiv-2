@@ -1,22 +1,24 @@
 <mat-accordion multi="true">
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="true" class="app-m-0">
     <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight">
       <mat-panel-title>
         {{ 'facet.title.Typy záznamů' | translate }}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <mat-list role="list">
+    <mat-list role="list" class="app-p-0">
       @for (entity of config.entities; track entity) {
-        <mat-list-item [ngClass]="'app-facet-entity ' + entity" [class.active]="state.entity === entity" (click)="changeEntity(entity)" [matTooltip]="'entities.' + entity + '.desc' | translate" [matTooltipPosition]="'right'">
-          <div fxLayout="row" fxFlexFill class="app-fx-wrapper" >
-            <div fxFlex="50px" class="app-fx-left">
+        <mat-list-item [ngClass]="'app-facet-entity ' + entity" [class.app-active]="state.entity === entity" (click)="changeEntity(entity)" [matTooltip]="'entities.' + entity + '.desc' | translate" [matTooltipPosition]="'right'">
+          <div class="app-fxLayout app-row app-fill app-cursor-pointer">
+            <div class="app-fxLayout app-row app-left app-center-v">
               <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
             </div>
-            <div fxFlex class="app-fx-right">
-              <strong>{{ 'entities.' + entity + '.title' | translate }}</strong>
-              @if (state.totals) {
-                <span>({{ state.totals[entity] }})</span>
-              }
+            <div class="app-fxFlex app-fxLayout app-row app-right">
+              <div class="app-as-center">
+                <span class="app-mr-2">{{ 'entities.' + entity + '.title' | translate }}</span>
+                @if (state.totals) {
+                  <span>({{ state.totals[entity] }})</span>
+                }
+              </div>
             </div>
           </div>
         </mat-list-item>
@@ -115,8 +117,8 @@
                 }
               </mat-menu>
             </mat-list>
-          </ng-template>
-        </mat-expansion-panel>
-      }
+        </ng-template>
+      </mat-expansion-panel>
     }
-  </mat-accordion>
+  }
+</mat-accordion>

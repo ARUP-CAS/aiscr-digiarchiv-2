@@ -1,6 +1,15 @@
 // --- HOME ---
 @use "../../../scss/app-mixins";
-@use "../../../scss/app-mixins-entity-color";
+@use '../../../scss/app-vars-entity-color' as *;
+
+// set entity color
+@mixin setHomeCardEntityColor() {
+  @each $entity, $color in $entities {
+    &.app-entity-#{$entity} {
+      background-color: $color !important;
+    } 
+  }
+}
 
 .app-entities-wrapper {
   &.app-doctype-expanded {
@@ -100,7 +109,7 @@
     }
   
     &.app-card-entity {
-      @include app-mixins-entity-color.setEntityColor(home_card);
+      @include setHomeCardEntityColor();
       flex: 1 1 100%;
       min-width: 100%;
       box-sizing: border-box;
@@ -174,7 +183,9 @@
           font-weight: bold;
         }
         
-        @include app-mixins-entity-color.setEntityColor(ico);
+        .app-entity-dokument {
+          color: #5882c4;
+        }
 
         .app-icon-inside {
           position: absolute;

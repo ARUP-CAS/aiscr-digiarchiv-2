@@ -51,6 +51,11 @@
   --app-searchbar-height: 90px; // 110 puvodni
   --app-searchbar-field-max-width: 640px;
 
+  // facet entities
+  --app-facet-entity-height: 40px;
+  --app-facet-entity-border-color-opacity: .3;
+  --app-facet-entity-bg-color-opacity: .1;
+
 }
 
 
@@ -79,16 +84,4 @@ $iconSize: (
   "21": 21,
   "22": 22,
   "23": 23,
-);
-
-// entity colors
-$entities: (
-  "dokument": #5882c4,
-  "projekt": #F39225,
-  "akce": #247e4b,
-  "lokalita": #951E7A,
-  "samostatny_nalez": #85140E,
-  "knihovna_3d": #778e98,
-  "let":  #15968c,
-  "ext_zdroj": #E7302A
 );
