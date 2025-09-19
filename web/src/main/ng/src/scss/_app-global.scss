@@ -15,6 +15,10 @@
   color: var(--app-color-primary) !important;
 }
 
+.app-color-warn {
+  color: var(--app-color-warn) !important;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;
@@ -43,6 +47,10 @@ a {
   }
 
   &.app-color-accent {
+    color: var(--app-color-accent) !important;
+  }
+
+  &.app-color-warn {
     color: var(--app-color-accent) !important;
   }
 }

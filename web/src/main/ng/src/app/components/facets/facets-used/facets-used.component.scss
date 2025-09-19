@@ -1,0 +1,31 @@
+@use "../../../../scss/app-mixins";
+
+.mat-mdc-list {
+  border-bottom: 1px solid var(--app-color-gray-3);
+  padding-bottom: 16px;
+
+  .mat-mdc-list-item {
+    .app-item-wrapper {
+      white-space: break-spaces;
+    }
+
+    .app-separator-and {
+      font-size: 12px;
+      color: var(--app-color-gray-5)
+    }
+
+    .app-badge-op {
+      display: inline-flex;
+      vertical-align: text-top;
+      margin-right: 2px;
+    }
+   
+    .mat-icon {
+      margin-top: 2px;
+
+       &:not(.app-icon-op) {
+        @include app-mixins.setIcon(18);
+       }
+    }   
+  }
+}

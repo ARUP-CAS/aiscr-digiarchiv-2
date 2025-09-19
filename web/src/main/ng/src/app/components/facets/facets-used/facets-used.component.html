@@ -1,8 +1,8 @@
-<mat-list role="list" class="app-list-used-facet">
-  <h3 mat-subheader fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="app-primary">
-    <div fxFlex>{{ 'facet.title.Aktivní filtry' | translate }}</div>
+<mat-list role="list">
+  <h3 mat-subheader class="app-fxLayout app-row app-center-v app-color-primary">
+    <div class="app-fxFlex">{{ 'facet.title.Aktivní filtry' | translate }}</div>
     <div>
-      <a [matTooltip]="'facet.tooltip.Odstranit všechny filtry' | translate" matTooltipPosition="above" (click)="clean()">
+      <a class="app-fxLayout app-row app-center-v app-color-warn" [matTooltip]="'facet.tooltip.Odstranit všechny filtry' | translate" matTooltipPosition="above" (click)="clean()">
         <mat-icon>close</mat-icon>
       </a>
     </div>
@@ -10,23 +10,24 @@
   @for (facet of state.breadcrumbs; track facet) {
     <mat-list-item role="listitem" >
       @if (facet.field === 'separator') {
-        <div  class="app-and-separator">
+        <div class="app-fxLayout app-row app-center-v app-gap-1 app-separator-and">
+          <mat-icon></mat-icon>
           <span>-- AND --</span>
         </div>
       }
       @if (facet.field === 'cf') {
-        <div  >
+        <div>
           <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeCommonFacet(facet.display)">
             <mat-icon>close</mat-icon>{{ 'commonFacets.' + facet.display | translate}}
           </a>
-        </div>
+        </div> 
       }
       @if (facet.field !== 'separator' && facet.field !== 'cf') {
-        <div class="app-display-table">
-          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
+        <div class="app-fxLayout app-row app-start-v app-gap-1 app-item-wrapper">
+          <a class="app-fxLayout app-row app-center-v" [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
             <mat-icon>close</mat-icon>
           </a>
-          <span class="app-facet-name">
+          <span>
             @if (facet.operator && facet.operator !== 'or') {
               <span [class]="'app-badge-op app-in-facet-dynamic ' + facet.operator">
                 <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>
