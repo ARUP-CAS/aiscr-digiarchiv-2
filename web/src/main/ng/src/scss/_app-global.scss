@@ -224,8 +224,7 @@ a {
 
 
 .app-badge-op {
-  display: inline-flex;
-  margin-right: 8px;
+  position: relative;
   font-size: 10px !important;
   font-weight: 500;
   color: var(--app-color-lightnes) !important;
@@ -233,10 +232,11 @@ a {
   justify-content: center;
   border-radius: 4px;
   height: 17px;
-  align-items: center;
-  vertical-align: sub;
 
   .mat-icon {
+    position: absolute;
+    left: 7px;
+    top: 1.5px;
     @extend .app-clean-mg;
     @include app-mixins.setIcon(14, var(--app-color-lightnes));
   }

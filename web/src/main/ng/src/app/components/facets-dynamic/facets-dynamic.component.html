@@ -4,8 +4,8 @@
       {{ 'facet.title.filtruj_dle' | translate }}
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <div class="app-fxLayout app-row" [class.app-row-gap-16]="filterField">
-    <mat-form-field fxFlex appearance="outline">
+  <div class="app-fxLayout app-row" [class.app-mb-4]="filterField">
+    <mat-form-field class="app-fxFlex" appearance="outline">
       <mat-select [placeholder]="'facet.input.Vyberte pole' | translate" name="filterField"
         [(ngModel)]="filterField">
         @for (f of config.filterFields; track f) {
@@ -30,16 +30,22 @@
       </a>
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="filterOperator = 'or'">
-          <span class="app-badge-op or"><mat-icon>{{ 'facet.icon.or' | translate }}</mat-icon></span>
-          <span>{{ 'facet.menu.Operátor OR' | translate }}</span>
+          <div class="app-fxLayout app-row app-center-v app-gap-2">
+            <span class="app-badge-op or"><mat-icon>{{ 'facet.icon.or' | translate }}</mat-icon></span>
+            <span>{{ 'facet.menu.Operátor OR' | translate }}</span>
+          </div>
         </button>
         <button mat-menu-item (click)="filterOperator = 'and'">
-          <span class="app-badge-op and"><mat-icon>{{ 'facet.icon.and' | translate }}</mat-icon></span>
-          <span>{{ 'facet.menu.Operátor AND' | translate }}</span>
+          <div class="app-fxLayout app-row app-center-v app-gap-2">
+             <span class="app-badge-op and"><mat-icon>{{ 'facet.icon.and' | translate }}</mat-icon></span>
+            <span>{{ 'facet.menu.Operátor AND' | translate }}</span>
+          </div>
         </button>
         <button mat-menu-item (click)="filterOperator = 'not'">
-          <span class="app-badge-op not"><mat-icon>{{ 'facet.icon.not' | translate }}</mat-icon></span>
-          <span>{{ 'facet.menu.Operátor NOT' | translate }}</span>
+           <div class="app-fxLayout app-row app-center-v app-gap-2">
+            <span class="app-badge-op not"><mat-icon>{{ 'facet.icon.not' | translate }}</mat-icon></span>
+            <span>{{ 'facet.menu.Operátor NOT' | translate }}</span>
+           </div>
         </button>
       </mat-menu>
       @switch(filterField.type) {
