@@ -2,7 +2,7 @@
 
 @use "app-mixins-icon" as *;
 @use "app-mixins-gap" as *;
-@use "app-mixins-entity-color";
+@use "app-mixins-entity-color" as *;
 @use "app-vars";
 
 @include setGap();
@@ -177,7 +177,9 @@ a {
 
 .app-facets,
 .app-result-item {
-  @include app-mixins-entity-color.setEntityColor(ico);
+  .mat-icon {
+    @include setEntityColor();
+  }
 }
 
 .app-label {

@@ -1,48 +1,111 @@
-
-
-@if(result()) {
-    @switch(result().entity) {
-        @case ('dokument') { <app-dokument [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
-            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-        @case ('knihovna_3d') { <app-dokument [result]="result()" [inDocument]="inDocument()"
-            [detailExpanded]="detailExpanded()" [isChild]="isChild()" [mapDetail]="mapDetail()"
-            [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-dokument> }
-        @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
-            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-samostatny-nalez> }
-        @case ('projekt') { <app-projekt [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
-            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-projekt> }
-        @case ('akce') { <app-akce [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
-            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-akce> }
-        @case ('lokalita') { <app-lokalita [result]="result()" [inDocument]="inDocument()" [detailExpanded]="detailExpanded()"
-            [isChild]="isChild()" [mapDetail]="mapDetail()" [isDocumentDialogOpen]="isDocumentDialogOpen()"></app-lokalita> }
-
-        @case('dokument_cast') {
-            <app-dokument-cast [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-dokument-cast>
-          }
-        @case('let') {
-            <app-let [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-let>
-          }
-        @case('pian') {
-            <app-pian [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-pian>
-          }
-        @case('ext_zdroj') {
-            <app-externi-zdroj [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
-          }
-          @case('adb') {
-              <app-adb [result]="result()" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
-            }
-          @case('vyskovy_bod') {
-              <app-vyskovy-bod [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
-            }
-          @case('dokumentacni_jednotka') {
-              <app-dok-jednotka [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
-            }
-          @case('komponenta') {
-              <app-komponenta [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
-            }
-          @case('komponenta_dokument') {
-              <app-komponenta-dokument [result]="result()" [detailExpanded]="true" [inDocument]="true"></app-komponenta-dokument>
-            }
-    }
-}
-
+@if(result()) { @switch(result().entity) { @case ('dokument') {
+  <app-dokument
+    [result]="result()"
+    [inDocument]="inDocument()"
+    [detailExpanded]="detailExpanded()"
+    [isChild]="isChild()"
+    [mapDetail]="mapDetail()"
+    [isDocumentDialogOpen]="isDocumentDialogOpen()"
+  ></app-dokument>
+  } @case ('knihovna_3d') {
+  <app-dokument
+    [result]="result()"
+    [inDocument]="inDocument()"
+    [detailExpanded]="detailExpanded()"
+    [isChild]="isChild()"
+    [mapDetail]="mapDetail()"
+    [isDocumentDialogOpen]="isDocumentDialogOpen()"
+  ></app-dokument>
+  } @case ('samostatny_nalez') {
+  <app-samostatny-nalez
+    [result]="result()"
+    [inDocument]="inDocument()"
+    [detailExpanded]="detailExpanded()"
+    [isChild]="isChild()"
+    [mapDetail]="mapDetail()"
+    [isDocumentDialogOpen]="isDocumentDialogOpen()"
+  ></app-samostatny-nalez>
+  } @case ('projekt') {
+  <app-projekt
+    [result]="result()"
+    [inDocument]="inDocument()"
+    [detailExpanded]="detailExpanded()"
+    [isChild]="isChild()"
+    [mapDetail]="mapDetail()"
+    [isDocumentDialogOpen]="isDocumentDialogOpen()"
+  ></app-projekt>
+  } @case ('akce') {
+  <app-akce
+    [result]="result()"
+    [inDocument]="inDocument()"
+    [detailExpanded]="detailExpanded()"
+    [isChild]="isChild()"
+    [mapDetail]="mapDetail()"
+    [isDocumentDialogOpen]="isDocumentDialogOpen()"
+  ></app-akce>
+  } @case ('lokalita') {
+  <app-lokalita
+    [result]="result()"
+    [inDocument]="inDocument()"
+    [detailExpanded]="detailExpanded()"
+    [isChild]="isChild()"
+    [mapDetail]="mapDetail()"
+    [isDocumentDialogOpen]="isDocumentDialogOpen()"
+  ></app-lokalita>
+  } @case('dokument_cast') {
+  <app-dokument-cast
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-dokument-cast>
+  } @case('let') {
+  <app-let
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-let>
+  } @case('pian') {
+  <app-pian
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-pian>
+  } @case('ext_zdroj') {
+  <app-externi-zdroj
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-externi-zdroj>
+  } @case('adb') {
+  <app-adb
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+    [isChild]="false"
+  ></app-adb>
+  } @case('vyskovy_bod') {
+  <app-vyskovy-bod
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-vyskovy-bod>
+  } @case('dokumentacni_jednotka') {
+  <app-dok-jednotka
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-dok-jednotka>
+  } @case('komponenta') {
+  <app-komponenta
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-komponenta>
+  } @case('komponenta_dokument') {
+  <app-komponenta-dokument
+    [result]="result()"
+    [detailExpanded]="true"
+    [inDocument]="true"
+  ></app-komponenta-dokument>
+  } 
+} }

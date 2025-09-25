@@ -161,21 +161,16 @@
               </div>
             }
             @if (state.numFound > 0) {
-              <div class="app-fxLayout app-row" [class]="'app-view-' + state.itemView">
-                <div class="app-fxFlex">
-                  @for (result of docs; track result) {
-                    <app-entity-container [result]="result"></app-entity-container>
-                    <!-- @switch(state.entity) {
-                      @case ('dokument') { <app-dokument [result]="result"></app-dokument> }
-                      @case ('knihovna_3d') { <app-dokument [result]="result"></app-dokument> }
-                      @case ('samostatny_nalez') { <app-samostatny-nalez [result]="result"></app-samostatny-nalez> }
-                      @case ('projekt') { <app-projekt [result]="result"></app-projekt> }
-                      @case ('akce') { <app-akce [result]="result"></app-akce> }
-                      @case ('lokalita') { <app-lokalita [result]="result"></app-lokalita> }
-                    } -->
-                  }
-                </div>
+             <!-- to delete <div class="app-fxLayout app-row" [class]="'app-view-' + state.itemView">
+                <div class="app-fxFlex"> -->
+              <div class="app-fxLayout app-column app-gap-4">
+                @for (result of docs; track result) {
+                  <app-entity-container [result]="result"></app-entity-container>
+                }
               </div>
+                 
+               <!--  </div>
+              </div> -->
             }
             @if (state.numFound > 0) {
               <div class="app-fxLayout app-row">

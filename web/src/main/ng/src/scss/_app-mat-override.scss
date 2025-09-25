@@ -3,47 +3,10 @@
 @use "sass:map";
 @use "@angular/material" as mat;
 @use "theme-colors" as my-theme;
-@use "app-vars-entity-color" as *;
 @use "app-mixins-icon" as *;
-
-
-// set entity color
-@mixin setFacetEntityColor() {
-  @each $entity, $color in $entities {
-    &.#{$entity} {
-      color: $color;
-      background-color: rgba($color, .1);
-      border-color: rgba($color, .3);
-
-      &.app-active {
-        background-color: $color;
-      }
-
-      &:hover {
-        background-color: $color;
-      }
-
-      &:not(.app-active, :hover) {
-        .mdc-list-item__primary-text {
-          color: $color;
-        }
-      }
-    
-      .app-left {
-        background-color: $color;
-      }
-    }    
-  }
-}
-
-// set entity color
-@mixin setEntityColor() {
-  @each $entity, $color in $entities {
-    &.app-entity-#{$entity} {
-      color: $color !important;
-    }   
-  }
-}
+@use "app-mixins-entity-color" as *;
+@use "app-mixins-entity-facet-color" as *;
+@use "app-mixins-entity-card-color" as *;
 
 
 :root {
@@ -222,6 +185,10 @@
       }
     }
   }
+  .app-card-result {
+    @include setEntityCardColor();
+  }
+
 
 
   // --- MENU ---
