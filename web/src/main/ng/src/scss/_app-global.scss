@@ -1,9 +1,9 @@
 // --- GLOBAL ---
 
-@use 'app-mixins';
+@use "app-mixins-icon";
 @use "app-mixins-gap";
 @use "app-mixins-entity-color";
-@use 'app-vars';
+@use "app-vars";
 
 @include app-mixins-gap.setGap();
 
@@ -158,7 +158,7 @@ a {
 }
 
 .app-icon-18 {
-  @include app-mixins.setIcon(18, $position: text-bottom);
+  @include app-mixins-icon.setIcon(18, $position: text-bottom);
 }
 
 .app-rotate-up {
@@ -246,7 +246,7 @@ a {
     left: 7px;
     top: 1.5px;
     @extend .app-clean-mg;
-    @include app-mixins.setIcon(14, var(--app-color-lightnes));
+    @include app-mixins-icon.setIcon(14, var(--app-color-lightnes));
   }
 
   &.or {

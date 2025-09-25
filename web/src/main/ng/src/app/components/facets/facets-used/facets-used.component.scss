@@ -1,4 +1,4 @@
-@use "../../../../scss/app-mixins";
+@use "../../../../scss/app-mixins-icon";
 
 .mat-mdc-list {
   border-bottom: 1px solid var(--app-color-gray-3);
@@ -24,7 +24,7 @@
       margin-top: 2px;
 
        &:not(.app-icon-op) {
-        @include app-mixins.setIcon(18);
+        @include app-mixins-icon.setIcon(18);
        }
     }   
   }

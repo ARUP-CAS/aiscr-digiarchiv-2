@@ -1,4 +1,4 @@
-@use "../../../scss/app-mixins";
+@use "../../../scss/app-mixins-icon";
 
 .mat-mdc-list-item {
   .app-text {
@@ -16,7 +16,7 @@
 
   .mat-icon {
     &:not(.app-icon-op) {
-      @include app-mixins.setIcon(18);
+      @include app-mixins-icon.setIcon(18);
     }
   }
 }

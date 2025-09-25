@@ -1,4 +1,4 @@
-@use "../../../scss/app-mixins";
+@use "../../../scss/app-mixins-icon";
 
 .app-num {
   width: 90px;
@@ -6,7 +6,7 @@
   margin-right: 16px;
 
   .mat-icon {
-    @include app-mixins.setIcon($size: 18)
+    @include app-mixins-icon.setIcon($size: 18)
   }   
 }
 

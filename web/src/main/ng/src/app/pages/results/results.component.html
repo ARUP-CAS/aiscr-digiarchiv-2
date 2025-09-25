@@ -94,9 +94,9 @@
                 }
                 @if (hasResultsInOther) {
                   {{ 'card.citation.nebo se přepněte do jiné entity, kde jsme nalezli výsledky' | translate }}:
-                  <p></p>
                   @for (entity of config.entities; track entity) {
                     @if (state.totals[entity] > 0) {
+                       <p></p>
                       <div class="app-info-badge app-cursor-pointer" [ngClass]="'app-entity-' + entity" (click)="setEntity(entity)">
                         <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
                         <strong>{{ 'entities.' + entity + '.title' | translate }}</strong>

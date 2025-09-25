@@ -1,5 +1,5 @@
 // --- HOME ---
-@use "../../../scss/app-mixins";
+@use "../../../scss/app-mixins-icon";
 @use '../../../scss/app-vars-entity-color' as *;
 
 // set entity color
@@ -170,7 +170,7 @@
 
       .mat-mdc-card-title {
         .mat-icon {
-          @include app-mixins.setIcon(28);
+          @include app-mixins-icon.setIcon(28);
         }
       }
 

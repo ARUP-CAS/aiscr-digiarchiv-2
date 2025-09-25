@@ -1,4 +1,4 @@
-@use "../../../scss/app-mixins";
+@use "../../../scss/app-mixins-icon";
 
 .mat-toolbar {
   height: var(--app-navbar-height);
@@ -29,12 +29,12 @@
       margin-top: 16px !important;
 
       .mat-icon {
-        @include app-mixins.setIcon(24);
+        @include app-mixins-icon.setIcon(24);
       }
     }
 
     .mat-icon {
-      @include app-mixins.setIcon(20, inherit, sub);
+      @include app-mixins-icon.setIcon(20, inherit, sub);
       margin-right: 4px;
     } 
   }

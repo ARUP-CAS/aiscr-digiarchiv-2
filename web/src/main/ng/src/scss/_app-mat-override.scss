@@ -3,6 +3,7 @@
 @use '@angular/material' as mat;
 @use 'theme-colors' as my-theme;
 @use 'app-vars-entity-color' as *;
+@use 'app-mixins-icon' as *;
 
 
 // set entity color
@@ -31,6 +32,15 @@
         background-color: $color;
       }
     }    
+  }
+}
+
+// set entity color
+@mixin setEntityColor() {
+  @each $entity, $color in $entities {
+    &.app-entity-#{$entity} {
+      color: $color !important;
+    }   
   }
 }
 
@@ -193,6 +203,24 @@
     subtitle-text-weight: 400,
     subtitle-text-tracking: 0,
   ));
+  .app-card-info {
+    @include mat.card-overrides((
+      elevated-container-color: rgba(var(--app-color-fav-rgb), .1)
+    ));
+
+    .mat-mdc-card-content {
+      color: var(--app-color-info);
+
+      .app-info-badge {
+        @include setEntityColor();
+
+        .mat-icon {
+          margin-right: var(--app-gap-icon);
+          @include setIcon(18, inherit, bottom);
+        }
+      }
+    }
+  }
 
 
   // --- MENU ---
