@@ -1,7 +1,7 @@
 // --- LAYOUT ---
 
-@import "./app-mixins-icon";
-@import "./app-variables-old";
+@use "app-mixins-icon" as *;
+@use "app-variables-old" as *;
 
 html,
 body {

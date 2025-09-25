@@ -1,9 +1,10 @@
 // --- MATERIAL OVERRIDE ---
-@use 'sass:map';
-@use '@angular/material' as mat;
-@use 'theme-colors' as my-theme;
-@use 'app-vars-entity-color' as *;
-@use 'app-mixins-icon' as *;
+
+@use "sass:map";
+@use "@angular/material" as mat;
+@use "theme-colors" as my-theme;
+@use "app-vars-entity-color" as *;
+@use "app-mixins-icon" as *;
 
 
 // set entity color

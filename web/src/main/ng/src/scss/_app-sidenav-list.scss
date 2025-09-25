@@ -1,6 +1,6 @@
 // --- SIDENAV LIST ---
-@use "./app-mixins-icon";
-@use "./app-variables-old";
+
+@use "app-mixins-icon" as *;
 
 app-sidenav-list {
   .mat-mdc-list-item {
@@ -14,7 +14,7 @@ app-sidenav-list {
     }
 
     .mat-icon {
-      @include app-mixins-icon.setIcon(20, inherit, sub);
+      @include setIcon(20, inherit, sub);
       margin-right: var(--app-gap-icon);
     } 
   }

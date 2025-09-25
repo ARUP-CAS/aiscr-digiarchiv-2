@@ -1,6 +1,6 @@
 // --- MIXINS ---
-@use "sass:map";
-@use 'app-vars' as *;
+
+@use "app-vars";
 
 // set alert card
 @mixin setAlertCard() {

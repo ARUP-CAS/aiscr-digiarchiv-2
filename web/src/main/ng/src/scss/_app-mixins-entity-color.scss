@@ -1,5 +1,6 @@
 // --- MIXINS ---
-@use 'app-vars-entity-color' as *;
+
+@use "app-vars-entity-color" as *;
 
 // set entity color
 @mixin setEntityColor($type) {

@@ -1,6 +1,6 @@
 // --- FLEX LAYOUT ---
 
-@use "app-mixins-flex-gap";
+@use "app-mixins-flex-gap" as *;
 
 .app-fxLayout {
   display: flex !important;
@@ -8,12 +8,12 @@
 
   &.app-row {
     flex-direction: row;
-    @include app-mixins-flex-gap.setFlexGap(row);
+    @include setFlexGap(row);
   }
 
   &.app-column {
     flex-direction: column;
-    @include app-mixins-flex-gap.setFlexGap(column);
+    @include setFlexGap(column);
   }
 
   &.app-wrap {

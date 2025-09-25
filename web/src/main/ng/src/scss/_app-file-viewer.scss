@@ -1,8 +1,7 @@
 // --- FILE VIEWER ---
 
-
-@use "./app-mixins-icon";
-@import "./app-variables-old";
+@use "app-mixins-icon" as *;
+@use "app-variables-old" as *;
 
 app-file-viewer {
   .mat-dialog-title {
@@ -37,7 +36,7 @@ app-file-viewer {
     .app-toolbar-wrapper {
       .app-controls {
         .mat-icon {
-        @include app-mixins-icon.setIcon($position: middle);  
+        @include setIcon($position: middle);  
         }
        
         .mat-mdc-form-field {
@@ -48,7 +47,7 @@ app-file-viewer {
   
       .app-metadata {
         .mat-icon {
-          @include app-mixins-icon.setIcon($position: middle);
+          @include setIcon($position: middle);
         }
       }
 
