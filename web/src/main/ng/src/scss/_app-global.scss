@@ -3,7 +3,7 @@
 @use 'app-mixins';
 @use "app-mixins-gap";
 @use "app-mixins-entity-color";
-@use 'app-variables';
+@use 'app-vars';
 
 @include app-mixins-gap.setGap();
 
