@@ -1,0 +1,24 @@
+@use "../../../scss/app-mixins";
+
+.app-list-item-default {
+  .app-text {
+    &:not(:hover) {
+      color: var(--app-color-gray-6);
+    }
+  }
+
+  .app-list-content {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 265px;
+  }
+
+  .mat-icon {
+    &:not(.app-icon-op) {
+      @include app-mixins.setIcon(18);
+    }
+  }
+}
+
+

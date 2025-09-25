@@ -30,16 +30,16 @@
   <app-facets-search></app-facets-search>
 
   @if (config.commonFacets.length > 0) {
-    <mat-expansion-panel class="app-scroll" [expanded]="expandedFacets['commonFacets']">
+    <mat-expansion-panel class="app-scroll app-m-0" [expanded]="expandedFacets['commonFacets']">
       <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight" (click)="expandedFacets['commonFacets'] = !expandedFacets['commonFacets']">
         <mat-panel-title>
           {{ 'facet.field.commonFacets' | translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
-        <mat-list role="list">
+        <mat-list role="list" class="app-p-0">
           @for (cf of config.commonFacets; track cf) {
-            <mat-list-item class="app-list-table" >
+            <mat-list-item>
               <div class="app-list-content">
                 <a (click)="clickCommonFacet(cf)">
                   {{ 'commonFacets.' + cf.name | translate}}
@@ -54,69 +54,71 @@
 
   @for (facetField of facetsSorted; track facetField) {
     @if (facetField.values.length > 0) {
-      <mat-expansion-panel class="app-scroll" [expanded]="state.areFacetsFiltered || expandedFacets[facetField.field]">
+      <mat-expansion-panel class="app-scroll app-m-0" [expanded]="state.areFacetsFiltered || expandedFacets[facetField.field]">
         <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight" (click)="expandedFacets[facetField.field] = !expandedFacets[facetField.field]">
           <mat-panel-title>
             {{ 'facet.field.' + facetField.field | translate }}
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
-          <mat-list role="list">
+          <mat-list role="list" class="app-p-0">
             <cdk-virtual-scroll-viewport itemSize="22" [style.height.px]="math.min(198, facetField.values.length * 22)">
-              <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-table" >
-                <a [matMenuTriggerFor]="menu" class="app-btn-op-dropdown" [matTooltip]="facet.operator ? ('facet.tooltip.Operátor ' + facet.operator | translate) : ('facet.tooltip.Zvolit operátor pro filtrování' | translate)" class="app-mr-1">
-                  @if (!facet.operator || facet.operator === 'delete') {
-                    <mat-icon>more_vert</mat-icon>
-                  }
-                  @if (facet.operator && facet.operator !== 'delete') {
-                    <span [class]="'app-badge-op ' + facet.operator">
-                      <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>
-                    </span>
-                  }
-                </a>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="addFilter(facetField.field, facet, 'or')">
-                    <span class="app-badge-op or"><mat-icon>{{ 'facet.icon.or' | translate }}</mat-icon></span>
-                    <span>{{ 'facet.menu.Operátor OR' | translate }}</span>
-                  </button>
-                  <button mat-menu-item (click)="addFilter(facetField.field, facet, 'and')">
-                    <span class="app-badge-op and"><mat-icon>{{ 'facet.icon.and' | translate }}</mat-icon></span>
-                    <span>{{ 'facet.menu.Operátor AND' | translate }}</span>
-                  </button>
-                  <button mat-menu-item (click)="addFilter(facetField.field, facet, 'not')">
-                    <span class="app-badge-op not"><mat-icon>{{ 'facet.icon.not' | translate }}</mat-icon></span>
-                    <span>{{ 'facet.menu.Operátor NOT' | translate }}</span>
-                  </button>
-                </mat-menu>
-                <div class="app-list-content" [matTooltipPosition]="'right'" [matTooltip]="(facet.name | translate) + ' (' + facet.value + ')'">
-                  <a (click)="clickFacet(facetField.field, facet)">
-                    @switch(facetField.field) {
-                      @case ('dokument_kategorie_dokumentu') { {{ 'dokument_kategorie_dokumentu.' + facet.name | translate }} }
-                        @default { {{ facet.name | translate }} }
-                        }
-                      </a>
-                      <span>({{ facet.value }})</span>
-                    </div>
-                  </mat-list-item>
-                </cdk-virtual-scroll-viewport>
-                <button mat-flat-button (click)="applyFilters()" color="accent" class="app-apply-filter">
-                  <mat-icon mat-flat-button>filter_alt</mat-icon>
-                  {{ 'facet.button.Aplikovat filtr' | translate }}
-                </button>
-                <button mat-flat-button color="primary" class="app-apply-filter" [matMenuTriggerFor]="sortBy">
-                  <mat-icon mat-flat-button>sort</mat-icon>
-                  {{ 'facet.button.Řadit dle' | translate }} @if (state.facetSort[facetField.field]) {
-                  {{ 'facet.button.' + state.facetSort[facetField.field] | translate }}
-                }
-              </button>
-              <mat-menu #sortBy="matMenu">
-                <button mat-menu-item (click)="setFacetSort(facetField.field, 'count')" [class.active]="state.facetSort[facetField.field] === 'count'">{{ 'facet.menu.count' | translate }}</button>
-                <button mat-menu-item (click)="setFacetSort(facetField.field, 'name')" [class.active]="state.facetSort[facetField.field] === 'name'">{{ 'facet.menu.name' | translate }}</button>
-                @if (!config.noPoradiFacets[facetField.field]) {
-                  <button mat-menu-item (click)="setFacetSort(facetField.field, 'poradi')" [class.active]="state.facetSort[facetField.field] === 'poradi'">{{ 'facet.menu.poradi' | translate }}</button>
-                }
-              </mat-menu>
-            </mat-list>
+              <mat-list-item *cdkVirtualFor="let facet of facetField.values" class="app-list-item-default">
+                <div class="app-fxLayout app-row app-center-v app-gap-2">
+                  <a [matMenuTriggerFor]="menu" class="app-fxLayout app-row app-center-v app-btn-op-dropdown" [matTooltip]="facet.operator ? ('facet.tooltip.Operátor ' + facet.operator | translate) : ('facet.tooltip.Zvolit operátor pro filtrování' | translate)">
+                    @if (!facet.operator || facet.operator === 'delete') {
+                      <mat-icon>more_vert</mat-icon>
+                    }
+                    @if (facet.operator && facet.operator !== 'delete') {
+                      <span [class]="'app-badge-op ' + facet.operator">
+                        <mat-icon class="app-icon-op">{{ 'facet.icon.' + facet.operator | translate }}</mat-icon>
+                      </span>
+                    }
+                  </a>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="addFilter(facetField.field, facet, 'or')">
+                      <span class="app-badge-op or"><mat-icon>{{ 'facet.icon.or' | translate }}</mat-icon></span>
+                      <span>{{ 'facet.menu.Operátor OR' | translate }}</span>
+                    </button>
+                    <button mat-menu-item (click)="addFilter(facetField.field, facet, 'and')">
+                      <span class="app-badge-op and"><mat-icon>{{ 'facet.icon.and' | translate }}</mat-icon></span>
+                      <span>{{ 'facet.menu.Operátor AND' | translate }}</span>
+                    </button>
+                    <button mat-menu-item (click)="addFilter(facetField.field, facet, 'not')">
+                      <span class="app-badge-op not"><mat-icon>{{ 'facet.icon.not' | translate }}</mat-icon></span>
+                      <span>{{ 'facet.menu.Operátor NOT' | translate }}</span>
+                    </button>
+                  </mat-menu>
+                  <div class="app-list-content" [matTooltipPosition]="'right'" [matTooltip]="(facet.name | translate) + ' (' + facet.value + ')'">
+                    <a (click)="clickFacet(facetField.field, facet)" class="app-text">
+                      @switch(facetField.field) {
+                        @case ('dokument_kategorie_dokumentu') { {{ 'dokument_kategorie_dokumentu.' + facet.name | translate }} }
+                          @default { {{ facet.name | translate }} }
+                          }
+                    </a>
+                    <span class="app-count">({{ facet.value }})</span>
+                  </div>
+                </div>
+              </mat-list-item>
+            </cdk-virtual-scroll-viewport>
+            <button matButton="filled" (click)="applyFilters()" class="app-btn-accent app-btn-facet app-mt-4 app-mr-1">
+              <mat-icon mat-flat-button>filter_alt</mat-icon>
+              {{ 'facet.button.Aplikovat filtr' | translate }}
+            </button>
+            <button matButton="filled" class="app-btn-facet app-mt-4" [matMenuTriggerFor]="sortBy">
+              <mat-icon mat-flat-button>sort</mat-icon>{{ 'facet.button.Řadit dle' | translate }} 
+              @if (state.facetSort[facetField.field]) {
+                {{ 'facet.button.' + state.facetSort[facetField.field] | translate }}
+              }
+            </button>
+            <mat-menu #sortBy="matMenu">
+              <button mat-menu-item (click)="setFacetSort(facetField.field, 'count')" [class.active]="state.facetSort[facetField.field] === 'count'">{{ 'facet.menu.count' | translate }}</button>
+              <button mat-menu-item (click)="setFacetSort(facetField.field, 'name')" [class.active]="state.facetSort[facetField.field] === 'name'">{{ 'facet.menu.name' | translate }}</button>
+              @if (!config.noPoradiFacets[facetField.field]) {
+                <button mat-menu-item (click)="setFacetSort(facetField.field, 'poradi')" [class.active]="state.facetSort[facetField.field] === 'poradi'">{{ 'facet.menu.poradi' | translate }}</button>
+              }
+            </mat-menu>
+          </mat-list>
         </ng-template>
       </mat-expansion-panel>
     }
