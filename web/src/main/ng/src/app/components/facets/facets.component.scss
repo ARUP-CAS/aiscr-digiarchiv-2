@@ -1,6 +1,6 @@
 @use "../../../scss/app-mixins";
 
-.app-list-item-default {
+.mat-mdc-list-item {
   .app-text {
     &:not(:hover) {
       color: var(--app-color-gray-6);
