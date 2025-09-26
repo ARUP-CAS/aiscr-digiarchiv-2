@@ -130,6 +130,15 @@
   }
 
 
+  // --- BUTTON ICON ---
+  @include mat.icon-button-overrides((
+    container-shape: 3px,
+  ));
+  .mat-mdc-icon-button {
+    background-color: var(--app-color-gray-1);
+  }
+
+
   // --- EXPANSION PANEL ---
   @include mat.expansion-overrides((
     container-shape: 0px,
@@ -167,6 +176,15 @@
     subtitle-text-weight: 400,
     subtitle-text-tracking: 0,
   ));
+  .mat-mdc-card {
+    .mat-mdc-card-header-text {
+      width: 100%;
+    }
+
+    .mat-mdc-card-actions {
+      padding: 0 16px 16px 16px;
+    }
+  }
   .app-card-info {
     @include mat.card-overrides((
       elevated-container-color: rgba(var(--app-color-fav-rgb), .1)
@@ -187,6 +205,43 @@
   }
   .app-card-result {
     @include setEntityCardColor();
+
+    .mat-mdc-card-header {
+      margin-bottom: 12px;
+
+      .app-last-change {
+        font-size: 12px;
+        color: var(--app-color-gray-6);
+        font-weight: normal;
+      }
+    }
+
+    .mat-mdc-card-content {
+      line-height: 20px;
+    }
+
+    .mat-mdc-card-header,
+    .mat-mdc-card-content {
+      a {
+        color: var(--app-color-darknes);
+
+        &:hover {
+          color: var(--app-color-accent);
+        }
+      }
+
+      .mat-icon {
+         vertical-align: sub;
+
+        &[class*="app-entity-"] {
+          margin-right: 4px;
+        }
+
+        &:not([class*="app-entity-"]) {
+          @include setIcon(18, var(--app-color-accent));
+        }
+      }
+    }
   }
 
 

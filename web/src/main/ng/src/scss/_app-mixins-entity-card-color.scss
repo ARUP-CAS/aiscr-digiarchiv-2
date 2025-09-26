@@ -5,7 +5,7 @@
 // set entity color
 @mixin setEntityCardColor() {
   @each $entity, $color in $entities {
-    &.app-card-#{$entity} {
+    &.app-entity-#{$entity} {
       border-left: 4px solid #{$color} !important;
     }   
   }

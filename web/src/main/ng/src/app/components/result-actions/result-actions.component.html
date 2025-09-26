@@ -1,10 +1,11 @@
-<div>
+<div class="app-fxLayout app-row app-gap-2">
   @if (!mapDetail() && (result().chranene_udaje || result().loc_rpt || result().loc)) {
-    <button mat-flat-button (click)="service.showInMap(result(), false, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
+    <button matIconButton (click)="service.showInMap(result(), false, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
       <mat-icon>map</mat-icon>
     </button>
   }
-  <button mat-flat-button [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
+
+  <button matIconButton [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
     <mat-icon>link</mat-icon>
   </button>
   <mat-menu #links="matMenu">
@@ -17,7 +18,8 @@
       </a>
     }
   </mat-menu>
-  <button mat-flat-button [matMenuTriggerFor]="mCitace">
+
+  <button matIconButton [matMenuTriggerFor]="mCitace">
     <mat-icon>menu_book</mat-icon>
   </button>
   <mat-menu #mCitace="matMenu">
@@ -30,35 +32,37 @@
       </a>
     }
   </mat-menu>
-  <a mat-flat-button target="_blank" [href]="'print/'+result().ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
+
+  <a matIconButton target="_blank" [href]="'print/'+result().ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
     <mat-icon>print</mat-icon>
   </a>
+
   @if (state.logged) {
-    <button mat-flat-button (click)="toggleFav()" [class.app-color-fav]="result().isFav" [matTooltip]="result().isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
+    <button matIconButton (click)="toggleFav()" [class.app-color-fav]="result().isFav" [matTooltip]="result().isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
       <mat-icon>grade</mat-icon>
     </button>
   }
-  <button mat-flat-button (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
+
+  <button matIconButton (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
     <mat-icon>feedback</mat-icon>
   </button>
-  <a mat-flat-button
-    target="stats"
-    routerLink="/stats" [queryParams]="{ident_cely: result().ident_cely}"
-    [matTooltip]="'navbar.desc.stats' | translate">
+
+  <button matIconButton target="stats" routerLink="/stats" [queryParams]="{ident_cely: result().ident_cely}" [matTooltip]="'navbar.desc.stats' | translate">
     <mat-icon>query_stats</mat-icon>
-  </a>
+  </button>
+  
   @if (!isDocumentDialogOpen() && !inDocument()) {
-    <button mat-flat-button (click)="toggleDetail()" [ngClass]="detailExpanded() ? 'app-rotate-up' : 'app-rotate-down'">
+    <button matButton="filled" (click)="toggleDetail()" [ngClass]="detailExpanded() ? 'app-rotate-up' : 'app-rotate-down'">
       {{(detailExpanded() ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
     </button>
   }
   @if (state.itemView === 'col' && !isDocumentDialogOpen() && !inDocument()) {
-    <button mat-flat-button class="app-col-detail" (click)="openDocument()">
+    <button matButton="filled" class="app-col-detail" (click)="openDocument()">
       {{ 'card.button.Zobrazit detail' | translate }}
     </button>
   }
   @if (state.itemView === 'col' && isDocumentDialogOpen() && !inDocument()) {
-    <button mat-flat-button class="app-col-detail" [mat-dialog-close]="false">
+    <button matButton="filled" class="app-col-detail" [mat-dialog-close]="false">
       {{ 'card.button.Skrýt detail' | translate }}
     </button>
   }
