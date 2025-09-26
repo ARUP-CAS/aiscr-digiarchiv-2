@@ -27,10 +27,11 @@
 }
 
 .app-right {
-/*   @import "./app-toolbar";
-  @import "./app-chart-bar";
-  @import "./app-view-col";
-  @import "./app-view-row"; */
+  .app-action-links {
+    .app-pipe {
+      vertical-align: super;
+    }
+  }
 
   @media only screen and (max-width: 959px) {
     &:not(.app-results-opened),

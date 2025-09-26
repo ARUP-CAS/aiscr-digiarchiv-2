@@ -30,7 +30,7 @@ mat-sidenav {
 main {
   background-color: var(--app-color-gray-1);
 
-  @import "./app-results";
+  //@import "./app-results";
   @import "./app-stats";
   @import "./app-result-item";
   @import "./app-mapa";
