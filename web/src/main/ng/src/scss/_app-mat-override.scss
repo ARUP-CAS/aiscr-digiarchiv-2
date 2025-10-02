@@ -254,6 +254,19 @@
         color: var(--app-color-gray-6);
         font-weight: normal;
       }
+
+      .mat-mdc-card-title {
+        @media only screen and (max-width: 599px) {
+          flex-wrap: wrap !important;
+
+          div {
+            &:first-child {
+              flex: 1 1 100% !important;
+              margin-bottom: 12px;
+            }
+          }
+        }
+      }
     }
 
     .mat-mdc-card-content {
