@@ -39,4 +39,11 @@
       display: none !important;
     }
   }
+
+  .mat-mdc-card .mat-mdc-card-content .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body table th {
+    padding-left: 0;
+    text-align: left;
+    padding-right: 5px;
+    min-width: 130px;
+}
 }
