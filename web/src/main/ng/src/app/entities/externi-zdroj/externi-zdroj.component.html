@@ -49,7 +49,7 @@
             <div class="app-card-detail">
               <mat-accordion multi="true">
                 @if (_result.akce || _result.lokalita) {
-                  <mat-expansion-panel [expanded]="true" class="app-panel-souvisejici-zaznamy">
+                  <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
                     <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
                       <mat-panel-title>
                         {{ 'card.panelTitle.Související záznamy' | translate }}:

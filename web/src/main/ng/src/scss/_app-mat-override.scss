@@ -168,9 +168,46 @@
     }
   }
   .app-card-detail {
+    // first level debug
+   /*  & > .mat-accordion {
+      & > .mat-expansion-panel {
+        border: 4px solid red !important;
+        & > .mat-expansion-panel-content-wrapper {
+           & > .mat-expansion-panel-content {
+             & > .mat-expansion-panel-body {
+              
+              // second level
+              & > .mat-accordion {
+                & > .mat-expansion-panel {
+                  &.app-panel-inner {
+                    border: 4px solid blue !important;
+                    & > .mat-expansion-panel-content-wrapper {
+                      & > .mat-expansion-panel-content {
+                        & > .mat-expansion-panel-body {
+
+                          // third level
+                          & > .mat-accordion {
+                            & > .mat-expansion-panel {
+                              &.app-panel-inner {
+                                border: 4px solid green !important;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }             
+                }
+              }
+            }
+          }
+        }
+      }
+    } */
+   
+    // common
     .mat-expansion-panel {
       border: 1px solid var(--app-color-gray-3);
-      //margin-bottom: 1px;
 
       .mat-expansion-panel-header {
         background-color: var(--app-color-gray-2);
@@ -195,11 +232,13 @@
 
       &:not(:first-child):not(:last-child) {
         border: 1px solid var(--app-color-gray-3);
-        //border-bottom: 0 !important;
       }
 
+      // inner panel
       &.app-panel-inner {
-        margin-top: 16px;
+        &:not(:first-child) { 
+          margin-top: 16px;
+        }
 
         .mat-expansion-panel-header {
           padding: 8px;
@@ -219,7 +258,8 @@
         }
       }
 
-      &.app-panel-souvisejici-zaznamy {
+      // related itemm panel
+      &.app-panel-related-items {
         .mat-expansion-panel-body {
           padding: 0;
 
@@ -258,6 +298,12 @@
 
     .mat-mdc-card-actions {
       padding: 0 16px 16px 16px;
+    }
+
+    &.app-row-gap-16 {
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
     }
   }
   .app-card-info {
