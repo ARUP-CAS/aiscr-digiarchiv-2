@@ -1,13 +1,13 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" [class.app-entity-lokalita]="!isChild() && !isDocumentDialogOpen()">
-  @if (mapDetail && !isChild()) {
+<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-lokalita]="!isChild() && !isDocumentDialogOpen()">
+  @if (mapDetail() && !isChild()) {
     <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
     </a>
   }
   <mat-card-header>
-    <mat-card-title fxLayout="row" fxLayoutGap="16px">
-      <div fxFlex (click)="service.showInMap(result, false, false, isChild())">
-        @if (!state.isMapaCollapsed && !isChild() && !mapDetail) {
+    <mat-card-title class="app-fxLayout app-row app-gap-4">
+      <div class="app-fxFlex" (click)="service.showInMap(result, false, false, isChild())">
+        @if (!state.isMapaCollapsed && !isChild() && !mapDetail()) {
           <a><mat-icon>info</mat-icon></a>
         }
         <mat-icon class="app-entity-lokalita" [matTooltip]="'entities.lokalita.title' | translate">{{ config.entityIcons["lokalita"] }}</mat-icon>
@@ -25,18 +25,19 @@
           {{ _result.lokalita_chranene_udaje.nazev }}<span class="app-pipe"></span>
         }
       </div>
-      @if (state.isMapaCollapsed && !isChild() || mapDetail) {
+      @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
         <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
       }
     </mat-card-title>
   </mat-card-header>
+
   <mat-card-content [class.app-detail-closed]="!_detailExpanded">
     @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
-      <div class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+      <div class="app-thumb app-fxLayout app-row app-fill app-center-v app-center-h" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
     }
-    <div class="app-metadata app-row-gap-16">
+    <div class="app-metadata app-mb-4">
       <div>
         @if (_result.lokalita_typ_lokality || _result.lokalita_druh || _result.pristupnost) {
           <label class="app-label">{{ 'card.desc.Dokument - typ' | translate }}:</label>&#160;
@@ -95,9 +96,10 @@
       }
     </div>
   </mat-card-content>
+
   @if (!isChild()) {
-    <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
-      <div fxFlex class="app-metadata">
+    <mat-card-actions class="app-fxLayout app-row app-end-v">
+      <div class="app-fxFlex app-metadata">
         @if (_result.az_dokument?.length > 0) {
           {{'card.desc.Počet dokumentů' | translate}}: <strong>{{ _result.az_dokument.length }}</strong>
           <span class="app-pipe"></span>
@@ -107,6 +109,7 @@
       [detailExpanded]="_detailExpanded" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
     </mat-card-actions>
   }
+
   @if (_detailExpanded && !isChild()) {
     <mat-card-content>
       <div class="app-card-detail">
@@ -117,7 +120,7 @@
                 {{ 'card.panelTitle.Popis lokality' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <table>
+            <table class="app-mb-4">
               <tbody>
                 @if (_result.az_chranene_udaje?.uzivatelske_oznaceni) {
                   <tr>
