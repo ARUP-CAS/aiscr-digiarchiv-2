@@ -414,7 +414,10 @@
                       }
                     }
                     <mat-accordion multi="true">
-                      <!-- <app-komponenta *ngFor="let kd of dokument_cast.komponenta"  [result]="kd"></app-komponenta> -->
+                      @for(kd of dokument_cast.komponenta; track kd.ident_cely) {
+                        <app-komponenta [result]="kd"></app-komponenta>
+                      }
+                      
                       @if (dokument_cast.neident_akce) {
                         <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
                           <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">

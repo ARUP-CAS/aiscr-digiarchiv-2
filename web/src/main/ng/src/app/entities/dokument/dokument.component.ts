@@ -19,6 +19,7 @@ import { ResultActionsComponent } from "../../components/result-actions/result-a
 import { MatAccordion, MatExpansionModule } from "@angular/material/expansion";
 import { RelatedComponent } from "../../components/related/related.component";
 import { MatButtonModule } from '@angular/material/button';
+import { KomponentaComponent } from "../komponenta/komponenta.component";
 
 @Component({
   imports: [
@@ -28,7 +29,8 @@ import { MatButtonModule } from '@angular/material/button';
     InlineFilterComponent, DatePipe, MatButtonModule,
     ResultActionsComponent,
     MatAccordion,
-    forwardRef(() => RelatedComponent)
+    forwardRef(() => RelatedComponent),
+    KomponentaComponent
 ],
   selector: 'app-dokument',
   templateUrl: './dokument.component.html',

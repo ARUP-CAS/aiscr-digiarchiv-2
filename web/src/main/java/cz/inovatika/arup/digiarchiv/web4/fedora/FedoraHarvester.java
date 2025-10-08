@@ -26,7 +26,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
-// import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient; 
 import org.apache.solr.client.solrj.impl.HttpSolrClient; 
 import org.apache.solr.common.SolrDocument;
@@ -328,7 +327,7 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexModels(String[] models) throws Exception {
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             indexModels(models, solr); 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -601,8 +600,9 @@ public class FedoraHarvester {
                     return;
                 }
             }
-
             checkLists(0, indexed, model, totalInModel, solr);
+            solr.commit("oai");
+            solr.commit("entities");
             LOGGER.log(Level.INFO, "Index model {0} finished", model);
         }
     }
