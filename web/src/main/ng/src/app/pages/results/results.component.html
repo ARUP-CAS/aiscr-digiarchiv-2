@@ -220,18 +220,16 @@
                     </cdk-virtual-scroll-viewport>
                   }
                   @if (!state.isMapaCollapsed && state.solrResponse?.response) {
-                    <div>
-                      @for (result of state.solrResponse.response.docs; track result) {
-                        <app-entity-container [result]="result"></app-entity-container>
-                      }
-                    </div>
+                    @for (result of state.solrResponse.response.docs; track result) {
+                      <app-entity-container [result]="result"></app-entity-container>
+                    }
                   }
                 }
               </mat-tab>
             </mat-tab-group>
           </mat-sidenav>
           <mat-sidenav-content style="margin-left: 0 !important;">
-            <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">BBBB
+            <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
               <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
             </button>
           </mat-sidenav-content>

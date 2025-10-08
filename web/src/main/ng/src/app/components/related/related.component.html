@@ -9,12 +9,12 @@
       <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'"
         [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
         @for (child of children(); track child.ident_cely; let idx = $index) {
-          <div>
-            <app-entity-container [result]="child.result" [isChild]="true" [mapDetail]="mapDetail()" class="app-related-item"></app-entity-container>
-          </div>
+          <app-entity-container [result]="child.result" [isChild]="true" [mapDetail]="mapDetail()" class="app-related-item"></app-entity-container>
         }
         @if (toProcess()?.length > 0) {
-          <button mat-button color="primary" fxFlexFill fxLayoutAlign="center center" (click)="loadAll()">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
+          <div class="app-fxLayout app-row app-center-h">
+            <button mat-button  (click)="loadAll()" class="app-mb-4">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
+          </div>
         }
       </cdk-virtual-scroll-viewport>
     }
