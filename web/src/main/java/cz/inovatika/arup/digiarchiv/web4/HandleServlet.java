@@ -87,8 +87,8 @@ public class HandleServlet extends HttpServlet {
         } else {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
-            try (PrintWriter out = response.getWriter()) {
                 String url = "http://localhost:4000/id/" + id;
+            try (PrintWriter out = response.getWriter()) {
 
 //                try (InputStream inputStream = RESTHelper.inputStream(url)) {
 //                    out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
@@ -106,7 +106,7 @@ public class HandleServlet extends HttpServlet {
                 }
 
             } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, "Error processing {0}", request.getRequestURI());
+                LOGGER.log(Level.SEVERE, "Error processing {0} from {1}", new String[]{request.getRequestURI(), url});
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
