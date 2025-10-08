@@ -23,6 +23,7 @@ import { DokumentComponent } from "../dokument/dokument.component";
 import { LokalitaComponent } from "../lokalita/lokalita.component";
 import { NalezComponent } from "../nalez/nalez.component";
 import { Entity } from '../entity/entity';
+import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
 
 @Component({
   imports: [
@@ -34,7 +35,8 @@ import { Entity } from '../entity/entity';
     forwardRef(() => AkceComponent),
     forwardRef(() => DokumentComponent),
     forwardRef(() => LokalitaComponent),
-    forwardRef(() => NalezComponent)
+    forwardRef(() => NalezComponent),
+    DokJednotkaComponent
 ],
   selector: 'app-komponenta',
   templateUrl: './komponenta.component.html',

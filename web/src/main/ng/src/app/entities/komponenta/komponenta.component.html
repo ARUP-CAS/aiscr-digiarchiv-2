@@ -39,7 +39,10 @@
                 {{ 'card.panelTitle.Související záznamy' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <!-- <app-dok-jednotka *ngFor="let dok_jednotka of result.dok_jednotka" [result]="dok_jednotka" [isChild]="true" class="app-related-item"></app-dok-jednotka> -->
+            @for (dok_jednotka of _result.dok_jednotka; track dok_jednotka.ident_cely) {
+              <app-dok-jednotka [result]="dok_jednotka" [isChild]="true" class="app-related-item"></app-dok-jednotka>
+            }
+            
             @for (akce of _result.akce; track akce.ident_cely) {
               <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
             }
