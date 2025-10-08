@@ -93,7 +93,7 @@
 <ng-template #contentTmpl>
 
   <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument()">
-    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()" [class.app-mb-n4]="_result.komponenta_poznamka === null">
       @if (!inDocument()) {
         <mat-panel-title>
           <ng-container *ngTemplateOutlet="titleTmpl; context:{panel:panel, panelHeader:panelHeader}"></ng-container>

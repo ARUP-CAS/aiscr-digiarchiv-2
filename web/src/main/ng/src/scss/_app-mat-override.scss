@@ -237,6 +237,9 @@
 
       // inner panel
       &.app-panel-inner {
+        &.mat-expansion-panel-spacing {
+          margin-top: 16px;
+        }
         &:not(:first-child) { 
           margin-top: 16px;
         }
