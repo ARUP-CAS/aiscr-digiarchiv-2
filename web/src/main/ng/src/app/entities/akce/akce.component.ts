@@ -79,7 +79,7 @@ export class AkceComponent extends Entity {
     if (this._result.az_ext_zdroj) {
       const orig = JSON.parse(JSON.stringify(this._result.az_ext_zdroj));
       let az_ext_zdroj: any[] = [];
-      this.az_ext_zdroj.set([]);
+      // this.az_ext_zdroj.set([]);
       for (let i = 0; i < orig.length; i = i + 20) {
         const ids = orig.slice(i, i + 20);
         this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
