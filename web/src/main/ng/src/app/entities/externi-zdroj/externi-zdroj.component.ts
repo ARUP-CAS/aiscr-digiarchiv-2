@@ -66,7 +66,7 @@ export class ExterniZdrojComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setData();
+    //this.setData();
   }
 
   checkLoading() {

@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
@@ -37,6 +37,8 @@ import { ExterniZdrojComponent } from "../externi-zdroj/externi-zdroj.component"
   styleUrls: ['./akce.component.scss']
 })
 export class AkceComponent extends Entity {
+
+  az_ext_zdroj = signal<any[]>([]);
 
   override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
@@ -76,17 +78,18 @@ export class AkceComponent extends Entity {
   getExtZdroj() {
     if (this._result.az_ext_zdroj) {
       const orig = JSON.parse(JSON.stringify(this._result.az_ext_zdroj));
-      this._result.az_ext_zdroj = [];
+      let az_ext_zdroj: any[] = [];
+      this.az_ext_zdroj.set([]);
       for (let i = 0; i < orig.length; i = i + 20) {
         const ids = orig.slice(i, i + 20);
         this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
           this._result.az_ext_odkaz.forEach((eo:any) => {
             const ez = res.response.docs.find((ez: any) => eo.ext_zdroj.id === ez.ident_cely);
             ez.ext_odkaz_paginace = eo.paginace;
-            this._result.az_ext_zdroj.push(ez);
+            az_ext_zdroj.push(ez);
           });
 
-          this._result.az_ext_zdroj.sort((ez1: any, ez2: any) => {
+          az_ext_zdroj.sort((ez1: any, ez2: any) => {
             let res = 0;
             res = ez1.ext_zdroj_autor[0].localeCompare(ez2.ext_zdroj_autor[0], 'cs');
             if (res === 0) {
@@ -96,7 +99,8 @@ export class AkceComponent extends Entity {
               res = ez1.ext_zdroj_nazev.localeCompare(ez2.ext_zdroj_nazev);
             }
             return res;
-          })
+          });
+          this.az_ext_zdroj.set(az_ext_zdroj);
         });
       }
     }

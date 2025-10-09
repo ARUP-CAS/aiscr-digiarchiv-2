@@ -208,7 +208,7 @@
               }
             </mat-accordion>
           </mat-expansion-panel>
-          @if (result().az_ext_zdroj?.length > 0) {
+          @if (az_ext_zdroj().length > 0) {
             <mat-expansion-panel [expanded]="true">
               <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
                 <mat-panel-title>
@@ -216,7 +216,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="app-clean-mg">
-                @for (eo of result().az_ext_zdroj; track eo) {
+                @for (eo of az_ext_zdroj(); track eo) {
                   <app-externi-zdroj [result]="eo"></app-externi-zdroj>
                 }
               </ul>
