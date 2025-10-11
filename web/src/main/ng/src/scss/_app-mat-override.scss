@@ -169,10 +169,10 @@
   }
   .app-card-detail {
     // first level debug
-    & > .mat-accordion {
+    /* & > .mat-accordion {
       & > .mat-expansion-panel {
         border-bottom: 0;
-        //border: 4px solid red !important;
+        border: 4px solid red !important;
         & > .mat-expansion-panel-content-wrapper {
            & > .mat-expansion-panel-content {
              & > .mat-expansion-panel-body {
@@ -181,7 +181,7 @@
               & > .mat-accordion {
                 & > .mat-expansion-panel {
                   &.app-panel-inner {
-                    //border: 4px solid blue !important;
+                    border: 4px solid blue !important;
                     & > .mat-expansion-panel-content-wrapper {
                       & > .mat-expansion-panel-content {
                         & > .mat-expansion-panel-body {
@@ -190,7 +190,7 @@
                           & > .mat-accordion {
                             & > .mat-expansion-panel {
                               &.app-panel-inner {
-                                //border: 4px solid green !important;
+                                border: 4px solid green !important;
                               }
                             }
                           }
@@ -204,7 +204,7 @@
           }
         }
       }
-    }
+    } */
    
     // common
     .mat-expansion-panel {
@@ -237,9 +237,14 @@
 
       // inner panel
       &.app-panel-inner {
-        &.mat-expansion-panel-spacing {
-          margin-top: 16px;
-        }
+         margin-top: 16px;
+          &.mat-expanded {
+          margin-top: 16px !important;
+        } 
+       /*  &.mat-expansion-panel-spacing,
+        &.mat-expanded {
+          margin-top: 16px !important;
+        } */
         &:not(:first-child) { 
           margin-top: 16px;
         }
@@ -252,8 +257,12 @@
             background-color: transparent;
           }
 
-          .mat-icon {
-            color: var(--app-color-darknes) !important;
+          .mat-expansion-panel-header-title {
+            display: block;
+
+            & > .mat-icon {
+              color: var(--app-color-darknes) !important;
+            }
           }
         }
 
