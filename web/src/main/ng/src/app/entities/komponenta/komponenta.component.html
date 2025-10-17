@@ -79,7 +79,6 @@
   @if (_result.komponenta_areal) {
     &#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="_result.komponenta_areal.id" [heslar]="'areal_druha'"></app-inline-filter>
   }
-
   @if (_result.komponenta_aktivita?.length > 0) {
     &#160;(@for (aktivita of _result.komponenta_aktivita; track aktivita.id; let last = $last) {
     <app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>
@@ -129,8 +128,5 @@
         </ul>
       </mat-expansion-panel>
     }
-
   </mat-expansion-panel>
-
-
 </ng-template>

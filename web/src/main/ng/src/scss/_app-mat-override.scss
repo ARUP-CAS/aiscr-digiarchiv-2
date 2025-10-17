@@ -206,7 +206,6 @@
       }
     } */
    
-    // common
     .mat-expansion-panel {
       border: 1px solid var(--app-color-gray-3);
 
@@ -238,22 +237,18 @@
       // inner panel
       &.app-panel-inner {
          margin-top: 16px;
-          &.mat-expanded {
+
+        &.mat-expanded,
+        &:not(:first-child) {
           margin-top: 16px !important;
         } 
-       /*  &.mat-expansion-panel-spacing,
-        &.mat-expanded {
-          margin-top: 16px !important;
-        } */
-        &:not(:first-child) { 
-          margin-top: 16px;
-        }
 
         .mat-expansion-panel-header {
           padding: 8px;
           background-color: transparent;
 
-          &:hover, &:focus {
+          &:hover, 
+          &:focus {
             background-color: transparent;
           }
 
@@ -339,6 +334,10 @@
   }
   .app-card-result {
     @include setEntityCardColor();
+
+    &:not(.app-card-child) {
+      margin-bottom: 16px;
+    }
 
     .mat-mdc-card-header {
       margin-bottom: 12px;

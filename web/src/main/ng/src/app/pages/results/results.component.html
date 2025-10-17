@@ -161,19 +161,16 @@
               </div>
             }
             @if (state.numFound > 0) {
-             <!-- to delete <div class="app-fxLayout app-row" [class]="'app-view-' + state.itemView">
-                <div class="app-fxFlex"> -->
-              <div class="app-fxLayout app-column app-gap-4">
-                @for (result of docs; track result) {
-                  <app-entity-container [result]="result"></app-entity-container>
-                }
+              <div class="app-fxLayout app-row" [class]="'app-view-' + state.itemView">
+                <div class="app-fxFlex">
+                  @for (result of docs; track result) {
+                    <app-entity-container [result]="result"></app-entity-container>
+                  } 
+                </div>
               </div>
-                 
-               <!--  </div>
-              </div> -->
             }
             @if (state.numFound > 0) {
-              <div class="app-fxLayout app-row app-mt-4">
+              <div class="app-fxLayout app-row">
                 <div class="app-fxFlex">
                   <app-paginator></app-paginator>
                 </div>
