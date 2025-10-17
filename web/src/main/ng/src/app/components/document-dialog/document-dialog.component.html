@@ -1,24 +1,9 @@
-<!-- <div mat-dialog-content>
+<div mat-dialog-content>
   <div class="app-display-table app-container">
     <div class="app-table-cell">
-      <ng-container *ngIf="result">
-        <app-dokument class="app-entity-first-child" *ngIf="result.entity === 'dokument'" [result]="result" [detailExpanded]="true" [isDocumentDialogOpen]="true" [inDocument]="true"></app-dokument>
-        <app-dokument class="app-entity-first-child" *ngIf="result.entity === 'knihovna_3d'" [result]="result" [detailExpanded]="true" [isDocumentDialogOpen]="true" [inDocument]="true"></app-dokument>
-        <app-akce class="app-entity-first-child" *ngIf="result.entity === 'akce'" [result]="result" [detailExpanded]="true" [isDocumentDialogOpen]="true" [inDocument]="true"></app-akce>
-        <app-lokalita class="app-entity-first-child" *ngIf="result.entity === 'lokalita'" [result]="result" [detailExpanded]="true" [isDocumentDialogOpen]="true" [inDocument]="true"></app-lokalita>
-        <app-projekt class="app-entity-first-child" *ngIf="result.entity === 'projekt'" [result]="result" [detailExpanded]="true" [isDocumentDialogOpen]="true" [inDocument]="true"></app-projekt>
-        <app-samostatny-nalez class="app-entity-first-child" *ngIf="result.entity === 'samostatny_nalez'" [result]="result" [detailExpanded]="true" [isDocumentDialogOpen]="true" [inDocument]="true"></app-samostatny-nalez>
-        <mat-card *ngIf="result.entity === 'pian' || result.entity === 'adb' || result.entity === 'let' || result.entity === 'dok_jednotka' || result.entity === 'komponenta' || result.entity === 'ext_zdroj'">
-          <mat-card-content>
-            <app-pian *ngIf="result.entity === 'pian'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
-            <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
-            <app-let *ngIf="result.entity === 'let'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
-            <app-dok-jednotka *ngIf="result.entity === 'dok_jednotka'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
-            <app-komponenta *ngIf="result.entity === 'komponenta'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
-            <app-externi-zdroj *ngIf="result.entity === 'ext_zdroj'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
-          </mat-card-content>
-        </mat-card>
-      </ng-container>
+      @if (!isResultEmpty(result)) {
+        <app-entity-container [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-entity-container>
+      }
     </div>
   </div>
-</div> -->
+</div>
