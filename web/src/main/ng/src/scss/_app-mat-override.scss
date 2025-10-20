@@ -116,7 +116,8 @@
   @include mat.button-overrides((
     filled-container-shape: 3px,
     protected-container-shape: 3px,
-    outlined-container-shape: 3px
+    outlined-container-shape: 3px,
+    text-container-shape: 3px
   ));
   .app-btn-facet {
     @include mat.button-overrides((
@@ -389,7 +390,6 @@
       }
     }
   }
-
 
 
   // --- MENU ---
