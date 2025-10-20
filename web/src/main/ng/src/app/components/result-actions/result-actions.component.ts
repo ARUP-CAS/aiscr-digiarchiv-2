@@ -75,7 +75,7 @@ export class ResultActionsComponent {
     this.state.dialogRef = this.dialog.open(DocumentDialogComponent, {
       width: '900px',
       data: this.result(),
-      panelClass: 'app-document-dialog'
+      panelClass: 'app-card-result-dialog'
     });
   }
 

@@ -407,6 +407,34 @@
    @include mat.paginator-overrides((
     container-background-color: transparent,
   ));
+
+
+  // --- DIALOG ---
+  @include mat.dialog-overrides((
+    content-padding: 16px,
+    container-shape: var(--app-default-border-radius)
+  ));
+  .app-card-result-dialog {
+    @include mat.dialog-overrides((
+      content-padding: 0,
+      container-shape: var(--app-default-border-radius),
+      container-max-width: 900px
+    ));
+    @include mat.card-overrides((
+      elevated-container-elevation: none
+    ));
+    .app-display-table {
+      width: 100% !important;
+
+      .app-table-cell {
+        padding: 0;
+
+        .app-card-result {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 }
 
 
@@ -418,22 +446,5 @@
 @for $i from 0 through 5 {
   mat-card.mat-elevation-z#{$i} {
     @include mat.elevation($i);
-  }
-}
-
-
-// dialog
-.mat-mdc-dialog-container {
-  .mat-mdc-dialog-title {
-    margin: 0;
-    padding: 0 16px 8px 16px;
-  }
-
-  .mat-mdc-dialog-content {
-    padding: 16px !important;
-  }
-
-  .mat-mdc-dialog-actions {
-    padding: 0 16px 16px 16px !important;
   }
 }
