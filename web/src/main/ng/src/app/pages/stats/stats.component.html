@@ -6,27 +6,27 @@
   </div>
 }
 
-<div class="app-searchbar-wrapper">
+<div class="app-fxLayout app-row app-center-v app-pl-4 app-pr-4 app-searchbar-wrapper">
   <div class="app-container">
-    <div fxLayout="row" fxLayoutGap="16px" class="app-search-form" fxLayoutAlign="start center">
-      <mat-form-field appearance="fill" class="app-form-field">
+    <div class="app-search-form app-fxLayout app-row app-gap-2 app-center-v">
+      <mat-form-field appearance="outline">
         <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="'facet.input.Datum od' | translate" (click)="datum_od.open()">
-        <mat-datepicker-toggle matSuffix [for]="datum_od"></mat-datepicker-toggle>
-        @if (datumod) {
-          <button matSuffix mat-icon-button class="app-color-warning"><mat-icon (click)="datumod = null">close</mat-icon></button>
+        <mat-datepicker-toggle matIconSuffix  [for]="datum_od"></mat-datepicker-toggle>
+        @if (!datumod) {
+          <button matIconSuffix mat-icon-button class="app-btn-warn"><mat-icon (click)="datumod = null">close</mat-icon></button>
         }
         <mat-datepicker #datum_od startView="multi-year"></mat-datepicker>
       </mat-form-field>
-      <mat-form-field appearance="fill" class="app-form-field">
+      <mat-form-field appearance="outline">
         <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'facet.input.Datum do' | translate" (click)="datum_do.open()">
-        <mat-datepicker-toggle matSuffix [for]="datum_do"></mat-datepicker-toggle>
+        <mat-datepicker-toggle matIconSuffix [for]="datum_do"></mat-datepicker-toggle>
         @if (datumdo) {
-          <button matSuffix mat-icon-button class="app-color-warning"><mat-icon (click)="datumdo = null">close</mat-icon></button>
+          <button matIconSuffix mat-icon-button class="app-color-warning"><mat-icon (click)="datumdo = null">close</mat-icon></button>
         }
         <mat-datepicker #datum_do startView="multi-year"></mat-datepicker>
       </mat-form-field>
-      <button mat-flat-button color="primary" (click)="addDateFilter()">
-        <mat-icon mat-flat-button>filter_alt</mat-icon>
+      <button matButton="filled" (click)="addDateFilter()">
+        <mat-icon>filter_alt</mat-icon>
         <span class="app-text">{{ 'facet.button.Aplikovat filtr' | translate }}</span>
       </button>
     </div>
@@ -36,7 +36,7 @@
 <div class="app-pt-4 app-pl-4 app-pb-0 app-pr-4">
   <div class="app-container">
     <mat-card class="app-mb-4">
-      <mat-card-content fxLayout="row" fxFlexFill class="app-graph-wrapper">
+      <mat-card-content class="app-graph-wrapper app-fxLayout app-row app-fill app-gap-4">
         <div class="app-left">
           <h3>{{ 'stats.interval' | translate }}</h3>
           <mat-list role="list">
@@ -45,7 +45,7 @@
             <mat-list-item [class.app-active]="interval === 'MONTH'" (click)="setInterval('MONTH')" class="app-cursor-pointer">{{ 'stats.interval_month' | translate }}</mat-list-item>
           </mat-list>
         </div>
-        <div fxFlex class="app-right">
+        <div class="app-right app-fxFlex">
           @if (!loading && series.length > 0) {
             <div class="app-graph" echarts [options]="chartOptions"></div>
           }
@@ -53,8 +53,8 @@
       </mat-card-content>
     </mat-card>
 
-    <div fxLayout="row" class="app-cards-wrapper">
-      <mat-card fxFlex>
+    <div class="app-cards-wrapper app-fxLayout app-row app-gap-4 app-mb-4">
+      <mat-card class="app-fxFlex">
         <mat-card-header>
           <mat-card-title>{{ 'stats.type' | translate }}</mat-card-title>
         </mat-card-header>
@@ -80,7 +80,7 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card fxFlex>
+      <mat-card class="app-fxFlex">
         <mat-card-header>
           <mat-card-title>{{ 'stats.entity' | translate }}</mat-card-title>
         </mat-card-header>
@@ -106,7 +106,7 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card fxFlex fxLayout="column" class="app-ident">
+      <mat-card class="app-ident app-fxFlex app-fxLayout app-column">
         <mat-card-header>
           <mat-card-title>{{ 'stats.ident_cely' | translate }} @if (ids) {
             <span >({{ 'stats.id_count' | translate : {count: ids.length, total: totalIds} }})</span>

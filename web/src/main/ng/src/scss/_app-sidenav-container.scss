@@ -139,7 +139,7 @@
     a {
       .mat-icon {
         @extend .app-mr-1 !optional;
-        color: var(--app-color-warning);
+        color: var( --app-color-warn);
         @include setIcon($size: 18, $position: middle);
       }
     }

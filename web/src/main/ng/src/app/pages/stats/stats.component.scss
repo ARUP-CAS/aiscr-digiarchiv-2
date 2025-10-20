@@ -1,0 +1,129 @@
+// graph
+.app-graph-wrapper {
+  .app-left {
+    @extend .app-pr-4 !optional;
+
+    h3 {
+      @extend .app-mb-0 !optional;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+  }
+
+  .app-right {
+    .app-graph {
+      @extend .app-pt-2 !optional;
+      background-color: var(--app-color-gray-1);
+    }
+  } 
+}
+
+// cards
+.app-cards-wrapper {
+  flex-wrap: wrap;
+  
+  @extend .app-ml-n2, .app-mr-n2 !optional;
+  
+  .mat-mdc-card {
+    @extend .app-mb-4, .app-ml-2, .app-mr-2 !optional;
+    min-height: 400px;
+  }
+}
+
+// responsive behavior
+@media only screen and (max-width: 959px) {
+  .app-searchbar-wrapper {
+    .app-search-form {
+      .mat-mdc-form-field {
+        min-width: 195px !important;
+
+        .mat-mdc-form-field-infix {
+          width: 100px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .app-searchbar-wrapper {
+    .app-search-form {
+      .mat-mdc-form-field {
+        min-width: 160px !important;
+
+        .mat-mdc-form-field-infix {
+          width: 80px;
+        }
+      }
+
+      .mat-flat-button {
+        min-width: auto !important;
+        padding-left: 8px;
+        padding-right: 8px;
+
+        .app-text {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .app-graph-wrapper {
+    display: block !important;
+
+    .app-left {
+      padding-right: 0 !important;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+@media only screen and (min-width: 1044px) {
+  .app-cards-wrapper {
+    .app-ident {
+      flex: 1 1 100% !important;
+      max-width: 50% !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 440px) {
+  .app-searchbar-wrapper {
+    .app-search-form {
+      .mat-mdc-form-field {
+        min-width: 130px !important;
+        margin-right: 8px !important;
+
+        .mat-mdc-form-field-wrapper {
+          .mat-mdc-form-field-flex {
+            padding-left: 8px !important;
+            padding-right: 4px !important;
+
+            .mat-mdc-form-field-infix {
+              width: 60px;
+            }
+  
+            .mat-mdc-form-field-suffix {
+              .mat-icon-button {
+                width: 20px !important;
+                height: 20px !important;
+                padding: 0 !important;
+  
+                svg {
+                  width: 18px;
+                  height: 18px;
+                }
+  
+                .mat-icon {
+                  font-size: 18px;
+                  width: 18px;
+                  height: 18px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
