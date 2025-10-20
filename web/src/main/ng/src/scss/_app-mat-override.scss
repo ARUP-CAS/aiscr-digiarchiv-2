@@ -86,6 +86,11 @@
     .mat-mdc-form-field-subscript-wrapper {
       line-height: 0;
       height: 0;
+
+      .mat-mdc-form-field-error {
+        text-align: center;
+        margin-top: -4px;
+      }
     }
   } 
   
@@ -412,6 +417,7 @@
   // --- DIALOG ---
   @include mat.dialog-overrides((
     content-padding: 16px,
+    container-color: var(--app-color-lightnes),
     container-shape: var(--app-default-border-radius)
   ));
   .app-card-result-dialog {
