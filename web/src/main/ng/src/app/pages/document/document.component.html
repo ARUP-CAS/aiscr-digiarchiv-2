@@ -5,6 +5,8 @@
     </div>
   </div>
 }
+
+<!-- fixit -->
 @if (!state.loading() && state.printing) {
   <div class="app-display-table app-loading">
     <div class="app-table-cell app-clean-pd">
@@ -12,10 +14,11 @@
     </div>
   </div>
 }
+
 @if (state.loading()) {
   <div class="app-loading-progress">{{ 'loading' | translate }} {{ state.documentProgress | number : '1.0-0' }}% ... </div>
 }
-<!-- <div *ngIf="!state.loading && state.printing" class="app-loading-progress">{{ 'printing' | translate }}</div> -->
+
 @if (!state.loading && state.imagesLoading && state.printing()) {
   <div class="app-loading-progress">{{ 'loading images' | translate }}: {{ (this.state.imagesLoaded * 100.0 / this.state.numImages) | number : '1.0-0' }}% ...</div>
 }
@@ -37,66 +40,8 @@
         </mat-card>
         @if (!isResultEmpty(result)) {
           <app-entity-container [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-entity-container>
-          <!-- @if (result.entity === 'dokument') {
-            <app-dokument [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument>
-          }
-          @if (result.entity === 'knihovna_3d') {
-            <app-dokument [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument>
-          }
-          @if (result.entity === 'akce') {
-            <app-akce [result]="result" [detailExpanded]="true" [inDocument]="true"></app-akce>
-          }
-          @if (result.entity === 'lokalita') {
-            <app-lokalita [result]="result" [detailExpanded]="true" [inDocument]="true"></app-lokalita>
-          }
-          @if (result.entity === 'projekt') {
-            <app-projekt [result]="result" [detailExpanded]="true" [inDocument]="true"></app-projekt>
-          }
-          @if (result.entity === 'samostatny_nalez') {
-            <app-samostatny-nalez [result]="result" [detailExpanded]="true" [inDocument]="true"></app-samostatny-nalez>
-          }
-          @if (result.entity === 'jednotka_dokumentu') {
-            <app-jednotka-dokumentu [result]="result" [detailExpanded]="true" [inDocument]="true"></app-jednotka-dokumentu>
-          }
-          @if (result.entity === 'dokument_cast') {
-            <app-dokument-cast [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument-cast>
-          }
-          @if (result.entity === 'let') {
-            <app-let [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
-          }
-          @if (result.entity === 'pian') {
-            <app-pian [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
-          }
-          @if (result.entity === 'ext_zdroj') {
-            <app-externi-zdroj [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
-          }
-            @if (result.entity === 'adb') {
-              <app-adb [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
-            }
-            @if (result.entity === 'vyskovy_bod') {
-              <app-vyskovy-bod [result]="result" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
-            }
-            @if (result.entity === 'dokumentacni_jednotka') {
-              <app-dok-jednotka [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
-            }
-            @if (result.entity === 'komponenta') {
-              <app-komponenta [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
-            }
-            @if (result.entity === 'komponenta_dokument') {
-              <app-komponenta-dokument [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta-dokument>
-            } -->
-      }
-    </div>
-  }
-
-  <!-- @if (!state.isMapaCollapsed) {
-    <div class="app-table-cell">
-      <mat-sidenav-container class="app-sidenav-container">
-        <mat-sidenav-content>
-          <app-mapa [isResults]="false"></app-mapa>
-        </mat-sidenav-content>
-      </mat-sidenav-container>
-    </div>
-  } -->
-</div>
+      	}
+    	</div>
+  	}
+	</div>
 }
