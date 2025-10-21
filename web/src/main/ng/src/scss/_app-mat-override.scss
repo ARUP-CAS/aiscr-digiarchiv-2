@@ -279,7 +279,11 @@
 
       // inner panel
       &.app-panel-inner {
-         margin-top: 16px;
+        margin-top: 16px;
+
+        &:hover {
+          border-color: var(--app-color-gray-5);
+        }
 
         &.mat-expanded,
         &:not(:first-child) {
