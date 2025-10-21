@@ -1,18 +1,20 @@
-// graph
-.app-graph-wrapper {
-  .app-left {
-    @extend .app-pr-4 !optional;
+// search
+.app-searchbar-wrapper {
+  .app-search-form {
+    .mat-mdc-form-field {
+      width: 300px !important;
 
-    h3 {
-      @extend .app-mb-0 !optional;
-      font-size: 16px !important;
-      font-weight: 700 !important;
+      .mat-mdc-form-field-infix {
+        width: 100px;
+      }
     }
   }
+}
 
+// graph
+.app-graph-wrapper {
   .app-right {
     .app-graph {
-      @extend .app-pt-2 !optional;
       background-color: var(--app-color-gray-1);
     }
   } 
@@ -21,12 +23,30 @@
 // cards
 .app-cards-wrapper {
   flex-wrap: wrap;
-  
-  @extend .app-ml-n2, .app-mr-n2 !optional;
+  margin: 0 -8px;
   
   .mat-mdc-card {
-    @extend .app-mb-4, .app-ml-2, .app-mr-2 !optional;
     min-height: 400px;
+    margin: 0 8px 16px 8px;
+
+    .mat-mdc-card-header {
+      margin-bottom: 16px;
+    }
+
+    .mat-mdc-card-content {
+      .mat-mdc-form-field {
+        width: 100%;
+        margin-bottom: 16px;
+      }
+
+      .app-item {
+        margin-bottom: 4px;
+
+        .app-count {
+          margin-left: 4px;
+        }
+      }
+    }
   }
 }
 
@@ -35,7 +55,7 @@
   .app-searchbar-wrapper {
     .app-search-form {
       .mat-mdc-form-field {
-        min-width: 195px !important;
+        width: 200px !important;
 
         .mat-mdc-form-field-infix {
           width: 100px;
@@ -56,10 +76,14 @@
         }
       }
 
-      .mat-flat-button {
+      .mdc-button {
         min-width: auto !important;
-        padding-left: 8px;
-        padding-right: 8px;
+        padding-left: 14px;
+        padding-right: 14px;
+
+        .mat-icon {
+          margin: 0;
+        }
 
         .app-text {
           display: none;
@@ -72,7 +96,7 @@
     display: block !important;
 
     .app-left {
-      padding-right: 0 !important;
+      margin-right: 0 !important;
       margin-bottom: 16px;
     }
   }
@@ -92,21 +116,15 @@
     .app-search-form {
       .mat-mdc-form-field {
         min-width: 130px !important;
-        margin-right: 8px !important;
 
-        .mat-mdc-form-field-wrapper {
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          padding: 0 4px 0 8px;
+
           .mat-mdc-form-field-flex {
-            padding-left: 8px !important;
-            padding-right: 4px !important;
-
-            .mat-mdc-form-field-infix {
-              width: 60px;
-            }
-  
-            .mat-mdc-form-field-suffix {
-              .mat-icon-button {
+            .mat-mdc-form-field-icon-suffix {
+              .mdc-icon-button {
                 width: 20px !important;
-                height: 20px !important;
+                height: 40px !important;
                 padding: 0 !important;
   
                 svg {

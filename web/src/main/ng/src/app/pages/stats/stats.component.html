@@ -21,7 +21,7 @@
         <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'facet.input.Datum do' | translate" (click)="datum_do.open()">
         <mat-datepicker-toggle matIconSuffix [for]="datum_do"></mat-datepicker-toggle>
         @if (datumdo) {
-          <button matIconSuffix mat-icon-button class="app-color-warning"><mat-icon (click)="datumdo = null">close</mat-icon></button>
+          <button matIconSuffix mat-icon-button class="app-btn-warn"><mat-icon (click)="datumdo = null">close</mat-icon></button>
         }
         <mat-datepicker #datum_do startView="multi-year"></mat-datepicker>
       </mat-form-field>
@@ -53,13 +53,13 @@
       </mat-card-content>
     </mat-card>
 
-    <div class="app-cards-wrapper app-fxLayout app-row app-gap-4 app-mb-4">
+    <div class="app-cards-wrapper app-fxLayout app-row app-gap-">
       <mat-card class="app-fxFlex">
         <mat-card-header>
           <mat-card-title>{{ 'stats.type' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <mat-form-field appearance="fill" class="app-w-100">
+          <mat-form-field appearance="outline">
             <mat-label>{{ 'stats.type' | translate }}</mat-label>
             <mat-select [(ngModel)]="type" (selectionChange)="filter('type', type)">
               @for (typ of typesAll; track typ) {
@@ -73,7 +73,7 @@
             }
           </mat-form-field>
           @for (f of types; track f) {
-            <div>
+            <div class="app-item">
               <a (click)="filter('type', f.name)">{{ 'stats.typ.' + f.name | translate }}</a><span class="app-count">({{ f.value }})</span>
             </div>
           }
@@ -85,7 +85,7 @@
           <mat-card-title>{{ 'stats.entity' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <mat-form-field appearance="fill" class="app-w-100">
+          <mat-form-field appearance="outline">
             <mat-label>{{ 'stats.entity' | translate }}</mat-label>
             <mat-select [(ngModel)]="entity" (selectionChange)="filter('entity', entity)">
               @for (e of entities; track e) {
@@ -99,7 +99,7 @@
             }
           </mat-form-field>
           @for (f of entities; track f) {
-            <div>
+            <div class="app-item">
               <a (click)="filter('entity', f.name)">{{ 'entities.' + f.name + '.title' | translate }}</a><span class="app-count">({{ f.value }})</span>
             </div>
           }
@@ -112,8 +112,8 @@
             <span >({{ 'stats.id_count' | translate : {count: ids.length, total: totalIds} }})</span>
           }</mat-card-title>
         </mat-card-header>
-        <mat-card-content fxFlex fxLayout="column">
-          <mat-form-field appearance="fill" class="app-w-100">
+        <mat-card-content class="app-fxFlex app-fxLayout app-column">
+          <mat-form-field appearance="outline">
             <mat-label>{{ 'stats.ident_cely' | translate }}</mat-label>
             <input matInput type="text" [placeholder]="'stats.ident_cely' | translate" name="ident_cely" id="ident_cely" (keyup.enter)="setIdentCely()" [(ngModel)]="ident_cely" />
             @if (ident_cely) {
@@ -122,9 +122,9 @@
               </button>
             }
           </mat-form-field>
-          <div fxFlex class="app-oa-y">
+          <div class="app-fxFlex app-oa-y">
             @for (f of ids; track f) {
-              <div>
+              <div class="app-item">
                 <a (click)="filter('ident_cely', f.name)">{{ formatId(f.name) }}</a><span class="app-count">({{ f.value }})</span>
               </div>
             }
@@ -133,12 +133,12 @@
       </mat-card>
 
       @if (state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')) {
-        <mat-card fxFlex>
+        <mat-card class="app-fxFlex">
           <mat-card-header>
             <mat-card-title>IP</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <mat-form-field appearance="fill" class="app-w-100">
+            <mat-form-field appearance="outline">
               <mat-label>IP</mat-label>
               <input matInput type="text" [placeholder]="'IP' | translate" name="ip" id="ident_cely" (keyup.enter)="filter('ip', ip)" [(ngModel)]="ip" />
               @if (ip) {
@@ -148,7 +148,7 @@
               }
             </mat-form-field>
             @for (f of ips; track f) {
-              <div>
+              <div class="app-item">
                 <a (click)="filter('ip', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
               </div>
             }
@@ -157,12 +157,12 @@
       }
 
       @if (state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')) {
-        <mat-card fxFlex>
+        <mat-card class="app-fxFlex">
           <mat-card-header>
             <mat-card-title>{{ 'stats.user' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <mat-form-field appearance="fill" class="app-w-100">
+            <mat-form-field appearance="outline">
               <mat-label>{{ 'stats.user' | translate }}</mat-label>
               <input matInput type="text" [placeholder]="'stats.user' | translate" name="user" id="user" (keyup.enter)="filter('user', user)" [(ngModel)]="user" />
               @if (user) {
@@ -172,7 +172,7 @@
               }
             </mat-form-field>
             @for (f of users; track f) {
-              <div>
+              <div class="app-item">
                 <a (click)="filter('user', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
               </div>
             }
