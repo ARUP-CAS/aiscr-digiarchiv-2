@@ -2,21 +2,21 @@
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
 <h1 mat-dialog-title>{{ 'dialog.title.Přihlášení uživatele' | translate}}</h1>
-<div mat-dialog-content>
+<div mat-dialog-content class="app-pt-2">
   @if (!state.logged) {
-    <div fxLayout="row wrap">
-      <mat-form-field fxFlex="100%">
+    <div class="app-fxLayout app-column app-gap-4">
+      <mat-form-field appearance="outline">
         <mat-label>{{ 'dialog.desc.Přihlašovací jméno' | translate }}</mat-label>
         <input matInput cdkFocusInitial type="text" [(ngModel)]="user" (keyup.enter)="focusp(loginpwd)" autocomplete="on" id="loginuser">
       </mat-form-field>
-      <mat-form-field fxFlex="100%">
+      <mat-form-field appearance="outline">
         <mat-label>{{ 'dialog.desc.Heslo' | translate }}</mat-label>
         <input matInput #loginpwd type="password" [(ngModel)]="pwd" (keyup.enter)="login()">
       </mat-form-field>
     </div>
     @if (loginError) {
-      <div class="app-color-warning">
-        {{loginError | translate}}
+      <div class="app-color-warn app-mt-4">
+        {{ loginError | translate }}
       </div>
     }
   }
