@@ -244,10 +244,17 @@
 
       .mat-mdc-card-title {
         a {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
           color: var(--app-color-darknes);
 
           &:hover {
             color: rgba(var(--app-color-darknes-rgb), .7);
+          }
+
+          .mat-icon {
+            margin-right: 8px
           }
         }
       }
