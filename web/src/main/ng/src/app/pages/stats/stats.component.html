@@ -38,7 +38,7 @@
     <mat-card class="app-mb-4">
       <mat-card-content class="app-graph-wrapper app-fxLayout app-row app-fill app-gap-4">
         <div class="app-left">
-          <h3>{{ 'stats.interval' | translate }}</h3>
+          <h3 class="app-mb-1">{{ 'stats.interval' | translate }}</h3>
           <mat-list role="list">
             <mat-list-item [class.app-active]="interval === 'DAY'" (click)="setInterval('DAY')" class="app-cursor-pointer">{{ 'stats.interval_day' | translate }}</mat-list-item>
             <mat-list-item [class.app-active]="interval === 'WEEK'" (click)="setInterval('WEEK')" class="app-cursor-pointer">{{ 'stats.interval_week' | translate }}</mat-list-item>
