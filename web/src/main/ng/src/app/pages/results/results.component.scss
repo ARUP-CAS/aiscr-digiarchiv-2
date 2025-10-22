@@ -8,11 +8,55 @@
   }
 }
 
+::ng-deep {
+  .app-toolbar {
+    margin-bottom: 4px;
+    
+    .app-action-links {
+      .mat-icon {
+        @include setIcon($position: bottom);
+      }
+    }
+
+    @media only screen and (max-width: 1220px) {
+      flex-wrap: wrap;
+
+      .app-action-links {
+        @include setIcon($position: bottom);
+        padding: 16px 0 0 16px;
+      }
+
+      app-paginator {
+        width: 100%;
+      }
+
+      .mat-mdc-paginator-container {
+        justify-content: start;
+      }
+    }
+
+    @media only screen and (min-width: 960px) and (max-width: 1140px), screen and (max-width: 760px) {
+      app-paginator {
+        margin-bottom: 8px;
+
+        & > .app-fxLayout {
+          display: block !important;
+
+          .mat-mdc-paginator {
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+  }
+} 
+
+
 .app-mobile-action-toolbar {
   display: none !important;
   height: var(--app-mobile-action-toolbar-height);
-  background-color: var(--app-gray-0);
-  border-bottom: 1px solid var(--app-gray-3);
+  background-color: var(--app-color-lightnes);
+  border-bottom: 1px solid var(--app-color-gray-3);
 
   @media only screen and (max-width: 959px) {
     display: flex !important;
