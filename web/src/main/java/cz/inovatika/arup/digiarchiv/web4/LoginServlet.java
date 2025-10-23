@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -159,6 +160,16 @@ public class LoginServlet extends HttpServlet {
                 JSONObject jo = new JSONObject();
                 try {
 
+                HttpSession session = req.getSession();
+                if (req.getParameter("JSESSIONID") != null) {
+                    Cookie userCookie = new Cookie("JSESSIONID", req.getParameter("JSESSIONID"));
+                    resp.addCookie(userCookie);
+                } else {
+                    String sessionId = session.getId();
+                    Cookie userCookie = new Cookie("JSESSIONID", sessionId);
+                    resp.addCookie(userCookie);
+                }
+                
                     String user = req.getParameter("user");
                     String pwd = req.getParameter("pwd");
                     if (req.getMethod().equals("POST")) {

@@ -1,11 +1,8 @@
 {
-  "/api/**": {
+  "/api": {
     "target": "http://localhost:8080/web4/api",
     "logLevel": "debug",
-    "pathRewrite": {
-      "^/api":""
-    },
-    "changeOrigin": false,
+    "changeOrigin": true,
     "withCredentials": true,
     "secure": false
   },
