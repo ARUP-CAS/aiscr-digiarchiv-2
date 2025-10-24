@@ -1,14 +1,18 @@
 {
-  "/api": {
-    "target": "http://localhost:8080/api",
+  "/api/**": {
+    "target": "https://digiarchiv-test.aiscr.cz/api",
+    "target2": "http://localhost:8080/web4/api",
     "logLevel": "debug",
+    "pathRewrite": {
+      "^/api":""
+    },
     "changeOrigin": true,
     "withCredentials": true,
     "secure": false
   },
   
   "/assets/i18n/**": {
-    "target": "http://localhost:8080/assets/i18n",
+    "target": "https://digiarchiv-test.aiscr.cz/assets/i18n",
     "logLevel": "debug",
     "pathRewrite": {
       "^/assets/i18n":""
@@ -18,7 +22,7 @@
   },
   
   "/assets/config.json": {
-    "target": "http://localhost:8080/assets/config.json",
+    "target": "https://digiarchiv-test.aiscr.cz/assets/config.json",
     "pathRewrite": {
       "^/api":""
     },

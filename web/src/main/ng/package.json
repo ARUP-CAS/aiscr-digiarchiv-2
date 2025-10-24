@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.api.conf.json",
+    "start.remote": "ng serve --proxy-config proxy.api.conf.remote.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
