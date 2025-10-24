@@ -19,7 +19,7 @@
   <div class="app-loading-progress">{{ 'loading' | translate }} {{ state.documentProgress | number : '1.0-0' }}% ... </div>
 }
 
-@if (!state.loading && state.imagesLoading && state.printing()) {
+@if (!state.loading() && state.imagesLoading && state.printing()) {
   <div class="app-loading-progress">{{ 'loading images' | translate }}: {{ (this.state.imagesLoaded * 100.0 / this.state.numImages) | number : '1.0-0' }}% ...</div>
 }
 
