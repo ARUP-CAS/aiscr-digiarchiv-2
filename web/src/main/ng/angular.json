@@ -18,7 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             "allowedCommonJsDependencies": [
-              "leaflet", "wicket"
+              "leaflet", "leaflet-heatmap", "wicket"
             ],
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -41,7 +41,11 @@
               "./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/leaflet/dist/leaflet.js",
+              "./node_modules/heatmap.js/build/heatmap.js",
+              "./node_modules/leaflet-heatmap/leaflet-heatmap.js"
+            ],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {

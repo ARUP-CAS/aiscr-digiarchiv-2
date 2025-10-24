@@ -34,6 +34,7 @@
     "axios": "^1.11.0",
     "echarts": "^5.6.0",
     "express": "^5.1.0",
+    "heatmap.js": "^2.0.5",
     "leaflet": "^1.9.4",
     "leaflet-heatmap": "^1.0.0",
     "leaflet.fullscreen": "^4.0.0",
