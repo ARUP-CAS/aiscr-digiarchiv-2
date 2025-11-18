@@ -482,6 +482,20 @@
       }
     }
   }
+
+
+  // --- SIDENAV ---
+  @include mat.sidenav-overrides((
+    container-background-color: var(--app-color-lightnes),
+    container-shape: 0
+  ));
+
+  .app-sidenav-container {
+    @include mat.sidenav-overrides((
+      container-background-color: transparent
+    ));
+  }
+  
 }
 
 

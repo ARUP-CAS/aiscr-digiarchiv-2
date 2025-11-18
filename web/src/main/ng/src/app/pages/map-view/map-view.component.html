@@ -13,7 +13,7 @@
     <div class="app-table-cell" >
       <mat-sidenav-container class="app-sidenav-container">
         <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="overflow-x: hidden;"><!--[(opened)]="opened"-->
-          <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
+          <button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
             <mat-icon>last_page</mat-icon>
           </button>
           <div style="padding: 15px;">{{ 'sidenav.tab.Info' | translate }}</div>
@@ -57,7 +57,7 @@
         </mat-sidenav>
 
         <mat-sidenav-content style="margin-left: 0 !important;">
-          <button mat-raised-button (click)="state.changeMapView(sidenav)" class="app-btn">
+          <button (click)="state.changeMapView(sidenav)" class="app-btn">
             <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
           </button>
 

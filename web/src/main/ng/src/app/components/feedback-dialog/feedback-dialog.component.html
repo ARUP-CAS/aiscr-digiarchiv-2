@@ -1,6 +1,5 @@
 <h1 mat-dialog-title>{{ 'dialog.title.Odeslat komentář' | translate }}</h1>
 <div mat-dialog-content class="app-pt-1">
-  <!-- fixit - captcha is hidden -->
   <re-captcha id="recaptcha" name="recaptcha" size="invisible" #captchaRef (resolved)="resolved($event)" (error)="errored($event)" errorMode="handled"></re-captcha>
   <div class="app-fxLayout app-column app-gap-4">
     <mat-form-field appearance="outline">
