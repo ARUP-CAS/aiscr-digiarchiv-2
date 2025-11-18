@@ -8,7 +8,7 @@
     <mat-card-title class="app-fxLayout app-row app-gap-4">
       <div class="app-fxFlex" (click)="service.showInMap(result, false, false, isChild())">
         @if (!state.isMapaCollapsed && !isChild() && !mapDetail()) {
-          <a><mat-icon>info</mat-icon></a>
+          <a class="app-icon-info"><mat-icon>info</mat-icon></a>
         }
         <mat-icon class="app-entity-akce" [matTooltip]="'entities.akce.title' | translate">{{ config.entityIcons["akce"] }}</mat-icon>
         @if (isChild()) {

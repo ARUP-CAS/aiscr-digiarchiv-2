@@ -8,15 +8,15 @@
 
     </div>
   }
-  <div #leftElement class="app-display-table app-container">
 
+  <div #leftElement class="app-display-table app-container">
     <div class="app-table-cell" >
       <mat-sidenav-container class="app-sidenav-container">
         <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="overflow-x: hidden;"><!--[(opened)]="opened"-->
           <button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
             <mat-icon>last_page</mat-icon>
           </button>
-          <div style="padding: 15px;">{{ 'sidenav.tab.Info' | translate }}</div>
+          <div class="app-p-4">{{ 'sidenav.tab.Info' | translate }}</div>
           <mat-tab-group [selectedIndex]="1">
             <mat-tab [label]="'sidenav.tab.Filtry' | translate">
               <div class="app-facets">
@@ -29,7 +29,7 @@
             <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
               @if (showType !== 'marker') {
                 <div>
-                  <mat-card class="app-result-item app-row-gap-16">
+                  <mat-card class="app-result-item app-pl-4 app-pr-4">
                     {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
                   </mat-card>
                 </div>
@@ -56,12 +56,10 @@
           </mat-tab-group>
         </mat-sidenav>
 
-        <mat-sidenav-content style="margin-left: 0 !important;">
+        <mat-sidenav-content class="app-ml-0">
           <button (click)="state.changeMapView(sidenav)" class="app-btn">
             <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
           </button>
-
-
           <div class="app-map" leaflet [leafletOptions]="options"
             (leafletMapReady)="onMapReady($event)"
             [leafletLayersControl]="layersControl"
@@ -93,8 +91,6 @@
               <app-entity-container [result]="state.mapResult" [mapDetail]="true"></app-entity-container>
             }
           </div>
-
-
         </mat-sidenav-content>
       </mat-sidenav-container>
     </div>

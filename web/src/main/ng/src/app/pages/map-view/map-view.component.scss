@@ -23,42 +23,88 @@
   }
 }
 
+
 ::ng-deep {
-  // .leaflet-control-container {
-  //   .leaflet-left {
-  //     .leaflet-control {
-  //       display: inline-block;
-  //       float: none;
-  //     }
+  app-paginator {
+    .app-num {
+      margin-right: 8px !important;
+    }
 
-  //     .leaflet-control-zoom {
-  //       a {
-  //         border-bottom: 0;
-  //         float: left;
-  //         line-height: 26px;
+    .app-sort {
+      display: none;
+    }
 
-  //         &:first-child {
-  //           border-right: 1px solid #ccc;
-  //         }
-  //       }
-  //     }
+    .mat-mdc-paginator {
+      .mat-mdc-paginator-range-label {
+        margin: 0;
+      }
+    }
+  }
 
-  //     .location-filter {
-  //       a {
-  //         background-position-x: center;
-  //         background-position-y: 2px;
-  //       }
-  //     }
-  //   }
-  // }
+  .mat-mdc-card {
+    &.app-card-result {
+      margin-bottom: 0 !important;
+      box-shadow: none;
+      border-radius: 0;
+      border-bottom: 1px solid var(--app-color-gray-3);
 
-  .leaflet-right {
-    z-index: 1003;
+      .mat-mdc-card-header {
+        .mat-mdc-card-title {
+          .app-icon-info {
+            margin-right: 4px;
 
-    .leaflet-control {
-      .leaflet-control-layers-toggle {
-        width: 30px;
-        height: 30px;
+            .mat-icon {
+              vertical-align: baseline;
+              color: var(--app-color-primary-darker-rgb) !important;
+            }
+          }
+        }
+      }
+
+      .mat-mdc-card-content,
+      .mat-mdc-card-actions {
+        display: none !important;
+      }
+    }
+  }
+  
+  .app-map {
+    // .leaflet-control-container {
+    //   .leaflet-left {
+    //     .leaflet-control {
+    //       display: inline-block;
+    //       float: none;
+    //     }
+
+    //     .leaflet-control-zoom {
+    //       a {
+    //         border-bottom: 0;
+    //         float: left;
+    //         line-height: 26px;
+
+    //         &:first-child {
+    //           border-right: 1px solid #ccc;
+    //         }
+    //       }
+    //     }
+
+    //     .location-filter {
+    //       a {
+    //         background-position-x: center;
+    //         background-position-y: 2px;
+    //       }
+    //     }
+    //   }
+    // }
+
+    .leaflet-right {
+      z-index: 1003;
+
+      .leaflet-control {
+        .leaflet-control-layers-toggle {
+          width: 30px;
+          height: 30px;
+        }
       }
     }
   }
