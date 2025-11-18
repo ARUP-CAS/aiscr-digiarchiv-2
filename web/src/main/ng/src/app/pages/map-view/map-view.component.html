@@ -29,7 +29,7 @@
             <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
               @if (showType !== 'marker') {
                 <div>
-                  <mat-card class="app-result-item app-pl-4 app-pr-4">
+                  <mat-card class="app-card-result app-p-2 app-pl-4">
                     {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
                   </mat-card>
                 </div>

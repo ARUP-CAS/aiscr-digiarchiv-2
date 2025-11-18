@@ -36,7 +36,7 @@ main {
   //@import "./app-mapa";
   @import "./app-export";
   //@import "./app-facets";
-  @import "./app-sidenav-container";
+  //@import "./app-sidenav-container";
 }
 
 //@import "./app-footer";
@@ -127,7 +127,7 @@ main {
       } */
 
       &.app-left {
-        width: $app-table-cell-left-width;
+        width: var(--app-sidenav-width);
       }
     }
   }

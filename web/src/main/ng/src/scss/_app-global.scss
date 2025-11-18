@@ -250,6 +250,8 @@ a {
 
 
 .app-badge-op {
+  display: inline-flex;
+  vertical-align: text-top;
   position: relative;
   font-size: 10px !important;
   font-weight: 500;
