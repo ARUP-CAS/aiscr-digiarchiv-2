@@ -14,8 +14,7 @@
   @include mat.toolbar-overrides((
     container-background-color: var(--mat-sys-primary),
     container-text-color: var(--app-color-lightnes),
-    title-text-size: 14px,
-    //standard-height: 80px
+    title-text-size: 14px
   ));
 
 
@@ -514,13 +513,8 @@
 }
 
 
-
-
-
-
-
-@for $i from 0 through 5 {
-  mat-card.mat-elevation-z#{$i} {
-    @include mat.elevation($i);
-  }
-}
+// @for $i from 0 through 5 {
+//   mat-card.mat-elevation-z#{$i} {
+//     @include mat.elevation($i);
+//   }
+// }

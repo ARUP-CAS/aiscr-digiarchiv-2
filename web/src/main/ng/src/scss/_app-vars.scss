@@ -1,5 +1,8 @@
 // --- VARIABLES ---
 
+// get color from pallete
+// #{map.get(map.get(my-theme.$primary-palette, primary), 30)};
+
 :root {
   --app-color-lightnes: #ffffff;
   --app-color-lightnes-rgb: 255, 255, 255;
