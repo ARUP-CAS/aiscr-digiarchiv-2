@@ -115,6 +115,13 @@
     panel-background-color: var(--app-color-lightnes),
     trigger-text-size: 12px,
   ));
+  .cdk-overlay-pane {
+    width: auto !important;
+
+    .mat-mdc-option {
+      min-height: var(--app-menu-item-height);
+    }
+  }
 
 
   // --- DATE PICKER ---
@@ -446,6 +453,10 @@
   .mat-mdc-menu-panel {
     min-width: 100%;
     max-width: 100%;
+
+    .mat-mdc-menu-item {
+      min-height: var(--app-menu-item-height);
+    }
 
     .app-badge-op {
       margin-right: 8px;

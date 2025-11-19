@@ -6,12 +6,10 @@
 // @use "angular-material-css-vars" as mat-css-vars;
 
 @use "scss/theme-colors";
-@use "scss/app-variables-old";
-@use "scss/app-vars";
 
+@use "scss/app-vars";
 @use "scss/app-flex-layout";
 @use "scss/app-global";
-//@use "scss/app-mat-override-old";
 @use "scss/app-layout";
 
 @use "scss/app-adv-search";
@@ -20,19 +18,3 @@
 @use "scss/app-export";
 @use "scss/app-print";
 @use "scss/app-mat-override";
-
-
-
-// @include mat-css-vars.init-material-css-vars(); 
-
-// html {
-//   @include mat.theme((
-//     color: (
-//       theme-type: light,
-//       primary: mat.$blue-palette,
-//       tertiary: mat.$red-palette,
-//     ),
-//     typography: Roboto,
-//     density: 0,
-//   ));
-// }

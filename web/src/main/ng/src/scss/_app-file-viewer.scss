@@ -1,7 +1,6 @@
 // --- FILE VIEWER ---
 
 @use "app-mixins-icon" as *;
-@use "app-variables-old" as *;
 
 app-file-viewer {
   .mat-dialog-title {
@@ -51,7 +50,7 @@ app-file-viewer {
         }
       }
 
-      @media #{$lt-md} {
+      @media only screen and (max-width: 959px) {
         flex-wrap: wrap;
 
         .app-controls,
@@ -70,7 +69,7 @@ app-file-viewer {
             img {
               max-width: 100%;
 
-              @media #{$lt-md} {
+              @media only screen and (max-width: 959px) {
                 width: 100%;  
               }
             }

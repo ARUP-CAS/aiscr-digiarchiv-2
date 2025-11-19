@@ -1,7 +1,6 @@
 // --- LAYOUT ---
 
 @use "app-mixins-icon" as *;
-@use "app-variables-old" as *;
 
 html,
 body {
@@ -36,7 +35,7 @@ main {
   display: block;
   width: calc(100% - (16px * 2)) !important;
   height: inherit;
-  min-height: calc(100% - #{$app-footer-height});
+  min-height: calc(100% - var(--app-footer-height));
 
   // for view map resize container
   .app-view-map & {
@@ -65,11 +64,11 @@ main {
     &.app-left {
       width: 100%;
 
-      @media #{$gt-sm} {
+      @media only screen and (min-width: 960px) {
         padding-right: 32px;
       }
 
-      @media #{$lt-md} {
+      @media only screen and (max-width: 959px) {
         padding: 16px0 0 0;
       }
     }
@@ -77,7 +76,7 @@ main {
     &.app-right {
       padding-bottom: 16px;
       
-      @media #{$lt-md} {
+      @media only screen and (max-width: 959px) {
         padding-top: 0;
       }
     }
@@ -101,10 +100,10 @@ main {
 }
 
 // mq
-@media #{$gt-sm} {
+@media only screen and (min-width: 960px) {
   .app-display-table {
     display: table;
-    height: calc(100% - #{$app-footer-height});
+    height: calc(100% - var(--app-footer-height));
 
     .app-table-cell {
       display: table-cell;
