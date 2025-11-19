@@ -60,8 +60,8 @@
         </div>
       </mat-card-content>
       @if (!isChild()) {
-        <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
-          <div fxFlex class="app-metadata">
+        <mat-card-actions class="app-fxLayout app-row app-end-v">
+          <div class="app-fxFlex app-metadata">
             @if (_result.az_dj_pian?.length > 0 ) {
               {{'card.desc.Počet archeologickych zaznamu' | translate}}: <strong>{{_result.az_dj_pian.length }}</strong>
               <span class="app-pipe"></span>

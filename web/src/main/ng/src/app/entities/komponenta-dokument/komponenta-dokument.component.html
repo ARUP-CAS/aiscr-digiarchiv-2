@@ -9,8 +9,8 @@
       </mat-card-title>
     </mat-card-header>
     @if(!isChild()){
-      <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
-        <div fxFlex class="app-metadata">
+      <mat-card-actions class="app-fxLayout app-row app-end-v">
+        <div class="app-fxFlex app-metadata">
           @if(_result.dokument?.length > 0){
             <ng-container>
               {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{_result.dokument?.length}}</strong>

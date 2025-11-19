@@ -26,7 +26,7 @@
   </mat-card-header>
   <mat-card-content>
     @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
-      <div class="app-thumb" fxLayout="row" fxFlexFill fxLayoutAlign="center center" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+      <div class="app-fxLayout app-row app-fill app-center-h app-center-v app-thumb" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
     }
@@ -117,8 +117,8 @@
     </mat-card-content>
 
     @if (!isChild()) {
-      <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
-        <div fxFlex></div>
+      <mat-card-actions class="app-fxLayout app-row app-end-v">
+        <div class="app-fxFlex"></div>
         <!-- <app-result-actions [inDocument]="inDocument" [result]="result" [bibTex]="''" [isDocumentDialogOpen]="false"
       [detailExpanded]="detailExpanded" [mapDetail]="mapDetail" (onToggleDetail)="toggleDetail()"></app-result-actions> -->
       <app-result-actions [inDocument]="inDocument()" [result]="result" [isDocumentDialogOpen]="isDocumentDialogOpen()"  (onToggleDetail)="toggleDetail()"

@@ -8,8 +8,8 @@
 </h1>
 <div mat-dialog-content>
   @if (selectedFile) {
-    <div fxLayout="row" fxLayoutAlign="start baseline" class="app-toolbar-wrapper">
-      <div fxFlex class="app-controls">
+    <div class="app-fxLayout app-row app-baseline app-toolbar-wrapper">
+      <div class="app-fxFlex app-controls">
         <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
         <span class="app-pipe"></span>
         <mat-form-field>

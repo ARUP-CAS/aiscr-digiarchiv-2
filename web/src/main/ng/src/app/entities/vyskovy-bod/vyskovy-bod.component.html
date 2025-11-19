@@ -27,8 +27,8 @@
 }
 
 @if (!isChild()) {
-  <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
-    <div fxFlex class="app-metadata">
+  <mat-card-actions class="app-fxLayout app-row app-end-v">
+    <div class="app-fxFlex app-metadata">
     </div>
     <app-result-actions [inDocument]="inDocument()" [result]="_result" [detailExpanded]="detailExpanded()" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
       [bibTex]="bibTex"

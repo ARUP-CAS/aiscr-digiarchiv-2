@@ -1,20 +1,6 @@
 <div class="app-fxLayout app-row app-center-v app-pl-4 app-pr-4 app-searchbar-wrapper">
   <div class="app-container">
     <div class="app-fxLayout app-row app-center-v app-search-form">
-      <!-- <div class="app-fxFlex app-fx-left">
-        <input type="text" [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" 
-        name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above" />
-        <span fxFlex class="app-controls">
-          <span class="app-mobile-controls fxHide_gt-xs">
-            <a (click)="toggleMapa()">
-              <mat-icon>{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
-            </a>
-          </span>
-          <a (click)="search()">
-            <mat-icon>search</mat-icon>
-          </a>
-        </span>
-      </div> -->
       <mat-form-field class="app-fxFlex app-left" appearance="outline">
         <input matInput [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above">
         <mat-icon matSuffix (click)="toggleMapa()" class="app-mobile-controls fxHide_gt-xs app-cursor-pointer app-btn-map">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>

@@ -3,7 +3,7 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-        <div fxFlex>
+        <div class="app-fxFlex">
           {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;
           @if (!isChild()) {
             <span >{{ _result.ident_cely }}</span>
@@ -126,8 +126,8 @@
 @if (inDocument()) {
   <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" >
     <mat-card-header>
-      <mat-card-title fxLayout="row" fxLayoutGap="16px">
-        <div fxFlex>
+      <mat-card-title class="app-fxLayout app-row app-gap-4">
+        <div class="app-fxFlex">
           {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;
           <span>{{ _result.ident_cely }}</span>
           <!-- <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a> -->
@@ -230,8 +230,8 @@
     </mat-card-content>
   }
   @if (!isChild()) {
-    <mat-card-actions fxLayout="row" fxLayoutAlign="start end">
-      <div fxFlex class="app-metadata">
+    <mat-card-actions class="app-fxLayout app-row app-end-v">
+      <div class="app-fxFlex app-metadata">
         @if (_result.akce?.length > 0) {
           {{ 'card.desc.Počet akcí' | translate }}: <strong>{{_result.akce?.length}}</strong>
           <span class="app-pipe"></span>
