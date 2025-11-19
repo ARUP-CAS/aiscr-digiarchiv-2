@@ -1,9 +1,10 @@
 // --- EXPORT ---
 
-app-export, app-export-mapa {
+app-export, 
+app-export-mapa {
   display: block;
   background-color: var(--app-color-lightnes);
-  padding: $app-searchbar-field-icon-gap;
+  padding: 10px;
 
   table {
     border-collapse: collapse;

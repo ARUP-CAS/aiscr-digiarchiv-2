@@ -29,17 +29,7 @@ mat-sidenav {
 // main wrapper
 main {
   background-color: var(--app-color-gray-1);
-
-  //@import "./app-results";
-  //@import "./app-stats";
-  //@import "./app-result-item";
-  //@import "./app-mapa";
-  @import "./app-export";
-  //@import "./app-facets";
-  //@import "./app-sidenav-container";
 }
-
-//@import "./app-footer";
 
 // display table layout
 .app-display-table {
@@ -134,37 +124,37 @@ main {
 }
 
 // --- fxHide FIX (using own class instead fx attributs) -> https://github.com/angular/flex-layout/issues/1228 ---
-@media #{$md} {
+@media only screen and (min-width: 960px) and (max-width: 1279px) {
   .fxHide_md {
     display: none !important;
   }
 }
 
-@media #{$sm} {
+@media only screen and (min-width: 600px) and (max-width: 959px) {
   .fxHide_sm {
     display: none !important;
   }
 }
 
-@media #{$xs} {
+@media only screen and (max-width: 599px) {
   .fxHide_xs {
     display: none !important;
   }
 }
 
-@media #{$gt-md} {
+@media only screen and (min-width: 1280px) {
   .fxHide_gt-md {
     display: none !important;
   }
 }
 
-@media #{$gt-sm} {
+@media only screen and (min-width: 960px) {
   .fxHide_gt-sm {
     display: none !important;
   }
 }
 
-@media #{$gt-xs} {
+@media only screen and (min-width: 600px) {
   .fxHide_gt-xs {
     display: none !important;
   }
