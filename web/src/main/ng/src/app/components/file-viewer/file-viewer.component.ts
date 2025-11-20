@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, PLATFORM_ID, signal } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 //import { NguCarousel, NguCarouselConfig } from '@ngu/carousel';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,9 +22,9 @@ import {
   NguCarousel, 
   NguCarouselConfig, 
   NguCarouselDefDirective,
-  NguCarouselNextDirective,
-  NguCarouselPrevDirective,
-  NguItemComponent
+  // NguCarouselNextDirective,
+  // NguCarouselPrevDirective,
+  // NguItemComponent
 } from '@ngu/carousel';
 import { LicenseDialogComponent } from '../license-dialog/license-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,10 +34,9 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, FormsModule,
+    TranslateModule, RouterModule, FlexLayoutModule, FormsModule, MatDialogModule,
     MatCardModule, MatIconModule,  MatButtonModule, MatFormFieldModule, MatInputModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
-    NguCarousel,
     NguCarousel,
     NguCarouselDefDirective
   ],

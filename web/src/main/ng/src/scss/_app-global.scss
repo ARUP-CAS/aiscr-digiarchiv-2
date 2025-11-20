@@ -100,6 +100,10 @@ a {
   box-shadow: none !important;
 }
 
+.app-va-center {
+  vertical-align: middle;
+}
+
 // colors
 .app-color-warning {
   color: var(--app-color-waring) !important;
@@ -120,6 +124,10 @@ a {
 
   &:last-child {
     display: none;
+  }
+
+  .app-fxLayout & {
+    height: 16px;
   }
 }
 

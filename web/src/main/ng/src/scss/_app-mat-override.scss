@@ -496,6 +496,15 @@
       }
     }
   }
+  .app-file-viewer {
+    @include mat.dialog-overrides((
+      container-max-width: 1000px
+    ));
+
+    .mat-mdc-dialog-content {
+      max-height: unset;
+    }
+  }
 
 
   // --- SIDENAV ---
