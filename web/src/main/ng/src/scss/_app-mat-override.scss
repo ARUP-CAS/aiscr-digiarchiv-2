@@ -539,7 +539,12 @@
       container-background-color: transparent
     ));
   }
-  
+
+
+  // -- DIVIDER
+  @include mat.divider-overrides((
+    color: var(--app-color-gray-3)
+  ));
 }
 
 
