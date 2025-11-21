@@ -1,7 +1,5 @@
 // --- LAYOUT ---
 
-@use "app-mixins-icon" as *;
-
 html,
 body {
   height: 100%;
@@ -21,7 +19,6 @@ mat-sidenav {
 }
  
 mat-sidenav {
-  @import "./app-sidenav-list";
   width: 250px;
 }
 

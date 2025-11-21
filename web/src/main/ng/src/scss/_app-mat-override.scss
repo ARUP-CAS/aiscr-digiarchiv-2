@@ -79,6 +79,27 @@
       }
     }
   }
+  .app-sidenav-list {
+    .mat-mdc-list-item {
+      border-radius: 0;
+      padding: 24px 16px;
+
+      &.app-active {
+        background-color: var(--app-color-gray-1) !important;
+        border-radius: 0;
+
+        .mdc-list-item__primary-text {
+          color: var(--app-color-primary) !important;
+          font-weight: 900;
+        }
+      }
+
+      .mat-icon {
+        @include setIcon(20, inherit, sub);
+        margin-right: var(--app-gap-icon);
+      } 
+    }
+  }
 
 
   // --- FORM FIELD ---

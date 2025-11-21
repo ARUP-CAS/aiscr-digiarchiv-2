@@ -9,10 +9,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { RouterModule } from '@angular/router';
+import { AppConfiguration } from '../../app-configuration';
 
 @Component({
   imports: [
     TranslateModule,
+    RouterModule,
     MatIconModule,
     MatListModule
 ],
@@ -41,6 +45,7 @@ export class SidenavListComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private dialog: MatDialog,
     public state: AppState,
+    public config: AppConfiguration,
     private service: AppService,
     @Inject(DOCUMENT) private document: Document
   ) { }

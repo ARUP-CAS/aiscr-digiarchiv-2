@@ -1,9 +1,9 @@
-<mat-nav-list>
+<mat-nav-list class="app-sidenav-list">
   <a mat-list-item routerLink="home" (click)="onSidenavClose()" routerLinkActive="app-active">
     <mat-icon>home</mat-icon>
     Home
   </a>
-  <a mat-list-item routerLink="napoveda" (click)="onSidenavClose()" routerLinkActive="app-active">
+  <a mat-list-item [href]="config.helpUrl" (click)="onSidenavClose()" target="_blank">
     <mat-icon>help_outline</mat-icon>
     {{ 'navbar.desc.Nápověda' | translate }}
   </a>
@@ -19,7 +19,7 @@
     </a>
   }
   @if (!state.logged) {
-    <a mat-list-item href="http://api.archeologickamapa.cz/registrace/0/" target="_blank">
+    <a mat-list-item [href]="config.registrationUrl" target="_blank">
       <mat-icon>how_to_reg</mat-icon>
       {{ 'navbar.desc.Registrovat uživatele' | translate }}
     </a>
