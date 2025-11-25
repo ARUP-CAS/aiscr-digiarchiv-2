@@ -168,7 +168,9 @@ public class SamostatnyNalez implements FedoraModel {
         }
 
         IndexUtils.addRefField(idoc, fieldPrefix + "okres", okres);
+        if (okres != null) {
         IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(okres.getId()).getString("kraj_nazev")); 
+        }
         IndexUtils.addVocabField(idoc, fieldPrefix + "projekt", projekt);
         IndexUtils.addVocabField(idoc, fieldPrefix + "okolnosti", okolnosti);
         IndexUtils.addVocabField(idoc, fieldPrefix + "obdobi", obdobi);
@@ -241,9 +243,9 @@ public class SamostatnyNalez implements FedoraModel {
         for (Object f : indexFields) {
             String s = (String) f;
             if (s.contains(".")) {
-                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
+                IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
             } else {
-                for (String sufix : SolrSearcher.prSufixAll) {
+                for (String sufix : prSufix) {
                     if (idoc.containsKey(s)) {
                         IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
                     }
@@ -251,9 +253,26 @@ public class SamostatnyNalez implements FedoraModel {
                         IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
                     }
                 }
-                
+
             }
-        }
+        } 
+//        
+//        for (Object f : indexFields) {
+//            String s = (String) f;
+//            if (s.contains(".")) {
+//                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
+//            } else {
+//                for (String sufix : SolrSearcher.prSufixAll) {
+//                    if (idoc.containsKey(s)) {
+//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
+//                    }
+//                    if (idoc.containsKey(s + "_" + sufix)) {
+//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
+//                    }
+//                }
+//                
+//            }
+//        }
 
         // Add value of vocab fields
         for (String sufix : SolrSearcher.prSufixAll) {

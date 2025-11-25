@@ -77,6 +77,14 @@ export class LokalitaComponent extends Entity {
       this._result = res.response.docs[0];
       // this.getDokuments();
       this.getExtZdroj();
+      this._result.az_dokumentacni_jednotka.forEach((dj: any) => {
+        if (dj.dj_pian) {
+          const p = this._result.pian.find((p: any) => p.ident_cely === dj.dj_pian.id);
+          if (p) {
+            dj.dj_pian = p;
+          }
+        }
+      });
       this.hasDetail = true;
     });
   }

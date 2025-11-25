@@ -136,7 +136,7 @@ public class DokumentCast {
                             String kraj = kat.getString("kraj_nazev");
             
             
-                            IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
+                            IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres); 
                             IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                             JSONObject li2 = new JSONObject()
                                     .put("pristupnost", doc.getString("pristupnost"))

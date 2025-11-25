@@ -117,7 +117,7 @@ public class FedoraHarvester {
      */
     public JSONObject harvest() throws IOException {
         Instant start = Instant.now();
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             ret = new JSONObject();
             getModels(solr);
             solr.commit("oai");
@@ -150,7 +150,7 @@ public class FedoraHarvester {
      */
     
     public JSONObject update(String from) throws IOException {
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             ret = new JSONObject();
             return update(from, solr);
         }
@@ -295,7 +295,7 @@ public class FedoraHarvester {
      */
     public JSONObject indexDeleted() throws IOException {
         Instant start = Instant.now();
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             processModel("deleted", solr);
 
             solr.commit("oai");
@@ -327,7 +327,7 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexModels(String[] models) throws Exception {
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             indexModels(models, solr); 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -375,7 +375,7 @@ public class FedoraHarvester {
 //        String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
         String solrResp = IndexUtils.requestSolr(url);
         JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             for (int i = 0; i < docs.length(); i++) {
                 String id = docs.getJSONObject(i).getString("ident_cely");
                 try {
@@ -400,7 +400,7 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexId(String id) throws Exception {
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             JSONObject j = indexId(id, true, solr);
             return j;
         }
@@ -733,8 +733,8 @@ public class FedoraHarvester {
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex.toString());
-            errors.put(model + " " + id + ":  " + ex);
+            LOGGER.log(Level.SEVERE, null, ex); 
+            errors.put(model + " " + id + ":  " + ex.toString());
             // throw new Exception(ex);
         }
     }

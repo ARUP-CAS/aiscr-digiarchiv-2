@@ -16,6 +16,8 @@ import { DatePipe, DecimalPipe, isPlatformBrowser } from '@angular/common';
 
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { PaginatorI18n } from './components/paginator/paginator-i18n';
 
 
 export const MY_FORMATS = {
@@ -31,17 +33,22 @@ export const MY_FORMATS = {
   },
 };
 
+export function createCustomMatPaginatorIntl(
+  translateService: TranslateService
+) { return new PaginatorI18n(translateService); }
+
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideAppInitializer(() => inject(AppConfiguration).load()),
-    provideRouter(routes), 
+    provideRouter(routes),
     provideClientHydration(withEventReplay()),
 
-    {provide: DateAdapter, useClass: MomentDateAdapter,deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]},
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-    
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: 'api/assets/i18n/',
@@ -51,11 +58,16 @@ export const appConfig: ApplicationConfig = {
       lang: 'en'
     }),
 
+    {
+      provide: MatPaginatorIntl, deps: [TranslateService],
+      useFactory: createCustomMatPaginatorIntl
+    },
+
     provideHttpClient(withFetch()),
     // { provide: APP_INITIALIZER, useFactory: (config: AppConfiguration) => () => config.load(), deps: [AppConfiguration], multi: true },
-    TranslateService, 
+    TranslateService,
     DecimalPipe, DatePipe,
-    AppState, 
+    AppState,
     AppService
   ]
 };

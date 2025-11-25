@@ -111,6 +111,7 @@ public class LokalitaSearcher implements EntitySearcher {
                 //String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
                 SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
             }
+            addPians(jo, client, request);
         } else {
             JSONObject doc = jo.getJSONObject("doc");
             if (LoginServlet.userId(request) != null) {
@@ -118,9 +119,41 @@ public class LokalitaSearcher implements EntitySearcher {
             }
             String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
             SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
+            
+            addPians(jo, client, request);
         }
     }
 
+//    public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
+//        String pristupnost = LoginServlet.pristupnost(request.getSession());
+//        if ("E".equals(pristupnost)) {
+//            pristupnost = "D";
+//        }
+//        PIANSearcher ps = new PIANSearcher();
+//        String[] fs = ps.getSearchFields(pristupnost);
+//        String fields = String.join(",", fs);
+//
+//        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+//        for (int i = 0; i < ja.length(); i++) {
+//            JSONObject doc = ja.getJSONObject(i);
+//            if (doc.has("az_dj_pian")) { 
+//                JSONArray cdjs = doc.getJSONArray("az_dj_pian");
+//                for (int j = 0; j < cdjs.length(); j++) {
+//                    String cdj = cdjs.getString(j);
+//                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+//                    if (sub != null) {
+//                        String docPr = sub.getString("pristupnost");
+//                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
+//                            sub.remove("pian_chranene_udaje");
+//                        }
+//                        doc.append("pian", sub);
+//                    }
+//
+//                }
+//            }
+//        }
+//    }
+    
     public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -133,20 +166,18 @@ public class LokalitaSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.has("az_dj_pian")) { 
+            if (doc.has("az_dj_pian")) {
                 JSONArray cdjs = doc.getJSONArray("az_dj_pian");
-                for (int j = 0; j < cdjs.length(); j++) {
-                    String cdj = cdjs.getString(j);
-                    JSONObject sub = SolrSearcher.getById(client, cdj, fields);
-                    if (sub != null) {
-                        String docPr = sub.getString("pristupnost");
-                        if (docPr.compareToIgnoreCase(pristupnost) > 0) {
-                            sub.remove("pian_chranene_udaje");
-                        }
-                        doc.append("pian", sub);
-                    }
-
-                }
+                String[] pians = (String[]) cdjs.toList().toArray(String[]::new);
+        
+                SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", pians ) + "\")")
+                    .addFilterQuery("entity:pian")
+                    .setSort("ident_cely", SolrQuery.ORDER.asc)
+                        .setFields(fields)
+                    .setParam("stats", false)
+                    .setFacet(false);
+                JSONObject joPians = SearchUtils.json(query, client, "entities");
+                doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs"));
             }
         }
     }

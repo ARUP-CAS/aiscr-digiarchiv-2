@@ -103,6 +103,15 @@ export class DokumentComponent extends Entity {
   }
 
   override okres() {
+
+    if (this._result.location_info) {
+      this._result.location_info.forEach((li: { okres: string; }) => {
+        if (!this.okresy.includes(li.okres)) {
+          this.okresy.push(li.okres);
+        }
+      });
+    }
+
     if (this._result.hasOwnProperty('f_okres')) {
       const okresy = [];
       const katastry = [];

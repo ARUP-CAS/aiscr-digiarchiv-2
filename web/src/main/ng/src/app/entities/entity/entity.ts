@@ -80,6 +80,7 @@ export class Entity {
         if (this.mapDetail) {
           this.getFullId();
         }
+        this.okres();
       }
     });
   }
@@ -150,7 +151,7 @@ export class Entity {
 
   okres() {
     if (this._result.hasOwnProperty('f_okres')) {
-      const okresy = [];
+      this.okresy = [];
       const katastry = [];
       let ret = '';
       for (let idx = 0; idx < this._result.f_okres.length; idx++) {
@@ -158,7 +159,7 @@ export class Entity {
         const katastr = this._result.f_katastr[idx];
 
         if (katastry.indexOf(katastr) < 0) {
-          okresy.push(okres);
+          this.okresy.push(okres);
           katastry.push(katastr);
           if (idx > 0) {
             ret += ', ';
@@ -166,6 +167,7 @@ export class Entity {
           ret += katastr + ' (' + okres + ')';
         }
       }
+      console.log(ret)
       return ret;
     } else {
       return '';

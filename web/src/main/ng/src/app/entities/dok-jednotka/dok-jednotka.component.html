@@ -79,7 +79,7 @@
         </mat-panel-title>
       }
     </mat-expansion-panel-header>
-    @if (_detailExpanded || !inDocument()) {
+    @if (_detailExpanded || !inDocument()) { 
       <!--*ngIf="result.dj_negativni_jednotka"-->
       <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
       {{ _result.dj_negativni_jednotka ? ('negativní' | translate) : ('pozitivní' | translate) }}
@@ -87,10 +87,10 @@
     @if (_detailExpanded || !inDocument()) {
       <mat-accordion multi="true">
         @if (_result.dj_pian) {
-          <app-pian [result]="_result.dj_pian" [isChild]="true"></app-pian>
+          <app-pian [result]="_result.dj_pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
         }
-        @if (_result.adb_ident_cely) {
-          <app-adb [result]="_result.adb_ident_cely" [isChild]="true"></app-adb>
+        @if (_result.dj_adb) {
+          <app-adb [result]="_result.dj_adb" [isChild]="true" [detailExpanded]="detailExpanded()"></app-adb>
         }
         @for (komponenta of _result.dj_komponenta; track komponenta.ident_cely) {
           <app-komponenta [result]="komponenta"></app-komponenta>

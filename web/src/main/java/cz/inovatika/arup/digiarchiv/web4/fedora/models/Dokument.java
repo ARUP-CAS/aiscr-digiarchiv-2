@@ -311,6 +311,8 @@ public class Dokument implements FedoraModel {
             IndexUtils.addByPath(idoc, orig, dest, Arrays.asList(SolrSearcher.prSufixAll), false);
         }
         
+        
+        
     }
 
     public void setFullText(SolrInputDocument idoc) {

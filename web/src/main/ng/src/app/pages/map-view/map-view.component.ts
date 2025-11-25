@@ -14,7 +14,12 @@ import 'leaflet.markercluster';
 import './locationfilter.js';
 import 'leaflet.polylinemeasure';
 declare var HeatmapOverlay: any;
-import 'wicket';
+
+import * as Wkt from 'wicket';
+//import {Wkt} from 'wicket';
+//import 'wicket';
+//declare var Wkt: any; 
+
 import 'leaflet.fullscreen/Control.FullScreen.js';
 
 import { HttpParams } from '@angular/common/http';
@@ -882,8 +887,9 @@ export class MapViewComponent {
         docIds: docIds,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
-      this.markersList.push(mrk);
+      // this.markersList.push(mrk);
       mrk.addTo(this.markers);
+      
       this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, docIds);
     });
   }
@@ -928,7 +934,7 @@ export class MapViewComponent {
         doc.pian_id.forEach((pian_id: string) => {
           const markerInList = this.markersList.find(p => p.options.id === pian_id);
           // const pianInList = this.piansList.find(p => p.id === pian_id);
-          console.log(markerInList)
+          // console.log(markerInList)
           if (!markerInList) {
             const p = pianIds.find(p => p.id === pian_id)
             if (!p) {
@@ -977,7 +983,7 @@ export class MapViewComponent {
           if (doc.ident_cely === this.currentMapId) {
             mrk.setIcon(this.hitIcon);
           }
-          this.markersList.push(mrk);
+          // this.markersList.push(mrk);
           mrk.addTo(this.markers);
         });
       }
@@ -1113,8 +1119,8 @@ export class MapViewComponent {
       return;
     }
     try {
-
       const wkt = new Wkt.Wkt();
+        console.log(wkt)
       wkt.read(geom_wkt_c);
       const wJson = wkt.toJson();
       wJson.id = ident_cely;
@@ -1135,9 +1141,14 @@ export class MapViewComponent {
         layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
         // layer.addTo(this.overlays);
         layer.addTo(this.markers);
+        console.log(this.markersList, this.markers)
+        if (this.currentMapId || this.markersList.length === 1) {
+          this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
+        }
+        
       }
     } catch (e) {
-      // console.log(e)
+      console.log(e)
     }
 
   }

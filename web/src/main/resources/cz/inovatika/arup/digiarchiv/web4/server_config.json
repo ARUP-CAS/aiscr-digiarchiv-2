@@ -190,6 +190,7 @@
         "dokument_doi",
         "dokument_organizace",
         "organizace:dokument_organizace",
+        "f_okres",
         "dokument_okres",
         "dokument_popis",
         "dokument_cast_archeologicky_zaznam",
