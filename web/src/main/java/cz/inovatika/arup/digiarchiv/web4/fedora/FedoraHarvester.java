@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web4.fedora;
 
 import cz.inovatika.arup.digiarchiv.web4.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web4.InitServlet;
+import static cz.inovatika.arup.digiarchiv.web4.LogAnalytics.LOGGER;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
@@ -9,13 +10,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +30,13 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient; 
-import org.apache.solr.client.solrj.impl.HttpSolrClient; 
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.CursorMarkParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -85,7 +91,7 @@ public class FedoraHarvester {
     private void writeStatusFile(String type, String status) throws IOException {
         File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_" + "status.txt");
         FileUtils.writeStringToFile(f, status, "UTF-8");
-    }  
+    }
 
     /**
      * Stop fedora index process
@@ -148,14 +154,13 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    
     public JSONObject update(String from) throws IOException {
         try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             ret = new JSONObject();
             return update(from, solr);
         }
     }
-    
+
     private JSONObject update(String from, SolrClient solr) throws IOException {
         try {
             String status = readStatusFile("update");
@@ -322,44 +327,44 @@ public class FedoraHarvester {
     /**
      * Index all records in one model from Fedora
      *
-     * @param models List of models to process 
+     * @param models List of models to process
      * @return
      * @throws IOException
      */
     public JSONObject indexModels(String[] models) throws Exception {
         try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            indexModels(models, solr); 
+            indexModels(models, solr);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             writeStatusFile("index", STATUS_FINISHED);
             errors.put(ex);
-        } 
+        }
         return ret;
     }
-    
+
     private JSONObject indexModels(String[] models, SolrClient solr) throws Exception {
         writeStatusFile("index", STATUS_RUNNING);
         Instant start = Instant.now();
-            for (String model : models) {
-                if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", false)) {
-                    searchModel(model, solr);
-                } else {
-                    processModel(model, solr);
-                }
+        for (String model : models) {
+            if (Options.getInstance().getJSONObject("fedora").optBoolean("useSearch", false)) {
+                searchModel(model, solr);
+            } else {
+                processModel(model, solr);
             }
-            solr.commit("oai");
-            solr.commit("entities");
-            for (String key : idocs.keySet()) {
-                solr.commit(key);
-            }
-            Instant end = Instant.now();
-            String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
-            ret.put("ellapsed time", interval);
-            ret.put("request time", FormatUtils.formatInterval(requestTime));
-            ret.put("process time", FormatUtils.formatInterval(processTime));
-            ret.put("errors", errors);
-            LOGGER.log(Level.INFO, "Index models finished in {0}", interval);
-        
+        }
+        solr.commit("oai");
+        solr.commit("entities");
+        for (String key : idocs.keySet()) {
+            solr.commit(key);
+        }
+        Instant end = Instant.now();
+        String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
+        ret.put("ellapsed time", interval);
+        ret.put("request time", FormatUtils.formatInterval(requestTime));
+        ret.put("process time", FormatUtils.formatInterval(processTime));
+        ret.put("errors", errors);
+        LOGGER.log(Level.INFO, "Index models finished in {0}", interval);
+
         writeRetToFile("models", start);
         return ret;
     }
@@ -507,7 +512,6 @@ public class FedoraHarvester {
 //            }
 //        }
 //    }
-
     /**
      * Harvest Fedora for model and index
      *
@@ -587,7 +591,7 @@ public class FedoraHarvester {
                 if ("deleted".equals(model)) {
                     processDeleted(id, null);
                 } else {
-                    processRecord(id, model); 
+                    processRecord(id, model);
                 }
 
                 ret.put(model, indexed++);
@@ -720,7 +724,7 @@ public class FedoraHarvester {
     }
 
     private void processRecord(String id, String model) throws Exception {
-        try { 
+        try {
             // http://192.168.8.33:8080/rest/AMCR-test/record/C-201449117/metadata
             // returns xml
             LOGGER.log(Level.FINE, "Processing record {0}", id);
@@ -733,7 +737,7 @@ public class FedoraHarvester {
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex); 
+            LOGGER.log(Level.SEVERE, null, ex);
             errors.put(model + " " + id + ":  " + ex.toString());
             // throw new Exception(ex);
         }
@@ -841,5 +845,83 @@ public class FedoraHarvester {
             solr.commit("oai");
             idocsOAI.clear();
         }
+    }
+
+    /**
+     * Index all records in one model from Fedora
+     *
+     * @param models List of models to process
+     * @return
+     * @throws IOException
+     */
+    public JSONObject checkDatestamp(String[] entities) throws Exception {
+        JSONObject ret = new JSONObject();
+        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            for (String entity : entities) {
+                int rows = 500;
+                SolrQuery query = new SolrQuery("*")
+                        .addFilterQuery("entity:" + entity)
+                        .setFields("ident_cely,datestamp")
+                        .setRows(rows)
+                        .setSort("ident_cely", SolrQuery.ORDER.asc);
+                boolean done = false;
+                QueryResponse rsp = null;
+                SolrDocumentList docs;
+                int totalDocs = 0;
+                int totalBad = 0;
+                String cursorMark = CursorMarkParams.CURSOR_MARK_START;
+                while (!done) {
+                    query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursorMark);
+                    try {
+                        rsp = solr.query("entities", query);
+                        docs = rsp.getResults();
+                        for (SolrDocument doc : docs) {
+                            String ident_cely = (String) doc.getFirstValue("ident_cely");
+                            Date solrdate = (Date) doc.getFirstValue("datestamp");
+
+                            String fedoraDate = FedoraUtils.getDateStamp(ident_cely);
+
+                            if (fedoraDate == null) {
+                                ret.append(entity, new JSONObject()
+                                        .put("ident_cely", ident_cely)
+                                        .put("solr_date", solrdate)
+                                        .put("fedoraDate", "unknown"));
+                                totalBad++;
+                            } else {
+                                if (Instant.parse(fedoraDate).truncatedTo(ChronoUnit.SECONDS ).isAfter(solrdate.toInstant())) {
+
+                                    ret.append(entity, new JSONObject()
+                                            .put("ident_cely", ident_cely)
+                                            .put("solr_date", solrdate.toInstant().toString())
+                                            .put("fedoraDate", fedoraDate));
+                                    totalBad++;
+                                }
+                            }
+
+                            totalDocs++;
+                        }
+                        LOGGER.log(Level.INFO, "Currently {0} files processed", totalDocs);
+
+                        String nextCursorMark = rsp.getNextCursorMark();
+
+                        if (cursorMark.equals(nextCursorMark) || rsp.getResults().size() < rows) {
+                            done = true;
+                        } else {
+                            cursorMark = nextCursorMark;
+                            // done = true;
+                        }
+                        ret.put("total", totalDocs);
+                        ret.put("totalBad", totalBad);
+                    } catch (SolrServerException e) {
+                        LOGGER.log(Level.SEVERE, null, e);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            writeStatusFile("index", STATUS_FINISHED);
+            errors.put(ex);
+        }
+        return ret;
     }
 }

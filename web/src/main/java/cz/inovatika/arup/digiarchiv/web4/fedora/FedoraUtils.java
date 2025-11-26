@@ -12,7 +12,13 @@ import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.logging.Level;
+import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -80,6 +86,17 @@ public class FedoraUtils {
   public static JSONObject getJsonMetadataById(String id) throws URISyntaxException, IOException, InterruptedException, Exception {
     return new JSONArray(request("record/" + id + "/metadata/fcr:metadata")).getJSONObject(0);
   }
+  
+  public static String getDateStamp(String id) {
+        try {
+            JSONObject json = FedoraUtils.getJsonMetadataById(id);
+            String d = json.getJSONArray("http://fedora.info/definitions/v4/repository#lastModified")
+                    .getJSONObject(0).getString("@value");
+            return d;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
   
   public static Path requestFile(String url, String filepath, String mime) throws URISyntaxException, IOException, InterruptedException {
     //HttpClient client = HttpClient. newHttpClient();

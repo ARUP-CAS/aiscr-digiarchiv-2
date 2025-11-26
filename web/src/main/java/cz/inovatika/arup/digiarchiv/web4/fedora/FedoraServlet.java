@@ -345,6 +345,22 @@ public class FedoraServlet extends HttpServlet {
                 return json;
             }
         },
+        CHECK_DATESTAMP {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    FedoraHarvester fh = new FedoraHarvester();
+                    if (req.getParameter("offset") != null) {
+                        fh.setOffset(Integer.parseInt(req.getParameter("offset")));
+                    }
+                    json = fh.checkDatestamp(req.getParameterValues("model"));
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
+        },
         REQUEST_RAW {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
