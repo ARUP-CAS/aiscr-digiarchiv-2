@@ -36,7 +36,7 @@ export class RelatedComponent implements OnInit {
   public children = signal<{ entity: string, ident_cely: string, result: any }[]>([]);
   numChildren: number = 0;
 
-  itemSize = 133;
+  itemSize = 190;
   vsSize = 0;
   math = Math;
   toProcess = signal<{ entity: string, ident_cely: string }[]>([]);
@@ -83,13 +83,14 @@ export class RelatedComponent implements OnInit {
       }
 
       const ids: { entity: string, ident_cely: string }[] = this.toProcess().splice(0, entitySize);
-
+      
       this.service.getIdAsChild(ids.map(e => e.ident_cely), entity).subscribe((res: any) => {
         const ch: { entity: string; ident_cely: any; result: any; }[] = [];
         res.response.docs.forEach((result: any) => {
           ch.push({ entity, ident_cely: result.ident_cely, result })
         });
-        this.children.set(ch);
+        
+        this.children.update(chi => [...chi, ...ch]);
         this.state.documentProgress = this.children().length / this.numChildren * 100;
         this.state.loading.set((this.children().length) < this.numChildren);
         if ((loadAll && this.state.loading()) || (entitySize < this.loadSize)) {

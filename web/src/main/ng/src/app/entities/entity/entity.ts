@@ -150,27 +150,12 @@ export class Entity {
   }
 
   okres() {
-    if (this._result.hasOwnProperty('f_okres')) {
-      this.okresy = [];
-      const katastry = [];
-      let ret = '';
-      for (let idx = 0; idx < this._result.f_okres.length; idx++) {
-        const okres = this._result.f_okres[idx];
-        const katastr = this._result.f_katastr[idx];
-
-        if (katastry.indexOf(katastr) < 0) {
-          this.okresy.push(okres);
-          katastry.push(katastr);
-          if (idx > 0) {
-            ret += ', ';
-          }
-          ret += katastr + ' (' + okres + ')';
+    if (this._result.location_info) {
+      this._result.location_info.forEach((li: { okres: string; }) => {
+        if (!this.okresy.includes(li.okres)) {
+          this.okresy.push(li.okres);
         }
-      }
-      console.log(ret)
-      return ret;
-    } else {
-      return '';
+      });
     }
   }
 

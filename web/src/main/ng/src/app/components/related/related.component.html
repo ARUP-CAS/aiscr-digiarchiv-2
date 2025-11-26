@@ -2,12 +2,13 @@
   <mat-expansion-panel [expanded]="true" class="app-panel-related-items virtual">
     <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
       <mat-panel-title>
-        {{ 'card.panelTitle.Související záznamy' | translate }}: {{ numChildren }}
+        {{ 'card.panelTitle.Související záznamy' | translate }}: {{ related().length }}
       </mat-panel-title>
     </mat-expansion-panel-header>
     @if (!state.printing()) {
-      <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'"
-        [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2">
+      <cdk-virtual-scroll-viewport [style.height.px]="vsSize"  [style.width]="'100%'"
+        [itemSize]="itemSize" [minBufferPx]="math.min(9*itemSize, numChildren * itemSize)" [maxBufferPx]="math.min(9*itemSize, numChildren * itemSize)*2"
+        >
         @for (child of children(); track child.ident_cely; let idx = $index) {
           <app-entity-container [result]="child.result" [isChild]="true" [mapDetail]="mapDetail()" class="app-related-item"></app-entity-container>
         }

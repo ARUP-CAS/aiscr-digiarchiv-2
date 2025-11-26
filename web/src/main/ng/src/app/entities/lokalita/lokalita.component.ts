@@ -67,7 +67,8 @@ export class LokalitaComponent extends Entity {
         related.push({entity: 'dokument', ident_cely})
       });
       
-      this.related.set(related);
+      // this.related.set(related);
+      this.related.update(r => [...related]);
       
     });
   }

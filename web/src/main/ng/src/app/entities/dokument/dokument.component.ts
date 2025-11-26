@@ -13,13 +13,13 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { FileViewerComponent } from '../../components/file-viewer/file-viewer.component';
-import { Utils } from '../../shared/utils';
 import { InlineFilterComponent } from "../../components/inline-filter/inline-filter.component";
 import { ResultActionsComponent } from "../../components/result-actions/result-actions.component";
 import { MatAccordion, MatExpansionModule } from "@angular/material/expansion";
 import { RelatedComponent } from "../../components/related/related.component";
 import { MatButtonModule } from '@angular/material/button';
 import { KomponentaComponent } from "../komponenta/komponenta.component";
+import { LetComponent } from "../let/let.component";
 
 @Component({
   imports: [
@@ -30,7 +30,9 @@ import { KomponentaComponent } from "../komponenta/komponenta.component";
     ResultActionsComponent,
     MatAccordion,
     forwardRef(() => RelatedComponent),
-    KomponentaComponent
+    forwardRef(() => KomponentaComponent),
+    forwardRef(() => LetComponent),
+    
 ],
   selector: 'app-dokument',
   templateUrl: './dokument.component.html',
@@ -43,9 +45,12 @@ export class DokumentComponent extends Entity {
      if (!isPlatformBrowser(this.platformId)) {
        return;
      }
-  if (!this._result.ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
-    return;
-  }
+    if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
+      return;
+    }
+  // if (!this._result.ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
+  //   return;
+  // }
   this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
     this._result.dokument_cast_archeologicky_zaznam = res.dokument_cast_archeologicky_zaznam;
     this._result.dokument_cast_projekt = res.dokument_cast_projekt;
@@ -61,7 +66,7 @@ export class DokumentComponent extends Entity {
     res.dokument_cast_projekt.forEach((ident_cely: string) => {
       related.push({entity: 'projekt', ident_cely})
     });
-    this.related.set(related);
+    this.related.update(r => [...related]);
   });
 }
 
@@ -100,39 +105,6 @@ export class DokumentComponent extends Entity {
       this.imgSrc = this.config.context + '/api/img/thumb?id=' + this._result.soubor[0].id;
     }
 
-  }
-
-  override okres() {
-
-    if (this._result.location_info) {
-      this._result.location_info.forEach((li: { okres: string; }) => {
-        if (!this.okresy.includes(li.okres)) {
-          this.okresy.push(li.okres);
-        }
-      });
-    }
-
-    if (this._result.hasOwnProperty('f_okres')) {
-      const okresy = [];
-      const katastry = [];
-      let ret = '';
-      for (let idx = 0; idx < this._result.f_okres.length; idx++) {
-        const okres = this._result.f_okres[idx];
-        const katastr = this._result.f_katastr[idx];
-
-        if (katastry.indexOf(katastr) < 0) {
-          okresy.push(okres);
-          katastry.push(katastr);
-          if (idx > 0) {
-            ret += ', ';
-          }
-          ret += katastr + ' (' + okres + ')';
-        }
-      }
-      return ret;
-    } else {
-      return '';
-    }
   }
 
   override popisObsahu(): string {
