@@ -70,7 +70,12 @@ export class FacetsUsedComponent implements OnInit {
     this.state.breadcrumbs.forEach((c: Crumb) => {
       q[c.field] = null;
     });
+
+    this.config.commonFacets.forEach(cf => {
+      q[cf.name] = null;
+    });
     q.page = 0;
+    this.state.breadcrumbs = [];
     this.router.navigate([], { queryParams: q, queryParamsHandling: 'merge' });
   }
 }

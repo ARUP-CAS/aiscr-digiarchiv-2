@@ -1077,5 +1077,5 @@
     }
   ],
   "feedBackMaxLength": 4000,
-  "commonFacets": []
+		"commonFacets": []
 }
