@@ -545,7 +545,12 @@
       "zoom out": "Zoom out",
       "info": "The map displays records with accessibility corresponding to your user role. Only users with higher privileges can see hidden records.",
       "measureOn": "Turn on PolylineMeasure",
-      "measureOff": "Turn off PolylineMeasure"
+      "measureOff": "Turn off PolylineMeasure",      
+      "tooltipTextFinish": "Click to <b>finish line</b><br>",
+      "tooltipTextDelete": "Press SHIFT-key and click to <b>delete point</b>",
+      "tooltipTextMove": "Click and drag to <b>move point</b><br>",
+      "tooltipTextResume": "<br>Press CTRL-key and click to <b>resume line</b>",
+      "tooltipTextAdd": "Press CTRL-key and click to <b>add point</b>"
     },
     "tooltip": {
       "Odstranit tento filtr": "Remove this filter"

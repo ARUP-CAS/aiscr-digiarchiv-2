@@ -374,6 +374,13 @@ export class MapViewComponent {
 
     L.control.polylineMeasure({
       position: 'topright',
+      
+      tooltipTextFinish: 'Click to <b>finish line</b><br>',
+      tooltipTextDelete: 'Press SHIFT-key and click to <b>delete point</b>',
+      tooltipTextMove: 'Click and drag to <b>move point</b><br>',
+      tooltipTextResume: '<br>Press CTRL-key and click to <b>resume line</b>',
+      tooltipTextAdd: 'Press CTRL-key and click to <b>add point</b>',
+
       measureControlTitleOn: this.service.getTranslation('map.desc.measureOn'), // 'Turn on PolylineMeasure' Title for the control going to be switched on
       measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
     }).addTo(map);
@@ -422,7 +429,11 @@ export class MapViewComponent {
         this.markersActive = false;
         this.clusters.clearLayers();
         this.markers.clearLayers();
-        this.map.removeLayer(this.heatmapLayer);
+        this.markersList = [];
+        if (this.heatmapLayer) {
+          this.map.removeLayer(this.heatmapLayer);
+        }
+        
       }
     });
 
@@ -1120,7 +1131,6 @@ export class MapViewComponent {
     }
     try {
       const wkt = new Wkt.Wkt();
-        console.log(wkt)
       wkt.read(geom_wkt_c);
       const wJson = wkt.toJson();
       wJson.id = ident_cely;
@@ -1141,7 +1151,6 @@ export class MapViewComponent {
         layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
         // layer.addTo(this.overlays);
         layer.addTo(this.markers);
-        console.log(this.markersList, this.markers)
         if (this.currentMapId || this.markersList.length === 1) {
           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
         }

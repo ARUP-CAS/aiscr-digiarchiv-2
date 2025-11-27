@@ -545,7 +545,12 @@
       "zoom out": "Oddálit",
       "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním.",
       "measureOn": "Měření vzdálenosti",
-      "measureOff": "Ukončít měření vzdálenosti"
+      "measureOff": "Ukončít měření vzdálenosti",      
+      "tooltipTextFinish": "Click to <b>finish line</b><br>",
+      "tooltipTextDelete": "Press SHIFT-key and click to <b>delete point</b>",
+      "tooltipTextMove": "Click and drag to <b>move point</b><br>",
+      "tooltipTextResume": "<br>Press CTRL-key and click to <b>resume line</b>",
+      "tooltipTextAdd": "Press CTRL-key and click to <b>add point</b>"
     },
     "tooltip": {
       "Odstranit tento filtr": "Zrušit tento filtr"
