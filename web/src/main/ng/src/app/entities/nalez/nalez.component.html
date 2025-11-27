@@ -9,8 +9,6 @@
 }
 @if (result().pocet || result().poznamka) {
   &#160;({{ result().pocet }}@if (result().poznamka) {
-  @if (result().pocet) {
-    ;&#160;
-    }{{ result().poznamka }}
-    })
+  @if (result().pocet) {;&#160;
+    }{{ result().poznamka }}})
   }
