@@ -375,11 +375,11 @@ export class MapViewComponent {
     L.control.polylineMeasure({
       position: 'topright',
       
-      tooltipTextFinish: 'Click to <b>finish line</b><br>',
-      tooltipTextDelete: 'Press SHIFT-key and click to <b>delete point</b>',
-      tooltipTextMove: 'Click and drag to <b>move point</b><br>',
-      tooltipTextResume: '<br>Press CTRL-key and click to <b>resume line</b>',
-      tooltipTextAdd: 'Press CTRL-key and click to <b>add point</b>',
+      tooltipTextFinish: this.service.getTranslation('map.desc.tooltipTextFinish'), // 'Click to <b>finish line</b><br>',
+      tooltipTextDelete: this.service.getTranslation('map.desc.tooltipTextDelete'), // 'Press SHIFT-key and click to <b>delete point</b>',
+      tooltipTextMove: this.service.getTranslation('map.desc.tooltipTextMove'), // 'Click and drag to <b>move point</b><br>',
+      tooltipTextResume: this.service.getTranslation('map.desc.tooltipTextResume'), // '<br>Press CTRL-key and click to <b>resume line</b>',
+      tooltipTextAdd: this.service.getTranslation('map.desc.tooltipTextAdd'), // 'Press CTRL-key and click to <b>add point</b>',
 
       measureControlTitleOn: this.service.getTranslation('map.desc.measureOn'), // 'Turn on PolylineMeasure' Title for the control going to be switched on
       measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
