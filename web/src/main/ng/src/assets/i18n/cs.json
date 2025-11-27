@@ -545,7 +545,7 @@
       "zoom out": "Oddálit",
       "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním.",
       "measureOn": "Měření vzdálenosti",
-      "measureOff": "Ukončít měření vzdálenosti", 
+      "measureOff": "Ukončit měření vzdálenosti", 
       "tooltipTextFinish": "Klikněte pro <b>dokončení linie</b><br>",
       "tooltipTextDelete": "Stiskněte klávesu SHIFT a klikněte pro <b>vymazání bodu</b>",
       "tooltipTextMove": "Kliněte a potáhněte pro <b>posun bodu</b><br>",
