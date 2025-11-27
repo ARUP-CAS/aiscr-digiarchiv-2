@@ -6,16 +6,13 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
-import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrInputDocument;
-import org.json.JSONObject;
 
 /**
  *

@@ -22,7 +22,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -87,28 +90,58 @@ public class HandleServlet extends HttpServlet {
         } else {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
-                String url = "http://localhost:4000/id/" + id;
+            File cacheFile = new File(getCacheDir(id) + id);
+            String url = "http://localhost:4000/id/" + id;
             try (PrintWriter out = response.getWriter()) {
+
+                Instant deadline = Instant.now().minus(1, ChronoUnit.DAYS);
+                if (cacheFile.exists() && (new Date(cacheFile.lastModified())).toInstant().isAfter(deadline)) {
+                    out.println(org.apache.commons.io.FileUtils.readFileToString(cacheFile, "UTF-8"));
+                } else {
 
 //                try (InputStream inputStream = RESTHelper.inputStream(url)) {
 //                    out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
 //                }
-                HttpRequest hrequest = HttpRequest.newBuilder()
-                        .uri(new URI(url))
-                        .GET()
-                        .build();
+                    HttpRequest hrequest = HttpRequest.newBuilder()
+                            .uri(new URI(url))
+                            .GET()
+                            .build();
 
-                try (HttpClient httpclient = HttpClient
-                        .newBuilder()
-                        .build()) {
-                    HttpResponse<String> hresponse = httpclient.send(hrequest, HttpResponse.BodyHandlers.ofString());
-                    out.println(hresponse.body());
+                    try (HttpClient httpclient = HttpClient
+                            .newBuilder()
+                            .build()) {
+                        HttpResponse<String> hresponse = httpclient.send(hrequest, HttpResponse.BodyHandlers.ofString());
+                        String s = hresponse.body();
+                        FileUtils.writeStringToFile(cacheFile, s, "UTF-8");
+                        out.println(s);
+                    }
                 }
 
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "Error processing {0} from {1}", new String[]{request.getRequestURI(), url});
                 LOGGER.log(Level.SEVERE, null, ex);
             }
+        }
+    }
+    
+    private static String getCacheDir(String f) {
+        try {
+            String destDir = InitServlet.CONFIG_DIR + "/cache/";  
+            String filename = f.substring(f.lastIndexOf("/") + 1);  
+            int period = 2;
+            int levels = 3;
+            int l = filename.length();
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < levels; i++) {
+                sb.append(filename.substring(l - (i * period) - period, l - (i * period))).append(File.separator);
+            }
+            new File(destDir + sb.toString()).mkdirs();
+            return destDir + sb.toString();
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 

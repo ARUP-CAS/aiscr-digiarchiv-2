@@ -70,6 +70,12 @@ public class FedoraHarvester {
             .ofPattern("YYYY-MM-dd")
             .withZone(ZoneId.systemDefault());
 
+    private void writeToErrorsFile(String id) throws IOException {
+        Instant date = Instant.now();
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + "logs" + File.separator + "index_errors." + formatter.format(date) + ".json");
+        FileUtils.writeStringToFile(f, id + System.getProperty("line.separator"), "UTF-8", true);
+    }
+
     private void writeRetToFile(String type, Instant date) throws IOException {
 
         File f = new File(InitServlet.CONFIG_DIR + File.separator + "logs" + File.separator + type + "." + formatter.format(date) + ".json");
@@ -282,6 +288,7 @@ public class FedoraHarvester {
                     processRecord(id, withRelated, solr);
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, "Error processing {0}", id);
+                    writeToErrorsFile(id);
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
@@ -660,6 +667,7 @@ public class FedoraHarvester {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
             LOGGER.log(Level.SEVERE, null, ex);
+            writeToErrorsFile(id);
             errors.put(id + ":  " + ex);
             throw ex;
         }
@@ -738,6 +746,7 @@ public class FedoraHarvester {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
             LOGGER.log(Level.SEVERE, null, ex);
+            writeToErrorsFile(id);
             errors.put(model + " " + id + ":  " + ex.toString());
             // throw new Exception(ex);
         }
@@ -854,7 +863,7 @@ public class FedoraHarvester {
      * @return
      * @throws IOException
      */
-    public JSONObject checkDatestamp(String[] entities) throws Exception {
+    public JSONObject checkDatestamp(String[] entities, boolean reindex) throws Exception {
         JSONObject ret = new JSONObject();
         try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             for (String entity : entities) {
@@ -888,12 +897,15 @@ public class FedoraHarvester {
                                         .put("fedoraDate", "unknown"));
                                 totalBad++;
                             } else {
-                                if (Instant.parse(fedoraDate).truncatedTo(ChronoUnit.SECONDS ).isAfter(solrdate.toInstant())) {
+                                if (Instant.parse(fedoraDate).truncatedTo(ChronoUnit.SECONDS).isAfter(solrdate.toInstant())) {
 
                                     ret.append(entity, new JSONObject()
                                             .put("ident_cely", ident_cely)
                                             .put("solr_date", solrdate.toInstant().toString())
                                             .put("fedoraDate", fedoraDate));
+                                    if (reindex) {
+                                        indexId(entity, true, solr);
+                                    }
                                     totalBad++;
                                 }
                             }
@@ -912,6 +924,7 @@ public class FedoraHarvester {
                         }
                         ret.put("total", totalDocs);
                         ret.put("totalBad", totalBad);
+                        LOGGER.log(Level.INFO, "Finished. total: {0}. Bad: {1}", new Object[]{totalDocs, totalBad});
                     } catch (SolrServerException e) {
                         LOGGER.log(Level.SEVERE, null, e);
                     }

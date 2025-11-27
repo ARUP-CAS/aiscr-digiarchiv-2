@@ -318,9 +318,10 @@ public class FedoraServlet extends HttpServlet {
                 try {
                     String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
                     String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
-                + "&condition=" + URLEncoder.encode("modified>" + req.getParameter("url"), "UTF8");
-                    
-                    
+                + "&order_by=modified&condition=" + URLEncoder.encode("modified>" + req.getParameter("url"), "UTF8");
+//                if (req.getParameter("model") != null ) {   
+//                  baseQuery += "&condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + req.getParameter("model") + "/member/*", "UTF8");
+//                }  
                     json.put("resp", FedoraUtils.search(baseQuery));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
@@ -335,7 +336,7 @@ public class FedoraServlet extends HttpServlet {
                 try {
                     String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
                     String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/file/*", "UTF8")
-                + "&condition=" + URLEncoder.encode("modified>" + req.getParameter("from"), "UTF8");
+                + "&order_by=modified&condition=" + URLEncoder.encode("modified>" + req.getParameter("from"), "UTF8");
                     
                     
                     json.put("resp", FedoraUtils.search(baseQuery));
@@ -354,7 +355,7 @@ public class FedoraServlet extends HttpServlet {
                     if (req.getParameter("offset") != null) {
                         fh.setOffset(Integer.parseInt(req.getParameter("offset")));
                     }
-                    json = fh.checkDatestamp(req.getParameterValues("model"));
+                    json = fh.checkDatestamp(req.getParameterValues("model"), Boolean.parseBoolean(req.getParameter("reindex")));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }
