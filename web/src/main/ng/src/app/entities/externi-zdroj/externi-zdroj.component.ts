@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID, forwardRef, input, effect } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, forwardRef, input, effect, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -19,6 +19,7 @@ import { ResultActionsComponent } from '../../components/result-actions/result-a
 import { AkceComponent } from '../akce/akce.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { LokalitaComponent } from "../lokalita/lokalita.component";
+import { RelatedComponent } from "../../components/related/related.component";
 
 @Component({
   imports: [
@@ -27,9 +28,11 @@ import { LokalitaComponent } from "../lokalita/lokalita.component";
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule, ScrollingModule,
     ResultActionsComponent,
-    forwardRef(() => AkceComponent),
-    forwardRef(() => LokalitaComponent)
-  ],
+    // forwardRef(() => AkceComponent),
+    // forwardRef(() => LokalitaComponent),
+    forwardRef(() => RelatedComponent),
+    
+],
   selector: 'app-externi-zdroj',
   templateUrl: './externi-zdroj.component.html',
   styleUrls: ['./externi-zdroj.component.scss']
@@ -47,6 +50,8 @@ export class ExterniZdrojComponent implements OnInit {
   itemSize = 133;
   vsSize = 0;
   numChildren = 0;
+
+  related = signal<{ entity: string, ident_cely: string }[]>([]);
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -89,21 +94,31 @@ export class ExterniZdrojComponent implements OnInit {
     this.numChildren = this._result.ext_zdroj_ext_odkaz.length;
     this.state.documentProgress = 0;
     if (this._result.ext_zdroj_ext_odkaz) {
-      for (let i = 0; i < this._result.ext_zdroj_ext_odkaz.length; i = i + 10) {
-        const ids = this._result.ext_zdroj_ext_odkaz.slice(i, i + 10).map((eo: any) => eo.archeologicky_zaznam.id);
-        this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
-          this._result.akce = this._result.akce.concat(res.response.docs.filter((d: { entity: string; }) => d.entity === 'akce'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this._result.akce.length + this._result.lokalita.length) / this.numChildren * 100;
-          this.state.loading.set((this._result.akce.length + this._result.lokalita.length) < this.numChildren);
-        });
-        this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
-          this._result.lokalita = this._result.lokalita.concat(res.response.docs.filter((d: { entity: string; }) => d.entity === 'lokalita'));
-          this.numChildren = this.numChildren - ids.length + res.response.docs.length;
-          this.state.documentProgress = (this._result.akce.length + this._result.lokalita.length) / this.numChildren * 100;
-          this.state.documentProgress = (this._result.akce.length + this._result.lokalita.length) / this.numChildren * 100;
-        });
-      }
+      // for (let i = 0; i < this._result.ext_zdroj_ext_odkaz.length; i = i + 10) {
+      //   const ids = this._result.ext_zdroj_ext_odkaz.slice(i, i + 10).map((eo: any) => eo.archeologicky_zaznam.id);
+      //   this.service.getIdAsChild(ids, "akce").subscribe((res: any) => {
+      //     this._result.akce = this._result.akce.concat(res.response.docs.filter((d: { entity: string; }) => d.entity === 'akce'));
+      //     this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+      //     this.state.documentProgress = (this._result.akce.length + this._result.lokalita.length) / this.numChildren * 100;
+      //     this.state.loading.set((this._result.akce.length + this._result.lokalita.length) < this.numChildren);
+      //   });
+      //   this.service.getIdAsChild(ids, "lokalita").subscribe((res: any) => {
+      //     this._result.lokalita = this._result.lokalita.concat(res.response.docs.filter((d: { entity: string; }) => d.entity === 'lokalita'));
+      //     this.numChildren = this.numChildren - ids.length + res.response.docs.length;
+      //     this.state.documentProgress = (this._result.akce.length + this._result.lokalita.length) / this.numChildren * 100;
+      //     this.state.loading.set((this._result.akce.length + this._result.lokalita.length) < this.numChildren);
+      //   });
+      // }
+
+      const related: { entity: string; ident_cely: string; }[] = [...this._result.ext_zdroj_ext_odkaz.map((eo: any) => {return {ident_cely: eo.archeologicky_zaznam.id, entity: 'akce'}}),
+          ...this._result.ext_zdroj_ext_odkaz.map((eo: any) => {return {ident_cely: eo.archeologicky_zaznam.id, entity: 'lokalita'}})
+        ];
+
+      
+      this.related.set(related);
+
+
+
     }
 
   }
