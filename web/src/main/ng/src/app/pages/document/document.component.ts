@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, Inject, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -15,7 +15,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CitationComponent } from "../../components/citation/citation.component";
 import { EntityContainer } from "../../entities/entity-container/entity-container";
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, isPlatformBrowser } from '@angular/common';
+import { MapViewComponent } from "../map-view/map-view.component";
+import { MapViewContainerComponent } from "../map-view/map-view-container.component";
 
 @Component({
   imports: [
@@ -24,7 +26,9 @@ import { DecimalPipe } from '@angular/common';
     MatProgressBarModule, MatTooltipModule,
     MatButtonModule, DecimalPipe,
     CitationComponent,
-    EntityContainer
+    EntityContainer,
+    // MapViewComponent,
+    //MapViewContainerComponent
 ],
   selector: 'app-document',
   templateUrl: './document.component.html',
@@ -39,8 +43,10 @@ export class DocumentComponent implements OnInit, AfterViewInit {
 
   children_start = 0;
   children_rows = 20;
+  isBrowser: boolean = false; 
 
   constructor(
+    @Inject(PLATFORM_ID) platformId: any,
     private titleService: Title,
     private route: ActivatedRoute,
     private router: Router,
@@ -49,6 +55,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     private service: AppService
   ) {
     this.state.bodyClass = 'app-page-results';
+    this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit(): void {

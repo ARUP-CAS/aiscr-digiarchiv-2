@@ -687,9 +687,13 @@ export class AppService {
     p.mapa = true;
     p.mapId = result.ident_cely;
     let url = '/map';
+
+    // this.state.documentId ? '/id' : '/results';
+
+
     if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
-      url = '/id/' + this.state.documentId;
+      url = '/map/' + this.state.documentId;
       p.loc_rpt = null;
       p.vyber = null;
     } else {

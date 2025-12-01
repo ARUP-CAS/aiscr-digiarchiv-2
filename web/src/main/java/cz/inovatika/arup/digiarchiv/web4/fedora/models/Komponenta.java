@@ -95,9 +95,10 @@ public class Komponenta {
 
         idoc.addField("komponenta_dokument_ident_cely", ident_cely);
         if (komponenta_jistota != null) {
-            kdoc.addField("komponenta_jistota", komponenta_jistota);
-            idoc.addField("komponenta_dokument_jistota", komponenta_jistota);
-            idoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
+            boolean v = Boolean.parseBoolean(komponenta_jistota);
+            kdoc.addField("komponenta_jistota", v);
+            idoc.addField("komponenta_dokument_jistota", v);
+            idoc.addField("dokument_cast_komponenta_dokument_jistota", v);
         } else {
             kdoc.removeField("komponenta_jistota");
         }

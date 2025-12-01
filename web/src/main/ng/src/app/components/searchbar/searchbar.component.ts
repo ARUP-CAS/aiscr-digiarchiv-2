@@ -116,7 +116,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.mapa = !this.state.isMapaCollapsed;
     p.loc_rpt = null;
 
-    let url = '/results';
+    let url = this.state.documentId ? '/id' : '/results';
     if (p.mapa) {
       url = '/map';
       if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
@@ -149,8 +149,8 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
         p.vyber = null;
       }
     }
-    if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
-      url = '/id/' + this.state.documentId;
+    if (this.state.documentId) {
+      url = (p.mapa ? '/map/':'/id/') + this.state.documentId;
       p.loc_rpt = null;
       p.vyber = null;
     }

@@ -83,11 +83,15 @@ export class AkceComponent extends Entity {
       for (let i = 0; i < orig.length; i = i + 20) {
         const ids = orig.slice(i, i + 20);
         this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
-          this._result.az_ext_odkaz.forEach((eo:any) => {
-            const ez = res.response.docs.find((ez: any) => eo.ext_zdroj.id === ez.ident_cely);
-            ez.ext_odkaz_paginace = eo.paginace;
-            az_ext_zdroj.push(ez);
-          });
+          if(this._result.az_ext_odkaz) {
+            this._result.az_ext_odkaz.forEach((eo:any) => {
+              const ez = res.response.docs.find((ez: any) => eo.ext_zdroj.id === ez.ident_cely);
+              if (ez){
+                ez.ext_odkaz_paginace = eo.paginace;
+                az_ext_zdroj.push(ez);
+              }
+            });
+          }
 
           az_ext_zdroj.sort((ez1: any, ez2: any) => {
             let res = 0;

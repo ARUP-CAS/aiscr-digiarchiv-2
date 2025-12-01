@@ -203,8 +203,10 @@
             </tbody>
             </table>
             <mat-accordion multi="true">
-              @for (dok_jednotka of _result.az_dokumentacni_jednotka; track dok_jednotka.ident_cely) {
-                <app-dok-jednotka [result]="dok_jednotka" [pians]="_result.pian" [adbs]="_result.adb" [detailExpanded]="detailExpanded()"></app-dok-jednotka>
+              @if(_result.az_dokumentacni_jednotka) {
+                @for (dok_jednotka of _result.az_dokumentacni_jednotka; track dok_jednotka) {
+                  <app-dok-jednotka [result]="dok_jednotka" [pians]="_result.pian" [adbs]="_result.adb" [detailExpanded]="detailExpanded()"></app-dok-jednotka>
+                }
               }
             </mat-accordion>
           </mat-expansion-panel>

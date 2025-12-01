@@ -262,8 +262,16 @@ export class MapViewComponent {
     if (!this.markersActive) {
       return;
     }
-    const mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
-    this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
+
+    let mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
+    if (this.route.snapshot.params['id']) {
+      this.state.documentId = this.route.snapshot.params['id'];
+      this.currentMapId = this.route.snapshot.params['id'];
+      mapIdChanged = true;
+    } else {
+      this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
+    }
+
     this.pianIdChanged = this.currentPianId !== this.route.snapshot.queryParamMap.get('pian_id');
     this.currentPianId = this.route.snapshot.queryParamMap.get('pian_id');
     if (!this.route.snapshot.queryParamMap.has('vyber')) {
