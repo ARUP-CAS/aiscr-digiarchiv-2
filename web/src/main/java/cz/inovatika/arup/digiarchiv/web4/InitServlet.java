@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
+import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -97,6 +98,14 @@ public class InitServlet extends HttpServlet {
 
         LOGGER.log(Level.INFO, "CONFIG_DIR is -> {0}", CONFIG_DIR);
     }
+
+    @Override
+    public void destroy() {
+        SolrClientFactory.resetSolrClient(); 
+        super.destroy(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        
+    }
+    
 
     private static void writeStatusFile(String type, String status) {
         try {

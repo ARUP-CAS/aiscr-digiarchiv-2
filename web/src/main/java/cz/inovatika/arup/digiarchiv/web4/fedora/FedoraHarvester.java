@@ -2,20 +2,18 @@ package cz.inovatika.arup.digiarchiv.web4.fedora;
 
 import cz.inovatika.arup.digiarchiv.web4.FormatUtils;
 import cz.inovatika.arup.digiarchiv.web4.InitServlet;
-import static cz.inovatika.arup.digiarchiv.web4.LogAnalytics.LOGGER;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,8 +28,8 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+//import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+//import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -129,7 +127,8 @@ public class FedoraHarvester {
      */
     public JSONObject harvest() throws IOException {
         Instant start = Instant.now();
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
+            SolrClient solr = SolrClientFactory.getSolrClient();
             ret = new JSONObject();
             getModels(solr);
             solr.commit("oai");
@@ -161,10 +160,9 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject update(String from) throws IOException {
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrClient solr = SolrClientFactory.getSolrClient();
             ret = new JSONObject();
             return update(from, solr);
-        }
     }
 
     private JSONObject update(String from, SolrClient solr) throws IOException {
@@ -307,7 +305,8 @@ public class FedoraHarvester {
      */
     public JSONObject indexDeleted() throws IOException {
         Instant start = Instant.now();
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
+            SolrClient solr = SolrClientFactory.getSolrClient();
             processModel("deleted", solr);
 
             solr.commit("oai");
@@ -339,7 +338,8 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexModels(String[] models) throws Exception {
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
+            SolrClient solr = SolrClientFactory.getSolrClient();
             indexModels(models, solr);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -387,7 +387,8 @@ public class FedoraHarvester {
 //        String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
         String solrResp = IndexUtils.requestSolr(url);
         JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+
+            SolrClient solr = SolrClientFactory.getSolrClient();
             for (int i = 0; i < docs.length(); i++) {
                 String id = docs.getJSONObject(i).getString("ident_cely");
                 try {
@@ -398,7 +399,7 @@ public class FedoraHarvester {
                     // LOGGER.log(Level.WARNING, "Error indexing {0}, -> {1}", new Object[]{id, e.toString()});
                     ret.put(id, e.toString());
                 }
-            }
+
             checkLists(0, docs.length(), fq, docs.length(), solr);
         }
         return ret;
@@ -412,10 +413,9 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexId(String id) throws Exception {
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrClient solr = SolrClientFactory.getSolrClient();
             JSONObject j = indexId(id, true, solr);
             return j;
-        }
     }
 
     private JSONObject indexId(String id, boolean commit, SolrClient solr) throws Exception {
@@ -825,6 +825,7 @@ public class FedoraHarvester {
     }
 
     private void checkLists(int size, int indexed, String model, int totalInModel, SolrClient solr) throws SolrServerException, IOException {
+        try {
         if (idocsEntities.size() > size) {
             LOGGER.log(Level.INFO, "Entities {0}", idocsEntities.size());
             solr.add("entities", idocsEntities);
@@ -854,6 +855,11 @@ public class FedoraHarvester {
             solr.commit("oai");
             idocsOAI.clear();
         }
+        } catch(SolrServerException | IOException ex) {
+            LOGGER.log(Level.SEVERE, "Can't commit changes");
+            SolrClientFactory.resetSolrClient();
+            throw ex;// new Exception(ex)
+        }
     }
 
     /**
@@ -865,7 +871,8 @@ public class FedoraHarvester {
      */
     public JSONObject checkDatestamp(String[] entities, boolean reindex) throws Exception {
         JSONObject ret = new JSONObject();
-        try (SolrClient solr = new HttpSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try {
+            SolrClient solr = SolrClientFactory.getSolrClient();
             for (String entity : entities) {
                 int rows = 500;
                 SolrQuery query = new SolrQuery("*")

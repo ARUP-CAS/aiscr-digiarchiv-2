@@ -1134,7 +1134,7 @@ export class MapViewComponent {
     const t = this.service.getTranslation('entities.' + this.state.entity + '.title');
     const p = ids.length > 1 ? ids.length : ids[0];
     // const p = ids.join(', ');
-    return id + ' (' + this.service.getHeslarTranslation(presnost, 'presnost') + ') (' + t + ': ' + p + ')';
+    return id + ' (' + this.service.getTranslation(presnost) + ') (' + t + ': ' + p + ')';
   }
 
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docIds: string[]) {

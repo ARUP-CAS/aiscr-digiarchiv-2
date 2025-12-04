@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+//import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,8 +67,9 @@ public class IndexUtils {
 
     
     public static void addAndCommit(String collection, List<SolrInputDocument> idocs) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            client.add(collection, idocs, 10);
+        try {
+            SolrClient solr = SolrClientFactory.getSolrClient();
+            solr.add(collection, idocs, 10);
             // client.commit(collection);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -76,8 +77,9 @@ public class IndexUtils {
     }
 
     public static void addAndCommit(String collection, SolrInputDocument idoc) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            client.add(collection, idoc, 10);
+        try {
+            SolrClient solr = SolrClientFactory.getSolrClient();
+            solr.add(collection, idoc, 10);
             // client.commit(collection);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);

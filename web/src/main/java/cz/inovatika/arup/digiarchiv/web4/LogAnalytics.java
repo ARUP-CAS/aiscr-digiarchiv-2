@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
+import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
@@ -17,7 +18,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.CursorMarkParams;
+import org.apache.solr.common.params.CursorMarkParams; 
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,8 @@ public class LogAnalytics {
     public static final Logger LOGGER = Logger.getLogger(LogAnalytics.class.getName());
 
     public static void log(HttpServletRequest request, String ident_cely, String type, String entity) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {  
+        try {
+            SolrClient solr = SolrClientFactory.getSolrClient();
             JSONObject user = LoginServlet.user(request);
             String ip = request.getRemoteAddr();
             SolrInputDocument idoc = new SolrInputDocument();
@@ -45,7 +47,7 @@ public class LogAnalytics {
             LOGGER.log(Level.FINE, "user:{0}; ip:{1}; ident_cely: {2}; type: {3}",
                     new String[]{user.optString("ident_cely", "anonym"),
                         ip, ident_cely, type});
-            client.add("logs", idoc, 1000);
+            solr.add("logs", idoc, 1000);
         } catch (SolrServerException | IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
