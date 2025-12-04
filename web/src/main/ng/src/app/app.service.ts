@@ -684,12 +684,9 @@ export class AppService {
 
     this.state.isMapaCollapsed = false;
     const p: any = {};
-    p.mapa = true;
-    p.mapId = result.ident_cely;
     let url = '/map';
 
     // this.state.documentId ? '/id' : '/results';
-
 
     if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
@@ -699,6 +696,9 @@ export class AppService {
     } else {
       this.state.mapResult = result;
       p.loc_rpt = null;
+
+      p.mapa = true;
+      p.mapId = result.ident_cely;
       // const bounds = this.getBoundsByDoc(result);
       //p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       //',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;

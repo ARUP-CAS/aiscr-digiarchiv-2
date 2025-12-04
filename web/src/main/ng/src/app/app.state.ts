@@ -266,7 +266,7 @@ export class AppState {
     this.entity = params.has('entity') ? params.get('entity') : 'dokument';
     this.sorts_by_entity = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
     this.page = params.has('page') ? +params.get('page') : 0;
-    this.isMapaCollapsed = params.has('mapa') ? params.get('mapa') === 'false' : true;
+    
     if (this.isMapaCollapsed) {
       this.rows = params.has('rows') ? +params.get('rows') : this.config.defaultRows;
     } else {

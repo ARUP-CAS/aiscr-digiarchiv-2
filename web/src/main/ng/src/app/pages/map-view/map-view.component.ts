@@ -265,10 +265,12 @@ export class MapViewComponent {
 
     let mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
     if (this.route.snapshot.params['id']) {
+      this.isDocumentHandle = true;
       this.state.documentId = this.route.snapshot.params['id'];
       this.currentMapId = this.route.snapshot.params['id'];
       mapIdChanged = true;
     } else {
+      this.isDocumentHandle = false;
       this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     }
 
@@ -513,6 +515,11 @@ export class MapViewComponent {
   doZoom() {
     if (this.settingsBounds) {
       // maps bounds changed by code.
+      
+      if (this.isDocumentHandle) {
+        // Jsme v documentu, nepotrebujeme znovu nacist data
+        return;
+      }
       this.getDataByVisibleArea();
       this.settingsBounds = false;
       return;

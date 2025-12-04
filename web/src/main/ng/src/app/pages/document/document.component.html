@@ -45,6 +45,11 @@
       [isChild]="false"></app-entity-container>
     }
   </div>
-  }
+  } 
+@if (isBrowser && !state.isMapaCollapsed) {
+@defer {
+<app-map-view></app-map-view>
+}
+}
 </div>
 }

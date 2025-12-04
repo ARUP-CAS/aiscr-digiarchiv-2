@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -27,8 +27,7 @@ import { MapViewContainerComponent } from "../map-view/map-view-container.compon
     MatButtonModule, DecimalPipe,
     CitationComponent,
     EntityContainer,
-    // MapViewComponent,
-    //MapViewContainerComponent
+    forwardRef(() => MapViewComponent)
 ],
   selector: 'app-document',
   templateUrl: './document.component.html',
@@ -54,8 +53,8 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     public state: AppState,
     private service: AppService
   ) {
-    this.state.bodyClass = 'app-page-results';
     this.isBrowser = isPlatformBrowser(platformId);
+    this.state.bodyClass = 'app-page-results';
   }
 
   ngOnInit(): void {

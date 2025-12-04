@@ -21,8 +21,16 @@ export const routes: Routes = [
         path: 'map/:id',
         loadComponent: () => import('./pages/map-view/map-view-container.component').then(m => m.MapViewContainerComponent)
     },
-    { path: 'id/:id', component: DocumentComponent },
-    { path: 'print/:id', component: DocumentComponent },
+    {
+        path: 'id/:id',
+        loadComponent: () => import('./pages/document/document.component').then(m => m.DocumentComponent)
+    },
+    {
+        path: 'print/:id',
+        loadComponent: () => import('./pages/document/document.component').then(m => m.DocumentComponent)
+    },
+    // { path: 'id/:id', component: DocumentComponent },
+    // { path: 'print/:id', component: DocumentComponent },
     { path: 'export', component: ExportComponent },
     { path: 'export-mapa', component: ExportMapaComponent },
 

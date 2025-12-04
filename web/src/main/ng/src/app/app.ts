@@ -50,6 +50,7 @@ export class App {
         this.isResults = this.router.isActive('results', p);
         this.isStats = this.router.isActive('stats', p);
         const params = this.route.snapshot.queryParamMap;
+        this.state.isMapaCollapsed = (this.router.isActive('map', p) || this.router.isActive('export-mapa', p) || params.has('mapa')) ? params.get('mapa') === 'false' : true;
         if (params.has('lang')) {
           this.service.changeLang(params.get('lang'));
         }
