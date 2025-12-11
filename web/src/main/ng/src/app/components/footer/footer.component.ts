@@ -79,9 +79,12 @@ export class ConsentSheet {
   ) { }
 
   consent(event: MouseEvent): void {
+    localStorage.setItem("consent", "granted");
+    const TIMESTAMP = Date.now();
+    const expiresOn = TIMESTAMP + 1000 * 60 * 60 * 24 * 365 // 1year in ms
+    localStorage.setItem("consentTime", expiresOn.toString());
     this._bottomSheetRef.dismiss();
     event.preventDefault();
-    localStorage.setItem("consent", "granted");
   }
 
   reject(event: MouseEvent): void {

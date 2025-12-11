@@ -48,7 +48,7 @@ export class AppState {
   isFacetsCollapsed = true;
 
   dialogRef: MatDialogRef<any, any>;
-  mapResult: any; // Select entity in map view
+  mapResult = signal<any>(null); // Select entity in map view
   pianId: string; // Selected pian in map
   locationFilterEnabled: boolean; // Vyber na mape
   locationFilterBounds: any; // Vyber na mape
@@ -310,7 +310,7 @@ export class AppState {
   }
 
   setMapResultById(docId: string) {
-    if (docId === this.mapResult?.ident_cely) {
+    if (docId === this.mapResult()?.ident_cely) {
       this.setMapResult(null, false);
     } else {
       const doc = this.solrResponse.response.docs.find(d => d.ident_cely === docId);
@@ -319,8 +319,9 @@ export class AppState {
   }
 
   setMapResult(result: any, mapDetail: any) {
-    const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
-    this.mapResult = result;
+    console.log(result)
+    const changed = (!result || (result.ident_cely !== this.mapResult()?.ident_cely));
+    this.mapResult.set(result);
     // if (!result && !this.isMapaCollapsed) {
       
     //   return;

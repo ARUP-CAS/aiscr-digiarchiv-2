@@ -1,5 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web4.fedora.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import org.apache.solr.common.SolrInputDocument;
  *
  * @author alberto
  */
+@JsonInclude(Include.NON_NULL)
 public class Komponenta {
 
     @Field
@@ -33,7 +36,10 @@ public class Komponenta {
 
 //<xs:element name="jistota" minOccurs="0" maxOccurs="1" type="xs:boolean"/> <!-- "{jistota}" -->
     @JacksonXmlProperty(localName = "jistota")
-    public String komponenta_jistota;
+    public String jistota;
+    
+    @Field
+    public Boolean komponenta_jistota;
 
 //<xs:element name="presna_datace" minOccurs="0" maxOccurs="1" type="xs:string"/> <!-- "{presna_datace}" -->
     @JacksonXmlProperty(localName = "presna_datace")
@@ -94,12 +100,13 @@ public class Komponenta {
         kdoc.setField("komponenta_typ_nalezu", komponenta_typ_nalezu);
 
         idoc.addField("komponenta_dokument_ident_cely", ident_cely);
-        if (komponenta_jistota != null) {
-            boolean v = Boolean.parseBoolean(komponenta_jistota);
-            kdoc.addField("komponenta_jistota", v);
-            idoc.addField("komponenta_dokument_jistota", v);
-            idoc.addField("dokument_cast_komponenta_dokument_jistota", v);
+        if (jistota != null) {
+            komponenta_jistota = Boolean.parseBoolean(jistota);
+            kdoc.addField("komponenta_jistota", komponenta_jistota);
+            idoc.addField("komponenta_dokument_jistota", komponenta_jistota);
+            idoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
         } else {
+            komponenta_jistota = null;
             kdoc.removeField("komponenta_jistota");
         }
         idoc.addField("komponenta_dokument_presna_datace", komponenta_presna_datace);

@@ -92,7 +92,7 @@
         @if (_result.dj_adb) {
           <app-adb [result]="_result.dj_adb" [isChild]="true" [detailExpanded]="detailExpanded()"></app-adb>
         }
-        @for (komponenta of _result.dj_komponenta; track komponenta.ident_cely) {
+        @for (komponenta of _result.dj_komponenta; track komponenta) {
           <app-komponenta [result]="komponenta"></app-komponenta>
         }
       </mat-accordion>

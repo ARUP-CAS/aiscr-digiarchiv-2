@@ -65,15 +65,15 @@
   }
   {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
   <app-inline-filter [field]="'f_obdobi'" [value]="_result.komponenta_obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
-  @if (_result.komponenta_jistota === false || _result.komponenta_presna_datace) {
-    &#160;(@if ( _result.komponenta_jistota === false) 
+  
+  @if (_result.hasOwnProperty('komponenta_jistota') || _result.komponenta_presna_datace) {
+    &#160;(@if (!result()['komponenta_jistota']) 
     {{{ 'facet.field.komponenta_dokument_jistota_false' | translate }}}@if (_result.komponenta_jistota === false && _result.komponenta_presna_datace) 
     {
     ;&#160;
-  }@if (_result.komponenta_presna_datace) {{{_result.komponenta_presna_datace}}
-    })}@if (_result.komponenta_areal) {
+  }@if (_result.komponenta_presna_datace) {{{_result.komponenta_presna_datace}}})}@if (_result.komponenta_areal) {
     &#160;–&#160;<app-inline-filter [field]="'f_areal'" [value]="_result.komponenta_areal.id" [heslar]="'areal_druha'"></app-inline-filter>
-  }@if (_result.komponenta_aktivita?.length > 0) {a
+  }@if (_result.komponenta_aktivita?.length > 0) {
     &#160;(@for (aktivita of _result.komponenta_aktivita; track aktivita.id; let last = $last) {
     <app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>
     @if (!last) {

@@ -659,16 +659,19 @@ export class AppService {
   setMapResult(result: any, mapDetail: any) {
     if (!result && mapDetail) {
       // zavirame kartu
-
       const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
       this.state.closingMapResult = inResults;
-      this.state.mapResult = result;
-      let url = '/map';
-      const p: any = {};
-      p.mapId = null;
-      p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
-      ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
-      this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
+      this.state.mapResult.update(r => result);
+      if (!this.state.documentId) {
+        let url = '/map';
+        const p: any = {};
+        p.mapId = null;
+        p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
+        ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
+        this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
+      } else {
+        
+      }
     } else {
       this.state.setMapResult(result, mapDetail);
     }
@@ -694,7 +697,7 @@ export class AppService {
       p.loc_rpt = null;
       p.vyber = null;
     } else {
-      this.state.mapResult = result;
+      this.state.mapResult.set(result);
       p.loc_rpt = null;
 
       p.mapa = true;

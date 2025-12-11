@@ -26,8 +26,8 @@
     </mat-expansion-panel>
   }
   @if (inDocument() || mapDetail()) {
-    <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" (click)="state.setMapResult(_result, mapDetail())">
-      @if (mapDetail() && !isChild()) {
+    <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()">
+      @if ((inDocument() || mapDetail()) && !isChild()) {
         <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
           <mat-icon>clear</mat-icon>
         </a>

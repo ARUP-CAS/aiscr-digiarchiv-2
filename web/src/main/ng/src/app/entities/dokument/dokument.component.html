@@ -50,7 +50,7 @@
           <img [src]="imgSrc" (load)="imageLoaded()" />
         </a>
         }
-        @if (!isChild() && (state.isMapaCollapsed || _result.ident_cely === state.mapResult?.ident_cely)) {
+        @if (!isChild() && (state.isMapaCollapsed || _result.ident_cely === state.mapResult()?.ident_cely)) {
         <a (click)="viewFiles()">
           <img [src]="imgSrc" />
         </a>

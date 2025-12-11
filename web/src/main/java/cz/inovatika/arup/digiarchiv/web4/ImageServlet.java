@@ -235,7 +235,7 @@ public class ImageServlet extends HttpServlet {
                         }
                         InputStream is = FedoraUtils.requestInputStream(url);
                         FileUtils.copyInputStreamToFile(is, f);
-                        LOGGER.log(Level.INFO, "bytes received: {0}", f.length());
+                        LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
                         IOUtils.copy(new FileInputStream(f), response.getOutputStream());
                         // InputStream is = getFromFedora(id, "orig");
                         // IOUtils.copy(is, response.getOutputStream());

@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
+import cz.inovatika.arup.digiarchiv.web4.Options;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import org.apache.solr.client.solrj.impl.Http2SolrClient;
  */
 public class SolrClientFactory {
 
+    public static final Logger LOGGER = Logger.getLogger(SolrClientFactory.class.getName());
     private static volatile SolrClient solrClient; // volatile for thread-safety
 
     private SolrClientFactory() {
@@ -23,7 +25,7 @@ public class SolrClientFactory {
             synchronized (SolrClientFactory.class) {  
                 if (solrClient == null) {
                     // Replace with your Solr URL and appropriate client implementation
-                    String solrUrl = "http://localhost:8983/solr";
+                    String solrUrl = Options.getInstance().getString("solrhost");
                     solrClient = new Http2SolrClient.Builder(solrUrl).build();
                     // For a Solr Cloud setup, you would use CloudSolrClient
                     // String zkHost = "localhost:2181/solr";
@@ -35,6 +37,7 @@ public class SolrClientFactory {
     }
 
     public static void resetSolrClient() {
+        LOGGER.log(Level.INFO, "Reseting SolrClient");
         if (solrClient != null) {
             try {
                 solrClient.close();

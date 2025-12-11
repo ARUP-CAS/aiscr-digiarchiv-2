@@ -87,8 +87,8 @@
           }
 
           <div class="app-view-card-info" [class.app-pian-visible]="state.pianId && opened" [class.app-pian-visible-sidenav-closed]="state.pianId && !opened">
-            @if (state.mapResult) {
-              <app-entity-container [result]="state.mapResult" [mapDetail]="true"></app-entity-container>
+            @if (state.mapResult()) {
+              <app-entity-container [result]="state.mapResult()" [mapDetail]="true"></app-entity-container>
             }
           </div>
         </mat-sidenav-content>

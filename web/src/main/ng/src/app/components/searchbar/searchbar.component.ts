@@ -86,7 +86,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.q = this.state.q ? (this.state.q !== '' ? this.state.q : null) : null;
     p.page = 0;
     p.mapId = null;
-    this.state.mapResult = null;
+    this.state.mapResult.set(null);
     let url = '/results';
     if (this.router.isActive('map', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
       url = '/map';

@@ -826,38 +826,41 @@ public class FedoraHarvester {
 
     private void checkLists(int size, int indexed, String model, int totalInModel, SolrClient solr) throws SolrServerException, IOException {
         try {
-        if (idocsEntities.size() > size) {
-            LOGGER.log(Level.INFO, "Entities {0}", idocsEntities.size());
-            solr.add("entities", idocsEntities);
-            solr.commit("entities");
-            idocsEntities.clear();
-            LOGGER.log(Level.INFO, "Indexed {0} of {1} -> {2}", new Object[]{indexed, totalInModel, model});
-        }
-        if (idocsDeleted.size() > size) {
-            LOGGER.log(Level.INFO, "deleted {0}", idocsDeleted.size());
-            solr.add("deleted", idocsDeleted);
-            solr.commit("deleted");
-            idocsDeleted.clear();
-        }
-
-        for (String key : idocs.keySet()) {
-            List l = idocs.get(key);
-            if (l.size() > size) {
-                solr.add(key, l);
-                solr.commit(key);
-                l.clear();
-                LOGGER.log(Level.INFO, "Indexed {0} - {1}", new Object[]{indexed, key});
+            if (idocsEntities.size() > size) {
+                LOGGER.log(Level.INFO, "Entities {0}", idocsEntities.size());
+                solr.add("entities", idocsEntities);
+                solr.commit("entities");
+                idocsEntities.clear();
+                LOGGER.log(Level.INFO, "Indexed {0} of {1} -> {2}", new Object[]{indexed, totalInModel, model});
             }
-        }
-        if (idocsOAI.size() > size) {
-            LOGGER.log(Level.INFO, "OAI {0}", idocsOAI.size());
-            solr.add("oai", idocsOAI);
-            solr.commit("oai");
-            idocsOAI.clear();
-        }
-        } catch(SolrServerException | IOException ex) {
+            if (idocsDeleted.size() > size) {
+                LOGGER.log(Level.INFO, "deleted {0}", idocsDeleted.size());
+                solr.add("deleted", idocsDeleted);
+                solr.commit("deleted");
+                idocsDeleted.clear();
+            }
+
+            for (String key : idocs.keySet()) {
+                List l = idocs.get(key);
+                if (l.size() > size) {
+                    LOGGER.log(Level.INFO, "Sending {0}...", key);
+                    solr.add(key, l);
+                    solr.commit(key);
+                    l.clear();
+                    LOGGER.log(Level.INFO, "Indexed {0} - {1}", new Object[]{indexed, key});
+                }
+            }
+            if (idocsOAI.size() > size) {
+                LOGGER.log(Level.INFO, "OAI {0}", idocsOAI.size());
+                solr.add("oai", idocsOAI);
+                solr.commit("oai");
+                idocsOAI.clear();
+            }
+        } catch(Exception ex) {
             LOGGER.log(Level.SEVERE, "Can't commit changes");
-            SolrClientFactory.resetSolrClient();
+            System.out.println(ex);
+            // LOGGER.log(Level.SEVERE, ex.toString()); 
+            SolrClientFactory.resetSolrClient(); 
             throw ex;// new Exception(ex)
         }
     }

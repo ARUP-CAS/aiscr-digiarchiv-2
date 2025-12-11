@@ -297,10 +297,10 @@ export class MapViewComponent {
       return;
     }
     if (mapIdChanged) {
-      this.state.mapResult = null;
+      this.state.mapResult.set(null);
     }
     if (!this.currentMapId) {
-      this.state.mapResult = null;
+      this.state.mapResult.set(null);
       this.clearSelectedMarker();
     } else {
       if (mapIdChanged && !this.route.snapshot.queryParamMap.has('loc_rpt')) {
@@ -372,8 +372,6 @@ export class MapViewComponent {
         disableText: this.service.getTranslation('map.desc.remove selection')
       }
     });
-
-    console.log(this.locationFilter )
 
     if (this.state.locationFilterBounds) {
       this.locationFilter.setBounds(this.state.locationFilterBounds);
@@ -726,7 +724,7 @@ export class MapViewComponent {
   }
 
   setHeatData(distErr: number) {
-    if (this.state.mapResult) {
+    if (this.state.mapResult()) {
       return
     }
     this.loading = true;
@@ -786,7 +784,7 @@ export class MapViewComponent {
     this.heatmapLayer.setData(heatData);
     this.map.addLayer(this.heatmapLayer);
     setTimeout(() => {
-      if (this.state.mapResult) {
+      if (this.state.mapResult()) {
         //this.hitMarker(this.state.mapResult);
       }
       this.loading = false;
@@ -927,7 +925,7 @@ export class MapViewComponent {
     }
     if (ids.length === 0) {
       this.stopLoadingMarkers();
-      if (this.currentMapId && !this.state.mapResult) {
+      if (this.currentMapId && !this.state.mapResult()) {
         this.getMarkerById(this.currentMapId, false, false);
       }
       return;
@@ -946,7 +944,7 @@ export class MapViewComponent {
         this.loadNextMarkers(ids, entity, isId)
       } else {
         this.stopLoadingMarkers();
-        if (this.currentMapId && !this.state.mapResult) {
+        if (this.currentMapId && !this.state.mapResult()) {
           this.getMarkerById(this.currentMapId, false, false);
         }
       }
@@ -1005,7 +1003,7 @@ export class MapViewComponent {
             presnost: '',
             typ: 'bod',
             docIds: [doc.ident_cely],
-            pian_chranene_udaje: null
+            pian_chranene_udaje: doc.pian_chranene_udaje
           });
           if (doc.ident_cely === this.currentMapId) {
             mrk.setIcon(this.hitIcon);
@@ -1013,11 +1011,15 @@ export class MapViewComponent {
           // this.markersList.push(mrk);
           mrk.addTo(this.markers);
         });
+        // Je to pian
+        if (doc.pian_chranene_udaje) {
+          this.addShapeLayer(doc.ident_cely, doc.pian_presnost, doc.pian_chranene_udaje?.geom_wkt.value, [doc.ident_cely]);
+        }
       }
 
     });
     this.loadingMarkers = false;
-    if (this.currentMapId && !this.state.mapResult) {
+    if (this.currentMapId && !this.state.mapResult()) {
       this.getMarkerById(this.currentMapId, false, false);
     }
 
@@ -1039,7 +1041,7 @@ export class MapViewComponent {
       // this.markersList = [];
       // this.markers.clearLayers();
     }
-    const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez';
+    const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez' || docs[0]['entity'] === 'pian';
 
     if (byLoc) {
       this.setMarkersByLoc(docs, isId)
@@ -1120,7 +1122,7 @@ export class MapViewComponent {
         return;
       }
       if (!docIds.includes(this.currentMapId)) {
-        this.state.mapResult = null;
+        this.state.mapResult.set(null);
       }
       this.markersList = [];
       //this.opened = true;
@@ -1187,13 +1189,12 @@ export class MapViewComponent {
         this.state.setSearchResponse(res, 'map');
       }
       const doc = res.response.docs.find((d: any) => d.ident_cely === docId);
-      this.state.mapResult = doc;
+      this.state.mapResult.set(doc);
       this.clearSelectedMarker();
       this.setMarkers(res.response.docs, false, true);
       if (zoom) {
         this.zoomOnMapResult(doc);
       }
-
 
     });
   }
@@ -1223,9 +1224,7 @@ export class MapViewComponent {
   zoomOnMapResult(doc: any) {
 
     this.hitMarker(doc);
-console.log(doc)
     const bounds: any = this.getBoundsByDoc(doc);
-console.log(bounds)
     this.map.setView(bounds.getCenter(), Math.max(this.config.mapOptions.hitZoomLevel, this.map.getZoom()));
     if (!this.map.getBounds().contains(bounds)) {
       // Markers outside view in this zoom
