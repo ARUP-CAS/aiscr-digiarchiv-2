@@ -332,7 +332,7 @@
       "druh": "Class",
       "dalsi_katastry": "Other cadastres",
       "f_typ_projektu": "Type",
-      "podnet": "Motivation",
+      "podnet": "Intervention motivation",
       "predano_organizace": "Transferred to organisation",
       "inv_cislo": "Registering no.",
       "f_okres": "District",
@@ -405,7 +405,7 @@
       "Dokumentovaná akce/lokalita": "Documented event/site",
       "Vedoucí akce": "Fieldwork manager",
       "Akce - lokalizace": "Location",
-      "Akce - lokalizace/okolnosti": "Location / circumstances",
+      "Akce - lokalizace/okolnosti": "Location/circumstances",
       "Pian": "PIAN",
       "Nahrazuje NZ": "Substitutes report",
       "odlozena_nz": "Report postponed",
@@ -427,7 +427,7 @@
       "Druh lokality": "Site class",
       "Další katastry": "Other cadastres",
       "Projekt - typ": "Type",
-      "Projekt - podnět": "Motivation",
+      "Projekt - podnět": "Intervention motivation",
       "Projekt - oznaceni_stavby": "Development permit ID",
       "Počet samostatných nálezů": "Finds",
       "Parcelní číslo": "Parcel number",
@@ -532,7 +532,7 @@
       "Výsledky": "Results"
     },
     "button": {
-      "Filtrace / Výsledky": "Filtration / Results"
+      "Filtrace / Výsledky": "Filtration/Results"
     }
   },
 
