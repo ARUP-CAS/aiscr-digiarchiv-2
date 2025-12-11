@@ -384,9 +384,10 @@ export class MapViewComponent {
 
     L.control.polylineMeasure({
       position: 'topright',
-      
+
       tooltipTextFinish: this.service.getTranslation('map.desc.tooltipTextFinish'), // 'Click to <b>finish line</b><br>',
-      tooltipTextDelete: this.service.getTranslation('map.desc.tooltipTextDelete'), // 'Press SHIFT-key and click to <b>delete point</b>',
+      // tooltipTextDelete: this.service.getTranslation('map.desc.tooltipTextDelete'), // 'Press SHIFT-key and click to <b>delete point</b>',
+      tooltipTextDelete: '', // 'Press SHIFT-key and click to <b>delete point</b>',
       tooltipTextMove: this.service.getTranslation('map.desc.tooltipTextMove'), // 'Click and drag to <b>move point</b><br>',
       tooltipTextResume: this.service.getTranslation('map.desc.tooltipTextResume'), // '<br>Press CTRL-key and click to <b>resume line</b>',
       tooltipTextAdd: this.service.getTranslation('map.desc.tooltipTextAdd'), // 'Press CTRL-key and click to <b>add point</b>',
