@@ -173,14 +173,14 @@ public class Options {
     }
   }
 
-  public String getOAIListMetadataFormats() {
+  public String getOAIListMetadataFormats(String version) {
     try {
-      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListMetadataFormats.xml";
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListMetadataFormats_"+version+".xml";
       File f = new File(path);
       if (f.exists() && f.canRead()) {
         return FileUtils.readFileToString(f, "UTF-8");
       } else {
-        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListMetadataFormats.xml"));
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListMetadataFormats_"+version+".xml"));
         return FileUtils.readFileToString(fdef, "UTF-8");
       }
     } catch (IOException ex) {

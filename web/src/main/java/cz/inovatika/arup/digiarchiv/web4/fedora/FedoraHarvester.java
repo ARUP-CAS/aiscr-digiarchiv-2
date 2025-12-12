@@ -97,6 +97,20 @@ public class FedoraHarvester {
         FileUtils.writeStringToFile(f, status, "UTF-8");
     }
 
+    private void writeUpdateFile(Instant date) throws IOException {
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + "update_time.txt");
+        FileUtils.writeStringToFile(f, date.toString(), "UTF-8");
+    }
+
+    private String readUpdateFile() throws IOException {
+        File f = new File(InitServlet.CONFIG_DIR + File.separator + "update_time.txt");
+        if (f.exists() && f.canRead()) {
+            return FileUtils.readFileToString(f, "UTF-8");
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Stop fedora index process
      *
@@ -178,6 +192,9 @@ public class FedoraHarvester {
             String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
             String lastDate = from;
             if (lastDate == null) {
+                lastDate = readUpdateFile(); // 2023-08-01T00:00:00.000Z
+            }
+            if (lastDate == null) {
                 lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
             }
             // lastDate = "2024-07-30T15:37:05.633Z";
@@ -205,6 +222,7 @@ public class FedoraHarvester {
 
             writeRetToFile("update", start);
             writeStatusFile("update", STATUS_FINISHED);
+            writeUpdateFile(start);
             if (total > 0) {
                 LOGGER.log(Level.INFO, "Running update for changes after start");
                 update(start.toString(), solr);
@@ -805,6 +823,8 @@ public class FedoraHarvester {
             model = "archeologicky_zaznam:" + model;
         } else if (model.equals("knihovna_3d")) {
             model = "dokument:3d";
+        } else if (model.equals("heslo")) {
+            model = "heslo:" + edoc.getFieldValue("nazev_heslare");
         }
         idoc.setField("model", model);
         if (edoc.containsKey("projekt_organizace")) {
@@ -858,8 +878,7 @@ public class FedoraHarvester {
             }
         } catch(Exception ex) {
             LOGGER.log(Level.SEVERE, "Can't commit changes");
-            System.out.println(ex);
-            // LOGGER.log(Level.SEVERE, ex.toString()); 
+            LOGGER.log(Level.SEVERE, ex.toString()); 
             SolrClientFactory.resetSolrClient(); 
             throw ex;// new Exception(ex)
         }

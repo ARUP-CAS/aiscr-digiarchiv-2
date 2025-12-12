@@ -39,7 +39,7 @@ public class OAIServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String version = request.getPathInfo();
         if ("/v2".equals(version)) {
-            version = "/v2.0";
+            version = "/v2.2";
         }
         try {
             String actionNameParam = request.getParameter("verb");

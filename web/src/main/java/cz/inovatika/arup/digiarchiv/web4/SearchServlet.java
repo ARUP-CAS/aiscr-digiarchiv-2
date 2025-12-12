@@ -56,7 +56,7 @@ public class SearchServlet extends HttpServlet {
             String action = request.getPathInfo().substring(1);
             if (action != null) {
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
-                String json = actionToDo.doPerform(request, response);
+                String json = actionToDo.doPerform(request, response); 
                 out.println(json);
             } else {
                 out.print("action -> " + StringEscapeUtils.escapeHtml4(action));
