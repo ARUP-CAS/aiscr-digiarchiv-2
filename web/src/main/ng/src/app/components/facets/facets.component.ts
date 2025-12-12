@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -65,7 +65,7 @@ export class FacetsComponent implements OnInit {
   changedFacets: Crumb[] = [];
   math = Math;
 
-  facetsSorted: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[];
+  facetsSorted = signal<{ field: string, values: { name: string, type: string, value: number, operator: string }[] }[]>([]);
   expandedFacets: {[field: string]: boolean} = {};
 
   constructor(
@@ -85,7 +85,7 @@ export class FacetsComponent implements OnInit {
   }
 
   orderFacets() {
-    this.facetsSorted = [];
+    const facetsSorted: { field: string, values: { name: string, type: string, value: number, operator: string, poradi?: number }[] }[] =[];
     this.state.facetsFiltered.forEach(f => {
         const ff: { name: string, type: string, value: number, operator: string, poradi?: number }[] = f.values;
         
@@ -118,9 +118,10 @@ export class FacetsComponent implements OnInit {
             return v2.value - v1.value
           });
         }
-        this.facetsSorted.push({ field: f.field, values: ff });
+        facetsSorted.push({ field: f.field, values: ff });
     });
 
+    this.facetsSorted.update(f => [...facetsSorted]);
 
   }
 
