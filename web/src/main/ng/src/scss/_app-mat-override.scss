@@ -554,8 +554,8 @@
 }
 
 
-// @for $i from 0 through 5 {
-//   mat-card.mat-elevation-z#{$i} {
-//     @include mat.elevation($i);
-//   }
-// }
+@for $i from 0 through 5 {
+  mat-card.mat-elevation-z#{$i} {
+    @include mat.elevation($i);
+  }
+}

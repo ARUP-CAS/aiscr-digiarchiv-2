@@ -127,6 +127,7 @@
     margin-left: 142px;
     max-height: calc(100% - 100px);
     overflow-y: auto;
+    box-shadow: var(--mat-sys-level1);
 
     .app-card-result {
       margin-bottom: 0 !important;
