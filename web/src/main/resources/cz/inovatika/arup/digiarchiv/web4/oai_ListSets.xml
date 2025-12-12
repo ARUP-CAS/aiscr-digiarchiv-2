@@ -130,6 +130,506 @@
       </setDescription>
     </set>
     <set>
+      <setSpec>heslo:adb_podnet</setSpec>
+      <setName>Heslář: ADB – podnět / Vocabulary: ADP – motivation</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:adb_typ</setSpec>
+      <setName>Heslář: ADB – typ sondy / Vocabulary: ADP – trench type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:akce_typ</setSpec>
+      <setName>Heslář: Typ akce / Vocabulary: Fieldwork Event type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:akce_typ_kat</setSpec>
+      <setName>Heslář: Typ akce kategorie / Vocabulary: Fieldwork Event category type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:aktivita</setSpec>
+      <setName>Heslář: Aktivita / Vocabulary: Activity</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:areal</setSpec>
+      <setName>Heslář: Areal / Vocabulary: Area</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:areal_kat</setSpec>
+      <setName>Heslář: Areal kategorie / Vocabulary: Area category</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:datum_specifikace</setSpec>
+      <setName>Heslář: Datum specifikace / Vocabulary: Specification date</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dohlednost</setSpec>
+      <setName>Heslář: Dohlednost / Vocabulary: Visibility</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dok_jednotka_typ</setSpec>
+      <setName>Heslář: Dokumentační jednotka typ / Vocabulary: Documentation unit type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_format</setSpec>
+      <setName>Heslář: Dokument - formát / Vocabulary: Document format</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_licence</setSpec>
+      <setName>Heslář: Dokument - licence / Vocabulary: Document licence</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_material</setSpec>
+      <setName>Heslář: Dokument - materiál / Vocabulary: Document material</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_nahrada</setSpec>
+      <setName>Heslář: Dokument - náhrada / Vocabulary: Document replacement</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_rada</setSpec>
+      <setName>Heslář: Dokument - řada / Vocabulary: Document Series</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_typ</setSpec>
+      <setName>Heslář: Dokument - typ / Vocabulary: Document type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_ulozeni</setSpec>
+      <setName>Heslář: Dokument - uložení / Vocabulary: Document location</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:dokument_zachovalost</setSpec>
+      <setName>Heslář: Dokument - zachovalost / Vocabulary: Document State of preservation</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:ext_zdroj_typ</setSpec>
+      <setName>Heslář: Externí zdroj - typ / Vocabulary: External sources- type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:jazyk</setSpec>
+      <setName>Heslář: Jazyk / Vocabulary: Language</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:jistota_urceni</setSpec>
+      <setName>Heslář: Jistota určení / Vocabulary: Level of confidence</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:letfoto_tvar</setSpec>
+      <setName>Heslář: Letecké fotografie - tvar / Vocabulary: Aerial photographs - shape</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:letiste</setSpec>
+      <setName>Heslář: Letiště / Vocabulary: Airport</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:lokalita_druh</setSpec>
+      <setName>Heslář: Lokalita - druh / Vocabulary: Site - class</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:lokalita_druh_kat</setSpec>
+      <setName>Heslář: Lokalita - kategorie druhu / Vocabulary: Site - class category</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:lokalita_typ</setSpec>
+      <setName>Heslář: Lokalita - typ / Vocabulary: Site - type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:nalez_typ</setSpec>
+      <setName>Heslář: Nález - typ / Vocabulary: Finding - type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:nalezove_okolnosti</setSpec>
+      <setName>Heslář: Nálezové okolnosti / Vocabulary: Finding context</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:obdobi</setSpec>
+      <setName>Heslář: Období / Vocabulary: Period</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:obdobi_kat</setSpec>
+      <setName>Heslář: Období - kategorie / Vocabulary: Period category</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:objekt_druh</setSpec>
+      <setName>Heslář: Objekt - druh / Vocabulary: Object - class</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:objekt_druh_kat</setSpec>
+      <setName>Heslář: Objekt - druh kategorie / Vocabulary: Object - class category</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:objekt_specifikace</setSpec>
+      <setName>Heslář: Objekt - specifikace kategorie / Vocabulary: Object - specification</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:objekt_specifikace_kat</setSpec>
+      <setName>Heslář: Objekt - druh kategorie / Vocabulary: Object - specification category</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:organizace_typ</setSpec>
+      <setName>Heslář: Organizace - typ / Vocabulary: Organization - type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:pamatkova_ochrana</setSpec>
+      <setName>Heslář: Památková ochrana / Vocabulary: Heritage protection</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:pian_presnost</setSpec>
+      <setName>Heslář: PIAN - přesnost / Vocabulary: PIAN - accuracy</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:pian_typ</setSpec>
+      <setName>Heslář: PIAN - typ / Vocabulary: PIAN - type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:pocasi</setSpec>
+      <setName>Heslář: Počasí / Vocabulary: Weather</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:posudek_typ</setSpec>
+      <setName>Heslář: Posudek - typ / Vocabulary: Expert report - type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:posudek_typ_kat</setSpec>
+      <setName>Heslář: Posudek - typ kategorie / Vocabulary: Expert report - type category</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:predmet_druh</setSpec>
+      <setName>Heslář: Předmět - druh / Vocabulary: Find - class</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:predmet_druh_kat</setSpec>
+      <setName>Heslář: Předmět - druh kategorie / Vocabulary: Find - class category</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:predmet_specifikace</setSpec>
+      <setName>Heslář: Předmět - specifikace / Vocabulary: Find - specification</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:pristupnost</setSpec>
+      <setName>Heslář: Přístupnost / Vocabulary: Acessibility</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:projekt_typ</setSpec>
+      <setName>Heslář: Projekt - typ / Vocabulary: Project - type</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:stav_dochovani</setSpec>
+      <setName>Heslář: Stav dochování / Vocabulary: State of preservation</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:udalost_typ</setSpec>
+      <setName>Heslář: Událost - typ / Vocabulary: Type of event</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:vyskovy_bod_typ</setSpec>
+      <setName>Heslář: Typ výškového bodu / Vocabulary: Type of elevation point</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>heslo:zeme</setSpec>
+      <setName>Heslář: Země / Vocabulary: Country</setName>
+      <setDescription>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:description xml:lang="cs">Hesla z řízených slovníků užívaných v AMČR.</dc:description>
+          <dc:description xml:lang="en">Terms from the controlled vocabularies used in AMCR.</dc:description>
+        </oai_dc:dc>
+      </setDescription>
+    </set>
+    <set>
       <setSpec>ruian_kraj</setSpec>
       <setName>RÚIAN - Kraje / RÚIAN - Regions</setName>
       <setDescription>

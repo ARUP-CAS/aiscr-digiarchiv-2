@@ -133,7 +133,7 @@ public class OAIRequest {
         ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req, version))
-                .append(Options.getInstance().getOAIIdentify())
+                .append(Options.getInstance().getOAIIdentify(version))
                 .append("</OAI-PMH>");
         return ret.toString();
     }
@@ -170,7 +170,7 @@ public class OAIRequest {
             ret.append(headerOAI())
                     .append(responseDateTag())
                     .append(requestTag(req, version))
-                    .append(Options.getInstance().getOAIListMetadataFormats())
+                    .append(Options.getInstance().getOAIListMetadataFormats(version))
                     .append("</OAI-PMH>");
             return ret.toString();
         } catch (SolrServerException | IOException ex) {
@@ -331,6 +331,8 @@ public class OAIRequest {
             if (model == null) {
                 model = "*";
             } else if (model.equals("archeologicky_zaznam")) {
+                model = model + "\\:*";
+            } else if (model.equals("heslo")) {
                 model = model + "\\:*";
             } else if (model.equals("dokument")) {
                 model = model + "*";

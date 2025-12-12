@@ -1,36 +1,36 @@
-@if (value()) {
+@if (strVal()) {
   @if (isChild()) {
     @if (!isDocument && !isDate() && !isYear()) {
-      <span >{{heslar() ? (value() | translate) : value() }}</span>
+      <span >{{heslar() ? (strVal() | translate) : strVal() }}</span>
     }
     @if (!isDocument && isDate()) {
-      <span >{{value() | date : 'yyyy-MM-dd'}} </span>
+      <span >{{strVal() | date : 'yyyy-MM-dd'}} </span>
     }
     @if (!isDocument && isYear()) {
-      <span >{{value()}} </span>
+      <span >{{strVal()}} </span>
     }
     @if (isDocument && !isDate()) {
-      {{heslar() ? (value() | translate) : value() }}
+      {{heslar() ? (strVal() | translate) : strVal() }}
     }
     @if (isDocument && isDate()) {
-      {{value() | date : 'yyyy-MM-dd'}}
+      {{strVal() | date : 'yyyy-MM-dd'}}
     }
   }
   @if (!isChild()) { 
     @if (!isDocument && !isDate() && !isYear()) {
-      <a (click)="addFilter($event)" class="app-filter-badge">{{heslar() ? (value() | translate) : value() }} <mat-icon>filter_alt</mat-icon></a>
+      <a (click)="addFilter($event)" class="app-filter-badge">{{heslar() ? (strVal() | translate) : strVal() }} <mat-icon>filter_alt</mat-icon></a>
     }
     @if (!isDocument && isDate()) {
-      <a (click)="addFilter($event)" class="app-filter-badge">{{value() | date : 'yyyy-MM-dd'}} <mat-icon>filter_alt</mat-icon></a>
+      <a (click)="addFilter($event)" class="app-filter-badge">{{strVal() | date : 'yyyy-MM-dd'}} <mat-icon>filter_alt</mat-icon></a>
     }
     @if (!isDocument && isYear()) {
-      <a (click)="addFilter($event)" class="app-filter-badge">{{value()}} <mat-icon>filter_alt</mat-icon></a>
+      <a (click)="addFilter($event)" class="app-filter-badge">{{strVal()}} <mat-icon>filter_alt</mat-icon></a>
     }
     @if (isDocument && !isDate()) {
-      {{heslar() ? (value() | translate) : value() }}
+      {{heslar() ? (strVal() | translate) : strVal() }}
     }
     @if (isDocument && isDate()) {
-      {{value() | date : 'yyyy-MM-dd'}}
+      {{strVal() | date : 'yyyy-MM-dd'}}
     }
   }
 }

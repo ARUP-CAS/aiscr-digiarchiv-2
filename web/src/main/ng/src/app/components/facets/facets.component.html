@@ -52,7 +52,7 @@
     </mat-expansion-panel>
   }
 
-  @for (facetField of facetsSorted; track facetField) {
+  @for (facetField of facetsSorted(); track facetField) {
     @if (facetField.values.length > 0) {
       <mat-expansion-panel class="app-scroll" [expanded]="state.areFacetsFiltered || expandedFacets[facetField.field]">
         <mat-expansion-panel-header [expandedHeight]="facetHeight" [collapsedHeight]="facetHeight" (click)="expandedFacets[facetField.field] = !expandedFacets[facetField.field]">

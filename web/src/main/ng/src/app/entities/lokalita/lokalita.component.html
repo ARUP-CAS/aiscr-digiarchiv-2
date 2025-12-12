@@ -143,7 +143,7 @@
               </tbody>
             </table>
             <mat-accordion multi="true">
-              @for (dok_jednotka of _result.az_dokumentacni_jednotka; track dok_jednotka.ident_cely) {
+              @for (dok_jednotka of _result.az_dokumentacni_jednotka; track dok_jednotka) {
                 <app-dok-jednotka [result]="dok_jednotka" [pians]="_result.az_dj_pian" [adbs]="_result.az_dj_adb"></app-dok-jednotka>
               }
             </mat-accordion>

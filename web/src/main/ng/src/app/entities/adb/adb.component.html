@@ -54,7 +54,7 @@
     }
     @if (_result.adb_autor_popisu) {
       <div>
-        <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ _result.adb_autor_popisu }}
+        <label class="app-label">{{ 'card.desc.Autor popisu' | translate }}:</label>&#160;{{ _result.adb_autor_popisu.value ? _result.adb_autor_popisu.value : _result.adb_autor_popisu }}
       </div>
     }
     @if (_result.adb_rok_popisu) {
@@ -64,7 +64,7 @@
     }
     @if (_result.adb_autor_revize) {
       <div>
-        <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ _result.adb_autor_revize }}
+        <label class="app-label">{{ 'card.desc.Autor revize' | translate }}:</label>&#160;{{ _result.adb_autor_revize.value ? _result.adb_autor_revize.value : _result.adb_autor_revize }}
       </div>
     }
     @if (_result.adb_rok_revize > 0) {
@@ -92,7 +92,7 @@
                 <a [routerLink]="'/id/' + vb.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ vb.ident_cely }} <mat-icon>link</mat-icon></a>
                 (<app-inline-filter [field]="'adb_vyskovy_bod_typ'" [value]="vb.typ.id" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
                 @if (vb.geom_gml) {
-                  <div><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ vb.geom_gml }}</div>
+                  <div><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ vb.geom_gml.value ? vb.geom_gml.value : vb.geom_gml }}</div>
                 }
                 @if (vb.geom_wkt) {
                   <div><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>

@@ -94,7 +94,7 @@ public class OAIServlet extends HttpServlet {
         Identify {
             @Override
             String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
-                return OAIRequest.identify(req, version);
+                return OAIRequest.identify(req, version == null ? "2.2" : version);
             }
         },
         ListSets {
@@ -106,7 +106,7 @@ public class OAIServlet extends HttpServlet {
         ListMetadataFormats {
             @Override
             String doPerform(HttpServletRequest req, HttpServletResponse response, String version) throws Exception {
-                return OAIRequest.metadataFormats(req, version);
+                return OAIRequest.metadataFormats(req, version == null ? "2.2" : version);
             }
         },
         GetRecord {

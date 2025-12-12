@@ -15,7 +15,7 @@ import './locationfilter.js';
 import 'leaflet.polylinemeasure';
 declare var HeatmapOverlay: any;
 
-import * as Wkt from 'wicket';
+//import * as Wkt from 'wicket';
 //import {Wkt} from 'wicket';
 //import 'wicket';
 //declare var Wkt: any; 

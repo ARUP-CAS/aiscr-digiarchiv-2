@@ -16,9 +16,9 @@
   @if (detailExpanded()) {
     <mat-card-content>
       @if (_result.vyskovy_bod_geom_gml) {
-        <div><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ _result.vyskovy_bod_geom_gml }}</div>
+        <div><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ _result.vyskovy_bod_geom_gml.value ? _result.vyskovy_bod_geom_gml.value : _result.vyskovy_bod_geom_gml }}</div>
       }
-      @if (_result.vyskovy_bod_geom_wkt) {
+      @if (_result.vyskovy_bod_geom_wkt.value ? _result.vyskovy_bod_geom_wkt.value : _result.vyskovy_bod_geom_wkt) {
         <div><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
         EPSG:{{ _result.vyskovy_bod_geom_wkt.epsg }}, {{ _result.vyskovy_bod_geom_wkt.value }}
       </div>
