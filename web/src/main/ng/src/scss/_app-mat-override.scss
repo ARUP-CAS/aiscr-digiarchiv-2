@@ -409,6 +409,12 @@
   .app-card-result {
     @include setEntityCardColor();
 
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     &:not(.app-card-child) {
       margin-bottom: 16px;
     }
