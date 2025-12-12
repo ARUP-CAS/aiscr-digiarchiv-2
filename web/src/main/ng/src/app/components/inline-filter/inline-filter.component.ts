@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, input } from '@angular/core';
+import { Component, OnInit, computed, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -22,6 +22,9 @@ export class InlineFilterComponent implements OnInit {
 
   readonly field = input<string>();
   readonly value = input<any>();
+  public strVal = computed<string>(() => 
+    (this.value().id ? this.value().id : this.value()) + ''
+  );
   readonly heslar = input<string>();
   readonly isChild = input<boolean>();
   readonly isDate = input(false);
@@ -38,7 +41,9 @@ export class InlineFilterComponent implements OnInit {
   }
 
   addFilter(event: any) {
-    let v = this.value() + '';
+    const val = this.value();
+    console.log(this.field(), val, val.id)
+    let v = (val.id ? val.id : val) + '';
     const filter = this.config.filterFields.find(ff => ff.field === this.field());
     if (filter && filter.type === 'date') {
     // if (this.config.dateFacets.includes(this.field)) {

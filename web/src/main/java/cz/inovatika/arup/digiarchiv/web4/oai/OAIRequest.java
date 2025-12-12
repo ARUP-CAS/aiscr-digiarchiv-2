@@ -252,8 +252,6 @@ public class OAIRequest {
         if ("akce".equals(set) || "lokalita".equals(set) || "knihovna_3d".equals(set)) {
             return false;
         }
-        System.out.println(set);
-        System.out.println(Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set));
         return Options.getInstance().getJSONObject("OAI").getJSONArray("sets").toList().contains(set);
     }
 
