@@ -72,16 +72,20 @@
 
           @if (loadingMarkers) {
             <mat-card class="app-active-pian-facet">
-              <mat-card-content>
-                <a [matTooltip]="'map.tooltip.Zastavit' | translate" (click)="stopLoadingMarkers()"><mat-icon style="margin-right: 0px !important">stop</mat-icon></a>
+              <mat-card-content class="app-p-0">
+                <a [matTooltip]="'map.tooltip.Zastavit' | translate" (click)="stopLoadingMarkers()">
+                  <mat-icon style="margin-right: 0px !important">stop</mat-icon>
+                </a>
               </mat-card-content>
             </mat-card>
           }
 
           @if (state.pianId) {
             <mat-card class="app-active-pian-facet">
-              <mat-card-content>
-                <a [matTooltip]="'map.tooltip.Odstranit tento filtr' | translate" (click)="clearPian()"><mat-icon>clear</mat-icon>{{ state.pianId }}</a>&#160;
+              <mat-card-content class="app-p-0">
+                <a [matTooltip]="'map.tooltip.Odstranit tento filtr' | translate" (click)="clearPian()" class="app-fxLayout app-row app-center-v app-gap-1 app-pr-1">
+                  <mat-icon>clear</mat-icon><span>{{ state.pianId }}</span>
+                </a>
               </mat-card-content>
             </mat-card>
           }
