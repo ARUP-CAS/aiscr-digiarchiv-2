@@ -125,8 +125,12 @@
     z-index: 1002;
     width: 850px;
     margin-left: 142px;
-    max-height: calc(100% - var(--app-gap-top-card-info));
+    max-height: calc(100% - 100px);
     overflow-y: auto;
+
+    .app-card-result {
+      margin-bottom: 0 !important;
+    }
 
     .mat-mdc-card-title {
       max-width: calc(100% - 35px);
