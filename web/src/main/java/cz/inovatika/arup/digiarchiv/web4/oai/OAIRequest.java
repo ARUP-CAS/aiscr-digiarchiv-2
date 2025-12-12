@@ -133,7 +133,7 @@ public class OAIRequest {
         ret.append(headerOAI())
                 .append(responseDateTag())
                 .append(requestTag(req, version))
-                .append(Options.getInstance().getOAIIdentify())
+                .append(Options.getInstance().getOAIIdentify(version))
                 .append("</OAI-PMH>");
         return ret.toString();
     }

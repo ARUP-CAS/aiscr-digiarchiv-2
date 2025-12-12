@@ -157,14 +157,14 @@ public class Options {
     client_conf.put("indexing", _indexingFlag);
   }
 
-  public String getOAIIdentify() {
+  public String getOAIIdentify(String version) {
     try {
-      String path = InitServlet.CONFIG_DIR + File.separator + "oai_identify.xml";
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_identify_"+version+".xml";
       File f = new File(path);
       if (f.exists() && f.canRead()) {
         return FileUtils.readFileToString(f, "UTF-8");
       } else {
-        File fdef = FileUtils.toFile(Options.class.getResource("oai_identify.xml"));
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_identify_"+version+".xml"));
         return FileUtils.readFileToString(fdef, "UTF-8");
       }
     } catch (IOException ex) {

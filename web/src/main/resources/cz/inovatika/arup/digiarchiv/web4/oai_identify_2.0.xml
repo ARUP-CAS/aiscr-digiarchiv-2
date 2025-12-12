@@ -1,6 +1,6 @@
   <Identify>
     <repositoryName>Archaeological Map of the Czech Republic (AMCR)</repositoryName>
-    <baseURL>https://api.aiscr.cz/oai</baseURL>
+    <baseURL>https://api.aiscr.cz/2.0/oai</baseURL>
     <protocolVersion>2.0</protocolVersion>
     <adminEmail>info@amapa.cz</adminEmail>
     <earliestDatestamp>2024-07-14T21:39:10.988Z</earliestDatestamp>
