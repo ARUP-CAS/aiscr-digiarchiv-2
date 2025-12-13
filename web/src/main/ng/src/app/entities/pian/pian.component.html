@@ -26,22 +26,24 @@
     </mat-expansion-panel>
   }
   @if (inDocument() || mapDetail()) {
-    <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()">
+    <mat-card class="app-card-result" [class.app-card-child]="isChild()">
       @if ((inDocument() || mapDetail()) && !isChild()) {
         <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
           <mat-icon>clear</mat-icon>
         </a>
       }
       <mat-card-header>
-        <mat-card-title>
-          {{ 'card.title.Pian' | translate }}&#160;{{ _result.ident_cely }}
-          <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="_result.pian_typ" [heslar]="'typ_pian'"></app-inline-filter>
-          <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="_result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>
-          <span class="app-pipe"></span>
+        <mat-card-title class="app-fxLayout app-row app-gap-4">
+          <div class="app-fxFlex">
+            <span>{{ 'card.title.Pian' | translate }}&#160;{{ _result.ident_cely }}</span>
+            <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="_result.pian_typ" [heslar]="'typ_pian'"></app-inline-filter>
+            <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="_result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>
+            <span class="app-pipe"></span>
+          </div> 
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="app-metadata app-row-gap-16">
+        <div class="app-metadata app-mb-4">
           @if (_result.pristupnost || _result.pian_chranene_udaje?.zm10) {
             <div>
               @if (_result.pristupnost) {

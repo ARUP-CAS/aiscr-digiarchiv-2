@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppState } from '../../app.state';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
 
 @Component({
   imports: [
@@ -68,7 +69,7 @@ export class FooterComponent implements OnInit {
 @Component({
   imports: [
     TranslateModule,
-    MatIconModule
+    MatIconModule, MatButton, MatIconButton
 ],
   selector: 'footer-consent',
   templateUrl: 'consent.html'

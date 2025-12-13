@@ -125,8 +125,13 @@
     z-index: 1002;
     width: 850px;
     margin-left: 142px;
-    max-height: calc(100% - var(--app-gap-top-card-info));
+    max-height: calc(100% - 100px);
     overflow-y: auto;
+    box-shadow: var(--mat-sys-level1);
+
+    .app-card-result {
+      margin-bottom: 0 !important;
+    }
 
     .mat-mdc-card-title {
       max-width: calc(100% - 35px);
@@ -154,6 +159,7 @@
     min-height: 30px;
     line-height: 30px;
     border: 2px solid #ccc;
+    box-shadow: none;
 
     a {
       .mat-icon {

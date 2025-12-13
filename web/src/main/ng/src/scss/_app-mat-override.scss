@@ -409,6 +409,12 @@
   .app-card-result {
     @include setEntityCardColor();
 
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     &:not(.app-card-child) {
       margin-bottom: 16px;
     }
@@ -548,8 +554,8 @@
 }
 
 
-// @for $i from 0 through 5 {
-//   mat-card.mat-elevation-z#{$i} {
-//     @include mat.elevation($i);
-//   }
-// }
+@for $i from 0 through 5 {
+  mat-card.mat-elevation-z#{$i} {
+    @include mat.elevation($i);
+  }
+}
