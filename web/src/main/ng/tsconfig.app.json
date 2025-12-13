@@ -5,7 +5,7 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [
-      "node", "@types/wicket"
+      "node", "./src/assets/wicket"
     ]
   },
   "include": [
