@@ -25,6 +25,10 @@
         </mat-option>
       }
     </mat-select>
-    <mat-icon matSuffix (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [matTooltip]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
+    <div matSuffix class="app-fxLayout app-row app-pr-2">
+      <mat-icon matSuffi (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [matTooltip]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
+      <mat-icon matSuffi>arrow_drop_down</mat-icon>
+    </div>
+    <!-- <mat-icon matSuffix (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [matTooltip]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon> -->
   </mat-form-field>
 </div>

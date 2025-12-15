@@ -15,6 +15,10 @@
 
   .mat-mdc-select {
     font-size: 12px !important;
+
+    ::ng-deep .mat-mdc-select-arrow-wrapper {
+      display: none !important;
+    }
   }
 }
 
