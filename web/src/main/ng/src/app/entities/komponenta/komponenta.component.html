@@ -67,8 +67,8 @@
   <app-inline-filter [field]="'f_obdobi'" [value]="_result.komponenta_obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
   
   @if (_result.hasOwnProperty('komponenta_jistota') || _result.komponenta_presna_datace) {
-    &#160;(@if (!_result['komponenta_jistota']) 
-    {{{ 'facet.field.komponenta_dokument_jistota_false' | translate }}}@if (_result.komponenta_jistota === false && _result.komponenta_presna_datace) 
+    &#160;(@if (_result.hasOwnProperty('komponenta_jistota') && !_result['komponenta_jistota']) 
+    {{{ 'facet.field.komponenta_dokument_jistota_false' | translate }}}@if ((_result.hasOwnProperty('komponenta_jistota') && !_result['komponenta_jistota'])  && _result.komponenta_presna_datace) 
     {
     ;&#160;
   }@if (_result.komponenta_presna_datace) {{{_result.komponenta_presna_datace}}})}@if (_result.komponenta_areal) {
