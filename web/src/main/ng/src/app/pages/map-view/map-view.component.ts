@@ -264,15 +264,16 @@ export class MapViewComponent {
       return;
     }
 
-    this.mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
     if (this.route.snapshot.params['id']) {
+      this.mapIdChanged = this.currentMapId !== this.route.snapshot.params['id'];
       this.isDocumentHandle = true;
       this.state.documentId = this.route.snapshot.params['id'];
       this.currentMapId = this.route.snapshot.params['id'];
     } else {
+      this.mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
       this.isDocumentHandle = false;
-    }
       this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
+    }
 
     this.pianIdChanged = this.currentPianId !== this.route.snapshot.queryParamMap.get('pian_id');
     this.currentPianId = this.route.snapshot.queryParamMap.get('pian_id');
