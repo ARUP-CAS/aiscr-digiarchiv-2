@@ -319,7 +319,6 @@ export class AppState {
   }
 
   setMapResult(result: any, mapDetail: any) {
-    console.log(result)
     const changed = (!result || (result.ident_cely !== this.mapResult()?.ident_cely));
     this.mapResult.set(result);
     // if (!result && !this.isMapaCollapsed) {

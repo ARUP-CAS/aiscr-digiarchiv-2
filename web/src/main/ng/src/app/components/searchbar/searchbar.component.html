@@ -15,9 +15,9 @@
           </button>
         }
         <mat-menu #exports="matMenu">
-          @for (format of formats; track format) {
-          <a mat-menu-item [href]="exportUrl + '&format=' + format" target="_blank" > 
-            {{ format | translate }}
+          @for (u of exportUrls(); track u) {
+          <a mat-menu-item [href]="u.url" target="_blank" > 
+            {{ u.format | translate }}
           </a>
         }
         </mat-menu>

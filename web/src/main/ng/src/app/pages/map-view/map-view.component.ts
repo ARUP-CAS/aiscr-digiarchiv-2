@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, Inject, NgZone, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, NgZone, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -82,7 +82,7 @@ export class MapViewComponent {
   matcher: MediaQueryList;
   sideNavMapBreakPoint: string = "(min-width: 1280px)";
 
-  loading = false;
+  loading = signal<boolean>(false);
   itemSize = 70;
   vsSize = 0;
 
@@ -101,7 +101,7 @@ export class MapViewComponent {
     maxZoom: 18,
     zoom: 4,
     zoomControl: false,
-    wheelDebounceTime: 200,
+    wheelDebounceTime: 1000,
     zoomSnap: 0,
     center: L.latLng(49.803, 15.496),
     preferCanvas: true
@@ -149,7 +149,8 @@ export class MapViewComponent {
   usingMeasure = false;
   markersActive = true;
   isDocumentHandle = false;
-  loadingMarkers = false;
+  mapIdChanged = false;
+  loadingMarkers = signal<boolean>(false);
   settingsBounds = false;
   currentMapId: string = null;
   currentPianId: string = null;
@@ -263,16 +264,15 @@ export class MapViewComponent {
       return;
     }
 
-    let mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
+    this.mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
     if (this.route.snapshot.params['id']) {
       this.isDocumentHandle = true;
       this.state.documentId = this.route.snapshot.params['id'];
       this.currentMapId = this.route.snapshot.params['id'];
-      mapIdChanged = true;
     } else {
       this.isDocumentHandle = false;
-      this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     }
+      this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
 
     this.pianIdChanged = this.currentPianId !== this.route.snapshot.queryParamMap.get('pian_id');
     this.currentPianId = this.route.snapshot.queryParamMap.get('pian_id');
@@ -296,14 +296,15 @@ export class MapViewComponent {
       this.pianIdChanged = false;
       return;
     }
-    if (mapIdChanged) {
+    
+    if (this.mapIdChanged) {
       this.state.mapResult.set(null);
     }
     if (!this.currentMapId) {
       this.state.mapResult.set(null);
       this.clearSelectedMarker();
     } else {
-      if (mapIdChanged && !this.route.snapshot.queryParamMap.has('loc_rpt')) {
+      if (this.mapIdChanged && !this.route.snapshot.queryParamMap.has('loc_rpt')) {
         // Zpracujeme tady jen kdyz nemame souracnice
         // Pokud mame, zkontrolujeme na konci ziskani markeru
         this.getMarkerById(this.currentMapId, false, true);
@@ -499,8 +500,8 @@ export class MapViewComponent {
 
   markersSubs: any;
   stopLoadingMarkers() {
-    this.loading = false;
-    this.loadingMarkers = false;
+    this.loading.set(false);
+    this.loadingMarkers.set(false);
 
     if (this.markersSubs) {
       this.markersSubs.unsubscribe();
@@ -643,9 +644,9 @@ export class MapViewComponent {
     if (!p.entity) {
       p.entity = 'dokument';
     }
-    this.loading = true;
+    this.loading.set(true);
     this.service.search(p as HttpParams).subscribe((resp: any) => {
-      this.loading = false;
+      this.loading.set(false);
       this.state.numFound = resp.response.numFound;
       this.state.setFacets(resp);
       this.processResponse(resp);
@@ -674,7 +675,7 @@ export class MapViewComponent {
             this.setClusterDataByPian(res.response.docs);
           }
           setTimeout(() => {
-            this.loading = false;
+            this.loading.set(false);
           }, 100)
 
         });
@@ -727,13 +728,13 @@ export class MapViewComponent {
     if (this.state.mapResult()) {
       return
     }
-    this.loading = true;
+    this.loading.set(true);
 
     if (this.heatmapLayer) {
       this.map.removeLayer(this.heatmapLayer);
     }
     if (!this.state.heatMaps?.loc_rpt) {
-      //this.state.loading.set(false);
+      this.loading.set(true);
       return;
     }
     // const markersToShow = Math.min(this.state.solrResponse.response.numFound, this.markersList.length);
@@ -787,7 +788,7 @@ export class MapViewComponent {
       if (this.state.mapResult()) {
         //this.hitMarker(this.state.mapResult);
       }
-      this.loading = false;
+      this.loading.set(false);
       this.cd.detectChanges();
     }, 10);
   }
@@ -848,7 +849,7 @@ export class MapViewComponent {
   }
 
   getVisibleAreaMarkers(clean: boolean) {
-    this.loading = true;
+    this.loading.set(true);
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
     const bounds = this.map.getBounds();
     const value = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
@@ -862,6 +863,7 @@ export class MapViewComponent {
     }
     this.state.solrResponse = null;
     this.markersSubs = this.service.search(p as HttpParams).subscribe((res: any) => {
+      this.loading.set(false);
       this.state.setSearchResponse(res, 'map');
 
       this.setMarkers(res.response.docs, clean, false);
@@ -881,7 +883,6 @@ export class MapViewComponent {
         this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
         this.setToMarkerZoom = false;
       }
-      this.loading = false;
     });
   }
 
@@ -940,7 +941,7 @@ export class MapViewComponent {
       //   this.stopLoadingMarkers();
       // } else {
       if (ids.length > 0) {
-        this.loading = true;
+        //this.loading.set(true);
         this.loadNextMarkers(ids, entity, isId)
       } else {
         this.stopLoadingMarkers();
@@ -984,8 +985,8 @@ export class MapViewComponent {
         });
       }
     });
-    this.loading = true;
-    this.loadingMarkers = true;
+    this.loading.set(true);
+    this.loadingMarkers .set(true);
     this.loadNextMarkers(pianIds, 'pian', isId);
   }
 
@@ -1018,13 +1019,13 @@ export class MapViewComponent {
       }
 
     });
-    this.loadingMarkers = false;
+    this.loadingMarkers .set(false);
     if (this.currentMapId && !this.state.mapResult()) {
       this.getMarkerById(this.currentMapId, false, false);
     }
 
     setTimeout(() => {
-      this.loading = false;
+      this.loading.set(false);
       this.cd.detectChanges();
     }, 100)
   }
@@ -1167,10 +1168,10 @@ export class MapViewComponent {
           this.setPianId(ident_cely, docIds);
         });
         layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
-        // layer.addTo(this.overlays);
+        
         layer.addTo(this.markers);
-        if (this.currentMapId || this.markersList.length === 1) {
-          this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
+        if (this.mapIdChanged && this.currentMapId ) {
+           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
         }
         
       }
@@ -1189,7 +1190,9 @@ export class MapViewComponent {
         this.state.setSearchResponse(res, 'map');
       }
       const doc = res.response.docs.find((d: any) => d.ident_cely === docId);
-      this.state.mapResult.set(doc);
+      if (this.currentMapId !== this.state.mapResult()?.ident_cely) {
+        this.state.mapResult.set(doc);
+      }
       this.clearSelectedMarker();
       this.setMarkers(res.response.docs, false, true);
       if (zoom) {

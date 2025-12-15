@@ -1,5 +1,5 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -43,7 +43,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
   formats = ['GML', 'WKT', 'GeoJSON'];
-  exportUrl: string;
+  exportUrls = signal<{url:string, format: string}[]>([]);
 
   constructor(
     private windowRef: AppWindowRef,
@@ -59,9 +59,9 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     this.service.currentLang.subscribe(res => {
       this.setExportUrl();
     });
-    this.route.queryParams.subscribe(val => {
+    //this.route.queryParams.subscribe(val => {
       this.setExportUrl();
-    });
+    //});
   }
 
   setExportUrl() {
@@ -70,15 +70,19 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
       if (str.indexOf('entity=') < 0) {
         str += '&entity=' + this.state.entity;
       }
-      this.exportUrl = 'export-mapa?' + str;
+      const urls: {url:string, format: string}[] = [];
+      this.formats.forEach(f => {
+        urls.push({url:'export-mapa?' + str + '&format=' + f, format: f});
+      })
+      this.exportUrls.update(() => [...urls]);
   }
 
   ngAfterViewInit() {
   }
 
-  openExport() {
-    const link = this.windowRef.nativeWindow.open(this.exportUrl + '&format=raw');
-  }
+  // openExport() {
+  //   const link = this.windowRef.nativeWindow.open(this.exportUrl + '&format=raw');
+  // }
 
   search() {
     const p: any = {};
