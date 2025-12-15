@@ -25,12 +25,18 @@
     list-item-label-text-color: var(--app-color-gray-6),
     list-item-one-line-container-height: auto
   ));
-  .mat-mdc-list-item {
-    padding: 0 8px;
-
-    @include mat.list-overrides((
-      list-item-one-line-container-height: 22px
-    ));
+  
+  .app-facets {
+    .mat-mdc-list-item {
+      &:not(.app-facet-entity, .app-facet-used) {
+        padding: 0 8px;
+      }
+    }
+    .mat-expansion-panel {
+      @include mat.list-overrides((
+        list-item-one-line-container-height: 22px
+      ));
+    }
   }
   .app-facet-entity {
     @include setFacetEntityColor();
@@ -449,10 +455,13 @@
     .mat-mdc-card-header,
     .mat-mdc-card-content {
       a {
-        color: var(--app-color-darknes);
+        &.app-filter-badge,
+        &.app-ident-badge {
+          color: var(--app-color-darknes);
 
-        &:hover {
-          color: var(--app-color-accent);
+          &:hover {
+            color: var(--app-color-accent);
+          }
         }
       }
 

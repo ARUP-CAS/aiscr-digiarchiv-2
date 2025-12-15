@@ -8,7 +8,7 @@
     </div>
   </h3>
   @for (facet of state.breadcrumbs; track facet) {
-    <mat-list-item role="listitem" >
+    <mat-list-item role="listitem" class="app-facet-used">
       @if (facet.field === 'separator') {
         <div class="app-fxLayout app-row app-center-v app-gap-1 app-separator-and">
           <mat-icon></mat-icon>
