@@ -1,5 +1,6 @@
 {
   "solrhost": "http://localhost:8983/solr/",
+  "isTestEnv": false,
   "OAI": {
     "baseUrl": "https://api.aiscr.cz",
     "repositoryName": "Archaeological Map of the Czech Republic (AMCR)",

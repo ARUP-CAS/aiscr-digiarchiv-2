@@ -14,7 +14,9 @@ import org.apache.solr.client.solrj.impl.Http2SolrClient;
 public class SolrClientFactory {
 
     public static final Logger LOGGER = Logger.getLogger(SolrClientFactory.class.getName());
-    private static volatile SolrClient solrClient; // volatile for thread-safety
+    // volatile for thread-safety
+    private static volatile SolrClient solrClient; 
+    private static volatile SolrClient solrClientSearch; 
 
     private SolrClientFactory() {
         // Private constructor to prevent instantiation
@@ -36,6 +38,22 @@ public class SolrClientFactory {
         return solrClient;
     }
 
+    public static SolrClient getSolrClientSearch() {
+        if (solrClientSearch == null) {
+            synchronized (SolrClientFactory.class) {  
+                if (solrClientSearch == null) {
+                    // Replace with your Solr URL and appropriate client implementation
+                    String solrUrl = Options.getInstance().getString("solrhost");
+                    solrClientSearch = new Http2SolrClient.Builder(solrUrl).build();
+                    // For a Solr Cloud setup, you would use CloudSolrClient
+                    // String zkHost = "localhost:2181/solr";
+                    // solrClient = new CloudSolrClient.Builder().withZkHost(zkHost).build();
+                }
+            }
+        }
+        return solrClientSearch;
+    }
+
     public static void resetSolrClient() {
         LOGGER.log(Level.INFO, "Reseting SolrClient");
         if (solrClient != null) {
@@ -46,6 +64,18 @@ public class SolrClientFactory {
             }
         }
         solrClient = null;
+    }
+
+    public static void resetSolrClientSearch() {
+        LOGGER.log(Level.INFO, "Reseting solrClientSearch");
+        if (solrClientSearch != null) {
+            try {
+                solrClientSearch.close();
+            } catch (IOException ex) {
+                Logger.getLogger(SolrClientFactory.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        solrClientSearch = null;
     }
 
     private static class InstanceHolder {
