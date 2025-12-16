@@ -52,17 +52,17 @@
   </button>
   
   @if (!isDocumentDialogOpen() && !inDocument()) {
-    <button matButton="filled" (click)="toggleDetail()" [ngClass]="detailExpanded() ? 'app-rotate-up' : 'app-rotate-down'">
+    <button matButton="tonal" (click)="toggleDetail()" [ngClass]="detailExpanded() ? 'app-rotate-up' : 'app-rotate-down'">
       {{(detailExpanded() ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
     </button>
   }
   @if (state.itemView === 'col' && !isDocumentDialogOpen() && !inDocument()) {
-    <button matButton="filled" class="app-col-detail" (click)="openDocument()">
+    <button matButton="tonal" class="app-col-detail" (click)="openDocument()">
       {{ 'card.button.Zobrazit detail' | translate }}
     </button>
   }
   @if (state.itemView === 'col' && isDocumentDialogOpen() && !inDocument()) {
-    <button matButton="filled" class="app-col-detail" [mat-dialog-close]="false">
+    <button matButton="tonal" class="app-col-detail" [mat-dialog-close]="false">
       {{ 'card.button.Skrýt detail' | translate }}
     </button>
   }

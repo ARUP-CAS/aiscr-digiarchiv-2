@@ -167,10 +167,12 @@
 
   // --- BUTTON ---
   @include mat.button-overrides((
-    filled-container-shape: 3px,
+    text-container-shape: 3px,
     protected-container-shape: 3px,
+    filled-container-shape: 3px,
     outlined-container-shape: 3px,
-    text-container-shape: 3px
+    tonal-container-shape:3px,
+    tonal-container-color: var(--app-color-gray-1)
   ));
   .app-btn-facet {
     @include mat.button-overrides((
