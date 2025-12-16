@@ -160,8 +160,10 @@
 
   // --- PROGRESS BAR ---
   @include mat.progress-bar-overrides((
-    active-indicator-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
-    track-color: #{map.get(map.get(my-theme.$primary-palette, error),10)}
+    //active-indicator-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
+    //track-color: #{map.get(map.get(my-theme.$primary-palette, error),10)},
+    active-indicator-color: var(--app-color-primary),
+    track-color: rgba(var(--app-color-primary-rgb), 0.2)
   ));
 
 
