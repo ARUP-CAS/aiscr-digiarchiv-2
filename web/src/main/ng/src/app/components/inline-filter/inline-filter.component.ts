@@ -16,7 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
   ],
   selector: 'app-inline-filter',
   templateUrl: './inline-filter.component.html',
-  styleUrls: ['./inline-filter.component.scss']
+  styleUrls: ['./inline-filter.component.scss'],
+  preserveWhitespaces: false
 })
 export class InlineFilterComponent implements OnInit {
 

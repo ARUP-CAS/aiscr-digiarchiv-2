@@ -1,36 +1,11 @@
-@if (strVal()) {
-  @if (isChild()) {
-    @if (!isDocument && !isDate() && !isYear()) {
-      <span >{{heslar() ? (strVal() | translate) : strVal() }}</span>
-    }
-    @if (!isDocument && isDate()) {
-      <span >{{strVal() | date : 'yyyy-MM-dd'}} </span>
-    }
-    @if (!isDocument && isYear()) {
-      <span >{{strVal()}} </span>
-    }
-    @if (isDocument && !isDate()) {
-      {{heslar() ? (strVal() | translate) : strVal() }}
-    }
-    @if (isDocument && isDate()) {
-      {{strVal() | date : 'yyyy-MM-dd'}}
-    }
-  }
-  @if (!isChild()) { 
-    @if (!isDocument && !isDate() && !isYear()) {
-      <a (click)="addFilter($event)" class="app-filter-badge">{{heslar() ? (strVal() | translate) : strVal() }} <mat-icon>filter_alt</mat-icon></a>
-    }
-    @if (!isDocument && isDate()) {
-      <a (click)="addFilter($event)" class="app-filter-badge">{{strVal() | date : 'yyyy-MM-dd'}} <mat-icon>filter_alt</mat-icon></a>
-    }
-    @if (!isDocument && isYear()) {
-      <a (click)="addFilter($event)" class="app-filter-badge">{{strVal()}} <mat-icon>filter_alt</mat-icon></a>
-    }
-    @if (isDocument && !isDate()) {
-      {{heslar() ? (strVal() | translate) : strVal() }}
-    }
-    @if (isDocument && isDate()) {
-      {{strVal() | date : 'yyyy-MM-dd'}}
-    }
-  }
-}
+@if (strVal()) {@if (isChild()) {@if (!isDocument && !isDate() && !isYear()){<span >{{heslar() ? (strVal() | translate) : strVal() }}</span>}
+@if (!isDocument && isDate()) {<span >{{strVal() | date : 'yyyy-MM-dd'}} </span>}
+@if (!isDocument && isYear()) {<span >{{strVal()}} </span>}
+@if (isDocument && !isDate()) {{{heslar() ? (strVal() | translate) : strVal() }}}
+@if (isDocument && isDate()) {{{strVal() | date : 'yyyy-MM-dd'}}}}
+@if (!isChild()) {
+@if (!isDocument && !isDate() && !isYear()) {<a (click)="addFilter($event)" class="app-filter-badge">{{heslar() ? (strVal() | translate) : strVal() }} <mat-icon>filter_alt</mat-icon></a>}
+@if (!isDocument && isDate()) {<a (click)="addFilter($event)" class="app-filter-badge">{{strVal() | date : 'yyyy-MM-dd'}} <mat-icon>filter_alt</mat-icon></a>}
+@if (!isDocument && isYear()) {<a (click)="addFilter($event)" class="app-filter-badge">{{strVal()}} <mat-icon>filter_alt</mat-icon></a>}
+@if (isDocument && !isDate()) {{{heslar() ? (strVal() | translate) : strVal() }}}
+@if (isDocument && isDate()) {{{strVal() | date : 'yyyy-MM-dd'}}}}}
