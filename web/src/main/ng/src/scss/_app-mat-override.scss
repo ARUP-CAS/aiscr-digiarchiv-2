@@ -160,17 +160,21 @@
 
   // --- PROGRESS BAR ---
   @include mat.progress-bar-overrides((
-    active-indicator-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
-    track-color: #{map.get(map.get(my-theme.$primary-palette, error),10)}
+    //active-indicator-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
+    //track-color: #{map.get(map.get(my-theme.$primary-palette, error),10)},
+    active-indicator-color: var(--app-color-primary),
+    track-color: rgba(var(--app-color-primary-rgb), 0.2)
   ));
 
 
   // --- BUTTON ---
   @include mat.button-overrides((
-    filled-container-shape: 3px,
+    text-container-shape: 3px,
     protected-container-shape: 3px,
+    filled-container-shape: 3px,
     outlined-container-shape: 3px,
-    text-container-shape: 3px
+    tonal-container-shape:3px,
+    tonal-container-color: var(--app-color-gray-1)
   ));
   .app-btn-facet {
     @include mat.button-overrides((

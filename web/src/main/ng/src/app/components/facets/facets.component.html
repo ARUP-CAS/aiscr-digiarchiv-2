@@ -41,8 +41,8 @@
           @for (cf of config.commonFacets; track cf) {
             <mat-list-item>
               <div class="app-list-content">
-                <a (click)="clickCommonFacet(cf)">
-                  {{ 'commonFacets.' + cf.name | translate}}
+                <a (click)="clickCommonFacet(cf)" class="app-text">
+                  {{ 'commonFacets.' + cf.name | translate }}
                 </a>
               </div>
             </mat-list-item>
