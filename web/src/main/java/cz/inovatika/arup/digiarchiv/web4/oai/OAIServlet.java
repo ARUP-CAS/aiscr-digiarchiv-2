@@ -41,6 +41,10 @@ public class OAIServlet extends HttpServlet {
         if ("/v2".equals(version)) {
             version = "/v2.0";
         }
+        if (version == null) {
+            version = "2.2";
+        }
+        version = version.replaceAll("/", "").replaceAll("v", "");
         try {
             String actionNameParam = request.getParameter("verb");
             if (actionNameParam != null) {

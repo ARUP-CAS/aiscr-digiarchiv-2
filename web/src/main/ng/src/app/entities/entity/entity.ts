@@ -77,7 +77,7 @@ export class Entity {
         this.checkRelations();
         this.hasDetail = false;
         this.detailExpanded = this.inDocument;// && !this.mapDetail;
-        if (this.mapDetail()) {
+        if (this.mapDetail() || (isPlatformBrowser(this.platformId) && this.inDocument())) {
           this.getFullId();
         }
         this.okres();

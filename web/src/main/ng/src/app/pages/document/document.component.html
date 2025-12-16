@@ -25,7 +25,7 @@
   this.state.numImages) | number : '1.0-0' }}% ...</div>
 }
 
-@if (!loading) {
+@if (!loading()) {
 <div class="app-display-table app-container">
   @if (state.isMapaCollapsed) {
   <div class="app-table-cell">
@@ -33,15 +33,15 @@
       <mat-card-content>
         @if (!isResultEmpty(result)) {
         <strong>{{ 'card.desc.Persistentní odkaz' | translate }}: </strong> {{link}}
-        <app-citation [result]="result" [link]="link"></app-citation>
+        <app-citation [result]="result()" [link]="link"></app-citation>
         }
         @if (isResultEmpty(result)) {
         {{ 'card.note.idnotfound' | translate }}
         }
       </mat-card-content>
     </mat-card>
-    @if (!isResultEmpty(result)) {
-    <app-entity-container [result]="result" [detailExpanded]="true" [inDocument]="true"
+    @if (!isResultEmpty(result())) {
+    <app-entity-container [result]="result()" [detailExpanded]="true" [inDocument]="true"
       [isChild]="false"></app-entity-container>
     }
   </div>

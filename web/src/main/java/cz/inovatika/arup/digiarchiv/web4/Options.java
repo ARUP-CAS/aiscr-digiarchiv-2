@@ -159,12 +159,12 @@ public class Options {
 
   public String getOAIIdentify(String version) {
     try {
-      String path = InitServlet.CONFIG_DIR + File.separator + "oai_identify_"+version.replaceAll("v", "").replaceAll("/", "")+".xml";
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_identify_"+version+".xml";
       File f = new File(path);
       if (f.exists() && f.canRead()) {
         return FileUtils.readFileToString(f, "UTF-8");
       } else {
-        File fdef = FileUtils.toFile(Options.class.getResource("oai_identify_"+version.replaceAll("/", "").replaceAll("v", "")+".xml"));
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_identify_"+version+".xml"));
         return FileUtils.readFileToString(fdef, "UTF-8");
       }
     } catch (IOException ex) {
@@ -174,7 +174,7 @@ public class Options {
   }
 
   public String getOAIListMetadataFormats(String version) {
-      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListMetadataFormats_"+version.replaceAll("/", "").replaceAll("v", "")+".xml";
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListMetadataFormats_"+version+".xml";
       LOGGER.log(Level.INFO, "Path {0}", path); 
     try {
       
@@ -182,7 +182,7 @@ public class Options {
       if (f.exists() && f.canRead()) {
         return FileUtils.readFileToString(f, "UTF-8");
       } else {
-        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListMetadataFormats_"+version.replaceAll("/", "").replaceAll("v", "")+".xml"));
+        File fdef = FileUtils.toFile(Options.class.getResource("oai_ListMetadataFormats_"+version+".xml"));
         return FileUtils.readFileToString(fdef, "UTF-8");
       }
     } catch (IOException ex) {

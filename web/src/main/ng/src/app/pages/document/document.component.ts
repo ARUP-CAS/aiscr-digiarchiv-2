@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, Inject, PLATFORM_ID, forwardRef, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -28,21 +28,21 @@ import { MapViewContainerComponent } from "../map-view/map-view-container.compon
     CitationComponent,
     EntityContainer,
     forwardRef(() => MapViewComponent)
-],
+  ],
   selector: 'app-document',
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss']
 })
 export class DocumentComponent implements OnInit, AfterViewInit {
   opened = true;
-  loading = false;
-  result: any;
+  loading = signal<boolean>(false);
+  result = signal<any>(null);
   link: string;
   now = new Date();
 
   children_start = 0;
   children_rows = 20;
-  isBrowser: boolean = false; 
+  isBrowser: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) platformId: any,
@@ -78,7 +78,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   tryPrint() {
     setTimeout(() => {
       if (this.state.loading || this.state.imagesLoading) {
-        this.state.imagesLoading =  this.state.imagesLoaded < this.state.numImages;
+        this.state.imagesLoading = this.state.imagesLoaded < this.state.numImages;
         this.tryPrint();
       } else {
         this.state.loading.set(true);
@@ -88,46 +88,46 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
-    + ' | ' + this.service.getTranslation('title.record') 
-    + ' - ' + (this.result ? this.result.ident_cely : '') );
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc')
+      + ' | ' + this.service.getTranslation('title.record')
+      + ' - ' + (this.result() ? this.result().ident_cely : ''));
   }
 
   search(id: string) {
-    this.loading = true;
+    this.loading.set(true);
     this.state.imagesLoaded = 0;
     this.state.hasError = false;
+    this.result.set(null);
     this.service.getId(id, true).subscribe((resp: SolrResponse) => {
+      this.state.loading.set(false);
+      this.loading.set(false);
       if (resp.error) {
-        this.state.loading.set(false);
-        this.loading = false;
         this.state.hasError = true;
         this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.search_error');
         return;
       }
       this.state.setSearchResponse(resp);
       if (resp.response.numFound > 0) {
-        this.result = resp.response.docs[0];
-        this.state.entity = this.result.entity;
-        if (this.result.autor) {
-          this.result.autorFormatted = this.result.autor.join(' – ');
+        const doc: any = resp.response.docs[0];
+        this.state.entity = doc.entity;
+        if (doc.autor) {
+          doc.autorFormatted = doc.autor.join(' – ');
         }
 
-        this.state.setMapResult(this.result, false);
-        this.setTitle();
-        if (this.result.entity === 'lokalita' && this.result.lokalita_igsn) {
-          this.link = 'https://doi.org/' + this.result.lokalita_igsn;
-        } else if (this.result.samostatny_nalez_igsn) {
-          this.link = 'https://doi.org/' + this.result.samostatny_nalez_igsn;
-        } else if (this.result.dokument_doi) {
-          this.link = 'https://doi.org/' + this.result.dokument_doi;
+        this.state.setMapResult(doc, false);
+        if (doc.entity === 'lokalita' && doc.lokalita_igsn) {
+          this.link = 'https://doi.org/' + doc.lokalita_igsn;
+        } else if (doc.samostatny_nalez_igsn) {
+          this.link = 'https://doi.org/' + doc.samostatny_nalez_igsn;
+        } else if (doc.dokument_doi) {
+          this.link = 'https://doi.org/' + doc.dokument_doi;
         } else {
           this.link = this.config.serverUrl + 'id/' + id;
         }
-        
+
+        this.result.set(doc);
+        this.setTitle();
       }
-      this.loading = false;
-      this.state.loading.set(false);
     });
   }
 

@@ -120,11 +120,11 @@ public class OAIRequest {
 
     public static String requestTag(HttpServletRequest req, String version) {
         StringBuilder ret = new StringBuilder();
-        ret.append("<request ");
+        ret.append("<request");
         for (String p : req.getParameterMap().keySet()) {
-            ret.append(p).append("=\"").append(req.getParameter(p)).append("\" ");
+            ret.append(" ").append(p).append("=\"").append(req.getParameter(p)).append("\"");
         }
-        ret.append(">").append(Options.getInstance().getJSONObject("OAI").getString("baseUrl")).append("/oai</request>\n");
+        ret.append(">").append(Options.getInstance().getJSONObject("OAI").getString("baseUrl")).append("/").append(version).append("/oai</request>\n");
         return ret.toString();
     }
 
@@ -564,13 +564,13 @@ public class OAIRequest {
             if (tr) {
                 String old_version = xmlns_amcr.substring(xmlns_amcr.length() - 4, xmlns_amcr.length() -1);
                 try {
-                    xml = transformByVersion(xml, old_version, version.substring(2));
+                    xml = transformByVersion(xml, old_version, version);
                     // Change xmlns_amcr to the new
-                    if ("/v2.0".equals(version)) {
+                    if ("2.0".equals(version)) {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.0/";
-                    } else if ("/v2.1".equals(version)) {
+                    } else if ("2.1".equals(version)) {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.1/";
-                    } else if ("/v2.2".equals(version)) {
+                    } else if ("2.2".equals(version)) {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.2/";
                     }                    
                 } catch (TransformerException ex) {
@@ -668,9 +668,9 @@ public class OAIRequest {
     private static boolean shoulTransformVersion(String version, String xmlns_amcr) { 
 
         return !(version==null || 
-                ("/v2.0".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
-                || ("/v2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
-                || ("/v2.2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.2/".equals(xmlns_amcr)));
+                ("2.0".equals(version) && "https://api.aiscr.cz/schema/amcr/2.0/".equals(xmlns_amcr))
+                || ("2.1".equals(version) && "https://api.aiscr.cz/schema/amcr/2.1/".equals(xmlns_amcr))
+                || ("2.2".equals(version) && "https://api.aiscr.cz/schema/amcr/2.2/".equals(xmlns_amcr)));
     }
 
     private static String transformByVersion(String xml, String start_version, String end_version) throws TransformerException {
