@@ -38,11 +38,17 @@ public class OAIServlet extends HttpServlet {
         response.setContentType("text/xml;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String version = request.getPathInfo();
-        if ("/v2".equals(version)) {
-            version = "/v2.0";
-        }
         if (version == null) {
-            version = "2.2";
+            version = Options.getInstance().getJSONObject("OAI").getString("currentVersion");
+            String url = "/" + version + request.getRequestURI();
+                    if (request.getQueryString() != null) {
+                        url += "?" + request.getQueryString();
+                    }
+            response.sendRedirect(url);
+            return;
+        }
+        if ("/v2".equals(version)) {
+            version = "2.0";
         }
         version = version.replaceAll("/", "").replaceAll("v", "");
         try {

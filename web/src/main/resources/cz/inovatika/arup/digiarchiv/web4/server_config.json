@@ -3,6 +3,7 @@
   "isTestEnv": false,
   "OAI": {
     "baseUrl": "https://api.aiscr.cz",
+    "currentVersion": "2.2",
     "repositoryName": "Archaeological Map of the Czech Republic (AMCR)",
     "adminEmail": "info@amapa.cz",
     "metadataPrefixes": [
