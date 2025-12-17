@@ -33,6 +33,10 @@
         <app-inline-filter [isChild]="isChild()" [field]="'dokument_rok_vzniku'" [value]="_result.dokument_rok_vzniku"
           [isYear]="true"></app-inline-filter>
         <span class="app-pipe"></span>
+        @if (!state.isMapaCollapsed) {
+          <app-inline-filter [isChild]="isChild()" [field]="'f_typ_dokumentu'" [value]="_result.dokument_typ_dokumentu"
+              [heslar]="'typ_dokumentu'"></app-inline-filter><span class="app-pipe"></span>
+        }
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
       <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{

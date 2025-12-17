@@ -23,6 +23,9 @@
         }
         &#160;(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.projekt_okres"></app-inline-filter>)
         <span class="app-pipe"></span><app-inline-filter [isChild]="isChild()" [field]="'f_vedouci'" [value]="_result.projekt_vedouci_projektu" ></app-inline-filter><span class="app-pipe"></span>
+          @if (!state.isMapaCollapsed) {
+            <label>{{ _result.projekt_datum_zahajeni | date : 'dd.MM.yyyy'}} - {{ _result.projekt_datum_ukonceni | date : 'dd.MM.yyyy' }}</label><span class="app-pipe"></span>
+          }
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
         <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
