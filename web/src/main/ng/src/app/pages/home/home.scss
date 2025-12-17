@@ -213,7 +213,8 @@
       box-sizing: border-box;
       margin-bottom: 16px !important;
       margin-right: 16px;
-      background-color: var(--app-color-gray-2);
+      //background-color: var(--app-color-gray-2);
+      background-color: rgba(#5882c4, 0.1);
 
       &:nth-child(5) {
         margin-right: 0 !important;
@@ -247,7 +248,8 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          color: var(--app-color-darknes);
+          //color: var(--app-color-darknes);
+          color: #5882c4;
 
           &:hover {
             color: rgba(var(--app-color-darknes-rgb), .7);
@@ -261,6 +263,7 @@
       
       .mat-mdc-card-subtitle {
         @extend .app-clean-mg !optional;
+        color: #5882c4;
 
         span {
           font-weight: bold;
