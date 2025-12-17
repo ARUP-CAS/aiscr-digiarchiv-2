@@ -12,7 +12,7 @@
         <a class="app-icon-info"><mat-icon>info</mat-icon></a>
         }
         <mat-icon class="app-entity-dokument" [matTooltip]="'entities.dokument.title' | translate">{{
-          config.entityIcons[_result.entity] }}</mat-icon>
+          config.entityIcons[_result.dokument_kategorie_dokumentu] }}</mat-icon>
         @if (isChild()) {
         <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank"
           class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }}

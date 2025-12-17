@@ -236,6 +236,7 @@
         "dokument_autor",
         "rok_vzniku:dokument_rok_vzniku",
         "dokument_rok_vzniku",
+                "dokument_kategorie_dokumentu",
         "dokument_typ_dokumentu",
         "dokument_material_originalu",
         "dokument_rada",
