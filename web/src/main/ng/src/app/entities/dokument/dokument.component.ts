@@ -113,7 +113,7 @@ export class DokumentComponent extends Entity {
   }
 
   override viewFiles() {
-    if (this.isChild) {
+    if (this.isChild()) {
       this.gotoDoc();
       return;
     }

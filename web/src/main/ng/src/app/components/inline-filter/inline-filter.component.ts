@@ -24,7 +24,7 @@ export class InlineFilterComponent implements OnInit {
   readonly field = input<string>();
   readonly value = input<any>();
   public strVal = computed<string>(() => 
-    (this.value().id ? this.value().id : this.value()) + ''
+    (this.value()?.id ? this.value().id : this.value()) + ''
   );
   readonly heslar = input<string>();
   readonly isChild = input<boolean>();
