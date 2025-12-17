@@ -27,7 +27,7 @@
   }
   @if (inDocument() || mapDetail()) {
     <mat-card class="app-card-result" [class.app-card-child]="isChild()">
-      @if ((inDocument() || mapDetail()) && !isChild()) {
+      @if (mapDetail() && !isChild()) {
         <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
           <mat-icon>clear</mat-icon>
         </a>

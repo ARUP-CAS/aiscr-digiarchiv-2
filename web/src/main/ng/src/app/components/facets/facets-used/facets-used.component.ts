@@ -40,6 +40,13 @@ export class FacetsUsedComponent implements OnInit {
     });
   }
 
+  removeInfavorites() {
+    
+    const params: any = {};
+    params['inFavorites'] = null;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
   removeCommonFacet(name: string) {
     const params: any = {};
     params[name] = null;
@@ -76,6 +83,7 @@ export class FacetsUsedComponent implements OnInit {
       q[cf.name] = null;
     });
     q.page = 0;
+    q['inFavorites'] = null;
     this.state.breadcrumbs = [];
     this.router.navigate([], { queryParams: q, queryParamsHandling: 'merge' });
   }

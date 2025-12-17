@@ -20,7 +20,7 @@
           <mat-tab-group [selectedIndex]="1">
             <mat-tab [label]="'sidenav.tab.Filtry' | translate">
               <div class="app-facets">
-                @if (state.breadcrumbs?.length !== 0) {
+                @if (state.breadcrumbs?.length !== 0 || state.inFavorites()) {
                   <app-facets-used></app-facets-used>
                 }
                 <app-facets></app-facets>

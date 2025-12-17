@@ -7,6 +7,18 @@
       </a>
     </div>
   </h3>
+  
+  @if(state.inFavorites()) {
+    <mat-list-item role="listitem" class="app-facet-used">
+      <div>
+          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeInfavorites()">
+            <mat-icon>close</mat-icon>{{ 'card.desc.Favorites' |
+                translate }}
+          </a>
+        </div> 
+    </mat-list-item>
+  }
+  
   @for (facet of state.breadcrumbs; track facet) {
     <mat-list-item role="listitem" class="app-facet-used">
       @if (facet.field === 'separator') {

@@ -65,7 +65,7 @@
             @if (state.facetsLoading()) {
               <div class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
             }
-            @if (state.breadcrumbs?.length > 0) {
+            @if (state.breadcrumbs?.length > 0 || state.inFavorites()) {
               <app-facets-used></app-facets-used>
             }
             <app-facets></app-facets>
@@ -110,7 +110,7 @@
               @if (inFav) {
                 {{ 'nebo' | translate }} {{ 'card.citation.zrušit volbu' | translate }} "{{ 'card.desc.Favorites' |
                 translate }}".
-                @if (state.inFavorites) {
+                @if (state.inFavorites()) {
                   <a (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'card.tooltip.Favorites' | translate">
                     <mat-icon>grade</mat-icon>
                   </a>
@@ -191,7 +191,7 @@
             <mat-tab-group [selectedIndex]="1">
               <mat-tab [label]="'sidenav.tab.Filtry' | translate">
                 <div class="app-facets">
-                  @if (state.breadcrumbs?.length > 0) {
+                  @if (state.breadcrumbs?.length > 0 || state.inFavorites()) {
                     <app-facets-used></app-facets-used>
                   }
                   <app-facets></app-facets>

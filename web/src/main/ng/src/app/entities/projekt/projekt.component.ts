@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,17 +11,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
-import { AppConfiguration } from '../../app-configuration';
-import { AppService } from '../../app.service';
-import { AppState } from '../../app.state';
-import { DocumentDialogComponent } from '../../components/document-dialog/document-dialog.component';
-import { FeedbackDialogComponent } from '../../components/feedback-dialog/feedback-dialog.component';
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { RelatedComponent } from '../../components/related/related.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
-import { DokJednotkaComponent } from '../dok-jednotka/dok-jednotka.component';
 import { Entity } from '../entity/entity';
-import { ExterniZdrojComponent } from '../externi-zdroj/externi-zdroj.component';
 
 @Component({
   imports: [
