@@ -25,7 +25,7 @@
           <!-- <app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="_result.akce_organizace" [heslar]="'organizace'"></app-inline-filter>
           <span class="app-pipe"></span> -->
           @if (!state.isMapaCollapsed) {
-            <label >{{ _result.akce_datum_zahajeni | date : 'dd.MM.yyyy' }}</label><span class="app-pipe"></span>
+            <label >{{ _result.akce_datum_zahajeni | date : 'dd.MM.yyyy' }}@if(_result.akce_datum_ukonceni){ - {{ _result.akce_datum_ukonceni | date : 'dd.MM.yyyy' }}}</label><span class="app-pipe"></span>
           }
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
