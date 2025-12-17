@@ -87,216 +87,100 @@
 <ng-template #format>
   <!-- kniha -->
   @if (_result.ext_zdroj_typ === 'HES-001117') {
-    @if (_result.ext_zdroj_autor) {
-      {{ _result.ext_zdroj_autor.join(' – ') }}&#160;
-    }
-    @if (_result.ext_zdroj_rok_vydani_vzniku) {
-      {{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;
-    }
-    @if (_result.ext_zdroj_nazev) {
-      {{ _result.ext_zdroj_nazev }}.&#160;
-    }
-    @if (_result.ext_zdroj_edice_rada) {
-      {{ _result.ext_zdroj_edice_rada }}.&#160;
-    }
-    @if (_result.ext_zdroj_misto) {
-      {{ _result.ext_zdroj_misto }}
-    }
-    @if (_result.ext_zdroj_vydavatel) {
-      :&#160;{{ _result.ext_zdroj_vydavatel }}
-    }
-    @if (_result.ext_zdroj_isbn) {
-      &#160;({{ _result.ext_zdroj_isbn }})
-    }
-    @if (!_result.ext_odkaz_paginace && !_result.ext_zdroj_link) {
-      .&#160;
-    }
-    @if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {
-      ,&#160;
-    }
-    @if (_result.ext_odkaz_paginace) {
-      {{ _result.ext_odkaz_paginace }}.&#160;
-    }
-    @if (_result.ext_zdroj_link) {
-      {{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link " target="_blank">{{ _result.ext_zdroj_link }}</a>.
-    }
-    @if (_result.ext_zdroj_doi) {
-      doi:{{ _result.ext_zdroj_doi }}&#160;
-    }
-    @if (!inDocument()) {
-      <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}"
-        target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-        [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
-      }
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_edice_rada) {{{ _result.ext_zdroj_edice_rada }}.&#160;}
+@if (_result.ext_zdroj_misto) {{{ _result.ext_zdroj_misto }}}
+@if (_result.ext_zdroj_vydavatel) {:&#160;{{ _result.ext_zdroj_vydavatel }}}
+@if (_result.ext_zdroj_isbn) {&#160;({{ _result.ext_zdroj_isbn }})}
+@if (!_result.ext_odkaz_paginace && !_result.ext_zdroj_link) {.&#160;}
+@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link " target="_blank">{{ _result.ext_zdroj_link }}</a>.}
+@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {
+<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}"
+target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
     }
     <!-- část knihy -->
     @if (_result.ext_zdroj_typ === 'HES-001118') {
-      @if (_result.ext_zdroj_autor) {
-        {{ _result.ext_zdroj_autor.join(' – ') }}&#160;
-      }
-      @if (_result.ext_zdroj_rok_vydani_vzniku) {
-        {{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;
-      }
-      @if (_result.ext_zdroj_nazev) {
-        {{ _result.ext_zdroj_nazev }}.&#160;
-      }
-      @if (_result.ext_zdroj_editor) {
-        In: {{ _result.ext_zdroj_editor.join(' – ') }} (ed.),&#160;
-      }
-      @if (_result.ext_zdroj_sbornik_nazev) {
-        {{ _result.ext_zdroj_sbornik_nazev }}.&#160;
-      }
-      @if (_result.ext_zdroj_edice_rada) {
-        {{ _result.ext_zdroj_edice_rada }}.&#160;
-      }
-      @if (_result.ext_zdroj_misto) {
-        {{ _result.ext_zdroj_misto }}
-      }
-      @if (_result.ext_zdroj_vydavatel) {
-        :&#160;{{ _result.ext_zdroj_vydavatel }}
-      }
-      @if (_result.ext_zdroj_isbn) {
-        &#160;({{ _result.ext_zdroj_isbn }})
-      }
-      @if (_result.ext_odkaz_paginace || _result.ext_zdroj_link || (inDocument() && _result.ext_zdroj_paginace_titulu)) {
-        ,&#160;
-      }
-      @if (_result.ext_odkaz_paginace) {
-        {{ _result.ext_odkaz_paginace }}.&#160;
-      }
-      @if (inDocument() && _result.ext_zdroj_paginace_titulu) {
-        {{ _result.ext_zdroj_paginace_titulu }}.&#160;
-      }
-      @if (_result.ext_zdroj_link) {
-        {{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
-      }
-      @if (_result.ext_zdroj_doi) {
-        doi:{{ _result.ext_zdroj_doi }}&#160;
-      }
-      @if (!inDocument()) {
-        <a [routerLink]="'/id/' + _result.ident_cely"
-          [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-          [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
-        }
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_editor) {In: {{ _result.ext_zdroj_editor.join(' – ') }} (ed.),&#160;}
+@if (_result.ext_zdroj_sbornik_nazev) {{{ _result.ext_zdroj_sbornik_nazev }}.&#160;}
+@if (_result.ext_zdroj_edice_rada) {{{ _result.ext_zdroj_edice_rada }}.&#160;}
+@if (_result.ext_zdroj_misto) {{{ _result.ext_zdroj_misto }}}
+@if (_result.ext_zdroj_vydavatel) {:&#160;{{ _result.ext_zdroj_vydavatel }}}
+@if (_result.ext_zdroj_isbn) {&#160;({{ _result.ext_zdroj_isbn }})}
+@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link || (inDocument() && _result.ext_zdroj_paginace_titulu)) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}
+@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {
+<a [routerLink]="'/id/' + _result.ident_cely"
+[queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
       }
       <!--  článek v časopise -->
       @if (_result.ext_zdroj_typ === 'HES-001119') {
-        @if (_result.ext_zdroj_autor) {
-          {{ _result.ext_zdroj_autor.join(' – ') }}&#160;
-        }
-        @if (_result.ext_zdroj_rok_vydani_vzniku) {
-          {{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;
-        }
-        @if (_result.ext_zdroj_nazev) {
-          {{ _result.ext_zdroj_nazev }}.&#160;
-        }
-        @if (_result.ext_zdroj_casopis_denik_nazev) {
-          {{ _result.ext_zdroj_casopis_denik_nazev }}&#160;
-        }
-        @if (_result.ext_zdroj_casopis_rocnik) {
-          {{ _result.ext_zdroj_casopis_rocnik }}&#160;
-        }
-        @if (_result.ext_zdroj_issn) {
-          ({{ _result.ext_zdroj_issn }})
-        }
-        @if (_result.ext_odkaz_paginace || _result.ext_zdroj_link || _result.ext_odkaz_paginace || _result.ext_zdroj_paginace_titulu) {
-          ,&#160;
-        }
-        @if (_result.ext_odkaz_paginace) {
-          {{ _result.ext_odkaz_paginace }}.&#160;
-        }
-        @if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {
-          {{ _result.ext_zdroj_paginace_titulu }}.&#160;
-        }
-        @if (inDocument() && _result.ext_zdroj_paginace_titulu) {
-          {{ _result.ext_zdroj_paginace_titulu }}.&#160;
-        }
-        @if (_result.ext_zdroj_link) {
-          {{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
-          }@if (_result.ext_zdroj_doi) {
-          doi:{{ _result.ext_zdroj_doi }}&#160;
-        }
-        @if (!inDocument()) {
-          <a [routerLink]="'/id/' + _result.ident_cely"
-            [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-            [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon>
-          </a>
-        }
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_casopis_denik_nazev) {{{ _result.ext_zdroj_casopis_denik_nazev }}&#160;}
+@if (_result.ext_zdroj_casopis_rocnik) {{{ _result.ext_zdroj_casopis_rocnik }}}
+@if (_result.ext_zdroj_issn) {&#160;({{ _result.ext_zdroj_issn }})}
+@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link || _result.ext_odkaz_paginace || _result.ext_zdroj_paginace_titulu) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {
+  <a [routerLink]="'/id/' + _result.ident_cely"
+    [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+    [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon>
+  </a>
+}
       }
       <!-- článek v novinách -->
       @if (_result.ext_zdroj_typ === 'HES-001120') {
-        @if (_result.ext_zdroj_autor) {
-          {{ _result.ext_zdroj_autor.join(' – ') }}&#160;
-        }
-        @if (_result.ext_zdroj_rok_vydani_vzniku) {
-          {{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;
-        }
-        @if (_result.ext_zdroj_nazev) {
-          {{ _result.ext_zdroj_nazev }}.&#160;
-        }
-        @if (_result.ext_zdroj_casopis_denik_nazev) {
-          {{ _result.ext_zdroj_casopis_denik_nazev }}&#160;
-        }
-        @if (_result.ext_zdroj_datum_rd) {
-          {{ _result.ext_zdroj_datum_rd | date : 'dd.MM.yyyy' }},&#160;
-        }
-        @if (_result.ext_odkaz_paginace) {
-          ,&#160;{{ _result.ext_odkaz_paginace }}.&#160;
-        }
-        @if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {
-          ,&#160;{{ _result.ext_zdroj_paginace_titulu }}.&#160;
-        }
-        @if (inDocument() && _result.ext_zdroj_paginace_titulu) {
-          {{ _result.ext_zdroj_paginace_titulu }}.&#160;
-        }
-        @if (_result.ext_zdroj_link) {
-          {{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
-          }@if (_result.ext_zdroj_doi) {
-          doi:{{ _result.ext_zdroj_doi }}&#160;
-        }
-        @if (!inDocument()) {
-          <a [routerLink]="'/id/' + _result.ident_cely"
-            [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-            [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
-          }
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_casopis_denik_nazev) {{{ _result.ext_zdroj_casopis_denik_nazev }}&#160;}
+@if (_result.ext_zdroj_datum_rd) {{{ _result.ext_zdroj_datum_rd | date : 'dd.MM.yyyy' }},&#160;}
+@if (_result.ext_odkaz_paginace && !_result.ext_zdroj_datum_rd) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {,&#160;{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
+}@if (_result.ext_zdroj_doi) {
+doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {<a [routerLink]="'/id/' + _result.ident_cely"
+[queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
         }
         <!-- nepublikovaná zpráva  jiný zdroj -->
         @if (_result.ext_zdroj_typ === 'HES-001121') {
-          @if (_result.ext_zdroj_autor) {
-            {{ _result.ext_zdroj_autor.join(' – ') }}&#160;
-          }
-          @if (_result.ext_zdroj_rok_vydani_vzniku) {
-            {{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;
-          }
-          @if (_result.ext_zdroj_oznaceni) {
-            {{ _result.ext_zdroj_oznaceni }}&#160;
-          }
-          @if (_result.ext_zdroj_nazev) {
-            {{ _result.ext_zdroj_nazev }}&#160;
-          }
-          @if (_result.ext_zdroj_typ_dokumentu) {
-            ({{ _result.ext_zdroj_typ_dokumentu | translate }}).&#160;
-          }
-          @if (_result.ext_zdroj_organizace) {
-            {{ _result.ext_zdroj_organizace }}.&#160;
-          }
-          @if (!inDocument()) {
-            @if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {
-              ,&#160;
-            }
-          }
-          @if (_result.ext_odkaz_paginace) {
-            {{ _result.ext_odkaz_paginace }}.&#160;
-          }
-          @if (_result.ext_zdroj_link) {
-            {{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
-            }@if (_result.ext_zdroj_doi) {
-            doi:{{ _result.ext_zdroj_doi }}&#160;
-          }
-          @if (!inDocument()) {
-            <a [routerLink]="'/id/' + _result.ident_cely"
-              [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-              [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
-            }
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_oznaceni) {{{ _result.ext_zdroj_oznaceni }}&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}&#160;}
+@if (_result.ext_zdroj_typ_dokumentu) {({{ _result.ext_zdroj_typ_dokumentu | translate }}).&#160;}
+@if (_result.ext_zdroj_organizace) {{{ _result.ext_zdroj_organizace }}.&#160;}
+@if (!inDocument()) {@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {,&#160;}}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
+}@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {<a [routerLink]="'/id/' + _result.ident_cely"
+[queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
           }
         </ng-template>
