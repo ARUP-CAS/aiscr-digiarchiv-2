@@ -34,6 +34,7 @@ export class FacetsUsedComponent implements OnInit {
 
   ngOnInit(): void {
     
+      this.service.setCrumbs(this.route.snapshot.queryParamMap);
     this.service.currentLang.subscribe(() => {
       this.service.setCrumbs(this.route.snapshot.queryParamMap);
     });

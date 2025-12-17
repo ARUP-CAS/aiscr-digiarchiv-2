@@ -81,10 +81,9 @@ public class LogAnalytics {
                         .replaceAll("\\.", "\\\\."));
             }
 
-            if (LoginServlet.pristupnostSimple(request.getSession()).compareToIgnoreCase("C") > 0) {
+            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
                 query.addFacetField("user")
                         .addFacetField("ip");
-
             }
 
             query.set("stats", "true");

@@ -72,7 +72,7 @@ export class SamostatnyNalezComponent extends Entity {
         panelClass: 'app-file-viewer',
         width: '1000px',
         height: '900px',
-        data: this.result
+        data: this._result
       });
     } else {
       const msg = this.service.getTranslation('alert.insuficient rights');

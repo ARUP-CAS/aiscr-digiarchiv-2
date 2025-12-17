@@ -82,7 +82,7 @@ public class LoginServlet extends HttpServlet {
         return (String) req.getSession().getAttribute("userid");
     }
 
-    public static String pristupnost(HttpSession session) {
+    public static String pristupnostSoubor(HttpSession session) {
         JSONObject user = (JSONObject) session.getAttribute("user");
         String pristupnost = "A";
         if (user != null && !user.has("error")) {
@@ -94,14 +94,14 @@ public class LoginServlet extends HttpServlet {
         return pristupnost;
     }
 
-    public static String pristupnostSimple(HttpSession session) {
+    public static String pristupnost(HttpSession session) {
         JSONObject ses = (JSONObject) session.getAttribute("user");
         String pristupnost = "A";
         if (ses != null && !ses.has("error")) {
             pristupnost = ses.getString("pristupnost");
         }
         return pristupnost;
-    }
+    } 
 
     public static String organizace(HttpSession session) {
         JSONObject ses = (JSONObject) session.getAttribute("user");
