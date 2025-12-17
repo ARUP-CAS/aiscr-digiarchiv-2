@@ -222,28 +222,28 @@ public class OAIRequest {
 
     private static String idDoesNotExist(HttpServletRequest req, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                 + "<error code=\"idDoesNotExist\" />"
                 + "</OAI-PMH>";
     }
 
     private static String noRecordsMatch(HttpServletRequest req, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                 + "<error code=\"noRecordsMatch\" />"
                 + "</OAI-PMH>";
     }
 
     private static String badArgument(HttpServletRequest req, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                 + "<error code=\"badArgument\">Invalid arguments</error>"
                 + "</OAI-PMH>";
     }
 
     private static String badArgument(HttpServletRequest req, String msg, String version) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                 + "<error code=\"badArgument\">" + msg + "</error>"
                 + "</OAI-PMH>";
     }
@@ -288,7 +288,7 @@ public class OAIRequest {
                 metadataPrefix = solrRt.getString("metadataPrefix");
             } else {
                 String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                        + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                        + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                         + "<error code=\"badResumptionToken\"/>"
                         + "</OAI-PMH>";
                 return xml;
@@ -305,7 +305,7 @@ public class OAIRequest {
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (resumptionToken == null && !metadataPrefixes.contains(metadataPrefix)) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                    + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                    + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
@@ -366,7 +366,7 @@ public class OAIRequest {
 
                 } else {
                     String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                            + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                            + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                             + "<error code=\"badResumptionToken\"/>"
                             + "</OAI-PMH>";
                     return xml;
@@ -482,7 +482,7 @@ public class OAIRequest {
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
         if (!metadataPrefixes.contains(metadataPrefix)) {
             String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                    + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
+                    + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
