@@ -241,7 +241,7 @@ public class OAIRequest {
                 + "</OAI-PMH>";
     }
 
-    private static String badArgument(HttpServletRequest req, String msg, String version) {
+    private static String badArgument(HttpServletRequest req, String version, String msg) {
         return OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                 + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "/oai</request>"
                 + "<error code=\"badArgument\">" + msg + "</error>"
@@ -295,11 +295,11 @@ public class OAIRequest {
             }
         }
         if (metadataPrefix == null && resumptionToken == null) {
-            return badArgument(req, "metadataPrefix is missing");
+            return badArgument(req, version, "metadataPrefix is missing");
         }
         String[] reqMetadataPrefixes = req.getParameterValues("metadataPrefix");
         if (resumptionToken == null && reqMetadataPrefixes != null && reqMetadataPrefixes.length > 1) {
-            return badArgument(req, "multiple metadataPrefixes");
+            return badArgument(req, version, "multiple metadataPrefixes");
         }
 
         List<Object> metadataPrefixes = Options.getInstance().getJSONObject("OAI").getJSONArray("metadataPrefixes").toList();
@@ -309,7 +309,7 @@ public class OAIRequest {
                     + "<error code=\"cannotDisseminateFormat\"/>"
                     + "</OAI-PMH>";
             return xml;
-        }
+        } 
 
         StringBuilder ret = new StringBuilder();
         JSONObject conf = Options.getInstance().getJSONObject("OAI");
@@ -337,7 +337,7 @@ public class OAIRequest {
             } else if (model.equals("dokument")) {
                 model = model + "*";
             } else if (!validSet(model)) {
-                return badArgument(req, "Invalid set");
+                return badArgument(req, version, "Invalid set");
             } else {
                 model = ClientUtils.escapeQueryChars(model);
             }
@@ -378,7 +378,7 @@ public class OAIRequest {
 
             if (from != null && until != null && !"*".equals(from) && !"*".equals(until)) {
                 if (from.length() != until.length()) {
-                    return badArgument(req, "The request has different granularities for the from and until parameters.");
+                    return badArgument(req, version, "The request has different granularities for the from and until parameters.");
                 }
             }
             if (from != null || until != null) {
