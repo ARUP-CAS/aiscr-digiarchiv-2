@@ -77,7 +77,7 @@ public class OAIServlet extends HttpServlet {
                 out.println(xml);
             } else {
                 String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
-                        + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "</request>"
+                        + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "/oai</request>"
                         + "<error code=\"badVerb\">verb is absent</error>"
                         + "</OAI-PMH>";
                 out.print(xml);
