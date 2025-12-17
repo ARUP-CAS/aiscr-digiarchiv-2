@@ -31,6 +31,7 @@ export class AppState {
 
   private mapViewSubject: Subject<string> = new Subject();
   public mapViewChanged: Observable<string> = this.mapViewSubject.asObservable();
+  public sidenavOpened: boolean;
 
   entity: string;
 
@@ -335,6 +336,7 @@ export class AppState {
 
   changeMapView(sidenav: any) {
     sidenav.toggle();
+    this.sidenavOpened = sidenav.opened;
     this.mapViewSubject.next('');
   }
 

@@ -255,7 +255,7 @@ export class MapViewComponent {
   // set opened for sidenav
   myListener(event: any) {
     this.zone.run(() => {
-      this.opened = event.matches;
+      this.opened = event.matches  && this.state.sidenavOpened;
     });
   }
 
