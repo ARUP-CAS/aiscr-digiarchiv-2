@@ -1043,7 +1043,7 @@ export class MapViewComponent {
       // this.markersList = [];
       // this.markers.clearLayers();
     }
-    const byLoc = this.state.entity === 'knihovna_3d' || this.state.entity === 'samostatny_nalez' || docs[0]['entity'] === 'pian';
+    const byLoc = docs[0]['entity'] === 'knihovna_3d' || docs[0]['entity'] === 'samostatny_nalez' || docs[0]['entity'] === 'pian';
 
     if (byLoc) {
       this.setMarkersByLoc(docs, isId)
