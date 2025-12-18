@@ -196,7 +196,6 @@ export class FileViewerComponent implements OnInit {
 
       // this.rolling = false;
       // const fs: any[] = JSON.parse(this.data.soubor);
-      console.log(this.data['soubor'])
       this.data['soubor'].forEach((f: any) => {
         const file = new File();
         file.id = f.id;

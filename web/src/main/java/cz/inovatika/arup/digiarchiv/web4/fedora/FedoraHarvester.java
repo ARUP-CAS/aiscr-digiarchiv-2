@@ -151,6 +151,16 @@ public class FedoraHarvester {
                 solr.commit(key);
             }
             solr.commit();
+            
+            // clear indexed before start
+            String q = "indextime:[* TO " + start.toString() + "]";
+            solr.deleteByQuery("entities", q);
+            solr.deleteByQuery("oai", q);
+            for (String key : idocs.keySet()) {
+                solr.deleteByQuery(key, q);
+            }
+            solr.commit();
+
             Instant end = Instant.now();
             String interval = FormatUtils.formatInterval(end.toEpochMilli() - start.toEpochMilli());
             ret.put("ellapsed time", interval);
@@ -174,9 +184,9 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject update(String from) throws IOException {
-            SolrClient solr = SolrClientFactory.getSolrClient();
-            ret = new JSONObject();
-            return update(from, solr);
+        SolrClient solr = SolrClientFactory.getSolrClient();
+        ret = new JSONObject();
+        return update(from, solr);
     }
 
     private JSONObject update(String from, SolrClient solr) throws IOException {
@@ -406,17 +416,17 @@ public class FedoraHarvester {
         String solrResp = IndexUtils.requestSolr(url);
         JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
 
-            SolrClient solr = SolrClientFactory.getSolrClient();
-            for (int i = 0; i < docs.length(); i++) {
-                String id = docs.getJSONObject(i).getString("ident_cely");
-                try {
-                    ret.put(id, indexId(id, false, solr));
-                    checkLists(batchSize, indexed++, fq, docs.length(), solr);
-                    LOGGER.log(Level.FINE, "Index by ID {0} finished. {1} of {2}", new Object[]{id, i + 1, docs.length()});
-                } catch (Exception e) {
-                    // LOGGER.log(Level.WARNING, "Error indexing {0}, -> {1}", new Object[]{id, e.toString()});
-                    ret.put(id, e.toString());
-                }
+        SolrClient solr = SolrClientFactory.getSolrClient();
+        for (int i = 0; i < docs.length(); i++) {
+            String id = docs.getJSONObject(i).getString("ident_cely");
+            try {
+                ret.put(id, indexId(id, false, solr));
+                checkLists(batchSize, indexed++, fq, docs.length(), solr);
+                LOGGER.log(Level.FINE, "Index by ID {0} finished. {1} of {2}", new Object[]{id, i + 1, docs.length()});
+            } catch (Exception e) {
+                // LOGGER.log(Level.WARNING, "Error indexing {0}, -> {1}", new Object[]{id, e.toString()});
+                ret.put(id, e.toString());
+            }
 
             checkLists(0, docs.length(), fq, docs.length(), solr);
         }
@@ -431,9 +441,9 @@ public class FedoraHarvester {
      * @throws IOException
      */
     public JSONObject indexId(String id) throws Exception {
-            SolrClient solr = SolrClientFactory.getSolrClient();
-            JSONObject j = indexId(id, true, solr);
-            return j;
+        SolrClient solr = SolrClientFactory.getSolrClient();
+        JSONObject j = indexId(id, true, solr);
+        return j;
     }
 
     private JSONObject indexId(String id, boolean commit, SolrClient solr) throws Exception {
@@ -876,10 +886,9 @@ public class FedoraHarvester {
                 solr.commit("oai");
                 idocsOAI.clear();
             }
-        } catch(Exception ex) {
-            LOGGER.log(Level.SEVERE, "Can't commit changes");
-            LOGGER.log(Level.SEVERE, ex.toString()); 
-            SolrClientFactory.resetSolrClient(); 
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Can't commit changes", ex);
+            SolrClientFactory.resetSolrClient();
             throw ex;// new Exception(ex)
         }
     }

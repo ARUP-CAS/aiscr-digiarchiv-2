@@ -24,8 +24,8 @@
           }
         </div>
         <div class="app-metadata app-fxLayout app-row app-center-v">
-          {{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile.size_mb}}MB</strong><span class="app-pipe"></span><!--
-          -->{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong><span class="app-pipe"></span>
+          <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile.size_mb}}MB</strong></span><span class="app-pipe"></span><!--
+          --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong></span><span class="app-pipe"></span>
           @if (selectedFile !== null) {
             <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile.nazev"><mat-icon class="app-va-center">get_app</mat-icon></a>
           }
