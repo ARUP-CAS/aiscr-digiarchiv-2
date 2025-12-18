@@ -52,7 +52,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   docs: SolrDocument[] = [];
   isChartBarCollapsed = true;
   exportUrl: string;
-  inFav: boolean;
   hasResultsInOther: boolean;
   math = Math;
   subs: any[] = [];
@@ -143,11 +142,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   toggleFavorites() {
-    this.inFav = !this.inFav;
+    this.state.inFavorites.update(v => !v);
     const params: Params = this.route.snapshot.queryParams;
     const p: any = Object.assign({}, params);
-    if (this.inFav) {
-      p.inFavorites = this.inFav;
+    if (this.state.inFavorites()) {
+      p.inFavorites = this.state.inFavorites();
     } else {
       p.inFavorites = null;
     }

@@ -48,7 +48,7 @@
       </a>
       <span class="app-pipe"></span>
       @if (state.logged) {
-        <a (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
+        <a (click)="toggleFavorites()" [class.app-color-fav]="state.inFavorites()" [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
           <mat-icon>grade</mat-icon>
         </a>
       }
@@ -89,7 +89,7 @@
                 <span class="app-info-badge" [ngClass]="'app-entity-' + state.entity">
                   <mat-icon [ngClass]="'app-entity-' + state.entity">{{ config.entityIcons[state.entity] }}</mat-icon><strong>{{ 'entities.' + state.entity + '.title' | translate }}</strong>
                   </span><br />
-                  {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }}@if (hasResultsInOther || inFav) {
+                  {{ 'card.citation.Zkuste zadat jiný dotaz' | translate }}@if (hasResultsInOther || state.inFavorites()) {
                   ,
                 }
                 @if (hasResultsInOther) {
@@ -107,11 +107,11 @@
                   }
                 }
               }
-              @if (inFav) {
+              @if (state.inFavorites()) {
                 {{ 'nebo' | translate }} {{ 'card.citation.zrušit volbu' | translate }} "{{ 'card.desc.Favorites' |
                 translate }}".
                 @if (state.inFavorites()) {
-                  <a (click)="toggleFavorites()" [class.app-color-fav]="inFav" [matTooltip]="'card.tooltip.Favorites' | translate">
+                  <a (click)="toggleFavorites()" [class.app-color-fav]="state.inFavorites()" [matTooltip]="'card.tooltip.Favorites' | translate">
                     <mat-icon>grade</mat-icon>
                   </a>
                 }
@@ -151,7 +151,7 @@
                 <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank"><mat-icon>get_app</mat-icon></a>
                   <span class="app-pipe"></span>
                   @if (state.logged) {
-                    <a (click)="toggleFavorites()" [class.app-color-fav]="inFav"
+                    <a (click)="toggleFavorites()" [class.app-color-fav]="state.inFavorites()"
                       [matTooltip]="'toolbar.tooltip.Favorites' | translate">
                       <mat-icon>grade</mat-icon>
                     </a>

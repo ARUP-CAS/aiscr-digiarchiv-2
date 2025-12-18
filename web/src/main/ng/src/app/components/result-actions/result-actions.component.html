@@ -38,7 +38,7 @@
   </a>
 
   @if (state.logged) {
-    <button matIconButton (click)="toggleFav()" [class.app-color-fav]="result().isFav" [matTooltip]="result().isFav ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
+    <button matIconButton (click)="toggleFav()" [class.app-color-fav]="isFav()" [matTooltip]="isFav() ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
       <mat-icon>grade</mat-icon>
     </button>
   }

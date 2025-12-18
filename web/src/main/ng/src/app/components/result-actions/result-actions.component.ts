@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, EventEmitter, Output, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,6 +36,8 @@ export class ResultActionsComponent {
   readonly mapDetail = input<boolean>();
   readonly ident_cely_api = input<any>();
 
+  isFav = signal<boolean>(false);
+
   @Output() onToggleDetail  = new EventEmitter<string>();
 
   useParentEntities = ['']
@@ -47,6 +49,10 @@ export class ResultActionsComponent {
     private router: Router,
     public config: AppConfiguration
   ) { }
+
+  ngOnInit() {
+    this.isFav.set(this.result().isFav)
+  }
 
   apiIdentCely(item:{label: string, metadataPrefix: string, url: string, useParent: boolean}) {
     const ident_cely_api = this.ident_cely_api();
@@ -62,11 +68,11 @@ export class ResultActionsComponent {
     const result = this.result();
     if (result.isFav) {
       this.service.removeFav(result.ident_cely).subscribe(res => {
-        this.result().isFav = false;
+        this.isFav.set(false);
       });
     } else {
       this.service.addFav(result.ident_cely).subscribe(res => {
-        this.result().isFav = true;
+        this.isFav.set(true);
       });
     }
   }
