@@ -138,7 +138,7 @@
     }
 
     @media only screen and (max-width: 959px) {
-      width: calc(100% - (16px + var(--app-gap-map)));
+      width: calc(100% - (50px + var(--app-gap-map)));
     }
 
     .app-link-close {
