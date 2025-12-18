@@ -1,9 +1,10 @@
 
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import 'wicket';
+
+import * as Wkt from 'wicket';
 import { DatePipe } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,7 +12,6 @@ import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
-import { SolrDocument } from '../../shared/solr-document';
 import { SolrResponse } from '../../shared/solr-response';
 
 @Component({
@@ -25,7 +25,7 @@ import { SolrResponse } from '../../shared/solr-response';
 })
 export class ExportMapaComponent implements OnInit {
 
-  docs: any[] = [];
+  docs = signal<any[]>([]);
   format: string | undefined;
   hasPian = true;
 
@@ -86,14 +86,13 @@ export class ExportMapaComponent implements OnInit {
     }
     this.state.loading.set(true);
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
-      
+      let docs: any[] = resp.response.docs;
       this.state.loading.set(false);
       if (resp.error) {
         return;
       }
       if (this.state.entity === 'knihovna_3d') {
-        this.docs = resp.response.docs;
-        this.docs.forEach(doc => {
+        docs.forEach(doc => {
           if (this.format === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
             const wkt = new Wkt.Wkt();
@@ -106,9 +105,9 @@ export class ExportMapaComponent implements OnInit {
           }
         });
         this.hasPian = false;
+        this.docs.update(d => [...docs]);
       } else if (this.state.entity === 'samostatny_nalez') {
-        this.docs = resp.response.docs;
-        this.docs.forEach(doc => {
+        docs.forEach(doc => {
           if (this.format === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
             const wkt = new Wkt.Wkt();
@@ -121,9 +120,10 @@ export class ExportMapaComponent implements OnInit {
           }
         });
         this.hasPian = false;
+        this.docs.update(d => [...docs]);
       } else {
+        docs = [];
         this.hasPian = true;
-        this.docs = [];
         resp.response.docs.forEach(doc => {
           if(doc.pian) {
             
@@ -142,7 +142,8 @@ export class ExportMapaComponent implements OnInit {
                   }
                   // d.lat = p.centroid_n;
                   // d.lng = p.centroid_e;
-                  this.docs.push(d);
+                  docs.push(d);
+                  this.docs.update(d => [...docs]);
                 }
               });
             });
@@ -153,7 +154,4 @@ export class ExportMapaComponent implements OnInit {
 
     });
   }
-
- 
-
 }

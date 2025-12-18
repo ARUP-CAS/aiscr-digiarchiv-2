@@ -59,9 +59,9 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     this.service.currentLang.subscribe(res => {
       this.setExportUrl();
     });
-    //this.route.queryParams.subscribe(val => {
+    this.route.queryParams.subscribe(val => {
       this.setExportUrl();
-    //});
+    });
   }
 
   setExportUrl() {

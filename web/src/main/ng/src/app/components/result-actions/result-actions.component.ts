@@ -66,7 +66,7 @@ export class ResultActionsComponent {
 
   toggleFav() {
     const result = this.result();
-    if (result.isFav) {
+    if (this.isFav()) {
       this.service.removeFav(result.ident_cely).subscribe(res => {
         this.isFav.set(false);
       });
