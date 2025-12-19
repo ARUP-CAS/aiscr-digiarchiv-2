@@ -87,6 +87,37 @@
 }
 
 ::ng-deep {
+  .mat-mdc-card {
+    .mat-mdc-card-actions {
+      @media only screen and (min-width: 960px) and (max-width: 1150px) {
+        display: block !important;
+
+        app-result-actions {
+          .app-fxLayout {
+            flex-wrap: wrap;
+
+            .mat-mdc-button-base {
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+      @media only screen and (max-width: 770px) {
+        display: block !important;
+
+        app-result-actions {
+          .app-fxLayout {
+            flex-wrap: wrap;
+
+            .mat-mdc-button-base {
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+
   // view row
   .app-view-row {
     .mat-mdc-card {
