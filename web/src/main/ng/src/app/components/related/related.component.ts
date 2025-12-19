@@ -50,6 +50,10 @@ export class RelatedComponent implements OnInit {
   ) {
     effect(() => {
       this.ids = this.related();
+      if (this.ids.length === 0) {
+        return;
+      }
+      this.children.set([]);
       this.numChildren = this.ids.length;
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
       this.ids.sort((c1, c2) => {
@@ -69,7 +73,6 @@ export class RelatedComponent implements OnInit {
   }
 
   getRecords(loadAll: boolean) {
-
     if (this.toProcess().length > 0) {
       const entity = this.toProcess()[0].entity;
       let entitySize = 0;
