@@ -27,7 +27,9 @@ import { AppConfiguration } from '../../app-configuration';
 export class SidenavListComponent implements OnInit {
   @Output() sidenavClose = new EventEmitter();
 
-  public onSidenavClose = () => {
+  onSidenavClose(e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
     this.sidenavClose.emit();
   }
 

@@ -661,7 +661,7 @@ export class AppService {
       // zavirame kartu
       const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
       this.state.closingMapResult = inResults;
-      this.state.mapResult.update(r => result);
+      this.state.setMapResult(result, mapDetail);
       if (!this.state.documentId) {
         let url = '/map';
         const p: any = {};

@@ -329,9 +329,9 @@ export class AppState {
     if (mapDetail) {
       return;
     }
-    if (changed) {
+    //if (changed) {
       this.mapResultSubject.next(result);
-    }
+    //}
   }
 
   changeMapView(sidenav: any) {

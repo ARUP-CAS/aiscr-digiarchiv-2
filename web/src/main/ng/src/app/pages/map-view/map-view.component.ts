@@ -209,8 +209,10 @@ export class MapViewComponent {
     }));
 
     this.subs.push(this.state.mapResultChanged.subscribe(res => {
+      console.log(window.innerWidth, this.config.hideMenuWidth)
       if (window.innerWidth < this.config.hideMenuWidth) {
         this.opened = false;
+        this.state.sidenavOpened = false;
       }
     }));
 
@@ -255,7 +257,7 @@ export class MapViewComponent {
   // set opened for sidenav
   myListener(event: any) {
     this.zone.run(() => {
-      this.opened = event.matches  && this.state.sidenavOpened;
+      this.opened = event.matches && this.state.sidenavOpened;
     });
   }
 
