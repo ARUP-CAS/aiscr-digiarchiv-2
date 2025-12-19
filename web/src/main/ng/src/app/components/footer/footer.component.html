@@ -5,18 +5,24 @@
         <p>
           {{ 'footer.desc.Archeologický ústav AV ČR, Praha, v. v. i.' | translate }} © {{ currentYear }}.
         </p>
-        <p>
-          {{'footer.desc.Kontakt' | translate}} <a (click)="showKontakt()"><mat-icon>info</mat-icon></a><span
-            class="app-pipe"></span>Created by
-          <a href="http://www.inovatika.cz" title="Inovatika" target="_blank">
-            <img src="./assets/img/logo-inovatika.png" alt="Inovatika" class="app-logo" />
-          </a>
+        <p class="app-middle">
+          <span>
+             {{'footer.desc.Kontakt' | translate}} <a (click)="showKontakt()"><mat-icon>info</mat-icon></a>
+          </span>
           <span class="app-pipe"></span>
-          <a href="http://creativecommons.org/licenses/by-nc/4.0/" [title]="'footer.license.cc_by_nc' | translate"
-            target="_blank">
-            <img src="assets/img/logo-cc.png" [alt]="'footer.license.cc_by_nc' | translate" />
-          </a>&#160;
-          <a (click)="showLicence()"><mat-icon>info</mat-icon></a>
+          <span>
+            Created by
+            <a href="http://www.inovatika.cz" title="Inovatika" target="_blank">
+              <img src="./assets/img/logo-inovatika.png" alt="Inovatika" class="app-logo" />
+            </a>
+          </span>
+          <span class="app-pipe"></span>
+          <span>
+            <a href="http://creativecommons.org/licenses/by-nc/4.0/" [title]="'footer.license.cc_by_nc' | translate" target="_blank">
+              <img src="assets/img/logo-cc.png" [alt]="'footer.license.cc_by_nc' | translate" />
+            </a>&#160;
+            <a (click)="showLicence()"><mat-icon>info</mat-icon></a>
+          </span>
         </p>
         <p>
           <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v400" title="Version info"
