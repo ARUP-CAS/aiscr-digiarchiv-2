@@ -133,12 +133,38 @@
       margin-bottom: 0 !important;
     }
 
-    .mat-mdc-card-title {
-      max-width: calc(100% - 35px);
+    .mat-mdc-card {
+      .mat-mdc-card-title {
+        max-width: calc(100% - 35px);
+      }
+
+      .mat-mdc-card-actions {
+        @media only screen and (max-width: 740px) {
+          display: block !important;
+
+          app-result-actions {
+            .app-fxLayout {
+              flex-wrap: wrap;
+
+              .mat-mdc-button-base {
+                margin-top: 8px;
+              }
+            }
+          }
+        }
+      }
     }
 
     @media only screen and (max-width: 959px) {
       width: calc(100% - (50px + var(--app-gap-map)));
+    }
+
+    @media only screen and (max-width: 490px) {
+      max-height: calc(100% - 120px);
+    }
+
+    @media only screen and (max-width: 340px) {
+      max-height: calc(100% - 140px);
     }
 
     .app-link-close {
@@ -170,4 +196,8 @@
     }
   }
 }
+
+ .app-view-card-info {
+    
+  } 
 
