@@ -87,30 +87,33 @@
 }
 
 ::ng-deep {
-  .mat-mdc-card {
-    .mat-mdc-card-actions {
-      @media only screen and (min-width: 960px) and (max-width: 1150px) {
-        display: block !important;
+  // view default
+  .app-view-default {
+    .mat-mdc-card {
+      .mat-mdc-card-actions {
+        @media only screen and (min-width: 960px) and (max-width: 1150px) {
+          display: block !important;
 
-        app-result-actions {
-          .app-fxLayout {
-            flex-wrap: wrap;
+          app-result-actions {
+            .app-fxLayout {
+              flex-wrap: wrap;
 
-            .mat-mdc-button-base {
-              margin-top: 8px;
+              .mat-mdc-button-base {
+                margin-top: 8px;
+              }
             }
           }
         }
-      }
-      @media only screen and (max-width: 770px) {
-        display: block !important;
+        @media only screen and (max-width: 770px) {
+          display: block !important;
 
-        app-result-actions {
-          .app-fxLayout {
-            flex-wrap: wrap;
+          app-result-actions {
+            .app-fxLayout {
+              flex-wrap: wrap;
 
-            .mat-mdc-button-base {
-              margin-top: 8px;
+              .mat-mdc-button-base {
+                margin-top: 8px;
+              }
             }
           }
         }
@@ -150,7 +153,56 @@
       max-width: calc(#{$flex-width} - #{$flex-gap});
       margin-right: 16px;
 
-      &:nth-child(4n) {
+      @media only screen and (min-width: 1160px) {
+        &:nth-child(4n) {
+          margin-right: 0;
+        }
+      } 
+
+      @media only screen and (min-width: 959px) and (max-width: 1160px) {
+        $flex-width: 33.3333%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+
+      @media only screen and (min-width: 730px) and (max-width: 959px) {
+        $flex-width: 25%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(4n) {
+          margin-right: 0;
+        }
+      }
+
+      @media only screen and (min-width: 520px) and (max-width: 730px) {
+        $flex-width: 33.3333%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+
+      @media only screen and (min-width: 360px) and (max-width: 520px) {
+        $flex-width: 50%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(2n) {
+          margin-right: 0;
+        }
+      }
+
+       @media only screen and (max-width: 360px) {
+        $flex-width: 100%;
+        flex: 1 1 $flex-width;
+        max-width: $flex-width;
         margin-right: 0;
       }
 
