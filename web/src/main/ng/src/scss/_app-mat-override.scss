@@ -505,8 +505,17 @@
 
   // --- PAGINATOR ---
    @include mat.paginator-overrides((
-    container-background-color: transparent,
+    container-background-color: transparent
   ));
+  .mat-mdc-paginator {
+    .mat-mdc-paginator-page-size-select {
+      width: 78px;
+    }
+
+    .mat-mdc-paginator-range-label {
+      margin: 0 6px 0 8px;
+    }
+  }
 
 
   // --- DIALOG ---

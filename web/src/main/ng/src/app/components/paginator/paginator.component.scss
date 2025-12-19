@@ -3,7 +3,7 @@
 .app-num {
   width: 90px;
   font-size: 12px;
-  margin-right: 16px;
+  margin-right: 8px;
 
   .mat-icon {
     @include app-mixins-icon.setIcon($size: 18)
