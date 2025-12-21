@@ -71,7 +71,7 @@ export class Home implements OnInit {
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });
-    this.state.resetState();
+    this.state.resetState(true);
     this.service.getHome().subscribe((resp: any) => {
       // this.fillBoxes(resp);
       if (resp.error) {

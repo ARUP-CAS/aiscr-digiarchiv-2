@@ -209,7 +209,6 @@ export class MapViewComponent {
     }));
 
     this.subs.push(this.state.mapResultChanged.subscribe(res => {
-      console.log(window.innerWidth, this.config.hideMenuWidth)
       if (window.innerWidth < this.config.hideMenuWidth) {
         this.opened = false;
         this.state.sidenavOpened = false;
@@ -241,6 +240,7 @@ export class MapViewComponent {
   }
 
   ngOnDestroy() {
+    this.state.resetState(false);
     this.matcher.removeEventListener('change', (e) => {
       this.myListener(e);
     });
@@ -892,6 +892,9 @@ export class MapViewComponent {
 
   processMarkersResp(resp: any[], ids: { id: string, docIds: string[] }[], isId: boolean) {
     resp.forEach(pian => {
+      if (!pian.loc_rpt?.[0]) {
+        return;
+      }
       const coords = pian.loc_rpt[0].split(',');
       const docIds = ids.find(p => p.id === pian.ident_cely).docIds
       let markerInList = this.markersList.find(p => p.options.id === pian.ident_cely);

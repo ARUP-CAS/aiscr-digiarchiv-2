@@ -85,6 +85,9 @@ export class FacetsComponent implements OnInit {
   }
 
   orderFacets() {
+    if (!this.state.facetsFiltered) {
+      return;
+    }
     const facetsSorted: { field: string, values: { name: string, type: string, value: number, operator: string, poradi?: number }[] }[] =[];
     this.state.facetsFiltered.forEach(f => {
         const ff: { name: string, type: string, value: number, operator: string, poradi?: number }[] = f.values;

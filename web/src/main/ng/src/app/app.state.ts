@@ -14,8 +14,8 @@ import { signal } from '@angular/core';
 export class AppState {
 
   // Observe state
-  private resultsSubject: Subject<{typ: string, pageChanged: boolean}> = new Subject();
-  public resultsChanged: Observable<{typ: string, pageChanged: boolean}> = this.resultsSubject.asObservable();
+  private resultsSubject: Subject<{ typ: string, pageChanged: boolean }> = new Subject();
+  public resultsChanged: Observable<{ typ: string, pageChanged: boolean }> = this.resultsSubject.asObservable();
 
   private routeSubject: ReplaySubject<Params> = new ReplaySubject(0);
   public routeChanged: Observable<Params> = this.routeSubject.asObservable();
@@ -91,7 +91,7 @@ export class AppState {
     }[]
   }[] = [];
 
-  heatMaps:any;
+  heatMaps: any;
 
   q: string;
   rows: number;
@@ -100,10 +100,10 @@ export class AppState {
   totalPages: number
   sorts_by_entity: Sort[];
   sort: Sort;
-  ui: { sort: {[entity: string]:string}, rows?:number} = {sort:{}};
+  ui: { sort: { [entity: string]: string }, rows?: number } = { sort: {} };
 
   // Pokud uzivatel zvoli jine razeni pro danou facetu, napr: {"obdobi": "poradi"}
-  facetSort: {[facetname: string]: string} = {};
+  facetSort: { [facetname: string]: string } = {};
 
   hideWithoutThumbs = false;
   inFavorites = signal<boolean>(false);
@@ -114,22 +114,25 @@ export class AppState {
 
   documentProgress: number;
 
-  resetState() {
+  resetState(full: boolean) {
     this.documentId = null;
     this.setMapResult(null, false);
-    this.breadcrumbs = null;
-    this.conditions = [];
 
-  this.pianId = null;
-  this.locationFilterEnabled = false;
-  this.locationFilterBounds = null;
-  this.mapBounds = null;
+    this.pianId = null;
+    this.locationFilterEnabled = false;
+    this.locationFilterBounds = null;
+    this.mapBounds = null;
 
-  this.loading.set(false);
-  this.facetsLoading.set(false);
-  this.printing.set(false);
-  this.switchingMap = false;
-  this.closingMapResult = false;
+    if (full) {
+      this.breadcrumbs = null;
+      this.conditions = [];
+      this.loading.set(false);
+      this.facetsLoading.set(false);
+      this.printing.set(false);
+      this.switchingMap = false;
+      this.closingMapResult = false;
+    }
+
 
   }
 
@@ -167,9 +170,9 @@ export class AppState {
     if (resp.facet_counts) {
       this.setEntityTotals(resp.facet_counts.facet_fields['entity']);
     }
-    
 
-    this.resultsSubject.next({typ, pageChanged: this.pageChanged});
+
+    this.resultsSubject.next({ typ, pageChanged: this.pageChanged });
     this.pageChanged = false;
     if (resp.facet_counts) {
       setTimeout(() => {
@@ -215,7 +218,7 @@ export class AppState {
       }
     });
 
-    
+
 
     this.facetsFiltered = Object.assign([], this.facets);
     this.setFacetPivots(resp);
@@ -286,7 +289,7 @@ export class AppState {
     this.entity = params.has('entity') ? params.get('entity') : 'dokument';
     this.sorts_by_entity = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
     this.page = params.has('page') ? +params.get('page') : 0;
-    
+
     if (this.isMapaCollapsed) {
       this.rows = params.has('rows') ? +params.get('rows') : this.config.defaultRows;
     } else {
@@ -297,7 +300,7 @@ export class AppState {
     // this.sort = null;
     if (params.has('sort')) {
       this.sort = this.sorts_by_entity.find(s => (s.field) === params.get('sort'));
-    } else if(this.sort) {
+    } else if (this.sort) {
       // this.sort could be from another entity. Check validity
       this.sort = this.sorts_by_entity.find(s => s.field === this.sort.field);
     }
@@ -322,8 +325,8 @@ export class AppState {
       const sameOrg = this.user.organizace.id === organizace;
       const orgCanRead = this.user.pristupnost.toUpperCase().localeCompare('C'.toUpperCase()) > -1 && this.user.cteni_dokumentu;
       return orgCanRead ||
-             this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || 
-             ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
+        this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 ||
+        ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
     } else {
       return false;
     }
@@ -342,14 +345,14 @@ export class AppState {
     const changed = (!result || (result.ident_cely !== this.mapResult()?.ident_cely));
     this.mapResult.set(result);
     // if (!result && !this.isMapaCollapsed) {
-      
+
     //   return;
     // }
     if (mapDetail) {
       return;
     }
     //if (changed) {
-      this.mapResultSubject.next(result);
+    this.mapResultSubject.next(result);
     //}
   }
 
@@ -364,12 +367,12 @@ export class AppState {
     if (res.error) {
       this.logged = false;
       this.user = null;
-      this.ui = {sort:{}};
+      this.ui = { sort: {} };
     } else {
       this.logged = true;
       this.user = res;
 
-      
+
       if (this.user.ui) {
         this.ui = this.user.ui;
       }
