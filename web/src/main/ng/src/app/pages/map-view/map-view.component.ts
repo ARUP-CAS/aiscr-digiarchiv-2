@@ -274,6 +274,7 @@ export class MapViewComponent {
     } else {
       this.mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
       this.isDocumentHandle = false;
+      this.state.documentId = null;
       this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     }
 

@@ -35,6 +35,12 @@
                 </div>
               }
               @if ((state.solrResponse && showType === 'marker')) {
+                
+                @if (state.breadcrumbs?.length !== 0 || state.inFavorites()) {
+                  <div class="app-facets">
+                  <app-facets-used></app-facets-used>
+                  </div>
+                }
                 <app-paginator></app-paginator>
                 @if (state.isMapaCollapsed && vsSize > 0) {
                   <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"

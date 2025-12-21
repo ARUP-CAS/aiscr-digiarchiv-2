@@ -114,6 +114,25 @@ export class AppState {
 
   documentProgress: number;
 
+  resetState() {
+    this.documentId = null;
+    this.setMapResult(null, false);
+    this.breadcrumbs = null;
+    this.conditions = [];
+
+  this.pianId = null;
+  this.locationFilterEnabled = false;
+  this.locationFilterBounds = null;
+  this.mapBounds = null;
+
+  this.loading.set(false);
+  this.facetsLoading.set(false);
+  this.printing.set(false);
+  this.switchingMap = false;
+  this.closingMapResult = false;
+
+  }
+
   setConfig(cfg: AppConfiguration) {
     this.config = cfg;
     this.currentLang = cfg.defaultLang;
