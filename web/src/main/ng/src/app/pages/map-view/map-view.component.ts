@@ -1045,6 +1045,9 @@ export class MapViewComponent {
       this.markers.clearLayers();
       this.clusters.clearLayers();
     }
+    if (docs.length === 0) {
+      return;
+    }
     if (this.markersList.length + docs.length > this.config.mapOptions.docsForMarker && !isId) {
       // this.markersList = [];
       // this.markers.clearLayers();

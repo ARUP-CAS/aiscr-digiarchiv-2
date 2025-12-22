@@ -41,7 +41,7 @@ export class FooterComponent implements OnInit {
       const EXPIRE_DATE = parseInt(localStorage.getItem("consentTime"));
       expired = Date.now() > EXPIRE_DATE;
     }
-    this.mustConsent = null === localStorage.getItem("consent") || expired;
+    this.mustConsent = (null === localStorage.getItem("consent")) || expired;
     if (this.mustConsent) {
       this._bottomSheet.open(ConsentSheet, {
         closeOnNavigation: false,
