@@ -1,6 +1,6 @@
 # Digitální archiv AMČR
 
-[![DOI](https://zenodo.org/badge/306070194.svg)](https://zenodo.org/doi/10.5281/zenodo.8329064)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8329064.svg)](https://doi.org/10.5281/zenodo.8329064)
 
 Digitální archiv Archeologické mapy České republiky (AMČR) je webová aplikace určená k prohlížení informací o archeologických výzkumech, lokalitách a nálezech, provozovaná Archeologickými ústavy AV ČR v Praze a Brně. Archivy těchto institucí obsahují dokumentaci terénních archeologických výzkumů na území ČR od r. 1919 do současnosti a své sbírky dále obohacují. Databáze AMČR a související dokumenty tvoří největší soubor archeologických dat dotýkajících se Česka, jedná se proto o významnou součást našeho kulturního dědictví.
 
