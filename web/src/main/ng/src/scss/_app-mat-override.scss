@@ -308,6 +308,12 @@
             min-width: 130px;
           }
         }
+
+        ul {
+          li {
+            word-break: break-word;
+          }
+        }
       }
 
       &:not(:first-child):not(:last-child) {
