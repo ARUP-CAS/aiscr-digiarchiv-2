@@ -54,7 +54,7 @@
     </mat-card>
 
     <div class="app-cards-wrapper app-fxLayout app-row">
-      <mat-card class="app-fxFlex">
+      <mat-card class="app-fxFlex app-event">
         <mat-card-header>
           <mat-card-title>{{ 'stats.type' | translate }}</mat-card-title>
         </mat-card-header>
@@ -80,7 +80,7 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card class="app-fxFlex">
+      <mat-card class="app-fxFlex app-record-type">
         <mat-card-header>
           <mat-card-title>{{ 'stats.entity' | translate }}</mat-card-title>
         </mat-card-header>
@@ -106,7 +106,7 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card class="app-ident app-fxFlex app-fxLayout app-column">
+      <mat-card class="app-fxFlex app-fxLayout app-column app-ident">
         <mat-card-header>
           <mat-card-title>{{ 'stats.ident_cely' | translate }} @if (ids) {
             <span >({{ 'stats.id_count' | translate : {count: ids.length, total: totalIds} }})</span>
@@ -133,7 +133,7 @@
       </mat-card>
 
       @if (state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')) {
-        <mat-card class="app-fxFlex">
+        <mat-card class="app-fxFlex app-ip">
           <mat-card-header>
             <mat-card-title>IP</mat-card-title>
           </mat-card-header>
@@ -157,7 +157,7 @@
       }
 
       @if (state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')) {
-        <mat-card class="app-fxFlex">
+        <mat-card class="app-fxFlex app-user">
           <mat-card-header>
             <mat-card-title>{{ 'stats.user' | translate }}</mat-card-title>
           </mat-card-header>
