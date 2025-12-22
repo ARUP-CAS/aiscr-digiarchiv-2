@@ -554,7 +554,8 @@
       "tooltipTextAdd": "Stiskněte klávesu CTRL a kllikněte pro <b>přidání bodu</b>"
     },
     "tooltip": {
-      "Odstranit tento filtr": "Zrušit tento filtr"
+      "Odstranit tento filtr": "Zrušit tento filtr",
+      "Zastavit": "Zastavit"
     },
     "layer": {
       "cuzk_zakladni": "ČÚZK - Základní mapy ČR",

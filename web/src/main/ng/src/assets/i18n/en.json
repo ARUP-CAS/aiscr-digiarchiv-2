@@ -554,7 +554,8 @@
       "tooltipTextAdd": "Press CTRL-key and click to <b>add point</b>"
     },
     "tooltip": {
-      "Odstranit tento filtr": "Remove this filter"
+      "Odstranit tento filtr": "Remove this filter",
+      "Zastavit": "Stop"
     },
     "layer": {
       "cuzk_zakladni": "ČÚZK - Basic Map",

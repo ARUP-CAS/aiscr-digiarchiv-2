@@ -546,6 +546,8 @@
     }
   }
   .app-file-viewer {
+    max-width: unset !important;
+    width: 1000px !important;
     @include mat.dialog-overrides((
       container-max-width: 1000px
     ));

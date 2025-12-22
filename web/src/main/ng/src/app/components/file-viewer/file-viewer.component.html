@@ -2,32 +2,32 @@
   <h1 mat-dialog-title class="app-fxLayout app-row app-gap-2">
     <div class="app-list-files-wrapper app-fxFlex">
       @for (file of files(); track file; let idx = $index) {
-        <a (click)="selectFile(file, idx)" [class.active]="file.id === selectedFile?.id">{{ file.nazev }}</a>&#160;
+        <a (click)="selectFile(file, idx)" [class.active]="file.id === selectedFile()?.id">{{ file.nazev }}</a>&#160;
       }
     </div>
     <a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
   </h1>
   <div mat-dialog-content class="app-fxFlex">
-    @if (selectedFile) {
+    @if (selectedFile()) {
       <div class="app-fxLayout app-row app-toolbar-wrapper app-mb-4">
         <div class="app-fxFlex app-controls app-fxLayout app-row app-center-v app-gap-2">
           <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
           <mat-form-field appearance="outline">
             <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()"  />
           </mat-form-field>
-          <span>{{ 'dialog.citation.stránka z' | translate }}</span><strong>{{ selectedFile?.rozsah }}</strong>
-          @if (currentPage < selectedFile.rozsah) {
+          <span>{{ 'dialog.citation.stránka z' | translate }}</span><strong>{{ selectedFile()?.rozsah }}</strong>
+          @if (currentPage < selectedFile().rozsah) {
             <span class="app-pipe"></span>
           }
-          @if (currentPage < selectedFile.rozsah) {
+          @if (currentPage < selectedFile().rozsah) {
             <a (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
           }
         </div>
         <div class="app-metadata app-fxLayout app-row app-center-v">
-          <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile.size_mb}}MB</strong></span><span class="app-pipe"></span><!--
+          <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile().size_mb}}MB</strong></span><span class="app-pipe"></span><!--
           --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong></span><span class="app-pipe"></span>
-          @if (selectedFile !== null) {
-            <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile.nazev"><mat-icon class="app-va-center">get_app</mat-icon></a>
+          @if (selectedFile() !== null) {
+            <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile().nazev"><mat-icon class="app-va-center">get_app</mat-icon></a>
           }
         </div>
       </div>
@@ -39,7 +39,7 @@
     </mat-card>
     <ngu-carousel #carousel [inputs]="carouselConfig" (carouselLoad)="carouselItemsLoad($event)" [dataSource]="carouselItems" >
       <div *nguCarouselDef="let item; let idx = index" class="item">
-        <img [src]="imgPoint(selectedFile, 'medium') + '?size=medium&id='+ selectedFile.id + '&nazev='+ selectedFile.nazev + '&page=' + idx" />
+        <img [src]="imgPoint(selectedFile(), 'medium') + '?size=medium&id='+ selectedFile().id + '&nazev='+ selectedFile().nazev + '&page=' + idx" />
       </div>
     </ngu-carousel>
   </div>

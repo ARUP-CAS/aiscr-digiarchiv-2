@@ -51,7 +51,7 @@ export class FileViewerComponent implements OnInit {
   // result: any;
 
   files = signal<File[]>([]);
-  selectedFile: File = null; 
+  selectedFile = signal<File>(null); 
 
   currentPage: number = 1;
   currentPageDisplayed = 1;
@@ -91,10 +91,10 @@ export class FileViewerComponent implements OnInit {
 
   selectFile(file: File, idx: number) {
     // this.carousel.dataSource = [];
-    this.selectedFile = file;
+    this.selectedFile.set(file);
     setTimeout(() => {
 
-    //this.carousel.dataSource = this.selectedFile.pages;
+    //this.carousel.dataSource = this.selectedFile().pages;
       this.currentPage = 1;
       this.setPage();
       this.fileid = idx + new Date().getTime();
@@ -103,17 +103,17 @@ export class FileViewerComponent implements OnInit {
 
   public carouselItemsLoad(j: number) {
     this.carouselItems = [];
-    const len = this.selectedFile.pages.length;
+    const len = this.selectedFile().pages.length;
     const max = Math.min(len, this.currentPage + 4 );
       for (let i = 0; i < max; i++) {
         this.carouselItems.push(
-          this.selectedFile.pages[i]
+          this.selectedFile().pages[i]
         );
       }
   }
 
   downloadUrl() {
-    return this.config.context + '/api/img/full?id=' + this.selectedFile.id;
+    return this.config.context + '/api/img/full?id=' + this.selectedFile().id;
   }
 
   imgPoint(doc: any, size: string) {
@@ -143,7 +143,7 @@ export class FileViewerComponent implements OnInit {
 
           const link = this.windowRef.nativeWindow.document.createElement('a');
           link.href = this.downloadUrl();
-          link.download = this.selectedFile.nazev;
+          link.download = this.selectedFile().nazev;
           link.click();
           this.service.showInfoDialog(this.service.getTranslation('dialog.desc.download_started'), 2000);
         }
@@ -168,7 +168,7 @@ export class FileViewerComponent implements OnInit {
   gotoPage() {
     
     this.currentPage = parseInt(this.currentPage+'');
-    if (this.currentPage > 0 || this.currentPage < this.selectedFile.rozsah) {
+    if (this.currentPage > 0 || this.currentPage < this.selectedFile().rozsah) {
       this.carousel.moveTo(this.currentPage - 1, false);
     }
   }
@@ -177,7 +177,7 @@ export class FileViewerComponent implements OnInit {
     this.currentPage = parseInt(this.currentPage+'');
     this.carouselItemsLoad(this.currentPage);
     setTimeout(() => {
-      if (this.currentPage > 0 || this.currentPage < this.selectedFile.rozsah) {
+      if (this.currentPage > 0 || this.currentPage < this.selectedFile().rozsah) {
         this.carousel.moveTo(this.currentPage - 1, false);
       }
     }, 100);
@@ -186,7 +186,7 @@ export class FileViewerComponent implements OnInit {
   setData() {
 
 
-    this.selectedFile = null;
+    this.selectedFile.set(null)
     const files: File[] = [];
     this.showing = false;
 
@@ -224,7 +224,7 @@ export class FileViewerComponent implements OnInit {
   }
 
   mimetype() {
-    const s = this.selectedFile.mimetype;
+    const s = this.selectedFile().mimetype;
     if (s.indexOf('/') > 0) {
       return s.split('/')[1].toUpperCase();
     } else {

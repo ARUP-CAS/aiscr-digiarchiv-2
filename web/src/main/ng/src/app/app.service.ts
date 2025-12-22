@@ -6,13 +6,15 @@ import { Subject, Observable, of } from 'rxjs';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-// import {latLng, latLngBounds} from "leaflet";
+
 import { AppWindowRef } from './app.window-ref';
 import { AppConfiguration } from './app-configuration';
 import { AppState } from './app.state';
 import { Crumb } from './shared/crumb';
 import { environment } from '../environments/environment';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+// import { latLng, latLngBounds} from "leaflet";
+declare var L: any;
 
 @Injectable({
   providedIn: 'root'
@@ -489,9 +491,10 @@ export class AppService {
       this.state.breadcrumbs.push(new Crumb('separator', '', ''));
 
       const loc_rpt: any = value.split(',');
-      // const southWest = latLng(loc_rpt[0], loc_rpt[1]);
-      // const northEast = latLng(loc_rpt[2], loc_rpt[3]);
-      // this.state.locationFilterBounds = latLngBounds(southWest, northEast);
+      
+      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+      this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
 
       // }
     } else {

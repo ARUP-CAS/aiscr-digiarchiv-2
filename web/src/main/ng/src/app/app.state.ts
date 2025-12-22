@@ -53,6 +53,7 @@ export class AppState {
   pianId: string; // Selected pian in map
   locationFilterEnabled: boolean; // Vyber na mape
   locationFilterBounds: any; // Vyber na mape
+  vyber: any; // Vyber na mape
   mapBounds: any;
 
   solrResponse: SolrResponse;
