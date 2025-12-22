@@ -1,0 +1,17 @@
+::ng-deep .mat-mdc-card {
+  .mat-mdc-card-actions {
+    @media only screen and (max-width: 560px) {
+      display: block !important;
+
+      app-result-actions {
+        .app-fxLayout {
+          flex-wrap: wrap;
+
+          .mat-mdc-button-base {
+            margin-top: 8px;
+          }
+        }
+      }
+    }
+  }
+}
