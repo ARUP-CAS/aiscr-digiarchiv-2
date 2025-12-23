@@ -21,7 +21,7 @@
     "@angular/material": "^20.0.4",
     "@angular/material-moment-adapter": "^20.1.5",
     "@angular/platform-browser": "^20.0.5",
-    "@angular/platform-server": "^20.0.5",
+    "@angular/platform-server": "^20.3.0",
     "@angular/router": "^20.0.5",
     "@angular/ssr": "^20.0.4",
     "@bluehalo/ngx-leaflet": "^20.0.0",
