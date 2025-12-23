@@ -1,4 +1,4 @@
-@if (loading) {
+@if (loading()) {
   <div class="app-display-table app-loading" style="position: absolute; z-index:1000;">
     <div class="app-table-cell app-clean-pd">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -46,7 +46,7 @@
           </mat-list>
         </div>
         <div class="app-right app-fxFlex">
-          @if (!loading && series.length > 0) {
+          @if (!loading() && series.length > 0) {
             <div class="app-graph" echarts [options]="chartOptions"></div>
           }
         </div>
@@ -88,7 +88,7 @@
           <mat-form-field appearance="outline">
             <mat-label>{{ 'stats.entity' | translate }}</mat-label>
             <mat-select [(ngModel)]="entity" (selectionChange)="filter('entity', entity)">
-              @for (e of entities; track e) {
+              @for (e of entities; track $index) {
                 <mat-option [value]="e.name">{{ 'entities.' + e.name + '.title' | translate }}</mat-option>
               }
             </mat-select>
@@ -98,7 +98,7 @@
               </button>
             }
           </mat-form-field>
-          @for (f of entities; track f) {
+          @for (f of entities; track $index) {
             <div class="app-item">
               <a (click)="filter('entity', f.name)">{{ 'entities.' + f.name + '.title' | translate }}</a><span class="app-count">({{ f.value }})</span>
             </div>
@@ -123,7 +123,7 @@
             }
           </mat-form-field>
           <div class="app-fxFlex app-oa-y">
-            @for (f of ids; track f) {
+            @for (f of ids; track $index) {
               <div class="app-item">
                 <a (click)="filter('ident_cely', f.name)">{{ formatId(f.name) }}</a><span class="app-count">({{ f.value }})</span>
               </div>
@@ -147,7 +147,7 @@
                 </button>
               }
             </mat-form-field>
-            @for (f of ips; track f) {
+            @for (f of ips; track $index) {
               <div class="app-item">
                 <a (click)="filter('ip', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
               </div>
@@ -171,7 +171,7 @@
                 </button>
               }
             </mat-form-field>
-            @for (f of users; track f) {
+            @for (f of users; track $index) {
               <div class="app-item">
                 <a (click)="filter('user', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
               </div>

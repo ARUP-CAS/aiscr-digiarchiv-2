@@ -100,8 +100,8 @@ export class FacetsComponent implements OnInit {
 
         if ('name' === this.state.facetSort[f.field]) {
           ff.sort((v1, v2) => {
-            const n1 = this.service.getHeslarTranslation(v1.name, f.field).toLocaleUpperCase('cs');
-            const n2 = this.service.getHeslarTranslation(v2.name, f.field).toLocaleUpperCase('cs');
+            const n1 = this.service.getTranslation(v1.name).toLocaleUpperCase('cs');
+            const n2 = this.service.getTranslation(v2.name).toLocaleUpperCase('cs');
             // facet.name | translateHeslar : facetField.field
             return n1.localeCompare(n2, 'cs');
           });
@@ -118,6 +118,7 @@ export class FacetsComponent implements OnInit {
           }
         } else {
           ff.sort((v1, v2) => {
+            //return v1.value.localeCompare(v2.value, 'cs')
             return v2.value - v1.value
           });
         }

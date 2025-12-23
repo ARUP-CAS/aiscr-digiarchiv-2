@@ -1,17 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { EChartsOption } from 'echarts';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
-import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import * as echarts from 'echarts/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +19,16 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
+
+import * as echarts from 'echarts/core';
+import { EChartsOption, ECharts } from 'echarts'; 
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import { LineChart } from 'echarts/charts';
+import { TooltipComponent, GridComponent, TitleComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+import { LabelLayout } from "echarts/features";
+echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout]);
+
 
 @Component({
   imports: [
@@ -69,7 +76,7 @@ export class StatsComponent implements OnInit {
   datumod: Date;
   datumdo: Date;
 
-  loading = false;
+  loading = signal(false);
 
   // insoType: string = 'O';
   // extType: string;
@@ -155,7 +162,7 @@ export class StatsComponent implements OnInit {
   }
 
   search(params: Params) {
-    this.loading = true;
+    this.loading.set(true);
     this.ident_cely = params['ident_cely'];
     this.type = params['type'];
     this.ip = params['ip'];
@@ -185,7 +192,7 @@ export class StatsComponent implements OnInit {
       this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
 
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
-      this.loading = false;
+      this.loading.set(false);
     });
   }
 

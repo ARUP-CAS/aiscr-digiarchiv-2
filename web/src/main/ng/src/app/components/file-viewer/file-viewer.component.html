@@ -13,7 +13,7 @@
         <div class="app-fxFlex app-controls app-fxLayout app-row app-center-v app-gap-2">
           <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
           <mat-form-field appearance="outline">
-            <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" (keyup.enter)="setPage()"  />
+            <input type="number" [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" [value]="currentPageDisplayed()" (keyup.enter)="setPage()"  />
           </mat-form-field>
           <span>{{ 'dialog.citation.stránka z' | translate }}</span><strong>{{ selectedFile()?.rozsah }}</strong>
           @if (currentPage < selectedFile().rozsah) {
@@ -37,10 +37,12 @@
         {{ 'dialog.desc.viewerInfo' | translate }}
       </mat-card-content>
     </mat-card>
+    @if(showing()){
     <ngu-carousel #carousel [inputs]="carouselConfig" (carouselLoad)="carouselItemsLoad($event)" [dataSource]="carouselItems" >
       <div *nguCarouselDef="let item; let idx = index" class="item">
-        <img [src]="imgPoint(selectedFile(), 'medium') + '?size=medium&id='+ selectedFile().id + '&nazev='+ selectedFile().nazev + '&page=' + idx" />
+        <img [title]="currentPageDisplayed()" [src]="imgPoint(selectedFile(), 'medium') + '?size=medium&id='+ selectedFile().id + '&nazev='+ selectedFile().nazev + '&page=' + idx" />
       </div>
     </ngu-carousel>
+    }
   </div>
 </div>

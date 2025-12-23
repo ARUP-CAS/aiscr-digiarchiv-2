@@ -46,7 +46,7 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class FileViewerComponent implements OnInit {
 
-  showing = false;
+  showing = signal(false);
   // rolling = false;
   // result: any;
 
@@ -54,7 +54,7 @@ export class FileViewerComponent implements OnInit {
   selectedFile = signal<File>(null); 
 
   currentPage: number = 1;
-  currentPageDisplayed = 1;
+  currentPageDisplayed = signal(1);
   fileid = 0;
   carouselItems: any[] = [];
 
@@ -92,13 +92,12 @@ export class FileViewerComponent implements OnInit {
   selectFile(file: File, idx: number) {
     // this.carousel.dataSource = [];
     this.selectedFile.set(file);
-    setTimeout(() => {
-
-    //this.carousel.dataSource = this.selectedFile().pages;
+    //setTimeout(() => {
       this.currentPage = 1;
+      this.currentPageDisplayed.set(this.currentPage);
       this.setPage();
       this.fileid = idx + new Date().getTime();
-    }, 10);
+    //}, 10);
   }
 
   public carouselItemsLoad(j: number) {
@@ -107,7 +106,8 @@ export class FileViewerComponent implements OnInit {
     const max = Math.min(len, this.currentPage + 4 );
       for (let i = 0; i < max; i++) {
         this.carouselItems.push(
-          this.selectedFile().pages[i]
+          i
+          //this.selectedFile().pages[i]
         );
       }
   }
@@ -154,41 +154,44 @@ export class FileViewerComponent implements OnInit {
 
   nextPage() {
     this.currentPage++;
-    this.carousel.moveTo(this.currentPage - 1, false);
-
+    this.currentPageDisplayed.set(this.currentPage);
+    this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.carousel.moveTo(this.currentPage - 1, false);
+      this.currentPageDisplayed.set(this.currentPage);
+      this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
     }
   }
 
   gotoPage() {
     
     this.currentPage = parseInt(this.currentPage+'');
+    this.currentPageDisplayed.set(this.currentPage);
     if (this.currentPage > 0 || this.currentPage < this.selectedFile().rozsah) {
-      this.carousel.moveTo(this.currentPage - 1, false);
+      this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
     }
   }
 
   setPage() {
     this.currentPage = parseInt(this.currentPage+'');
+    this.currentPageDisplayed.set(this.currentPage);
     this.carouselItemsLoad(this.currentPage);
-    setTimeout(() => {
-      if (this.currentPage > 0 || this.currentPage < this.selectedFile().rozsah) {
-        this.carousel.moveTo(this.currentPage - 1, false);
-      }
-    }, 100);
+    // setTimeout(() => {
+    //   if (this.currentPage > 0 || this.currentPage < this.selectedFile().rozsah) {
+    //     this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
+    //   }
+    // }, 100);
   }
 
   setData() {
 
 
-    this.selectedFile.set(null)
+    this.selectedFile.set(null);
     const files: File[] = [];
-    this.showing = false;
+    this.showing.set(false);
 
     setTimeout(() => {
       // this.rolling = false;
@@ -218,7 +221,7 @@ export class FileViewerComponent implements OnInit {
       this.selectFile(this.files()[0], 0);
       // this.selectedFile = this.files[0];
       // this.currentPage = 1;
-      this.showing = true;
+      this.showing.set(true);
     }, 10);
 
   }
@@ -236,7 +239,4 @@ export class FileViewerComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
-
-
-
 }
