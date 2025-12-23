@@ -887,7 +887,8 @@ public class FedoraHarvester {
                 idocsOAI.clear();
             }
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Can't commit changes", ex);
+            //LOGGER.log(Level.SEVERE, "Can't commit changes", ex);
+            LOGGER.log(Level.SEVERE, "Can't commit changes");
             SolrClientFactory.resetSolrClient();
             throw ex;// new Exception(ex)
         }
