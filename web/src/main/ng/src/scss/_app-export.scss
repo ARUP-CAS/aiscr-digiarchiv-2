@@ -1,0 +1,37 @@
+// --- EXPORT ---
+
+app-export, 
+app-export-mapa {
+  display: block;
+  background-color: var(--app-color-lightnes);
+  padding: 10px;
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 5px;
+    }
+
+    thead {
+      tr {
+        border-bottom: 2px solid var(--app-color-gray-3);
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: var(--app-color-gray-1);
+        }
+
+        &:hover {
+          background-color: var(--app-color-gray-3);
+        }
+      }
+    }
+  }
+}

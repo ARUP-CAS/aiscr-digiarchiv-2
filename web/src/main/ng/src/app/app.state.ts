@@ -1,21 +1,21 @@
 
-import { AppConfiguration } from 'src/app/app-configuration';
-import { SolrResponse } from 'src/app/shared/solr-response';
 
-import { Observable, Subject, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { Params, ParamMap } from '@angular/router';
-import { NavigationExtras } from '@angular/router';
-import { Configuration, Sort } from './shared/config';
-import { User } from 'src/app/shared/user';
-import { Crumb } from 'src/app/shared/crumb';
-import { Condition } from 'src/app/shared/condition';
+import { Sort } from './shared/config';
 import { MatDialogRef } from '@angular/material/dialog';
+import { AppConfiguration } from './app-configuration';
+import { Condition } from './shared/condition';
+import { Crumb } from './shared/crumb';
+import { SolrResponse } from './shared/solr-response';
+import { User } from './shared/user';
+import { signal } from '@angular/core';
 
 export class AppState {
 
   // Observe state
-  private resultsSubject: Subject<{typ: string, pageChanged: boolean}> = new Subject();
-  public resultsChanged: Observable<{typ: string, pageChanged: boolean}> = this.resultsSubject.asObservable();
+  private resultsSubject: Subject<{ typ: string, pageChanged: boolean }> = new Subject();
+  public resultsChanged: Observable<{ typ: string, pageChanged: boolean }> = this.resultsSubject.asObservable();
 
   private routeSubject: ReplaySubject<Params> = new ReplaySubject(0);
   public routeChanged: Observable<Params> = this.routeSubject.asObservable();
@@ -31,6 +31,7 @@ export class AppState {
 
   private mapViewSubject: Subject<string> = new Subject();
   public mapViewChanged: Observable<string> = this.mapViewSubject.asObservable();
+  public sidenavOpened: boolean;
 
   entity: string;
 
@@ -44,27 +45,23 @@ export class AppState {
   itemView = 'default';
   isMapaCollapsed = true;
   timelineOpened = true;
-  printing = false;
   documentId: string;
   isFacetsCollapsed = true;
 
   dialogRef: MatDialogRef<any, any>;
-  mapResult: any; // Select entity in map view
+  mapResult = signal<any>(null); // Select entity in map view
   pianId: string; // Selected pian in map
   locationFilterEnabled: boolean; // Vyber na mape
   locationFilterBounds: any; // Vyber na mape
+  vyber: any; // Vyber na mape
   mapBounds: any;
 
-
-  // public loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  // public loading: Observable<boolean> = this._loading.asObservable();
-  // loading = true;
-
   solrResponse: SolrResponse;
-  loading: boolean = true;
+  loading = signal<boolean>(true);
+  facetsLoading = signal<boolean>(true);
+  printing = signal<boolean>(false);
   switchingMap = false;
   closingMapResult = false;
-  facetsLoading = false;
   hasError = false;
   imagesLoading: boolean;
   imagesLoaded = 0;
@@ -79,7 +76,7 @@ export class AppState {
 
   totals: { [entity: string]: number } = {};
 
-  facetRanges;
+  facetRanges: unknown;
   currentObdobiOd: number;
   currentObdobiDo: number;
 
@@ -95,7 +92,7 @@ export class AppState {
     }[]
   }[] = [];
 
-  heatMaps;
+  heatMaps: any;
 
   q: string;
   rows: number;
@@ -104,19 +101,41 @@ export class AppState {
   totalPages: number
   sorts_by_entity: Sort[];
   sort: Sort;
-  ui: { sort: {[entity: string]:string}, rows?:number} = {sort:{}};
+  ui: { sort: { [entity: string]: string }, rows?: number } = { sort: {} };
 
   // Pokud uzivatel zvoli jine razeni pro danou facetu, napr: {"obdobi": "poradi"}
-  facetSort: {[facetname: string]: string} = {};
+  facetSort: { [facetname: string]: string } = {};
 
   hideWithoutThumbs = false;
-  inFavorites: boolean;
+  inFavorites = signal<boolean>(false);
   obdobi: any;
 
   breadcrumbs: Crumb[];
   conditions: Condition[];
 
   documentProgress: number;
+
+  resetState(full: boolean) {
+    this.documentId = null;
+    this.setMapResult(null, false);
+
+    this.pianId = null;
+    this.locationFilterEnabled = false;
+    this.locationFilterBounds = null;
+    this.mapBounds = null;
+
+    if (full) {
+      this.breadcrumbs = null;
+      this.conditions = [];
+      this.loading.set(false);
+      this.facetsLoading.set(false);
+      this.printing.set(false);
+      this.switchingMap = false;
+      this.closingMapResult = false;
+    }
+
+
+  }
 
   setConfig(cfg: AppConfiguration) {
     this.config = cfg;
@@ -141,20 +160,20 @@ export class AppState {
       this.stats[k].from = this.stats[k].min;
       this.stats[k].until = this.stats[k].max;
     });
-    this.stats.datum_provedeni = {
-      min: this.stats.datum_provedeni_od.min,
-      max: this.stats.datum_provedeni_do.max,
-      count: this.stats.datum_provedeni_od.count,
-      from: this.stats.datum_provedeni_od.min,
-      until: this.stats.datum_provedeni_do.max
+    this.stats['datum_provedeni'] = {
+      min: this.stats['datum_provedeni_od'].min,
+      max: this.stats['datum_provedeni_do'].max,
+      count: this.stats['datum_provedeni_od'].count,
+      from: this.stats['datum_provedeni_od'].min,
+      until: this.stats['datum_provedeni_do'].max
     };
 
     if (resp.facet_counts) {
       this.setEntityTotals(resp.facet_counts.facet_fields['entity']);
     }
-    
 
-    this.resultsSubject.next({typ, pageChanged: this.pageChanged});
+
+    this.resultsSubject.next({ typ, pageChanged: this.pageChanged });
     this.pageChanged = false;
     if (resp.facet_counts) {
       setTimeout(() => {
@@ -163,7 +182,7 @@ export class AppState {
     }
   }
 
-  setFacets(resp) {
+  setFacets(resp: any) {
     if (this.page !== 0 && this.heatMaps?.loc_rpt) {
       return;
     }
@@ -200,7 +219,7 @@ export class AppState {
       }
     });
 
-    
+
 
     this.facetsFiltered = Object.assign([], this.facets);
     this.setFacetPivots(resp);
@@ -229,14 +248,14 @@ export class AppState {
         const field = f.split(',')[0];
         switch (field) {
           case 'dokument_kategorie_dokumentu':
-            const fp = { field, values: [], count: -1 };
+            const fp: any = { field: field, values: [], count: -1 };
             pivots[f].forEach(f1 => {
               fp.values.push(f1);
             });
             this.facetPivots.push(fp);
             break;
           default:
-            const facetPivoted = {};
+            const facetPivoted: any = {};
             pivots[f].forEach(f1 => {
               if (this.getUserPristupnost().localeCompare(f1.value) > -1) {
                 f1.pivot.forEach(f2 => {
@@ -249,7 +268,7 @@ export class AppState {
               }
             });
             const fpKeys = Object.keys(facetPivoted);
-            const values = [];
+            const values: any = [];
             fpKeys.forEach(k => {
               values.push(facetPivoted[k]);
             });
@@ -261,17 +280,17 @@ export class AppState {
 
   }
 
-  setRouteChanged(val) {
+  setRouteChanged(val: any) {
     this.routeSubject.next(val);
   }
 
   processParams(params: ParamMap) {
     this.hideWithoutThumbs = params.has('hideWithoutThumbs') ? params.get('hideWithoutThumbs') === 'true' : false;
-    this.inFavorites = params.has('inFavorites') ? params.get('inFavorites') === 'true' : false;
+    this.inFavorites.set(params.has('inFavorites') ? params.get('inFavorites') === 'true' : false);
     this.entity = params.has('entity') ? params.get('entity') : 'dokument';
     this.sorts_by_entity = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
     this.page = params.has('page') ? +params.get('page') : 0;
-    this.isMapaCollapsed = params.has('mapa') ? params.get('mapa') === 'false' : true;
+
     if (this.isMapaCollapsed) {
       this.rows = params.has('rows') ? +params.get('rows') : this.config.defaultRows;
     } else {
@@ -282,7 +301,7 @@ export class AppState {
     // this.sort = null;
     if (params.has('sort')) {
       this.sort = this.sorts_by_entity.find(s => (s.field) === params.get('sort'));
-    } else if(this.sort) {
+    } else if (this.sort) {
       // this.sort could be from another entity. Check validity
       this.sort = this.sorts_by_entity.find(s => s.field === this.sort.field);
     }
@@ -307,15 +326,15 @@ export class AppState {
       const sameOrg = this.user.organizace.id === organizace;
       const orgCanRead = this.user.pristupnost.toUpperCase().localeCompare('C'.toUpperCase()) > -1 && this.user.cteni_dokumentu;
       return orgCanRead ||
-             this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 || 
-             ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
+        this.user.pristupnost.toUpperCase().localeCompare(pristupnost.toUpperCase()) > -1 ||
+        ((this.user.pristupnost.toUpperCase().localeCompare('C') > -1 && sameOrg));
     } else {
       return false;
     }
   }
 
   setMapResultById(docId: string) {
-    if (docId === this.mapResult?.ident_cely) {
+    if (docId === this.mapResult()?.ident_cely) {
       this.setMapResult(null, false);
     } else {
       const doc = this.solrResponse.response.docs.find(d => d.ident_cely === docId);
@@ -323,23 +342,24 @@ export class AppState {
     }
   }
 
-  setMapResult(result, mapDetail) {
-    const changed = (!result || (result.ident_cely !== this.mapResult?.ident_cely));
-    this.mapResult = result;
+  setMapResult(result: any, mapDetail: any) {
+    const changed = (!result || (result.ident_cely !== this.mapResult()?.ident_cely));
+    this.mapResult.set(result);
     // if (!result && !this.isMapaCollapsed) {
-      
+
     //   return;
     // }
     if (mapDetail) {
       return;
     }
-    if (changed) {
-      this.mapResultSubject.next(result);
-    }
+    //if (changed) {
+    this.mapResultSubject.next(result);
+    //}
   }
 
-  changeMapView(sidenav) {
+  changeMapView(sidenav: any) {
     sidenav.toggle();
+    this.sidenavOpened = sidenav.opened;
     this.mapViewSubject.next('');
   }
 
@@ -348,12 +368,12 @@ export class AppState {
     if (res.error) {
       this.logged = false;
       this.user = null;
-      this.ui = {sort:{}};
+      this.ui = { sort: {} };
     } else {
       this.logged = true;
       this.user = res;
 
-      
+
       if (this.user.ui) {
         this.ui = this.user.ui;
       }

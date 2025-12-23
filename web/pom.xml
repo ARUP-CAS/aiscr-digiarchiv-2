@@ -1,190 +1,151 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>cz.inovatika.arup</groupId>
-    <artifactId>web</artifactId>
+    <groupId>cz.inovatika.arup.digiarchiv</groupId>
+    <artifactId>web4</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-
-    <name>web</name>
-
+    <name>web4</name>
+    
     <properties>
-        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jakartaee>11.0.0-M1</jakartaee>
         <context.name></context.name>
         <skipNg>false</skipNg>
     </properties>
     
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-text</artifactId>
-      <version>1.13.1</version>
-    </dependency>
+    <dependencies>
         <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>2.9.0</version>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>9.10.0</version>
         </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.19.0</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20240303</version>
-      <type>jar</type>
-    </dependency>
-<!--    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-      <version>1.2.83</version>
-    </dependency>-->
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.17.1</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.xmlrpc</groupId>
-      <artifactId>xmlrpc-client</artifactId>
-      <version>3.1.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.5.14</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.pdfbox</groupId>
-      <artifactId>pdfbox</artifactId>
-      <version>3.0.3</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-csv</artifactId>
-      <version>1.12.0</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.17.0</version>
-      <type>jar</type>
-    </dependency>
-    
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>1.4.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-email</artifactId>
-      <version>1.6.0</version>
-      <type>jar</type>
-    </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.21.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20250517</version>
+            <type>jar</type>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version>8.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.5</version>
+            <type>jar</type>
+        </dependency>
+        
+        
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee}</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <dependency>
             <groupId>com.fasterxml.jackson</groupId>
             <artifactId>jackson-bom</artifactId>
-            <version>2.19.0</version>
+            <version>2.20.1</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
-            <version>2.19.0</version>
+            <version>2.20.1</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>2.10.0</version>
         </dependency>
         <dependency>
             <groupId>org.locationtech.jts.io</groupId>
             <artifactId>jts-io-common</artifactId>
             <version>1.20.0</version>
         </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-solrj</artifactId>
-      <version>9.6.1</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon</artifactId>
-      <version>8.7</version>
-    </dependency>
-    <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>8.0.1</version>
-            <scope>provided</scope>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>1.6.0</version>
+            <type>jar</type>
         </dependency>
-
     </dependencies>
-
+    
     <build>
         <plugins>
-          
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.5.0</version>
-        <executions>
-          <execution>
-            <id>exec-npm-install</id>
-            <phase>generate-sources</phase>
-            <configuration>
-              <skip>${skipNg}</skip>
-              <executable>npm</executable>
-              <workingDirectory>${project.basedir}/src/main/ng</workingDirectory>  
-              <arguments>
-                <argument>run</argument>
-                <argument>build:ssr</argument>
-              </arguments>
-            </configuration>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+            
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <id>exec-npm-install</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <skip>${skipNg}</skip>
+                            <executable>npm</executable>
+                            <workingDirectory>${project.basedir}/src/main/ng</workingDirectory>  
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
       
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.4.1</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>${project.basedir}/src/main/webapp</directory>
-              <includes>
-                <include>*.css</include>
-                <include>*.js</include>
-                <include>*.gz</include>
-                <include>*.map</include>
-                <include>index.html</include>
-                <include>index.ssr.html</include>
-                <include>assets/*/**</include>
-                <include>server/*/**</include>
-              </includes>
-              <excludes>
-                <exclude>index.jsp</exclude>
-              </excludes>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/src/main/webapp</directory>
+                            <includes>
+                                <include>*.css</include>
+                                <include>*.js</include>
+                                <include>*.gz</include>
+                                <include>*.map</include>
+                                <include>index.html</include>
+                                <include>assets/*/**</include>
+                                <include>server/*/**</include>
+                            </includes>
+                            <excludes>
+                                <exclude>index.jsp</exclude>
+                            </excludes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
       
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.3.1</version>
-        <executions>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
           
                     <execution>
                         <id>copy-frontend-resources</id>
@@ -241,14 +202,14 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <sourceFile>src/main/ng/dist/ng/browser/index.html</sourceFile>
-                            <destinationFile>${project.basedir}/src/main/webapp/index.ssr.html</destinationFile>
+                            <sourceFile>src/main/ng/dist/ng/browser/index.csr.html</sourceFile>
+                            <destinationFile>${project.basedir}/src/main/webapp/index.html</destinationFile>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
     
-            <!-- Insert jsp pageEncoding tag to index.html -->
+<!--             Insert jsp pageEncoding tag to index.html -->
             <plugin> 
                 <groupId>com.google.code.maven-replacer-plugin</groupId> 
                 <artifactId>replacer</artifactId> 
@@ -278,23 +239,6 @@
                             </replacements> 
                         </configuration> 
                     </execution>  
-          
-                    <execution> 
-                        <id>replace-for-index-ssr</id>
-                        <phase>prepare-package</phase> 
-                        <goals> 
-                            <goal>replace</goal> 
-                        </goals>  
-                        <configuration> 
-                            <file>${project.basedir}/src/main/webapp/index.ssr.html</file> 
-                            <replacements>  
-                                <replacement> 
-                                    <token>base href="/"</token> 
-                                    <value>base href="${context.name}/"</value> 
-                                </replacement> 
-                            </replacements> 
-                        </configuration> 
-                    </execution> 
 	  
                     <execution> 
                         <id>replace-for-config</id>
@@ -337,76 +281,24 @@
                             </replacements> 
                         </configuration> 
                     </execution> 
-          
-                    <execution> 
-                        <id>replace-for-styles</id>
-                        <phase>prepare-package</phase> 
-                        <goals> 
-                            <goal>replace</goal> 
-                        </goals> 
-            
-                        <configuration> 
-                            <includes>
-                                <include>${project.basedir}/src/main/webapp/styles.*.css</include>
-                            </includes> 
-                            <replacements> 
-                                <replacement> 
-                                    <token>/assets/fonts/</token> 
-                                    <value>assets/fonts/</value> 
-                                </replacement> 
-                            </replacements> 
-                        </configuration>  
-                    </execution> 
                 </executions>
             </plugin>
-      
-      
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.14.0</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-          <compilerArguments>
-            <endorseddirs>${endorsed.dir}</endorseddirs>
-          </compilerArguments>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>3.4.0</version>
-        <configuration>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.8.1</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${endorsed.dir}</outputDirectory>
-              <silent>true</silent>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>javax</groupId>
-                  <artifactId>javaee-endorsed-api</artifactId>
-                  <version>7.0</version>
-                  <type>jar</type>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
+            
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

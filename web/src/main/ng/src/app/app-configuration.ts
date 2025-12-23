@@ -1,6 +1,6 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, of, tap, lastValueFrom, map, switchMap, catchError } from 'rxjs';
+import { of, tap, catchError, switchMap, firstValueFrom } from 'rxjs';
 import { Configuration } from './shared/config';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -8,12 +8,18 @@ import { isPlatformBrowser } from '@angular/common';
     providedIn: 'root'
 }) export class AppConfiguration {
 
-    public config: Configuration;
+    public config: Configuration = new Configuration();
     public invalidServer: boolean;
 
-    public obdobi;
-    public obdobiStats;
-    public thesauri: { [key: string]: number };
+    public obdobi: any;
+    public obdobiStats: any;
+
+    
+    // public thesauri: { [key: string]: number };
+    public get thesauri(): { [key: string]: number } {
+        return this.config.thesauri;
+    }
+
 
     public get context() {
         return this.config.context;
@@ -142,11 +148,11 @@ import { isPlatformBrowser } from '@angular/common';
     server = '';
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
-        private http: HttpClient) {
+        @Inject(PLATFORM_ID) private platformId: any
+    ) {
         if (!isPlatformBrowser(this.platformId)) {
             const args = process.argv;
-            if (args.length > 2) {
+            if (args.length > 2 && args[2].startsWith('http')) {
                 this.server = args[2];
             }
         }
@@ -157,30 +163,14 @@ import { isPlatformBrowser } from '@angular/common';
     }
 
     public load() {
-        return this.http.get(this.server + 'assets/config.json').pipe(
-            switchMap((cfg: any) => {
+        const http = inject(HttpClient);
+        console.log('Loading config...')
+        return firstValueFrom(http.get(this.server + 'assets/config.json').pipe(
+            tap((cfg: any) => {
                 this.config = cfg as Configuration;
                 this.config.amcr = this.server;
-                return this.http.get(this.server + 'api/search/thesauri').pipe(tap((res: any) => {
-                    // this.obdobi = res.response.docs;
-                    // this.obdobiStats = res.stats.stats_fields.poradi;
-                    this.thesauri = res;
-                }));
-            }),
-            catchError((err) => {
-                // this.alertSubject.next(err);
-                return of(err);
             })
-        );
-    }
-
-    getThesauri() {
-        const url = this.server + 'api/search/thesauri';
-        return this.http.get(url)
-            .toPromise()
-            .then((res: any) => {
-                this.thesauri = res;
-            });
+        ));
     }
 
 }

@@ -1,0 +1,118 @@
+// --- VARIABLES ---
+
+// get color from pallete
+// #{map.get(map.get(my-theme.$primary-palette, primary), 30)};
+
+:root {
+  --app-color-lightnes: #ffffff;
+  --app-color-lightnes-rgb: 255, 255, 255;
+  --app-color-darknes: #000000;
+  --app-color-darknes-rgb: 0, 0, 0;
+  --app-color-primary: #0d47a1;
+  --app-color-primary-rgb: 13, 71, 161;
+  --app-color-primary-darker-rgb: rgba(9,50,114);
+  --app-color-accent: #ff4081;
+  --app-color-warn: #f44336;
+  --app-color-lightnes: #ffffff;
+  --app-color-darknes: #000000;
+  --app-color-info: #ff6f00;
+  --app-color-info-rgb: 255, 111, 0;
+  --app-color-fav: #f9a825;
+  --app-color-fav-rgb: 249, 168, 37;
+
+  // operators
+  --app-color-badge-or: #00897b;
+  --app-color-badge-and: #8e24aa;
+  --app-color-badge-not: var( --app-color-warn);
+
+  // gray pallete
+  --app-color-gray-0: #FAFAFA;
+  --app-color-gray-1: #F5F5F5;
+  --app-color-gray-2: #EEEEEE;
+  --app-color-gray-3: #E0E0E0;
+  --app-color-gray-4: #BDBDBD;
+  --app-color-gray-5: #9E9E9E;
+  --app-color-gray-6: #757575;
+  --app-color-gray-7: #616161;
+  --app-color-gray-8: #424242;
+  --app-color-gray-9: #212121;
+
+  --app-default-border-radius: 4px;
+
+  // mobile
+  --app-mobile-action-toolbar-height: 46px; 
+
+  // custom
+  --app-navbar-height: 80px;
+  --app-menu-item-height: 38px;
+
+  // layout
+  --app-gap-icon: 5px;
+  --app-gap-button: 8px;
+  --app-gap-map: 12px;
+  --app-gap-top-card-info: 52px;
+  --app-container: 1280px;
+  --app-border-radius: 4px;
+  --app-component-height: 40px;
+
+  --app-sidenav-width: 350px;
+
+  --app-searchbar-height: 90px; // 110 puvodni
+  --app-searchbar-field-max-width: 640px;
+
+  // facet entities
+  --app-facet-entity-height: 40px;
+  --app-facet-entity-border-color-opacity: .3;
+  --app-facet-entity-bg-color-opacity: .1;
+
+  --app-footer-height: 200px;
+  --app-footer-color-bg: var(--app-color-gray-8);
+  --app-footer-color: rgba(var(--app-color-lightnes-rgb), .6);
+}
+
+
+// gaps
+$gaps: (
+  "0": 0,
+  "1": 4,
+  "2": 8,
+  "3": 12,
+  "4": 16,
+  "5": 20,
+  "6": 24,
+  "7": 28,
+  "8": 32,
+);
+
+// icon size
+$iconSize: (
+  "14": 14,
+  "15": 15,
+  "16": 16,
+  "17": 17,
+  "18": 18,
+  "19": 19,
+  "20": 20,
+  "21": 21,
+  "22": 22,
+  "23": 23,
+);
+
+// mq break point
+// $xxs: 'only screen and (min-width: 400px) and (max-width: 599px)';
+// $xs: 'only screen and (max-width: 599px)';
+// $sm: 'only screen and (min-width: 600px) and (max-width: 959px)';
+// $md: 'only screen and (min-width: 960px) and (max-width: 1279px)';
+// $lg: 'only screen and (min-width: 1280px) and (max-width: 1919px)';
+// $xl: 'only screen and (min-width: 1920px) and (max-width: 5000px)';
+
+// $lt-sm: 'only screen and (max-width: 599px)';
+// $lt-md:	'only screen and (max-width: 959px)';
+// $lt-lg:	'only screen and (max-width: 1279px)';
+// $lt-xl:	'only screen and (max-width: 1919px)';
+
+// $gt-xs:	'only screen and (min-width: 600px)';
+// $gt-sm:	'only screen and (min-width: 960px)';
+// $gt-md:	'only screen and (min-width: 1280px)';
+// $gt-lg:	'only screen and (min-width: 1920px)';
+
