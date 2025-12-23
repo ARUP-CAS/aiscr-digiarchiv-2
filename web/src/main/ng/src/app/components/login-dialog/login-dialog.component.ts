@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -34,8 +34,8 @@ export class LoginDialogComponent implements OnInit {
 
   user: string;
   pwd: string;
-  loginError: any;
-  loading: boolean;
+  loginError = signal<any>(null);
+  loading = signal(false);
 
   constructor(
     public dialogRef: MatDialogRef<LoginDialogComponent>,
@@ -50,12 +50,12 @@ export class LoginDialogComponent implements OnInit {
   }
 
   login() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.login(this.user, this.pwd).subscribe(res => {
       this.state.setLogged(res);
-      this.loading = false;
+      this.loading.set(false);
       if (res.error) {
-        this.loginError = res.error;
+        this.loginError.set(res.error);
       } else {
         this.loginError = null;
         this.user = '';

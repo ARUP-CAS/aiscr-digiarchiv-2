@@ -1,4 +1,4 @@
-@if (loading) {
+@if (loading()) {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
 <h1 mat-dialog-title>{{ 'dialog.title.Přihlášení uživatele' | translate}}</h1>
@@ -14,9 +14,9 @@
         <input matInput #loginpwd type="password" [(ngModel)]="pwd" (keyup.enter)="login()">
       </mat-form-field>
     </div>
-    @if (loginError) {
+    @if (loginError()) {
       <div class="app-color-warn app-mt-4">
-        {{ loginError | translate }}
+        {{ loginError() | translate }}
       </div>
     }
   }
