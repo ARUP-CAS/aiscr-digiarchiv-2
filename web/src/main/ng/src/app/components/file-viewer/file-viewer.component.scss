@@ -1,0 +1,52 @@
+.mat-mdc-dialog-title {
+  .app-list-files-wrapper {
+    a {
+      font-size: 16px !important;
+
+      &.active {
+        background-color: var(--app-color-primary);
+        color: var(--app-color-lightnes);
+        border-radius: var(--app-border-radius);
+        padding: var(--app-gap-icon) 8px;
+      }
+    }
+  }
+}
+
+.mat-mdc-dialog-content {
+  .app-toolbar-wrapper {
+    .mat-mdc-form-field {
+      width: 60px;
+      font-weight: bold;
+    }
+
+    @media only screen and (max-width: 959px) {
+      flex-wrap: wrap;
+
+      .app-controls,
+      .app-metadata {
+        flex: 0 0 100%;
+      }
+    }
+  } 
+}
+
+::ng-deep .ngucarousel {
+  & > .ngu-container {
+    & > .ngu-touch-container {
+      & > .ngucarousel-items {
+        & > .item {
+          text-align: center !important;
+
+          img {
+            max-width: 100%;
+
+            @media only screen and (max-width: 959px) {
+              width: 100%;  
+            }
+          }
+        }
+      }
+    }
+  }
+}

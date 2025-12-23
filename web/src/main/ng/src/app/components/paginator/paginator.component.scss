@@ -1,0 +1,24 @@
+@use "../../../scss/app-mixins-icon";
+
+.app-num {
+  width: 90px;
+  font-size: 12px;
+  margin-right: 8px;
+
+  .mat-icon {
+    @include app-mixins-icon.setIcon($size: 18)
+  }   
+}
+
+.app-sort {
+  width: 170px;
+
+  .mat-mdc-select {
+    font-size: 12px !important;
+
+    ::ng-deep .mat-mdc-select-arrow-wrapper {
+      display: none !important;
+    }
+  }
+}
+

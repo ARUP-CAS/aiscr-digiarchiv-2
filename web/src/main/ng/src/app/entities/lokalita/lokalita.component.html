@@ -1,0 +1,173 @@
+<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-lokalita]="!isChild() && !isDocumentDialogOpen()">
+  @if (mapDetail() && !isChild()) {
+    <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+      <mat-icon>clear</mat-icon>
+    </a>
+  }
+  <mat-card-header>
+    <mat-card-title class="app-fxLayout app-row app-gap-4">
+      <div class="app-fxFlex" (click)="service.showInMap(_result, false, false, isChild())">
+        @if (!state.isMapaCollapsed && !isChild() && !mapDetail()) {
+          <a class="app-icon-info"><mat-icon>info</mat-icon></a>
+        }
+        <mat-icon class="app-entity-lokalita" [matTooltip]="'entities.lokalita.title' | translate">{{ config.entityIcons["lokalita"] }}</mat-icon>
+        @if (isChild()) {
+          <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+        }
+        @if (!isChild()) {
+          <span class="app-ident-format">{{ _result.ident_cely }}</span>
+        }
+        <span class="app-pipe"></span>
+        @if (_result.az_chranene_udaje) {
+          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
+          }&#160;(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.az_okres"></app-inline-filter>)
+          <span class="app-pipe"></span>@if (_result.lokalita_chranene_udaje?.nazev) {
+          {{ _result.lokalita_chranene_udaje.nazev }}<span class="app-pipe"></span>
+        }
+          @if (!state.isMapaCollapsed) {
+            <app-inline-filter [isChild]="isChild()" [field]="'f_druh_lokality'" [value]="_result.lokalita_druh" [heslar]="'druh_lokality_druha'"></app-inline-filter><span class="app-pipe"></span>
+          }
+      </div>
+      @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
+        <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+      }
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content [class.app-detail-closed]="!_detailExpanded">
+    @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
+      <div class="app-thumb app-fxLayout app-row app-fill app-center-v app-center-h" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+        <mat-icon>image_not_supported</mat-icon>
+      </div>
+    }
+    <div class="app-metadata app-mb-4">
+      <div>
+        @if (_result.lokalita_typ_lokality || _result.lokalita_druh || _result.pristupnost) {
+          <label class="app-label">{{ 'card.desc.Dokument - typ' | translate }}:</label>&#160;
+          <app-inline-filter [isChild]="isChild()" [field]="'f_typ_lokality'" [value]="_result.lokalita_typ_lokality" [heslar]="'typ_lokality'"></app-inline-filter>
+          <span class="app-pipe"></span>
+        }
+        @if (_result.lokalita_druh) {
+          <label class="app-label">{{ 'card.desc.Druh lokality' | translate }}:</label>&#160;
+          <app-inline-filter [isChild]="isChild()" [field]="'f_druh_lokality'" [value]="_result.lokalita_druh" [heslar]="'druh_lokality_druha'"></app-inline-filter>
+          <span class="app-pipe"></span>
+        }
+        @if (_result.lokalita_zachovalost) {
+          <label class="app-label">{{ 'card.desc.lokalita_zachovalost' | translate }}:</label>&#160;
+          <app-inline-filter [isChild]="isChild()" [field]="'lokalita_zachovalost'" [value]="_result.lokalita_zachovalost" [heslar]="'lokalita_zachovalost'"></app-inline-filter>
+          <!-- <span>{{ _result.lokalita_zachovalost | translateHeslar : 'lokalita_zachovalost' }}</span>  -->
+          <span class="app-pipe"></span>
+        }
+        @if (_result.lokalita_jistota) {
+          <label class="app-label">{{ 'card.desc.lokalita_jistota' | translate }}:</label>&#160;
+          <span>{{ _result.lokalita_jistota | translate }}</span>
+          <span class="app-pipe"></span>
+        }
+        @if (_result.pristupnost) {
+          <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
+          <app-inline-filter [isChild]="isChild()" [field]="'pristupnost'" [value]="_result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+          <span class="app-pipe"></span>
+        }
+      </div>
+      @if (_result.lokalita_igsn) {
+        <div>
+          <label class="app-label">{{ 'IGSN' | translate }}:</label>&#160;{{ _result.lokalita_igsn }}
+        </div>
+      }
+      @if (_result.az_chranene_udaje?.dalsi_katastr?.length > 0) {
+        <div>
+          <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
+          @for (k of _result.az_chranene_udaje.dalsi_katastr; track k; let last = $last) {
+            <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
+            <!-- &#160;(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="service.getOkres(k)"></app-inline-filter>) -->
+            @if (!last) {
+              <span>;&#160;</span>
+            }
+          }
+          (@for (k of _result.az_chranene_udaje.okresy; track k; let last = $last) {
+          <app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="k"></app-inline-filter>
+          @if (!last) {
+            <span>;&#160;</span>
+          }
+          })
+        </div>
+      }
+      @if (_result.lokalita_chranene_udaje?.popis) {
+        <div class="app-truncate-text">
+          <label class="app-label">{{ 'card.desc.Popis' | translate }}:</label>&#160;{{ _result.lokalita_chranene_udaje.popis }}<!-- {{ cropped(_result.popis) }} -->
+        </div>
+      }
+    </div>
+  </mat-card-content>
+
+  @if (!isChild()) {
+    <mat-card-actions class="app-fxLayout app-row app-end-v">
+      <div class="app-fxFlex app-metadata">
+        @if (_result.az_dokument?.length > 0) {
+          {{'card.desc.Počet dokumentů' | translate}}: <strong>{{ _result.az_dokument.length }}</strong>
+          <span class="app-pipe"></span>
+        }
+      </div>
+      <app-result-actions [inDocument]="inDocument()" [result]="_result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"
+      [detailExpanded]="_detailExpanded" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
+    </mat-card-actions>
+  }
+
+  @if (_detailExpanded && !isChild()) {
+    <mat-card-content>
+      <div class="app-card-detail">
+        <mat-accordion multi="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+              <mat-panel-title>
+                {{ 'card.panelTitle.Popis lokality' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table class="app-mb-4">
+              <tbody>
+                @if (_result.az_chranene_udaje?.uzivatelske_oznaceni) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
+                    <td>{{ _result.az_chranene_udaje?.uzivatelske_oznaceni }}</td>
+                  </tr>
+                }
+                @if (_result.lokalita_chranene_udaje?.popis) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Popis' | translate }}:</th>
+                    <td>{{ _result.lokalita_chranene_udaje?.popis }}</td>
+                  </tr>
+                }
+                @if (_result.lokalita_chranene_udaje?.poznamka) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
+                    <td>{{ _result.lokalita_chranene_udaje?.poznamka }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <mat-accordion multi="true">
+              @for (dok_jednotka of _result.az_dokumentacni_jednotka; track dok_jednotka) {
+                <app-dok-jednotka [result]="dok_jednotka" [pians]="_result.az_dj_pian" [adbs]="_result.az_dj_adb"></app-dok-jednotka>
+              }
+            </mat-accordion>
+          </mat-expansion-panel>
+          @if (_result.az_ext_zdroj?.length > 0) {
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+                <mat-panel-title>
+                  {{ 'card.panelTitle.Externí zdroje' | translate }}:
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <ul class="app-clean-mg">
+                @for (extZdroj of _result.az_ext_zdroj; track extZdroj) {
+                  <app-externi-zdroj [result]="extZdroj" ></app-externi-zdroj>
+                }
+              </ul>
+            </mat-expansion-panel>
+          }
+          <app-related [related]="related()" [mapDetail]="mapDetail()"></app-related>
+        </mat-accordion>
+      </div>
+    </mat-card-content>
+  }
+</mat-card>

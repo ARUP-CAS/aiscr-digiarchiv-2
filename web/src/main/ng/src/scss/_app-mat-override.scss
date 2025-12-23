@@ -1,0 +1,594 @@
+// --- MATERIAL OVERRIDE ---
+
+@use "sass:map";
+@use "@angular/material" as mat;
+@use "theme-colors" as my-theme;
+@use "app-mixins-icon" as *;
+@use "app-mixins-entity-color" as *;
+@use "app-mixins-entity-facet-color" as *;
+@use "app-mixins-entity-card-color" as *;
+
+
+:root {
+  // --- TOLBAR ---
+  @include mat.toolbar-overrides((
+    container-background-color: var(--mat-sys-primary),
+    container-text-color: var(--app-color-lightnes),
+    title-text-size: 14px
+  ));
+
+
+  // --- LIST ---
+  @include mat.list-overrides((
+    //list-item-hover-label-text-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
+    list-item-label-text-tracking: 0,
+    list-item-label-text-color: var(--app-color-gray-6),
+    list-item-one-line-container-height: auto
+  ));
+  
+  .app-facets {
+    .mat-mdc-list-item {
+      &:not(.app-facet-entity, .app-facet-used) {
+        padding: 0 8px;
+      }
+    }
+    .mat-expansion-panel {
+      @include mat.list-overrides((
+        list-item-one-line-container-height: 22px
+      ));
+    }
+  }
+  .app-facet-entity {
+    @include setFacetEntityColor();
+    @include mat.list-overrides((
+      list-item-container-shape: var(--app-default-border-radius),
+      list-item-label-text-color: var(--app-color-lightnes),
+      list-item-hover-label-text-color: var(--app-color-lightnes),
+      list-item-one-line-container-height: var(--app-facet-entity-height),
+      list-item-label-text-tracking: 0,
+      list-item-label-text-weight: 400,
+      list-item-label-text-font: 'Roboto Condensed, sans-serif'
+    ));
+
+    padding: 0;
+    margin-bottom: 8px;
+    border: 1px solid;
+
+    .mdc-list-item__content {
+      align-self: unset;
+    }
+
+    .app-left {
+      padding: 0 12px;
+
+      .mat-icon {
+        color: var(--app-color-lightnes) !important;
+      }
+    }
+
+    .app-right {
+      padding: 0 12px;
+    }
+  }
+  .app-graph-wrapper {
+    .mat-mdc-list-item {
+      @include mat.list-overrides((
+        list-item-one-line-container-height: 48px
+      ));
+
+      &.app-active {
+        @include mat.list-overrides((
+          list-item-label-text-weight: 900,
+          list-item-label-text-color: var(--app-color-gray-9),
+          list-item-container-color: var(--app-color-gray-1)
+        ));
+      }
+    }
+  }
+  .app-sidenav-list {
+    .mat-mdc-list-item {
+      border-radius: 0;
+      padding: 24px 16px;
+
+      &.app-active {
+        background-color: var(--app-color-gray-1) !important;
+        border-radius: 0;
+
+        .mdc-list-item__primary-text {
+          color: var(--app-color-primary) !important;
+          font-weight: 900;
+        }
+      }
+
+      .mat-icon {
+        @include setIcon(20, inherit, sub);
+        margin-right: var(--app-gap-icon);
+      } 
+    }
+  }
+
+
+  // --- FORM FIELD ---
+  @include mat.form-field-overrides((
+    container-height: 40px,
+    container-vertical-padding: 8px,
+    container-text-size: 14px,
+    container-text-tracking: 0,
+    outlined-outline-color: var(--app-color-gray-3),
+    subscript-text-line-height: 0px
+  ));
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--app-color-lightnes);   
+    }
+    .mat-mdc-form-field-infix {
+      width: auto;
+    }
+    .mat-mdc-form-field-subscript-wrapper {
+      line-height: 0;
+      height: 0;
+
+      .mat-mdc-form-field-error {
+        text-align: center;
+        margin-top: -4px;
+      }
+    }
+  } 
+  
+
+  // --- SELECT ---
+  @include mat.select-overrides((
+    panel-background-color: var(--app-color-lightnes),
+    trigger-text-size: 12px,
+  ));
+  .cdk-overlay-pane {
+    width: auto !important;
+
+    .mat-mdc-option {
+      min-height: var(--app-menu-item-height);
+    }
+  }
+
+
+  // --- DATE PICKER ---
+  @include mat.datepicker-overrides((
+    calendar-container-shape: var(--app-default-border-radius),
+    calendar-container-elevation-shadow: var(--mat-select-container-elevation-shadow, 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)),
+    calendar-container-background-color: var(--app-color-lightnes),
+  ));
+
+
+  // --- PROGRESS BAR ---
+  @include mat.progress-bar-overrides((
+    //active-indicator-color: #{map.get(map.get(my-theme.$primary-palette, error), 50)},
+    //track-color: #{map.get(map.get(my-theme.$primary-palette, error),10)},
+    active-indicator-color: var(--app-color-primary),
+    track-color: rgba(var(--app-color-primary-rgb), 0.2)
+  ));
+
+
+  // --- BUTTON ---
+  @include mat.button-overrides((
+    text-container-shape: 3px,
+    protected-container-shape: 3px,
+    filled-container-shape: 3px,
+    outlined-container-shape: 3px,
+    tonal-container-shape:3px,
+    tonal-container-color: var(--app-color-gray-1)
+  ));
+  .app-btn-facet {
+    @include mat.button-overrides((
+      filled-container-height: 28px
+    ));
+  }
+  .app-btn-accent {
+    @include mat.button-overrides((
+      filled-container-color: var(--app-color-accent)
+    ));
+  }
+  .app-btn-warn {
+    @include mat.button-overrides((
+      filled-container-color: var(--app-color-warn)
+    ));
+  }
+
+
+  // --- BUTTON ICON ---
+  @include mat.icon-button-overrides((
+    container-shape: 3px,
+  ));
+  .mat-mdc-card-actions {
+    .mat-mdc-icon-button {
+      background-color: var(--app-color-gray-1);
+    }
+  }
+  .app-btn-primary {
+    @include mat.icon-button-overrides((
+      icon-color: var(--app-color-primary)
+    ));
+  }
+  .app-btn-accent {
+    @include mat.icon-button-overrides((
+      icon-color: var(--app-color-accent)
+    ));
+  }
+  .app-btn-warn {
+    @include mat.icon-button-overrides((
+      icon-color: var(--app-color-warn)
+    ));
+  }
+
+
+  // --- EXPANSION PANEL ---
+  @include mat.expansion-overrides((
+    container-shape: 0px,
+    container-background-color: transparent,
+    container-elevation-shadow: none,
+    header-text-size: 15px,
+    header-text-line-height: auto,
+    header-text-tracking: 0,
+    container-text-tracking: 0,
+    container-text-size: 14px,
+    container-text-line-height: 18px
+  ));
+  .mat-expansion-panel {
+    &.mat-expansion-panel-spacing {
+      margin: 0;
+    }
+    .mat-expansion-panel-header {
+      padding: 0 16px;
+    }
+    .mat-expansion-panel-body {
+      padding: 0 8px 16px;
+    }
+  }
+  .app-facets {
+    .mat-expansion-panel {
+      border-bottom: 1px solid var(--app-color-gray-3);
+    }
+  }
+  .app-card-detail {
+    // first level debug
+    /* & > .mat-accordion {
+      & > .mat-expansion-panel {
+        border-bottom: 0;
+        border: 4px solid red !important;
+        & > .mat-expansion-panel-content-wrapper {
+           & > .mat-expansion-panel-content {
+             & > .mat-expansion-panel-body {
+              
+              // second level
+              & > .mat-accordion {
+                & > .mat-expansion-panel {
+                  &.app-panel-inner {
+                    border: 4px solid blue !important;
+                    & > .mat-expansion-panel-content-wrapper {
+                      & > .mat-expansion-panel-content {
+                        & > .mat-expansion-panel-body {
+
+                          // third level
+                          & > .mat-accordion {
+                            & > .mat-expansion-panel {
+                              &.app-panel-inner {
+                                border: 4px solid green !important;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }             
+                }
+              }
+            }
+          }
+        }
+      }
+    } */
+   
+    .mat-expansion-panel {
+      border: 1px solid var(--app-color-gray-3);
+
+      .mat-expansion-panel-header {
+        background-color: var(--app-color-gray-2);
+
+        &:hover, &:focus {
+          background-color: var(--app-color-gray-2);
+        }
+      }
+
+      .mat-expansion-panel-body {
+        padding: 16px;
+
+        table {
+          th {
+            padding-left: 0;
+            text-align: left;
+            padding-right: 5px;
+            min-width: 130px;
+          }
+          td {
+            word-break: break-word;
+          }
+        }
+
+        ul {
+          li {
+            word-break: break-word;
+          }
+        }
+      }
+
+      &:not(:first-child):not(:last-child) {
+        border: 1px solid var(--app-color-gray-3);
+      }
+
+      // inner panel
+      &.app-panel-inner {
+        margin-top: 16px;
+
+        &:hover {
+          border-color: var(--app-color-gray-6);
+        }
+
+        &.mat-expanded,
+        &:not(:first-child) {
+          margin-top: 16px !important;
+        } 
+
+        .mat-expansion-panel-header {
+          padding: 8px;
+          background-color: transparent;
+
+          &:hover, 
+          &:focus {
+            background-color: transparent;
+          }
+
+          .mat-expansion-panel-header-title {
+            display: block;
+
+            & > .mat-icon {
+              color: var(--app-color-darknes) !important;
+            }
+          }
+        }
+
+        .mat-expansion-panel-body {
+          padding-top: 0;
+        }
+      }
+
+      // related itemm panel
+      &.app-panel-related-items {
+        .mat-expansion-panel-body {
+          padding: 0;
+
+          .app-metadata {
+            margin-bottom: 0 !important;
+          }
+        }
+
+        @include mat.card-overrides((
+          elevated-container-elevation: none
+        ));
+      }
+    }
+  }
+
+
+  // --- CARD ---
+  @include mat.card-overrides((
+    elevated-container-shape: 3px,
+    elevated-container-color: var(--app-color-lightnes), 
+    title-text-font: 'Roboto Condensed, sans-serif',
+    title-text-size: 16px,
+    title-text-weight: 700,
+    title-text-line-height: 20px,
+    title-text-tracking: 0,
+    subtitle-text-font: 'Roboto Condensed, sans-serif',
+    subtitle-text-size: 14px,
+    subtitle-text-color: var(--app-color-gray-6),
+    subtitle-text-weight: 400,
+    subtitle-text-tracking: 0,
+  ));
+  .mat-mdc-card {
+    .mat-mdc-card-header-text {
+      width: 100%;
+    }
+
+    .mat-mdc-card-actions {
+      padding: 8px 16px 16px 16px;
+    }
+
+    &.app-row-gap-16 {
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+  .app-card-info {
+    @include mat.card-overrides((
+      elevated-container-color: rgba(var(--app-color-fav-rgb), .1)
+    ));
+
+    .mat-mdc-card-content {
+      color: var(--app-color-info);
+
+      .app-info-badge {
+        @include setEntityColor();
+
+        .mat-icon {
+          margin-right: var(--app-gap-icon);
+          @include setIcon(18, inherit, bottom);
+        }
+      }
+    }
+  }
+  .app-card-result {
+    @include setEntityCardColor();
+
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &:not(.app-card-child) {
+      margin-bottom: 16px;
+    }
+
+    .mat-mdc-card-header {
+      margin-bottom: 12px;
+
+      .app-last-change {
+        font-size: 12px;
+        color: var(--app-color-gray-6);
+        font-weight: normal;
+      }
+
+      .mat-mdc-card-title {
+        @media only screen and (max-width: 599px) {
+          flex-wrap: wrap !important;
+
+          div {
+            &:first-child {
+              flex: 1 1 100% !important;
+              margin-bottom: 12px;
+            }
+          }
+        }
+      }
+    }
+
+    .mat-mdc-card-content {
+      line-height: 20px;
+    }
+
+    .mat-mdc-card-header,
+    .mat-mdc-card-content {
+      a {
+        &.app-filter-badge,
+        &.app-ident-badge {
+          color: var(--app-color-darknes);
+
+          &:hover {
+            color: var(--app-color-accent);
+          }
+        }
+      }
+
+      .mat-icon {
+         vertical-align: sub;
+
+        &[class*="app-entity-"] {
+          margin-right: 4px;
+        }
+
+        &:not([class*="app-entity-"]) {
+          @include setIcon(18, var(--app-color-accent));
+        }
+      }
+    }
+  }
+
+
+  // --- MENU ---
+  @include mat.menu-overrides((
+    container-shape: 3px,
+    container-color: var(--app-color-lightnes)
+  ));
+  .mat-mdc-menu-panel {
+    min-width: 100%;
+    max-width: 100%;
+
+    .mat-mdc-menu-item {
+      min-height: var(--app-menu-item-height);
+    }
+
+    .app-badge-op {
+      margin-right: 8px;
+    }
+  }
+
+
+  // --- PAGINATOR ---
+   @include mat.paginator-overrides((
+    container-background-color: transparent
+  ));
+  .mat-mdc-paginator {
+    .mat-mdc-paginator-page-size-select {
+      width: 78px;
+    }
+
+    .mat-mdc-paginator-range-label {
+      margin: 0 6px 0 8px;
+    }
+  }
+
+
+  // --- DIALOG ---
+  @include mat.dialog-overrides((
+    content-padding: 16px,
+    container-color: var(--app-color-lightnes),
+    container-shape: var(--app-default-border-radius)
+  ));
+  .app-card-result-dialog {
+    @include mat.dialog-overrides((
+      content-padding: 0,
+      container-shape: var(--app-default-border-radius),
+      container-max-width: 900px
+    ));
+    @include mat.card-overrides((
+      elevated-container-elevation: none
+    ));
+    .app-display-table {
+      width: 100% !important;
+
+      .app-table-cell {
+        padding: 0;
+
+        .app-card-result {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  .app-file-viewer {
+    max-width: unset !important;
+    width: 1000px !important;
+    @include mat.dialog-overrides((
+      container-max-width: 1000px
+    ));
+
+    .mat-mdc-dialog-content {
+      max-height: unset;
+    }
+  }
+
+
+  // --- SIDENAV ---
+  @include mat.sidenav-overrides((
+    container-background-color: var(--app-color-lightnes),
+    container-shape: 0
+  ));
+
+  .app-sidenav-container {
+    @include mat.sidenav-overrides((
+      container-background-color: transparent
+    ));
+  }
+
+
+  // -- DIVIDER
+  @include mat.divider-overrides((
+    color: var(--app-color-gray-3)
+  ));
+}
+
+
+@for $i from 0 through 5 {
+  mat-card.mat-elevation-z#{$i} {
+    @include mat.elevation($i);
+  }
+}

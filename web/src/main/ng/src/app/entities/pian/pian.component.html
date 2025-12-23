@@ -1,0 +1,134 @@
+@if (_result?.ident_cely) {
+  @if (!inDocument() && !mapDetail()) {
+    <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
+      <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
+        <mat-panel-title>
+          <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+          {{ 'card.panelTitle.Pian' | translate }}&#160;<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>–&#160;
+          <app-inline-filter [field]="'f_pian_typ'" [value]="_result.pian_typ" [heslar]="'typ_pian'"></app-inline-filter>
+          @if (_result.pian_presnost) {
+            &#160;({{'card.desc.přesnost' | translate }}:&#160;
+            <app-inline-filter [field]="'f_pian_presnost'" [value]="_result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>)
+          }
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      @if (_result.pian_chranene_udaje?.zm10) {
+        <div>
+          <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
+          <app-inline-filter [field]="'f_pian_zm10'" [value]="_result.pian_chranene_udaje.zm10"></app-inline-filter>
+        </div>
+      }
+      @if (_result.lat) {
+        <div>
+          <label class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ _result.lat[0] }} : {{ _result.lng[0] }}
+        </div>
+      }
+    </mat-expansion-panel>
+  }
+  @if (inDocument() || mapDetail()) {
+    <mat-card class="app-card-result" [class.app-card-child]="isChild()">
+      @if (mapDetail() && !isChild()) {
+        <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+          <mat-icon>clear</mat-icon>
+        </a>
+      }
+      <mat-card-header>
+        <mat-card-title class="app-fxLayout app-row app-gap-4">
+          <div class="app-fxFlex">
+            <span>{{ 'card.title.Pian' | translate }}&#160;{{ _result.ident_cely }}</span>
+            <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_typ'" [value]="_result.pian_typ" [heslar]="'typ_pian'"></app-inline-filter>
+            <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="_result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>
+            <span class="app-pipe"></span>
+          </div> 
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="app-metadata app-mb-4">
+          @if (_result.pristupnost || _result.pian_chranene_udaje?.zm10) {
+            <div>
+              @if (_result.pristupnost) {
+                <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
+                <app-inline-filter [field]="'pristupnost'" [value]="_result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+              }
+              @if (_result.pian_chranene_udaje?.zm10) {
+                <span class="app-pipe"></span>
+                <label class="app-label">{{ 'card.desc.PIAN - Základní mapa 1:10 000' | translate }}:</label>&#160;
+                <app-inline-filter [field]="'zm10'" [value]="_result.pian_chranene_udaje.zm10" [heslar]="'zm10'"></app-inline-filter>
+                <span class="app-pipe"></span>
+              }
+            </div>
+          }
+        </div>
+      </mat-card-content>
+      @if (!isChild()) {
+        <mat-card-actions class="app-fxLayout app-row app-end-v">
+          <div class="app-fxFlex app-metadata">
+            @if (_result.az_dj_pian?.length > 0 ) {
+              {{'card.desc.Počet archeologickych zaznamu' | translate}}: <strong>{{_result.az_dj_pian.length }}</strong>
+              <span class="app-pipe"></span>
+            }
+          </div>
+          <app-result-actions [inDocument]="inDocument()" [result]="_result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"
+          [detailExpanded]="_detailExpanded" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
+        </mat-card-actions>
+      }
+      @if (_detailExpanded) {
+        <mat-card-content>
+          <div class="app-card-detail">
+            <mat-accordion multi="true">
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+                  <mat-panel-title>
+                    {{ 'card.panelTitle.Popis PIAN' | translate }}:
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <table>
+                  <tbody>
+                    @if (_result.pian_chranene_udaje || _result.lat) {
+                      <tr>
+                        <th class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</th>
+                        <td>@if (_result.lat) {
+                          {{ _result.lat }}
+                          }@if (_result.lng) {
+                          &#160;:&#160;{{ _result.lng }}
+                        }</td>
+                      </tr>
+                    }
+                    @if (_result.pian_geom_system) {
+                      <tr>
+                        <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                        <td>{{ _result.pian_geom_system }}</td>
+                      </tr>
+                    }
+                    @if (_result.pian_chranene_udaje?.geom_gml) {
+                      <tr>
+                        <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                        <td>{{ _result.pian_chranene_udaje.geom_gml }}
+                          @if (_result.pian_chranene_udaje?.geom_sjtsk_gml) {
+                            <br/> {{ _result.pian_chranene_udaje.geom_sjtsk_gml }}
+                          } </td>
+                        </tr>
+                      }
+                      @if (_result.pian_chranene_udaje?.geom_wkt) {
+                        <tr>
+                          <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                          <td>
+                            <div>EPSG:{{ _result.pian_chranene_udaje.geom_wkt.epsg }}, {{ _result.pian_chranene_udaje.geom_wkt.value }}</div>
+                            @if (_result.pian_chranene_udaje?.geom_sjtsk_wkt) {
+                              <div>EPSG:{{ _result.pian_chranene_udaje.geom_sjtsk_wkt.epsg }},
+                              {{ _result.pian_chranene_udaje.geom_sjtsk_wkt.value }}</div>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </mat-expansion-panel>
+                <app-related [related]="related()" [mapDetail]="mapDetail()"></app-related>
+              </mat-accordion>
+            </div>
+          </mat-card-content>
+        }
+      </mat-card>
+    }
+  }

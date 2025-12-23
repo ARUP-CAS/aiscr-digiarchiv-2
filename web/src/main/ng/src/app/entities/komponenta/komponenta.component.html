@@ -1,0 +1,119 @@
+@if (!inDocument()) {
+  <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
+}
+@if (inDocument()) {
+  <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()">
+    <mat-card-header>
+      <mat-card-title>
+        <ng-container *ngTemplateOutlet="titleTmpl"></ng-container>
+      </mat-card-title>
+    </mat-card-header>
+    @if (_detailExpanded) {
+      <mat-card-content>
+        <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
+      </mat-card-content>
+    }
+    @if (!isChild()) {
+      <mat-card-actions class="app-fxLayout app-row app-end-v">
+        <div class="app-fxFlex app-metadata">
+          @if (_result.akce?.length > 0) {
+            {{ 'card.desc.Počet akcí' | translate }}: <strong>{{_result.akce?.length}}</strong>
+            <span class="app-pipe"></span>
+          }
+          @if (_result.lokalita?.length > 0) {
+            {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{_result.lokalita.length}}</strong>
+            <span class="app-pipe"></span>
+          }
+        </div>
+        <app-result-actions [inDocument]="inDocument()" [result]="_result" [detailExpanded]="_detailExpanded" [mapDetail]="true" (onToggleDetail)="toggleDetail()"
+          [bibTex]="bibTex"
+        [ident_cely_api]="_result.ident_cely.substr(0, _result.ident_cely.lastIndexOf('-'))"></app-result-actions>
+      </mat-card-actions>
+    }
+    @if (_detailExpanded) {
+      <mat-card-content>
+        @if ((_result.akce || _result.lokalita || _result.dokument) && !isChild()) {
+          <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+              <mat-panel-title>
+                {{ 'card.panelTitle.Související záznamy' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @for (dok_jednotka of _result.dok_jednotka; track dok_jednotka.ident_cely) {
+              <app-dok-jednotka [result]="dok_jednotka" [isChild]="true" class="app-related-item"></app-dok-jednotka>
+            }
+            
+            @for (akce of _result.akce; track akce.ident_cely) {
+              <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+            }
+            @for (lok of _result.lokalita; track lok.ident_cely) {
+              <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+            }
+            @for (dokument of _result.dokument; track dokument.ident_cely) {
+              <app-dokument [result]="dokument" [isChild]="true" class="app-related-item"></app-dokument>
+            }
+          </mat-expansion-panel>
+        }
+      </mat-card-content>
+    }
+  </mat-card>
+}
+
+<ng-template #titleTmpl let-panel let-panelHeader>
+  @if (panel) {
+    <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
+  }
+{{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} 
+  <mat-icon>link</mat-icon></a> – <app-inline-filter [field]="'f_obdobi'" [value]="_result.komponenta_obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
+@if ((_result.hasOwnProperty('komponenta_jistota') && !_result['komponenta_jistota'])  || _result.komponenta_presna_datace) 
+{&#160;(@if (_result.hasOwnProperty('komponenta_jistota') && !_result['komponenta_jistota']) 
+{{{ 'facet.field.komponenta_dokument_jistota_false' | translate }}}@if ((_result.hasOwnProperty('komponenta_jistota') && !_result['komponenta_jistota'])  && _result.komponenta_presna_datace) 
+{;&#160;}@if (_result.komponenta_presna_datace) {{{_result.komponenta_presna_datace}}})}@if (_result.komponenta_areal) {&#160;– <app-inline-filter [field]="'f_areal'" [value]="_result.komponenta_areal.id" [heslar]="'areal_druha'"></app-inline-filter>
+}@if (_result.komponenta_aktivita?.length > 0) {&#160;(@for (aktivita of _result.komponenta_aktivita; track aktivita.id; let last = $last) 
+{<app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>@if (!last) {
+<span>,&#160;</span>
+}})
+}
+</ng-template>
+
+<ng-template #contentTmpl>
+
+  <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument()">
+    <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()" [class.app-mb-n4]="_result.komponenta_poznamka === null">
+      @if (!inDocument()) {
+        <mat-panel-title>
+          <ng-container *ngTemplateOutlet="titleTmpl; context:{panel:panel, panelHeader:panelHeader}"></ng-container>
+        </mat-panel-title>
+      }
+    </mat-expansion-panel-header>
+    @if (_result.komponenta_poznamka) {
+      <div>
+        <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ _result.komponenta_poznamka }}
+      </div>
+    }
+    @if (_result.komponenta_nalez_objekt?.length > 0 || _result.komponenta_nalez_predmet?.length > 0) {
+      <mat-expansion-panel #panel1 [expanded]="true" hideToggle class="app-panel-inner">
+        <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+          <mat-panel-title>
+            <mat-icon>{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>
+            {{ 'card.panelTitle.Nálezy' | translate }}:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul class="app-list-inside">
+          @for (nalez of _result.komponenta_nalez_objekt; track nalez) {
+            <li>
+              <app-nalez [result]="nalez"></app-nalez>
+            </li>
+          }
+        </ul>
+        <ul class="app-list-inside">
+          @for (nalez of _result.komponenta_nalez_predmet; track nalez) {
+            <li>
+              <app-nalez [result]="nalez"></app-nalez>
+            </li>
+          }
+        </ul>
+      </mat-expansion-panel>
+    }
+  </mat-expansion-panel>
+</ng-template>
