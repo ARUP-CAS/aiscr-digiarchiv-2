@@ -40,6 +40,7 @@ export class RelatedComponent implements OnInit {
   vsSize = 0;
   math = Math;
   toProcess = signal<{ entity: string, ident_cely: string }[]>([]);
+  tp: { entity: string, ident_cely: string }[];
   loadSize = 20;
 
   constructor(
@@ -60,6 +61,7 @@ export class RelatedComponent implements OnInit {
         return c1.entity.localeCompare(c2.entity) ||  c1.ident_cely.localeCompare(c2.ident_cely)
       });
       this.toProcess.set(JSON.parse(JSON.stringify(this.ids)));
+      this.tp = JSON.parse(JSON.stringify(this.ids));
       if (this.state.printing() || this.router.isActive('print', false)) {
         this.state.loading.set(true);;
         this.getRecords(true)
@@ -73,19 +75,19 @@ export class RelatedComponent implements OnInit {
   }
 
   getRecords(loadAll: boolean) {
-    if (this.toProcess().length > 0) {
-      const entity = this.toProcess()[0].entity;
+    if (this.tp.length > 0) {
+      const entity = this.tp[0].entity;
       let entitySize = 0;
-      const max = Math.min(this.loadSize, this.toProcess().length);
+      const max = Math.min(this.loadSize, this.tp.length);
       for (let i = 0; i < max; i++) {
-        if (entity === this.toProcess()[i].entity) {
+        if (entity === this.tp[i].entity) {
           entitySize++;
         } else {
           break;
         }
       }
 
-      const ids: { entity: string, ident_cely: string }[] = this.toProcess().splice(0, entitySize);
+      const ids: { entity: string, ident_cely: string }[] =this.tp.splice(0, entitySize);
       
       this.service.getIdAsChild(ids.map(e => e.ident_cely), entity).subscribe((res: any) => {
         const ch: { entity: string; ident_cely: any; result: any; }[] = [];
@@ -96,7 +98,9 @@ export class RelatedComponent implements OnInit {
         this.children.update(chi => [...chi, ...ch]);
         this.state.documentProgress = this.children().length / this.numChildren * 100;
         this.state.loading.set((this.children().length) < this.numChildren);
-        if ((loadAll && this.state.loading()) || (entitySize < this.loadSize)) {
+        this.toProcess.update(t => [...this.tp]);
+        if ((loadAll && this.state.loading()) || (entitySize < this.loadSize) || (this.children().length === 0 && this.tp.length > 0)) {
+        // if ((loadAll && this.state.loading()) || this.tp.length > 0) {
           this.getRecords(loadAll)
         } else {
           this.state.loading.set(false);;
