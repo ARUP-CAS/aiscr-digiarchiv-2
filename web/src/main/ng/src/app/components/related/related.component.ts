@@ -57,7 +57,7 @@ export class RelatedComponent implements OnInit {
       this.numChildren = this.ids.length;
       this.vsSize = Math.min(600, Math.min(this.numChildren, 5) * this.itemSize);
       this.ids.sort((c1, c2) => {
-        return c1.ident_cely.localeCompare(c2.ident_cely)
+        return c1.entity.localeCompare(c2.entity) ||  c1.ident_cely.localeCompare(c2.ident_cely)
       });
       this.toProcess.set(JSON.parse(JSON.stringify(this.ids)));
       if (this.state.printing() || this.router.isActive('print', false)) {

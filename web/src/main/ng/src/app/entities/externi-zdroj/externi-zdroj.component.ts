@@ -110,15 +110,12 @@ export class ExterniZdrojComponent implements OnInit {
       //   });
       // }
 
-      const related: { entity: string; ident_cely: string; }[] = [...this._result.ext_zdroj_ext_odkaz.map((eo: any) => {return {ident_cely: eo.archeologicky_zaznam.id, entity: 'akce'}}),
+      const related: { entity: string; ident_cely: string; }[] = [
+          ...this._result.ext_zdroj_ext_odkaz.map((eo: any) => {return {ident_cely: eo.archeologicky_zaznam.id, entity: 'akce'}}),
           ...this._result.ext_zdroj_ext_odkaz.map((eo: any) => {return {ident_cely: eo.archeologicky_zaznam.id, entity: 'lokalita'}})
         ];
 
-      
       this.related.set(related);
-
-
-
     }
 
   }
