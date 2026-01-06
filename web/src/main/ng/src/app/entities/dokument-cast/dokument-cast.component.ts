@@ -15,10 +15,11 @@ import { ResultActionsComponent } from '../../components/result-actions/result-a
 import { KomponentaComponent } from "../komponenta/komponenta.component";
 import { DokumentComponent } from "../dokument/dokument.component";
 import { Entity } from '../entity/entity';
+import { DatePipe } from '@angular/common';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, FlexLayoutModule, DatePipe,
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule,
