@@ -176,7 +176,17 @@ export class FileViewerComponent implements OnInit {
   }
 
   setPage() {
+    const regex = /[0-9]/;
+    const matches = regex.exec(this.currentPage+'');
+    if (!matches) {
+      alert('invalid');
+      return;
+    }
     this.currentPage = parseInt(this.currentPage+'');
+    if (this.currentPage < 1 || this.currentPage > this.selectedFile().rozsah) {
+      alert('invalid');
+      return;
+    }
     this.currentPageDisplayed.set(this.currentPage);
     this.carouselItemsLoad(this.currentPage);
     // setTimeout(() => {
@@ -187,8 +197,6 @@ export class FileViewerComponent implements OnInit {
   }
 
   setData() {
-
-
     this.selectedFile.set(null);
     const files: File[] = [];
     this.showing.set(false);
