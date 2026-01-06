@@ -1,7 +1,8 @@
 
-<mat-card class="app-result-item app-row-gap-16">
+<mat-card class="app-card-result">
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title class="app-fxLayout app-row app-gap-4">
+          <div class="app-fxFlex">
       {{ 'card.panelTitle.Výškový bod' | translate }}:&#160;
       @if (isChild()) {
         <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
@@ -10,6 +11,12 @@
         <span class="app-ident-format">{{ _result.ident_cely }}</span>
       }
       (<app-inline-filter [field]="'typ'" [value]="_result.vyskovy_bod_typ" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
+      </div>
+        @if (_result.datestamp && state.isMapaCollapsed && !isChild() || mapDetail()) {
+          <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
+            'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+          }
+
     </mat-card-title>
   </mat-card-header>
 
