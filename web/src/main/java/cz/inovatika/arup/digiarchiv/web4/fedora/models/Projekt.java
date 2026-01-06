@@ -203,7 +203,7 @@ public class Projekt implements FedoraModel {
             IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
 
             IndexUtils.addRefField(idoc, "projekt_okres", projekt_okres);
-            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(projekt_okres.getId()).getString("kraj_nazev"));
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(projekt_okres.getId()).getString("kraj"));
             IndexUtils.addVocabField(idoc, "projekt_typ_projektu", projekt_typ_projektu);
             IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
             IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
@@ -519,7 +519,7 @@ class ProjektChraneneUdaje {
                 okresy.add(okres);
                 IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
             }
-            String kraj = k.getString("kraj_nazev");
+            String kraj = k.getString("kraj");
             if (!kraje.contains(kraj)) {
                 kraje.add(kraj);
                 IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);

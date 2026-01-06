@@ -107,9 +107,14 @@ public class I18n {
     } 
     String urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/")
             + "organizations/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + field;
-//    inputStream = RESTHelper.inputStream(urlOrg);
-//    solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
-//    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
+    docs = getFromSolr(urlOrg);
+    for (int i = 0; i < docs.length(); i++) {
+      def.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
+    }
+    
+    // Kraje
+    urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/") 
+            + "ruian/export?q=*:*&fq=entity:ruian_kraj&wt=json&sort=ident_cely%20asc&fl=ident_cely," + field;
     docs = getFromSolr(urlOrg);
     for (int i = 0; i < docs.length(); i++) {
       def.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
