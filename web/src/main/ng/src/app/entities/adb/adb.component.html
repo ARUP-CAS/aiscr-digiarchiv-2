@@ -124,7 +124,7 @@
 }
 
 @if (inDocument()) {
-  <mat-card class="app-card-result" [class.app-card-child]="isChild()" >
+  <mat-card class="app-card-result" [class.app-card-child]="isChild()">
     <mat-card-header>
       <mat-card-title class="app-fxLayout app-row app-gap-4">
         <div class="app-fxFlex">
@@ -253,19 +253,21 @@
   @if (_detailExpanded) {
     <mat-card-content [class.app-detail-closed]="!_detailExpanded">
       @if (_result.akce || _result.lokalita) {
-        <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
-          <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
-            <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}:
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          @for (akce of _result.akce; track akce.ident_cely) {
-            <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-          }
-          @for (lok of _result.lokalita; track lok.ident_cely) {
-            <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
-          }
-        </mat-expansion-panel>
+        <div class="app-card-detail">
+          <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+              <mat-panel-title>
+                {{ 'card.panelTitle.Související záznamy' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @for (akce of _result.akce; track akce.ident_cely) {
+              <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+            }
+            @for (lok of _result.lokalita; track lok.ident_cely) {
+              <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+            }
+          </mat-expansion-panel>
+        </div>
       }
     </mat-card-content>
   }
