@@ -332,15 +332,16 @@ public class FedoraServlet extends HttpServlet {
         SEARCH_MODEL {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                resp.setContentType("application/json;charset=UTF-8");
                 JSONObject json = new JSONObject();
                 try {
                     String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
                     String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/"+req.getParameter("model")+"/member/*", "UTF8")
-                + "&order_by=modified";
+                + "&order_by=modified&include_total_result_count=true"; 
 //                if (req.getParameter("model") != null ) {   
 //                  baseQuery += "&condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + req.getParameter("model") + "/member/*", "UTF8");
 //                }  
-                    json.put("resp", FedoraUtils.search(baseQuery));
+                    json = new JSONObject(FedoraUtils.search(baseQuery));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }

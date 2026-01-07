@@ -250,17 +250,17 @@ public class FedoraHarvester {
             int indexed = 0;
             int batchSize = 1000;
             int pOffset = 0;
-            String s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
+            String s = FedoraUtils.search(baseQuery + "&order_by=modified&&include_total_result_count=true&offset=" + pOffset + "&max_results=" + batchSize);
             JSONObject json = new JSONObject(s);
             JSONArray records = json.getJSONArray("items");
             while (records.length() > 0) {
                 processSearchItems(records, isDeleted, withRelated, solr);
                 indexed += records.length();
                 pOffset += batchSize;
-                s = FedoraUtils.search(baseQuery + "&offset=" + pOffset + "&max_results=" + batchSize);
+                s = FedoraUtils.search(baseQuery + "&include_total_result_count=true&offset=" + pOffset + "&max_results=" + batchSize);
                 json = new JSONObject(s);
                 records = json.getJSONArray("items");
-                checkLists(0, indexed, indexType, records.length(), solr);
+                checkLists(0, indexed, indexType, json.getInt("totalResults"), solr);
                 String status = readStatusFile(indexType);
                 if (STATUS_STOPPED.equals(status)) {
                     LOGGER.log(Level.INFO, "Index stopped at {0}", formatter.format(Instant.now()));
@@ -275,7 +275,7 @@ public class FedoraHarvester {
                 ret.put(indexType, indexed);
             }
 
-            checkLists(0, indexed, "update", indexed, solr);
+            checkLists(0, indexed, "update", json.getInt("totalResults"), solr);
             ret.put("items", json);
             ret.put("total", indexed);
             solr.commit("oai");
@@ -575,6 +575,7 @@ public class FedoraHarvester {
             } else {
                 baseQuery += URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + model + "/member/*", "UTF8");
             }
+            
             searchFedora(baseQuery, "deleted".equals(model), model, false, solr);
             update(start.toString(), solr);
             Instant end = Instant.now();
