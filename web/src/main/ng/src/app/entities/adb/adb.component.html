@@ -108,7 +108,7 @@
   </mat-expansion-panel>
   @if (_result.akce || _result.lokalita) {
     <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
-      <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
+      <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
         <mat-panel-title>
           {{ 'card.panelTitle.Související záznamy' | translate }}:
         </mat-panel-title>
@@ -255,7 +255,7 @@
       <mat-card-content [class.app-detail-closed]="!_detailExpanded" class="app-persistent-link-wrapper">
         @if (_result.akce || _result.lokalita) {
           <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
-            <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
               <mat-panel-title>
                 {{ 'card.panelTitle.Související záznamy' | translate }}:
               </mat-panel-title>
