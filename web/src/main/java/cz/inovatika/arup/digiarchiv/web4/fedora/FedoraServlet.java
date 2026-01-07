@@ -329,6 +329,24 @@ public class FedoraServlet extends HttpServlet {
                 return json;
             }
         },
+        SEARCH_MODEL {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
+                    String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/"+req.getParameter("model")+"/member/*", "UTF8")
+                + "&order_by=modified";
+//                if (req.getParameter("model") != null ) {   
+//                  baseQuery += "&condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + req.getParameter("model") + "/member/*", "UTF8");
+//                }  
+                    json.put("resp", FedoraUtils.search(baseQuery));
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
+        },
         SEARCH_FILE {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
