@@ -40,7 +40,7 @@ public class FedoraServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {        
         List<Object> allowedIP = Options.getInstance().getJSONArray("allowedIP").toList();
         // System.out.println(request.getRemoteAddr());
         // System.out.println(request.getHeader("X-Forwarded-For"));
@@ -64,7 +64,6 @@ public class FedoraServlet extends HttpServlet {
                         String path = InitServlet.CONFIG_DIR + File.separator + "1.pdf";
                         File targetFile = new File(path);
                         FileUtils.copyInputStreamToFile(is, targetFile);
-
                         return;
                     }
                     response.setContentType("application/json;charset=UTF-8");

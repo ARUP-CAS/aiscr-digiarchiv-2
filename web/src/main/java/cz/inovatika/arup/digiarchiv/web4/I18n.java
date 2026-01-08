@@ -114,18 +114,11 @@ public class I18n {
     
     // Kraje
     urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/") 
-            + "ruian/export?q=*:*&fq=entity:ruian_kraj&wt=json&sort=ident_cely%20asc&fl=ident_cely," + field;
+            + "ruian/export?q=*:*&fq=entity:ruian_kraj&wt=json&sort=ident_cely%20asc&fl=ident_cely,nazev," + field;
     docs = getFromSolr(urlOrg);
     for (int i = 0; i < docs.length(); i++) {
       def.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
-    }
-    if ("en".equals(locale)) {
-      urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/") 
-            + "ruian/export?q=*:*&fq=entity:ruian_kraj&wt=json&sort=ident_cely%20asc&fl=ident_cely,nazev," + field;
-        docs = getFromSolr(urlOrg);
-        for (int i = 0; i < docs.length(); i++) {
-          def.put(docs.getJSONObject(i).getString("nazev"), docs.getJSONObject(i).optString(field));
-        }
+      def.put(docs.getJSONObject(i).getString("nazev"), docs.getJSONObject(i).optString(field));
     }
     
     //Pristupnost indexujeme zkratky

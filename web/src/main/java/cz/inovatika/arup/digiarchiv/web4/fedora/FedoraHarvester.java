@@ -251,7 +251,6 @@ public class FedoraHarvester {
             int batchSize = 1000;
             int max_results = 10000000;
             int pOffset = 0;
-            LOGGER.log(Level.INFO, "URL IS  {0}", baseQuery + "&include_total_result_count=true&offset=" + pOffset + "&max_results=" + max_results);
             String s = FedoraUtils.search(baseQuery + "&include_total_result_count=true&offset=" + pOffset + "&max_results=" + max_results);
             JSONObject json = new JSONObject(s);
             JSONArray records = json.getJSONArray("items");
@@ -317,11 +316,10 @@ public class FedoraHarvester {
                 // LOGGER.log(Level.INFO, "Updating item  {0} ", id);
                 try {
                     processRecord(id, withRelated, solr);
-                    checkLists(batchSize, i, model, totalInModel, solr);
+                    checkLists(batchSize, i+1, model, totalInModel, solr);
                 } catch (Exception ex) {
-                    LOGGER.log(Level.SEVERE, "Error processing {0}", id);
                     writeToErrorsFile(id);
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "Error processing " + id, ex);
                 }
             }
         }
@@ -590,12 +588,12 @@ public class FedoraHarvester {
             ret.put("request time", FormatUtils.formatInterval(requestTime));
             ret.put("process time", FormatUtils.formatInterval(processTime));
             ret.put("errors", errors);
-            LOGGER.log(Level.INFO, "Update finished in {0}", interval);
+            LOGGER.log(Level.INFO, "searchModel FINISHED in {0}", interval);
 
             writeStatusFile("models", STATUS_FINISHED);
             writeRetToFile("models", start);
         } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "searchModel FAILED", ex);
             writeStatusFile("update", STATUS_FINISHED);
         }
         return ret;
@@ -692,6 +690,12 @@ public class FedoraHarvester {
             String xml = FedoraUtils.requestXml("record/" + id + "/metadata");
             requestTime += Instant.now().toEpochMilli() - start;
             String model = FedoraModel.getModel(xml);
+            if (model == null) {
+                LOGGER.log(Level.SEVERE, "Error parsing xml {0} for record {1}", new Object[]{xml, id});
+                writeToErrorsFile(id);
+                errors.put(id + ": Error parsing xml");
+                return;
+            }
             start = Instant.now().toEpochMilli();
             indexXml(xml, model);
             if (processRelated) {
@@ -700,8 +704,7 @@ public class FedoraHarvester {
             }
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error processing record " + id, ex);
             writeToErrorsFile(id);
             errors.put(id + ":  " + ex);
             throw ex;
@@ -864,7 +867,7 @@ public class FedoraHarvester {
     private void checkLists(int size, int indexed, String model, int totalInModel, SolrClient solr) throws SolrServerException, IOException {
         try {
             if (idocsEntities.size() > size) {
-                LOGGER.log(Level.INFO, "Entities {0}", idocsEntities.size());
+                // LOGGER.log(Level.INFO, "Entities {0}", idocsEntities.size());
                 solr.add("entities", idocsEntities);
                 solr.commit("entities");
                 idocsEntities.clear();
@@ -880,7 +883,7 @@ public class FedoraHarvester {
             for (String key : idocs.keySet()) {
                 List l = idocs.get(key);
                 if (l.size() > size) {
-                    LOGGER.log(Level.INFO, "Sending {0}...", key);
+                    // LOGGER.log(Level.INFO, "Sending {0}...", key);
                     solr.add(key, l);
                     solr.commit(key);
                     l.clear();
@@ -888,7 +891,7 @@ public class FedoraHarvester {
                 }
             }
             if (idocsOAI.size() > size) {
-                LOGGER.log(Level.INFO, "OAI {0}", idocsOAI.size());
+                // LOGGER.log(Level.INFO, "OAI {0}", idocsOAI.size());
                 solr.add("oai", idocsOAI);
                 solr.commit("oai");
                 idocsOAI.clear();
