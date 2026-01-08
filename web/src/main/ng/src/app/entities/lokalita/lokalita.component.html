@@ -20,13 +20,15 @@
         <span class="app-pipe"></span>
         @if (_result.az_chranene_udaje) {
           <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
-          }&#160;(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.az_okres"></app-inline-filter>)
-          <span class="app-pipe"></span>@if (_result.lokalita_chranene_udaje?.nazev) {
-          {{ _result.lokalita_chranene_udaje.nazev }}<span class="app-pipe"></span>
         }
-          @if (!state.isMapaCollapsed) {
-            <app-inline-filter [isChild]="isChild()" [field]="'f_druh_lokality'" [value]="_result.lokalita_druh" [heslar]="'druh_lokality_druha'"></app-inline-filter><span class="app-pipe"></span>
-          }
+        <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.az_okres"></app-inline-filter>)</span>
+        <span class="app-pipe"></span>
+        @if (_result.lokalita_chranene_udaje?.nazev) {
+          <span class="app-element-wrapper">{{ _result.lokalita_chranene_udaje.nazev }}</span><span class="app-pipe"></span>
+        }
+        @if (!state.isMapaCollapsed) {
+          <app-inline-filter [isChild]="isChild()" [field]="'f_druh_lokality'" [value]="_result.lokalita_druh" [heslar]="'druh_lokality_druha'"></app-inline-filter><span class="app-pipe"></span>
+        }
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
         <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>

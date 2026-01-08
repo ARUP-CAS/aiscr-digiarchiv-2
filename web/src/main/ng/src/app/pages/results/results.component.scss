@@ -207,24 +207,28 @@
       }
 
       .mat-mdc-card {
-        max-height: 216px;
+        min-height: 216px;
+        max-height: 236px;
         
         .mat-mdc-card-header {
           .mat-mdc-card-header-text {
             width: 100%;
-    
-            .mat-mdc-card-title {
-              position: relative;
-              visibility: hidden;
-              max-height: 20px;
 
-              .app-ident-format {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                visibility: visible;
-                text-align: center;
+            .mat-mdc-card-title {
+              display: block;
+              text-align: center;
+
+              & > .app-fxFlex {
+                margin-right: 0 !important;
+                margin-bottom: 0 !important;
+
+                *:not(.app-ident-format) {
+                  display: none;
+                }
+              }
+
+              .app-last-change {
+                display: none;
               }
             }
           }
