@@ -285,4 +285,34 @@
       }
     }
   }
+
+  .app-card-result-dialog {
+    @media only screen and (max-width: 400px) {
+      .mat-mdc-card-content {
+        & > .app-fxLayout {
+          display: block !important;
+
+          .app-thumb {
+            margin-bottom: 8px;
+            text-align: center;
+            background-color: var(--app-color-gray-2);
+          }
+        }
+      }
+
+      .mat-mdc-card-actions {
+        display: block !important;
+        
+        app-result-actions {
+          & > .app-fxLayout {
+            flex-wrap: wrap;
+
+            .mat-mdc-button-base {
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
