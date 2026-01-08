@@ -112,9 +112,9 @@
       font-weight: 600;
       padding-right: 6px;
 
-      @media (max-width: 360px) {
+      @media (max-width: 440px) {
         display: none;
-      } 
+      }
     }
   }
 
@@ -193,6 +193,11 @@
         color: var( --app-color-warn);
         @include setIcon($size: 18, $position: middle);
       }
+    }
+
+    @media (max-width: 312px) {
+      top: 54px;
+      right: 50px;
     }
   }
 }
