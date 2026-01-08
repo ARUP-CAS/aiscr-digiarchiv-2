@@ -23,7 +23,7 @@
       </mat-card-title>
     </mat-card-header>
     @if (_detailExpanded) {
-      <mat-card-content >
+      <mat-card-content class="app-persistent-link-wrapper">
         <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
       </mat-card-content>
     }
@@ -46,7 +46,7 @@
       </mat-card-actions>
     }
     @if (_detailExpanded) {
-      <mat-card-content >
+      <mat-card-content class="app-persistent-link-wrapper">
         @if (_result.akce || _result.lokalita) {
           <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
             <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"

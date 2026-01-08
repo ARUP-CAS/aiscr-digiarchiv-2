@@ -247,7 +247,8 @@
       border-bottom: 1px solid var(--app-color-gray-3);
     }
   }
-  .app-card-detail {
+  .app-card-detail,
+  .app-persistent-link-wrapper {
     // first level debug
     /* & > .mat-accordion {
       & > .mat-expansion-panel {
