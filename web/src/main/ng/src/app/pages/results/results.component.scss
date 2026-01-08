@@ -90,6 +90,14 @@
   // view default
   .app-view-default {
     .mat-mdc-card {
+      .mat-mdc-card-content {
+         @media only screen and (max-width: 450px) {
+          a {
+            word-break: break-all;
+          }
+         }
+      }
+
       .mat-mdc-card-actions {
         @media only screen and (min-width: 960px) and (max-width: 1150px) {
           display: block !important;
