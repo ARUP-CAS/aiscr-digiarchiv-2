@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -17,13 +17,64 @@ import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { Crumb } from '../../shared/crumb';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import 'moment/locale/cs';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
+
+export class MultiDateFormat {
+  value = '';
+  constructor() { }
+  get display() {
+    switch (this.value) {
+      case 'mm.yyyy':
+        return {
+          dateInput: 'MM.YYYY',
+          monthYearLabel: 'MM YYYY',
+          dateA11yLabel: 'MM.YYYY',
+          monthYearA11yLabel: 'MM YYYY',
+        };
+      case 'yyyy':
+        return {
+          dateInput: 'YYYY',
+          monthYearLabel: 'MM YYYY',
+          dateA11yLabel: 'MM.YYYY',
+          monthYearA11yLabel: 'MM YYYY',
+        };
+      default:
+        return {
+          dateInput: 'DD.MM.YYYY',
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        }
+    }
+
+  }
+  get parse() {
+    switch (this.value) {
+      case 'mm.yyyy':
+        return {
+          dateInput: 'MM.YYYY'
+        };
+      case 'yyyy':
+        return {
+          dateInput: 'YYYY'
+        };
+      default:
+        return {
+          dateInput: 'DD.MM.YYYY'
+        }
+    }
+
+  }
+}
 
 @Component({
   imports: [
@@ -32,7 +83,8 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
     MatDatepickerModule, MatRadioModule, MatButtonModule, MatInputModule
   ],
-  providers: [provideMomentDateAdapter()],
+  providers: [
+    provideMomentDateAdapter(), { provide: MAT_DATE_FORMATS, useClass: MultiDateFormat }],
   selector: 'app-facets-dynamic',
   templateUrl: './facets-dynamic.component.html',
   styleUrls: ['./facets-dynamic.component.scss']
@@ -76,7 +128,7 @@ export class FacetsDynamicComponent implements OnInit {
 
   addFilter() {
     this.state.isFacetsCollapsed = true;
-    document.getElementById('content-scroller').scrollTo(0,0);
+    document.getElementById('content-scroller').scrollTo(0, 0);
     const params: any = {};
     let val = this.filterFieldValue;
     switch (this.filterField.type) {

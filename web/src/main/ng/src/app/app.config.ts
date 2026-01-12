@@ -10,14 +10,13 @@ import { provideTranslateHttpLoader, TranslateHttpLoader } from '@ngx-translate/
 import { AppService } from './app.service';
 import { AppState } from './app.state';
 import { AppConfiguration } from './app-configuration';
-import { firstValueFrom, tap } from 'rxjs';
-import { Configuration } from './shared/config';
 import { DatePipe, DecimalPipe, isPlatformBrowser } from '@angular/common';
 
-import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS, provideNativeDateAdapter } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorI18n } from './components/paginator/paginator-i18n';
+
 
 
 export const MY_FORMATS = {
@@ -46,6 +45,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
 
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'cs-CZ' },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
 
