@@ -81,11 +81,11 @@ export class ExportMapaComponent implements OnInit {
     p['isExport'] = true;
     p['noFacets'] = true;
     p['noStats'] = true;
-    if (!p['entity']) {
+    if (!p['entity'] && !p['id']) {
       p['entity'] = 'dokument';
     }
     this.state.loading.set(true);
-    this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+    this.service.searchExportMapa(p as HttpParams).subscribe((resp: SolrResponse) => {
       let docs: any[] = resp.response.docs;
       this.state.loading.set(false);
       if (resp.error) {
@@ -106,7 +106,7 @@ export class ExportMapaComponent implements OnInit {
         });
         this.hasPian = false;
         this.docs.update(d => [...docs]);
-      } else if (this.state.entity === 'samostatny_nalez') {
+      } else if (this.state.documentId === 'samostatny_nalez') {
         docs.forEach(doc => {
           if (this.format === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
@@ -120,6 +120,23 @@ export class ExportMapaComponent implements OnInit {
           }
         });
         this.hasPian = false;
+        this.docs.update(d => [...docs]);
+      } else if (p['id'] && docs[0]?.entity === 'pian') {
+        this.state.entity = 'pian';
+        docs.forEach(doc => {
+          doc.pian = doc;
+          if (this.format === 'GeoJSON') {
+            // console.log(ident_cely, resp.geom_wkt_c);
+            const wkt = new Wkt.Wkt();
+            wkt.read(doc.pian_chranene_udaje.geom_wkt.value);
+            doc.geometrie = JSON.stringify(wkt.toJson());
+          } else if (this.format === 'GML') {
+            doc.geometrie = doc.pian_chranene_udaje.geom_gml;
+          } else {
+            doc.geometrie = doc.pian_chranene_udaje.geom_wkt.value;
+          }
+        });
+        this.hasPian = true;
         this.docs.update(d => [...docs]);
       } else {
         docs = [];

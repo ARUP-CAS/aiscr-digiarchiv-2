@@ -56,7 +56,7 @@ public class SearchServlet extends HttpServlet {
             String action = request.getPathInfo().substring(1);
             if (action != null) {
                 Actions actionToDo = Actions.valueOf(action.toUpperCase());
-                String json = actionToDo.doPerform(request, response); 
+                String json = actionToDo.doPerform(request, response);
                 out.println(json);
             } else {
                 out.print("action -> " + StringEscapeUtils.escapeHtml4(action));
@@ -101,8 +101,8 @@ public class SearchServlet extends HttpServlet {
                     JSONObject jo = SearchUtils.json(query, client, "entities");
                     json = jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("entity");
                     json.put("kategorie", jo.getJSONObject("facet_counts").getJSONObject("facet_fields").getJSONObject("dokument_kategorie_dokumentu"));
-                    json.put("stats", jo.getJSONObject("stats")); 
-                    json.put("response", jo.getJSONObject("response")); 
+                    json.put("stats", jo.getJSONObject("stats"));
+                    json.put("response", jo.getJSONObject("response"));
 
                 } catch (Exception ex) {
                     json.put("error", ex);
@@ -201,7 +201,7 @@ public class SearchServlet extends HttpServlet {
                     // Remove stats
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
-                    
+
                     if (Boolean.parseBoolean(request.getParameter("shouldLog"))) {
                         LogAnalytics.log(request, request.getParameter("id"), "id", entity);
                     }
@@ -267,7 +267,6 @@ public class SearchServlet extends HttpServlet {
 //                            }
 //                        }
 //                    }
-
 //                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
 //                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
                     return jo.toString();
@@ -411,7 +410,7 @@ public class SearchServlet extends HttpServlet {
 //                        }
 //                    }
 
-                    Uzivatel.updateUI(request); 
+                    Uzivatel.updateUI(request);
                     return jo.toString();
                 } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
@@ -425,11 +424,25 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
                 String entity = "" + request.getParameter("entity");
-                EntitySearcher searcher = SearchUtils.getSearcher(entity);
-                if (searcher == null) {
-                    return new JSONObject().put("error", "unrecognized entity").toString();
-                }
-                return searcher.export(request);
+                    if (request.getParameter("id") != null) {
+                        return Actions.ID.doPerform(request, response);
+//                        SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+//                                .setFacet(false);
+//                        query.setRequestHandler("/search");
+//                        if (entity == null) {
+//                            query.setFields("entity");
+//                            JSONObject jo = SearchUtils.json(query, client, "entities");
+//                            if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
+//                                return jo.toString();
+//                            }
+//                            entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+//                        }
+                    }
+                    EntitySearcher searcher = SearchUtils.getSearcher(entity);
+                    if (searcher == null) {
+                        return new JSONObject().put("error", "unrecognized entity").toString();
+                    }
+                    return searcher.export(request);
             }
         },
         PIANS {
@@ -441,32 +454,32 @@ public class SearchServlet extends HttpServlet {
                 return jo.toString();
             }
         },
-//        GETHESLAR {
-//            @Override
-//            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//
-//                JSONObject json = new JSONObject();
-//                try {
-//                    HttpJdkSolrClient client = IndexUtils.getClientNoOp();
-//                    String pristupnost = LoginServlet.pristupnost(request.getSession());
-//                    SolrQuery query = new SolrQuery("heslar:\"" + request.getParameter("id") + "\"")
-//                            .setRows(1000);
-//
-//                    QueryRequest req = new QueryRequest(query);
-//
-//                    NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
-//                    rawJsonResponseParser.setWriterType("json");
-//                    req.setResponseParser(rawJsonResponseParser);
-//
-//                    NamedList<Object> resp = client.request(req, "translations");
-//                    return (String) resp.get("response");
-//
-//                } catch (Exception ex) {
-//                    json.put("error", ex);
-//                }
-//                return json.toString();
-//            }
-//        },
+        //        GETHESLAR {
+        //            @Override
+        //            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //
+        //                JSONObject json = new JSONObject();
+        //                try {
+        //                    HttpJdkSolrClient client = IndexUtils.getClientNoOp();
+        //                    String pristupnost = LoginServlet.pristupnost(request.getSession());
+        //                    SolrQuery query = new SolrQuery("heslar:\"" + request.getParameter("id") + "\"")
+        //                            .setRows(1000);
+        //
+        //                    QueryRequest req = new QueryRequest(query);
+        //
+        //                    NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
+        //                    rawJsonResponseParser.setWriterType("json");
+        //                    req.setResponseParser(rawJsonResponseParser);
+        //
+        //                    NamedList<Object> resp = client.request(req, "translations");
+        //                    return (String) resp.get("response");
+        //
+        //                } catch (Exception ex) {
+        //                    json.put("error", ex);
+        //                }
+        //                return json.toString();
+        //            }
+        //        },
         THESAURI {
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -506,7 +519,7 @@ public class SearchServlet extends HttpServlet {
             }
         },
         LOG {
-            
+
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
                 JSONObject json = new JSONObject();
@@ -519,7 +532,7 @@ public class SearchServlet extends HttpServlet {
             }
         },
         STATS {
-            
+
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
                 JSONObject json = new JSONObject();

@@ -257,6 +257,15 @@ export class AppService {
   }
 
   /**
+   * Fired for main search in results page
+   * @param params the params
+   */
+  searchExportMapa(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/export_mapa`, params);
+  }
+
+  /**
    * Fired for stats search in stats page
    * @param params the params
    */
