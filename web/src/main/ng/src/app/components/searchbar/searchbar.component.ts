@@ -66,7 +66,10 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
 
   setExportUrl() {
     const parts = this.router.url.split('?');
-      let str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
+      let str = (parts.length > 1 ? parts[1] : '');
+      if (!str.includes('lang=')) {
+        str += '&lang=' + this.state.currentLang;
+      }
       if (this.state.documentId) {
         str += '&id=' + this.state.documentId;
       }
