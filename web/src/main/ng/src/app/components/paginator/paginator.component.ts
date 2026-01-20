@@ -1,11 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { AppState } from 'src/app/app.state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
-import { Sort } from 'src/app/shared/config';
-import { AppConfiguration } from 'src/app/app-configuration';
+import {MatPaginatorModule} from '@angular/material/paginator';
+
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppState } from '../../app.state';
+import { Sort } from '../../shared/config';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
+  imports: [
+    TranslateModule,
+    FormsModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatListModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatPaginatorModule,
+    MatButtonModule
+],
   selector: 'app-paginator',
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss']

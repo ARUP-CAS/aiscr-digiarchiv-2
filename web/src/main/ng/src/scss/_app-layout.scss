@@ -1,0 +1,159 @@
+// --- LAYOUT ---
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  font-size: 14px; 
+}
+
+// sidenav
+mat-sidenav-container, 
+mat-sidenav-content, 
+mat-sidenav {
+  height: 100%;
+}
+ 
+mat-sidenav {
+  width: 250px;
+  max-width: 90%;
+}
+
+// main wrapper
+main {
+  background-color: var(--app-color-gray-1);
+}
+
+// display table layout
+.app-display-table {
+  display: block;
+  width: calc(100% - (16px * 2)) !important;
+  height: inherit;
+  min-height: calc(100% - var(--app-footer-height));
+
+  // for view map resize container
+  .app-view-map & {
+    width: 100% !important;
+    position: relative;
+
+    .app-map {
+      height: 100%;
+    }
+  }
+
+  &.app-loading {
+    width: 100% !important;
+    height: auto;
+    min-height: auto;
+  }
+
+  .app-table-cell {
+    display: block;
+    padding: 32px 0; // _pridano
+
+    .app-view-map & {
+      padding: 0;
+    }
+
+    &.app-left {
+      width: 100%;
+
+      @media only screen and (min-width: 960px) {
+        padding-right: 32px;
+      }
+
+      @media only screen and (max-width: 959px) {
+        padding: 16px0 0 0;
+      }
+    }
+
+    &.app-right {
+      padding-bottom: 16px;
+      
+      @media only screen and (max-width: 959px) {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+// container
+.app-container {
+  margin: 0 auto;
+  max-width: var(--app-container);
+  width: 100%;
+
+  &.app-fluid {
+    max-width: 100%;
+  }
+
+  // for view map resize container
+  .app-view-map & {
+    max-width: 100%;
+  }
+}
+
+// mq
+@media only screen and (min-width: 960px) {
+  .app-display-table {
+    display: table;
+    height: calc(100% - var(--app-footer-height));
+
+    .app-table-cell {
+      display: table-cell;
+      padding: calc(2 * 16px) 0;
+      vertical-align: top;
+
+      // for view map resize container
+      /* .app-view-map & {
+        padding: 0;
+      } */
+
+      &.app-left {
+        width: var(--app-sidenav-width);
+      }
+    }
+  }
+}
+
+// --- fxHide FIX (using own class instead fx attributs) -> https://github.com/angular/flex-layout/issues/1228 ---
+@media only screen and (min-width: 960px) and (max-width: 1279px) {
+  .fxHide_md {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 959px) {
+  .fxHide_sm {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .fxHide_xs {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 1280px) {
+  .fxHide_gt-md {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .fxHide_gt-sm {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .fxHide_gt-xs {
+    display: none !important;
+  }
+}
+

@@ -1,15 +1,38 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { Router } from '@angular/router';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Moment } from 'moment';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppService } from 'src/app/app.service';
-import { AppState } from 'src/app/app.state';
-import { Crumb } from 'src/app/shared/crumb';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { Crumb } from '../../shared/crumb';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatRadioModule} from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule, FormsModule, MatFormFieldModule,
+    MatCardModule, MatIconModule, MatExpansionModule, MatMenuModule,
+    MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
+    MatDatepickerModule, MatRadioModule, MatButtonModule, MatInputModule
+  ],
+  providers: [provideMomentDateAdapter()],
   selector: 'app-facets-dynamic',
   templateUrl: './facets-dynamic.component.html',
   styleUrls: ['./facets-dynamic.component.scss']
