@@ -674,7 +674,7 @@ export class AppService {
       const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
       this.state.closingMapResult = inResults;
       this.state.setMapResult(result, mapDetail);
-      if (!this.state.documentId) {
+      if (!this.state.documentId()) {
         let url = '/map';
         const p: any = {};
         p.mapId = null;
@@ -705,7 +705,7 @@ export class AppService {
 
     if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
-      url = '/map/' + this.state.documentId;
+      url = '/map/' + this.state.documentId();
       p.loc_rpt = null;
       p.vyber = null;
     } else {

@@ -1,5 +1,5 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Component, OnInit, Inject, AfterViewInit, signal } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, signal, effect } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -15,9 +15,9 @@ import { AppState } from '../../app.state';
 import { AppWindowRef } from '../../app.window-ref';
 import { Condition } from '../../shared/condition';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
@@ -33,7 +33,7 @@ import {MatInputModule} from '@angular/material/input';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule
-],
+  ],
   selector: 'app-searchbar',
   templateUrl: './searchbar.component.html',
   styleUrls: ['./searchbar.component.scss']
@@ -43,7 +43,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
   formats = ['GML', 'WKT', 'GeoJSON'];
-  exportUrls = signal<{url:string, format: string}[]>([]);
+  exportUrls = signal<{ url: string, format: string }[]>([]);
 
   constructor(
     private windowRef: AppWindowRef,
@@ -53,34 +53,36 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     public config: AppConfiguration,
     private service: AppService,
     @Inject(DOCUMENT) private document: Document
-  ) { }
+  ) {
+    effect(() => {
+      const id = this.state.documentId();
+      this.setExportUrl();
+    })
+  }
 
   ngOnInit(): void {
     this.service.currentLang.subscribe(res => {
-      this.setExportUrl();
-    });
-    this.route.queryParams.subscribe(val => {
       this.setExportUrl();
     });
   }
 
   setExportUrl() {
     const parts = this.router.url.split('?');
-      let str = (parts.length > 1 ? parts[1] : '');
-      if (!str.includes('lang=')) {
-        str += '&lang=' + this.state.currentLang;
-      }
-      if (this.state.documentId) {
-        str += '&id=' + this.state.documentId;
-      }
-      if (str.indexOf('entity=') < 0 && !this.state.documentId) {
-        str += '&entity=' + this.state.entity;
-      }
-      const urls: {url:string, format: string}[] = [];
-      this.formats.forEach(f => {
-        urls.push({url:'export-mapa?' + str + '&format=' + f, format: f});
-      })
-      this.exportUrls.update(() => [...urls]);
+    let str = (parts.length > 1 ? parts[1] : '');
+    if (!str.includes('lang=')) {
+      str += '&lang=' + this.state.currentLang;
+    }
+    if (this.state.documentId()) {
+      str += '&id=' + this.state.documentId();
+    }
+    if (str.indexOf('entity=') < 0 && !this.state.documentId()) {
+      str += '&entity=' + this.state.entity;
+    }
+    const urls: { url: string, format: string }[] = [];
+    this.formats.forEach(f => {
+      urls.push({ url: 'export-mapa?' + str + '&format=' + f, format: f });
+    })
+    this.exportUrls.update(() => [...urls]);
   }
 
   ngAfterViewInit() {
@@ -126,7 +128,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.mapa = !this.state.isMapaCollapsed;
     p.loc_rpt = null;
 
-    let url = this.state.documentId ? '/id' : '/results';
+    let url = this.state.documentId() ? '/id' : '/results';
     if (p.mapa) {
       url = '/map';
       if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
@@ -159,8 +161,8 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
         p.vyber = null;
       }
     }
-    if (this.state.documentId) {
-      url = (p.mapa ? '/map/':'/id/') + this.state.documentId;
+    if (this.state.documentId()) {
+      url = (p.mapa ? '/map/' : '/id/') + this.state.documentId();
       p.loc_rpt = null;
       p.vyber = null;
     }

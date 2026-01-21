@@ -269,12 +269,12 @@ export class MapViewComponent {
     if (this.route.snapshot.params['id']) {
       this.mapIdChanged = this.currentMapId !== this.route.snapshot.params['id'];
       this.isDocumentHandle = true;
-      this.state.documentId = this.route.snapshot.params['id'];
+      this.state.documentId.set(this.route.snapshot.params['id']);
       this.currentMapId = this.route.snapshot.params['id'];
     } else {
       this.mapIdChanged = this.currentMapId !== this.route.snapshot.queryParamMap.get('mapId');
       this.isDocumentHandle = false;
-      this.state.documentId = null;
+      this.state.documentId.set(null);
       this.currentMapId = this.route.snapshot.queryParamMap.get('mapId');
     }
 

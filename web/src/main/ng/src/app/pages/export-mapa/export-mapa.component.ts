@@ -106,7 +106,7 @@ export class ExportMapaComponent implements OnInit {
         });
         this.hasPian = false;
         this.docs.update(d => [...docs]);
-      } else if (this.state.documentId === 'samostatny_nalez') {
+      } else if (this.state.entity === 'samostatny_nalez') {
         docs.forEach(doc => {
           if (this.format === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
