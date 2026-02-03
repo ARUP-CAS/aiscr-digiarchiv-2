@@ -116,6 +116,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
         this.myListener(e);
       });
       window.scrollTo(0,0);
+      document.getElementById('content-scroller').scrollTo(0,0);
     }
   }
 
