@@ -37,7 +37,7 @@ export class Box {
   styleUrl: './home.scss'
 })
 export class Home implements OnInit {
-  isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
   opened: boolean = false;
   private overlayRef: OverlayRef;

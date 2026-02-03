@@ -8,7 +8,7 @@
 
 <div class="app-display-table app-container">
   <div class="app-table-cell">
-    <div class="app-fxLayout app-row app-wrap app-entities-wrapper" [class.app-doctype-expanded]="showingCat">
+    <div class="app-fxLayout app-row app-wrap app-entities-wrapper" [class.app-doctype-expanded]="showingCat">{{ isTouchDevice }}
       @for (entity of config.entities; track entity; let index = $index) {
         <mat-card [class]="'app-entity-' + entity + ' app-' + index" class="app-fxLayout app-column aoo-fill app-card-entity mat-elevation-z3" [matTooltip]="'entities.' + entity + '.desc' | translate" [matTooltipDisabled]="isTouchDevice"><!-- matTooltipTouchGestures="off"-->
           <mat-card-header routerLink="/results" [queryParams]="{'entity' : entity, sort: getSortByEntity(entity)}" class="app-cursor-pointer">

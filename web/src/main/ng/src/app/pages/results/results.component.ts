@@ -115,6 +115,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.matcher.addEventListener('change', (e) => {
         this.myListener(e);
       });
+      window.scrollTo(0,0);
     }
   }
 
