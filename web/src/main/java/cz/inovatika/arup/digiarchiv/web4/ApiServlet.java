@@ -51,7 +51,7 @@ public class ApiServlet extends HttpServlet {
         if (!relative.startsWith("/")) {
             relative = "/" + relative;
         }
-        String dispatcherPath = "/WEB-INF/api" + relative;
+        String dispatcherPath = relative;
         return dispatcherPath;
     }
 

@@ -165,10 +165,16 @@ export class StatsComponent implements OnInit {
 
   ngOnInit(): void {
     this.setTitle();
+
+    // Init this.datumod NOW/YEAR - 1YEAR
+    // this.datumod = new Date(new Date().getFullYear() - 1, 0, 1);
+    this.datumod = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+
     this.service.currentLang.subscribe(res => {
       this.search(this.route.snapshot.queryParams);
       this.setTitle();
     });
+
     this.subs.push(this.route.queryParams.subscribe(val => {
       this.search(val);
     }));
@@ -225,7 +231,7 @@ export class StatsComponent implements OnInit {
     this.type = params['type'];
     this.ip = params['ip'];
     this.user = params['user'];
-    this.interval = params['interval'] ? params['interval'] : 'DAY';
+    this.interval = params['interval'] ? params['interval'] : 'WEEK';
     this.entity = params['entity'];
 
     if (params['date']) {
@@ -303,7 +309,7 @@ export class StatsComponent implements OnInit {
     this.chartOptions.series = this.series;
     this.chartOptions.legend = { data: this.legend, bottom: 0 };
 
-    let title = this.service.getTranslation('stats.graphTitle.' + (this.interval ? this.interval : 'DAY'));
+    let title = this.service.getTranslation('stats.graphTitle.' + (this.interval ? this.interval : 'WEEK'));
     this.chartOptions.title = {
       text: title,
       left: 'center'

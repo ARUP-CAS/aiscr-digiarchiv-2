@@ -70,10 +70,10 @@ public class LogAnalytics {
                     .setParam("stats.field", "{!countDistinct=true}ident_cely")
                     .setParam("json.nl", "arrntv")
                     .setParam("facet.range", "indextime")
-                    .setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR")
+                    .setParam("f.indextime.facet.range.other", "before")
                     .setParam("f.indextime.facet.range.end", "NOW")
                     .setParam("f.indextime.facet.range.gap", 
-                            "+1DAY");
+                            "+1MONTH");
             JSONArray ips = Options.getInstance().getJSONArray("statsIpFilter");
             for(int i =0; i<ips.length(); i++) {
                 query.addFilterQuery("-ip:" + ips.getString(i)
@@ -123,8 +123,13 @@ public class LogAnalytics {
                 } else {
                     to = to + "T23:59:59Z";
                 }
+                query.setParam("f.indextime.facet.range.start", from);
                 String fq = "indextime:[" + from + " TO " + to + "]";
                 query.addFilterQuery(fq);
+            } else {
+                // query.setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR");
+                // prvni zaznam "2024-11-08T11:53:40.718Z"
+                query.setParam("f.indextime.facet.range.start", "2024-11-01T00:00:00Z");
             }
 
             if (request.getParameter("entity") != null) {
