@@ -642,7 +642,7 @@ export class AppService {
     this.state.facetsFiltered = [];
     this.state.facets.forEach(f => {
       const values = f.values.filter(v => {
-        const translated = this.getHeslarTranslation(v.name, f.field);
+        const translated = this.getTranslation(v.name);
         return pattern.test(translated);
       });
       if (values.length > 0) {

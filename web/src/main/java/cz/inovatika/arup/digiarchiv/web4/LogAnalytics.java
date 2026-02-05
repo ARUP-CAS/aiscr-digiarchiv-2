@@ -73,7 +73,7 @@ public class LogAnalytics {
                     .setParam("f.indextime.facet.range.other", "before")
                     .setParam("f.indextime.facet.range.end", "NOW")
                     .setParam("f.indextime.facet.range.gap", 
-                            "+1MONTH");
+                            "+7DAYS");
             JSONArray ips = Options.getInstance().getJSONArray("statsIpFilter");
             for(int i =0; i<ips.length(); i++) {
                 query.addFilterQuery("-ip:" + ips.getString(i)
