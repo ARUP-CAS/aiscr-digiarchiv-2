@@ -55,7 +55,7 @@ public class FedoraUtils {
     //HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
-            .uri(new URI(SEARCH_POINT + StringEscapeUtils.escapeHtml4(urlQuery)))
+            .uri(new URI(SEARCH_POINT + urlQuery))
             .header("Authorization", auth_header())
             //.header("Accept", "application/ld+json")
             .build();
@@ -64,7 +64,7 @@ public class FedoraUtils {
   }
   public static String requestXml(String url) throws URISyntaxException, IOException, InterruptedException {
     // HttpClient client = HttpClient. newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
+    HttpRequest request = HttpRequest.newBuilder() 
             .GET()
             .uri(new URI(API_POINT + url))
             .header("Authorization", auth_header())

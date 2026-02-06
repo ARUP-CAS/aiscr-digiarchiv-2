@@ -180,16 +180,17 @@ public class FedoraHarvester {
      * Harvest Fedora for updates and index
      *
      * @param from Date to update from
+     * @param until Date to update until
      * @return
      * @throws IOException
      */
-    public JSONObject update(String from) throws IOException {
+    public JSONObject update(String from, String until) throws IOException {
         SolrClient solr = SolrClientFactory.getSolrClient();
         ret = new JSONObject();
-        return update(from, solr);
+        return update(from, until, solr);
     }
 
-    private JSONObject update(String from, SolrClient solr) throws IOException {
+    private JSONObject update(String from, String until, SolrClient solr) throws IOException {
         try {
             String status = readStatusFile("update");
             if (STATUS_RUNNING.equals(status)) {
@@ -215,12 +216,20 @@ public class FedoraHarvester {
             // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Frecord%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=10
             String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
                     + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
+            if (until != null) {
+                baseQuery += "&condition=" + URLEncoder.encode("modified<" + until, "UTF8");
+            }
             JSONObject searchJSON = searchFedora(baseQuery, false, "update", true, solr);
             total += searchJSON.optInt("total", 0);
 
+            
+            
             // http://192.168.8.33:8080/rest/fcr:search?condition=fedora_id%3DAMCR-test%2Fmodel%2Fdeleted%2F*&condition=modified%3E%3D2023-08-01T00%3A00%3A00.000Z&offset=0&max_results=100
             baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
                     + "&condition=" + URLEncoder.encode("modified>" + lastDate, "UTF8");
+            if (until != null) {
+                baseQuery += "&condition=" + URLEncoder.encode("modified<" + until, "UTF8");
+            }
             searchJSON = searchFedora(baseQuery, true, "update", false, solr);
             total += searchJSON.optInt("total", 0);
             Instant end = Instant.now();
@@ -232,13 +241,15 @@ public class FedoraHarvester {
 
             writeRetToFile("update", start);
             writeStatusFile("update", STATUS_FINISHED);
-            writeUpdateFile(start);
+            if (until != null) {
+                writeUpdateFile(start);
+            }
             if (total > 0) {
                 LOGGER.log(Level.INFO, "Running update for changes after start");
-                update(start.toString(), solr);
+                update(start.toString(), until, solr);
             }
             LOGGER.log(Level.INFO, "Update finished in {0}", interval);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             writeStatusFile("update", STATUS_FINISHED);
         }
@@ -800,10 +811,14 @@ public class FedoraHarvester {
                 DocumentObjectBinder dob = new DocumentObjectBinder();
                 SolrInputDocument idoc = dob.toSolrInputDocument(fm);
 
+                /**
+                 * 
+                 * Odstraneno na zaklade https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/642
                 if (idoc.containsKey("stav") && Integer.parseInt(idoc.getFieldValue("stav").toString()) == -1) {
                     LOGGER.log(Level.FINE, "Skiping record {0}. Stav = -1", idoc.getFieldValue("ident_cely"));
                     return;
                 }
+                 */
 //                if (!fm.isSearchable()) {
 //                    LOGGER.log(Level.FINE, "Skiping record {0}. Not searchable", idoc.getFieldValue("ident_cely"));
 //                    return;
