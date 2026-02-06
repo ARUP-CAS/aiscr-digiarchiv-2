@@ -6,3 +6,4 @@ ThumbnailsGenerator/nbactions.xml
 .DS_Store
 web/src/.DS_Store
 web/.DS_Store
+web/src/main/webapp/index.csr.html
