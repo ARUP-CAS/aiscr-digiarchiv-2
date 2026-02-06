@@ -1,14 +1,34 @@
-import { AppService } from 'src/app/app.service';
-import { AppState } from 'src/app/app.state';
-import { Component, OnInit, ViewContainerRef, TemplateRef, HostListener, Inject, Output, EventEmitter } from '@angular/core';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, ViewContainerRef, Inject, Output, EventEmitter } from '@angular/core';
+import { Overlay } from '@angular/cdk/overlay';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { DOCUMENT } from '@angular/common';
-import { AppConfiguration } from 'src/app/app-configuration';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 @Component({
+  imports: [
+    TranslateModule,
+    FormsModule,
+    RouterModule,
+    MatIconModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatToolbarModule
+],
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
@@ -17,12 +37,10 @@ export class NavbarComponent implements OnInit {
 
   // sidenav
   @Output() public sidenavToggle = new EventEmitter();
-  loggedChecker;
+  loggedChecker: ReturnType<typeof setInterval>;
   intervalMilis = 30000;
 
   constructor(
-    private overlay: Overlay,
-    private viewContainerRef: ViewContainerRef,
     public config: AppConfiguration,
     private dialog: MatDialog,
     public state: AppState,
@@ -83,10 +101,6 @@ export class NavbarComponent implements OnInit {
     this.document.body.classList.remove('app-view-map');
   }
 
-  focusp(e, el) {
-    el.focus();
-  }
-
   showLogin() {
     this.state.dialogRef = this.dialog.open(LoginDialogComponent, {
       width: '450px',
@@ -94,19 +108,6 @@ export class NavbarComponent implements OnInit {
       data: null
     });
   }
-
-  // login() {
-  //   this.service.login(this.user, this.pwd).subscribe((res: any) => {
-  //     this.state.setLogged(res);
-  //     if (res.error) {
-  //       this.loginError = true;
-  //     } else {
-  //       this.loginError = false;
-  //       this.user = '';
-  //       this.pwd = '';
-  //     }
-  //   });
-  // }
 
 
 }

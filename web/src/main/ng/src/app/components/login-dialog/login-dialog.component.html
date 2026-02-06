@@ -1,37 +1,39 @@
-<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
 <h1 mat-dialog-title>{{ 'dialog.title.Přihlášení uživatele' | translate}}</h1>
-<div mat-dialog-content>
-    <ng-container *ngIf="!state.logged">
-      <div fxLayout="row wrap">
-        <mat-form-field fxFlex="100%">
-          <mat-label>{{ 'dialog.desc.Přihlašovací jméno' | translate }}</mat-label>
-          <input matInput cdkFocusInitial type="text" [(ngModel)]="user" (keyup.enter)="focusp($event, loginpwd)" autocomplete="on" id="loginuser">
-        </mat-form-field>
-
-        <mat-form-field fxFlex="100%">
-          <mat-label>{{ 'dialog.desc.Heslo' | translate }}</mat-label>
-          <input matInput #loginpwd type="password" [(ngModel)]="pwd" (keyup.enter)="login()">
-        </mat-form-field> 
+<div mat-dialog-content class="app-pt-2">
+  @if (!state.logged) {
+    <div class="app-fxLayout app-column app-gap-4">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'dialog.desc.Přihlašovací jméno' | translate }}</mat-label>
+        <input matInput cdkFocusInitial type="text" [(ngModel)]="user" (keyup.enter)="focusp(loginpwd)" autocomplete="on" id="loginuser">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'dialog.desc.Heslo' | translate }}</mat-label>
+        <input matInput #loginpwd type="password" [(ngModel)]="pwd" (keyup.enter)="login()">
+      </mat-form-field>
+    </div>
+    @if (loginError()) {
+      <div class="app-color-warn app-mt-4">
+        {{ loginError() | translate }}
       </div>
-  
-      <div class="app-color-warning" *ngIf="loginError">
-        {{loginError | translate}}
-      </div>    
-    </ng-container>
+    }
+  }
 
-    <ng-container *ngIf="state.logged">
-      <span class="app-label">{{ 'dialog.desc.Přihlášený uživatel' | translate }}:</span>&#160;<strong>{{ state.user.jmeno}} {{state.user.prijmeni }}</strong><br />
-      <span class="app-label">{{ 'dialog.desc.Uživatelská role' | translate }}:</span>&#160;<strong>{{ state.user.skupina[0].value | translate }}</strong><br />
-      <span class="app-label">{{ 'dialog.desc.Organizace' | translate }}:</span>&#160;<strong>{{ state.user.organizace.id | translateHeslar  : 'organizace' }}</strong>
-    </ng-container>
+  @if (state.logged) {
+    <span class="app-label">{{ 'dialog.desc.Přihlášený uživatel' | translate }}:</span>&#160;<strong>{{ state.user.jmeno}} {{state.user.prijmeni }}</strong><br />
+    <span class="app-label">{{ 'dialog.desc.Uživatelská role' | translate }}:</span>&#160;<strong>{{ state.user.skupina[0].value | translate }}</strong><br />
+    <span class="app-label">{{ 'dialog.desc.Organizace' | translate }}:</span>&#160;<strong>{{ state.user.organizace.id | translate }}</strong>
+  }
 </div>
 <div mat-dialog-actions>
-  <ng-container *ngIf="!state.logged">
+  @if (!state.logged) {
     <button mat-button (click)="login()">{{ 'dialog.button.Přihlásit' | translate }}</button>
     <a mat-button [href]="config.restorePassword">{{ 'dialog.button.Obnovit heslo' | translate }}</a>
-  </ng-container>
-  <ng-container *ngIf="state.logged">
+  }
+  @if (state.logged) {
     <button mat-button (click)="logout()">{{ 'dialog.button.Odhlásit' | translate }}</button>
-  </ng-container>
+  }
   <button mat-button [mat-dialog-close]="false" cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>
 </div>

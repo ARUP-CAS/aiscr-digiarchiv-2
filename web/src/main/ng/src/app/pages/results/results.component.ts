@@ -1,32 +1,43 @@
 import { SolrDocument } from './../../shared/solr-document';
 import { HttpParams } from '@angular/common/http';
 import { SolrResponse } from './../../shared/solr-response';
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { AppState } from 'src/app/app.state';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppService } from 'src/app/app.service';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, NavigationEnd, ActivatedRoute, ParamMap, Params } from '@angular/router';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { Router, ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { NgZone } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { MatMenuModule } from '@angular/material/menu';
+import { FacetsUsedComponent } from "../../components/facets/facets-used/facets-used.component";
+import { FacetsComponent } from "../../components/facets/facets.component";
+import { PaginatorComponent } from "../../components/paginator/paginator.component";
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { MatButtonModule } from '@angular/material/button';
+import { EntityContainer } from "../../entities/entity-container/entity-container";
 
 @Component({
+  imports: [
+    TranslateModule, CommonModule, RouterModule, FlexLayoutModule,
+    MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
+    MatProgressBarModule, MatTooltipModule, ScrollingModule,
+    MatMenuModule, MatButtonModule,
+    FacetsUsedComponent,
+    FacetsComponent,
+    PaginatorComponent,
+    EntityContainer
+],
   selector: 'app-results', 
-  animations: [
-    trigger(
-      'enterAnimation', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)', height: 0 }),
-        animate('100ms', style({ transform: 'translateY(0)', height: 120 }))
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateY(0)', height: 120 }),
-        animate('100ms', style({ transform: 'translateY(100%)', height: 0 }))
-      ])
-    ]
-    )
-  ],
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
 })
@@ -41,7 +52,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   docs: SolrDocument[] = [];
   isChartBarCollapsed = true;
   exportUrl: string;
-  inFav: boolean;
   hasResultsInOther: boolean;
   math = Math;
   subs: any[] = [];
@@ -50,6 +60,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   vsSize = 0;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
     private titleService: Title,
     private route: ActivatedRoute,
     private router: Router,
@@ -89,7 +100,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
       if (val.typ === 'map') {
         this.docs = this.state.solrResponse.response.docs;
         setTimeout(() => {
-          this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+          this.vsSize = this.leftElement ? this.leftElement.nativeElement.clientHeight - 107 : 400;
         }, 100);
       }
     }));
@@ -99,16 +110,20 @@ export class ResultsComponent implements OnInit, OnDestroy {
     // });
 
     // set side nav map breakpoint
-    this.matcher = this.mediaMatcher.matchMedia(this.sideNavMapBreakPoint);
-    this.matcher.addEventListener('change', (e) => {
-      this.myListener(e);
-    });
+    if (isPlatformBrowser(this.platformId)){
+      this.matcher = this.mediaMatcher.matchMedia(this.sideNavMapBreakPoint);
+      this.matcher.addEventListener('change', (e) => {
+        this.myListener(e);
+      });
+    }
   }
 
   ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)){
     this.matcher.removeEventListener('change', (e) => {
       this.myListener(e);
     });
+    }
     
     this.subs.forEach(s => s.unsubscribe());
   }
@@ -127,11 +142,11 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   toggleFavorites() {
-    this.inFav = !this.inFav;
+    this.state.inFavorites.update(v => !v);
     const params: Params = this.route.snapshot.queryParams;
     const p: any = Object.assign({}, params);
-    if (this.inFav) {
-      p.inFavorites = this.inFav;
+    if (this.state.inFavorites()) {
+      p.inFavorites = this.state.inFavorites();
     } else {
       p.inFavorites = null;
     }
@@ -139,19 +154,19 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   search(params: Params) {
-    if (params.mapa) {
+    if (params['mapa']) {
       // Zpracuje mapa
       // setTimeout(() => {
-      //   this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+      //   this.vsSize = this.leftElement ? this.leftElement.nativeElement.clientHeight - 107 : 400;
       // }, 100);
       return;
     }
-    this.state.loading = true;
+    this.state.loading.set(true);
+    this.state.facetsLoading.set(true);
     const p = Object.assign({}, params);
     this.state.switchingMap = false;
     this.state.documentProgress = 0;
     this.loading = true;
-    this.state.facetsLoading = true;
     this.state.hasError = false;
     
     if (!p['entity']) {
@@ -162,8 +177,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
     p['noFacets'] = 'true';
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
       if (resp.error) {
-        this.state.loading = false;
-        this.state.facetsLoading = false;
+        this.state.loading.set(false);
+        this.state.facetsLoading.set(false);
         this.loading = false;
         this.state.hasError = true;
         this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.search_error');
@@ -171,8 +186,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
       }
       this.state.setSearchResponse(resp);
 
-      if (p.rows) {
-        this.state.ui.rows = p.rows;
+      if (p['rows']) {
+        this.state.ui.rows = p['rows'];
       }
 
       if (this.state.ui?.sort?.[this.state.entity]) {
@@ -182,33 +197,24 @@ export class ResultsComponent implements OnInit, OnDestroy {
       this.setTitle();
       this.docs = resp.response.docs;
       if (this.state.isMapaCollapsed) {
-        this.state.loading = false;
+        this.state.loading.set(false);;
       }
       this.loading = false;
       this.hasResultsInOther = this.config.entities.findIndex(e => this.state.totals[e] > 0) > -1;
       setTimeout(() => {
-        this.vsSize = this.leftElement.nativeElement.clientHeight - 107;
+        this.vsSize = this.leftElement ? this.leftElement.nativeElement.clientHeight - 107 : 400;
       }, 100);
 
       p['noFacets'] = 'false';
       p['onlyFacets'] = 'true';
       this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
         this.state.setFacets(resp);
-        this.state.facetsLoading = false;
+        this.state.facetsLoading.set(false);
       });
       
       // Math.min(9*itemSize, docs.length * itemSize)
     });
 
-  }
-
-
-  isActiveFacet() {
-    if (this.state.breadcrumbs?.length === 0) {
-      return false;
-    } else {
-      return true;
-    }
   }
 
   showChartBar() {
@@ -219,7 +225,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.state.itemView = view;
   }
 
-  setEntity(entity) {
+  setEntity(entity: string) {
     this.router.navigate([], { queryParams: { entity, page: 0 }, queryParamsHandling: 'merge' });
   }
 
@@ -229,7 +235,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   loadingFinished() {
     setTimeout(() => {
-      this.state.loading = false;
+      this.state.loading.set(false);;
       this.cd.detectChanges();
     }, 100)
     

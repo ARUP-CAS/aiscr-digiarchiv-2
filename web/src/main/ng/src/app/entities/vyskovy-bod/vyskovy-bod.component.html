@@ -1,0 +1,57 @@
+
+<mat-card class="app-result-item app-row-gap-16">
+  <mat-card-header>
+    <mat-card-title>
+      {{ 'card.panelTitle.Výškový bod' | translate }}:&#160;
+      @if (isChild()) {
+        <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+      }
+      @if (!isChild()) {
+        <span class="app-ident-format">{{ _result.ident_cely }}</span>
+      }
+      (<app-inline-filter [field]="'typ'" [value]="_result.vyskovy_bod_typ" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
+    </mat-card-title>
+  </mat-card-header>
+
+  @if (detailExpanded()) {
+    <mat-card-content>
+      @if (_result.vyskovy_bod_geom_gml) {
+        <div><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ _result.vyskovy_bod_geom_gml.value ? _result.vyskovy_bod_geom_gml.value : _result.vyskovy_bod_geom_gml }}</div>
+      }
+      @if (_result.vyskovy_bod_geom_wkt.value ? _result.vyskovy_bod_geom_wkt.value : _result.vyskovy_bod_geom_wkt) {
+        <div><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
+        EPSG:{{ _result.vyskovy_bod_geom_wkt.epsg }}, {{ _result.vyskovy_bod_geom_wkt.value }}
+      </div>
+    }
+  </mat-card-content>
+}
+
+@if (!isChild()) {
+  <mat-card-actions class="app-fxLayout app-row app-end-v">
+    <div class="app-fxFlex app-metadata">
+    </div>
+    <app-result-actions [inDocument]="inDocument()" [result]="_result" [detailExpanded]="detailExpanded()" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
+      [bibTex]="bibTex"
+    [ident_cely_api]="_result.ident_cely.substr(0, _result.ident_cely.lastIndexOf('-'))"></app-result-actions>
+  </mat-card-actions>
+}
+
+@if (detailExpanded()) {
+  <mat-card-content>
+    @if (_result.vyskovy_bod_parent && !isChild()) {
+      <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
+        <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
+          <mat-panel-title>
+            {{ 'card.panelTitle.Související záznamy' | translate }}:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        @for (result of _result.adb; track result) {
+          <app-adb [result]="_result" [isChild]="true" class="app-related-item"></app-adb>
+        }
+      </mat-expansion-panel>
+    }
+  </mat-card-content>
+}
+
+
+</mat-card>
