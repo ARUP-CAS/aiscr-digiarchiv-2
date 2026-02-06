@@ -6,13 +6,20 @@
       </li>
     }
     @case (true) {
-      <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" >
+      <mat-card class="app-card-result" [class.app-card-child]="isChild()" >
         <mat-card-header>
-          <mat-card-title>
-            <span class="app-ident-format">{{ _result.ident_cely }}</span>
-            <span class="app-pipe"></span>
-            <app-inline-filter [field]="'ext_zdroj_typ'" [value]="_result.ext_zdroj_typ" [heslar]="'pristupnost'"></app-inline-filter>
-            <span class="app-pipe"></span>
+          <mat-card-title class="app-fxLayout app-row app-center-v app-gap-4">
+            <div class="app-fxFlex">
+              <span class="app-ident-format">{{ _result.ident_cely }}</span>
+              <span class="app-pipe"></span>
+              <app-inline-filter [field]="'ext_zdroj_typ'" [value]="_result.ext_zdroj_typ" [heslar]="'pristupnost'"></app-inline-filter>
+              <span class="app-pipe"></span>
+            </div>
+            
+            @if (_result.datestamp && state.isMapaCollapsed && !isChild() ) {
+              <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
+                'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+              }
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>

@@ -45,7 +45,7 @@ export class AppState {
   itemView = 'default';
   isMapaCollapsed = true;
   timelineOpened = true;
-  documentId: string;
+  documentId = signal<string>(null);
   isFacetsCollapsed = true;
 
   dialogRef: MatDialogRef<any, any>;
@@ -116,7 +116,7 @@ export class AppState {
   documentProgress: number;
 
   resetState(full: boolean) {
-    this.documentId = null;
+    this.documentId.set(null);
     this.setMapResult(null, false);
 
     this.pianId = null;

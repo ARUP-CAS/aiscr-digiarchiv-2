@@ -31,11 +31,11 @@
   <div class="app-table-cell">
     <mat-card class="app-card-info app-row-gap-16">
       <mat-card-content>
-        @if (!isResultEmpty(result)) {
+        @if (!isResultEmpty(result())) {
         <strong>{{ 'card.desc.Persistentní odkaz' | translate }}: </strong> {{link}}
         <app-citation [result]="result()" [link]="link"></app-citation>
         }
-        @if (isResultEmpty(result)) {
+        @if (isResultEmpty(result())) {
         {{ 'card.note.idnotfound' | translate }}
         }
       </mat-card-content>

@@ -151,7 +151,7 @@ public class PIANSearcher implements EntitySearcher {
     @Override
     public String[] getSearchFields(String pristupnost) {
 
-        return new String[]{"ident_cely,entity,pristupnost,stav,pian_typ,pian_presnost,pian_geom_system,pian_chranene_udaje:[json]",
+        return new String[]{"ident_cely,entity,datestamp,pristupnost,stav,pian_typ,pian_presnost,pian_geom_system,pian_chranene_udaje:[json]",
             "centroid_n:centroid_n_" + pristupnost, "centroid_e:centroid_e_" + pristupnost,
             "lat:lat_" + pristupnost,
             "lng:lng_" + pristupnost,

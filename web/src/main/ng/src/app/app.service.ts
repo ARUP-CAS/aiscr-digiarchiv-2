@@ -257,6 +257,15 @@ export class AppService {
   }
 
   /**
+   * Fired for main search in results page
+   * @param params the params
+   */
+  searchExportMapa(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/export_mapa`, params);
+  }
+
+  /**
    * Fired for stats search in stats page
    * @param params the params
    */
@@ -633,7 +642,7 @@ export class AppService {
     this.state.facetsFiltered = [];
     this.state.facets.forEach(f => {
       const values = f.values.filter(v => {
-        const translated = this.getHeslarTranslation(v.name, f.field);
+        const translated = this.getTranslation(v.name);
         return pattern.test(translated);
       });
       if (values.length > 0) {
@@ -665,7 +674,7 @@ export class AppService {
       const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
       this.state.closingMapResult = inResults;
       this.state.setMapResult(result, mapDetail);
-      if (!this.state.documentId) {
+      if (!this.state.documentId()) {
         let url = '/map';
         const p: any = {};
         p.mapId = null;
@@ -696,7 +705,7 @@ export class AppService {
 
     if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
-      url = '/map/' + this.state.documentId;
+      url = '/map/' + this.state.documentId();
       p.loc_rpt = null;
       p.vyber = null;
     } else {

@@ -169,7 +169,7 @@ public class SamostatnyNalez implements FedoraModel {
 
         IndexUtils.addRefField(idoc, fieldPrefix + "okres", okres);
         if (okres != null) {
-        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(okres.getId()).getString("kraj_nazev")); 
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(okres.getId()).getString("kraj")); 
         }
         IndexUtils.addVocabField(idoc, fieldPrefix + "projekt", projekt);
         IndexUtils.addVocabField(idoc, fieldPrefix + "okolnosti", okolnosti);

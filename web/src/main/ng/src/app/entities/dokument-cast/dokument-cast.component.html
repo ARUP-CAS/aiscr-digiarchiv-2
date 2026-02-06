@@ -1,11 +1,12 @@
-<mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" (click)="state.setMapResult(_result, mapDetail())">
+<mat-card class="app-card-result" [class.app-card-child]="isChild()" (click)="state.setMapResult(_result, mapDetail())">
   @if (mapDetail && !isChild) {
     <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
     </a>
   }
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title class="app-fxLayout app-row app-gap-4">
+        <div class="app-fxFlex">
       @if (!state.isMapaCollapsed && !isChild() && !mapDetail()) {
         <a><mat-icon>info</mat-icon></a>
       }
@@ -22,6 +23,12 @@
         ({{ _result.poznamka }})
       }
       <span class="app-pipe"></span>
+      </div>
+        @if (_result.datestamp && state.isMapaCollapsed && !isChild() || mapDetail()) {
+          <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
+            'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+          }
+
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>

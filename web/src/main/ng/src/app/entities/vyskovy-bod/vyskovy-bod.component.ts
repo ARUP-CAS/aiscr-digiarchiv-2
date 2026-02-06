@@ -12,10 +12,11 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { AdbComponent } from "../adb/adb.component";
 import { InlineFilterComponent } from "../../components/inline-filter/inline-filter.component";
 import { Entity } from '../entity/entity';
+import { DatePipe } from '@angular/common';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, FlexLayoutModule, DatePipe,
     MatCardModule, MatIconModule, MatTooltipModule,
     MatButtonModule,
     ResultActionsComponent,
