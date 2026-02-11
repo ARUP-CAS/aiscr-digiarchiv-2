@@ -79,10 +79,10 @@ public class HandleServlet extends HttpServlet {
                     response.getWriter().print("Downloading file still in progress. Try later.");
                     return;
                 }
-                AppState.writeGetFileStarted(ip, id);
-                boolean success = getFile(id, request, response);
+                AppState.writeGetFileStarted(ip, InitServlet.asSafePath(id));
+                boolean success = getFile(InitServlet.asSafePath(id), request, response);
                 // Logs IP ends time
-                AppState.writeGetFileFinished(ip, id, success);
+                AppState.writeGetFileFinished(ip, InitServlet.asSafePath(id), success);
                 //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile end");
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
@@ -90,8 +90,8 @@ public class HandleServlet extends HttpServlet {
         } else {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
-            File cacheFile = new File(getCacheDir(id) + id);
-            String url = "http://localhost:4000/id/" + id;
+            File cacheFile = new File(getCacheDir(InitServlet.asSafePath(id)) + InitServlet.asSafePath(id));
+            String url = "http://localhost:4000/id/" + InitServlet.asSafePath(id);
             try (PrintWriter out = response.getWriter()) {
 
                 Instant deadline = Instant.now().minus(1, ChronoUnit.DAYS);
