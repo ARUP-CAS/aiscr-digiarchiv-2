@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, effect, forwardRef, input, signal } from '@angular/core';
+import { Component, OnInit, effect, forwardRef, input, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';

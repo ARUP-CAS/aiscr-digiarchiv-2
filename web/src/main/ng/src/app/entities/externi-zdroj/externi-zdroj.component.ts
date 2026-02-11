@@ -16,9 +16,7 @@ import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
-import { AkceComponent } from '../akce/akce.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { LokalitaComponent } from "../lokalita/lokalita.component";
 import { RelatedComponent } from "../../components/related/related.component";
 
 @Component({

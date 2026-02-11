@@ -9,7 +9,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { AppConfiguration } from '../../app-configuration';
 

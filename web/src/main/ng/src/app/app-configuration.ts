@@ -1,6 +1,6 @@
 import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { of, tap, catchError, switchMap, firstValueFrom } from 'rxjs';
+import { tap, firstValueFrom } from 'rxjs';
 import { Configuration } from './shared/config';
 import { isPlatformBrowser } from '@angular/common';
 

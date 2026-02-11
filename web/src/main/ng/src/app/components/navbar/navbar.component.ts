@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewContainerRef, Inject, Output, EventEmitter } from '@angular/core';
-import { Overlay } from '@angular/cdk/overlay';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { DOCUMENT } from '@angular/common';
@@ -12,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 

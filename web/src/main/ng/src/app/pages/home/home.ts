@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { TranslateModule } from '@ngx-translate/core';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { OverlayRef, Overlay } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Title } from '@angular/platform-browser';
@@ -12,8 +12,8 @@ import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { RouterModule } from '@angular/router';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FreeTextComponent } from "../../components/free-text/free-text.component";
 
 export class Box {

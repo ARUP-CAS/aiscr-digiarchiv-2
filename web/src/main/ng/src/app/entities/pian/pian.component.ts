@@ -1,8 +1,7 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, Inject, PLATFORM_ID, forwardRef, input } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';

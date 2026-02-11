@@ -8,7 +8,6 @@ import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
-import { SolrDocument } from '../../shared/solr-document';
 import { SolrResponse } from '../../shared/solr-response';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DatePipe } from '@angular/common';

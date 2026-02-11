@@ -1,6 +1,6 @@
 
-import { Component, OnInit, forwardRef, input } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component, forwardRef, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -12,9 +12,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
-import { AppConfiguration } from '../../app-configuration';
-import { AppService } from '../../app.service';
-import { AppState } from '../../app.state';
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
 import { AkceComponent } from "../akce/akce.component";

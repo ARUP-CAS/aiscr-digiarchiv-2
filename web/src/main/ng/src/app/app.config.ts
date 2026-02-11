@@ -1,16 +1,16 @@
-import { APP_INITIALIZER, ApplicationConfig, inject, PLATFORM_ID, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
-import { TranslateService, TranslateModule, TranslateLoader, provideTranslateService } from '@ngx-translate/core';
-import { provideTranslateHttpLoader, TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppService } from './app.service';
 import { AppState } from './app.state';
 import { AppConfiguration } from './app-configuration';
-import { DatePipe, DecimalPipe, isPlatformBrowser } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS, provideNativeDateAdapter } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';

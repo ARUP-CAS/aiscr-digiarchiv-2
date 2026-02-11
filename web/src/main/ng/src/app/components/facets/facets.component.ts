@@ -1,8 +1,6 @@
 
-import { Component, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,10 +12,10 @@ import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { Crumb } from '../../shared/crumb';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import {ScrollingModule} from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FacetsDynamicComponent } from "../facets-dynamic/facets-dynamic.component";
 import { FacetsSearchComponent } from "./facets-search/facets-search.component";
 import { MatButtonModule } from '@angular/material/button';

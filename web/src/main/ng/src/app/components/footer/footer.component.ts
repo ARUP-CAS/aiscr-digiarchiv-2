@@ -8,7 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppState } from '../../app.state';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
-import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 
 @Component({
   imports: [
