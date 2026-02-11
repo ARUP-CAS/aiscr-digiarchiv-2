@@ -147,10 +147,12 @@
         <div>
           <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
           @for (item of _result.location_info; track item; let last = $last) {
-          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
-          @if (!last && item.katastr) {
-          <span>,&#160;</span>
-          }
+            @if (item.katastr) {
+              <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
+            }
+            @if (!last && item.katastr) {
+            <span>,&#160;</span>
+            }
           }
           (@for (okres of okresy; track okres; let last = $last) {
           <app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="okres"></app-inline-filter>@if (!last) {
@@ -488,8 +490,10 @@
                     <tr>
                       <th class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</th>
                       <td>
+                        @if (dokument_cast.neident_akce.katastr) {
                         <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'"
                           [value]="dokument_cast.neident_akce.katastr.value"></app-inline-filter>
+                        }
                         @if (dokument_cast.neident_akce.okres) {
                         &#160;(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'"
                           [value]="dokument_cast.neident_akce.okres.value"></app-inline-filter>)

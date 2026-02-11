@@ -1,15 +1,12 @@
 import { Component, forwardRef, input } from '@angular/core';
-import { AppState } from '../../app.state';
 import { DokumentComponent } from "../dokument/dokument.component";
 import { SamostatnyNalezComponent } from "../samostatny-nalez/samostatny-nalez.component";
 import { ProjektComponent } from "../projekt/projekt.component";
 import { AkceComponent } from "../akce/akce.component";
 import { LokalitaComponent } from "../lokalita/lokalita.component";
-import { RelatedComponent } from "../../components/related/related.component";
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ResultActionsComponent } from "../../components/result-actions/result-actions.component";
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';

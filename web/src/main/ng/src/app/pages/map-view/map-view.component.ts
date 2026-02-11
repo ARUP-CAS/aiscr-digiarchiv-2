@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 //import * as L from 'leaflet'
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { Control, geoJSON, LatLngBounds, Map, Marker, marker, tileLayer } from 'leaflet';
+import { geoJSON, LatLngBounds, Marker, tileLayer } from 'leaflet';
 
 import 'leaflet.markercluster';
 // import { locationFilter } from './location';

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, input } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';

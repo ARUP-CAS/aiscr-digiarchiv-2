@@ -18,7 +18,7 @@
           <span class="app-ident-format">{{ _result.ident_cely }}</span>
         }
         <span class="app-pipe"></span>
-        @if (_result.az_chranene_udaje) {
+        @if (_result.az_chranene_udaje?.hlavni_katastr) {
           <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
         }
         <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.az_okres"></app-inline-filter>)</span>

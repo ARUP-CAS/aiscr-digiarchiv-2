@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
 import { ResultsComponent } from './pages/results/results.component';
 import { StatsComponent } from './pages/stats/stats.component';
-import { MapViewContainerComponent } from './pages/map-view/map-view-container.component';
-import { DocumentComponent } from './pages/document/document.component';
 import { ExportMapaComponent } from './pages/export-mapa/export-mapa.component';
 import { ExportComponent } from './pages/export/export.component';
 

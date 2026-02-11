@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, Input, Inject, PLATFORM_ID, forwardRef, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID, forwardRef, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router, Params, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from 'ngx-flexible-layout';
 import { AppConfiguration } from '../../app-configuration';
@@ -17,7 +17,6 @@ import { CitationComponent } from "../../components/citation/citation.component"
 import { EntityContainer } from "../../entities/entity-container/entity-container";
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { MapViewComponent } from "../map-view/map-view.component";
-import { MapViewContainerComponent } from "../map-view/map-view-container.component";
 
 @Component({
   imports: [

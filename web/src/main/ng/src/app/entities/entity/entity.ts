@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, computed, effect, Inject, input, PLATFORM_ID, signal, Signal } from '@angular/core';
+import { Component, effect, Inject, input, PLATFORM_ID, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';

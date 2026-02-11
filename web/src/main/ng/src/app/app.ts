@@ -1,8 +1,8 @@
 import { Component, DOCUMENT, Inject } from '@angular/core';
-import { ActivatedRoute, IsActiveMatchOptions, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, IsActiveMatchOptions, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatListModule} from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 import { AppConfiguration } from './app-configuration';
 import { AppService } from './app.service';
 import { AppState } from './app.state';

@@ -1,6 +1,5 @@
 
-import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, forwardRef } from '@angular/core';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { Entity } from '../entity/entity';
 import { MatCardModule } from '@angular/material/card';

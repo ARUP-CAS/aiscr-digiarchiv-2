@@ -1,7 +1,6 @@
 
-import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID, forwardRef, signal } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Router, RouterModule } from '@angular/router';
+import { Component, forwardRef, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { Entity } from '../entity/entity';
 import { MatButtonModule } from '@angular/material/button';
