@@ -44,7 +44,7 @@ public class PdfServlet extends HttpServlet {
       Options opts = Options.getInstance();
       if (id != null && !id.equals("")) {
         try {
-            String fname = ImageSupport.getDestDir(id) + id + File.separator + page + ".jpg";
+            String fname = ImageSupport.getDestDir(id) + InitServlet.asSafePath(id) + File.separator + InitServlet.asSafePath(page) + ".jpg";
             File f = new File(fname);
             if (f.exists()) {
               response.setContentType("image/jpeg");
