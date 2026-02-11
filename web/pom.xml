@@ -116,30 +116,31 @@
                 </executions>
             </plugin>
       
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.5.0</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${project.basedir}/src/main/webapp</directory>
-                            <includes>
-                                <include>*.css</include>
-                                <include>*.js</include>
-                                <include>*.gz</include>
-                                <include>*.map</include>
-                                <include>index.html</include>
-                                <include>assets/*/**</include>
-                                <include>server/*/**</include>
-                            </includes>
-                            <excludes>
-                                <exclude>index.jsp</exclude>
-                            </excludes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${project.basedir}/src/main/webapp</directory>
+              <includes>
+                <include>*.css</include>
+                <include>*.js</include>
+                <include>*.gz</include>
+                <include>*.map</include>
+                <include>index.html</include>
+                <include>index.ssr.html</include>
+                <include>assets/*/**</include>
+                <include>server/*/**</include>
+              </includes>
+              <excludes>
+                <exclude>index.jsp</exclude>
+              </excludes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
       
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
