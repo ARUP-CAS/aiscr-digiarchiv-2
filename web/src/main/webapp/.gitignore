@@ -1,6 +1,7 @@
 assets/
 server/
 index.html
+index.csr.html
 *.js
 *.css
 *.map

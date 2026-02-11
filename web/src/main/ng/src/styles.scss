@@ -1,13 +1,19 @@
-// --- ROOT SCSS ---
-@import "sass/app-theme-default";
-@import "sass/app-variables";
-@import "sass/app-mixins";
-@import "sass/app-gaps";
-@import "sass/app-global";
-@import "sass/app-mat-override";
-@import "sass/app-layout";
-@import "sass/app-adv-search";
-@import "sass/app-file-viewer";
-@import "sass/app-login-dialog";
-@import "sass/app-document-dialog";
-@import "sass/app-print";
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use "@angular/material" as mat;
+
+// @use "angular-material-css-vars" as mat-css-vars;
+
+//@use "scss/theme-colors";
+
+@use "scss/app-vars";
+@use "scss/app-flex-layout";
+@use "scss/app-global";
+@use "scss/app-layout";
+
+@use "scss/app-adv-search";
+@use "scss/app-sidenav-container";
+@use "scss/app-export";
+@use "scss/app-print";
+@use "scss/app-mat-override";

@@ -1,13 +1,25 @@
 import { Component, OnInit, Output, EventEmitter, ViewContainerRef, Inject, TemplateRef } from '@angular/core';
-import { AppService } from 'src/app/app.service';
-import { AppState } from 'src/app/app.state';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { DOCUMENT } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { RouterModule } from '@angular/router';
+import { AppConfiguration } from '../../app-configuration';
 
 @Component({
+  imports: [
+    TranslateModule,
+    RouterModule,
+    MatIconModule,
+    MatListModule
+],
   selector: 'app-sidenav-list',
   templateUrl: './sidenav-list.component.html',
   styleUrls: ['./sidenav-list.component.scss']
@@ -15,7 +27,9 @@ import { DOCUMENT } from '@angular/common';
 export class SidenavListComponent implements OnInit {
   @Output() sidenavClose = new EventEmitter();
 
-  public onSidenavClose = () => {
+  onSidenavClose(e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
     this.sidenavClose.emit();
   }
 
@@ -33,6 +47,7 @@ export class SidenavListComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private dialog: MatDialog,
     public state: AppState,
+    public config: AppConfiguration,
     private service: AppService,
     @Inject(DOCUMENT) private document: Document
   ) { }
@@ -56,10 +71,6 @@ export class SidenavListComponent implements OnInit {
   logoClicked() {
     this.state.isMapaCollapsed = true;
     this.document.body.classList.remove('app-view-map');
-  }
-
-  focusp(e, el) {
-    el.focus();
   }
 
   showLogin() {

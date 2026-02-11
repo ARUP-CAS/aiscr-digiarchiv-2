@@ -8,7 +8,7 @@ export class File {
   humanFileSize: string;
   filepath: string;
 
-  setSize(si) {
+  setSize(si: number) {
     var thresh = si ? 1000 : 1024;
     if (Math.abs(this.size_mb) < thresh) {
       this.humanFileSize = this.size_mb + ' B';
