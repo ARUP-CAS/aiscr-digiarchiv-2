@@ -21,7 +21,7 @@
         @if (_result.projekt_hlavni_katastr) {
           <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.projekt_hlavni_katastr"></app-inline-filter>
         }
-        &#160;(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.projekt_okres"></app-inline-filter>)
+        <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.projekt_okres"></app-inline-filter>)</span>
         <span class="app-pipe"></span><app-inline-filter [isChild]="isChild()" [field]="'f_vedouci'" [value]="_result.projekt_vedouci_projektu" ></app-inline-filter><span class="app-pipe"></span>
           @if (!state.isMapaCollapsed) {
             <label>{{ _result.projekt_datum_zahajeni | date : 'dd.MM.yyyy'}} - {{ _result.projekt_datum_ukonceni | date : 'dd.MM.yyyy' }}</label><span class="app-pipe"></span>

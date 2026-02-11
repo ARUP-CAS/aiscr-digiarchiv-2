@@ -45,6 +45,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                 for (int j = 0; j < reldocs.length(); j++) {
                     JSONObject cdj = reldocs.getJSONObject(j);
                     doc.append("dokument", cdj);
+                    doc.put("datestamp", cdj.getString("datestamp"));
                 }
 
                 if (doc.has("dokument_cast_archeologicky_zaznam")) {
@@ -54,6 +55,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                         JSONObject sub = SolrSearcher.getById(client, cdj, fields);
                         if (sub != null) {
                             doc.put(sub.getString("entity"), sub);
+                            doc.put("datestamp", sub.getString("datestamp"));
                         }
 
                     }

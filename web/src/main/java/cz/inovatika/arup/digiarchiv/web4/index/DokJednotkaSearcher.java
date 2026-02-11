@@ -24,7 +24,6 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
-
         PIANSearcher ps = new PIANSearcher();
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -48,6 +47,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
 
                 for (int j = 0; j < subs.length(); j++) {
                     doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
+                    doc.put("datestamp", subs.getJSONObject(i).getString("datestamp"));
                 }
                 parentSearchable = true;
 

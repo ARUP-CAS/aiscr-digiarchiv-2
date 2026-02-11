@@ -8,6 +8,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -16,6 +18,47 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "ApiServlet", urlPatterns = {"/api"})
 public class ApiServlet extends HttpServlet {
 
+    /**
+     * Resolves and validates a safe internal path for API forwarding based on the
+     * provided path info. Returns {@code null} if the path is invalid or not allowed.
+     */
+    private String getSafePath(String pathInfo) {
+        if (pathInfo == null || pathInfo.isEmpty()) {
+            return null;
+        }
+
+        // Disallow backslashes and parent directory traversal.
+        if (pathInfo.contains("..") || pathInfo.contains("\\")) {
+            return null;
+        }
+
+        // Ensure the path starts with a single '/' so Paths.get works as expected.
+        String normalizedInput = pathInfo.startsWith("/") ? pathInfo.substring(1) : pathInfo;
+
+        Path normalized;
+        try {
+            normalized = Paths.get(normalizedInput).normalize();
+        } catch (Exception ex) {
+            return null;
+        }
+
+        if (normalized.startsWith("..")) {
+            return null;
+        }
+
+        // Map all API resources under a fixed internal prefix.
+        String relative = normalized.toString().replace('\\', '/');
+        if (!relative.startsWith("/")) {
+            relative = "/" + relative;
+        }
+        String dispatcherPath = relative;
+        return dispatcherPath;
+    }
+
+    /**
+     * 
+     * 
+     */
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -27,8 +70,13 @@ public class ApiServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path = request.getPathInfo();
-        RequestDispatcher rd = request.getRequestDispatcher(path);
+        String safePath = getSafePath(request.getPathInfo());
+        if (safePath == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        // String path = request.getPathInfo();
+        RequestDispatcher rd = request.getRequestDispatcher(safePath);
         rd.forward(request, response);
     }
 

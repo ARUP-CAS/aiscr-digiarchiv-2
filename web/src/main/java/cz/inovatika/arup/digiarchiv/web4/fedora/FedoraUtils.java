@@ -12,13 +12,8 @@ import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.logging.Level;
-import org.apache.solr.common.SolrInputDocument;
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,7 +41,7 @@ public class FedoraUtils {
     //HttpClient client = HttpClient. newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .GET()
-            .uri(new URI(API_POINT + url)) 
+            .uri(new URI(API_POINT + StringEscapeUtils.escapeHtml4(url))) 
             .header("Authorization", auth_header())
             .header("Accept", "application/ld+json")
             .build();
@@ -69,7 +64,7 @@ public class FedoraUtils {
   }
   public static String requestXml(String url) throws URISyntaxException, IOException, InterruptedException {
     // HttpClient client = HttpClient. newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
+    HttpRequest request = HttpRequest.newBuilder() 
             .GET()
             .uri(new URI(API_POINT + url))
             .header("Authorization", auth_header())

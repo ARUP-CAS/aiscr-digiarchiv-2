@@ -3,7 +3,7 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()">
       <mat-panel-title>
         <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-        <div class="app-fxFlex">
+        <span>
           {{ 'card.title.Archeologický dokumentační bod' | translate }}&#160;
           @if (!isChild()) {
             <span >{{ _result.ident_cely }}</span>
@@ -12,7 +12,7 @@
             <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
           }
           <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + _result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
-        </div>
+        </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
     @if (_result.adb_typ_sondy) {
@@ -105,26 +105,26 @@
       </mat-expansion-panel>
     </mat-accordion>
   }
-</mat-expansion-panel>
-@if (_result.akce || _result.lokalita) {
-  <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
-    <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
-      <mat-panel-title>
-        {{ 'card.panelTitle.Související záznamy' | translate }}:
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    @for (akce of _result.akce; track akce.ident_cely){
-      <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-    }
-    @for (lok of _result.lokalita; track lok.ident_cely) {
-      <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
-    }
   </mat-expansion-panel>
-}
+  @if (_result.akce || _result.lokalita) {
+    <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
+      <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+        <mat-panel-title>
+          {{ 'card.panelTitle.Související záznamy' | translate }}:
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      @for (akce of _result.akce; track akce.ident_cely){
+        <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+      }
+      @for (lok of _result.lokalita; track lok.ident_cely) {
+        <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+      }
+    </mat-expansion-panel>
+  }
 }
 
 @if (inDocument()) {
-  <mat-card class="app-result-item app-row-gap-16" [class.app-card-child]="isChild()" >
+  <mat-card class="app-card-result" [class.app-card-child]="isChild()" >
     <mat-card-header>
       <mat-card-title class="app-fxLayout app-row app-gap-4">
         <div class="app-fxFlex">
@@ -133,10 +133,15 @@
           <!-- <a [routerLink]="'/id/' + result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ result.ident_cely }} <mat-icon>link</mat-icon></a> -->
           <a [href]="'http://www.praha-archeologicka.cz/map/?cmd=el-zoom&el-type=adb&el-id=' + _result.ident_cely" target="_blank" class="app-icon-ap" [matTooltip]="'card.tooltip.Externí odkaz na Prahu archeologickou u ADB' | translate"><img src="assets/img/icon-pa.png" alt="" /></a>
         </div>
+        
+        @if (_result.datestamp && state.isMapaCollapsed && !isChild() || mapDetail()) {
+          <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
+            'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+          }
       </mat-card-title>
     </mat-card-header>
     @if (_detailExpanded) {
-      <mat-card-content [class.app-detail-closed]="!_detailExpanded">
+      <mat-card-content [class.app-detail-closed]="!_detailExpanded" class="app-persistent-link-wrapper">
         @if (_result.adb_typ_sondy) {
           <div>
             <label class="app-label">{{ 'card.desc.Typ sondy' | translate }}:</label>&#160;
@@ -199,7 +204,7 @@
             <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ _result.adb_chranene_udaje.poznamka }}
           </div>
         }
-        @if (_result.adb_chranene_udaje?.vyskovy_bod && _result.adb_chranene_udaje?.vyskovy_bod.length > 0) {
+        @if (_result.adb_chranene_udaje?.vyskovy_bod && _result.adb_chranene_udaje?.vyskovy_bod.length > 0) { 
           <mat-accordion multi="true">
             <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
@@ -217,52 +222,53 @@
                       <div><label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ vb.geom_gml }}</div>
                     }
                     @if (vb.geom_wkt) {
-                      <div><label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
-                      EPSG:{{ vb.geom_wkt.epsg }}, {{ vb.geom_wkt.value }}
-                    </div>
-                  }
-                </li>
-              }
-            </ul>
+                      <div>
+                        <label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
+                        EPSG:{{ vb.geom_wkt.epsg }}, {{ vb.geom_wkt.value }}
+                      </div>
+                    }
+                  </li>
+                }
+              </ul>
+            </mat-expansion-panel>
+          </mat-accordion>          
+        }
+      </mat-card-content>
+    }
+    @if (!isChild()) {
+      <mat-card-actions class="app-fxLayout app-row app-end-v">
+        <div class="app-fxFlex app-metadata">
+          @if (_result.akce?.length > 0) {
+            {{ 'card.desc.Počet akcí' | translate }}: <strong>{{_result.akce?.length}}</strong>
+            <span class="app-pipe"></span>
+          }
+          @if (_result.lokalita?.length > 0) {
+            {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{_result.lokalita.length}}</strong>
+            <span class="app-pipe"></span>
+          }
+        </div>
+        <app-result-actions [inDocument]="inDocument()" [result]="_result" [detailExpanded]="_detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
+        [bibTex]="bibTex" ></app-result-actions>
+      </mat-card-actions>
+    }
+    @if (_detailExpanded) {
+      <mat-card-content [class.app-detail-closed]="!_detailExpanded" class="app-persistent-link-wrapper">
+        @if (_result.akce || _result.lokalita) {
+          <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+              <mat-panel-title>
+                {{ 'card.panelTitle.Související záznamy' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @for (akce of _result.akce; track akce.ident_cely) {
+              <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
+            }
+            @for (lok of _result.lokalita; track lok.ident_cely) {
+              <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
+            }
           </mat-expansion-panel>
-        </mat-accordion>
-      }
-    </mat-card-content>
-  }
-  @if (!isChild()) {
-    <mat-card-actions class="app-fxLayout app-row app-end-v">
-      <div class="app-fxFlex app-metadata">
-        @if (_result.akce?.length > 0) {
-          {{ 'card.desc.Počet akcí' | translate }}: <strong>{{_result.akce?.length}}</strong>
-          <span class="app-pipe"></span>
         }
-        @if (_result.lokalita?.length > 0) {
-          {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{_result.lokalita.length}}</strong>
-          <span class="app-pipe"></span>
-        }
-      </div>
-      <app-result-actions [inDocument]="inDocument()" [result]="_result" [detailExpanded]="_detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
-      [bibTex]="bibTex" ></app-result-actions>
-    </mat-card-actions>
-  }
-  @if (_detailExpanded) {
-    <mat-card-content [class.app-detail-closed]="!_detailExpanded">
-      @if (_result.akce || _result.lokalita) {
-        <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
-          <mat-expansion-panel-header expandedHeight="36px" collapsedHeight="36px">
-            <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}:
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          @for (akce of _result.akce; track akce.ident_cely) {
-            <app-akce [result]="akce" [isChild]="true" class="app-related-item"></app-akce>
-          }
-          @for (lok of _result.lokalita; track lok.ident_cely) {
-            <app-lokalita [result]="lok" [isChild]="true" class="app-related-item"></app-lokalita>
-          }
-        </mat-expansion-panel>
-      }
-    </mat-card-content>
-  }
-</mat-card>
+      </mat-card-content>
+    }
+  </mat-card>
 }

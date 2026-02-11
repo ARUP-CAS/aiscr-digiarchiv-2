@@ -18,7 +18,7 @@
           <span class="app-ident-format">{{ _result.ident_cely }}</span>
         }
         <span class="app-pipe"></span>
-        <app-inline-filter [isChild]="isChild()" [field]="'f_nalezce'" [value]="_result.samostatny_nalez_nalezce"></app-inline-filter><span class="app-pipe"></span>{{ _result.samostatny_nalez_datum_nalezu | date : 'yyyy-MM-dd' }}<span class="app-pipe"></span>
+        <app-inline-filter [isChild]="isChild()" [field]="'f_nalezce'" [value]="_result.samostatny_nalez_nalezce"></app-inline-filter><span class="app-pipe"></span><span class="app-element-wrapper">{{ _result.samostatny_nalez_datum_nalezu | date : 'yyyy-MM-dd' }}</span><span class="app-pipe"></span>
           @if (!state.isMapaCollapsed) {
             <app-inline-filter [isChild]="isChild()" [field]="'f_obdobi'" [value]="_result.samostatny_nalez_obdobi" [heslar]="'f_obdobi'"></app-inline-filter><span class="app-pipe"></span>
             <app-inline-filter [isChild]="isChild()" [field]="'f_druh_nalezu'" [value]="_result.samostatny_nalez_druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter><span class="app-pipe"></span>
