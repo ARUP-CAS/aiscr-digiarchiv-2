@@ -466,7 +466,7 @@ public class Indexer {
                             totalDocs, pdfGen.generated, imgGenerated);
                     LOGGER.log(Level.INFO, "processing file {0}. {1}", new Object[]{id, msg});
                     // pdfGen.processFile(f, force, onlyThumbs);
-                    pdfGen.processBytes(is, id, force, onlyThumbs);
+                    pdfGen.processBytes(is, id, true, onlyThumbs);
                     ImageSupport.writeSha(id, sha);
                 }
             }

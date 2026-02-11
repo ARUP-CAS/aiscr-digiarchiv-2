@@ -1,61 +1,55 @@
-<div class="app-display-table app-loading" *ngIf="state.loading">
+@if (state.loading()) {
+<div class="app-display-table app-loading">
   <div class="app-table-cell app-clean-pd">
     <mat-progress-bar mode="determinate" [value]="state.documentProgress"></mat-progress-bar>
   </div>
 </div>
-<div class="app-display-table app-loading" *ngIf="!state.loading && state.printing">
-  <div class="app-table-cell app-clean-pd">
-    <mat-progress-bar mode="determinate" [value]="(this.state.imagesLoaded * 100.0 / this.state.numImages)"></mat-progress-bar>
-  </div>
-</div>
-<div *ngIf="state.loading" class="app-loading-progress">{{ 'loading' | translate }} {{ state.documentProgress | number : '1.0-0' }}% ... </div>
-<!-- <div *ngIf="!state.loading && state.printing" class="app-loading-progress">{{ 'printing' | translate }}</div> -->
-<div *ngIf="!state.loading && state.imagesLoading && state.printing" class="app-loading-progress">{{ 'loading images' | translate }}: {{ (this.state.imagesLoaded * 100.0 / this.state.numImages) | number : '1.0-0' }}% ...</div>
+}
 
-<div class="app-display-table app-container" *ngIf="!loading">
-  <ng-container *ngIf="state.isMapaCollapsed"> 
-    <div class="app-table-cell">
-      <mat-card class="app-card-info app-row-gap-16">
-        <mat-card-content>
-          <ng-container *ngIf="!isResultEmpty(result)">
-            <strong>{{ 'card.desc.Persistentní odkaz' | translate }}: </strong> {{link}}
-            <app-citation [result]="result" [link]="link"></app-citation>
-          </ng-container>
-          <ng-container *ngIf="isResultEmpty(result)">
-            {{ 'card.note.idnotfound' | translate }}
-          </ng-container>
-        </mat-card-content>
-      </mat-card>
-      <ng-container *ngIf="!isResultEmpty(result)">
-        <app-dokument *ngIf="result.entity === 'dokument'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument>
-        <app-dokument *ngIf="result.entity === 'knihovna_3d'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument>
-        <!-- <app-knihovna3d *ngIf="result.entity === 'knihovna_3d'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-knihovna3d> -->
-        <app-akce *ngIf="result.entity === 'akce'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-akce>
-        <app-lokalita *ngIf="result.entity === 'lokalita'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-lokalita>
-        <app-projekt *ngIf="result.entity === 'projekt'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-projekt>
-        <app-samostatny-nalez *ngIf="result.entity === 'samostatny_nalez'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-samostatny-nalez>
-        <app-jednotka-dokumentu *ngIf="result.entity === 'jednotka_dokumentu'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-jednotka-dokumentu>
-        <app-dokument-cast *ngIf="result.entity === 'dokument_cast'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dokument-cast>
-        <app-let *ngIf="result.entity === 'let'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-let>
-        <app-pian *ngIf="result.entity === 'pian'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-pian>
-        <app-externi-zdroj *ngIf="result.entity === 'ext_zdroj'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-externi-zdroj>
-        <!-- <mat-card *ngIf="result.entity === 'adb' || result.entity === 'dokumentacni_jednotka' || result.entity === 'komponenta' || result.entity === 'komponenta_dokument' || result.entity === 'vyskovy_bod'">
-          <mat-card-content> -->
-            <app-adb *ngIf="result.entity === 'adb'" [result]="result" [detailExpanded]="true" [inDocument]="true" [isChild]="false"></app-adb>
-            <app-vyskovy-bod *ngIf="result.entity === 'vyskovy_bod'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-vyskovy-bod>
-            <app-dok-jednotka *ngIf="result.entity === 'dokumentacni_jednotka'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-dok-jednotka>
-            <app-komponenta *ngIf="result.entity === 'komponenta'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta>
-            <app-komponenta-dokument *ngIf="result.entity === 'komponenta_dokument'" [result]="result" [detailExpanded]="true" [inDocument]="true"></app-komponenta-dokument>
-          <!-- </mat-card-content>
-        </mat-card> -->
-      </ng-container>
-    </div>
-  </ng-container>
-  <div class="app-table-cell" *ngIf="!state.isMapaCollapsed">
-    <mat-sidenav-container class="app-sidenav-container">
-      <mat-sidenav-content>
-        <app-mapa [isResults]="false"></app-mapa>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+@if (!state.loading() && state.printing()) {
+<div class="app-display-table app-loading">
+  <div class="app-table-cell app-clean-pd">
+    <mat-progress-bar mode="determinate"
+      [value]="(this.state.imagesLoaded * 100.0 / this.state.numImages)"></mat-progress-bar>
   </div>
 </div>
+}
+
+@if (state.loading()) {
+<div class="app-loading-progress">{{ 'loading' | translate }} {{ state.documentProgress | number : '1.0-0' }}% ...
+</div>
+}
+
+@if (!state.loading() && state.imagesLoading && state.printing()) {
+<div class="app-loading-progress">{{ 'loading images' | translate }}: {{ (this.state.imagesLoaded * 100.0 /
+  this.state.numImages) | number : '1.0-0' }}% ...</div>
+}
+
+@if (!loading()) {
+<div class="app-display-table app-container">
+  @if (state.isMapaCollapsed) {
+  <div class="app-table-cell">
+    <mat-card class="app-card-info app-row-gap-16">
+      <mat-card-content>
+        @if (!isResultEmpty(result())) {
+        <strong>{{ 'card.desc.Persistentní odkaz' | translate }}: </strong> {{link}}
+        <app-citation [result]="result()" [link]="link"></app-citation>
+        }
+        @if (isResultEmpty(result())) {
+        {{ 'card.note.idnotfound' | translate }}
+        }
+      </mat-card-content>
+    </mat-card>
+    @if (!isResultEmpty(result())) {
+    <app-entity-container [result]="result()" [detailExpanded]="true" [inDocument]="true"
+      [isChild]="false"></app-entity-container>
+    }
+  </div>
+  } 
+@if (isBrowser && !state.isMapaCollapsed) {
+@defer {
+<app-map-view></app-map-view>
+}
+}
+</div>
+}

@@ -1,13 +1,31 @@
+
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppService } from 'src/app/app.service';
-import { AppState } from 'src/app/app.state';
-import { environment } from 'src/environments/environment.prod';
+import { FormsModule, NgForm } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { RecaptchaModule } from "ng-recaptcha-2";
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
+  imports: [
+    TranslateModule,
+    MatDialogModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    RecaptchaModule
+],
   selector: 'app-feedback-dialog',
   templateUrl: './feedback-dialog.component.html',
   styleUrls: ['./feedback-dialog.component.scss']
