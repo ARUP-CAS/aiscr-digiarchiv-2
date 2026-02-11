@@ -141,11 +141,10 @@
       <xs:element name="spoluprace_nadrizeni" minOccurs="0" maxOccurs="unbounded" type="amcr:spoluprace_nadrizeniType"/>  
       <xs:element name="spoluprace_podrizeni" minOccurs="0" maxOccurs="unbounded" type="amcr:spoluprace_podrizeniType"/> 
 	  -->
-	  
+
+  <field name="text_all" type="text_general" indexed="true" stored="false" multiValued="true" /> 
    
-   <field name="text_all" type="text_general" indexed="true" stored="false" multiValued="true" /> 
-   
-   <dynamicField name="*" type="string" multiValued="false"/>
+  <dynamicField name="*" type="string" multiValued="false"/>
    
 
  <!-- Field to use to determine and enforce document uniqueness. 

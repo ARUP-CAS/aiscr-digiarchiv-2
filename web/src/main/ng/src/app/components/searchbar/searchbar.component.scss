@@ -1,0 +1,42 @@
+// --- SEARCHBAR ---
+
+.app-left {
+  .app-btn-map {
+    border-right: 1px solid var(--app-color-gray-4);
+  }
+
+  // mq
+  @media only screen and (min-width: 960px) {
+    max-width: var(--app-searchbar-field-max-width);
+  }
+}
+
+.app-right {
+  text-align: right;
+
+  // mq
+  @media only screen and (min-width: 960px) {
+    flex: 1 1 0%;
+  }
+
+  @media only screen and (max-width: 959px) {
+    .mdc-button {
+      .mat-icon {
+        margin: 0 !important;
+      }
+    }
+  }
+  
+  .mdc-button {
+    &.app-active {
+      background-color: var( --app-color-warn);
+    }
+
+    // mq
+    @media only screen and (min-width: 1280px) {
+      &:nth-child(2) {
+       // margin-right: calc(16px * 2);
+      }
+    }
+  }
+}

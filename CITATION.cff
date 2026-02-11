@@ -13,6 +13,7 @@ authors:
   affiliation: "Inovatika s.r.o"
 - family-names: "Švejcar"
   given-names: "Ondřej"
+  orcid: "https://orcid.org/0009-0006-3764-9454"
   affiliation: "Czech Academy of Sciences, Institute of Archaeology, Prague"
 - family-names: "Pavloň"
   given-names: "Tomáš"
@@ -20,6 +21,7 @@ authors:
   affiliation: "Czech Academy of Sciences, Institute of Archaeology, Brno"
 - family-names: "Křivánková"
   given-names: "Dana"
+  orcid: "https://orcid.org/0000-0001-5718-9447"
   affiliation: "Czech Academy of Sciences, Institute of Archaeology, Prague"
 - family-names: "Pajdla"
   given-names: "Petr"
@@ -27,9 +29,9 @@ authors:
   affiliation: "Czech Academy of Sciences, Institute of Archaeology, Brno"
 title: "Digitální archiv AMČR"
 abstract: "The Digital Archive of the Archaeological Map of the Czech Republic (AMCR) is a web application for viewing information on archaeological investigations, sites and finds, operated by the Archaeological Institutes of the CAS in Prague and Brno."
-version: v3.0.2
+version: v4.0.1
 doi: 10.5281/zenodo.8329064
-date-released: 2024-11-07
+date-released: 2026-02-03
 url: "https://github.com/ARUP-CAS/aiscr-digiarchiv-2"
 repository-code: "https://github.com/ARUP-CAS/aiscr-digiarchiv-2"
 license: GPL-3.0-or-later

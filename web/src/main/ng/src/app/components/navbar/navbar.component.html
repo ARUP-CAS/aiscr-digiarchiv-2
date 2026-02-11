@@ -1,18 +1,18 @@
-<mat-toolbar class="app-navbar">
+<mat-toolbar>
   <div class="app-container">
-    <div fxLayout="row" fxFlexFill>
-      <div fxFlex class="app-fx-left">
+    <div class="app-fxLayout app-row app-fill">
+      <div class="app-fxFlex app-fxLayout app-row app-center-v app-left">
         <a class="app-logo" (click)="logoClicked()" routerLink="home" [title]="'navbar.desc.logo_desc' | translate">
           <img [src]="'assets/img/logo-da-amcr-' + state.currentLang + '.png'" [alt]="'navbar.desc.logo_desc' | translate" />
         </a>
       </div>
-      <div fxFlex class="app-fx-right">
-        <div fxLayout="row" fxLayoutAlign="end" fxFlexFill class="fxHide_gt-sm"><!--fxHide.gt-sm-->
+      <div class="app-right">
+        <div class="app-fxLayout app-row app-fill app-end-h fxHide_gt-sm"><!--fxHide.gt-sm-->
           <a (click)="onToggleSidenav()" class="app-sidenav-link">
             <mat-icon>menu</mat-icon>
-          </a>  
+          </a>
         </div>
-        <div fxLayout="row" fxLayoutAlign="end" fxFlexFill class="fxHide_sm fxHide_xs"><!--fxHide.sm fxHide.xs-->
+        <div class="app-fxLayout app-row app-fill app-end-h fxHide_sm fxHide_xs"><!--fxHide.sm fxHide.xs-->
           <a routerLink="home" routerLinkActive="app-active">
             <mat-icon>home</mat-icon>
             Home
@@ -23,27 +23,49 @@
             {{ 'navbar.desc.Nápověda' | translate }}
           </a>
           <span class="app-pipe"></span>
-          <a *ngIf="!state.logged" (click)="showLogin()">
-            <mat-icon>login</mat-icon>
-            {{ 'navbar.desc.Přihlásit uživatele' | translate }}
+          @if (!state.logged) {
+            <a (click)="showLogin()">
+              <mat-icon>login</mat-icon>
+              {{ 'navbar.desc.Přihlásit uživatele' | translate }}
+            </a>
+          }
+          @if (!state.logged) {
+            <span class="app-pipe"></span>
+          }
+          @if (!state.logged) {
+            <a [href]="config.registrationUrl" target="_blank">
+              <mat-icon>how_to_reg</mat-icon>
+              {{ 'navbar.desc.Registrovat uživatele' | translate }}
+            </a>
+          }
+          @if (state.logged) {
+            <a (click)="showLogin()">
+              <mat-icon>logout</mat-icon>
+              {{state.user.jmeno}} {{state.user.prijmeni}}
+              ({{state.user.skupina[0].value | translate}})
+            </a>
+          }
+          @if (state.logged) {
+            <span class="app-pipe"></span>
+          }
+          @if (state.logged) {
+            <a [href]="config.accountUrl" target="_blank">
+              <mat-icon>settings</mat-icon>
+              {{ 'navbar.desc.account' | translate }}
+            </a>
+          }
+          <span class="app-pipe"></span>
+          <a routerLink="stats">
+            <mat-icon>query_stats</mat-icon>
+            {{ 'navbar.desc.stats' | translate }}
           </a>
           <span class="app-pipe"></span>
-          <a *ngIf="!state.logged" [href]="config.registrationUrl" target="_blank">
-            <mat-icon>how_to_reg</mat-icon>
-            {{ 'navbar.desc.Registrovat uživatele' | translate }}
-          </a>
-          <a *ngIf="state.logged" (click)="showLogin()">
-            <mat-icon>logout</mat-icon>
-            {{state.user.jmeno}} {{state.user.prijmeni}}
-            ({{state.user.skupina[0].value | translate}})
-          </a>
-          <a *ngIf="state.logged" [href]="config.accountUrl" target="_blank">
-            <mat-icon>settings</mat-icon>
-            {{ 'navbar.desc.account' | translate }}
-          </a>
-          <span class="app-pipe"></span>
-          <a *ngIf="state.currentLang !== 'en'" (click)="changeLang('en')">English</a>
-          <a *ngIf="state.currentLang !== 'cs'" (click)="changeLang('cs')">Čeština</a>
+          @if (state.currentLang !== 'en') {
+            <a (click)="changeLang('en')">English</a>
+          }
+          @if (state.currentLang !== 'cs') {
+            <a (click)="changeLang('cs')">Čeština</a>
+          }
         </div>
       </div>
     </div>

@@ -1,0 +1,184 @@
+@if (loading()) {
+  <div class="app-loading" style="position: absolute; z-index:10000; width: 100%;">
+    <div class="app-table-cell app-clean-pd">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  </div>
+}
+
+<div class="app-fxLayout app-row app-center-v app-pl-4 app-pr-4 app-searchbar-wrapper">
+  <div class="app-container">
+    <div class="app-search-form app-fxLayout app-row app-gap-2 app-center-v">
+      <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="'facet.input.Datum od' | translate" (click)="datum_od.open()">
+        <mat-datepicker-toggle matIconSuffix  [for]="datum_od"></mat-datepicker-toggle>
+        @if (!datumod) {
+          <button matIconSuffix mat-icon-button class="app-btn-warn"><mat-icon (click)="datumod = null">close</mat-icon></button>
+        }
+        <mat-datepicker #datum_od startView="multi-year"></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'facet.input.Datum do' | translate" (click)="datum_do.open()">
+        <mat-datepicker-toggle matIconSuffix [for]="datum_do"></mat-datepicker-toggle>
+        @if (datumdo) {
+          <button matIconSuffix mat-icon-button class="app-btn-warn"><mat-icon (click)="datumdo = null">close</mat-icon></button>
+        }
+        <mat-datepicker #datum_do startView="multi-year"></mat-datepicker>
+      </mat-form-field>
+      <button matButton="filled" (click)="addDateFilter()">
+        <mat-icon>filter_alt</mat-icon>
+        <span class="app-text">{{ 'facet.button.Aplikovat filtr' | translate }}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="app-pt-4 app-pl-4 app-pb-0 app-pr-4">
+  <div class="app-container">
+    <mat-card class="app-mb-4">
+      <mat-card-content class="app-graph-wrapper app-fxLayout app-row app-fill app-gap-4">
+        <div class="app-left">
+          <h3 class="app-mb-1">{{ 'stats.interval' | translate }}</h3>
+          <mat-list role="list">
+            <mat-list-item [class.app-active]="interval === 'DAY'" (click)="setInterval('DAY')" class="app-cursor-pointer">{{ 'stats.interval_day' | translate }}</mat-list-item>
+            <mat-list-item [class.app-active]="interval === 'WEEK'" (click)="setInterval('WEEK')" class="app-cursor-pointer">{{ 'stats.interval_week' | translate }}</mat-list-item>
+            <mat-list-item [class.app-active]="interval === 'MONTH'" (click)="setInterval('MONTH')" class="app-cursor-pointer">{{ 'stats.interval_month' | translate }}</mat-list-item>
+          </mat-list>
+        </div>
+        <div class="app-right app-fxFlex">
+          @if (!loading() && series.length > 0) {
+            <div class="app-graph" echarts [options]="chartOptions"></div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="app-cards-wrapper app-fxLayout app-row">
+      <mat-card class="app-fxFlex app-event">
+        <mat-card-header>
+          <mat-card-title>{{ 'stats.type' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'stats.type' | translate }}</mat-label>
+            <mat-select [(ngModel)]="type" (selectionChange)="filter('type', type)">
+              @for (typ of typesAll; track typ) {
+                <mat-option [value]="typ">{{ 'stats.typ.' + typ | translate }}</mat-option>
+              }
+            </mat-select>
+            @if (type) {
+              <button (click)="removeFilter('type', $event)" matSuffix mat-icon-button class="app-color-warning">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+          @for (f of types; track f) {
+            <div class="app-item">
+              <a (click)="filter('type', f.name)">{{ 'stats.typ.' + f.name | translate }}</a><span class="app-count">({{ f.value }})</span>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="app-fxFlex app-record-type">
+        <mat-card-header>
+          <mat-card-title>{{ 'stats.entity' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'stats.entity' | translate }}</mat-label>
+            <mat-select [(ngModel)]="entity" (selectionChange)="filter('entity', entity)">
+              @for (e of entities; track $index) {
+                <mat-option [value]="e.name">{{ 'entities.' + e.name + '.title' | translate }}</mat-option>
+              }
+            </mat-select>
+            @if (entity) {
+              <button (click)="removeFilter('entity', $event)" matSuffix mat-icon-button class="app-color-warning">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+          @for (f of entities; track $index) {
+            <div class="app-item">
+              <a (click)="filter('entity', f.name)">{{ 'entities.' + f.name + '.title' | translate }}</a><span class="app-count">({{ f.value }})</span>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="app-fxFlex app-fxLayout app-column app-ident">
+        <mat-card-header>
+          <mat-card-title>{{ 'stats.ident_cely' | translate }} @if (ids) {
+            <span >({{ 'stats.id_count' | translate : {count: ids.length, total: totalIds} }})</span>
+          }</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="app-fxFlex app-fxLayout app-column">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'stats.ident_cely' | translate }}</mat-label>
+            <input matInput type="text" [placeholder]="'stats.ident_cely' | translate" name="ident_cely" id="ident_cely" (keyup.enter)="setIdentCely()" [(ngModel)]="ident_cely" />
+            @if (ident_cely) {
+              <button mat-icon-button matSuffix (click)="ident_cely = null; removeFilter('ident_cely', $event)" class="app-color-warning">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+          <div class="app-fxFlex app-oa-y">
+            @for (f of ids; track $index) {
+              <div class="app-item">
+                <a (click)="filter('ident_cely', f.name)">{{ formatId(f.name) }}</a><span class="app-count">({{ f.value }})</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      @if (state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')) {
+        <mat-card class="app-fxFlex app-ip">
+          <mat-card-header>
+            <mat-card-title>IP</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="outline">
+              <mat-label>IP</mat-label>
+              <input matInput type="text" [placeholder]="'IP' | translate" name="ip" id="ident_cely" (keyup.enter)="filter('ip', ip)" [(ngModel)]="ip" />
+              @if (ip) {
+                <button mat-icon-button matSuffix (click)="ip = null; removeFilter('ip', $event)" class="app-color-warning">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+            </mat-form-field>
+            @for (f of ips; track $index) {
+              <div class="app-item">
+                <a (click)="filter('ip', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
+              </div>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+
+      @if (state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')) {
+        <mat-card class="app-fxFlex app-user">
+          <mat-card-header>
+            <mat-card-title>{{ 'stats.user' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'stats.user' | translate }}</mat-label>
+              <input matInput type="text" [placeholder]="'stats.user' | translate" name="user" id="user" (keyup.enter)="filter('user', user)" [(ngModel)]="user" />
+              @if (user) {
+                <button mat-icon-button matSuffix (click)="user = null; removeFilter('user', $event)" class="app-color-warning">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+            </mat-form-field>
+            @for (f of users; track $index) {
+              <div class="app-item">
+                <a (click)="filter('user', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
+              </div>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </div>
+</div>

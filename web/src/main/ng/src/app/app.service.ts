@@ -1,19 +1,20 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { map, catchError, finalize } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppState } from 'src/app/app.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Observable, of } from 'rxjs';
-import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
-import { Crumb } from 'src/app/shared/crumb';
-import { ParamMap, Router } from '@angular/router';
-import { AppWindowRef } from './app.window-ref';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+
+import { AppWindowRef } from './app.window-ref';
+import { AppConfiguration } from './app-configuration';
+import { AppState } from './app.state';
+import { Crumb } from './shared/crumb';
+import { environment } from '../environments/environment';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
-declare var L;
+// import { latLng, latLngBounds} from "leaflet";
+declare var L: any;
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class AppService {
     private dialog: MatDialog,
     private windowRef: AppWindowRef,
     private decimalPipe: DecimalPipe,
+    private route: ActivatedRoute,
     private router: Router,
     private config: AppConfiguration,
     private state: AppState,
@@ -40,8 +42,8 @@ export class AppService {
     if (isPlatformBrowser(this.platformId)) {
       if (this.windowRef.nativeWindow.print) {
         this.windowRef.nativeWindow.print();
-        this.state.printing = false;
-        this.state.loading = false;
+        this.state.printing.set(false);
+        this.state.loading.set(false);
       }
     }
   }
@@ -53,7 +55,7 @@ export class AppService {
     //   panelClass: 'app-login-dialog'
     // });
 
-    const blob: Blob = new Blob([bibTex], {type: 'text/plain'});
+    const blob: Blob = new Blob([bibTex], { type: 'text/plain' });
     const fileName: string = id + '.bib';
     const objectUrl: string = URL.createObjectURL(blob);
     const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
@@ -61,7 +63,7 @@ export class AppService {
     a.href = objectUrl;
     a.download = fileName;
     document.body.appendChild(a);
-    a.click();        
+    a.click();
 
     document.body.removeChild(a);
     URL.revokeObjectURL(objectUrl);
@@ -86,6 +88,10 @@ export class AppService {
       params[field].push(value + ':' + operator);
     }
     params.page = 0;
+    
+    this.state.isFacetsCollapsed = true;
+    document.getElementById('content-scroller').scrollTo(0,0);
+    this.state.setFacetChanged();
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
@@ -102,7 +108,7 @@ export class AppService {
         return this.formatObdobi(value);
       }
       case 'dokument_kategorie_dokumentu': {
-        
+
         const hkey = 'dokument_kategorie_dokumentu.' + value;
         const t = this.translate.instant(hkey);
         if (t === hkey) {
@@ -130,7 +136,7 @@ export class AppService {
         }
       }
     }
-    
+
 
   }
 
@@ -151,7 +157,7 @@ export class AppService {
   }
 
   stopLoading() {
-    // this.state.loading = false;
+    // this.state.loading.set(false);;
     // this.state.facetsLoading = false;
   }
 
@@ -162,14 +168,14 @@ export class AppService {
       message: [message]
     };
     const dialogRef = this.dialog.open(AlertDialogComponent, {
-         data,
-         width: '400px',
-         panelClass: 'app-alert-dialog'
+      data,
+      width: '400px',
+      panelClass: 'app-alert-dialog'
     });
-    
+
     dialogRef.afterOpened().subscribe(_ => {
       setTimeout(() => {
-         dialogRef.close();
+        dialogRef.close();
       }, duration)
     })
   }
@@ -181,11 +187,11 @@ export class AppService {
       message: [message]
     };
     const dialogRef = this.dialog.open(AlertDialogComponent, {
-         data,
-         width: '400px',
-         panelClass: 'app-alert-dialog'
+      data,
+      width: '400px',
+      panelClass: 'app-alert-dialog'
     });
-    
+
   }
 
   private handleError(error: HttpErrorResponse, me: any) {
@@ -198,7 +204,7 @@ export class AppService {
       // Forbiden. Redirect to login
       console.log("Service Unavailable");
       this.showErrorDialog('error', "Service Unavailable");
-      
+
     } else if (error.status === 403) {
       // Forbiden. Redirect to login
       console.log("Forbiden");
@@ -210,12 +216,12 @@ export class AppService {
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
     this.state.hasError = true;
-    this.state.loading = false;
-    this.state.facetsLoading = false;
+    this.state.loading.set(false);
+    this.state.facetsLoading.set(false);
     return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }
 
-  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<Object> {
+  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType: any = null): Observable<Object> {
     // const r = re ? re : 'json';
     this.state.hasError = false;
     const options = { params, responseType, withCredentials: true };
@@ -224,18 +230,18 @@ export class AppService {
     } else {
       const server = isPlatformBrowser(this.platformId) ? '' : this.config.amcr;
       return this.http.get<T>(`${server}api${url}`, options)
-      .pipe(map((r: any) => {
-        if (r.response?.status === -1) {
-          r.response.errors = { path: [{ errorMessage: r.response.errorMessage }] };
-        }
-        return r;
+        .pipe(map((r: any) => {
+          if (r.response?.status === -1) {
+            r.response.errors = { path: [{ errorMessage: r.response.errorMessage }] };
+          }
+          return r;
 
-      }))
-      .pipe(finalize(() => this.stopLoading()))
-      .pipe(catchError(err => this.handleError(err, this)));
-    }
+        }))
+        .pipe(finalize(() => this.stopLoading()))
+        .pipe(catchError(err => this.handleError(err, this)));
 
   }
+}
 
   private post(url: string, obj: any) {
     return this.http.post<any>(`api${url}`, obj);
@@ -248,6 +254,24 @@ export class AppService {
   search(params: HttpParams): Observable<any> {
     this.state.hasError = false;
     return this.get(`/search/query`, params);
+  }
+
+  /**
+   * Fired for main search in results page
+   * @param params the params
+   */
+  searchExportMapa(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/export_mapa`, params);
+  }
+
+  /**
+   * Fired for stats search in stats page
+   * @param params the params
+   */
+  searchStats(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/stats`, params);
   }
 
   /**
@@ -265,27 +289,28 @@ export class AppService {
     return this.get(`/search/check_relations`, params);
   }
 
-  getId(id: string, shouldLog: boolean = true): Observable<any > {
+  getId(id: string, shouldLog: boolean = true): Observable<any> {
     const params: HttpParams = new HttpParams()
-    .set('id', id)
-    .set('shouldLog', shouldLog);
+      .set('id', id)
+      .set('shouldLog', shouldLog);
     return this.get(`/search/id`, params);
   }
 
-  logViewer(id: string): Observable<any > {
+  logViewer(id: string, entity: string): Observable<any> {
     const params: HttpParams = new HttpParams()
-    .set('id', id)
-    .set('type', 'viewer');
+      .set('id', id)
+      .set('type', 'viewer')
+      .set('entity', entity);
     return this.get(`/search/log`, params);
   }
 
   getIdAsChild(ids: string[], entity: string) {
     let params: HttpParams = new HttpParams()
-    .set('entity', entity);
+      .set('entity', entity);
     ids.forEach(id => {
       params = params.append('id', id);
     });
-    
+
     return this.get(`/search/id_as_child`, params);
   }
 
@@ -304,7 +329,7 @@ export class AppService {
     if (loc_rpt) {
       params = params.set('loc_rpt', loc_rpt);
     }
-    
+
     return this.get(`/search/geometrie`, params);
   }
 
@@ -333,7 +358,7 @@ export class AppService {
   getText(id: string): Observable<string> {
     const params: HttpParams = new HttpParams().set('id', id).set('lang', this.state.currentLang);
     return this.get(`/texts/get`, params, 'text')
-    .pipe(map((response: any) => response));
+      .pipe(map((response: any) => response));
   }
 
   getAkce(id: string) {
@@ -413,8 +438,13 @@ export class AppService {
       }));
   }
 
-  
 
+
+  verifyRecaptcha(reCaptchaMsg: string) {
+    const url = '/feedback';
+    return this.post(url, { reCaptchaMsg, key: environment.recaptcha.siteKey });
+  }
+  
   feedback(name: string, mail: string, text: string, ident_cely: string) {
     const url = '/feedback';
     return this.post(url, { name, mail, text, ident_cely });
@@ -432,7 +462,7 @@ export class AppService {
 
   getLogged(wantsUser: boolean) {
     const url = '/user/islogged';
-    return this.get(url, new HttpParams().set('wantsUser', wantsUser+''));
+    return this.get(url, new HttpParams().set('wantsUser', wantsUser + ''));
   }
 
   login(user: string, pwd: string) {
@@ -462,17 +492,18 @@ export class AppService {
     if (params.has('vyber')) {
 
       // if (this.state.locationFilterEnabled) {
-        this.state.locationFilterEnabled = true;
-        const value = params.get('vyber');
+      this.state.locationFilterEnabled = true;
+      const value = params.get('vyber');
 
 
-        this.state.breadcrumbs.push(new Crumb('vyber', value, this.formatLocation(value)));
-        this.state.breadcrumbs.push(new Crumb('separator', '', ''));
+      this.state.breadcrumbs.push(new Crumb('vyber', value, this.formatLocation(value)));
+      this.state.breadcrumbs.push(new Crumb('separator', '', ''));
 
-        const loc_rpt = value.split(',');
-        const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
-        const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
-        this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
+      const loc_rpt: any = value.split(',');
+      
+      const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
+      const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
+      this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
 
       // }
     } else {
@@ -483,11 +514,11 @@ export class AppService {
     // this.config.urlFields.forEach(field => {
     //   if (params.has(field)) {
     params.keys.forEach(field => {
-      if (field.startsWith('f_') || 
-      this.config.urlFields.includes(field) ||
-      // this.config.dateFacets.includes(field) ||
-      // this.config.numberFacets.includes(field) ||
-      this.config.filterFields.find(ff => ff.field === field)) {
+      if (field.startsWith('f_') ||
+        this.config.urlFields.includes(field) ||
+        // this.config.dateFacets.includes(field) ||
+        // this.config.numberFacets.includes(field) ||
+        this.config.filterFields.find(ff => ff.field === field)) {
         let display = '';
         switch (field) {
           case 'obdobi_poradi': {
@@ -529,7 +560,7 @@ export class AppService {
             values.forEach(value => {
               const parts = value.split(':');
               const op = parts[parts.length - 1];
-              const val = value.substring(0,value.lastIndexOf(':'));
+              const val = value.substring(0, value.lastIndexOf(':'));
               if (filterField && filterField.type === 'number') {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
@@ -543,10 +574,16 @@ export class AppService {
             this.state.breadcrumbs.push(new Crumb('separator', '', ''));
           }
         }
-        
+
       }
     });
     this.state.breadcrumbs.pop();
+
+    this.config.commonFacets.forEach(cf => {
+      if (params.has(cf.name)) {
+        this.state.breadcrumbs.push(new Crumb('cf', cf.name, cf.name));
+      }
+    })
   }
 
   // shouldTranslate(field: string) {
@@ -579,9 +616,9 @@ export class AppService {
     const idx2 = val.split(',')[1];
     // const v1 = this.config.obdobi[idx1].poradi;
     // const v2 = this.config.obdobi[idx2].poradi;
-    const ob1 = this.config.obdobi.find(o => (o.poradi + '') === (idx1 + ''));
+    const ob1 = this.config.obdobi.find((o: { poradi: string; }) => (o.poradi + '') === (idx1 + ''));
     const d1 = this.getTranslation(ob1.nazev);
-    const ob2 = this.config.obdobi.find(o => (o.poradi + '') === (idx2 + ''));
+    const ob2 = this.config.obdobi.find((o: { poradi: string; }) => (o.poradi + '') === (idx2 + ''));
     const d2 = this.getTranslation(ob2.nazev);
     return this.getTranslation('from') + ' ' + d1 + ' ' + this.getTranslation('to') + ' ' + d2;
   }
@@ -605,7 +642,7 @@ export class AppService {
     this.state.facetsFiltered = [];
     this.state.facets.forEach(f => {
       const values = f.values.filter(v => {
-        const translated = this.getHeslarTranslation(v.name, f.field);
+        const translated = this.getTranslation(v.name);
         return pattern.test(translated);
       });
       if (values.length > 0) {
@@ -616,33 +653,74 @@ export class AppService {
     this.state.setFacetChanged();
   }
 
-  showInMap(result: any, isPian = false) {
+  getBoundsByResults() {
+    const lat = this.state.stats['lat'];
+    const lng = this.state.stats['lng'];
+    if (lat.max === lat.min) {
+      lat.min = lat.min - 0.05;
+      lat.max = lat.max + 0.05;
+      lng.min = lng.min - 0.05;
+      lng.max = lng.max + 0.05;
+    }
+    return lat.min + ',' + lng.min +
+      ',' + lat.max + ',' + lng.max;
+
+  }
+
+  
+  setMapResult(result: any, mapDetail: any) {
+    if (!result && mapDetail) {
+      // zavirame kartu
+      const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
+      this.state.closingMapResult = inResults;
+      this.state.setMapResult(result, mapDetail);
+      if (!this.state.documentId()) {
+        let url = '/map';
+        const p: any = {};
+        p.mapId = null;
+        p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
+        ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
+        this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
+      } else {
+        
+      }
+    } else {
+      this.state.setMapResult(result, mapDetail);
+    }
+  }
+
+  showInMap(result: any, isMapDetail = true, force = false, isChild = false) {
+    if ((!force && this.state.isMapaCollapsed) || isMapDetail || isChild) {
+      return;
+    }
     // const top = window.document.getElementsByTagName('header')[0].clientHeight;
-    this.windowRef.nativeWindow.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0,0);
+    this.state.switchingMap = true;
+    this.windowRef.nativeWindow.document.getElementsByTagName('mat-sidenav-content')[0].scroll(0, 0);
 
     this.state.isMapaCollapsed = false;
     const p: any = {};
-    p.mapa = true;
-    let url = '/results';
-    if (isPian) {
-      p.pian_id = result.ident_cely;
-      p.entity = result.akce ? 'akce' : (result.lokalita ? 'lokalita' : 'akce');
-      this.state.setMapResult(null, false);
-    } else if (this.router.isActive('/id', false)) {
+    let url = '/map';
+
+    // this.state.documentId ? '/id' : '/results';
+
+    if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
-      url = '/id/' + this.state.documentId;
+      url = '/map/' + this.state.documentId();
       p.loc_rpt = null;
       p.vyber = null;
     } else {
-      this.state.mapResult = result;
-      const loc_rpt = result.loc_rpt[0].split(',');
-      const lat =  parseFloat(loc_rpt[0]);
-      const lng =  parseFloat(loc_rpt[1]);
-      p.loc_rpt = '' + (lat - 0.003) + ',' + (lng - 0.003) +
-        ',' + (lat + 0.003) + ',' + (lng + 0.003);
+      this.state.mapResult.set(result);
+      p.loc_rpt = null;
+
+      p.mapa = true;
+      p.mapId = result.ident_cely;
+      // const bounds = this.getBoundsByDoc(result);
+      //p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
+      //',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;
+      //p.loc_rpt = this.getBoundsByResults();
       this.state.setMapResult(result, false);
     }
-    
+
     this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
 
     setTimeout(() => {

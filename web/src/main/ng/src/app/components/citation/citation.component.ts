@@ -1,19 +1,29 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit, input } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
 
 @Component({
+  imports: [
+    TranslateModule, FlexLayoutModule, DatePipe
+  ],
   selector: 'app-citation',
   templateUrl: './citation.component.html',
   styleUrls: ['./citation.component.scss']
 })
 export class CitationComponent implements OnInit {
 
-  @Input() result;
-  @Input() link;
+  readonly result = input<any>();
+  readonly link = input<string>();
   now = new Date();
 
   constructor() { }
 
   ngOnInit(): void {
+    const result = this.result();
+    if (result?.autor) {
+      result.autorFormatted = result.autor.join(' – ');
+    }
   }
 
 }

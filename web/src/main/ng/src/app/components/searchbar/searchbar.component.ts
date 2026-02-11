@@ -1,14 +1,39 @@
-import { AppConfiguration } from 'src/app/app-configuration';
-import { Condition } from 'src/app/shared/condition';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AppState } from 'src/app/app.state';
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, signal, effect } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
-import { AppService } from 'src/app/app.service';
-import { AppWindowRef } from 'src/app/app.window-ref';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { AppWindowRef } from '../../app.window-ref';
+import { Condition } from '../../shared/condition';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
+  imports: [
+    TranslateModule,
+    FormsModule,
+    MatIconModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
   selector: 'app-searchbar',
   templateUrl: './searchbar.component.html',
   styleUrls: ['./searchbar.component.scss']
@@ -18,7 +43,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
   formats = ['GML', 'WKT', 'GeoJSON'];
-  exportUrl: string;
+  exportUrls = signal<{ url: string, format: string }[]>([]);
 
   constructor(
     private windowRef: AppWindowRef,
@@ -28,34 +53,58 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     public config: AppConfiguration,
     private service: AppService,
     @Inject(DOCUMENT) private document: Document
-  ) { }
+  ) {
+    effect(() => {
+      const id = this.state.documentId();
+      this.setExportUrl();
+    })
+  }
 
   ngOnInit(): void {
     this.service.currentLang.subscribe(res => {
-      const parts = this.router.url.split('?');
-      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'export-mapa?' + str;
+      this.setExportUrl();
     });
-    this.route.queryParams.subscribe(val => {
-      const parts = this.router.url.split('?');
-      const str = (parts.length > 1 ? parts[1] : '') + '&lang=' + this.state.currentLang;
-      this.exportUrl = 'export-mapa?' + str;
-    });
+  }
+
+  setExportUrl() {
+    const parts = this.router.url.split('?');
+    let str = (parts.length > 1 ? parts[1] : '');
+    if (!str.includes('lang=')) {
+      str += '&lang=' + this.state.currentLang;
+    }
+    if (this.state.documentId()) {
+      str += '&id=' + this.state.documentId();
+    }
+    if (str.indexOf('entity=') < 0 && !this.state.documentId()) {
+      str += '&entity=' + this.state.entity;
+    }
+    const urls: { url: string, format: string }[] = [];
+    this.formats.forEach(f => {
+      urls.push({ url: 'export-mapa?' + str + '&format=' + f, format: f });
+    })
+    this.exportUrls.update(() => [...urls]);
   }
 
   ngAfterViewInit() {
   }
 
-  openExport() {
-    const link = this.windowRef.nativeWindow.open(this.exportUrl + '&format=raw');
-  }
+  // openExport() {
+  //   const link = this.windowRef.nativeWindow.open(this.exportUrl + '&format=raw');
+  // }
 
   search() {
     const p: any = {};
     // if ()
     p.q = this.state.q ? (this.state.q !== '' ? this.state.q : null) : null;
     p.page = 0;
-    this.router.navigate(['/results'], { queryParams: p, queryParamsHandling: 'merge' });
+    p.mapId = null;
+    this.state.mapResult.set(null);
+    let url = '/results';
+    if (this.router.isActive('map', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
+      url = '/map';
+    }
+    this.state.setFacetChanged();
+    this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
   }
 
   changeShowWithoutThumbs() {
@@ -68,6 +117,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     // this.state.locationFilterEnabled = false;
     // this.state.locationFilterBounds = null;
     this.state.isMapaCollapsed = !this.state.isMapaCollapsed;
+    this.state.switchingMap = !this.state.isMapaCollapsed;
     this.state.setMapResult(null, false);
     if (!this.state.isMapaCollapsed) {
       this.document.body.classList.add('app-view-map');
@@ -78,29 +128,41 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     p.mapa = !this.state.isMapaCollapsed;
     p.loc_rpt = null;
 
+    let url = this.state.documentId() ? '/id' : '/results';
     if (p.mapa) {
-      const lat = this.state.stats.lat;
-      const lng = this.state.stats.lng;
-      if (lat.max === lat.min) {
-        lat.min = lat.min - 0.05;
-        lat.max = lat.max + 0.05;
-        lng.min = lng.min - 0.05;
-        lng.max = lng.max + 0.05;
+      url = '/map';
+      if (this.router.isActive('/id', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })) {
+        p.loc_rpt = null;
+        p.vyber = null;
+      } else if (this.state.locationFilterEnabled) {
+        p.loc_rpt = this.state.locationFilterBounds.getSouthWest().lat + ',' +
+          this.state.locationFilterBounds.getSouthWest().lng + ',' +
+          this.state.locationFilterBounds.getNorthEast().lat + ',' +
+          this.state.locationFilterBounds.getNorthEast().lng;
+      } else {
+        const lat = this.state.stats['lat'];
+        const lng = this.state.stats['lng'];
+        // if (lat.max === lat.min) {
+        //   lat.min = lat.min - 0.05;
+        //   lat.max = lat.max + 0.05;
+        //   lng.min = lng.min - 0.05;
+        //   lng.max = lng.max + 0.05;
+        // }
+        p.loc_rpt = lat.min + ',' + lng.min +
+          ',' + lat.max + ',' + lng.max;
       }
-      p.loc_rpt = lat.min + ',' + lng.min +
-        ',' + lat.max + ',' + lng.max;
     } else {
       p.loc_rpt = null;
       p.pian_id = null;
       p.mapa = null;
+      p.mapId = null;
       if (!this.state.locationFilterEnabled) {
         p.loc_rpt = null;
         p.vyber = null;
       }
     }
-    let url = '/results';
-    if (this.router.isActive('/id', false)) {
-      url = '/id/' + this.state.documentId;
+    if (this.state.documentId()) {
+      url = (p.mapa ? '/map/' : '/id/') + this.state.documentId();
       p.loc_rpt = null;
       p.vyber = null;
     }

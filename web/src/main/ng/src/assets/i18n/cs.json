@@ -9,7 +9,13 @@
   "to": "do",
   "negativní": "negativní",
   "pozitivní": "pozitivní",
-
+  "title": {
+    "results": "Výsledky",
+    "map": "Mapa",
+    "export": "Export",
+    "export-mapa": "Export mapy",
+    "record": "Záznam "
+  },
 
   "navbar": {
     "desc": {
@@ -17,7 +23,9 @@
       "Nápověda": "Nápověda",
       "Přihlásit uživatele": "Přihlásit uživatele",
       "Registrovat uživatele": "Registrovat uživatele",
-      "account": "Správa účtu"
+      "account": "Správa účtu",
+      "stats": "Statistiky",
+      "Close": "Zavřít menu"
     }
   },
 
@@ -160,7 +168,7 @@
       "f_rada": "Dokument - řada",
       "f_material_dokumentu": "Dokument - materiál",
       "f_typ_dokumentu_posudek": "Dokument - typ posudku",
-      "f_jazyk_dokumentu": "Dokument - jazyk",
+      "f_jazyk_dokumentu": "Dokument - jazyky",
       "f_ulozeni_originalu": "Dokument - uložení originálu",
       "f_format": "Dokument - formát",
       "f_zachovalost": "Dokument - zachovalost",
@@ -184,12 +192,12 @@
       "datum_provedeni": "Datum výzkumu",
       "dokument_rok_vzniku": "Dokument - rok vzniku",
       "dokument_datum_zverejneni": "Dokument - datum zveřejnění",
-      "oznaceni_originalu": "Dokument - původní označení",
+      "oznaceni_originalu": "Dokument - označení originálu",
       "extra_data_cislo_objektu": "Dokument - objekt/kontext",
-      "extra_data_meritko": "Dokument - měřítko",
+      "extra_data_meritko": "Dokument - měřítko plánu",
       "extra_data_vyska": "Dokument - výška",
       "extra_data_sirka": "Dokument - šířka",
-      "extra_data_pocet_variant_originalu": "Dokument - počet variant",
+      "extra_data_pocet_variant_originalu": "Dokument - počet variant originálu",
       "extra_data_odkaz": "Dokument - odkaz",
       "extra_data_udalost": "Dokument - název události",
       "extra_data_region": "Dokument - region",
@@ -226,7 +234,7 @@
       "soubor_size_mbytes": "Soubor - velikost (MB)",
       "projekt_podnet": "Projekt - podnět",
       "projekt_chu_lokalizace": "Projekt - lokalizace",
-      "projekt_parcelni_cislo": "Projekt - parcelní číslo",
+      "projekt_chranene_udaje_parcelni_cislo": "Projekt - parcelní číslo",
       "projekt_planovane_zahajeni": "Projekt - plánované zahájení",
       "projekt_kulturni_pamatka_cislo": "Projekt - rejstříkové číslo památky",
       "projekt_kulturni_pamatka_popis": "Projekt - název památky",
@@ -288,12 +296,14 @@
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
       "loc_rpt": "Mapový výběr",
       "rada": "Dokument - řada",
-      "predano_organizace": "Předáno organizaci",
+      "samostatny_nalez_predano_organizace": "Předáno organizaci",
       "predmet_kategorie": "Nález - kategorie",
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
-      "f_udalost_typ": "Dokument - typ události",
-      "adb_vyskovy_bod_typ": "ADB - typ výškového bodu"
+      "f_udalost_typ": "Dokument - typ dokumentované události",
+      "adb_vyskovy_bod_typ": "ADB - typ výškového bodu",
+      "f_kraj": "Kraj",
+      "commonFacets": "Obvyklé dotazy"
     }
   },
 
@@ -350,7 +360,8 @@
     "menu": {
       "Persistentní odkaz": "Persistentní odkaz",
       "api_prefix": "OAI-PMH API",
-      "show_in_AMCR":"Zobrazit v AMČR"
+      "show_in_AMCR":"Zobrazit v AMČR",
+      "Zobrazit citaci": "Zobrazit citaci"
     },
     "desc": {
       "Poslední změna": "Poslední změna",
@@ -361,37 +372,37 @@
       "Organizace": "Organizace",
       "Katastr (okres)": "Katastr (okres)",
       "Popis": "Popis",
-      "Počet archeologickych zaznamu": "Počet archeologických záznamů",
-      "Počet akcí": "Počet akcí",
-      "Počet lokalit": "Počet lokalit",
-      "Počet souborů": "Počet souborů",
-      "Jazyk": "Jazyk",
+      "Počet archeologickych zaznamu": "Akcí a lokalit",
+      "Počet akcí": "Akcí",
+      "Počet lokalit": "Lokalit",
+      "Počet souborů": "Souborů",
+      "Jazyk": "Jazyky",
       "Popis obsahu": "Popis obsahu",
       "Poznámka": "Poznámka",
       "Zahrnuje posudky": "Zahrnuje posudky",
       "Dokument - uložení originálu": "Uložení originálu",
-      "Původní označení": "Původní označení",
+      "Původní označení": "Označení originálu",
       "Dokument - datum zveřejnění": "Datum zveřejnění",
       "Objekt/kontext": "Objekt/kontext",
       "Poloha (WKT)": "Poloha (WKT)",
       "Poloha (GML)": "Poloha (GML)",
       "Dokument - formát": "Formát",
-      "Výška (cm)": "Výška (cm)",
-      "Šířka (cm)": "Šířka (cm)",
-      "Měřítko": "Měřítko",
+      "Výška (cm)": "Výška plánu (cm)",
+      "Šířka (cm)": "Šířka plánu (cm)",
+      "Měřítko": "Měřítko plánu",
       "Dokument - zachovalost": "Zachovalost",
       "Náhrada": "Náhrada originálu",
-      "Počet variant": "Počet variant",
+      "Počet variant": "Počet variant originálu",
       "Odkaz": "Odkaz",
       "Dokument - datum vzniku": "Datum vzniku",
       "Země": "Země",
       "Region": "Region",
-      "Typ události": "Typ události",
-      "Událost": "Událost",
+      "Typ události": "Typ dokumentované události",
+      "Událost": "Dokumentovaná událost",
       "Licence": "Licence",
       "Rok od-do": "Rok události (od-do)",
-      "Osoby": "Osoby",
-      "Důvěryhodnost": "Důvěryhodnost",
+      "Osoby": "Dokumentované osoby",
+      "Důvěryhodnost": "Důvěryhodnost (%)",
       "Dokumentovaná akce/lokalita": "Dokumentovaná akce/lokalita",
       "Vedoucí akce": "Vedoucí akce",
       "Akce - lokalizace": "Lokalizace",
@@ -400,8 +411,9 @@
       "Nahrazuje NZ": "Nahrazuje NZ",
       "odlozena_nz": "Odložená NZ",
       "Lokalizace/okolnosti": "Lokalizace/okolnosti",
-      "Počet dokumentů": "Počet dokumentů",
-      "Počet projektů": "Počet projektů",
+      "Počet dokumentů": "Dokumentů",
+      "Počet projektů": "Projektů",
+      "Počet 3D dokumentů": "3D modelů",
       "Hlavní typ": "Hlavní typ",
       "Vedlejší typ": "Vedlejší typ",
       "Ostatní vedoucí": "Ostatní vedoucí",
@@ -418,7 +430,7 @@
       "Projekt - typ": "Typ",
       "Projekt - podnět": "Podnět",
       "Projekt - oznaceni_stavby": "Označení stavby",
-      "Počet samostatných nálezů": "Počet samostatných nálezů",
+      "Počet samostatných nálezů": "Samostatných nálezů",
       "Parcelní číslo": "Parcelní číslo",
       "Plánované zahájení": "Plánované zahájení",
       "Památková ochrana": "Památková ochrana",
@@ -464,7 +476,8 @@
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
-      "Zobrazit detail": "Zobrazit detail"
+      "Zobrazit detail": "Zobrazit detail",
+      "Zobrazit vsechny": "Načíst všechny záznamy"
     },
     "panelTitle": {
       "Popis dokumentu": "Popis dokumentu",
@@ -504,7 +517,7 @@
       "Citujte jako": "Citujte jako",
       "Dokument": "Dokument",
       "Dostupné z": "Dostupné z",
-      "AMČR: Záznam" : "AMČR: Záznam",
+      "AMČR: Záznam" : "Archeologický informační systém České republiky: Záznam",
       "Archeologická mapa České republiky": "Archeologická mapa České republiky"
     },
     "note": {
@@ -515,33 +528,45 @@
 
   "sidenav": {
     "tab": {
+      "Info": "Zobrazené výsledky odpovídají aktuálnímu výřezu mapy.",
       "Filtry": "Filtry",
       "Výsledky": "Výsledky"
     },
     "button": {
-      "Filtrace / Výsledky": "Filtrace / Výsledky"
+      "Filtrace / Výsledky": "Filtrace/Výsledky"
     }
   },
 
 
   "map": {
     "desc": {
-      "select area": "Vybrat oblast",
-      "remove selection": "Zrušit výběr",
+      "select area": "Filtrovat oblast",
+      "remove selection": "Zrušit filtr",
       "zoom in": "Přiblížit",
-      "zoom out": "Oddálit"
+      "zoom out": "Oddálit",
+      "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním.",
+      "measureOn": "Měření vzdálenosti",
+      "measureOff": "Ukončit měření vzdálenosti", 
+      "tooltipTextFinish": "Klikněte pro <b>dokončení linie</b><br>",
+      "tooltipTextDelete": "Stiskněte klávesu SHIFT a klikněte pro <b>vymazání bodu</b>",
+      "tooltipTextMove": "Kliněte a potáhněte pro <b>posun bodu</b><br>",
+      "tooltipTextResume": "<br>Stiskněte klávesu CTRL a kllikněte pro <b>obnovení měření</b>",
+      "tooltipTextAdd": "Stiskněte klávesu CTRL a kllikněte pro <b>přidání bodu</b>"
     },
     "tooltip": {
-      "Odstranit tento filtr": "Zrušit tento filtr"
+      "Odstranit tento filtr": "Zrušit tento filtr",
+      "Zastavit": "Zastavit"
     },
     "layer": {
       "cuzk_zakladni": "ČÚZK - Základní mapy ČR",
       "cuzk_orto": "ČÚZK - Ortofotomapa",
       "cuzk_stin": "ČÚZK - Stínovaný reliéf 5G",
       "openstreet": "OpenStreetMap",
+      "data": "Zobrazit záznamy",
       "cuzk_katastr_mapa": "ČÚZK - Katastrální mapa",
       "cuzk_katastr_uzemi": "ČÚZK - Katastrální území"
-    }
+    },
+    "zoomToResults": "Počet nalezených výsledků je: {{numFound}}. Pro zobrazení výsledků přibližte mapu nebo použijte filtraci."
   },
 
 
@@ -587,7 +612,8 @@
       "Typ souboru": "Typ souboru",
       "Jméno": "Jméno",
       "Komentář": "Komentář",
-      "download_started": "Stažení souboru spuštěno"
+      "download_started": "Stažení souboru spuštěno",
+      "viewerInfo": "Obsah je zobrazen v náhledové kvalitě. Pro získání obsahu v plné kvalitě použijte ikonu pro stažení souboru."
     },
     "input": {
       "Jméno": "Jméno",
@@ -622,7 +648,7 @@
       "Citujte jako": "Citujte jako",
       "Dokument": "Dokument",
       "Dostupné z": "Dostupné z",
-      "AMČR: Záznam" : "AMČR: Záznam",
+      "AMČR: Záznam" : "Archeologický informační systém České republiky: Záznam",
       "Archeologická mapa České republiky": "Archeologická mapa České republiky",
       "stránka z": "stránka z"
     },
@@ -648,7 +674,7 @@
       "dokument_rok_vzniku": "Dokument - rok vzniku",
       "dokument_typ_dokumentu": "Typ dokumentu",
       "dokument_material_originalu": "Materiál originálu",
-      "dokument_oznaceni_originalu": "Dokument - původní označení",
+      "dokument_oznaceni_originalu": "Dokument - označení originálu",
 
       "projekt_typ_projektu": "Projekt - typ",
       "akce_datum_zahajeni": "Datum zahájeni",
@@ -684,7 +710,7 @@
       "akce_odlozena_nz": "Akce - Odložená NZ"
     },
     "desc": {
-      "Pian": "Pian",
+      "Pian": "PIAN",
       "Přesnost": "Přesnost",
       "PIAN - typ": "PIAN - typ",
       "PIAN - Základní mapa 1:10 000": "PIAN - Základní mapa 1:10 000",
@@ -732,6 +758,21 @@
     "ext_zdroj": {
       "title": "Externí zdroje",
       "desc": "Bibliografické odkazy na externí zdroje informací o evidovaných archeologických akcích a lokalitách."
+    },
+    "adb": {
+      "title": "Archeologické dokumentační body"
+    },
+    "dokumentacni_jednotka": {
+      "title": "Dokumentační jednotky"
+    },
+    "komponenta": {
+      "title": "Komponenty"
+    },
+    "vyskovy_bod": {
+      "title": "Výškové body"
+    },
+    "dokument_cast": {
+      "title": "Obsahové části dokumentů"
     }
   },
 
@@ -763,5 +804,32 @@
   "f_aktivita_deponovani": "deponování",
   "f_aktivita_boj": "boj",
   "f_aktivita_jina": "jiný druh aktivity",
-  "f_aktivita_intruze": "intruze"
+  "f_aktivita_intruze": "intruze",
+
+  "stats": {
+    "ident_cely": "ID záznamu",
+    "type": "Událost",
+    "user": "Uživatel",
+    "entity": "Typ záznamu",
+    "typ": {
+      "id": "Zobrazení detailu",
+      "viewer": "Zobrazení náhledu",
+      "file": "Stažení souboru"
+    },
+    "graphTitle": {
+      "DAY": "Přístupů denně",
+      "WEEK": "Přístupů týdně",
+      "MONTH": "Přístupů měsíčně"
+    },
+    "graphName": "Počet uživatelských přístupů",
+    "interval": "Zobrazený interval",
+    "interval_day": "Den",
+    "interval_week": "Týden",
+    "interval_month": "Měsíc",
+    "id_count": "{{count}} z {{total}}"
+  },
+  "commonFacets": {
+    "noevidence": "Negativní zjištění",
+    "posevidence": "Pozitivní zjištění"
+  }
 }

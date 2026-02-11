@@ -18,6 +18,7 @@ export class Configuration {
   // numberFacets: string[];
 
   entities: string[];
+  reCaptchaScore: number;
 
   uiVars: {[key: string]: any};
 
@@ -58,6 +59,7 @@ export class Configuration {
       fillOpacity: number
     },
     selectionInitPad: number;
+    skipShapePrecisionIds: string[];
   };
   hideMenuWidth: number;
 
@@ -72,6 +74,9 @@ export class Configuration {
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};
 
-  choiceApi: {label: string, metadataPrefix: string, url: string}[];
+  choiceApi: {label: string, metadataPrefix: string, url: string, useParent: boolean}[];
   feedBackMaxLength: number;
+  commonFacets: {name: string, value: string}[];
+
+  thesauri: { [key: string]: number };
 }

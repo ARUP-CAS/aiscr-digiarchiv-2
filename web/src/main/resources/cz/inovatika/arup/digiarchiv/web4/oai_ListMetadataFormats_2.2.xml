@@ -1,0 +1,12 @@
+  <ListMetadataFormats>
+    <metadataFormat>
+      <metadataPrefix>oai_dc</metadataPrefix>
+      <schema>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</schema>
+      <metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</metadataNamespace>
+    </metadataFormat>
+    <metadataFormat>
+      <metadataPrefix>oai_amcr</metadataPrefix>
+      <schema>https://api.aiscr.cz/schema/amcr/2.2/amcr.xsd</schema>
+      <metadataNamespace>https://api.aiscr.cz/schema/amcr/2.2/</metadataNamespace>
+    </metadataFormat>
+  </ListMetadataFormats>

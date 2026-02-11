@@ -839,7 +839,6 @@
        <str name="facet.field">f_zachovalost</str>
 	   
        <str name="facet.field">f_let_organizace</str>
-       <str name="facet.field">f_let_pilot</str>
        <str name="facet.field">f_let_letiste_start</str>
        <str name="facet.field">f_let_letiste_cil</str>
        <str name="facet.field">f_let_pocasi</str>
@@ -853,6 +852,7 @@
 <!--       <str name="facet.field">f_pian_zm10</str> -->
        <str name="facet.field">f_adb_typ_sondy</str>
        <str name="facet.field">f_adb_podnet</str>
+       <str name="facet.field">f_kraj</str>
 
      </lst>
   </initParams>
