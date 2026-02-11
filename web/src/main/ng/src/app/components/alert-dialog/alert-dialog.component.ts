@@ -4,10 +4,11 @@ import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   imports: [
-    TranslateModule, CommonModule,
+    TranslateModule, CommonModule, MatButtonModule,
     MatDialogModule, MatCardModule, MatIconModule],
   selector: 'app-alert-dialog',
   templateUrl: './alert-dialog.component.html',

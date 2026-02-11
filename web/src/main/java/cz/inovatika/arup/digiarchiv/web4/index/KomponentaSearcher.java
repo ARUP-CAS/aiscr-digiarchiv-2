@@ -43,6 +43,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                 for (int j = 0; j < reldocs.length(); j++) {
                     JSONObject cdj = reldocs.getJSONObject(j);
                     doc.append("dokument", cdj);
+                    doc.put("datestamp", cdj.getString("datestamp"));
                 }
                 
                 String ident_cely = doc.getString("ident_cely");
@@ -55,6 +56,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                     
                     for (int j = 0; j < subs.length(); j++) {
                         doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
+                        doc.put("datestamp", subs.getJSONObject(i).getString("datestamp"));
                     }
                     parentSearchable = true;
                     

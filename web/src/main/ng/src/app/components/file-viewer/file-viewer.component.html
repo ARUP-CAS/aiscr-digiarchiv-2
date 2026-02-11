@@ -13,15 +13,14 @@
         <div class="app-fxFlex app-controls app-fxLayout app-row app-center-v app-gap-2">
           <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
           <mat-form-field appearance="outline">
-            <input type="number" [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput [(ngModel)]="currentPage" [value]="currentPageDisplayed()" (keyup.enter)="setPage()"  />
+            <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput
+             [(ngModel)]="currentPage" [value]="currentPageDisplayed()" (keyup.enter)="setPage()"  />
           </mat-form-field>
           <span>{{ 'dialog.citation.stránka z' | translate }}</span><strong>{{ selectedFile()?.rozsah }}</strong>
-          @if (currentPage < selectedFile().rozsah) {
+          <!-- @if (currentPage < selectedFile().rozsah) {
             <span class="app-pipe"></span>
-          }
-          @if (currentPage < selectedFile().rozsah) {
-            <a (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
-          }
+          } -->
+          <a [class.app-disabled-link]="currentPage >= selectedFile().rozsah" (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
         </div>
         <div class="app-metadata app-fxLayout app-row app-center-v">
           <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile().size_mb}}MB</strong></span><span class="app-pipe"></span><!--

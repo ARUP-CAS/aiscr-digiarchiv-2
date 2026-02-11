@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 
@@ -114,6 +115,38 @@ public class InitServlet extends HttpServlet {
         } catch (IOException ex) {
             Logger.getLogger(InitServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static String asSafePath(String path) {
+        if (path == null || path.isEmpty()) {
+            return "none";
+        }
+
+        // Disallow backslashes and parent directory traversal.
+        if (path.contains("..") || path.contains("\\")) {
+            return "invalid";
+        }
+
+        // Ensure the path starts with a single '/' so Paths.get works as expected.
+        String normalizedInput = path.startsWith("/") ? path.substring(1) : path;
+
+        Path normalized;
+        try {
+            normalized = Paths.get(normalizedInput).normalize();
+        } catch (Exception ex) {
+            return "invalid";
+        }
+
+        if (normalized.startsWith("..")) {
+            return "invalid";
+        }
+
+        // Map all API resources under a fixed internal prefix.
+        String relative = normalized.toString().replace('\\', '/');
+        if (!relative.startsWith("/")) {
+            relative = "/" + relative;
+        }
+        return relative;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

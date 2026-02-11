@@ -10,6 +10,10 @@
             &#160;({{'card.desc.přesnost' | translate }}:&#160;
             <app-inline-filter [field]="'f_pian_presnost'" [value]="_result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>)
           }
+          @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
+          <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
+            'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+          }
         </mat-panel-title>
       </mat-expansion-panel-header>
       @if (_result.pian_chranene_udaje?.zm10) {
@@ -40,6 +44,10 @@
             <span class="app-pipe"></span><app-inline-filter [field]="'f_pian_presnost'" [value]="_result.pian_presnost" [heslar]="'presnost'"></app-inline-filter>
             <span class="app-pipe"></span>
           </div> 
+          @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
+          <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
+            'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+          }
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>

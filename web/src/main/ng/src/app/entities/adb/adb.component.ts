@@ -21,7 +21,7 @@ import { Entity } from '../entity/entity';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, FlexLayoutModule, DatePipe,
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule,

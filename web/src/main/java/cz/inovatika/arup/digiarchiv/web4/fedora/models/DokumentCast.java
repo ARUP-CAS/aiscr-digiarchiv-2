@@ -131,7 +131,7 @@ public class DokumentCast {
                             
                             JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
                             String okres = kat.getString("okres_nazev");
-                            String kraj = kat.getString("kraj_nazev");
+                            String kraj = kat.getString("kraj");
             
             
                             IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres); 
@@ -187,7 +187,7 @@ public class DokumentCast {
                         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
                         JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
                         String okres = kat.getString("okres_nazev");
-                        String kraj = kat.getString("kraj_nazev");
+                        String kraj = kat.getString("kraj");
                         IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
                         IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                         JSONObject li2 = new JSONObject()

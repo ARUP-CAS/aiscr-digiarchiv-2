@@ -90,6 +90,14 @@
   // view default
   .app-view-default {
     .mat-mdc-card {
+      .mat-mdc-card-content {
+         @media only screen and (max-width: 450px) {
+          a {
+            word-break: break-all;
+          }
+         }
+      }
+
       .mat-mdc-card-actions {
         @media only screen and (min-width: 960px) and (max-width: 1150px) {
           display: block !important;
@@ -207,24 +215,28 @@
       }
 
       .mat-mdc-card {
-        max-height: 216px;
+        min-height: 216px;
+        max-height: 236px;
         
         .mat-mdc-card-header {
           .mat-mdc-card-header-text {
             width: 100%;
-    
-            .mat-mdc-card-title {
-              position: relative;
-              visibility: hidden;
-              max-height: 20px;
 
-              .app-ident-format {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                visibility: visible;
-                text-align: center;
+            .mat-mdc-card-title {
+              display: block;
+              text-align: center;
+
+              & > .app-fxFlex {
+                margin-right: 0 !important;
+                margin-bottom: 0 !important;
+
+                *:not(.app-ident-format) {
+                  display: none;
+                }
+              }
+
+              .app-last-change {
+                display: none;
               }
             }
           }
@@ -275,6 +287,36 @@
 
             &:not(.app-col-detail) {
               display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .app-card-result-dialog {
+    @media only screen and (max-width: 400px) {
+      .mat-mdc-card-content {
+        & > .app-fxLayout {
+          display: block !important;
+
+          .app-thumb {
+            margin-bottom: 8px;
+            text-align: center;
+            background-color: var(--app-color-gray-2);
+          }
+        }
+      }
+
+      .mat-mdc-card-actions {
+        display: block !important;
+        
+        app-result-actions {
+          & > .app-fxLayout {
+            flex-wrap: wrap;
+
+            .mat-mdc-button-base {
+              margin-top: 8px;
             }
           }
         }

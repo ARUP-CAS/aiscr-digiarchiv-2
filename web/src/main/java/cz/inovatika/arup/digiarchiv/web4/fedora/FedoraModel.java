@@ -105,18 +105,23 @@ public interface FedoraModel {
      * @throws XMLStreamException
      * @throws IOException
      */
-    public static String getModel(String xml) throws XMLStreamException, IOException {
-        XMLInputFactory f = XMLInputFactory.newFactory();
-        XMLStreamReader sr = f.createXMLStreamReader(new StringReader(xml));
+    public static String getModel(String xml) {
+        try {
+            XMLInputFactory f = XMLInputFactory.newFactory();
+            XMLStreamReader sr = f.createXMLStreamReader(new StringReader(xml));
 //    XmlMapper xmlMapper = new XmlMapper();
 //    xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        sr.nextTag();
-        sr.nextTag();
-        return sr.getLocalName();
+sr.nextTag();
+sr.nextTag();
+return sr.getLocalName();
 //    while (!sr.getLocalName().equals("projekt")) {
 //      sr.nextTag();
 //    }
 //    return (FedoraModel) xmlMapper.readValue(sr, clazz);
+        } catch (XMLStreamException ex) {
+            Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, "Error parsing xml");
+            return null;
+        }
     }
     
     static XMLInputFactory _xmlFactory = XMLInputFactory.newFactory();
