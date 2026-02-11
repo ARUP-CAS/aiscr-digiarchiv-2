@@ -1,0 +1,22 @@
+// --- MIXINS ---
+
+@use "app-vars" as *; 
+
+// set flex gap
+@mixin setFlexGap($direction: null) {
+  @each $gap, $val in $gaps {
+    &.app-gap-#{$gap} {
+      > * {
+        &:not(:last-child) {
+          @if ($direction == 'row') {
+            margin-right: #{$val}px;
+          } @else if ($direction == 'column') {
+            margin-bottom: #{$val}px;
+          } @else {
+            margin-right: #{$val}px;
+          }
+        }
+      }
+    }
+  }
+}

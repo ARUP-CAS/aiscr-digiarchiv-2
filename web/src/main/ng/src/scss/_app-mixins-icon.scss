@@ -1,0 +1,16 @@
+// --- MIXINS ---
+
+// set icon size
+@mixin setIcon($size: null, $color: null, $position: null) {
+  @if ($size != null) {
+    font-size: #{$size}px;
+    height: #{$size}px;
+    width: #{$size}px;  
+  }
+  @if ($color != null) {
+    color: $color !important;
+  }
+  @if ($position != null) {
+    vertical-align: $position !important;  
+  }
+}

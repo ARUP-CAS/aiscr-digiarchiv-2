@@ -1,5 +1,6 @@
-import { SolrDocument } from 'src/app/shared/solr-document';
-import { FacetPivot } from 'src/app/shared/facet-pivot';
+import { FacetPivot } from "./facet-pivot";
+import { SolrDocument } from "./solr-document";
+
 
 export class SolrResponse {
   response: {
@@ -16,7 +17,7 @@ export class SolrResponse {
     facet_intervals: any;
     facet_pivot: FacetPivot;
     facet_ranges: any;
-    facet_fields: {[field: string]: {name: string, type: string, value: number}}[];
+    facet_fields: {[field: string]: {name: string, type: string, value: number}[]};
     facet_heatmaps: any;
   };
   stats: {
