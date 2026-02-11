@@ -1,26 +1,28 @@
 <h1 mat-dialog-title>{{ 'dialog.title.Odeslat komentář' | translate }}</h1>
-<div mat-dialog-content>
-    <re-captcha id="recaptcha" name="recaptcha" size="invisible" #captchaRef (resolved)="resolved($event)" (error)="errored($event)" errorMode="handled"></re-captcha>
-    <mat-form-field class="app-w-100" appearance="fill" >
+<div mat-dialog-content class="app-pt-1">
+  <re-captcha id="recaptcha" name="recaptcha" size="invisible" #captchaRef (resolved)="resolved($event)" (error)="errored($event)" errorMode="handled"></re-captcha>
+  <div class="app-fxLayout app-column app-gap-4">
+    <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.desc.Jméno' | translate }}</mat-label>
       <input type="text" name="name" id="name"  matInput [placeholder]="'dialog.input.Jméno' | translate" [(ngModel)]="name"  required #uname="ngModel">
       <mat-error>
         {{ 'dialog.alert.Prosím zadejte jmeno' | translate }}!
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="app-w-100" appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>{{ 'Email' | translate }}</mat-label>
       <input type="email" name="mail" id="mail" matInput [placeholder]="'Ex. pat@example.com' | translate" [(ngModel)]="mail" email required #email="ngModel">
       <mat-error>
         {{ 'dialog.alert.Prosím zadejte platnou emailovou adresu' | translate }}!
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="app-w-100" appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.desc.Komentář' | translate }}</mat-label>
       <textarea matInput [placeholder]="'dialog.input.Napište komentář' | translate" rows="4" [(ngModel)]="text" [maxlength]="config.feedBackMaxLength"></textarea>
     </mat-form-field>
+  </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button color="primary" [disabled]="(uname.errors || email.errors || !reCaptchaValid)" (click)="sendFeedback()">{{ 'dialog.button.Odeslat' | translate }}</button>
+  <button matButton="filled" [disabled]="(uname.errors || email.errors || !reCaptchaValid)" (click)="sendFeedback()">{{ 'dialog.button.Odeslat' | translate }}</button>
   <button mat-button mat-dialog-close cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>
 </div>

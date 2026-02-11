@@ -41,7 +41,7 @@
       "weight": 2,
       "fillOpacity": 0.3
     },
-    "selectionInitPad": -0.95,
+    "selectionInitPad": -0.8,
     "skipShapePrecisionIds": ["HES-000864"]
   },
   "hideMenuWidth": 600,
@@ -1077,5 +1077,5 @@
     }
   ],
   "feedBackMaxLength": 4000,
-  "commonFacets": []
+		"commonFacets": []
 }
