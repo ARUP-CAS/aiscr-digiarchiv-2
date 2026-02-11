@@ -59,6 +59,7 @@ export class Configuration {
       fillOpacity: number
     },
     selectionInitPad: number;
+    skipShapePrecisionIds: string[];
   };
   hideMenuWidth: number;
 
@@ -75,4 +76,7 @@ export class Configuration {
 
   choiceApi: {label: string, metadataPrefix: string, url: string, useParent: boolean}[];
   feedBackMaxLength: number;
+  commonFacets: {name: string, value: string}[];
+
+  thesauri: { [key: string]: number };
 }

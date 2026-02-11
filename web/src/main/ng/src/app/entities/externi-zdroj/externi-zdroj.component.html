@@ -1,0 +1,193 @@
+@if (_result.ext_zdroj_typ) {
+  @switch (inDocument()) {
+    @case (false) {
+      <li>
+        <ng-container *ngTemplateOutlet="format"></ng-container>
+      </li>
+    }
+    @case (true) {
+      <mat-card class="app-card-result" [class.app-card-child]="isChild()" >
+        <mat-card-header>
+          <mat-card-title class="app-fxLayout app-row app-center-v app-gap-4">
+            <div class="app-fxFlex">
+              <span class="app-ident-format">{{ _result.ident_cely }}</span>
+              <span class="app-pipe"></span>
+              <app-inline-filter [field]="'ext_zdroj_typ'" [value]="_result.ext_zdroj_typ" [heslar]="'pristupnost'"></app-inline-filter>
+              <span class="app-pipe"></span>
+            </div>
+            
+            @if (_result.datestamp && state.isMapaCollapsed && !isChild() ) {
+              <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
+                'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+              }
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- <pre>{{ bibTex }}</pre> -->
+          <ul>
+            <li>
+              <ng-container *ngTemplateOutlet="format"></ng-container>
+            </li>
+          </ul>
+          @if (inDocument() && _result.ext_zdroj_poznamka) {
+            <div>
+              <strong>{{ 'card.desc.Poznámka' | translate }}: </strong> {{ _result.ext_zdroj_poznamka }}
+            </div>
+          }
+        </mat-card-content>
+        @if (!isChild()) {
+          <mat-card-actions class="app-fxLayout app-row app-end-v">
+            <div class="app-fxFlex app-metadata">
+              @if (_result.akce?.length > 0) {
+                {{ 'card.desc.Počet akcí' | translate }}: <strong>{{_result.akce?.length}}</strong>
+                <span class="app-pipe"></span>
+              }
+              @if (_result.lokalita?.length > 0) {
+                {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{_result.lokalita.length}}</strong>
+                <span class="app-pipe"></span>
+              }
+            </div>
+            <app-result-actions [inDocument]="inDocument()" [result]="result()" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"  (onToggleDetail)="toggleDetail()"
+            [detailExpanded]="_detailExpanded" [mapDetail]="false" ></app-result-actions>
+          </mat-card-actions>
+        }
+        @if (_detailExpanded) {
+          <mat-card-content>
+            <div class="app-card-detail">
+              <mat-accordion multi="true">
+                <app-related [related]="related()" [mapDetail]="false"></app-related>
+                <!-- @if (_result.akce || _result.lokalita) {
+                  <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
+                    <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+                      <mat-panel-title>
+                        {{ 'card.panelTitle.Související záznamy' | translate }}:
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if (vsSize > 0 && !state.printing()) {
+                      <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"  [style.width]="'100%'"
+                        [minBufferPx]="3*itemSize" [maxBufferPx]="6*itemSize">
+                        @for (lok of _result.lokalita; track lok.ident_cely) {
+                          <app-lokalita [result]="lok" [isChild]="true"  class="app-related-item"></app-lokalita>
+                        }
+                        <app-akce *cdkVirtualFor="let akce of _result.akce" [result]="akce" [isChild]="true"  class="app-related-item"></app-akce>
+                      </cdk-virtual-scroll-viewport>
+                    }
+                    @if (vsSize > 0 && state.printing()) {
+                      @for (lok of _result.lokalita; track lok.ident_cely) {
+                        <app-lokalita [result]="lok" [isChild]="true"  class="app-related-item"></app-lokalita>
+                      }
+                      @for (akce of _result.akce; track akce.ident_cely) {
+                        <app-akce [result]="akce" [isChild]="true"  class="app-related-item"></app-akce>
+                      }
+                    }
+                  </mat-expansion-panel>
+                } -->
+              </mat-accordion>
+            </div>
+          </mat-card-content>
+        }
+      </mat-card>
+    }
+  }
+}
+
+<ng-template #format>
+  <!-- kniha -->
+  @if (_result.ext_zdroj_typ === 'HES-001117') {
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_edice_rada) {{{ _result.ext_zdroj_edice_rada }}.&#160;}
+@if (_result.ext_zdroj_misto) {{{ _result.ext_zdroj_misto }}}
+@if (_result.ext_zdroj_vydavatel) {:&#160;{{ _result.ext_zdroj_vydavatel }}}
+@if (_result.ext_zdroj_isbn) {&#160;({{ _result.ext_zdroj_isbn }})}
+@if (!_result.ext_odkaz_paginace && !_result.ext_zdroj_link) {.&#160;}
+@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link " target="_blank">{{ _result.ext_zdroj_link }}</a>.}
+@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {
+<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}"
+target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
+    }
+    <!-- část knihy -->
+    @if (_result.ext_zdroj_typ === 'HES-001118') {
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_editor) {In: {{ _result.ext_zdroj_editor.join(' – ') }} (ed.),&#160;}
+@if (_result.ext_zdroj_sbornik_nazev) {{{ _result.ext_zdroj_sbornik_nazev }}.&#160;}
+@if (_result.ext_zdroj_edice_rada) {{{ _result.ext_zdroj_edice_rada }}.&#160;}
+@if (_result.ext_zdroj_misto) {{{ _result.ext_zdroj_misto }}}
+@if (_result.ext_zdroj_vydavatel) {:&#160;{{ _result.ext_zdroj_vydavatel }}}
+@if (_result.ext_zdroj_isbn) {&#160;({{ _result.ext_zdroj_isbn }})}
+@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link || (inDocument() && _result.ext_zdroj_paginace_titulu)) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}
+@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {
+<a [routerLink]="'/id/' + _result.ident_cely"
+[queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
+      }
+      <!--  článek v časopise -->
+      @if (_result.ext_zdroj_typ === 'HES-001119') {
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_casopis_denik_nazev) {{{ _result.ext_zdroj_casopis_denik_nazev }}&#160;}
+@if (_result.ext_zdroj_casopis_rocnik) {{{ _result.ext_zdroj_casopis_rocnik }}}
+@if (_result.ext_zdroj_issn) {&#160;({{ _result.ext_zdroj_issn }})}
+@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link || _result.ext_odkaz_paginace || _result.ext_zdroj_paginace_titulu) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {
+  <a [routerLink]="'/id/' + _result.ident_cely"
+    [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+    [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon>
+  </a>
+}
+      }
+      <!-- článek v novinách -->
+      @if (_result.ext_zdroj_typ === 'HES-001120') {
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}.&#160;}
+@if (_result.ext_zdroj_casopis_denik_nazev) {{{ _result.ext_zdroj_casopis_denik_nazev }}&#160;}
+@if (_result.ext_zdroj_datum_rd) {{{ _result.ext_zdroj_datum_rd | date : 'dd.MM.yyyy' }},&#160;}
+@if (_result.ext_odkaz_paginace && !_result.ext_zdroj_datum_rd) {,&#160;}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {,&#160;{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
+}@if (_result.ext_zdroj_doi) {
+doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {<a [routerLink]="'/id/' + _result.ident_cely"
+[queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
+        }
+        <!-- nepublikovaná zpráva  jiný zdroj -->
+        @if (_result.ext_zdroj_typ === 'HES-001121') {
+@if (_result.ext_zdroj_autor) {{{ _result.ext_zdroj_autor.join(' – ') }}&#160;}
+@if (_result.ext_zdroj_rok_vydani_vzniku) {{{ _result.ext_zdroj_rok_vydani_vzniku }}:&#160;}
+@if (_result.ext_zdroj_oznaceni) {{{ _result.ext_zdroj_oznaceni }}&#160;}
+@if (_result.ext_zdroj_nazev) {{{ _result.ext_zdroj_nazev }}&#160;}
+@if (_result.ext_zdroj_typ_dokumentu) {({{ _result.ext_zdroj_typ_dokumentu | translate }}).&#160;}
+@if (_result.ext_zdroj_organizace) {{{ _result.ext_zdroj_organizace }}.&#160;}
+@if (!inDocument()) {@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {,&#160;}}
+@if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
+}@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (!inDocument()) {<a [routerLink]="'/id/' + _result.ident_cely"
+[queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
+[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+}
+          }
+        </ng-template>

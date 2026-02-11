@@ -1,0 +1,14 @@
+// --- MIXINS ---
+
+@use "app-vars";
+
+// set icon size
+@mixin setIconSize() {
+  @each $size, $val in $iconSize {
+    &.app-#{$size} {
+      font-size: #{$val}px;
+      width: #{$val}px;
+      height: #{$val}px;
+    }
+  }
+}

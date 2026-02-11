@@ -24,7 +24,8 @@
       "Přihlásit uživatele": "Přihlásit uživatele",
       "Registrovat uživatele": "Registrovat uživatele",
       "account": "Správa účtu",
-      "stats": "Statistiky"
+      "stats": "Statistiky",
+      "Close": "Zavřít menu"
     }
   },
 
@@ -167,7 +168,7 @@
       "f_rada": "Dokument - řada",
       "f_material_dokumentu": "Dokument - materiál",
       "f_typ_dokumentu_posudek": "Dokument - typ posudku",
-      "f_jazyk_dokumentu": "Dokument - jazyk",
+      "f_jazyk_dokumentu": "Dokument - jazyky",
       "f_ulozeni_originalu": "Dokument - uložení originálu",
       "f_format": "Dokument - formát",
       "f_zachovalost": "Dokument - zachovalost",
@@ -191,12 +192,12 @@
       "datum_provedeni": "Datum výzkumu",
       "dokument_rok_vzniku": "Dokument - rok vzniku",
       "dokument_datum_zverejneni": "Dokument - datum zveřejnění",
-      "oznaceni_originalu": "Dokument - původní označení",
+      "oznaceni_originalu": "Dokument - označení originálu",
       "extra_data_cislo_objektu": "Dokument - objekt/kontext",
-      "extra_data_meritko": "Dokument - měřítko",
+      "extra_data_meritko": "Dokument - měřítko plánu",
       "extra_data_vyska": "Dokument - výška",
       "extra_data_sirka": "Dokument - šířka",
-      "extra_data_pocet_variant_originalu": "Dokument - počet variant",
+      "extra_data_pocet_variant_originalu": "Dokument - počet variant originálu",
       "extra_data_odkaz": "Dokument - odkaz",
       "extra_data_udalost": "Dokument - název události",
       "extra_data_region": "Dokument - region",
@@ -299,9 +300,10 @@
       "predmet_kategorie": "Nález - kategorie",
       "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
-      "f_udalost_typ": "Dokument - typ události",
+      "f_udalost_typ": "Dokument - typ dokumentované události",
       "adb_vyskovy_bod_typ": "ADB - typ výškového bodu",
-      "f_kraj": "Kraj"
+      "f_kraj": "Kraj",
+      "commonFacets": "Obvyklé dotazy"
     }
   },
 
@@ -374,33 +376,33 @@
       "Počet akcí": "Akcí",
       "Počet lokalit": "Lokalit",
       "Počet souborů": "Souborů",
-      "Jazyk": "Jazyk",
+      "Jazyk": "Jazyky",
       "Popis obsahu": "Popis obsahu",
       "Poznámka": "Poznámka",
       "Zahrnuje posudky": "Zahrnuje posudky",
       "Dokument - uložení originálu": "Uložení originálu",
-      "Původní označení": "Původní označení",
+      "Původní označení": "Označení originálu",
       "Dokument - datum zveřejnění": "Datum zveřejnění",
       "Objekt/kontext": "Objekt/kontext",
       "Poloha (WKT)": "Poloha (WKT)",
       "Poloha (GML)": "Poloha (GML)",
       "Dokument - formát": "Formát",
-      "Výška (cm)": "Výška (cm)",
-      "Šířka (cm)": "Šířka (cm)",
-      "Měřítko": "Měřítko",
+      "Výška (cm)": "Výška plánu (cm)",
+      "Šířka (cm)": "Šířka plánu (cm)",
+      "Měřítko": "Měřítko plánu",
       "Dokument - zachovalost": "Zachovalost",
       "Náhrada": "Náhrada originálu",
-      "Počet variant": "Počet variant",
+      "Počet variant": "Počet variant originálu",
       "Odkaz": "Odkaz",
       "Dokument - datum vzniku": "Datum vzniku",
       "Země": "Země",
       "Region": "Region",
-      "Typ události": "Typ události",
-      "Událost": "Událost",
+      "Typ události": "Typ dokumentované události",
+      "Událost": "Dokumentovaná událost",
       "Licence": "Licence",
       "Rok od-do": "Rok události (od-do)",
-      "Osoby": "Osoby",
-      "Důvěryhodnost": "Důvěryhodnost",
+      "Osoby": "Dokumentované osoby",
+      "Důvěryhodnost": "Důvěryhodnost (%)",
       "Dokumentovaná akce/lokalita": "Dokumentovaná akce/lokalita",
       "Vedoucí akce": "Vedoucí akce",
       "Akce - lokalizace": "Lokalizace",
@@ -531,7 +533,7 @@
       "Výsledky": "Výsledky"
     },
     "button": {
-      "Filtrace / Výsledky": "Filtrace / Výsledky"
+      "Filtrace / Výsledky": "Filtrace/Výsledky"
     }
   },
 
@@ -544,10 +546,16 @@
       "zoom out": "Oddálit",
       "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním.",
       "measureOn": "Měření vzdálenosti",
-      "measureOff": "Ukončít měření vzdálenosti"
+      "measureOff": "Ukončit měření vzdálenosti", 
+      "tooltipTextFinish": "Klikněte pro <b>dokončení linie</b><br>",
+      "tooltipTextDelete": "Stiskněte klávesu SHIFT a klikněte pro <b>vymazání bodu</b>",
+      "tooltipTextMove": "Kliněte a potáhněte pro <b>posun bodu</b><br>",
+      "tooltipTextResume": "<br>Stiskněte klávesu CTRL a kllikněte pro <b>obnovení měření</b>",
+      "tooltipTextAdd": "Stiskněte klávesu CTRL a kllikněte pro <b>přidání bodu</b>"
     },
     "tooltip": {
-      "Odstranit tento filtr": "Zrušit tento filtr"
+      "Odstranit tento filtr": "Zrušit tento filtr",
+      "Zastavit": "Zastavit"
     },
     "layer": {
       "cuzk_zakladni": "ČÚZK - Základní mapy ČR",
@@ -666,7 +674,7 @@
       "dokument_rok_vzniku": "Dokument - rok vzniku",
       "dokument_typ_dokumentu": "Typ dokumentu",
       "dokument_material_originalu": "Materiál originálu",
-      "dokument_oznaceni_originalu": "Dokument - původní označení",
+      "dokument_oznaceni_originalu": "Dokument - označení originálu",
 
       "projekt_typ_projektu": "Projekt - typ",
       "akce_datum_zahajeni": "Datum zahájeni",
@@ -702,7 +710,7 @@
       "akce_odlozena_nz": "Akce - Odložená NZ"
     },
     "desc": {
-      "Pian": "Pian",
+      "Pian": "PIAN",
       "Přesnost": "Přesnost",
       "PIAN - typ": "PIAN - typ",
       "PIAN - Základní mapa 1:10 000": "PIAN - Základní mapa 1:10 000",
@@ -764,7 +772,7 @@
       "title": "Výškové body"
     },
     "dokument_cast": {
-      "title": "Obsahové část dokumentů"
+      "title": "Obsahové části dokumentů"
     }
   },
 
@@ -819,5 +827,9 @@
     "interval_week": "Týden",
     "interval_month": "Měsíc",
     "id_count": "{{count}} z {{total}}"
+  },
+  "commonFacets": {
+    "noevidence": "Negativní zjištění",
+    "posevidence": "Pozitivní zjištění"
   }
 }

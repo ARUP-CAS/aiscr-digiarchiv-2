@@ -1,31 +1,34 @@
-<div fxLayout="row" fxLayoutAlign="start baseline" class="app-paginator-wrapper">
-  <mat-paginator fxFlex class="app-clean-bg"
+<div class="app-fxLayout app-row app-baseline">
+  <mat-paginator class="app-fxFlex"
     [length]="state.numFound"
     [pageSize]="state.rows"
     [pageIndex]="state.page"
     [pageSizeOptions]="[5, 10, 25, 50, 100]"
-    (page)="pageChanged($event)"
-    class="app-clean-bg">
+    (page)="pageChanged($event)">
   </mat-paginator>
-  
-  <mat-form-field fxFlex="70px" class="app-page-num"><!--fxHide_sm fxHide_xs-->
+
+  <mat-form-field class="app-num" appearance="outline"><!--fxHide_sm fxHide_xs-->
     <mat-label>{{ 'paginator.desc.Číslo stránky' | translate }}</mat-label>
-    <input matInput type="text" [(ngModel)]="pageIndex" (keyup.enter)="setPage()">
-    <a matSuffix [matTooltip]="'paginator.tooltip.Přejděte číslo stránky' | translate" (click)="setPage()">
-      <mat-icon>send</mat-icon>  
-    </a> 
+    <input matInput type="text" [(ngModel)]="pageIndex" (keyup.enter)="setPage()" name="pageIndex">
+    <mat-icon matSuffix [matTooltip]="'paginator.tooltip.Přejděte číslo stránky' | translate" (click)="setPage()" class="app-cursor-pointer">send</mat-icon>
   </mat-form-field>
-  
-  <mat-form-field fxFlex="120px" class="app-sorting"><!--fxHide_md fxHide_sm fxHide_xs-->
+
+  <mat-form-field class="app-sort" appearance="outline"><!--fxHide_md fxHide_sm fxHide_xs-->
     <mat-label>{{ 'paginator.desc.Řazení' | translate }}</mat-label>
     <mat-select [(ngModel)]="state.sort">
       <mat-select-trigger>
         {{state.sort ? ('paginator.sortBy.' + state.sort.label | translate) : ('' | translate)  }} &#160;
-        <mat-icon [matTooltip]="'paginator.dir.' + state.sort.dir | translate" class="app-small-icon">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
       </mat-select-trigger>
-      <mat-option *ngFor="let sort of state.sorts" (click)="sortBy(sort)" [value]="sort">
-        {{ 'paginator.sortBy.' + sort.label | translate }} <mat-icon>{{ sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
-      </mat-option>
+      @for (sort of state.sorts_by_entity; track sort) {
+        <mat-option (click)="sortBy(sort)" [value]="sort">
+          {{ 'paginator.sortBy.' + sort.label | translate }} <mat-icon>{{ sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
+        </mat-option>
+      }
     </mat-select>
+    <div matSuffix class="app-fxLayout app-row app-pr-2">
+      <mat-icon matSuffi (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [matTooltip]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
+      <mat-icon matSuffi>arrow_drop_down</mat-icon>
+    </div>
+    <!-- <mat-icon matSuffix (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [matTooltip]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon> -->
   </mat-form-field>
 </div>

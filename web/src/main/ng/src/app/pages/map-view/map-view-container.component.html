@@ -1,3 +1,5 @@
-<ng-container *ngIf="isBrowser">
+@if(isBrowser) {
+  @defer {
   <app-map-view></app-map-view>
- </ng-container>
+  }
+}

@@ -1,19 +1,20 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { map, catchError, finalize } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppState } from 'src/app/app.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Observable, of } from 'rxjs';
-import { SolrResponse } from 'src/app/shared/solr-response';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
-import { Crumb } from 'src/app/shared/crumb';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { AppWindowRef } from './app.window-ref';
 import { MatDialog } from '@angular/material/dialog';
+
+import { AppWindowRef } from './app.window-ref';
+import { AppConfiguration } from './app-configuration';
+import { AppState } from './app.state';
+import { Crumb } from './shared/crumb';
+import { environment } from '../environments/environment';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
-declare var L;
+// import { latLng, latLngBounds} from "leaflet";
+declare var L: any;
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +42,8 @@ export class AppService {
     if (isPlatformBrowser(this.platformId)) {
       if (this.windowRef.nativeWindow.print) {
         this.windowRef.nativeWindow.print();
-        this.state.printing = false;
-        this.state.loading = false;
+        this.state.printing.set(false);
+        this.state.loading.set(false);
       }
     }
   }
@@ -156,7 +157,7 @@ export class AppService {
   }
 
   stopLoading() {
-    // this.state.loading = false;
+    // this.state.loading.set(false);;
     // this.state.facetsLoading = false;
   }
 
@@ -215,12 +216,12 @@ export class AppService {
     // Return an observable with a user-facing error message.
     // return throwError({'status':error.status, 'message': error.message});
     this.state.hasError = true;
-    this.state.loading = false;
-    this.state.facetsLoading = false;
+    this.state.loading.set(false);
+    this.state.facetsLoading.set(false);
     return of({ 'status': error.status, 'message': error.message, 'error': [error.error] });
   }
 
-  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType?): Observable<Object> {
+  private get<T>(url: string, params: HttpParams = new HttpParams(), responseType: any = null): Observable<Object> {
     // const r = re ? re : 'json';
     this.state.hasError = false;
     const options = { params, responseType, withCredentials: true };
@@ -238,9 +239,9 @@ export class AppService {
         }))
         .pipe(finalize(() => this.stopLoading()))
         .pipe(catchError(err => this.handleError(err, this)));
-    }
 
   }
+}
 
   private post(url: string, obj: any) {
     return this.http.post<any>(`api${url}`, obj);
@@ -253,6 +254,15 @@ export class AppService {
   search(params: HttpParams): Observable<any> {
     this.state.hasError = false;
     return this.get(`/search/query`, params);
+  }
+
+  /**
+   * Fired for main search in results page
+   * @param params the params
+   */
+  searchExportMapa(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/export_mapa`, params);
   }
 
   /**
@@ -489,7 +499,8 @@ export class AppService {
       this.state.breadcrumbs.push(new Crumb('vyber', value, this.formatLocation(value)));
       this.state.breadcrumbs.push(new Crumb('separator', '', ''));
 
-      const loc_rpt = value.split(',');
+      const loc_rpt: any = value.split(',');
+      
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
@@ -567,6 +578,12 @@ export class AppService {
       }
     });
     this.state.breadcrumbs.pop();
+
+    this.config.commonFacets.forEach(cf => {
+      if (params.has(cf.name)) {
+        this.state.breadcrumbs.push(new Crumb('cf', cf.name, cf.name));
+      }
+    })
   }
 
   // shouldTranslate(field: string) {
@@ -599,9 +616,9 @@ export class AppService {
     const idx2 = val.split(',')[1];
     // const v1 = this.config.obdobi[idx1].poradi;
     // const v2 = this.config.obdobi[idx2].poradi;
-    const ob1 = this.config.obdobi.find(o => (o.poradi + '') === (idx1 + ''));
+    const ob1 = this.config.obdobi.find((o: { poradi: string; }) => (o.poradi + '') === (idx1 + ''));
     const d1 = this.getTranslation(ob1.nazev);
-    const ob2 = this.config.obdobi.find(o => (o.poradi + '') === (idx2 + ''));
+    const ob2 = this.config.obdobi.find((o: { poradi: string; }) => (o.poradi + '') === (idx2 + ''));
     const d2 = this.getTranslation(ob2.nazev);
     return this.getTranslation('from') + ' ' + d1 + ' ' + this.getTranslation('to') + ' ' + d2;
   }
@@ -625,7 +642,7 @@ export class AppService {
     this.state.facetsFiltered = [];
     this.state.facets.forEach(f => {
       const values = f.values.filter(v => {
-        const translated = this.getHeslarTranslation(v.name, f.field);
+        const translated = this.getTranslation(v.name);
         return pattern.test(translated);
       });
       if (values.length > 0) {
@@ -637,8 +654,8 @@ export class AppService {
   }
 
   getBoundsByResults() {
-    const lat = this.state.stats.lat;
-    const lng = this.state.stats.lng;
+    const lat = this.state.stats['lat'];
+    const lng = this.state.stats['lng'];
     if (lat.max === lat.min) {
       lat.min = lat.min - 0.05;
       lat.max = lat.max + 0.05;
@@ -650,40 +667,23 @@ export class AppService {
 
   }
 
-  getBoundsByDoc(result: any) {
-    let latMax = 0;
-    let latMin = 90;
-    let lngMax = 0;
-    let lngMin = 180;
-
-    // 50.66795366897923,13.808275906582654
-    result.loc_rpt.forEach(m => {
-      const latlng = m.split(',');
-      latMax = Math.max(latMax, latlng[0]);
-      latMin = Math.min(latMin, latlng[0]);
-      lngMax = Math.max(lngMax, latlng[1]);
-      lngMin = Math.min(lngMin, latlng[1]);
-
-    });
-
-    const southWest = L.latLng(latMin, lngMin);
-    const northEast = L.latLng(latMax, lngMax);
-    return L.latLngBounds(southWest, northEast);
-  }
-
-  setMapResult(result, mapDetail) {
+  
+  setMapResult(result: any, mapDetail: any) {
     if (!result && mapDetail) {
       // zavirame kartu
-
       const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
       this.state.closingMapResult = inResults;
-      this.state.mapResult = result;
-      let url = '/map';
-      const p: any = {};
-      p.mapId = null;
-      p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
-      ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
-      this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
+      this.state.setMapResult(result, mapDetail);
+      if (!this.state.documentId()) {
+        let url = '/map';
+        const p: any = {};
+        p.mapId = null;
+        p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
+        ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
+        this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
+      } else {
+        
+      }
     } else {
       this.state.setMapResult(result, mapDetail);
     }
@@ -699,17 +699,21 @@ export class AppService {
 
     this.state.isMapaCollapsed = false;
     const p: any = {};
-    p.mapa = true;
-    p.mapId = result.ident_cely;
     let url = '/map';
+
+    // this.state.documentId ? '/id' : '/results';
+
     if (this.router.isActive('/id', false)) {
       this.state.setMapResult(result, false);
-      url = '/id/' + this.state.documentId;
+      url = '/map/' + this.state.documentId();
       p.loc_rpt = null;
       p.vyber = null;
     } else {
-      this.state.mapResult = result;
+      this.state.mapResult.set(result);
       p.loc_rpt = null;
+
+      p.mapa = true;
+      p.mapId = result.ident_cely;
       // const bounds = this.getBoundsByDoc(result);
       //p.loc_rpt = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng +
       //',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng;

@@ -20,12 +20,12 @@
     <dependency>
       <groupId>com.twelvemonkeys.imageio</groupId>
       <artifactId>imageio-tiff</artifactId>
-      <version>3.12.0</version> <!-- Alternatively, build your own version -->
+      <version>3.13.0</version> <!-- Alternatively, build your own version -->
     </dependency>
     <dependency>
       <groupId>com.twelvemonkeys.imageio</groupId>
       <artifactId>imageio-jpeg</artifactId>
-      <version>3.12.0</version> <!-- Alternatively, build your own version -->
+      <version>3.13.0</version> <!-- Alternatively, build your own version -->
     </dependency>
     
     <dependency>
@@ -37,7 +37,7 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>3.0.3</version>
+      <version>3.0.6</version>
     </dependency>
 <!--    <dependency>
       <groupId>org.apache.pdfbox</groupId>
@@ -49,20 +49,20 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.19.0</version>
+      <version>2.21.0</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20240303</version>
+      <version>20251224</version>
       <type>jar</type>
     </dependency>
         
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
-      <version>9.6.1</version>
+      <version>9.10.1</version>
       <type>jar</type>
     </dependency>
         
@@ -74,7 +74,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>2.0.16</version>
+      <version>2.0.17</version>
     </dependency>
     <dependency>
       <groupId>com.levigo.jbig2</groupId>
@@ -88,7 +88,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.1</version>
         <executions>
           <execution>
             <goals>
