@@ -1,22 +1,31 @@
-import { SolrDocument } from 'src/app/shared/solr-document';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AppState } from 'src/app/app.state';
+
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { SolrResponse } from 'src/app/shared/solr-response';
-import { AppService } from 'src/app/app.service';
-import { AppConfiguration } from 'src/app/app-configuration';
+
 import * as Wkt from 'wicket';
+import { DatePipe } from '@angular/common';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { SolrResponse } from '../../shared/solr-response';
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule,
+    MatProgressBarModule, DatePipe
+],
   selector: 'app-export-mapa',
   templateUrl: './export-mapa.component.html',
   styleUrls: ['./export-mapa.component.scss']
 })
 export class ExportMapaComponent implements OnInit {
 
-  docs: any[] = [];
+  docs = signal<any[]>([]);
   format: string | undefined;
   hasPian = true;
 
@@ -40,7 +49,7 @@ export class ExportMapaComponent implements OnInit {
       this.ref.detectChanges();
     });
     this.route.queryParams.subscribe(val => {
-      this.format = val.format;
+      this.format = val['format'];
       this.search(val);
     });
 
@@ -58,7 +67,7 @@ export class ExportMapaComponent implements OnInit {
     // }, doc);
     // return res;
     try {
-      return eval('doc.' + path)
+      return window.eval('doc.' + path)
     } catch (e: any) {
       return '';
     }
@@ -67,21 +76,23 @@ export class ExportMapaComponent implements OnInit {
 
   search(params: Params) {
     const p = Object.assign({}, params);
-    p.rows = this.config.exportRowsLimit;
-    p.mapa = true;
-    p.isExport = true;
-    p.noFacets = true;
-    p.noStats = true;
-    this.state.loading = true;
-    this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
-      
-      this.state.loading = false;
+    p['rows'] = this.config.exportRowsLimit;
+    p['mapa'] = true;
+    p['isExport'] = true;
+    p['noFacets'] = true;
+    p['noStats'] = true;
+    if (!p['entity'] && !p['id']) {
+      p['entity'] = 'dokument';
+    }
+    this.state.loading.set(true);
+    this.service.searchExportMapa(p as HttpParams).subscribe((resp: SolrResponse) => {
+      let docs: any[] = resp.response.docs;
+      this.state.loading.set(false);
       if (resp.error) {
         return;
       }
       if (this.state.entity === 'knihovna_3d') {
-        this.docs = resp.response.docs;
-        this.docs.forEach(doc => {
+        docs.forEach(doc => {
           if (this.format === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
             const wkt = new Wkt.Wkt();
@@ -94,9 +105,9 @@ export class ExportMapaComponent implements OnInit {
           }
         });
         this.hasPian = false;
+        this.docs.update(d => [...docs]);
       } else if (this.state.entity === 'samostatny_nalez') {
-        this.docs = resp.response.docs;
-        this.docs.forEach(doc => {
+        docs.forEach(doc => {
           if (this.format === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
             const wkt = new Wkt.Wkt();
@@ -109,16 +120,34 @@ export class ExportMapaComponent implements OnInit {
           }
         });
         this.hasPian = false;
-      } else {
+        this.docs.update(d => [...docs]);
+      } else if (p['id'] && docs[0]?.entity === 'pian') {
+        this.state.entity = 'pian';
+        docs.forEach(doc => {
+          doc.pian = doc;
+          if (this.format === 'GeoJSON') {
+            // console.log(ident_cely, resp.geom_wkt_c);
+            const wkt = new Wkt.Wkt();
+            wkt.read(doc.pian_chranene_udaje.geom_wkt.value);
+            doc.geometrie = JSON.stringify(wkt.toJson());
+          } else if (this.format === 'GML') {
+            doc.geometrie = doc.pian_chranene_udaje.geom_gml;
+          } else {
+            doc.geometrie = doc.pian_chranene_udaje.geom_wkt.value;
+          }
+        });
         this.hasPian = true;
-        this.docs = [];
+        this.docs.update(d => [...docs]);
+      } else {
+        docs = [];
+        this.hasPian = true;
         resp.response.docs.forEach(doc => {
           if(doc.pian) {
             
             doc.pian.forEach(pian => {
               const d = JSON.parse(JSON.stringify(doc));
               d.pian = pian;
-              this.service.getGeometrie(pian.ident_cely, this.format, p.loc_rpt).subscribe((resp: any) => {
+              this.service.getGeometrie(pian.ident_cely, this.format, p['loc_rpt']).subscribe((resp: any) => {
                 if (resp.geometrie) {
                   if (this.format === 'GeoJSON') {
                     // console.log(ident_cely, resp.geom_wkt_c);
@@ -130,7 +159,8 @@ export class ExportMapaComponent implements OnInit {
                   }
                   // d.lat = p.centroid_n;
                   // d.lng = p.centroid_e;
-                  this.docs.push(d);
+                  docs.push(d);
+                  this.docs.update(d => [...docs]);
                 }
               });
             });
@@ -141,64 +171,4 @@ export class ExportMapaComponent implements OnInit {
 
     });
   }
-
-  hasRights(r: SolrDocument) {
-    return this.state.hasRights(r.pristupnost, r.organizace);
-  }
-
-  numFiles(result) {
-    if (result.hasOwnProperty('soubor')) {
-      return result.soubor.length;
-    } else {
-      return 0;
-    }
-  }
-
-  okres(result) {
-    if (result.hasOwnProperty('f_okres')) {
-      let okresy = [];
-      let katastry = [];
-      let ret = "";
-      for (let idx = 0; idx < result['f_okres'].length; idx++) {
-        let okres = result['f_okres'][idx];
-        let katastr = result['f_katastr'][idx];
-
-        if (katastry.indexOf(katastr) < 0) {
-          okresy.push(okres);
-          katastry.push(katastr);
-          if (idx > 0) {
-            ret += ', ';
-          }
-          ret += katastr + ' (' + okres + ')';
-        }
-      }
-      return ret;
-    } else {
-      return "";
-    }
-  }
-
-  organizace(result) {
-    if (result.hasOwnProperty('organizace')) {
-      let os = [];
-      let ret = "";
-      for (let idx = 0; idx < result['organizace'].length; idx++) {
-        let o = result['organizace'][idx];
-        if (os.indexOf(o) < 0 && o.trim() !== '') {
-          os.push(o);
-
-          if (idx > 0) {
-            ret += ', ';
-          }
-          ret += o;
-        }
-
-      }
-      return ret;
-    } else {
-      return "";
-    }
-
-  }
-
 }

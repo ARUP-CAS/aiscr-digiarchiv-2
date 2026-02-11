@@ -6,7 +6,7 @@ export class Utils {
    * @param target the target
    */
 
-  public static sanitize(source, target) {
+  public static sanitize(source: any, target: any) {
     for (const p in source) {
       if (source[p] && p in target) {
         target[p] = source[p];

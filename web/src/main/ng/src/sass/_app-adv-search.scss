@@ -1,9 +1,0 @@
-// --- ADV SEARCH ---
-
-app-adv-search {
-  .app-add-condition {
-    .mat-icon {
-      @include setIcon($position: bottom);
-    }
-  }
-}
