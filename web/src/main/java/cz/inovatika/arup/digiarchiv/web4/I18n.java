@@ -62,7 +62,7 @@ public class I18n {
 
   public void load(String locale) throws IOException, URISyntaxException, InterruptedException {
 
-    String filename = locale + ".json";
+    String filename = InitServlet.asSafePath(locale) + ".json";
 
     File fdef = new File(InitServlet.DEFAULT_I18N_DIR + File.separator + filename);
     JSONObject def = new JSONObject();
