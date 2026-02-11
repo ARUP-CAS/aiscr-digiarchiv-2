@@ -22,6 +22,7 @@ import { Entity } from '../entity/entity';
     TranslateModule,
     RouterModule,
     FlexLayoutModule,
+    DatePipe,
     MatCardModule,
     MatIconModule,
     MatSidenavModule,

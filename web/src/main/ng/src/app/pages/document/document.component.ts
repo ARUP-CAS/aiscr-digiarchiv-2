@@ -65,7 +65,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.state.printing.set(this.state.printing() || this.router.isActive('print', false));
     this.route.queryParams.subscribe(val => {
       this.search(this.route.snapshot.params['id']);
-      this.state.documentId = this.route.snapshot.params['id'];
+      this.state.documentId.set(this.route.snapshot.params['id']);
     });
   }
 

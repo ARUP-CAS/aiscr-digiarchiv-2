@@ -20,13 +20,14 @@
         <span class="app-pipe"></span>
         @if (_result.az_chranene_udaje?.hlavni_katastr) {
           <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
-          }&#160;(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.az_okres"></app-inline-filter>)
-          <span class="app-pipe"></span><app-inline-filter [isChild]="isChild()" [field]="'f_vedouci'" [value]="_result.akce_hlavni_vedouci"></app-inline-filter><span class="app-pipe"></span>
-          <!-- <app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="_result.akce_organizace" [heslar]="'organizace'"></app-inline-filter>
-          <span class="app-pipe"></span> -->
-          @if (!state.isMapaCollapsed) {
-            <label >{{ _result.akce_datum_zahajeni | date : 'dd.MM.yyyy' }}@if(_result.akce_datum_ukonceni){ - {{ _result.akce_datum_ukonceni | date : 'dd.MM.yyyy' }}}</label><span class="app-pipe"></span>
-          }
+        }
+        <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.az_okres"></app-inline-filter>)</span>
+        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild()" [field]="'f_vedouci'" [value]="_result.akce_hlavni_vedouci"></app-inline-filter><span class="app-pipe"></span>
+        <!-- <app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="_result.akce_organizace" [heslar]="'organizace'"></app-inline-filter>
+        <span class="app-pipe"></span> -->
+        @if (!state.isMapaCollapsed) {
+          <label >{{ _result.akce_datum_zahajeni | date : 'dd.MM.yyyy' }}@if(_result.akce_datum_ukonceni){ - {{ _result.akce_datum_ukonceni | date : 'dd.MM.yyyy' }}}</label><span class="app-pipe"></span>
+        }
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
         <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>

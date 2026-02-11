@@ -36,6 +36,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
         JSONObject sub = SolrSearcher.getById(client, p, fields);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);
+          doc.put("datestamp", sub.getString("datestamp"));
           parentSearchable = true;
         }
       }

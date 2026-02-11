@@ -31,7 +31,7 @@ public class TextsServlet extends HttpServlet {
 
     String lang = request.getParameter("lang");
     String filename = InitServlet.CONFIG_DIR + File.separator + "texts"
-            + File.separator + request.getParameter("id");
+            + File.separator + InitServlet.asSafePath(request.getParameter("id"));
     File f;
     if (lang != null) {
       f = new File(filename + "_" + lang + ".html");
