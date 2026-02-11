@@ -1,0 +1,99 @@
+@use "../../../scss/app-mixins-icon" as *;
+
+footer {
+  width: calc(100% - #{32px});
+  padding: 0 16px;
+  background-color: var(--app-footer-color-bg);
+  color: var(--app-footer-color);
+
+  .app-footer-wrapper {
+    flex-flow: wrap;
+    min-height: var(--app-footer-height);
+
+    @media only screen and (min-width: 960px) {
+      height: var(--app-footer-height);
+    }
+
+    .app-left,
+    .app-right {
+      $flex-width: 100%;
+      flex: 1 1 $flex-width;
+      min-width: $flex-width;
+
+      p {
+        margin-top: 0;;
+      }
+    }
+
+    a {
+      color: currentColor;
+    }
+
+    $flex-left-width: 400px;
+
+    .app-left {
+      padding-top: 32px;
+
+      img {
+        vertical-align: middle;
+      }
+
+      .app-logo {
+        height: 16px;
+        vertical-align: text-top;
+      }
+
+      .mat-icon {
+        @include setIcon($size: 20, $position: sub);
+      }
+
+      // mq
+      @media only screen and (min-width: 960px) {
+        $flex-width: $flex-left-width;
+        flex: 1 1 $flex-width;
+        min-width: $flex-width;
+      }
+
+      @media only screen and (max-width: 420px) {
+        .app-middle {
+          & > span {
+            display: block;
+            margin-bottom: 8px;
+          }
+
+          .app-pipe {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .app-right {
+      padding-top: 0;
+
+      img {
+        height: 60px;
+        margin: 0 16px 16px 0;
+      }
+
+      // mq
+      @media only screen and (min-width: 960px) {
+        $flex-width: calc(100% - #{$flex-left-width});
+        flex: 1 1 $flex-width;
+        min-width: $flex-width;
+        text-align: right;
+        padding-top: 32px;
+      }
+    }
+  }
+}
+
+::ng-deep .app-consent {
+  position: relative;
+
+  .mdc-icon-button {
+    position: absolute;
+    top: -10px;
+    right: 0px;
+  }
+}

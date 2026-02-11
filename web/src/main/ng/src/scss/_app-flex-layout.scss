@@ -1,0 +1,85 @@
+// --- FLEX LAYOUT ---
+
+@use "app-mixins-flex-gap" as *;
+
+.app-fxLayout {
+  display: flex !important;
+  box-sizing: border-box;
+
+  &.app-row {
+    flex-direction: row;
+    @include setFlexGap(row);
+  }
+
+  &.app-column {
+    flex-direction: column;
+    @include setFlexGap(column);
+  }
+
+  &.app-wrap {
+    flex-flow: wrap;
+  }
+
+  &.app-start-v {
+    align-items: start;
+  }
+
+  &.app-start-h {
+    place-content: start;
+  }
+
+  &.app-end-v {
+    align-items: end;
+  }
+
+  &.app-end-h {
+    place-content: end;
+  }
+
+  &.app-center-v {
+    align-items: center;
+  }
+
+  &.app-center-h {
+    place-content: center;
+  }
+
+  &.app-baseline {
+    align-items: baseline;
+  }
+
+  &.app-fill {
+    height: 100%; 
+    min-height: 100%; 
+    min-width: 100%; 
+    width: 100%; 
+  }
+}
+
+
+.app-fxFlex {
+  flex: 1 1 1e-09px; 
+  box-sizing: border-box;
+
+  &.app-center-v {
+    align-self: center;
+  }
+}
+
+.app-fxFlex-100w {
+  flex: 1 1 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.app-jc-start {
+  justify-content: start !important;
+}
+
+.app-jc-end {
+  justify-content: end !important;
+}
+
+.app-as-center {
+  align-self: center;
+}

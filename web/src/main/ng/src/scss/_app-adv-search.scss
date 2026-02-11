@@ -1,0 +1,12 @@
+// --- ADV SEARCH ---
+
+
+@use "app-mixins-icon" as *;
+
+app-adv-search {
+  .app-add-condition {
+    .mat-icon {
+      @include setIcon($position: bottom);
+    }
+  }
+}

@@ -1,14 +1,23 @@
-import { SolrDocument } from 'src/app/shared/solr-document';
+
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AppState } from 'src/app/app.state';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { SolrResponse } from 'src/app/shared/solr-response';
-import { AppService } from 'src/app/app.service';
-import { AppConfiguration } from 'src/app/app-configuration';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { SolrDocument } from '../../shared/solr-document';
+import { SolrResponse } from '../../shared/solr-response';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DatePipe } from '@angular/common';
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule,
+    MatProgressBarModule, DatePipe
+],
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.scss']
@@ -48,7 +57,7 @@ export class ExportComponent implements OnInit {
     // }, doc);
     // return res;
     try {
-      return eval('doc.' + path)
+      return window.eval('doc.' + path)
     } catch (e: any) {
       return '';
     }
@@ -62,14 +71,14 @@ export class ExportComponent implements OnInit {
   }
 
   search(params: Params) {
-    this.state.loading = true;
-    const p = Object.assign({}, params);
+    this.state.loading.set(true);
+    const p: any = Object.assign({}, params);
     p.rows = this.config.exportRowsLimit;
     if (!p['entity']) {
       p['entity'] = 'dokument';
     }
     this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
-      this.state.loading = false;
+      this.state.loading.set(false);
       if (resp.error) {
         return;
       }
@@ -78,11 +87,7 @@ export class ExportComponent implements OnInit {
     });
   }
 
-  hasRights(r: SolrDocument) {
-    return this.state.hasRights(r.pristupnost, r.organizace);
-  }
-
-  numFiles(result) {
+  numFiles(result: any) {
     if (result.hasOwnProperty('soubor')) {
       return result.soubor.length;
     } else {
@@ -90,51 +95,5 @@ export class ExportComponent implements OnInit {
     }
   }
 
-  // okres(result) {
-  //   if (result.hasOwnProperty('f_okres')) {
-  //     let okresy = [];
-  //     let katastry = [];
-  //     let ret = "";
-  //     for (let idx = 0; idx < result['f_okres'].length; idx++) {
-  //       let okres = result['f_okres'][idx];
-  //       let katastr = result['f_katastr'][idx];
-
-  //       if (katastry.indexOf(katastr) < 0) {
-  //         okresy.push(okres);
-  //         katastry.push(katastr);
-  //         if (idx > 0) {
-  //           ret += ', ';
-  //         }
-  //         ret += katastr + ' (' + okres + ')';
-  //       }
-  //     }
-  //     return ret;
-  //   } else {
-  //     return "";
-  //   }
-  // }
-
-  // organizace(result) {
-  //   if (result.hasOwnProperty('organizace')) {
-  //     let os = [];
-  //     let ret = "";
-  //     for (let idx = 0; idx < result['organizace'].length; idx++) {
-  //       let o = result['organizace'][idx];
-  //       if (os.indexOf(o) < 0 && o.trim() !== '') {
-  //         os.push(o);
-
-  //         if (idx > 0) {
-  //           ret += ', ';
-  //         }
-  //         ret += o;
-  //       }
-
-  //     }
-  //     return ret;
-  //   } else {
-  //     return "";
-  //   }
-
-  // }
 
 }

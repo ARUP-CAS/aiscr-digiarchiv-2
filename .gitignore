@@ -1,4 +1,3 @@
-web/src/main/webapp/index.ssr.html
 ThumbnailsGenerator/target/
 ThumbnailsGenerator/nbactions.xml
 
@@ -6,3 +5,4 @@ ThumbnailsGenerator/nbactions.xml
 .DS_Store
 web/src/.DS_Store
 web/.DS_Store
+web/src/main/webapp/index.csr.html

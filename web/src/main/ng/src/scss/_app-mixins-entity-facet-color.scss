@@ -1,0 +1,32 @@
+// --- MIXINS ---
+
+@use "app-vars-entity-color" as *;
+
+// set entity color
+@mixin setFacetEntityColor() {
+  @each $entity, $color in $entities {
+    &.#{$entity} {
+      color: $color;
+      background-color: rgba($color, .1);
+      border-color: rgba($color, .3);
+
+      &.app-active {
+        background-color: $color;
+      }
+
+      &:hover {
+        background-color: $color;
+      }
+
+      &:not(.app-active, :hover) {
+        .mdc-list-item__primary-text {
+          color: $color;
+        }
+      }
+    
+      .app-left {
+        background-color: $color;
+      }
+    }    
+  }
+}

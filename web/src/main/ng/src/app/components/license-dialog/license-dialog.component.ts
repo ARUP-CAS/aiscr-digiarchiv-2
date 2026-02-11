@@ -1,8 +1,21 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppConfiguration } from 'src/app/app-configuration';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { CitationComponent } from "../citation/citation.component";
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule,
+    MatCardModule, MatIconModule, MatDialogModule,
+    MatButtonModule,
+    CitationComponent
+],
   selector: 'app-license-dialog',
   templateUrl: './license-dialog.component.html',
   styleUrls: ['./license-dialog.component.scss']

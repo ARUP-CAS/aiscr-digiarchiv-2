@@ -1,17 +1,26 @@
-import { AppState } from 'src/app/app.state';
-import { AppConfiguration } from 'src/app/app-configuration';
-import { AppService } from 'src/app/app.service';
-import { Component, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
-import { Crumb } from 'src/app/shared/crumb';
-import { SolrResponse } from 'src/app/shared/solr-response';
+
+import { Component, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges, signal } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { DatePipe } from '@angular/common';
-import { MatDatepickerInputEvent, MatDatepicker } from '@angular/material/datepicker';
-import { Moment } from 'moment';
-import { DateAdapter } from '@angular/material/core';
-import { FormControl } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
+import { FlexLayoutModule } from 'ngx-flexible-layout';
+import { AppConfiguration } from '../../app-configuration';
+import { AppService } from '../../app.service';
+import { AppState } from '../../app.state';
+import { Crumb } from '../../shared/crumb';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { FacetsDynamicComponent } from "../facets-dynamic/facets-dynamic.component";
+import { FacetsSearchComponent } from "./facets-search/facets-search.component";
+import { MatButtonModule } from '@angular/material/button';
 
 interface FacetNode {
   field: string;
@@ -32,38 +41,32 @@ interface ExampleFlatNode {
 }
 
 @Component({
+  imports: [
+    TranslateModule, RouterModule, FlexLayoutModule,
+    MatCardModule, MatIconModule, MatExpansionModule, MatMenuModule,
+    MatProgressBarModule, MatTooltipModule, MatListModule, ScrollingModule,
+    FacetsDynamicComponent, MatButtonModule,
+    FacetsSearchComponent
+],
   selector: 'app-facets',
   templateUrl: './facets.component.html',
   styleUrls: ['./facets.component.scss']
 })
 export class FacetsComponent implements OnInit {
 
-  @ViewChild('tree') tree;
+  @ViewChild('tree') tree: any;
 
   loading: boolean;
   facetHeight: string = "40px";
 
   activeOP: boolean; // _temp pro test, pak vymazat
 
-  treeData: FacetNode[] = [];
-  treeControl: FlatTreeControl<ExampleFlatNode>;
-  treeFlattener;
-  dataSource: MatTreeFlatDataSource<unknown, ExampleFlatNode>;
+  
   changedFacets: Crumb[] = [];
   math = Math;
 
-  facetsSorted: { field: string, values: { name: string, type: string, value: number, operator: string }[] }[];
+  facetsSorted = signal<{ field: string, values: { name: string, type: string, value: number, operator: string }[] }[]>([]);
   expandedFacets: {[field: string]: boolean} = {};
-
-  private flattener = (node: FacetNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      field: node.field,
-      count: node.count,
-      used: node.used,
-      level
-    };
-  }
 
   constructor(
     private router: Router,
@@ -71,26 +74,21 @@ export class FacetsComponent implements OnInit {
     public config: AppConfiguration,
     public state: AppState,
     private service: AppService,
-  ) {
-
-    this.treeControl = new FlatTreeControl<ExampleFlatNode>(node => node.level, node => node.expandable);
-    this.treeFlattener = new MatTreeFlattener(this.flattener, node => node.level, node => node.expandable, node => node.children);
-
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-    this.dataSource.data = this.treeData;
-  }
+  ) { }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable; // demo
 
   ngOnInit(): void {
     this.state.facetsChanged.subscribe(() => {
-      this.setTreeData();
       this.orderFacets();
     });
   }
 
   orderFacets() {
-    this.facetsSorted = [];
+    if (!this.state.facetsFiltered) {
+      return;
+    }
+    const facetsSorted: { field: string, values: { name: string, type: string, value: number, operator: string, poradi?: number }[] }[] =[];
     this.state.facetsFiltered.forEach(f => {
         const ff: { name: string, type: string, value: number, operator: string, poradi?: number }[] = f.values;
         
@@ -102,8 +100,8 @@ export class FacetsComponent implements OnInit {
 
         if ('name' === this.state.facetSort[f.field]) {
           ff.sort((v1, v2) => {
-            const n1 = this.service.getHeslarTranslation(v1.name, f.field).toLocaleUpperCase('cs');
-            const n2 = this.service.getHeslarTranslation(v2.name, f.field).toLocaleUpperCase('cs');
+            const n1 = this.service.getTranslation(v1.name).toLocaleUpperCase('cs');
+            const n2 = this.service.getTranslation(v2.name).toLocaleUpperCase('cs');
             // facet.name | translateHeslar : facetField.field
             return n1.localeCompare(n2, 'cs');
           });
@@ -120,41 +118,15 @@ export class FacetsComponent implements OnInit {
           }
         } else {
           ff.sort((v1, v2) => {
+            //return v1.value.localeCompare(v2.value, 'cs')
             return v2.value - v1.value
           });
         }
-        this.facetsSorted.push({ field: f.field, values: ff });
+        facetsSorted.push({ field: f.field, values: ff });
     });
 
+    this.facetsSorted.update(f => [...facetsSorted]);
 
-  }
-
-  setTreeData() {
-    this.treeData = [];
-    if (this.state.facetPivots.length === 0) {
-      return;
-    }
-    const kategorie = this.state.facetPivots[0];
-    kategorie.values.forEach(fp => {
-      const used = this.state.breadcrumbs.findIndex(c => c.field === 'kategorie' && c.value === fp.value) > -1;
-      const fnode: FacetNode = {
-        field: fp.value,
-        count: fp.count,
-        used,
-        children: []
-      };
-      fp.pivot.forEach(val => {
-        const used2 = this.state.breadcrumbs.findIndex(c => c.field === val.field && c.value === val.value) > -1;
-        fnode.children.push({
-          field: val.value,
-          count: val.count,
-          used: used2
-        });
-      });
-      this.treeData.push(fnode);
-
-    });
-    this.dataSource.data = this.treeData;
   }
 
   changeShowWithoutThumbs() {
@@ -162,7 +134,7 @@ export class FacetsComponent implements OnInit {
     this.router.navigate([], { queryParams: { hideWithoutThumbs: val, page: 0 }, queryParamsHandling: 'merge' });
   }
 
-  changeEntity(entity) {
+  changeEntity(entity: string) {
     if (this.state.user) {
       // Get sort from ui
       this.service.getLogged(true).subscribe((resp: any) => {
@@ -177,7 +149,7 @@ export class FacetsComponent implements OnInit {
 
   }
 
-  setEntity(entity) {
+  setEntity(entity: string) {
     this.state.isFacetsCollapsed = true;
     this.state.setFacetChanged();
     document.getElementById('content-scroller').scrollTo(0,0);
@@ -209,7 +181,7 @@ export class FacetsComponent implements OnInit {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
-  clickFacet(field, facet) {
+  clickFacet(field: string, facet: any) {
     if (facet.operator && facet.operator !== 'delete') {
       this.addFilter(field, facet, 'delete');
     } else {
@@ -217,7 +189,7 @@ export class FacetsComponent implements OnInit {
     }
   }
 
-  addFilter(field, facet, op: string) {
+  addFilter(field: string, facet: any, op: string) {
     if (!facet.operator || this.changedFacets.length === 0) {
       this.changedFacets.push(new Crumb(field, facet.name, facet.name, op));
     } else {
@@ -269,7 +241,7 @@ export class FacetsComponent implements OnInit {
         if (c.operator !== 'delete') {
           // Change operators
           let found = false;
-          params[c.field].forEach(p => {
+          params[c.field].forEach((p: string) => {
             if (c.value === p.split(':')[0]) {
               p = c.value + ':' + c.operator;
               found = true;
@@ -280,7 +252,7 @@ export class FacetsComponent implements OnInit {
           }
         } else {
           // remove value
-          params[c.field] = params[c.field].filter(p => (c.value !== p.split(':')[0]));
+          params[c.field] = params[c.field].filter((p: string) => (c.value !== p.split(':')[0]));
         }
         if (params[c.field].length === 0) {
           params[c.field] = null;
