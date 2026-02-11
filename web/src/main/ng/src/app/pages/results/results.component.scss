@@ -1,0 +1,326 @@
+// --- RESULTS ---
+@use "../../../scss/app-mixins-icon" as *;
+
+// smaller top padding for result page
+.app-display-table {
+  .app-table-cell {
+    padding-top: 24px;
+  }
+}
+
+::ng-deep {
+  .app-toolbar {
+    margin-bottom: 4px;
+    
+    .app-action-links {
+      .mat-icon {
+        @include setIcon($position: bottom);
+      }
+    }
+
+    @media only screen and (max-width: 1270px) {
+      flex-wrap: wrap;
+
+      .app-action-links {
+        @include setIcon($position: bottom);
+        padding: 16px 0 0 16px;
+      }
+
+      app-paginator {
+        width: 100%;
+      }
+
+      .mat-mdc-paginator-container {
+        justify-content: start;
+      }
+    }
+
+    @media only screen and (min-width: 960px) and (max-width: 1140px), screen and (max-width: 760px) {
+      app-paginator {
+        margin-bottom: 8px;
+
+        & > .app-fxLayout {
+          display: block !important;
+
+          .mat-mdc-paginator {
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+  }
+} 
+
+
+.app-mobile-action-toolbar {
+  display: none !important;
+  height: var(--app-mobile-action-toolbar-height);
+  background-color: var(--app-color-lightnes);
+  border-bottom: 1px solid var(--app-color-gray-3);
+
+  @media only screen and (max-width: 959px) {
+    display: flex !important;
+  }
+}
+
+.app-left {
+  @media only screen and (max-width: 959px) {
+    &:not(.app-facets-opened) {
+      display: none !important;
+    }
+  }
+}
+
+.app-right {
+  .app-action-links {
+    .app-pipe {
+      vertical-align: super;
+    }
+  }
+
+  @media only screen and (max-width: 959px) {
+    &:not(.app-results-opened),
+    .app-action-links {
+      display: none !important;
+    }
+  }
+}
+
+::ng-deep {
+  // view default
+  .app-view-default {
+    .mat-mdc-card {
+      .mat-mdc-card-content {
+         @media only screen and (max-width: 450px) {
+          a {
+            word-break: break-all;
+          }
+         }
+      }
+
+      .mat-mdc-card-actions {
+        @media only screen and (min-width: 960px) and (max-width: 1150px) {
+          display: block !important;
+
+          app-result-actions {
+            .app-fxLayout {
+              flex-wrap: wrap;
+
+              .mat-mdc-button-base {
+                margin-top: 8px;
+              }
+            }
+          }
+        }
+        @media only screen and (max-width: 770px) {
+          display: block !important;
+
+          app-result-actions {
+            .app-fxLayout {
+              flex-wrap: wrap;
+
+              .mat-mdc-button-base {
+                margin-top: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // view row
+  .app-view-row {
+    .mat-mdc-card {
+      .mat-mdc-card-content {
+        &.app-detail-closed {
+          display: none;
+        }
+
+        .app-card-detail {
+          .app-detail-closed {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  // view col
+  .app-view-col {
+    & > div {
+      display: flex;
+      flex-flow: wrap;
+    }
+
+    app-entity-container {
+      $flex-width: 25%;
+      $flex-gap: 12px; // default val 16px - 4px because every 4 item has gap 0
+      flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+      box-sizing: border-box;
+      max-width: calc(#{$flex-width} - #{$flex-gap});
+      margin-right: 16px;
+
+      @media only screen and (min-width: 1160px) {
+        &:nth-child(4n) {
+          margin-right: 0;
+        }
+      } 
+
+      @media only screen and (min-width: 959px) and (max-width: 1160px) {
+        $flex-width: 33.3333%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+
+      @media only screen and (min-width: 730px) and (max-width: 959px) {
+        $flex-width: 25%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(4n) {
+          margin-right: 0;
+        }
+      }
+
+      @media only screen and (min-width: 520px) and (max-width: 730px) {
+        $flex-width: 33.3333%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+
+      @media only screen and (min-width: 360px) and (max-width: 520px) {
+        $flex-width: 50%;
+        flex: 1 1 calc(#{$flex-width} - #{$flex-gap});
+        max-width: calc(#{$flex-width} - #{$flex-gap});
+
+        &:nth-child(2n) {
+          margin-right: 0;
+        }
+      }
+
+       @media only screen and (max-width: 360px) {
+        $flex-width: 100%;
+        flex: 1 1 $flex-width;
+        max-width: $flex-width;
+        margin-right: 0;
+      }
+
+      .mat-mdc-card {
+        min-height: 216px;
+        max-height: 236px;
+        
+        .mat-mdc-card-header {
+          .mat-mdc-card-header-text {
+            width: 100%;
+
+            .mat-mdc-card-title {
+              display: block;
+              text-align: center;
+
+              & > .app-fxFlex {
+                margin-right: 0 !important;
+                margin-bottom: 0 !important;
+
+                *:not(.app-ident-format) {
+                  display: none;
+                }
+              }
+
+              .app-last-change {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .mat-mdc-card-content {
+          height: 100px;
+          min-height: 100px;
+
+          .app-metadata {
+            display: none;
+          }
+
+          .app-thumb {
+            @extend .app-clean-mg !optional;
+            width: 100%;
+            background-color: var(--app-color-gray-2);
+            text-align: center;
+            margin-right: 0 !important;
+
+            img {
+              vertical-align: middle;
+            }
+
+            .mat-icon {
+              @include setIcon(32);
+              color:  var(--app-color-darkness) !important;
+            }
+
+            &.app-thumb-missing {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+        }
+
+        .mat-mdc-card-actions {
+          place-content: center !important;
+          margin-top: 16px;
+
+          .app-metadata {
+            display: none;
+          }
+
+          .mat-mdc-button-base {
+            @extend .app-clean-mg !optional;
+
+            &:not(.app-col-detail) {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .app-card-result-dialog {
+    @media only screen and (max-width: 400px) {
+      .mat-mdc-card-content {
+        & > .app-fxLayout {
+          display: block !important;
+
+          .app-thumb {
+            margin-bottom: 8px;
+            text-align: center;
+            background-color: var(--app-color-gray-2);
+          }
+        }
+      }
+
+      .mat-mdc-card-actions {
+        display: block !important;
+        
+        app-result-actions {
+          & > .app-fxLayout {
+            flex-wrap: wrap;
+
+            .mat-mdc-button-base {
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

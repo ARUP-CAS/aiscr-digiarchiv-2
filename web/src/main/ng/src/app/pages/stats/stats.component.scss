@@ -1,0 +1,171 @@
+// search
+.app-searchbar-wrapper {
+  .app-search-form {
+    .mat-mdc-form-field {
+      width: 300px !important;
+
+      .mat-mdc-form-field-infix {
+        width: 100px;
+      }
+    }
+  }
+}
+
+// graph
+.app-graph-wrapper {
+  .app-right {
+    .app-graph {
+      background-color: var(--app-color-gray-1);
+    }
+  } 
+}
+
+// cards
+.app-cards-wrapper {
+  flex-wrap: wrap;
+  margin: 0 -8px;
+  
+  .mat-mdc-card {
+    min-height: 400px;
+    margin: 0 8px 16px 8px;
+
+    &.app-event,
+    &.app-record-type {
+      $app-width: 25%;
+      flex: 1 1 calc($app-width - 16px);
+      max-width: calc($app-width - 16px);
+    }
+
+    &.app-ident {
+      $app-width: 50%;
+      flex: 1 1 calc($app-width - 16px);
+      max-width: calc($app-width - 16px);
+    }
+
+    @media only screen and (max-width: 800px) {
+      $app-width: 100%;
+      flex: 1 1 $app-width !important;
+      max-width: $app-width !important;
+      min-height: auto;
+    } 
+
+    .mat-mdc-card-header {
+      margin-bottom: 12px;
+    }
+
+    .mat-mdc-card-content {
+      .mat-mdc-form-field {
+        width: 100%;
+        margin-bottom: 16px;
+      }
+
+      .app-item {
+        margin-bottom: 4px;
+
+        .app-count {
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+}
+
+// responsive behavior
+@media only screen and (max-width: 959px) {
+  .app-searchbar-wrapper {
+    .app-search-form {
+      .mat-mdc-form-field {
+        width: 200px !important;
+
+        .mat-mdc-form-field-infix {
+          width: 100px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .app-searchbar-wrapper {
+    .app-search-form {
+      .mat-mdc-form-field {
+        min-width: 160px !important;
+
+        .mat-mdc-form-field-infix {
+          width: 80px;
+        }
+      }
+
+      .mdc-button {
+        min-width: auto !important;
+        padding-left: 14px;
+        padding-right: 14px;
+
+        .mat-icon {
+          margin: 0;
+        }
+
+        .app-text {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .app-graph-wrapper {
+    display: block !important;
+
+    .app-left {
+      margin-right: 0 !important;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+/* @media only screen and (min-width: 1044px) {
+  .app-cards-wrapper {
+    .app-ident {
+      flex: 1 1 100% !important;
+      max-width: 50% !important;
+    }
+  }
+} */
+
+@media only screen and (max-width: 440px) {
+  .app-searchbar-wrapper {
+    .app-search-form {
+      .mat-mdc-form-field {
+        min-width: 130px !important;
+
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          padding: 0 4px 0 8px;
+
+          .mat-mdc-form-field-flex {
+            .mat-mdc-form-field-icon-suffix {
+              .mdc-icon-button {
+                width: 20px !important;
+                height: 40px !important;
+                padding: 0 !important;
+  
+                svg {
+                  width: 18px;
+                  height: 18px;
+                }
+  
+                .mat-icon {
+                  font-size: 18px;
+                  width: 18px;
+                  height: 18px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .app-cards-wrapper {
+    display: block !important;
+  }
+}

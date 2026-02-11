@@ -1,0 +1,204 @@
+// --- SIDENAV CONTAINER ---
+@use "app-mixins-icon" as *;
+
+.app-sidenav-container {
+  height: calc(100vh - 217px);
+
+  .mat-sidenav {
+    width: calc(var(--app-sidenav-width) + 40px);
+
+    .mat-drawer-inner-container {
+      background-color: var(--app-color-lightnes);
+      width: var(--app-sidenav-width);
+      box-shadow: 0 -1px 24px rgb(0 0 0 / 40%);
+
+      .app-btn {
+        right: 0 !important;
+        left: unset !important;
+      }
+    }
+
+    @media only screen and (max-width: 599px) { 
+      width: 100%;
+
+      .mat-drawer-inner-container {
+        width: 100%;
+      }
+    }
+
+    .mat-tab-group {
+      .mat-tab-label {
+        min-width: 50%;
+      }
+    }
+
+    .app-card-result {
+      border-bottom: 1px solid var(--app-color-gray-2);
+      border-radius: 0;
+      box-shadow: none;
+      margin-bottom: 0 !important;
+
+      &:hover {
+        background-color: var(--app-color-gray-2);
+      }
+
+      .mat-mdc-card-header {
+        padding: 8px 8px 8px 16px;
+        margin-bottom: 0;
+
+        .mat-mdc-card-title {
+          font-size: 14px;
+         
+          .app-icon-info {
+            margin-right: 4px;
+
+            .mat-icon {
+              @include setIcon(20, var(--app-color-primary-darker-rgb), baseline);
+            }
+          }
+        }
+      }
+      .mat-mdc-card-content,
+      .mat-mdc-card-actions {
+        display: none !important;
+      }
+    }
+
+    app-paginator {
+      & > div {
+        border-bottom: 1px solid var(--app-color-gray-3);
+      }
+
+      .mat-mdc-paginator-container {
+        width: auto;
+      }
+
+      .mat-mdc-paginator {
+        .mat-mdc-paginator-range-label {
+          margin: 0;
+        }
+      }
+
+      .app-num {
+        margin-right: 8px !important;
+      }
+
+      .mat-mdc-paginator-page-size,
+      .app-sort {
+        display: none !important;
+      }
+    }
+  }
+
+  .app-btn {
+    position: absolute;
+    top: var(--app-gap-map);
+    left: var(--app-gap-map);
+    z-index: 1092;
+    min-width: 0;
+    line-height: 28px;
+    padding: 0 1px;
+    box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
+    border: 0;
+    height: 28px;
+    background-color: var(--app-color-lightnes);
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+    border-radius: var(--app-default-border-radius);
+    cursor: pointer;
+
+    .app-btn-text {
+      font-weight: 600;
+      padding-right: 6px;
+
+      @media (max-width: 440px) {
+        display: none;
+      }
+    }
+  }
+
+  .app-view-card-info {
+    position: absolute;
+    top: var(--app-gap-top-card-info);
+    right: var(--app-gap-top-card-info);
+    z-index: 1002;
+    width: 850px;
+    margin-left: 142px;
+    max-height: calc(100% - 100px);
+    overflow-y: auto;
+    box-shadow: var(--mat-sys-level1);
+
+    .app-card-result {
+      margin-bottom: 0 !important;
+    }
+
+    .mat-mdc-card {
+      .mat-mdc-card-title {
+        max-width: calc(100% - 35px);
+      }
+
+      .mat-mdc-card-actions {
+        @media only screen and (max-width: 740px) {
+          display: block !important;
+
+          app-result-actions {
+            .app-fxLayout {
+              flex-wrap: wrap;
+
+              .mat-mdc-button-base {
+                margin-top: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: 959px) {
+      width: calc(100% - (50px + var(--app-gap-map)));
+    }
+
+    @media only screen and (max-width: 490px) {
+      max-height: calc(100% - 120px);
+    }
+
+    @media only screen and (max-width: 340px) {
+      max-height: calc(100% - 140px);
+    }
+
+    .app-link-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      color: var(--app-color-darknes);
+    }
+  }
+
+  .app-active-pian-facet {
+    @extend .app-clean-shadow !optional;
+    position: absolute;
+    top: calc(var(--app-gap-map) - 2px);
+    right: 130px;
+    z-index: 1002;
+    padding: 0 var(--app-gap-icon);
+    min-height: 30px;
+    line-height: 30px;
+    border: 2px solid #ccc;
+    box-shadow: none;
+
+    a {
+      .mat-icon {
+        @extend .app-mr-1 !optional;
+        color: var( --app-color-warn);
+        @include setIcon($size: 18, $position: middle);
+      }
+    }
+
+    @media (max-width: 312px) {
+      top: 54px;
+      right: 50px;
+    }
+  }
+}
+

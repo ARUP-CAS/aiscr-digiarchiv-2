@@ -1,0 +1,239 @@
+<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-akce]="!isChild() && !isDocumentDialogOpen()">
+  @if (mapDetail() && !isChild()) {
+    <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+      <mat-icon>clear</mat-icon>
+    </a>
+  }
+  <mat-card-header>
+    <mat-card-title class="app-fxLayout app-row app-gap-4">
+      <div class="app-fxFlex" (click)="service.showInMap(_result, false, false, isChild())">
+        @if (!state.isMapaCollapsed && !isChild() && !mapDetail()) {
+          <a class="app-icon-info"><mat-icon>info</mat-icon></a>
+        }
+        <mat-icon class="app-entity-akce" [matTooltip]="'entities.akce.title' | translate">{{ config.entityIcons["akce"] }}</mat-icon>
+        @if (isChild()) {
+          <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+        }
+        @if (!isChild()) {
+          <span class="app-ident-format">{{ _result.ident_cely }}</span>
+        }
+        <span class="app-pipe"></span>
+        @if (_result.az_chranene_udaje?.hlavni_katastr) {
+          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
+        }
+        <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.az_okres"></app-inline-filter>)</span>
+        <span class="app-pipe"></span><app-inline-filter [isChild]="isChild()" [field]="'f_vedouci'" [value]="_result.akce_hlavni_vedouci"></app-inline-filter><span class="app-pipe"></span>
+        <!-- <app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="_result.akce_organizace" [heslar]="'organizace'"></app-inline-filter>
+        <span class="app-pipe"></span> -->
+        @if (!state.isMapaCollapsed) {
+          <label >{{ _result.akce_datum_zahajeni | date : 'dd.MM.yyyy' }}@if(_result.akce_datum_ukonceni){ - {{ _result.akce_datum_ukonceni | date : 'dd.MM.yyyy' }}}</label><span class="app-pipe"></span>
+        }
+      </div>
+      @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
+        <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+      }
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content [class.app-detail-closed]="!_detailExpanded">
+    @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
+      <div class="app-thumb app-fxLayout app-row app-fill app-center-v app-center-h" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+        <mat-icon>image_not_supported</mat-icon>
+      </div>
+    }
+    <div class="app-metadata app-mb-4">
+      <div>
+        <label class="app-label">{{ 'card.desc.Datum výzkumu' | translate }}:</label>&#160;
+        {{ _result.akce_specifikace_data | translate }}
+        @if (_result.akce_specifikace_data === 'HES-000887') {
+          <!-- přesně -->
+          {{ _result.akce_datum_zahajeni | date : 'dd.MM.yyyy' }}
+          @if (_result.akce_datum_ukonceni) {
+            - {{ _result.akce_datum_ukonceni | date : 'dd.MM.yyyy' }}
+          }
+        }
+        @if (_result.akce_specifikace_data === 'HES-000886' || _result.akce_specifikace_data === 'HES-000889') {
+          {{ _result.akce_datum_zahajeni | date : 'yyyy' }}
+          @if (_result.akce_datum_ukonceni) {
+            - {{ _result.akce_datum_ukonceni | date : 'yyyy' }}
+          }
+        }
+        @if (_result.akce_specifikace_data !== 'HES-000887' && _result.akce_specifikace_data !== 'HES-000886' && _result.akce_specifikace_data !== 'HES-000889') {
+          {{ _result.akce_datum_zahajeni | date : 'yyyy' }}
+          @if (_result.akce_datum_ukonceni) {
+            @if (_result.akce_specifikace_data !== 'před rokem') {
+              -
+              }<!-- před rokem nemam HESLO -->
+              {{ _result.akce_datum_ukonceni }}
+            }
+          }
+          <span class="app-pipe"></span>
+          <ng-container><!-- *ngIf="_result.akce_je_nz"-->
+            <label class="app-label">{{ 'card.desc.Nahrazuje NZ' | translate }}:</label>&#160;
+            {{ (_result.akce_je_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
+          </ng-container>
+          @if (_result.hasOwnProperty('akce_odlozena_nz')) {
+            <!-- *"-->
+            <label class="app-label">{{ 'card.desc.odlozena_nz' | translate }}:</label>&#160;
+            {{ (_result.akce_odlozena_nz ? 'Ano' : 'Ne') | translate }}<span class="app-pipe"></span>
+          }
+          @if (_result.pristupnost) {
+            <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild()" [field]="'pristupnost'" [value]="_result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+          }
+        </div>
+        @if (_result.akce_organizace) {
+          <div>
+            <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="_result.akce_organizace" [heslar]="'organizace'"></app-inline-filter>
+          </div>
+        }
+        @if (_result.az_chranene_udaje?.dalsi_katastr.length > 0) {
+          <div>
+            <label class="app-label">{{ 'card.desc.dalsi_katastry' | translate }}:</label>&#160;
+            @for (k of _result.az_chranene_udaje.dalsi_katastr; track k; let last = $last) {
+              <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
+              @if (!last) {
+                <span>;&#160;</span>
+              }
+            }
+            (@for (k of _result.az_chranene_udaje.okresy; track k; let last = $last) {
+            <app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="k"></app-inline-filter>@if (!last) {
+            <span
+            >;&#160;</span>
+          }
+          })
+        </div>
+      }
+      @if (_result.akce_chranene_udaje?.lokalizace_okolnosti) {
+        <div class="app-w-max-1 app-w-min-100 app-d-inline-flex">
+          <label class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</label>&#160;<span class="app-truncate-text">{{ cropped(_result.akce_chranene_udaje.lokalizace_okolnosti) }}</span>
+        </div>
+      }
+    </div>
+  </mat-card-content>
+
+  @if (!isChild()) {
+    <mat-card-actions class="app-fxLayout app-row app-end-v">
+      <div class="app-fxFlex app-metadata">
+        @if (_result.az_dokument?.length > 0) {
+          {{'card.desc.Počet dokumentů' | translate}}: <strong>{{_result.az_dokument.length}}</strong>
+          <span class="app-pipe"></span>
+        }
+        @if (_result.akce_projekt) {
+          {{'card.desc.Počet projektů' | translate}}: <strong>1</strong>
+          <span class="app-pipe"></span>
+        }
+      </div>
+      <app-result-actions [inDocument]="inDocument()" [result]="_result" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"
+      [detailExpanded]="_detailExpanded" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
+    </mat-card-actions>
+  }
+
+  @if (_detailExpanded && !isChild()) {
+    <mat-card-content>
+      <div class="app-card-detail">
+        <mat-accordion multi="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+              <mat-panel-title>
+                {{ 'card.panelTitle.Popis akce' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table>
+              <tbody>
+                @if (_result.akce_hlavni_typ) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Hlavní typ' | translate }}:</th>
+                    <td><app-inline-filter [isChild]="isChild()" [field]="'f_typ_vyzkumu'" [value]="_result.akce_hlavni_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
+                  </tr>
+                }
+                @if (_result.akce_vedlejsi_typ) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Vedlejší typ' | translate }}:</th>
+                    <td><app-inline-filter [isChild]="isChild()" [field]="'f_typ_vyzkumu'" [value]="_result.akce_vedlejsi_typ" [heslar]="'typ_akce_druha'"></app-inline-filter></td>
+                  </tr>
+                }
+                @if (_result.akce_vedouci_akce_ostatni?.length > 0) {
+                  <tr>
+                    <th class="app-label">{{ 'card.desc.Ostatní vedoucí' | translate }}:</th>
+                    <td>@for (va of _result.akce_vedouci_akce_ostatni; track va) {
+                      <div >
+                        <app-inline-filter [isChild]="isChild()" [field]="'f_vedouci'" [value]="va.vedouci.value" [heslar]="'organizace'"></app-inline-filter>
+                        (<app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="va.organizace.id" [heslar]="'organizace'"></app-inline-filter>)
+                        <!-- {{va.vedouci.value}} ({{'heslar.' + va.organizace.id | translate}}) -->
+                      </div>
+                    }</td>
+                  </tr>
+                }
+                <!-- <tr *ngIf="_result.organizace_ostatni">
+                <th class="app-label">{{ 'card.desc.Ostatní organizace' | translate }}:</th>
+                <td><app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="_result.organizace_ostatni" [heslar]="'organizace'"></app-inline-filter></td>
+              </tr> -->
+              @if (_result.az_chranene_udaje?.uzivatelske_oznaceni) {
+                <tr>
+                  <th class="app-label">{{ 'card.desc.Uživatelské označení' | translate }}:</th>
+                  <td>{{ _result.az_chranene_udaje.uzivatelske_oznaceni }}</td>
+                </tr>
+              }
+              @if (_result.akce_ulozeni_nalezu) {
+                <tr>
+                  <th class="app-label">{{ 'card.desc.Uložení nálezů' | translate }}:</th>
+                  <td>{{ _result.akce_ulozeni_nalezu }}</td>
+                </tr>
+              }
+              @if (_result.akce_ulozeni_dokumentace) {
+                <tr>
+                  <th class="app-label">{{ 'card.desc.Uložení dokumentace' | translate }}:</th>
+                  <td>{{ _result.akce_ulozeni_dokumentace }}</td>
+                </tr>
+              }
+              @if (_result.akce_chranene_udaje?.lokalizace_okolnosti) {
+                <tr>
+                  <th class="app-label">{{ 'card.desc.Akce - lokalizace/okolnosti' | translate }}:</th>
+                  <td class="app-split-text">
+                    <div class="app-text-content">
+                      {{ _result.akce_chranene_udaje.lokalizace_okolnosti }}
+                    </div>
+                  </td>
+                </tr>
+              }
+              @if (_result.akce_chranene_udaje?.souhrn_upresneni) {
+                <tr>
+                  <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
+                  <td>{{ _result.akce_chranene_udaje.souhrn_upresneni }}</td>
+                </tr>
+              }
+            </tbody>
+            </table>
+            <mat-accordion multi="true">
+              @if(_result.az_dokumentacni_jednotka) {
+                @for (dok_jednotka of _result.az_dokumentacni_jednotka; track dok_jednotka) {
+                  <app-dok-jednotka [result]="dok_jednotka" [pians]="_result.pian" [adbs]="_result.adb" [detailExpanded]="detailExpanded()"></app-dok-jednotka>
+                }
+              }
+            </mat-accordion>
+          </mat-expansion-panel>
+          @if (az_ext_zdroj().length > 0) {
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+                <mat-panel-title>
+                  {{ 'card.panelTitle.Externí zdroje' | translate }}:
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <ul class="app-clean-mg">
+                @for (eo of az_ext_zdroj(); track eo) {
+                  <app-externi-zdroj [result]="eo"></app-externi-zdroj>
+                }
+              </ul>
+            </mat-expansion-panel>
+          }
+          <app-related [related]="related()" [mapDetail]="mapDetail()"></app-related>
+        </mat-accordion>
+      </div>
+    </mat-card-content>
+  }
+</mat-card>
+
+
+

@@ -1,0 +1,26 @@
+<div class="app-consent">
+  <button matIconButton (click)="close($event)"><mat-icon>close</mat-icon></button>
+  @if(state.currentLang === 'cs') {
+    <div> 
+      <h2>Nastavení cookies</h2>
+      <p>Tato stránka využívá analytická cookies od Google Analytics pro sledování návštěvnosti webových stránek. 
+        Sbíraná data nám pomáhají pochopit, jak interagujete s webem, umožňují zlepšovat jeho fungování a zajišťují, 
+        aby byl pro uživatele co nejpříjemnější a nejužitečnější. Jsou též důležitá pro vykazování využití infrastruktury AIS CR vůči poskytovatelům financí.</p>
+      <p>Prosíme o laskavé svolení tato důležitá data sbírat.</p>
+    </div>
+  }
+  @if(state.currentLang !== 'cs') {
+    <div> 
+      <h2>Cookies settings</h2>
+      <p>This site uses analytics cookies from Google Analytics to track website traffic. 
+        Collected data helps us understand how you interact with the site, helps us improve the way it works and ensures 
+        that it is as user-friendly and useful as possible. It is also important for reporting on the use of AIS CR to funders.
+        </p>
+      <p>We kindly please you to allow us to collect this important data.</p>
+    </div>
+  }
+  <div class="app-fxLayout app-row app-gap-2">
+    <button matButton="filled" color="primary" (click)="consent($event)">Přijmout</button>
+    <button mat-button (click)="reject($event)">Odmitnout</button> 
+  </div>
+</div>

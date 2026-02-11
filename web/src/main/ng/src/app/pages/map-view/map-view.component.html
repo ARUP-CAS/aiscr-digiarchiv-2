@@ -1,0 +1,108 @@
+
+@if(isBrowser) {
+  @if(loading()) {
+    <div class="app-display-table app-loading" style="position: absolute; z-index:1000;">
+      <div class="app-table-cell app-clean-pd" >
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+
+    </div>
+  }
+
+  <div #leftElement class="app-display-table app-container">
+    <div class="app-table-cell" >
+      <mat-sidenav-container class="app-sidenav-container">
+        <mat-sidenav #sidenav mode="side" [(opened)]="opened" style="overflow-x: hidden;"><!--[(opened)]="opened"-->
+          <button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
+            <mat-icon>last_page</mat-icon>
+          </button>
+          <div class="app-p-4">{{ 'sidenav.tab.Info' | translate }}</div>
+          <mat-tab-group [selectedIndex]="1">
+            <mat-tab [label]="'sidenav.tab.Filtry' | translate">
+              <div class="app-facets">
+                @if (state.breadcrumbs?.length !== 0 || state.inFavorites()) {
+                  <app-facets-used></app-facets-used>
+                }
+                <app-facets></app-facets>
+              </div>
+            </mat-tab>
+            <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
+              @if (showType !== 'marker') {
+                <div>
+                  <mat-card class="app-card-result app-p-2 app-pl-4">
+                    {{ 'map.zoomToResults' | translate : {numFound: state.numFound} }}
+                  </mat-card>
+                </div>
+              }
+              @if ((state.solrResponse && showType === 'marker')) {
+                
+                @if (state.breadcrumbs?.length !== 0 || state.inFavorites()) {
+                  <div class="app-facets">
+                  <app-facets-used></app-facets-used>
+                  </div>
+                }
+                <app-paginator></app-paginator>
+                @if (state.isMapaCollapsed && vsSize > 0) {
+                  <cdk-virtual-scroll-viewport [itemSize]="itemSize" [style.height.px]="vsSize"
+                    [minBufferPx]="math.min(9*itemSize, docs.length * itemSize)" [maxBufferPx]="math.min(9*itemSize, state.solrResponse.response.docs.length * itemSize)*2">
+                    <ng-container *cdkVirtualFor="let result of state.solrResponse.response.docs">
+                      <app-entity-container [result]="result"></app-entity-container>
+                    </ng-container>
+                  </cdk-virtual-scroll-viewport>
+                }
+                @if (state.solrResponse?.response) {
+                  <div>
+                    @for (result of state.solrResponse.response.docs; track result) {
+                      <app-entity-container [result]="result"></app-entity-container>
+                    }
+                  </div>
+                }
+              }
+            </mat-tab>
+          </mat-tab-group>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="app-ml-0">
+          <button (click)="state.changeMapView(sidenav)" class="app-btn">
+            <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
+          </button>
+          <div class="app-map" leaflet [leafletOptions]="options"
+            (leafletMapReady)="onMapReady($event)"
+            [leafletLayersControl]="layersControl"
+            [leafletLayersControlOptions]="{position: 'topright'}">
+            <!-- <div *ngIf="showHeat" [leafletLayer]="heatmapLayer"></div> -->
+            <div [leafletLayer]="clusters"></div>
+            <div [leafletLayer]="markers"></div>
+            <!-- <div [leafletLayer]="idmarkers"></div> -->
+          </div>
+
+          @if (loadingMarkers()) {
+            <mat-card class="app-active-pian-facet">
+              <mat-card-content class="app-p-0">
+                <a [matTooltip]="'map.tooltip.Zastavit' | translate" (click)="stopLoadingMarkers()">
+                  <mat-icon style="margin-right: 0px !important">stop</mat-icon>
+                </a>
+              </mat-card-content>
+            </mat-card>
+          }
+
+          @if (state.pianId) {
+            <mat-card class="app-active-pian-facet">
+              <mat-card-content class="app-p-0">
+                <a [matTooltip]="'map.tooltip.Odstranit tento filtr' | translate" (click)="clearPian()" class="app-fxLayout app-row app-center-v app-gap-1 app-pr-1">
+                  <mat-icon>clear</mat-icon><span>{{ state.pianId }}</span>
+                </a>
+              </mat-card-content>
+            </mat-card>
+          }
+
+          <div class="app-view-card-info" [class.app-pian-visible]="state.pianId && opened" [class.app-pian-visible-sidenav-closed]="state.pianId && !opened">
+            @if (state.mapResult()) {
+              <app-entity-container [result]="state.mapResult()" [mapDetail]="true"></app-entity-container>
+            }
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
+  </div>
+}

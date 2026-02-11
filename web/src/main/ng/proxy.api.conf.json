@@ -1,17 +1,14 @@
 {
-  "/api/**": {
+  "/api": {
     "target": "http://localhost:8080/api",
     "logLevel": "debug",
-    "pathRewrite": {
-      "^/api":""
-    },
-    "changeOrigin": false,
+    "changeOrigin": true,
     "withCredentials": true,
     "secure": false
   },
   
   "/assets/i18n/**": {
-    "target": "http://localhost:8080/assets/i18n/cs",
+    "target": "http://localhost:8080/assets/i18n",
     "logLevel": "debug",
     "pathRewrite": {
       "^/assets/i18n":""
@@ -20,7 +17,7 @@
     "secure": false
   },
   
-  "/assets/config_.json": {
+  "/assets/config.json": {
     "target": "http://localhost:8080/assets/config.json",
     "pathRewrite": {
       "^/api":""
