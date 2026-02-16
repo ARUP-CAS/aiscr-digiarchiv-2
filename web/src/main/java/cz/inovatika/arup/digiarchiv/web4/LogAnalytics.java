@@ -7,11 +7,14 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -54,10 +57,9 @@ public class LogAnalytics {
     }
 
     public static JSONObject stats(HttpServletRequest request) {
-        NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-        dontMessWithSolr.setWriterType("json");
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost"))
-                .withResponseParser(dontMessWithSolr).build()) {
+//        NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
+//        dontMessWithSolr.setWriterType("json");
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             // request.getParameter("id"), request.getParameter("type")
             SolrQuery query = new SolrQuery()
                     .setQuery("*")
@@ -114,8 +116,10 @@ public class LogAnalytics {
                 String from = parts[0];
                 if ("null".equals(from)) {
                     from = "*";
+                    query.setParam("f.indextime.facet.range.start", "2024-11-01T00:00:00Z");
                 } else {
                     from = from + "T00:00:00Z";
+                    query.setParam("f.indextime.facet.range.start", from);
                 }
                 String to = parts[1];
                 if ("null".equals(to)) {
@@ -123,7 +127,6 @@ public class LogAnalytics {
                 } else {
                     to = to + "T23:59:59Z";
                 }
-                query.setParam("f.indextime.facet.range.start", from);
                 String fq = "indextime:[" + from + " TO " + to + "]";
                 query.addFilterQuery(fq);
             } else {
@@ -147,18 +150,19 @@ public class LogAnalytics {
     }
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core) {
-        query.setRequestHandler("/select");
-        String qt = query.get("qt");
+        //query.setRequestHandler("/select");
+        //String qt = query.get("qt");
         query.set("wt", "json");
-        String jsonResponse;
+        // String jsonResponse;
         try {
-            QueryRequest qreq = new QueryRequest(query);
-            if (qt != null) {
-                qreq.setPath(qt);
-            }
-            NamedList<Object> qresp = client.request(qreq, core);
-            jsonResponse = (String) qresp.get("response");
-            return new JSONObject(jsonResponse);
+            
+            QueryRequest req = new QueryRequest(query);
+            req.setPath("/select");
+
+            req.setResponseParser(new InputStreamResponseParser("json"));
+            NamedList<Object> resp = client.request(req, core);
+            InputStream is = (InputStream) resp.get("stream");
+            return new JSONObject(IOUtils.toString(is, "UTF-8"));
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return new JSONObject().put("error", ex);
