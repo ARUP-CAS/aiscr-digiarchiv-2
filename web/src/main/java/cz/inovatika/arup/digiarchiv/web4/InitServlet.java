@@ -143,9 +143,9 @@ public class InitServlet extends HttpServlet {
 
         // Map all API resources under a fixed internal prefix.
         String relative = normalized.toString().replace('\\', '/');
-        if (!relative.startsWith("/")) {
-            relative = "/" + relative;
-        }
+//        if (!relative.startsWith("/")) {
+//            relative = "/" + relative;
+//        }
         return relative;
     }
 
