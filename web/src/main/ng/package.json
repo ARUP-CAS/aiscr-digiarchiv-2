@@ -23,7 +23,7 @@
     "@angular/material": "^14.0.5",
     "@angular/material-moment-adapter": "^14.0.5",
 
-    "@angular/platform-browser": "^16.0.0",
+    "@angular/platform-browser": "^21.1.4",
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/platform-server": "^16.0.0",
     "@angular/router": "^16.0.0",
