@@ -42,7 +42,7 @@
     "leaflet.markercluster": "^1.5.3",
     "leaflet.polylinemeasure": "^3.0.0",
     "moment": "^2.29.4",
-    "ng-recaptcha": "^12.0.1",
+    "ng-recaptcha": "^13.2.1",
     "ngx-echarts": "^16.2.0",
     "npm": "^11.6.2",
     "request": "^2.88.2",
