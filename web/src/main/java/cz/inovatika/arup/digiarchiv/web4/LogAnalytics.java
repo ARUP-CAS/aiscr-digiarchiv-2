@@ -141,12 +141,32 @@ public class LogAnalytics {
             }
 
             JSONObject ret = json(query, client, "logs");
-            // client.close();
+
+            //if (LoginServlet.pristupnost(request.getSession()).equalsIgnoreCase("E")) {
+            JSONObject r = totals(client);
+                ret.put("index_entities", r.getJSONObject("facet_counts")
+                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+            //}
             return ret;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return new JSONObject().put("error", ex);
         }
+    }
+
+    public static JSONObject totals(SolrClient client) {
+            // request.getParameter("id"), request.getParameter("type")
+            SolrQuery query = new SolrQuery()
+                    .setQuery("*")
+                    .setFacet(true)
+                    .setRows(0)
+                    .setFacetMinCount(1)
+                    .addFacetField("entity")
+                    .addFacetPivotField("entity,stav");
+            
+
+            JSONObject ret = json(query, client, "entities");
+            return ret;
     }
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core) {

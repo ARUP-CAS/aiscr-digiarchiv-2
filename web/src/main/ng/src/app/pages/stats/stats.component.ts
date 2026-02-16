@@ -24,11 +24,11 @@ import * as echarts from 'echarts/core';
 import { EChartsOption } from 'echarts'; 
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { LineChart } from 'echarts/charts';
-import { TooltipComponent, GridComponent, TitleComponent } from 'echarts/components';
+import { TooltipComponent, GridComponent, TitleComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LabelLayout } from "echarts/features";
 import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout]);
+echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
 import 'moment/locale/cs';
 
 export class MultiDateFormat {
@@ -128,6 +128,7 @@ export class StatsComponent implements OnInit {
   ips: { name: string, type: string, value: number }[];
   users: { name: string, type: string, value: number }[];
   entities: { name: string, type: string, value: number }[];
+  index_entities:  {field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[] = [];
   subs: any[] = [];
 
   datumod: Date;
@@ -256,6 +257,7 @@ export class StatsComponent implements OnInit {
       this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
 
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
+      this.index_entities = resp.index_entities;
       this.loading.set(false);
     });
   }
