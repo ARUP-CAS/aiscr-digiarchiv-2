@@ -15,13 +15,12 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
-import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.CursorMarkParams; 
+import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,10 +73,10 @@ public class LogAnalytics {
                     .setParam("facet.range", "indextime")
                     .setParam("f.indextime.facet.range.other", "before")
                     .setParam("f.indextime.facet.range.end", "NOW")
-                    .setParam("f.indextime.facet.range.gap", 
+                    .setParam("f.indextime.facet.range.gap",
                             "+7DAYS");
             JSONArray ips = Options.getInstance().getJSONArray("statsIpFilter");
-            for(int i =0; i<ips.length(); i++) {
+            for (int i = 0; i < ips.length(); i++) {
                 query.addFilterQuery("-ip:" + ips.getString(i)
                         .replaceAll(":", "\\\\:")
                         .replaceAll("\\.", "\\\\."));
@@ -141,12 +140,11 @@ public class LogAnalytics {
             }
 
             JSONObject ret = json(query, client, "logs");
-
-            //if (LoginServlet.pristupnost(request.getSession()).equalsIgnoreCase("E")) {
-            JSONObject r = totals(client);
+            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
+                JSONObject r = totals(client);
                 ret.put("index_entities", r.getJSONObject("facet_counts")
                         .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
-            //}
+            }
             return ret;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -155,18 +153,17 @@ public class LogAnalytics {
     }
 
     public static JSONObject totals(SolrClient client) {
-            // request.getParameter("id"), request.getParameter("type")
-            SolrQuery query = new SolrQuery()
-                    .setQuery("*")
-                    .setFacet(true)
-                    .setRows(0)
-                    .setFacetMinCount(1)
-                    .addFacetField("entity")
-                    .addFacetPivotField("entity,stav");
-            
+        // request.getParameter("id"), request.getParameter("type")
+        SolrQuery query = new SolrQuery()
+                .setQuery("*")
+                .setFacet(true)
+                .setRows(0)
+                .setFacetMinCount(1)
+                .addFacetField("entity")
+                .addFacetPivotField("entity,stav");
 
-            JSONObject ret = json(query, client, "entities");
-            return ret;
+        JSONObject ret = json(query, client, "entities");
+        return ret;
     }
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core) {
@@ -175,7 +172,7 @@ public class LogAnalytics {
         query.set("wt", "json");
         // String jsonResponse;
         try {
-            
+
             QueryRequest req = new QueryRequest(query);
             req.setPath("/select");
 
@@ -196,7 +193,7 @@ public class LogAnalytics {
         int totalDocs = 0;
         int rows = 100;
         JSONObject jo = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) { 
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
             SolrQuery query = new SolrQuery("*")
                     //.addFilterQuery("-entity:*") 
@@ -211,7 +208,7 @@ public class LogAnalytics {
                 try {
                     rsp = client.query("logs_old", query);
                     docs = rsp.getResults();
-                    for (SolrDocument doc : docs) { 
+                    for (SolrDocument doc : docs) {
                         String ident_cely = (String) doc.getFirstValue("ident_cely");
                         String typ = (String) doc.getFirstValue("type");
 
@@ -242,7 +239,7 @@ public class LogAnalytics {
                         }
                         totalDocs++;
                     }
-                    client.commit("logs"); 
+                    client.commit("logs");
                     LOGGER.log(Level.INFO, "Currently {0} files processed", totalDocs);
 
                     String nextCursorMark = rsp.getNextCursorMark();
@@ -251,11 +248,10 @@ public class LogAnalytics {
                     } else {
                         cursorMark = nextCursorMark;
                     }
-                
+
 //                    if (docs.size() < rows) {
 //                        done = true;
 //                    }
-
                 } catch (SolrServerException e) {
                     LOGGER.log(Level.SEVERE, null, e);
 
