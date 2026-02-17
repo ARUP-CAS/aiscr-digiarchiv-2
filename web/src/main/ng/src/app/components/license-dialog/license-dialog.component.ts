@@ -5,13 +5,13 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { CitationComponent } from "../citation/citation.component";
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, 
     MatCardModule, MatIconModule, MatDialogModule,
     MatButtonModule,
     CitationComponent

@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppState } from '../../app.state';
 import { Sort } from '../../shared/config';
@@ -22,7 +22,7 @@ import { MatInputModule } from '@angular/material/input';
   imports: [
     TranslateModule,
     FormsModule,
-    FlexLayoutModule,
+    
     MatIconModule,
     MatListModule,
     MatTooltipModule,

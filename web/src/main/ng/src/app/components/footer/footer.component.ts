@@ -7,12 +7,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppState } from '../../app.state';
 import { MatIconModule } from '@angular/material/icon';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { MatButton, MatIconButton } from '@angular/material/button';
 
 @Component({
   imports: [
-    TranslateModule, FlexLayoutModule,
+    TranslateModule, 
     MatIconModule
 ],
   selector: 'app-footer',

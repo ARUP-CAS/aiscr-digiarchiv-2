@@ -11,7 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -34,7 +34,7 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, FormsModule, MatDialogModule,
+    TranslateModule, RouterModule,  FormsModule, MatDialogModule,
     MatCardModule, MatIconModule,  MatButtonModule, MatFormFieldModule, MatInputModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
     NguCarousel,

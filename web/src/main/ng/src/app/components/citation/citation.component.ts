@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 
 @Component({
   imports: [
-    TranslateModule, FlexLayoutModule, DatePipe
+    TranslateModule,  DatePipe
   ],
   selector: 'app-citation',
   templateUrl: './citation.component.html',

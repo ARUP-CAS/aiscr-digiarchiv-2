@@ -4,14 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   imports: [
-    TranslateModule, CommonModule, FormsModule, FlexLayoutModule,
+    TranslateModule, CommonModule, FormsModule, 
     MatIconModule, MatButtonModule
   ],
   selector: 'app-inline-filter',

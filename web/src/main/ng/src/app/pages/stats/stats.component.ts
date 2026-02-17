@@ -6,7 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -83,7 +83,7 @@ export class MultiDateFormat {
   imports: [
     TranslateModule,
     RouterModule,
-    FlexLayoutModule,
+    
     FormsModule,
     MatProgressBarModule,
     MatTooltipModule,

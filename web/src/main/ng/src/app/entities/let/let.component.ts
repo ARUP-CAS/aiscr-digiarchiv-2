@@ -10,7 +10,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
 import { DokumentComponent } from '../dokument/dokument.component';
@@ -18,7 +18,7 @@ import { Entity } from '../entity/entity';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, DatePipe,
+    TranslateModule, RouterModule,  DatePipe,
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule,

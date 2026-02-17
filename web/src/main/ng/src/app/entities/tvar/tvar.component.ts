@@ -1,11 +1,11 @@
 import { Component, OnInit, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, 
 ],
   selector: 'app-tvar',
   templateUrl: './tvar.component.html',
