@@ -37,7 +37,7 @@
     "heatmap.js": "^2.0.5",
     "leaflet": "^1.9.4",
     "leaflet-heatmap": "^1.0.0",
-    "leaflet.fullscreen": "^4.0.0",
+    "leaflet.fullscreen": "^5.3.0",
     "leaflet.locationfilter": "^0.1.0",
     "leaflet.markercluster": "^1.5.3",
     "leaflet.polylinemeasure": "^3.0.0",
