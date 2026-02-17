@@ -1,7 +1,7 @@
 
 import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -40,7 +40,7 @@ interface ExampleFlatNode {
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, 
+    TranslateModule, RouterModule, CommonModule,
     MatCardModule, MatIconModule, MatExpansionModule, MatMenuModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, ScrollingModule,
     FacetsDynamicComponent, MatButtonModule,
