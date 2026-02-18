@@ -153,9 +153,11 @@ export class FileViewerComponent implements OnInit {
   }
 
   nextPage() {
-    this.currentPage++;
-    this.currentPageDisplayed.set(this.currentPage);
-    this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
+    if (this.currentPage < this.selectedFile().rozsah) {
+      this.currentPage++;
+      this.currentPageDisplayed.set(this.currentPage);
+      this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
+    }
   }
 
   prevPage() {
@@ -189,11 +191,12 @@ export class FileViewerComponent implements OnInit {
     }
     this.currentPageDisplayed.set(this.currentPage);
     this.carouselItemsLoad(this.currentPage);
-    // setTimeout(() => {
-    //   if (this.currentPage > 0 || this.currentPage < this.selectedFile().rozsah) {
-    //     this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
-    //   }
-    // }, 100);
+    if (!this.carousel) {
+      return;
+    }
+    setTimeout(() => {
+        this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
+    }, 100);
   }
 
   setData() {
