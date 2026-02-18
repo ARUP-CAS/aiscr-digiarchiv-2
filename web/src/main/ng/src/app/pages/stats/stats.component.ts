@@ -30,6 +30,7 @@ import { LabelLayout } from "echarts/features";
 import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
 import 'moment/locale/cs';
+import { MatCheckbox } from "@angular/material/checkbox";
 
 export class MultiDateFormat {
   value = '';
@@ -83,7 +84,6 @@ export class MultiDateFormat {
   imports: [
     TranslateModule,
     RouterModule,
-    
     FormsModule,
     MatProgressBarModule,
     MatTooltipModule,
@@ -95,7 +95,8 @@ export class MultiDateFormat {
     MatListModule,
     MatSelectModule,
     MatButtonModule,
-    NgxEchartsDirective
+    NgxEchartsDirective,
+    MatCheckbox
 ],
   providers: [
     provideEchartsCore({ echarts }),
@@ -153,6 +154,9 @@ export class StatsComponent implements OnInit {
     },
     color: ['rgb(0, 153, 168)', '#fac858'],
   };
+
+  show_deleted: boolean = false;
+  only_visible: boolean = false;
 
 
   constructor(
@@ -224,6 +228,18 @@ export class StatsComponent implements OnInit {
     params.page = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
     event.stopPropagation()
+  }
+
+  getIndex() {
+    this.loading.set(true);
+    const p: any = {};
+    p.page = 0;
+    p.show_deleted = this.show_deleted;
+    p.only_visible = this.only_visible;
+    this.service.indexStats(p as HttpParams).subscribe((resp: any) => {
+      this.index_entities = resp.index_entities;
+      this.loading.set(false);
+    });
   }
 
   search(params: Params) {

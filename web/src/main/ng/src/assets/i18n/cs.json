@@ -811,6 +811,10 @@
     "type": "Událost",
     "user": "Uživatel",
     "entity": "Typ záznamu",
+    "index": "Záznamy v indexu",
+    "stav": "Stav",
+    "show_deleted": "Zobrazit smazané záznamy",
+    "only_visible": "Pouze viditelné",
     "typ": {
       "id": "Zobrazení detailu",
       "viewer": "Zobrazení náhledu",

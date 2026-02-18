@@ -182,13 +182,15 @@
             <mat-card-title>{{ 'stats.index' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
+            <mat-checkbox [(ngModel)]="show_deleted" (ngModelChange)="getIndex()">{{ 'stats.show_deleted' | translate }}</mat-checkbox>
+            <mat-checkbox [(ngModel)]="only_visible" (change)="getIndex()">{{ 'stats.only_visible' | translate }}</mat-checkbox>
             @for (f of index_entities; track $index) {
               <div class="app-item">
-                <span>{{ f.value }}</span><span class="app-count">({{ f.count }})</span>
+                <span><strong>{{ f.value }}</strong></span><span class="app-count">({{ f.count }})</span>
                 @if (f.pivot) {
                   @for (p of f.pivot; track $index) {
                     <div class="app-item">
-                      &#160;&#160;<span>{{ p.value }}</span><span class="app-count">({{ p.count }})</span>
+                      &#160;&#160;<span>{{ 'stats.stav' | translate }}: {{ p.value }}</span><span class="app-count">({{ p.count }})</span>
                     </div>
                   }
                 }

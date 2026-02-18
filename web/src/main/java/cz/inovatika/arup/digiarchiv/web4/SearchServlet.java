@@ -544,6 +544,19 @@ public class SearchServlet extends HttpServlet {
                 return json.toString();
             }
         },
+        STATS_INDEX {
+
+            @Override
+            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    json = LogAnalytics.statsIndex(request);
+                } catch (Exception ex) {
+                    json.put("error", ex);
+                }
+                return json.toString();
+            }
+        },
         MAPA {
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {

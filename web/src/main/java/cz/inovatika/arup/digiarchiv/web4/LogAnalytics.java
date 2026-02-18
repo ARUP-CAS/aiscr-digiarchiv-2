@@ -141,7 +141,22 @@ public class LogAnalytics {
 
             JSONObject ret = json(query, client, "logs");
             if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
-                JSONObject r = totals(client);
+                JSONObject r = totals(request, client);
+                ret.put("index_entities", r.getJSONObject("facet_counts")
+                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+            }
+            return ret;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject().put("error", ex);
+        }
+    }
+    
+    public static JSONObject statsIndex(HttpServletRequest request) {
+        JSONObject ret = new JSONObject();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
+                JSONObject r = totals(request, client);
                 ret.put("index_entities", r.getJSONObject("facet_counts")
                         .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
             }
@@ -152,7 +167,7 @@ public class LogAnalytics {
         }
     }
 
-    public static JSONObject totals(SolrClient client) {
+    private static JSONObject totals(HttpServletRequest request, SolrClient client) {
         // request.getParameter("id"), request.getParameter("type")
         SolrQuery query = new SolrQuery()
                 .setQuery("*")
@@ -160,17 +175,24 @@ public class LogAnalytics {
                 .setRows(0)
                 .setFacetMinCount(1)
                 .addFacetField("entity")
-                .addFacetPivotField("entity,stav");
+                .addFacetPivotField("entity,stav")
+                .setFacetSort("index asc");
+        
+
+            if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+                query.addFilterQuery("-is_deleted:true");
+            }
+            
+            if (Boolean.parseBoolean(request.getParameter("only_visible"))) {
+                query.addFilterQuery("searchable:true");
+            }
 
         JSONObject ret = json(query, client, "entities");
         return ret;
     }
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core) {
-        //query.setRequestHandler("/select");
-        //String qt = query.get("qt");
         query.set("wt", "json");
-        // String jsonResponse;
         try {
 
             QueryRequest req = new QueryRequest(query);

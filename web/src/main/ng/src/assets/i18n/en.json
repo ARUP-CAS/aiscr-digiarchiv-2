@@ -811,6 +811,10 @@
     "type": "Event",
     "user": "User",
     "entity": "Record type",
+    "index": "Records in index",
+    "stav": "Status",
+    "show_deleted": "Show deleted records",
+    "only_visible": "Only visible",
     "typ": {
       "id": "Detail shown",
       "viewer": "Thumbnail shown",
