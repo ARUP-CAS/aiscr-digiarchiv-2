@@ -183,7 +183,8 @@ public class LogAnalytics {
                 query.addFilterQuery("-is_deleted:true");
             }
             
-            if (Boolean.parseBoolean(request.getParameter("only_visible"))) {
+            if (Boolean.parseBoolean(request.getParameter("only_visible"))) { 
+                query.addFilterQuery("-is_deleted:true");
                 query.addFilterQuery("searchable:true");
             }
 
