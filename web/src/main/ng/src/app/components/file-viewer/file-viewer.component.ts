@@ -181,12 +181,12 @@ export class FileViewerComponent implements OnInit {
     const regex = /[0-9]/;
     const matches = regex.exec(this.currentPage+'');
     if (!matches) {
-      alert('invalid');
+      alert(this.service.getTranslation('dialog.invalid_page'));
       return;
     }
     this.currentPage = parseInt(this.currentPage+'');
     if (this.currentPage < 1 || this.currentPage > this.selectedFile().rozsah) {
-      alert('invalid');
+      alert(this.service.getTranslation('dialog.invalid_page'));
       return;
     }
     this.currentPageDisplayed.set(this.currentPage);
