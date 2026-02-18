@@ -426,23 +426,13 @@ public class SearchServlet extends HttpServlet {
                 String entity = "" + request.getParameter("entity");
                     if (request.getParameter("id") != null) {
                         return Actions.ID.doPerform(request, response);
-//                        SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
-//                                .setFacet(false);
-//                        query.setRequestHandler("/search");
-//                        if (entity == null) {
-//                            query.setFields("entity");
-//                            JSONObject jo = SearchUtils.json(query, client, "entities");
-//                            if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
-//                                return jo.toString();
-//                            }
-//                            entity = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
-//                        }
                     }
                     EntitySearcher searcher = SearchUtils.getSearcher(entity);
                     if (searcher == null) {
                         return new JSONObject().put("error", "unrecognized entity").toString();
                     }
-                    return searcher.export(request);
+                    //return searcher.export(request);
+                    return searcher.search(request).toString();
             }
         },
         PIANS {
