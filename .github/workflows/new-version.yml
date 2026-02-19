@@ -8,7 +8,7 @@ on:
         type: string
         required: true
       citation_update:
-        description: 'Update citation'
+        description: 'Update citation and footer'
         type: boolean
         required: true
         default: true
@@ -53,25 +53,50 @@ jobs:
         if: ${{ inputs.citation_update }}
         uses: mikefarah/yq@v4
 
-      - name: Update CITATION.cff
+      - name: Update citation and footer
         if: ${{ inputs.citation_update }}
+        shell: bash
         run: |
-          set -euo pipefail
+          set -euo pipefail          
+          VERSION="${{ inputs.new_tag }}"
+          SHORT="${VERSION#v}"              # 4.1.0
+          ANCHOR="v$(echo $SHORT | tr -d '.')"   # v410
+          DATE=$(date -I)          
+          FOOTER_FILE="web/src/main/ng/src/app/components/footer/footer.component.html"
+          
+          if [[ ! -f "$FOOTER_FILE" ]]; then
+            echo "Footer file not found: $FOOTER_FILE"
+            exit 1
+          fi
+          # Update changelog anchor
+          sed -i -E \
+            "s#(<a[^>]*href=\"[^\"]*wiki/Changelog#)v[0-9]+#\1${ANCHOR}#g" \
+            "$FOOTER_FILE"
+          # Update visible version label
+          sed -i -E \
+            "s#(<a[^>]*wiki/Changelog#[^\"]*\"[^>]*>[^<]* )v[0-9]+\.[0-9]+\.[0-9]+#\1${VERSION}#g" \
+            "$FOOTER_FILE"
+          if ! grep -q "${VERSION}" "$FOOTER_FILE"; then
+            echo "Footer version replacement failed!"
+            exit 1
+          fi
+          echo "Footer updated to ${VERSION}"
+          git add "$FOOTER_FILE"
+          
           if [ ! -f CITATION.cff ]; then
             echo "CITATION.cff not found"
             exit 1
           fi
-          VERSION=${{ inputs.new_tag }}
-          DATE=$(date -I)
           yq -i '.version = "'"$VERSION"'"' CITATION.cff
           yq -i '.date-released = "'"$DATE"'"' CITATION.cff
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git add CITATION.cff
+          
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update CITATION.cff for release $VERSION"
+            git commit -m "Update citation and footer for release $VERSION"
             git pull --rebase origin main
             git push --force-with-lease || {
               echo "Push failed due to upstream changes. Retry release."
@@ -82,7 +107,8 @@ jobs:
       - name: Set final SHA
         id: final-sha
         run: |
-          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          git fetch origin main
+          echo "sha=$(git rev-parse origin/main)" >> $GITHUB_OUTPUT
   
   new_version:
     name: Create new tag
