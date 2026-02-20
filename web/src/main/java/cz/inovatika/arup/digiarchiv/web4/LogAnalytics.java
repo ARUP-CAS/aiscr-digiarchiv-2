@@ -15,11 +15,13 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.CoreAdminParams;
 import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
@@ -141,24 +143,10 @@ public class LogAnalytics {
 
             JSONObject ret = json(query, client, "logs");
             if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
-                JSONObject r = totals(request, client);
+                JSONObject r = entities(request, client);
                 ret.put("index_entities", r.getJSONObject("facet_counts")
                         .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
-            }
-            return ret;
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return new JSONObject().put("error", ex);
-        }
-    }
-    
-    public static JSONObject statsIndex(HttpServletRequest request) {
-        JSONObject ret = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
-                JSONObject r = totals(request, client);
-                ret.put("index_entities", r.getJSONObject("facet_counts")
-                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+                ret.put("cores", cores(request, client).getJSONObject("status"));
             }
             return ret;
         } catch (Exception ex) {
@@ -167,7 +155,23 @@ public class LogAnalytics {
         }
     }
 
-    private static JSONObject totals(HttpServletRequest request, SolrClient client) {
+    public static JSONObject statsIndex(HttpServletRequest request) {
+        JSONObject ret = new JSONObject();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
+                JSONObject r = entities(request, client);
+                ret.put("index_entities", r.getJSONObject("facet_counts")
+                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+                ret.put("cores", cores(request, client).getJSONObject("status"));
+            }
+            return ret;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject().put("error", ex);
+        }
+    } 
+
+    private static JSONObject entities(HttpServletRequest request, SolrClient client) {
         // request.getParameter("id"), request.getParameter("type")
         SolrQuery query = new SolrQuery()
                 .setQuery("*")
@@ -177,19 +181,34 @@ public class LogAnalytics {
                 .addFacetField("entity")
                 .addFacetPivotField("entity,stav")
                 .setFacetSort("index asc");
-        
 
-            if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
-                query.addFilterQuery("-is_deleted:true");
-            }
-            
-            if (Boolean.parseBoolean(request.getParameter("only_visible"))) { 
-                query.addFilterQuery("-is_deleted:true");
-                query.addFilterQuery("searchable:true");
-            }
+        if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+            query.addFilterQuery("-is_deleted:true");
+        }
+
+        if (Boolean.parseBoolean(request.getParameter("only_visible"))) {
+            query.addFilterQuery("-is_deleted:true");
+            query.addFilterQuery("searchable:true");
+        }
 
         JSONObject ret = json(query, client, "entities");
         return ret;
+    }
+
+    private static JSONObject cores(HttpServletRequest request, SolrClient client) {
+        try {
+            CoreAdminRequest arequest = new CoreAdminRequest();
+            arequest.setIndexInfoNeeded(true);
+            arequest.setAction(CoreAdminParams.CoreAdminAction.STATUS);
+
+            arequest.setResponseParser(new InputStreamResponseParser("json"));
+            NamedList<Object> resp = client.request(arequest);
+            InputStream is = (InputStream) resp.get("stream");
+            return new JSONObject(IOUtils.toString(is, "UTF-8"));
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject().put("error", ex);
+        }
     }
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core) {

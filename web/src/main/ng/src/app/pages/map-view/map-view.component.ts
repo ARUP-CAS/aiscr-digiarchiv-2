@@ -20,7 +20,7 @@ import * as Wkt from 'wicket';
 //import 'wicket';
 //declare var Wkt: any; 
 
-import 'leaflet.fullscreen/Control.FullScreen.js';
+import 'leaflet.fullscreen';
 
 import { HttpParams } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';

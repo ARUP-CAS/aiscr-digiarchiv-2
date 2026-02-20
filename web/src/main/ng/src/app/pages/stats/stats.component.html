@@ -196,6 +196,16 @@
                 }
               </div>
             }
+            @if (cores_info) {
+              <div class="app-item"> --- </div>
+              @for (c of cores; track $index) {
+                @if (cores_info[c]) {
+                  <div class="app-item">
+                    <span><strong>{{ c }}</strong></span><span class="app-count">({{ cores_info[c]?.index?.numDocs }})</span>
+                  </div>
+                }
+              }
+            }
           </mat-card-content>
         </mat-card>
       }

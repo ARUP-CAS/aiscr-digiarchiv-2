@@ -158,6 +158,16 @@ export class StatsComponent implements OnInit {
   show_deleted: boolean = false;
   only_visible: boolean = false;
 
+  cores = [
+      'uzivatel',
+      'heslar',
+      'ruian',
+      'organizations',
+      'osoba'
+    ];
+    
+  cores_info: any = {}; 
+
 
   constructor(
     // @Inject(MAT_DATE_FORMATS) private dateFormatConfig: MultiDateFormat,
@@ -238,6 +248,7 @@ export class StatsComponent implements OnInit {
     p.only_visible = this.only_visible;
     this.service.indexStats(p as HttpParams).subscribe((resp: any) => {
       this.index_entities = resp.index_entities;
+      this.cores_info = resp.cores;
       this.loading.set(false);
     });
   }
@@ -274,6 +285,7 @@ export class StatsComponent implements OnInit {
 
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
       this.index_entities = resp.index_entities;
+      this.cores_info = resp.cores;
       this.loading.set(false);
     });
   }
