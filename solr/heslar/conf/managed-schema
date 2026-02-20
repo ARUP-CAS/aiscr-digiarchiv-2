@@ -124,6 +124,7 @@
    
    <field name="hierarchie_vyse" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="hierarchie_nize" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="is_deleted" type="boolean" indexed="true" stored="true" default="false" /> 
    
    <field name="text_all" type="lowercase_cs" indexed="true" stored="false" multiValued="true" /> 
    

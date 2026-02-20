@@ -128,6 +128,7 @@
   <field name="definicni_bod_wkt" type="string" indexed="false" stored="true" /> 
   <field name="hranice_gml" type="string" indexed="false" stored="true" /> 
   <field name="hranice_wkt" type="string" indexed="false" stored="true" /> 
+   <field name="is_deleted" type="boolean" indexed="true" stored="true" default="false" /> 
   
    
    <field name="text_all" type="text_general" indexed="true" stored="false" multiValued="true" /> 

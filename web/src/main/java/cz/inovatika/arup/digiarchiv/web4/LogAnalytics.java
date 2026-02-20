@@ -148,7 +148,17 @@ public class LogAnalytics {
                         .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
                 ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
                         .getJSONObject("facet_fields").getJSONArray("entity"));
-                ret.put("cores", cores(request, client).getJSONObject("status"));
+                JSONObject cores = new JSONObject();
+                cores.put("heslar", coreTotal(request, client, "heslar").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("organizations", coreTotal(request, client, "organizations").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("osoba", coreTotal(request, client, "osoba").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("uzivatel", coreTotal(request, client, "uzivatel").getJSONObject("response")
+                        .getInt("numFound"));
+                ret.put("cores", cores);
+            //ret.put("cores", cores(request, client).getJSONObject("status"));
             }
             return ret;
         } catch (Exception ex) {
@@ -161,12 +171,22 @@ public class LogAnalytics {
         JSONObject ret = new JSONObject();
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
-            JSONObject r = entities(request, client);
-            ret.put("index_entities", r.getJSONObject("facet_counts")
-                    .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
-            ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
-                    .getJSONObject("facet_fields").getJSONArray("entity"));
-            ret.put("cores", cores(request, client).getJSONObject("status"));
+                JSONObject r = entities(request, client);
+                ret.put("index_entities", r.getJSONObject("facet_counts")
+                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+                ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
+                        .getJSONObject("facet_fields").getJSONArray("entity"));
+                JSONObject cores = new JSONObject();
+                cores.put("heslar", coreTotal(request, client, "heslar").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("organizations", coreTotal(request, client, "organizations").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("osoba", coreTotal(request, client, "osoba").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("uzivatel", coreTotal(request, client, "uzivatel").getJSONObject("response")
+                        .getInt("numFound"));
+                ret.put("cores", cores);
+            //ret.put("cores", cores(request, client).getJSONObject("status"));
             }
             return ret;
         } catch (Exception ex) {
@@ -210,9 +230,32 @@ public class LogAnalytics {
 
         query.set("json.nl", "arrntv");
         query.set("wt", "json");
+        
+        if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+            query.addFilterQuery("-is_deleted:true");
+        }
+        
         JSONObject ret = json(query, client, "ruian");
         return ret;
     }
+
+    private static JSONObject coreTotal(HttpServletRequest request, SolrClient client, String core) {
+        // request.getParameter("id"), request.getParameter("type")
+        SolrQuery query = new SolrQuery()
+                .setQuery("*")
+                .setFacet(true)
+                .setRows(0);
+
+        query.set("wt", "json");
+        
+        if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+            query.addFilterQuery("-is_deleted:true");
+        }
+        
+        JSONObject ret = json(query, client, core);
+        return ret;
+    }
+
 
     private static JSONObject cores(HttpServletRequest request, SolrClient client) {
         try {

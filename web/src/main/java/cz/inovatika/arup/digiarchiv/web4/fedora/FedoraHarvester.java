@@ -687,6 +687,25 @@ public class FedoraHarvester {
         Map<String, Object> fieldModifier = new HashMap<>(1);
         fieldModifier.put("set", true);
         sdoc.addField("is_deleted", fieldModifier);  // add the map as the field value
+        // Find the core
+        String core = null;
+        if (id.startsWith("U")) {
+            core = "uzivatel";
+        } else if (id.startsWith("ORG")) {
+            core = "organizations";
+        } else if (id.startsWith("OS")) {
+            core = "osoba";
+        } else if (id.startsWith("HES")) {
+            core = "heslar";
+        } 
+        
+        if (core != null) {
+            if (!idocs.containsKey(core)) {
+                idocs.put(core, new ArrayList());
+            }
+            idocs.get(core).add(idoc);
+        }
+            
         idocsEntities.add(sdoc);
         idocsOAI.add(sdoc);
 

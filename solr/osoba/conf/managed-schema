@@ -123,6 +123,7 @@
   <field name="entity" type="string" indexed="true" stored="true" /> 
   <field name="jmeno" type="string" indexed="true" stored="true" /> 
   <field name="prijmeni" type="string" indexed="true" stored="true" /> 
+   <field name="is_deleted" type="boolean" indexed="true" stored="true" default="false" /> 
   
   
   <field name="historie" type="string" indexed="true" stored="true" multiValued="true"/> 

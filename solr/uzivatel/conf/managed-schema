@@ -136,6 +136,7 @@
   <field name="notifikace" type="string" indexed="true" stored="true" multiValued="true"/> 
   <field name="hlidaci_pes" type="string" indexed="true" stored="true" multiValued="true"/> 
   <field name="historie" type="string" indexed="true" stored="true" multiValued="true"/> 
+   <field name="is_deleted" type="boolean" indexed="true" stored="true" default="false" /> 
   
    <!--
       <xs:element name="spoluprace_nadrizeni" minOccurs="0" maxOccurs="unbounded" type="amcr:spoluprace_nadrizeniType"/>  
