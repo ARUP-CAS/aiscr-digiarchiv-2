@@ -1,13 +1,13 @@
 
 import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -40,7 +40,7 @@ interface ExampleFlatNode {
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, CommonModule,
     MatCardModule, MatIconModule, MatExpansionModule, MatMenuModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, ScrollingModule,
     FacetsDynamicComponent, MatButtonModule,

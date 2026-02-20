@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, DatePipe,
+    TranslateModule, RouterModule,  DatePipe,
     MatCardModule, MatIconModule, MatTooltipModule,
     MatButtonModule,
     ResultActionsComponent,

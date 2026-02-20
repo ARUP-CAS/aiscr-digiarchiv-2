@@ -11,7 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -34,7 +34,7 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, FormsModule, MatDialogModule,
+    TranslateModule, RouterModule,  FormsModule, MatDialogModule,
     MatCardModule, MatIconModule,  MatButtonModule, MatFormFieldModule, MatInputModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
     NguCarousel,
@@ -153,9 +153,11 @@ export class FileViewerComponent implements OnInit {
   }
 
   nextPage() {
-    this.currentPage++;
-    this.currentPageDisplayed.set(this.currentPage);
-    this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
+    if (this.currentPage < this.selectedFile().rozsah) {
+      this.currentPage++;
+      this.currentPageDisplayed.set(this.currentPage);
+      this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
+    }
   }
 
   prevPage() {
@@ -179,21 +181,22 @@ export class FileViewerComponent implements OnInit {
     const regex = /[0-9]/;
     const matches = regex.exec(this.currentPage+'');
     if (!matches) {
-      alert('invalid');
+      alert(this.service.getTranslation('dialog.alert.invalid_page'));
       return;
     }
     this.currentPage = parseInt(this.currentPage+'');
     if (this.currentPage < 1 || this.currentPage > this.selectedFile().rozsah) {
-      alert('invalid');
+      alert(this.service.getTranslation('dialog.alert.invalid_page'));
       return;
     }
     this.currentPageDisplayed.set(this.currentPage);
     this.carouselItemsLoad(this.currentPage);
-    // setTimeout(() => {
-    //   if (this.currentPage > 0 || this.currentPage < this.selectedFile().rozsah) {
-    //     this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
-    //   }
-    // }, 100);
+    if (!this.carousel) {
+      return;
+    }
+    setTimeout(() => {
+        this.carousel.moveTo(this.currentPageDisplayed() - 1, false);
+    }, 100);
   }
 
   setData() {

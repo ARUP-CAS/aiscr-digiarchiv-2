@@ -6,7 +6,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -16,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, 
     MatCardModule, MatIconModule, MatButtonModule, ScrollingModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     forwardRef(() => EntityContainer)

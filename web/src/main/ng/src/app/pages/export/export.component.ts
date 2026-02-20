@@ -4,7 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, 
     MatProgressBarModule, DatePipe
 ],
   selector: 'app-export',

@@ -28,7 +28,7 @@
         (onToggleDetail)="toggleDetail()"></app-result-actions>
       </mat-card-actions>
     }
-    @if (detailExpanded) {
+    @if (detailExpanded()) {
       <mat-card-content>
         <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
       </mat-card-content>

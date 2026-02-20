@@ -52,6 +52,7 @@ a {
     cursor: not-allowed;
     opacity: 0.3;
     text-decoration: none;
+    pointer-events: none;
   }
 
   &.app-color-primary {

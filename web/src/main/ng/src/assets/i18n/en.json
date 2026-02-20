@@ -635,7 +635,8 @@
       "feedback_failed": "Error submitting comment",
       "error": "Error",
       "search_error": "Error searching",
-      "login_server_error": "Login not available. Try later."
+      "login_server_error": "Login not available. Try later.",
+      "invalid_page": "Invalid page"
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
@@ -811,6 +812,10 @@
     "type": "Event",
     "user": "User",
     "entity": "Record type",
+    "index": "Records in index",
+    "stav": "Status",
+    "show_deleted": "Show deleted records",
+    "only_visible": "Only visible",
     "typ": {
       "id": "Detail shown",
       "viewer": "Thumbnail shown",

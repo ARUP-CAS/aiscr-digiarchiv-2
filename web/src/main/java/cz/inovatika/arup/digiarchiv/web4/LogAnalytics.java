@@ -7,18 +7,22 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.NoOpResponseParser;
+import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.CursorMarkParams; 
+import org.apache.solr.common.params.CoreAdminParams;
+import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,10 +58,9 @@ public class LogAnalytics {
     }
 
     public static JSONObject stats(HttpServletRequest request) {
-        NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
-        dontMessWithSolr.setWriterType("json");
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost"))
-                .withResponseParser(dontMessWithSolr).build()) {
+//        NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
+//        dontMessWithSolr.setWriterType("json");
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             // request.getParameter("id"), request.getParameter("type")
             SolrQuery query = new SolrQuery()
                     .setQuery("*")
@@ -72,10 +75,10 @@ public class LogAnalytics {
                     .setParam("facet.range", "indextime")
                     .setParam("f.indextime.facet.range.other", "before")
                     .setParam("f.indextime.facet.range.end", "NOW")
-                    .setParam("f.indextime.facet.range.gap", 
+                    .setParam("f.indextime.facet.range.gap",
                             "+7DAYS");
             JSONArray ips = Options.getInstance().getJSONArray("statsIpFilter");
-            for(int i =0; i<ips.length(); i++) {
+            for (int i = 0; i < ips.length(); i++) {
                 query.addFilterQuery("-ip:" + ips.getString(i)
                         .replaceAll(":", "\\\\:")
                         .replaceAll("\\.", "\\\\."));
@@ -114,8 +117,10 @@ public class LogAnalytics {
                 String from = parts[0];
                 if ("null".equals(from)) {
                     from = "*";
+                    query.setParam("f.indextime.facet.range.start", "2024-11-01T00:00:00Z");
                 } else {
                     from = from + "T00:00:00Z";
+                    query.setParam("f.indextime.facet.range.start", from);
                 }
                 String to = parts[1];
                 if ("null".equals(to)) {
@@ -123,7 +128,6 @@ public class LogAnalytics {
                 } else {
                     to = to + "T23:59:59Z";
                 }
-                query.setParam("f.indextime.facet.range.start", from);
                 String fq = "indextime:[" + from + " TO " + to + "]";
                 query.addFilterQuery(fq);
             } else {
@@ -138,7 +142,24 @@ public class LogAnalytics {
             }
 
             JSONObject ret = json(query, client, "logs");
-            // client.close();
+            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
+                JSONObject r = entities(request, client);
+                ret.put("index_entities", r.getJSONObject("facet_counts")
+                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+                ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
+                        .getJSONObject("facet_fields").getJSONArray("entity"));
+                JSONObject cores = new JSONObject();
+                cores.put("heslar", coreTotal(request, client, "heslar").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("organizations", coreTotal(request, client, "organizations").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("osoba", coreTotal(request, client, "osoba").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("uzivatel", coreTotal(request, client, "uzivatel").getJSONObject("response")
+                        .getInt("numFound"));
+                ret.put("cores", cores);
+            //ret.put("cores", cores(request, client).getJSONObject("status"));
+            }
             return ret;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -146,19 +167,123 @@ public class LogAnalytics {
         }
     }
 
-    public static JSONObject json(SolrQuery query, SolrClient client, String core) {
-        query.setRequestHandler("/select");
-        String qt = query.get("qt");
-        query.set("wt", "json");
-        String jsonResponse;
-        try {
-            QueryRequest qreq = new QueryRequest(query);
-            if (qt != null) {
-                qreq.setPath(qt);
+    public static JSONObject statsIndex(HttpServletRequest request) {
+        JSONObject ret = new JSONObject();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
+                JSONObject r = entities(request, client);
+                ret.put("index_entities", r.getJSONObject("facet_counts")
+                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+                ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
+                        .getJSONObject("facet_fields").getJSONArray("entity"));
+                JSONObject cores = new JSONObject();
+                cores.put("heslar", coreTotal(request, client, "heslar").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("organizations", coreTotal(request, client, "organizations").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("osoba", coreTotal(request, client, "osoba").getJSONObject("response")
+                        .getInt("numFound"));
+                cores.put("uzivatel", coreTotal(request, client, "uzivatel").getJSONObject("response")
+                        .getInt("numFound"));
+                ret.put("cores", cores);
+            //ret.put("cores", cores(request, client).getJSONObject("status"));
             }
-            NamedList<Object> qresp = client.request(qreq, core);
-            jsonResponse = (String) qresp.get("response");
-            return new JSONObject(jsonResponse);
+            return ret;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject().put("error", ex);
+        }
+    }
+
+    private static JSONObject entities(HttpServletRequest request, SolrClient client) {
+        // request.getParameter("id"), request.getParameter("type")
+        SolrQuery query = new SolrQuery()
+                .setQuery("*")
+                .setFacet(true)
+                .setRows(0)
+                .setFacetMinCount(1)
+                .addFacetField("entity")
+                .addFacetPivotField("entity,stav");
+
+        if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+            query.addFilterQuery("-is_deleted:true");
+        }
+
+        if (Boolean.parseBoolean(request.getParameter("only_visible"))) {
+            query.addFilterQuery("-is_deleted:true");
+            query.addFilterQuery("searchable:true");
+        }
+
+        JSONObject ret = json(query, client, "entities");
+        return ret;
+    }
+
+    private static JSONObject ruian(HttpServletRequest request, SolrClient client) {
+        // request.getParameter("id"), request.getParameter("type")
+        SolrQuery query = new SolrQuery()
+                .setQuery("*")
+                .setFacet(true)
+                .setRows(0)
+                .setFacetMinCount(1)
+                .addFacetField("entity")
+                .setFacetSort("index asc");
+
+        query.set("json.nl", "arrntv");
+        query.set("wt", "json");
+        
+        if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+            query.addFilterQuery("-is_deleted:true");
+        }
+        
+        JSONObject ret = json(query, client, "ruian");
+        return ret;
+    }
+
+    private static JSONObject coreTotal(HttpServletRequest request, SolrClient client, String core) {
+        // request.getParameter("id"), request.getParameter("type")
+        SolrQuery query = new SolrQuery()
+                .setQuery("*")
+                .setFacet(true)
+                .setRows(0);
+
+        query.set("wt", "json");
+        
+        if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+            query.addFilterQuery("-is_deleted:true");
+        }
+        
+        JSONObject ret = json(query, client, core);
+        return ret;
+    }
+
+
+    private static JSONObject cores(HttpServletRequest request, SolrClient client) {
+        try {
+            CoreAdminRequest arequest = new CoreAdminRequest();
+            arequest.setIndexInfoNeeded(true);
+            arequest.setAction(CoreAdminParams.CoreAdminAction.STATUS);
+
+            arequest.setResponseParser(new InputStreamResponseParser("json"));
+            NamedList<Object> resp = client.request(arequest);
+            InputStream is = (InputStream) resp.get("stream");
+            return new JSONObject(IOUtils.toString(is, "UTF-8"));
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return new JSONObject().put("error", ex);
+        }
+    }
+
+    public static JSONObject json(SolrQuery query, SolrClient client, String core) {
+        query.set("wt", "json");
+        try {
+
+            QueryRequest req = new QueryRequest(query);
+            req.setPath("/select");
+
+            req.setResponseParser(new InputStreamResponseParser("json"));
+            NamedList<Object> resp = client.request(req, core);
+            InputStream is = (InputStream) resp.get("stream");
+            return new JSONObject(IOUtils.toString(is, "UTF-8"));
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return new JSONObject().put("error", ex);
@@ -172,7 +297,7 @@ public class LogAnalytics {
         int totalDocs = 0;
         int rows = 100;
         JSONObject jo = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) { 
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
             SolrQuery query = new SolrQuery("*")
                     //.addFilterQuery("-entity:*") 
@@ -187,7 +312,7 @@ public class LogAnalytics {
                 try {
                     rsp = client.query("logs_old", query);
                     docs = rsp.getResults();
-                    for (SolrDocument doc : docs) { 
+                    for (SolrDocument doc : docs) {
                         String ident_cely = (String) doc.getFirstValue("ident_cely");
                         String typ = (String) doc.getFirstValue("type");
 
@@ -218,7 +343,7 @@ public class LogAnalytics {
                         }
                         totalDocs++;
                     }
-                    client.commit("logs"); 
+                    client.commit("logs");
                     LOGGER.log(Level.INFO, "Currently {0} files processed", totalDocs);
 
                     String nextCursorMark = rsp.getNextCursorMark();
@@ -227,11 +352,10 @@ public class LogAnalytics {
                     } else {
                         cursorMark = nextCursorMark;
                     }
-                
+
 //                    if (docs.size() < rows) {
 //                        done = true;
 //                    }
-
                 } catch (SolrServerException e) {
                     LOGGER.log(Level.SEVERE, null, e);
 

@@ -11,7 +11,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { FileViewerComponent } from '../../components/file-viewer/file-viewer.component';
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { RelatedComponent } from '../../components/related/related.component';
@@ -19,7 +19,7 @@ import { ResultActionsComponent } from '../../components/result-actions/result-a
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, 
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, DatePipe, MatButtonModule,

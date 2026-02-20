@@ -8,7 +8,7 @@ import * as Wkt from 'wicket';
 import { DatePipe } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -16,7 +16,7 @@ import { SolrResponse } from '../../shared/solr-response';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, 
     MatProgressBarModule, DatePipe
 ],
   selector: 'app-export-mapa',

@@ -154,9 +154,7 @@
             }
           </mat-card-content>
         </mat-card>
-      }
-
-      @if (state.logged && (state.user.pristupnost === 'D' || state.user.pristupnost === 'E')) {
+        
         <mat-card class="app-fxFlex app-user">
           <mat-card-header>
             <mat-card-title>{{ 'stats.user' | translate }}</mat-card-title>
@@ -178,7 +176,48 @@
             }
           </mat-card-content>
         </mat-card>
+        
+        <mat-card class="app-fxFlex app-user">
+          <mat-card-header>
+            <mat-card-title>{{ 'stats.index' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-checkbox [(ngModel)]="show_deleted" (ngModelChange)="getIndex()">{{ 'stats.show_deleted' | translate }}</mat-checkbox>
+            <mat-checkbox [(ngModel)]="only_visible" (change)="getIndex()">{{ 'stats.only_visible' | translate }}</mat-checkbox>
+            @for (f of index_entities; track $index) {
+              <div class="app-item">
+                <span><strong>{{ f.value }}</strong></span><span class="app-count">({{ f.count }})</span>
+                @if (f.pivot) {
+                  @for (p of f.pivot; track $index) {
+                    <div class="app-item">
+                      &#160;&#160;<span>{{ 'stats.stav' | translate }}: {{ p.value }}</span><span class="app-count">({{ p.count }})</span>
+                    </div>
+                  }
+                }
+              </div>
+            }
+            @if (ruian && !only_visible) {
+              <div class="app-item"> --- </div>
+              @for (c of ruian; track $index) {
+                  <div class="app-item">
+                    <span><strong>{{ c.name | translate }}</strong></span><span class="app-count">({{ c.value }})</span>
+                  </div>
+              }
+            }
+            @if (cores_info && !only_visible) {
+              <div class="app-item"> --- </div>
+              @for (c of cores; track $index) {
+                @if (cores_info[c]) {
+                  <div class="app-item">
+                    <span><strong>{{ c }}</strong></span><span class="app-count">({{ cores_info[c] }})</span>
+                  </div>
+                }
+              }
+            }
+          </mat-card-content>
+        </mat-card>
       }
+
     </div>
   </div>
 </div>

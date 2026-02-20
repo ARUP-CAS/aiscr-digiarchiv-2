@@ -14,7 +14,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -28,7 +28,7 @@ import { EntityContainer } from "../../entities/entity-container/entity-containe
 
 @Component({
   imports: [
-    TranslateModule, CommonModule, RouterModule, FlexLayoutModule,
+    TranslateModule, CommonModule, RouterModule, 
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, ScrollingModule,
     MatMenuModule, MatButtonModule,

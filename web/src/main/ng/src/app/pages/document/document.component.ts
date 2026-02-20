@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID, forwardRef, sign
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -20,7 +20,7 @@ import { MapViewComponent } from "../map-view/map-view.component";
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule,
+    TranslateModule, RouterModule, 
     MatCardModule, MatIconModule, MatSidenavModule,
     MatProgressBarModule, MatTooltipModule,
     MatButtonModule, DecimalPipe,

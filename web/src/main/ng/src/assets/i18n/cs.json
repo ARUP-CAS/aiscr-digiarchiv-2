@@ -635,7 +635,8 @@
       "feedback_failed": "Chyba při odeslání komentáře",
       "error": "Chyba",
       "search_error": "Chyba při odeslání dotazu",
-      "login_server_error": "Přihlášení není momentálně dostupné"
+      "login_server_error": "Přihlášení není momentálně dostupné",
+      "invalid_page": "Neplatné číslo stránky"
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
@@ -811,6 +812,10 @@
     "type": "Událost",
     "user": "Uživatel",
     "entity": "Typ záznamu",
+    "index": "Záznamy v indexu",
+    "stav": "Stav",
+    "show_deleted": "Zobrazit smazané záznamy",
+    "only_visible": "Pouze viditelné",
     "typ": {
       "id": "Zobrazení detailu",
       "viewer": "Zobrazení náhledu",

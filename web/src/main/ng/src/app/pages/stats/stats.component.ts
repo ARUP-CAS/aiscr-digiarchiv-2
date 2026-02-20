@@ -6,7 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Params, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,12 +24,13 @@ import * as echarts from 'echarts/core';
 import { EChartsOption } from 'echarts'; 
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { LineChart } from 'echarts/charts';
-import { TooltipComponent, GridComponent, TitleComponent } from 'echarts/components';
+import { TooltipComponent, GridComponent, TitleComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LabelLayout } from "echarts/features";
 import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout]);
+echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
 import 'moment/locale/cs';
+import { MatCheckbox } from "@angular/material/checkbox";
 
 export class MultiDateFormat {
   value = '';
@@ -83,7 +84,6 @@ export class MultiDateFormat {
   imports: [
     TranslateModule,
     RouterModule,
-    FlexLayoutModule,
     FormsModule,
     MatProgressBarModule,
     MatTooltipModule,
@@ -95,7 +95,8 @@ export class MultiDateFormat {
     MatListModule,
     MatSelectModule,
     MatButtonModule,
-    NgxEchartsDirective
+    NgxEchartsDirective,
+    MatCheckbox
 ],
   providers: [
     provideEchartsCore({ echarts }),
@@ -128,6 +129,7 @@ export class StatsComponent implements OnInit {
   ips: { name: string, type: string, value: number }[];
   users: { name: string, type: string, value: number }[];
   entities: { name: string, type: string, value: number }[];
+  index_entities:  {field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[] = [];
   subs: any[] = [];
 
   datumod: Date;
@@ -152,6 +154,20 @@ export class StatsComponent implements OnInit {
     },
     color: ['rgb(0, 153, 168)', '#fac858'],
   };
+
+  show_deleted: boolean = false;
+  only_visible: boolean = false;
+
+  cores = [
+      'heslar',
+      'organizations',
+      'osoba',
+      'uzivatel'
+    ];
+    
+  cores_info: any = {}; 
+  
+  ruian: { name: string, type: string, value: number }[];
 
 
   constructor(
@@ -225,6 +241,20 @@ export class StatsComponent implements OnInit {
     event.stopPropagation()
   }
 
+  getIndex() {
+    this.loading.set(true);
+    const p: any = {};
+    p.page = 0;
+    p.show_deleted = this.show_deleted;
+    p.only_visible = this.only_visible;
+    this.service.indexStats(p as HttpParams).subscribe((resp: any) => {
+      this.index_entities = resp.index_entities;
+      this.cores_info = resp.cores;
+      this.ruian = resp.ruian;
+      this.loading.set(false);
+    });
+  }
+
   search(params: Params) {
     this.loading.set(true);
     this.ident_cely = params['ident_cely'];
@@ -256,6 +286,9 @@ export class StatsComponent implements OnInit {
       this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
 
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
+      this.index_entities = resp.index_entities;
+      this.cores_info = resp.cores;
+      this.ruian = resp.ruian;
       this.loading.set(false);
     });
   }

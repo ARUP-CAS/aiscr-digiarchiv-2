@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppService } from '../../../app.service';
 import { AppState } from '../../../app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, FormsModule, MatInputModule,
+    TranslateModule, RouterModule,  FormsModule, MatInputModule,
     MatCardModule, MatIconModule, MatTooltipModule, MatFormFieldModule,
     MatButtonModule
 ],

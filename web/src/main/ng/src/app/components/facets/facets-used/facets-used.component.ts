@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../../app-configuration';
 import { AppService } from '../../../app.service';
 import { AppState } from '../../../app.state';
@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, 
+    TranslateModule, RouterModule,  
     MatCardModule, MatIconModule, MatTooltipModule, MatListModule,
     MatButtonModule
 ],

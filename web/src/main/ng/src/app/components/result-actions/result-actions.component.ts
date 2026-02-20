@@ -5,7 +5,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -18,7 +18,7 @@ import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.comp
 
 @Component({
   imports: [
-    TranslateModule, CommonModule, FormsModule, FlexLayoutModule,
+    TranslateModule, CommonModule, FormsModule, 
     RouterModule, MatDialogModule, MatButtonModule,
     MatIconModule, MatButtonModule, MatMenuModule, MatTooltipModule
   ],

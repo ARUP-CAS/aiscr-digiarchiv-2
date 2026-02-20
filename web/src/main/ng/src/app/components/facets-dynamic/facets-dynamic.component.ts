@@ -12,7 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Moment } from 'moment';
-import { FlexLayoutModule } from 'ngx-flexible-layout';
+
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
@@ -78,7 +78,7 @@ export class MultiDateFormat {
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, FlexLayoutModule, FormsModule, MatFormFieldModule,
+    TranslateModule, RouterModule,  FormsModule, MatFormFieldModule,
     MatCardModule, MatIconModule, MatExpansionModule, MatMenuModule,
     MatProgressBarModule, MatTooltipModule, MatListModule, MatSelectModule,
     MatDatepickerModule, MatRadioModule, MatButtonModule, MatInputModule
