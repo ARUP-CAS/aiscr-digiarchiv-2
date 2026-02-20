@@ -70,12 +70,12 @@ jobs:
           fi
           # Update changelog anchor
           sed -i -E \
-            "s#(<a[^>]*href=\"[^\"]*wiki/Changelog#)v[0-9]+#\1${ANCHOR}#g" \
-            "$FOOTER_FILE"
+          "s|(<a[^>]*href=\"[^\"]*wiki/Changelog#)v[0-9]+|\1${ANCHOR}|g" \
+          "$FOOTER_FILE"
           # Update visible version label
           sed -i -E \
-            "s#(<a[^>]*wiki/Changelog#[^\"]*\"[^>]*>[^<]* )v[0-9]+\.[0-9]+\.[0-9]+#\1${VERSION}#g" \
-            "$FOOTER_FILE"
+          "s|(<a[^>]*wiki/Changelog#[^\"]*\"[^>]*>[^<]* )v[0-9]+\.[0-9]+\.[0-9]+|\1${VERSION}|g" \
+          "$FOOTER_FILE"
           if ! grep -q "${VERSION}" "$FOOTER_FILE"; then
             echo "Footer version replacement failed!"
             exit 1
