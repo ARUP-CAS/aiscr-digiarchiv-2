@@ -146,6 +146,8 @@ public class LogAnalytics {
                 JSONObject r = entities(request, client);
                 ret.put("index_entities", r.getJSONObject("facet_counts")
                         .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+                ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
+                        .getJSONObject("facet_fields").getJSONArray("entity"));
                 ret.put("cores", cores(request, client).getJSONObject("status"));
             }
             return ret;
@@ -159,17 +161,19 @@ public class LogAnalytics {
         JSONObject ret = new JSONObject();
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
-                JSONObject r = entities(request, client);
-                ret.put("index_entities", r.getJSONObject("facet_counts")
-                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
-                ret.put("cores", cores(request, client).getJSONObject("status"));
+            JSONObject r = entities(request, client);
+            ret.put("index_entities", r.getJSONObject("facet_counts")
+                    .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
+            ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
+                    .getJSONObject("facet_fields").getJSONArray("entity"));
+            ret.put("cores", cores(request, client).getJSONObject("status"));
             }
             return ret;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return new JSONObject().put("error", ex);
         }
-    } 
+    }
 
     private static JSONObject entities(HttpServletRequest request, SolrClient client) {
         // request.getParameter("id"), request.getParameter("type")
@@ -179,8 +183,7 @@ public class LogAnalytics {
                 .setRows(0)
                 .setFacetMinCount(1)
                 .addFacetField("entity")
-                .addFacetPivotField("entity,stav")
-                .setFacetSort("index asc");
+                .addFacetPivotField("entity,stav");
 
         if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
             query.addFilterQuery("-is_deleted:true");
@@ -192,6 +195,22 @@ public class LogAnalytics {
         }
 
         JSONObject ret = json(query, client, "entities");
+        return ret;
+    }
+
+    private static JSONObject ruian(HttpServletRequest request, SolrClient client) {
+        // request.getParameter("id"), request.getParameter("type")
+        SolrQuery query = new SolrQuery()
+                .setQuery("*")
+                .setFacet(true)
+                .setRows(0)
+                .setFacetMinCount(1)
+                .addFacetField("entity")
+                .setFacetSort("index asc");
+
+        query.set("json.nl", "arrntv");
+        query.set("wt", "json");
+        JSONObject ret = json(query, client, "ruian");
         return ret;
     }
 

@@ -159,14 +159,15 @@ export class StatsComponent implements OnInit {
   only_visible: boolean = false;
 
   cores = [
-      'uzivatel',
       'heslar',
-      'ruian',
       'organizations',
-      'osoba'
+      'osoba',
+      'uzivatel'
     ];
     
   cores_info: any = {}; 
+  
+  ruian: { name: string, type: string, value: number }[];
 
 
   constructor(
@@ -249,6 +250,7 @@ export class StatsComponent implements OnInit {
     this.service.indexStats(p as HttpParams).subscribe((resp: any) => {
       this.index_entities = resp.index_entities;
       this.cores_info = resp.cores;
+      this.ruian = resp.ruian;
       this.loading.set(false);
     });
   }
@@ -286,6 +288,7 @@ export class StatsComponent implements OnInit {
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
       this.index_entities = resp.index_entities;
       this.cores_info = resp.cores;
+      this.ruian = resp.ruian;
       this.loading.set(false);
     });
   }
