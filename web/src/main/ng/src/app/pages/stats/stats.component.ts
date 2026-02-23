@@ -188,11 +188,18 @@ export class StatsComponent implements OnInit {
 
     this.service.currentLang.subscribe(res => {
       this.search(this.route.snapshot.queryParams);
+      if (this.state.logged && (this.state.user.pristupnost === 'D' || this.state.user.pristupnost === 'E')) {
+        this.getIndex();
+      }
+      
       this.setTitle();
     });
 
     this.subs.push(this.route.queryParams.subscribe(val => {
       this.search(val);
+      if (this.state.logged && (this.state.user.pristupnost === 'D' || this.state.user.pristupnost === 'E')) {
+        this.getIndex();
+      }
     }));
   }
 
@@ -286,7 +293,6 @@ export class StatsComponent implements OnInit {
       this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
 
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
-      this.index_entities = resp.index_entities;
       this.cores_info = resp.cores;
       this.ruian = resp.ruian;
       this.loading.set(false);

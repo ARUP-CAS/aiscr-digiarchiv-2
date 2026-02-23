@@ -131,9 +131,9 @@ public class LogAnalytics {
                 String fq = "indextime:[" + from + " TO " + to + "]";
                 query.addFilterQuery(fq);
             } else {
-                // query.setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR");
+                query.setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR");
                 // prvni zaznam "2024-11-08T11:53:40.718Z"
-                query.setParam("f.indextime.facet.range.start", "2024-11-01T00:00:00Z");
+                // query.setParam("f.indextime.facet.range.start", "2024-11-01T00:00:00Z");
             }
 
             if (request.getParameter("entity") != null) {
@@ -142,24 +142,6 @@ public class LogAnalytics {
             }
 
             JSONObject ret = json(query, client, "logs");
-            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
-                JSONObject r = entities(request, client);
-                ret.put("index_entities", r.getJSONObject("facet_counts")
-                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
-                ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
-                        .getJSONObject("facet_fields").getJSONArray("entity"));
-                JSONObject cores = new JSONObject();
-                cores.put("heslar", coreTotal(request, client, "heslar").getJSONObject("response")
-                        .getInt("numFound"));
-                cores.put("organizations", coreTotal(request, client, "organizations").getJSONObject("response")
-                        .getInt("numFound"));
-                cores.put("osoba", coreTotal(request, client, "osoba").getJSONObject("response")
-                        .getInt("numFound"));
-                cores.put("uzivatel", coreTotal(request, client, "uzivatel").getJSONObject("response")
-                        .getInt("numFound"));
-                ret.put("cores", cores);
-            //ret.put("cores", cores(request, client).getJSONObject("status"));
-            }
             return ret;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
