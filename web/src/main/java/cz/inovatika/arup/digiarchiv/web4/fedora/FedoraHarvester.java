@@ -685,17 +685,17 @@ public class FedoraHarvester {
         sdoc.addField("ident_cely", id);
         sdoc.addField("datestamp", idoc.getFieldValue("datestamp"));
         Map<String, Object> fieldModifier = new HashMap<>(1);
-        fieldModifier.put("set", true);
+        fieldModifier.put("set", "true");
         sdoc.addField("is_deleted", fieldModifier);  // add the map as the field value
         // Find the core
         String core = null;
-        if (id.startsWith("U")) {
+        if (id.startsWith("U-")) {
             core = "uzivatel";
-        } else if (id.startsWith("ORG")) {
+        } else if (id.startsWith("ORG-")) {
             core = "organizations";
-        } else if (id.startsWith("OS")) {
+        } else if (id.startsWith("OS-")) {
             core = "osoba";
-        } else if (id.startsWith("HES")) {
+        } else if (id.startsWith("HES-")) {
             core = "heslar";
         } 
         
@@ -703,10 +703,11 @@ public class FedoraHarvester {
             if (!idocs.containsKey(core)) {
                 idocs.put(core, new ArrayList());
             }
-            idocs.get(core).add(idoc);
+            idocs.get(core).add(sdoc);
+        } else {
+            idocsEntities.add(sdoc);
         }
             
-        idocsEntities.add(sdoc);
         idocsOAI.add(sdoc);
 
     }
