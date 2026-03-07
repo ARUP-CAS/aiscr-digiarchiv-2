@@ -149,6 +149,6 @@ Viz také `CITATION.cff`.
 
 ## Licence
 
-[GPL-3.0](LICENSE)
-© [Archeologický ústav AV ČR, Praha, v.v.i.](https://www.arup.cas.cz/)
+[GPL-3.0](LICENSE)  
+© [Archeologický ústav AV ČR, Praha, v.v.i.](https://www.arup.cas.cz/)  
 © [Archeologický ústav AV ČR, Brno, v.v.i.](https://www.arub.cz/)
