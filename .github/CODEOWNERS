@@ -1,0 +1,28 @@
+# CODEOWNERS
+#
+# Každý PR musí být schválen alespoň jedním z vlastníků kódu.
+# Syntax: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Výchozí vlastníci pro vše v repozitáři
+*                           @motyc @albertoh
+
+# Solr konfigurace a schémata
+/solr/                      @motyc @albertoh
+
+# Hlavní webová aplikace
+/web/                       @motyc @albertoh
+
+# ThumbnailsGenerator
+/ThumbnailsGenerator/       @motyc @albertoh
+
+# CI/CD workflows a GitHub konfigurace
+/.github/                   @motyc @albertoh
+
+# Agentní dokumentace — vyžaduje human review před mergem
+/docs_agents/               @motyc @albertoh
+
+# Projektová dokumentace a pravidla
+/AGENTS.md                  @motyc @albertoh
+/CONTRIBUTING.md            @motyc @albertoh
+/README.md                  @motyc @albertoh
+/CITATION.cff               @motyc @albertoh
