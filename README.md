@@ -1,16 +1,15 @@
 # Digitální archiv AMČR
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8329064.svg)](https://doi.org/10.5281/zenodo.8329064)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8329064.svg)](https://doi.org/10.5281/zenodo.8329064) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-Digitální archiv Archeologické mapy České republiky (AMČR) je webová aplikace určená k prohlížení informací o archeologických výzkumech, lokalitách a nálezech, provozovaná Archeologickými ústavy AV ČR v Praze a Brně.
-Archivy těchto institucí obsahují dokumentaci terénních archeologických výzkumů na území ČR od r. 1919 do současnosti.
+Digitální archiv Archeologické mapy České republiky (AMČR) je webová aplikace určená k prohlížení informací o archeologických výzkumech, lokalitách a nálezech, provozovaná Archeologickými ústavy AV ČR v Praze a Brně.  
+Archivy těchto institucí obsahují dokumentaci terénních archeologických výzkumů na území ČR od r. 1919 do současnosti.  
 Databáze AMČR a související dokumenty tvoří největší soubor archeologických dat dotýkajících se Česka.
 
-Digitální archiv AMČR obsahuje různé druhy záznamů — jednotlivé archeologické dokumenty (texty, terénní fotografie, letecké snímky, mapy a plány, digitální data), projekty, terénní akce, archeologické lokality, evidenci samostatných nálezů i knihovnu 3D modelů.
+Digitální archiv AMČR obsahuje různé druhy záznamů — jednotlivé archeologické dokumenty (texty, terénní fotografie, letecké snímky, mapy a plány, digitální data), projekty, terénní akce, archeologické lokality, evidenci samostatných nálezů i knihovnu 3D modelů.  
 Data a popisné údaje jsou průběžně přebírány z AMČR, s níž je Digitální archiv propojen také uživatelskými účty.
 
-Obsažená data jsou zveřejňována v souladu s politikou otevřeného přístupu k informacím a se souhlasem držitelů autorských práv.
+Obsažená data jsou zveřejňována v souladu s politikou otevřeného přístupu k informacím a se souhlasem držitelů autorských práv.  
 Většina dat je přístupná každému uživateli, dokumenty jsou obvykle dostupné po registraci uživatelského účtu a menší část údajů slouží pouze odborníkům z oprávněných archeologických organizací.
 
 Digitální archiv AMČR je součástí Archeologického informačního systému České republiky (AIS CR) zapsaného do Cestovní mapy velkých výzkumných infrastruktur ČR.
@@ -21,20 +20,18 @@ Digitální archiv AMČR je součástí Archeologického informačního systému
 
 ## Odkazy
 
-| | |
-|---|---|
-| **Produkční aplikace** | https://digiarchiv.aiscr.cz/ |
-| **AMČR** (zdrojový systém) | https://amcr.aiscr.cz/ |
-| **AMČR API** | https://api.aiscr.cz/ |
-| **Uživatelská nápověda** | https://amcr-help.aiscr.cz/ |
-| **AIS CR** | https://www.aiscr.cz/ |
+- **Produkční aplikace:** https://digiarchiv.aiscr.cz/
+- **AMČR (zdrojový systém):** https://amcr.aiscr.cz/
+- **AMČR API:** https://api.aiscr.cz/
+- **Uživatelská nápověda:** https://amcr-help.aiscr.cz/
+- **AIS CR:** https://www.aiscr.cz/
 
 ---
 
 ## Technologický stack
 
 | Vrstva | Technologie |
-|---|---|
+| --- | --- |
 | Backend | Java, Spring |
 | Vyhledávání | Apache Solr |
 | Datové transformace | XSLT 2.0/3.0 (Saxon) |
@@ -47,16 +44,16 @@ Digitální archiv AMČR je součástí Archeologického informačního systému
 
 ## Struktura repozitáře
 
-```
+```text
 aiscr-digiarchiv-2/
 ├── .github/              # GitHub Actions CI/CD workflows, CODEOWNERS
 ├── ThumbnailsGenerator/  # Standalone Java utilita pro generování náhledů
 ├── solr/                 # Konfigurace Apache Solr (schémata, configsets)
 ├── web/                  # Hlavní webová aplikace
-│   ├── src/main/java/    # Java backend (Spring)
-│   ├── src/main/resources/ # Konfigurace, XSLT transformace
-│   ├── src/main/webapp/  # Frontend (TypeScript, SCSS, HTML šablony)
-│   └── src/test/         # Unit a integrační testy
+│   ├── src/main/java/        # Java backend (Spring)
+│   ├── src/main/resources/   # Konfigurace, XSLT transformace
+│   ├── src/main/webapp/      # Frontend (TypeScript, SCSS, HTML šablony)
+│   └── src/test/             # Unit a integrační testy
 ├── docs_agents/          # Dokumentace a konfigurace pro AI agenty
 ├── AGENTS.md             # Pravidla a instrukce pro AI coding agenty
 ├── CITATION.cff          # Citační metadata
@@ -92,7 +89,7 @@ npm run build
 
 ### Konfigurace prostředí
 
-Citlivé hodnoty (API klíče, hesla, connection strings) se **nikdy** necommitují.
+Citlivé hodnoty (API klíče, hesla, connection strings) se **nikdy necommitují**.  
 Použijte proměnné prostředí nebo `.env` soubor (viz `.gitignore`).
 
 ---
@@ -115,12 +112,12 @@ npm run build
 ## Větve a workflow
 
 | Větev | Prostředí | Popis |
-|---|---|---|
+| --- | --- | --- |
 | `dev` | Staging | Aktivní vývoj, integrace nových funkcí |
 | `main` | Stabilní | Stabilizovaný kód, příprava na release |
 
-Nové funkce a opravy se vyvíjí v `dev`.
-Do `main` se merguje teprve po stabilizaci — výhradně lidským reviewerem.
+Nové funkce a opravy se vyvíjejí v `dev`.  
+Do `main` se merguje teprve po stabilizaci — výhradně lidským reviewerem.  
 Release je vytvářen z tagovaného commitu na `main` (sémantické verzování `v4.x.x`).
 
 Viz `CONTRIBUTING.md` pro podrobný vývojový postup.
@@ -138,7 +135,7 @@ Repozitář obsahuje konfiguraci pro AI coding agenty (OpenAI Codex, Claude Code
 
 ## Citace
 
-```
+```markdown
 AIS CR: Digitální archiv AMČR. [cit. YYYY-MM-DD].
 Dostupné z: https://digiarchiv.aiscr.cz/
 DOI: 10.5281/zenodo.8329064
@@ -150,4 +147,6 @@ Viz také `CITATION.cff`.
 
 ## Licence
 
-[GPL-3.0](LICENSE) © [Archeologický ústav AV ČR, Praha, v.v.i.](https://www.arup.cas.cz/) a [Archeologický ústav AV ČR,Brno, v.v.i.](https://www.arub.cz/)
+[GPL-3.0](LICENSE)
+© [Archeologický ústav AV ČR, Praha, v.v.i.](https://www.arup.cas.cz/)
+© [Archeologický ústav AV ČR, Brno, v.v.i.](https://www.arub.cz/)

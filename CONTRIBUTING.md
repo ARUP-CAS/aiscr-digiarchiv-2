@@ -1,6 +1,6 @@
 # Přispívání do projektu — Digitální archiv AMČR
 
-Děkujeme za zájem o přispívání do projektu!
+Děkujeme za zájem o přispívání do projektu!  
 Tento dokument popisuje vývojový postup, konvence a pravidla pro přispěvatele.
 
 ---
@@ -8,11 +8,11 @@ Tento dokument popisuje vývojový postup, konvence a pravidla pro přispěvatel
 ## Větve a prostředí
 
 | Větev | Prostředí | Pravidlo |
-|---|---|---|
+| --- | --- | --- |
 | `dev` | Staging | Základna pro veškerý vývoj. Vždy větvete od `dev`. |
 | `main` | Stabilní | Merguje výhradně lidský reviewer. Nevytvářejte PR přímo do `main`. |
 
-```
+```text
 dev  ←  feature/<issue>
 dev  ←  bugfix/<issue>
 dev  ←  agents/{agent_name}/<topic>   # větve generované AI agenty
@@ -24,7 +24,7 @@ main ←  (pouze humans, po stabilizaci dev)
 ## Pojmenování větví
 
 | Typ | Vzor | Příklad |
-|---|---|---|
+| --- | --- | --- |
 | Nová funkce | `feature/<issue>` | `feature/142-fulltext-filter` |
 | Oprava chyby | `bugfix/<issue>` | `bugfix/98-solr-timeout` |
 | Agentní obsah | `agents/{agent_name}/<topic>` | `agents/codex/solr-audit` |
@@ -36,17 +36,21 @@ main ←  (pouze humans, po stabilizaci dev)
 
 1. **Vytvořte issue** (nebo najděte existující) popisující problém nebo funkci.
 2. **Větvete od `dev`:**
+
    ```bash
    git checkout dev
    git pull origin dev
    git checkout -b feature/<číslo-issue>
    ```
+
 3. **Implementujte změnu** — dodržujte konvence popsané níže a v `AGENTS.md`.
 4. **Napište nebo aktualizujte testy:**
+
    ```bash
    cd web && mvn test
    npm run build
    ```
+
 5. **Vytvořte Pull Request** do větve `dev`.
 
 ---
@@ -60,7 +64,7 @@ PR musí obsahovat:
 - **Popis změny:** co bylo změněno a jak
 - **Testování:** co bylo spuštěno, co prošlo, co nešlo spustit
 
-Použijte Draft PR, pokud práce není připravena k review.
+Použijte **Draft PR**, pokud práce není připravena k review.
 
 **Nevytvářejte PR do `main`** — mergování do `main` je výhradně v kompetenci maintainerů.
 
@@ -68,12 +72,16 @@ Použijte Draft PR, pokud práce není připravena k review.
 
 ## Commit zprávy
 
-Formát: `[typ] stručný popis (#číslo-issue)`
+Formát:
+
+```markdown
+[typ] stručný popis (#číslo-issue)
+```
 
 Povolené typy:
 
 | Typ | Kdy použít |
-|---|---|
+| --- | --- |
 | `feat` | Nová funkce |
 | `fix` | Oprava chyby |
 | `refactor` | Refactoring bez změny chování |
@@ -85,7 +93,7 @@ Povolené typy:
 
 Příklady:
 
-```
+```markdown
 [feat] Přidat fulltextový filtr podle typu záznamu (#142)
 [fix] Opravit timeout Solr dotazu při prázdném výsledku (#98)
 [docs] Aktualizovat README — sekce Testování (#0)
@@ -138,11 +146,11 @@ cd web && mvn compile -q && mvn test
 npm run build
 ```
 
-**Při změnách XSLT:**
+**Při změnách XSLT:**  
 Validujte transformace proti vzorovým XML datům z AMČR API.
 
-**Při změnách Solr schématu:**
-Spusťte lokální Solr a proveďte smoke-test dotaz.
+**Při změnách Solr schématu:**  
+Spusťte lokální Solr a proveďte smoke-test dotaz.  
 Uveďte v PR, zda změna vyžaduje reindexaci.
 
 Výsledky testů vždy popište v PR (`co bylo spuštěno`, `co prošlo`, `co nešlo spustit`).
@@ -153,12 +161,12 @@ Výsledky testů vždy popište v PR (`co bylo spuštěno`, `co prošlo`, `co ne
 
 ### Solr schéma
 
-Změny v `solr/` mohou vyžadovat **reindexaci** existujících dat.
+Změny v `solr/` mohou vyžadovat **reindexaci** existujících dat.  
 Každý PR se změnou schématu musí v popisu explicitně uvést, zda je reindexace potřebná.
 
 ### AMČR API kompatibilita
 
-XSLT transformace jsou úzce svázány s formátem odpovědí AMČR API (`aiscr-webamcr`).
+XSLT transformace jsou úzce svázány s formátem odpovědí AMČR API (`aiscr-webamcr`).  
 Sledujte changelog AMČR a po každé API změně upstream otestujte transformace.
 
 ### Bezpečnost
@@ -171,8 +179,9 @@ Sledujte changelog AMČR a po každé API změně upstream otestujte transformac
 
 ## AI agenti
 
-Větve generované AI agenty (`agents/{agent_name}/<topic>`) se větvují od `dev`
+Větve generované AI agenty (`agents/{agent_name}/<topic>`) se větvují od `dev`  
 a mergují do `dev` výhradně po lidském review.
+
 Podrobnosti viz `AGENTS.md` a `docs_agents/PROMPT.md`.
 
 ---
