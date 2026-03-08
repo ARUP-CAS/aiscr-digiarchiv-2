@@ -1,177 +1,380 @@
-# AGENTS.md
+# AGENTS.md — Instructions for AI Agents
 
-Rules in this file apply to the entire `aiscr-digiarchiv-2` repository.
-A nested `AGENTS.md` in a subdirectory takes precedence for that subtree.
+## Repository Overview
 
----
+This repository contains the **Digitální archiv AMČR** application used within the Archaeological Information System of the Czech Republic (AIS CR).
 
-## Repository orientation
+The system provides a digital archive and presentation layer for archaeological data and documents. The repository contains the backend application, search configuration, transformation layers, and supporting utilities.
 
-Before starting any work, gather context:
+Key components include:
 
-- **Repository structure overview:** `docs_agents/repository_map.json`
-- **Ongoing audit state and past findings:** `docs_agents/review_cache.json`,
-  `docs_agents/bugs.md`, `docs_agents/refactoring_backlog.md`
-- **Analytical background** (architecture, Solr, XSLT, Docker, security, etc.):
-  other JSON files in `docs_agents/`
+- Java / Spring application (`web/`)
+- Apache Solr search configuration (`solr/`)
+- XSLT transformations for presentation
+- Docker-based development and deployment environment
+- Supporting utilities such as the thumbnail generator
 
-These files contain context accumulated across previous sessions —
-reading them avoids duplicating work and provides relevant background for the task.
+This repository is part of the **ARUP-CAS AIS CR ecosystem**.
 
-For technical audit or review tasks, read first:
-`docs_agents/PROMPT.md`
+Rules in this file apply to the entire repository unless overridden by a nested `AGENTS.md` file in a subdirectory.
 
 ---
 
-## AI-generated content
+## Repository Orientation (Mandatory First Step)
 
-All content produced by agents (audit reports, analysis JSON files, prompt evolution notes)
-belongs in the `docs_agents/` directory and should be committed to a dedicated
-`agents/{agent_name}/` branch, branched off `dev`.
+Before starting any work, agents must gather repository context.
 
-This keeps AI-generated artefacts reviewable and separate from application code.
-`agents/` branches are merged into `dev` only after human review.
-Merging into `main` is done exclusively by humans — do not target `main` in any PR.
+Agents must read:
+
+- `docs_agents/repository_map.json`
+- `docs_agents/review_cache.json`
+- `docs_agents/bugs.md`
+- `docs_agents/refactoring_backlog.md`
+- `docs_agents/PROMPT.md`
+
+Purpose:
+
+These files store persistent context accumulated across previous AI review sessions. Reading them prevents duplicated work and provides architectural context.
+
+If information inside `docs_agents` contradicts repository governance rules defined in:
+
+- `AGENTS.md`
+- `CONTRIBUTING.md`
+- repository coding standards
+- CI workflow configuration
+
+those higher-level rules must be treated as authoritative.
+
+Agents should update the affected `docs_agents` files to restore consistency when discrepancies are detected.
+
+---
+
+## AI-Generated Content
+
+All AI-generated artefacts must be stored in:
+
+`docs_agents/`
+
+Examples include:
+
+- audit reports
+- architecture analysis
+- dependency analysis
+- prompt evolution notes
+- review outputs
+
+Agent branches must follow the naming convention:
+
+`agents/<agent_name>/<topic>`
+
+Examples:
+
+- `agents/gpt/review-solr-config`
+- `agents/claude/refactor-xslt`
+
+Rules:
+
+- Agent branches must always be created **from `dev`**
+- Agents must **never push directly to protected branches**
+- AI-generated work must be **reviewed by a human before merge**
+
+AI-generated analysis artefacts must not be mixed with application code.
+
+Merging into `main` is performed exclusively by human maintainers.
 
 ---
 
 ## Goal
 
-Keep changes small, safe, and easy to review in line with project conventions
-(`CONTRIBUTING.md`, `README.md`, CI workflows and project documentation).
+Agents should aim for **small, safe, reviewable improvements** aligned with:
+
+- repository coding conventions
+- CI requirements
+- project documentation
+- long-term maintainability
+
+Agents must avoid large refactors unless explicitly requested.
+
+The framework is designed to support **long-running incremental technical review of the repository**.
 
 ---
 
-## Agent behaviour
+## Agent Behaviour
 
-- Gather context before starting work (see section above) — do not repeat what was already done.
-- Use available skills where they add value.
-- After completing a task, suggest whether and how to update this file to improve its quality.
-- Record proven skills in the `Recommended skills` section below.
+Agents must:
 
----
+- gather repository context before starting work
+- avoid repeating previously recorded work
+- prefer incremental improvements
+- record findings in `docs_agents/`
+- keep changes minimal and well scoped
+- follow existing coding conventions
+- ensure compatibility with the CI pipeline
+- suggest improvements to `AGENTS.md` when appropriate
 
-## Recommended skills
+Agents should prioritise consistency with existing code rather than introducing stylistic changes.
 
-- `doc` — for reviewing and editing documentation artefacts where formatting matters.
-- `gh-fix-ci` — when you need to quickly locate and fix CI failures.
-- `gh-address-comments` — when incorporating review comments from a PR.
+### Recommended Skills
 
----
+Specialised capabilities that may improve maintenance efficiency.
 
-## Repository quick reference
+Skills are **optional helpers**, not mandatory tools.
 
-- Main application: `web/` (Java, Spring)
-- Search engine: `solr/` (Apache Solr configuration and schemas)
-- Thumbnail utility: `ThumbnailsGenerator/` (standalone Java utility)
-- Infrastructure: `docker-compose*.yml`
-- CI/CD: `.github/`
-- Ongoing audit: `docs_agents/` — read before any technical task
+Typical useful skills include:
 
----
+- `doc` — reviewing and editing documentation artefacts
+- `gh-fix-ci` — diagnosing and fixing CI failures
+- `gh-address-comments` — incorporating pull request review comments
 
-## Authoritative rule sources (read before larger changes)
-
-1. `CONTRIBUTING.md`
-2. `web/` — project-level build configuration (`pom.xml` or `build.gradle`)
-3. `.github/` — CI workflow definitions
+Agents should use such capabilities only when they improve quality or efficiency.
 
 ---
 
-## Mandatory rules for edits
+## Verification Sources
 
-1. Do not change runtime behaviour when the task is purely documentary or a no-feature refactor.
-2. Follow the style of existing code; do not introduce large unrelated refactors.
-3. Do not modify Solr schema (`solr/`) without noting the need for reindexation.
-4. Do not overwrite or remove existing changes outside the scope of the task.
-5. Do not commit secrets, keys, or sensitive local configuration.
+When verifying repository behaviour or architecture, use the following sources in order of authority:
+
+1. Running systems or APIs (when accessible)
+2. Source code in this repository
+3. Technical documentation
+4. Repository documentation
+
+If discrepancies are detected, prefer the higher-priority source and record the finding in `docs_agents`.
 
 ---
 
-## Coding standards and quality
+## Scope
 
-Java:
+### In Scope
 
-- Constructor injection in Spring components — never field injection (`@Autowired` on fields).
-- All checked and significant unchecked exceptions must be logged before re-throw or handling.
-- JPQL / SQL queries must be parameterised — no string concatenation with user input.
-- Javadoc in Czech for all public classes and methods in the `web/` module.
-- Do not use Google-style Javadoc sections; use standard `@param`, `@return`, `@throws`.
-- Keep descriptions specific to actual behaviour — not generic templates.
+Agents may modify:
 
-TypeScript / JavaScript:
+- application code in `web/`
+- configuration files
+- CI configuration
+- documentation
+- files inside `docs_agents/`
 
-- `strict: true` in `tsconfig.json` — do not disable strict mode.
-- Avoid `any` types; define explicit interfaces.
+Agents may also create analysis or documentation files when useful.
+
+### Out of Scope
+
+Agents must not modify generated or external artefacts such as:
+
+- `node_modules/`
+- `_site/`
+- `target/`
+- `build/`
+- `dist/`
+
+Agents must also avoid modifying external dependencies unless explicitly requested.
+
+Agents must not introduce changes that alter runtime behaviour unless explicitly required by the task.
+
+---
+
+## Tech Stack
+
+Technologies detected in this repository include:
+
+### Backend
+
+- Java
+- Spring Framework
+
+### Search Infrastructure
+
+- Apache Solr
+
+### Transformation Layer
+
+- XSLT (Saxon processor, XSLT 2.0 / 3.0)
+
+### Frontend / Assets
+
+- TypeScript
+- SCSS
+
+### Build System
+
+- Maven or Gradle
+
+### Infrastructure
+
+- Docker
+- Docker Compose
+
+### CI/CD
+
+- GitHub Actions
+
+### Coding Standards (Summary)
+
+Agents must follow the coding conventions already used in the repository.
+
+Important examples:
+
+Java
+
+- Prefer constructor injection for Spring components (avoid field injection).
+- Log significant exceptions before handling or rethrowing them.
+- Use parameterised queries for JPQL / SQL.
+- Public classes and methods in `web/` should include meaningful Javadoc.
+
+TypeScript / JavaScript
+
+- Respect strict typing (`strict: true`).
+- Avoid the `any` type where possible.
 - Prefer `async/await` over callback-based patterns.
 
-XSLT:
+XSLT
 
-- Each XSLT file must have a header comment stating its purpose and input namespace.
-- XSLT 2.0 / 3.0 (Saxon processor) — use its features, do not write XSLT 1.0-compatible code.
-- Namespace prefixes must be consistent across all files.
-- Every change must be validated against sample AMČR API data.
+- Each XSLT file should include a header comment describing its purpose.
+- Use XSLT 2.0 / 3.0 features available in the Saxon processor.
+- Maintain consistent namespace prefixes.
 
-SCSS:
+SCSS
 
-- Follow BEM naming for all classes.
-- New colour and dimension values belong in `_variables.scss`.
-- No inline styles in HTML / Thymeleaf templates.
+- Follow BEM naming conventions.
+- Shared values should be placed in variables files.
+
+Agents must avoid introducing inconsistent formatting or stylistic changes unrelated to the task.
 
 ---
 
-## Tests before submitting changes
+## Branch and PR Rules
+
+This repository follows a **multi-branch workflow**.
+
+Typical branch flow:
+
+`dev → main`
+
+Rules:
+
+- All development targets the **`dev` branch**
+- Never push directly to **`main`**
+- Always open a Pull Request
+
+Branch naming conventions:
+
+Application work:
+
+- `feature/<topic>`
+- `bugfix/<topic>`
+- `docs/<topic>`
+
+Agent branches:
+
+- `agents/<agent-name>/<topic>`
+
+Examples:
+
+- `feature/add-thumbnail-cache`
+- `bugfix/fix-solr-query`
+- `docs/update-api-docs`
+- `agents/gpt/review-solr-config`
+
+Pull Requests must include:
+
+- motivation
+- description of changes
+- testing summary
+
+Use **Draft PRs** for unfinished work.
+
+Merging into `main` is performed only by human maintainers.
+
+---
+
+## Testing Expectations
+
+Before submitting changes, agents should verify that the repository builds successfully.
+
+Typical checks include:
 
 Minimum:
 
-1. `mvn compile -q` (or `./gradlew compileJava`) — verify Java compilation
-2. `mvn test` (or `./gradlew test`) — unit tests must pass
-3. `npm run build` — verify TypeScript / SCSS compilation
+- `mvn compile`
+- `mvn test`
+- `npm run build`
 
-Based on change type:
+If the required tooling is not available in the execution environment:
 
-1. Run targeted tests for affected Java modules.
-2. For XSLT changes: validate transformations against sample AMČR API XML fixtures.
-3. For Solr schema changes: start Solr locally and run a smoke-test query.
-4. Selenium / integration tests only when the scope requires it and after confirmation
-   by the human initiating the prompt.
+- clearly state this in the PR or task summary
+- perform at least a static review of modified files
+- never claim that tests passed if they could not be executed
 
-Always briefly describe the test outcome in the PR/summary
-(`what was run`, `what passed`, `what could not be run`).
+When relevant, agents should also:
 
-### Fallback without Java / Maven
+- run targeted tests for affected modules
+- validate XSLT transformations against example API XML data
+- ensure that changes do not break Solr configuration
+- confirm that CI configuration remains valid
 
-If `mvn` / `java` is unavailable in the environment:
-
-1. State this explicitly in the summary/PR.
-2. Perform at least a static diff review:
-   - `git diff -- '*.java'`
-   - `git diff -- '*.xsl' '*.xslt'`
-3. Never claim checks passed if the tools could not be run.
+Always briefly document what verification steps were performed.
 
 ---
 
-## Git and PR workflow
+## docs_agents Structure
 
-- Base branch for all development: `dev`. Always branch off `dev`, if not instructed specifically otherwise.
-- Branch naming:
-  - application changes: `feature/<issue>` or `bugfix/<issue>` (see `CONTRIBUTING.md`)
-  - agent-generated content: `agents/{agent_name}/<topic>`
-- Make small, logical commits.
-- In a PR include:
-  - issue reference (`#number`)
-  - Motivation
-  - Description
-  - Testing
-- Use a Draft PR if the work is not yet ready for review.
-- Do not open PRs targeting `main` — merging into `main` is done exclusively by humans.
+The `docs_agents/` directory stores persistent AI review context.
+
+Files include:
+
+### PROMPT.md
+
+Instructions for running long-term AI-assisted review sessions.
+
+### PROMPT_RUN.md
+
+Explains how to execute a review session using `PROMPT.md`.
+
+### review_config.yaml
+
+Configuration for automated review modules based on the repository stack.
+
+### repository_map.json
+
+High-level structural overview of the repository.
+
+### dependency_graph.json
+
+Overview of dependencies between frameworks, services, and repository modules.
+
+### review_cache.json
+
+Persistent storage of results from previous AI review sessions.
+
+### bugs.md
+
+Structured log of discovered issues.
+
+### refactoring_backlog.md
+
+Long-term improvement backlog.
+
+Agents should update these files whenever relevant findings are made.
 
 ---
 
-## What owners and CI typically expect
+## Repository Context
 
-- CI runs on PRs into `dev` (and `main`, which is managed by humans)
-- Solr schema changes require a note about reindexation in the PR description
-- XSLT changes require evidence of validation against sample data
+This repository is part of the **AIS CR infrastructure** maintained by **ARUP-CAS**.
 
-Prefer changes that pass the CI pipeline without manual intervention.
+Related repositories include:
+
+- aiscr-webamcr — AMČR web application
+- aiscr-api-home — AIS CR API entry point
+- aiscr-webamcr-help — AMČR user documentation
+- aiscr-digiarchiv-2 — digital archive system
+
+Changes in shared infrastructure such as:
+
+- APIs
+- Solr schemas
+- shared data models
+
+may affect multiple repositories.
+
+Agents should therefore prefer **conservative, compatible changes** that do not break the broader ecosystem.
