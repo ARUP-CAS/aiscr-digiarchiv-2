@@ -340,6 +340,16 @@ Create: `docs_agents/solr_analysis.json`
 
 **Purpose:** Analyse the Solr search engine configuration and indexing patterns.
 
+### Reading strategy for large schemas
+
+Configset `entities/managed-schema` has 1000+ lines. For any schema file exceeding
+`max_lines_per_file` (2000), use a grep-first approach — do **not** read the entire file at once:
+
+1. Grep `<field\|<copyField\|<uniqueKey` to extract all field declarations.
+2. Read targeted sections (e.g. a specific field type block) only as needed.
+3. Prioritise deep analysis of: `entities`, `work`, `heslar`, `soubor`.
+   Summarise remaining configsets at a higher level.
+
 Inspect:
 
 - configsets in `solr/` (schema.xml, solrconfig.xml, managed-schema)
@@ -349,17 +359,27 @@ Inspect:
 - how each AMČR record type (dokument, projekt, akce, lokalita, nález, 3D model)
   is mapped to Solr documents
 - incremental vs. full reindexation triggers
+- for collections `uzivatel`, `uzivatel_ui`, `organizations`: check whether sensitive fields
+  (email, telefon, heslo, adresa) have `indexed="false"` or field-level security; escalate
+  any exposure to `bugs.md`
 
 Detect:
 
 - schema fields used in queries but missing an index
-- stored fields that are never returned — wasted storage
+- stored fields that are never returned — wasted storage:
+  heuristic — grep for `setFields` calls across the Java codebase; fields absent from all
+  `setFields()` invocations and not referenced in `/search` handler or result transformations
+  are candidates; mark as "potenciálně nevyužité" (runtime confirmation needed)
 - query patterns causing full collection scans
 - missing field type optimisations (e.g. `docValues` on sort fields)
-- inconsistencies between the Java model and the Solr schema
+- inconsistencies between the Java model and the Solr schema; technique:
+  extract field names from `addField()` calls in indexing Java files and compare against
+  explicit and dynamic fields in the schema; focus on fields with prefixes `adb_*`, `az_*`,
+  `dokument_*` in `ArcheologickyZaznam`
 - schema changes that would require reindexation without a migration note
-- mismatch between `solr-solrj` client version (known_facts.solr_client_version) and the Solr
-  server version declared in configuration or Docker files
+- mismatch between `solr-solrj` client version (`known_facts.solr_client_version`) and the Solr
+  server version; if Docker files are absent (confirmed by T01/T05), compare `solr-solrj`
+  version in `pom.xml` against `luceneMatchVersion` in `solrconfig.xml`
 
 Record severe issues in `bugs.md`.
 
