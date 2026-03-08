@@ -1,1 +1,363 @@
-{}
+{
+  "meta": {
+    "generated_by": "T01 — repository_map",
+    "generated_at": "2026-03-08",
+    "task_id": "T01",
+    "repository": "ARUP-CAS/aiscr-digiarchiv-2",
+    "branch": "dev"
+  },
+  "root_directories": {
+    ".github": {
+      "purpose": "CI/CD konfigurace (GitHub Actions) a Dependabot nastavení",
+      "files": [
+        ".github/workflows/new-version.yml",
+        ".github/dependabot.yml"
+      ]
+    },
+    "ThumbnailsGenerator": {
+      "purpose": "Samostatný Maven modul pro generování náhledů obrázků a PDF z Fedora Repository",
+      "build_system": "Maven (pom.xml)",
+      "main_class": "cz.incad.arup.thumbnailsgenerator.ThumbsGenerator"
+    },
+    "docs_agents": {
+      "purpose": "Persistentní kontextové soubory pro AI review sesí",
+      "files_maintained_by": "AI agenti"
+    },
+    "solr": {
+      "purpose": "Konfigurace Apache Solr — schémata a konfigurace kolekcí"
+    },
+    "web": {
+      "purpose": "Hlavní webová aplikace — Java/Servlet backend s Angular frontendem",
+      "build_system": "Maven (pom.xml), Node.js/npm (ng/package.json)"
+    }
+  },
+  "root_files": {
+    "AGENTS.md": "Instrukce pro AI agenty pracující s tímto repozitářem",
+    "CITATION.cff": "Citační metadata projektu",
+    "CODEOWNERS": "Definice vlastníků kódu pro code review",
+    "CONTRIBUTING.md": "Pokyny pro přispěvatele",
+    "LICENSE": "Licence projektu",
+    "README.md": "Hlavní dokumentace v češtině",
+    "README_en.md": "Hlavní dokumentace v angličtině"
+  },
+  "web_module": {
+    "artifact": {
+      "groupId": "cz.inovatika.arup.digiarchiv",
+      "artifactId": "web4",
+      "version": "1.0-SNAPSHOT",
+      "packaging": "war"
+    },
+    "java_packages": {
+      "root": "cz.inovatika.arup.digiarchiv.web4",
+      "total_java_files": 88,
+      "classes_in_root": [
+        "ApiServlet — hlavní REST/JSON API servlet",
+        "AppState — stav aplikace (singleton)",
+        "AuthService — autentizační logika vůči AMČR",
+        "ConfigServlet — obsluha konfigurace",
+        "FavoritesServlet — správa oblíbených záznamů",
+        "FeedbackServlet — zpětná vazba od uživatelů",
+        "FormatUtils — formátovací utility",
+        "GPSconvertor — konverze GPS souřadnic",
+        "HandleServlet — obsluha handle.net odkazů",
+        "I18n — internacionalizace (načítání překladů)",
+        "I18nServlet — API pro i18n",
+        "ImageServlet — obsluha obrázků z Fedora",
+        "InitServlet — inicializace aplikace při startu",
+        "LogAnalytics — analytické logování přístupu",
+        "LoginServlet — přihlašování / odhlašování",
+        "Options — konfigurace aplikace",
+        "PdfServlet — generování/obsluha PDF souborů",
+        "SearchServlet — hlavní vyhledávací servlet (Solr)",
+        "TextsServlet — obsluha statických textů"
+      ],
+      "subpackages": {
+        "fedora": {
+          "purpose": "Integrační vrstva pro Fedora Commons Repository REST API",
+          "classes": [
+            "FedoraHarvester — sklízení dat z Fedora API (inkrementální i plná indexace)",
+            "FedoraModel — abstraktní základní model záznamu",
+            "FedoraServlet — API servlet pro Fedora data",
+            "FedoraUtils — utility pro HTTP komunikaci s Fedora"
+          ],
+          "subpackages": {
+            "models": {
+              "purpose": "Doménové modely reprezentující AMČR entity čtené z Fedora Repository",
+              "classes": [
+                "ADB", "Akce", "ArcheologickyZaznam", "Deleted",
+                "Dokument", "DokumentCast", "DokumentacniJednotka",
+                "ExtOdkaz", "ExtZdroj", "ExtraData", "Heslo",
+                "HierarchieNize", "HierarchieVyse", "Historie",
+                "Komponenta", "Lang", "Let", "Lokalita",
+                "NalezObjekt", "NalezPredmet", "NeidentAkce",
+                "Organizace", "Osoba", "Oznamovatel", "PIAN",
+                "Projekt", "RUIANKatastr", "RUIANKraj", "RUIANOkres",
+                "SamostatnyNalez", "Soubor", "Tvar", "Uzivatel",
+                "VedouciAkceOstatni", "Vocab", "VyskovyBod", "WKT"
+              ],
+              "total_models": 36
+            }
+          }
+        },
+        "imagging": {
+          "purpose": "Zpracování a prezentace obrázků. Poznámka: překlep v názvu balíčku ('imagging' místo 'imaging').",
+          "classes": [
+            "ImageAccess — řízení přístupu k obrázkům",
+            "ImageMimeType — MIME typy obrázků",
+            "ImageSupport — utility pro práci s obrázky",
+            "PDFAcceptor — zpracování PDF souborů"
+          ]
+        },
+        "index": {
+          "purpose": "Solr indexovací a vyhledávací vrstva — jeden Searcher na typ záznamu AMČR",
+          "classes": [
+            "SolrClientFactory — továrna pro SolrClient instance",
+            "SolrSearcher — základní Solr vyhledávač (base class / utility)",
+            "SearchUtils — sdílené vyhledávací utility",
+            "IndexUtils — sdílené indexovací utility",
+            "ADBSearcher", "AkceSearcher", "ComponentSearcher",
+            "DokJednotkaSearcher", "DokumentCastSearcher", "DokumentSearcher",
+            "EntitySearcher", "ExtZdrojSearcher", "JednotkaDokumentuSearcher",
+            "KomponentaDokumentSearcher", "KomponentaSearcher", "LetSearcher",
+            "Library3DSearcher", "LokalitaSearcher", "PIANSearcher",
+            "ProjektSearcher", "SamostatnyNalezSearcher", "VyskovyBodSearcher"
+          ],
+          "total_classes": 22
+        },
+        "oai": {
+          "purpose": "OAI-PMH (Open Archives Initiative Protocol for Metadata Harvesting) implementace",
+          "classes": [
+            "OAIRequest — parsování a validace OAI-PMH požadavků",
+            "OAIServlet — obsluha OAI-PMH HTTP endpointu"
+          ]
+        }
+      }
+    },
+    "resources": {
+      "path": "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/",
+      "xslt_files": [
+        {
+          "file": "amcr_2.0_2.1.xslt",
+          "purpose": "Konverze XML dat z formátu AMČR API v2.0 na v2.1",
+          "sha256": "82196544a99b55da2e86659b5de47251e936ae422cdb22a2ddbd2e2820b460e3"
+        },
+        {
+          "file": "amcr_2.1_2.0.xslt",
+          "purpose": "Konverze XML dat z formátu AMČR API v2.1 zpět na v2.0",
+          "sha256": "29fd28491e74558234fe04158ddd69f5f7af0475f93921194bf5496446d89e87"
+        },
+        {
+          "file": "amcr_2.1_2.2.xslt",
+          "purpose": "Konverze XML dat z formátu AMČR API v2.1 na v2.2",
+          "sha256": "41ccd7e94163a370e1a039a244cfc075d00005226de043db083a1ce26f0bfe88"
+        },
+        {
+          "file": "amcr_2.2_2.1.xslt",
+          "purpose": "Konverze XML dat z formátu AMČR API v2.2 zpět na v2.1",
+          "sha256": "c8192d1b03a54cb646cbee9c56b48646a411180add85f629983e066c5c4bc854"
+        },
+        {
+          "file": "cleanEmpty.xslt",
+          "purpose": "Odstranění prázdných XML elementů z výstupu transformace",
+          "sha256": "66643572fa8ddb6307bf3c35cb7291296f20285d6ba6caaec708b26f3d595d8e"
+        },
+        {
+          "file": "forbidden.xslt",
+          "purpose": "Transformace dat s omezeným přístupem (zakázané záznamy)",
+          "sha256": "4bd6d364f24ec35baa94c18bc2d44c9c0e678c85099a7e872b3fe48049b9b2ef"
+        },
+        {
+          "file": "metadata_DC.xslt",
+          "purpose": "Generování Dublin Core metadatových záznamů pro OAI-PMH",
+          "sha256": "eec89992b06c320135a689ca34c8fad869b6ed59da58c7725aa6bbf7947afe8f"
+        }
+      ],
+      "other_resources": [
+        "META-INF/persistence.xml — JPA persistence konfigurace",
+        "dcrecord.xml — šablona Dublin Core záznamu",
+        "oai_ListMetadataFormats_2.0.xml",
+        "oai_ListMetadataFormats_2.1.xml",
+        "oai_ListMetadataFormats_2.2.xml",
+        "oai_ListSets.xml — OAI-PMH sety",
+        "oai_identify_2.0.xml",
+        "oai_identify_2.1.xml",
+        "oai_identify_2.2.xml",
+        "server_config.json — serverová konfigurace aplikace"
+      ]
+    },
+    "webapp": {
+      "path": "web/src/main/webapp/",
+      "files": [
+        "META-INF/context.xml — Tomcat context konfigurace",
+        "WEB-INF/web.xml — servlet konfigurace (deployment descriptor)",
+        "index.jsp — hlavní vstupní stránka",
+        "oai2.xsl — XSL stylesheet pro OAI-PMH UI",
+        "favicon.ico — ikona aplikace"
+      ]
+    },
+    "frontend": {
+      "path": "web/src/main/ng/",
+      "framework": "Angular",
+      "build_tool": "npm / Angular CLI",
+      "structure": {
+        "src/app/components": "Sdílené znovupoužitelné Angular komponenty",
+        "src/app/entities": "Doménové entity (TypeScript třídy/interfacy)",
+        "src/app/pages": "Stránky aplikace (Angular routed views)",
+        "src/app/shared": "Sdílené utility, services, pipes",
+        "src/assets/css": "CSS styly",
+        "src/assets/fonts": "Webové fonty",
+        "src/assets/i18n": "Lokalizační soubory (překlady)",
+        "src/assets/img": "Obrázky a ikony",
+        "src/assets/js": "JavaScriptové utility (potenciálně vendorované)",
+        "src/assets/wicket": "Wicket knihovní soubory (vendor)",
+        "src/scss": "SCSS zdrojové soubory",
+        "src/environments": "Konfigurační soubory prostředí (dev/prod)"
+      }
+    },
+    "test_coverage": {
+      "test_directory_exists": false,
+      "note": "Adresář web/src/test neexistuje — projekt neobsahuje automatizované Java testy"
+    }
+  },
+  "solr_module": {
+    "config_root": "solr/",
+    "global_config": "solr/solr.xml",
+    "total_configsets": 14,
+    "configsets": {
+      "deleted": {
+        "path": "solr/deleted/conf/",
+        "purpose": "Záznamy smazaných objektů (pro OAI-PMH Deleted tracking)",
+        "sha256_managed_schema": "a437c59dee8414d5d11687df4f634645cbb2eed600ef4e7589712386d6fe91e1"
+      },
+      "entities": {
+        "path": "solr/entities/conf/",
+        "purpose": "Hlavní entitní kolekce — dokumenty, projekty, akce, lokality, nálezy, 3D modely",
+        "sha256_managed_schema": "ff44884332dc941282ca199eb6aa1a621d6f4852960c37cbf3a4851a8b8e9782"
+      },
+      "favorites": {
+        "path": "solr/favorites/conf/",
+        "purpose": "Oblíbené záznamy uživatelů",
+        "sha256_managed_schema": "7ac2af3450498ac66a0473086b74406763893a949031b6e69ccbe7c99fc37227"
+      },
+      "heslar": {
+        "path": "solr/heslar/conf/",
+        "purpose": "Slovník/číselník archeologických hesel (controlled vocabulary)",
+        "sha256_managed_schema": "e450180d08cf5420565444000734d9e9e1e33db40c3fd68d9c9ad781cfe916e8"
+      },
+      "logs": {
+        "path": "solr/logs/conf/",
+        "purpose": "Analytické logy přístupu a vyhledávání",
+        "sha256_managed_schema": "29b1cfaf2a4be754232b7b01d4d1db86f7622ee70a5bd923c789fe288a6e5f75",
+        "note": "Vlastní solrconfig.xml (liší se od ostatních kolekcí)"
+      },
+      "oai": {
+        "path": "solr/oai/conf/",
+        "purpose": "OAI-PMH záznamy pro protokol sklizně metadat",
+        "note": "Chybí managed-schema soubor — používá výchozí nebo dynamické schéma",
+        "sha256_managed_schema": null
+      },
+      "organizations": {
+        "path": "solr/organizations/conf/",
+        "purpose": "Organizace (archeologické instituce, oprávněné organizace)",
+        "sha256_managed_schema": "0c10a485a56de3239ae1447e1e5d83a5e1b10e5175e3ef7d9ec25d0e5a079fbb"
+      },
+      "osoba": {
+        "path": "solr/osoba/conf/",
+        "purpose": "Osoby (archeologové, vedoucí akcí, oznamovatelé)",
+        "sha256_managed_schema": "58ec4e2632015d973baacd78dc3fbd5ac4158a8bbbef109cbcdcbc0697a7d68a"
+      },
+      "ruian": {
+        "path": "solr/ruian/conf/",
+        "purpose": "RÚIAN záznamy — katastrální území, kraje, okresy",
+        "sha256_managed_schema": "56679ffc6314e91f8bd1b0ee93b264dfa704e2b993274650138ccab888cddb01",
+        "note": "Vlastní solrconfig.xml (liší se od ostatních kolekcí)"
+      },
+      "soubor": {
+        "path": "solr/soubor/conf/",
+        "purpose": "Soubory přiložené k záznamům (digitální přílohy)",
+        "sha256_managed_schema": "bea44fb27f5f815d297f43d6834707f34041c74ac7b7523cb13b3352e661f1bf"
+      },
+      "translations": {
+        "path": "solr/translations/conf/",
+        "purpose": "Překlady UI textů a popisků",
+        "sha256_managed_schema": "cf10fc89bf6b76558011c561ed63b54263ae44fc61b68ffe0bf3f5071a283a49"
+      },
+      "uzivatel": {
+        "path": "solr/uzivatel/conf/",
+        "purpose": "Uživatelé systému (AMČR uživatelé)",
+        "sha256_managed_schema": "cc7ec8cd4aca9630c7b58c65d742a7f3d648ef0901777e58acf001536dc0c9bc"
+      },
+      "uzivatel_ui": {
+        "path": "solr/uzivatel_ui/conf/",
+        "purpose": "Uživatelská nastavení a předvolby pro UI",
+        "sha256_managed_schema": "cac1aaf8329d2b3999583271166121f3a6822e541a5fd370fd8e547006491020"
+      },
+      "work": {
+        "path": "solr/work/conf/",
+        "purpose": "Pracovní kolekce (staging nebo rozpracované záznamy)",
+        "sha256_managed_schema": "1932378f8d32072a551b0cc928bd8948fc350626487713c1ee55263ec6e31847"
+      }
+    },
+    "shared_solrconfig": {
+      "note": "10 kolekcí sdílí identický solrconfig.xml (SHA-256: 5ce00b28728f40f46aa0b9953f8643e6273f947ead2215ebc3f904d7de30f889)",
+      "collections_with_shared_config": [
+        "deleted", "favorites", "heslar", "organizations", "osoba",
+        "soubor", "translations", "uzivatel", "uzivatel_ui", "work"
+      ],
+      "collections_with_custom_config": [
+        "entities", "logs", "oai", "ruian"
+      ]
+    }
+  },
+  "thumbnails_generator": {
+    "path": "ThumbnailsGenerator/",
+    "type": "Samostatný Maven modul (standalone JAR)",
+    "package": "cz.incad.arup.thumbnailsgenerator",
+    "note": "Používá jiný base package (cz.incad) než hlavní web modul (cz.inovatika) — historická nekonzistence",
+    "classes": {
+      "ThumbsGenerator": "Hlavní třída — generování miniatur obrázků z Fedora úložiště",
+      "PDFThumbsGenerator": "Generování náhledů PDF dokumentů",
+      "ImageSupport": "Zpracování a konverze obrazových formátů",
+      "Indexer": "Indexování vygenerovaných náhledů do Solr",
+      "FedoraUtils": "HTTP přístup k Fedora Repository REST API",
+      "FormatUtils": "Formátovací a konverzní utility",
+      "Options": "Konfigurace — čtena z config.json / server_config.json"
+    },
+    "config_files": [
+      "src/main/resources/cz/incad/arup/thumbnailsgenerator/config.json",
+      "src/main/resources/cz/incad/arup/thumbnailsgenerator/server_config.json"
+    ],
+    "documentation": [
+      "read.me",
+      "readme.txt"
+    ]
+  },
+  "infrastructure": {
+    "docker": {
+      "status": "Žádné Dockerfile ani docker-compose soubory nebyly nalezeny v repozitáři",
+      "note": "Infrastrukturní konfigurace je pravděpodobně v externím repozitáři nebo v .gitignore"
+    },
+    "ci_cd": {
+      "platform": "GitHub Actions",
+      "workflows": [
+        {
+          "file": ".github/workflows/new-version.yml",
+          "sha256": "70c79ac74a703751a93cb3a93b801992d316176cdf67eab6d98b9a2b2dbf1ba7"
+        }
+      ],
+      "dependabot": {
+        "file": ".github/dependabot.yml",
+        "sha256": "e19d95d18d1c948ad94c853ec7a00fb40fa9936507c923a9b5f544ab092742f3"
+      }
+    }
+  },
+  "notable_findings": [
+    "Absence testovacího adresáře (web/src/test) — projekt nemá automatizované Java testy",
+    "Překlep v názvu balíčku: 'imagging' místo 'imaging'",
+    "ThumbnailsGenerator používá jiný base package (cz.incad) než hlavní aplikace (cz.inovatika)",
+    "Kolekce 'oai' nemá managed-schema soubor — ostatní kolekce ho mají",
+    "14 Solr kolekcí — relativně velký počet oddělených schémat pro různé entity",
+    "Infrastrukturní Docker konfigurace chybí v repozitáři",
+    "10 ze 14 Solr kolekcí sdílí identický solrconfig.xml"
+  ]
+}

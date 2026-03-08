@@ -1,10 +1,13 @@
 {
   "schema_version": "2",
   "initialized_at": "2026-03-07",
-  "last_updated": null,
-  "note": "Inicializační cache — žádné soubory zatím nebyly analyzovány. Agent musí při prvním spuštění spočítat SHA-256 hashes všech relevantních souborů.",
+  "last_updated": "2026-03-08",
   "tasks": {
-    "T01": { "status": "pending", "completed_at": null, "report_path": null },
+    "T01": {
+      "status": "done",
+      "completed_at": "2026-03-08",
+      "report_path": "docs_agents/review_reports/T01.md"
+    },
     "T02": { "status": "pending", "completed_at": null, "report_path": null },
     "T03": { "status": "pending", "completed_at": null, "report_path": null },
     "T04": { "status": "pending", "completed_at": null, "report_path": null },
@@ -16,5 +19,121 @@
     "T10": { "status": "pending", "completed_at": null, "report_path": null },
     "T11": { "status": "blocked", "completed_at": null, "report_path": null }
   },
-  "file_hashes": {}
+  "file_hashes": {
+    "web/pom.xml": {
+      "sha256": "2202c7e71e1147c29f113adbf1cab1f39e7c307b1f1b88d1068746b26349fc9a",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    ".github/workflows/new-version.yml": {
+      "sha256": "70c79ac74a703751a93cb3a93b801992d316176cdf67eab6d98b9a2b2dbf1ba7",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    ".github/dependabot.yml": {
+      "sha256": "e19d95d18d1c948ad94c853ec7a00fb40fa9936507c923a9b5f544ab092742f3",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/amcr_2.0_2.1.xslt": {
+      "sha256": "82196544a99b55da2e86659b5de47251e936ae422cdb22a2ddbd2e2820b460e3",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/amcr_2.1_2.0.xslt": {
+      "sha256": "29fd28491e74558234fe04158ddd69f5f7af0475f93921194bf5496446d89e87",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/amcr_2.1_2.2.xslt": {
+      "sha256": "41ccd7e94163a370e1a039a244cfc075d00005226de043db083a1ce26f0bfe88",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/amcr_2.2_2.1.xslt": {
+      "sha256": "c8192d1b03a54cb646cbee9c56b48646a411180add85f629983e066c5c4bc854",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/cleanEmpty.xslt": {
+      "sha256": "66643572fa8ddb6307bf3c35cb7291296f20285d6ba6caaec708b26f3d595d8e",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/forbidden.xslt": {
+      "sha256": "4bd6d364f24ec35baa94c18bc2d44c9c0e678c85099a7e872b3fe48049b9b2ef",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "web/src/main/resources/cz/inovatika/arup/digiarchiv/web4/metadata_DC.xslt": {
+      "sha256": "eec89992b06c320135a689ca34c8fad869b6ed59da58c7725aa6bbf7947afe8f",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/deleted/conf/managed-schema": {
+      "sha256": "a437c59dee8414d5d11687df4f634645cbb2eed600ef4e7589712386d6fe91e1",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/entities/conf/managed-schema": {
+      "sha256": "ff44884332dc941282ca199eb6aa1a621d6f4852960c37cbf3a4851a8b8e9782",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/favorites/conf/managed-schema": {
+      "sha256": "7ac2af3450498ac66a0473086b74406763893a949031b6e69ccbe7c99fc37227",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/heslar/conf/managed-schema": {
+      "sha256": "e450180d08cf5420565444000734d9e9e1e33db40c3fd68d9c9ad781cfe916e8",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/logs/conf/managed-schema": {
+      "sha256": "29b1cfaf2a4be754232b7b01d4d1db86f7622ee70a5bd923c789fe288a6e5f75",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/organizations/conf/managed-schema": {
+      "sha256": "0c10a485a56de3239ae1447e1e5d83a5e1b10e5175e3ef7d9ec25d0e5a079fbb",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/osoba/conf/managed-schema": {
+      "sha256": "58ec4e2632015d973baacd78dc3fbd5ac4158a8bbbef109cbcdcbc0697a7d68a",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/ruian/conf/managed-schema": {
+      "sha256": "56679ffc6314e91f8bd1b0ee93b264dfa704e2b993274650138ccab888cddb01",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/soubor/conf/managed-schema": {
+      "sha256": "bea44fb27f5f815d297f43d6834707f34041c74ac7b7523cb13b3352e661f1bf",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/translations/conf/managed-schema": {
+      "sha256": "cf10fc89bf6b76558011c561ed63b54263ae44fc61b68ffe0bf3f5071a283a49",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/uzivatel/conf/managed-schema": {
+      "sha256": "cc7ec8cd4aca9630c7b58c65d742a7f3d648ef0901777e58acf001536dc0c9bc",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/uzivatel_ui/conf/managed-schema": {
+      "sha256": "cac1aaf8329d2b3999583271166121f3a6822e541a5fd370fd8e547006491020",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    },
+    "solr/work/conf/managed-schema": {
+      "sha256": "1932378f8d32072a551b0cc928bd8948fc350626487713c1ee55263ec6e31847",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T01"
+    }
+  }
 }
