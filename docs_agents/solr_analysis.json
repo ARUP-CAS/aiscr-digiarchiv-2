@@ -1,1 +1,304 @@
-{}
+{
+  "task": "T03",
+  "analyzed_at": "2026-03-08",
+  "solr_client_version": "9.10.1",
+  "luceneMatchVersion_in_configs": "9.4",
+
+  "configsets": [
+    {
+      "name": "entities",
+      "schema_name": "digiarchiv-entities",
+      "schema_version": "1.6",
+      "schema_file": "solr/entities/conf/managed-schema",
+      "schema_file_sha256": "ff44884332dc941282ca199eb6aa1a621d6f4852960c37cbf3a4851a8b8e9782",
+      "unique_key": "ident_cely",
+      "note": "Hlavní archivní kolekce — obsahuje všechny typy záznamů AMČR (dokument, akce, lokalita, projekt, samostatný nález, ADB, 3D model). Schéma má 330+ explicitních polí + 25 dynamických. Prioritní kolekce.",
+      "field_count_approx": 330,
+      "dynamic_field_count": 25,
+      "copy_field_count": 4,
+      "sort_fields": ["autor_sort", "organizace_sort", "okres_sort", "katastr_sort", "nazev_sort"],
+      "fulltext_fields": ["text_all_A", "text_all_B", "text_all_C", "text_all_D", "text_all_E"],
+      "geo_fields": ["loc", "loc_A", "loc_B", "loc_C", "loc_D", "loc_rpt", "loc_rpt_A", "loc_rpt_B", "loc_rpt_C", "loc_rpt_D"],
+      "record_type_field_prefixes": ["dokument_", "akce_", "lokalita_", "projekt_", "samostatny_nalez_", "adb_", "az_"]
+    },
+    {
+      "name": "work",
+      "schema_name": "digiarchiv-work",
+      "schema_version": "1.6",
+      "schema_file": "solr/work/conf/managed-schema",
+      "schema_file_sha256": "1932378f8d32072a551b0cc928bd8948fc350626487713c1ee55263ec6e31847",
+      "unique_key": "id",
+      "note": "Session/pracovní úložiště. Pouze 4 pole: id, type, data, expiration. Minimalistické schéma pro dočasná data.",
+      "field_count_approx": 4,
+      "copy_fields": []
+    },
+    {
+      "name": "heslar",
+      "schema_name": "digiarchiv-heslar",
+      "schema_file": "solr/heslar/conf/managed-schema",
+      "schema_file_sha256": "e450180d08cf5420565444000734d9e9e1e33db40c3fd68d9c9ad781cfe916e8",
+      "unique_key": "ident_cely",
+      "note": "Číselník/heslář. Klíčová pole: ident_cely, nazev_heslare, razeni, hierarchie_vyse, hierarchie_nize, is_deleted. Wildcard dynamické pole *→string. Copyfield * → text_all (lowercase_cs).",
+      "field_count_approx": 7,
+      "copy_fields": [{"source": "*", "dest": "text_all"}],
+      "problems": ["copyField source='*' dest='text_all' — kopíruje VŠECHNA pole, včetně numerických a dat. Výkonnostní dopad při indexaci."]
+    },
+    {
+      "name": "soubor",
+      "schema_file": "solr/soubor/conf/managed-schema",
+      "schema_file_sha256": "bea44fb27f5f815d297f43d6834707f34041c74ac7b7523cb13b3352e661f1bf",
+      "unique_key": "path",
+      "note": "Metadata souborů v repozitáři. Pole: path, stav, size_bytes, rozsah, vytvoreno, datestamp, text_all. Wildcard dynamické pole *→string. Copyfield * → text_all.",
+      "field_count_approx": 7,
+      "copy_fields": [{"source": "*", "dest": "text_all"}]
+    },
+    {
+      "name": "oai",
+      "schema_name": "digiarchiv-oai",
+      "schema_file": "solr/oai/conf/managed-schema.xml",
+      "note": "ODLIŠNÝ název souboru: managed-schema.xml (ostatní mají managed-schema bez přípony). Kolekce pro OAI-PMH protokol. Klíčová pole: ident_cely, datestamp, xml (stored not indexed), model, organizace, pristupnost, stav. Schema generováno automaticky Solr (managed schema API).",
+      "field_count_approx": 12,
+      "problems": ["Soubor managed-schema.xml (s příponou .xml) místo managed-schema — odlišná naming konvence"]
+    },
+    {
+      "name": "deleted",
+      "schema_file": "solr/deleted/conf/managed-schema",
+      "schema_file_sha256": "a437c59dee8414d5d11687df4f634645cbb2eed600ef4e7589712386d6fe91e1",
+      "unique_key": "ident_cely",
+      "note": "Záznamy smazaných objektů. Minimální schéma.",
+      "field_count_approx": 4
+    },
+    {
+      "name": "favorites",
+      "schema_file": "solr/favorites/conf/managed-schema",
+      "schema_file_sha256": "7ac2af3450498ac66a0473086b74406763893a949031b6e69ccbe7c99fc37227",
+      "note": "Oblíbené záznamy uživatelů.",
+      "field_count_approx": 7
+    },
+    {
+      "name": "logs",
+      "schema_file": "solr/logs/conf/managed-schema",
+      "schema_file_sha256": "29b1cfaf2a4be754232b7b01d4d1db86f7622ee70a5bd923c789fe288a6e5f75",
+      "note": "Analytické logy přístupů.",
+      "field_count_approx": 8
+    },
+    {
+      "name": "organizations",
+      "schema_file": "solr/organizations/conf/managed-schema",
+      "schema_file_sha256": "0c10a485a56de3239ae1447e1e5d83a5e1b10e5175e3ef7d9ec25d0e5a079fbb",
+      "note": "Organizace. 21 polí včetně boolean cteni_dokumentu.",
+      "field_count_approx": 21
+    },
+    {
+      "name": "osoba",
+      "schema_file": "solr/osoba/conf/managed-schema",
+      "schema_file_sha256": "58ec4e2632015d973baacd78dc3fbd5ac4158a8bbbef109cbcdcbc0697a7d68a",
+      "note": "Osoby (autoři dokumentů).",
+      "field_count_approx": 10
+    },
+    {
+      "name": "ruian",
+      "schema_file": "solr/ruian/conf/managed-schema",
+      "schema_file_sha256": "56679ffc6314e91f8bd1b0ee93b264dfa704e2b993274650138ccab888cddb01",
+      "note": "RUIAN registry — katastry, okresy, kraje.",
+      "field_count_approx": 14
+    },
+    {
+      "name": "translations",
+      "schema_file": "solr/translations/conf/managed-schema",
+      "schema_file_sha256": "cf10fc89bf6b76558011c561ed63b54263ae44fc61b68ffe0bf3f5071a283a49",
+      "note": "I18n překlady UI.",
+      "field_count_approx": 10
+    },
+    {
+      "name": "uzivatel",
+      "schema_file": "solr/uzivatel/conf/managed-schema",
+      "schema_file_sha256": "cc7ec8cd4aca9630c7b58c65d742a7f3d648ef0901777e58acf001536dc0c9bc",
+      "note": "Uživatelé systému. Obsahuje citlivá pole: email, telefon (indexed=true, stored=true).",
+      "field_count_approx": 21
+    },
+    {
+      "name": "uzivatel_ui",
+      "schema_file": "solr/uzivatel_ui/conf/managed-schema",
+      "schema_file_sha256": "cac1aaf8329d2b3999583271166121f3a6822e541a5fd370fd8e547006491020",
+      "note": "UI stav uživatele. 5 polí.",
+      "field_count_approx": 5
+    }
+  ],
+
+  "schema": {
+    "field_types": [
+      {"name": "string", "class": "solr.StrField", "docValues": true, "note": "Globální docValues=true pro string"},
+      {"name": "boolean", "class": "solr.BoolField", "docValues": false, "note": "PROBLÉM: bez docValues — pomalejší filtrování"},
+      {"name": "pint", "class": "solr.IntPointField", "docValues": true},
+      {"name": "pfloat", "class": "solr.FloatPointField", "docValues": true},
+      {"name": "plong", "class": "solr.LongPointField", "docValues": true},
+      {"name": "pdate", "class": "solr.DatePointField", "docValues": true},
+      {"name": "rdate", "class": "solr.DateRangeField", "docValues": false, "note": "PROBLÉM: nepodporuje docValues — nelze sortovat/facetovat"},
+      {"name": "text_general", "class": "solr.TextField", "note": "Český stemmer CzechStemFilter"},
+      {"name": "text_general_std", "class": "solr.TextField", "note": "Standardní tokenizer"},
+      {"name": "icu_sort_cs", "class": "solr.ICUCollationField", "docValues": true, "locale": "cs"},
+      {"name": "string_big", "class": "solr.TextField", "omitNorms": true, "note": "Pro velká textová data bez omezení délky"},
+      {"name": "lowercase_cs", "class": "solr.TextField", "note": "Lowercase normalizace"},
+      {"name": "location", "class": "solr.LatLonPointSpatialField", "docValues": true},
+      {"name": "location_rpt", "class": "solr.SpatialRecursivePrefixTreeFieldType"},
+      {"name": "text_prefix", "class": "solr.TextField", "note": "Autocomplete"}
+    ],
+    "stored_not_indexed_fields": [
+      {"field": "lokalita_typ_lokality", "collection": "entities", "note": "indexed=false — nelze filtrovat; pro filtrace se používá f_typ_lokality"},
+      {"field": "lokalita_druh", "collection": "entities", "note": "indexed=false"},
+      {"field": "lokalita_zachovalost", "collection": "entities", "note": "indexed=false (ale f_lokalita_zachovalost indexováno)"},
+      {"field": "lokalita_jistota", "collection": "entities", "note": "indexed=false"},
+      {"field": "soubor", "collection": "entities", "note": "indexed=false, stored=true, docValues=false explicitně"},
+      {"field": "soubor_filepath", "collection": "entities", "note": "indexed=false"},
+      {"field": "soubor_id", "collection": "entities", "note": "indexed=false"},
+      {"field": "soubor_mimetype", "collection": "entities", "note": "indexed=false"},
+      {"field": "dokument_extra_data", "collection": "entities", "note": "type=string_big, indexed=false"},
+      {"field": "az_chranene_udaje", "collection": "entities", "note": "indexed=false — záměrné (chráněná data)"},
+      {"field": "chranene_udaje", "collection": "entities", "note": "indexed=false — záměrné"}
+    ],
+    "dynamic_fields": [
+      "dokument_az_chranene_udaje_*", "akce_lokalizace_okolnosti_*",
+      "akce_chranene_udaje_souhrn_upresneni_*", "lokalita_popis_*", "lokalita_poznamka_*",
+      "samostatny_nalez_lokalizace_*", "projekt_chranene_udaje_parcelni_cislo_*",
+      "projekt_chranene_udaje_hlavni_katastr_*", "projekt_chranene_udaje_dalsi_katastr_*",
+      "adb_chranene_udaje_*", "adb_vyskovy_bod_typ_*", "vyskovy_bod_ident_cely_*",
+      "f_uzivatelske_oznaceni_*", "f_adb_vyskovy_bod_typ_*"
+    ],
+    "copy_fields": [
+      {"source": "dokument_popis", "dest": "popis"},
+      {"source": "dokument_poznamka", "dest": "poznamka"},
+      {"source": "dokument_oznaceni_originalu", "dest": "oznaceni_originalu"},
+      {"note": "Fulltext pole text_all_A..E jsou plněna programově v ArcheologickyZaznam.setFullText(), ne přes copyField"}
+    ]
+  },
+
+  "query_configuration": {
+    "request_handlers": [
+      {"name": "/select", "class": "solr.SearchHandler"},
+      {"name": "/query", "class": "solr.SearchHandler"},
+      {"name": "/search", "class": "solr.SearchHandler", "note": "Hlavní vyhledávací handler s rozšířenými parametry"},
+      {"name": "/spell", "class": "solr.SearchHandler", "startup": "lazy"}
+    ],
+    "search_components": [
+      {"name": "spellcheck", "class": "solr.SpellCheckComponent"},
+      {"name": "highlight", "class": "solr.HighlightComponent"}
+    ],
+    "luceneMatchVersion": "9.4",
+    "solrj_version": "9.10.1",
+    "client_type": "Http2SolrClient (indexace) + HttpJdkSolrClient (heslar cache)",
+    "note_version_mismatch": "luceneMatchVersion=9.4 vs. solr-solrj=9.10.1 — viz SOLR-002"
+  },
+
+  "indexing": {
+    "record_types": [
+      {"type": "dokument", "java_class": "fedora.models.Dokument", "target_collection": "entities", "field_prefix": "dokument_"},
+      {"type": "akce", "java_class": "fedora.models.Akce", "target_collection": "entities", "field_prefix": "akce_"},
+      {"type": "lokalita", "java_class": "fedora.models.Lokalita", "target_collection": "entities", "field_prefix": "lokalita_"},
+      {"type": "projekt", "java_class": "fedora.models.Projekt", "target_collection": "entities", "field_prefix": "projekt_"},
+      {"type": "samostatny_nalez", "java_class": "fedora.models.SamostatnyNalez", "target_collection": "entities", "field_prefix": "samostatny_nalez_"},
+      {"type": "archeologicky_zaznam", "java_class": "fedora.models.ArcheologickyZaznam", "target_collection": "entities", "field_prefix": "az_", "note": "Nadtyp pro akce a lokality, plní az_dj_*, az_dj_adb, az_dj_pian"},
+      {"type": "3D model (extra_data)", "java_class": "fedora.models.ExtraData", "target_collection": "entities", "field_prefix": "extra_data_"},
+      {"type": "heslo", "java_class": "fedora.models.Heslo", "target_collection": "heslar"},
+      {"type": "uzivatel", "java_class": "fedora.models.Uzivatel", "target_collection": "uzivatel"},
+      {"type": "organizace", "java_class": "fedora.models.Organizace", "target_collection": "organizations"}
+    ],
+    "trigger": "Primárně FedoraHarvester.update(from, until) — inkrementální na základě 'modified' timestamp z Fedora REST API. Plná reindexace přes FedoraHarvester.harvest() nebo FedoraHarvester.indexModels().",
+    "incremental_updates": true,
+    "incremental_mechanism": "Dotaz: /fcr:search?condition=modified>={lastDate}. Timestamp uložen do update_time.txt v CONFIG_DIR.",
+    "batch_size": 1000,
+    "commit_strategy": "commit() voláno po každé dávce, zvlášť pro 'oai', 'entities', ostatní kolekce",
+    "client_instances": "Dva singleton Http2SolrClient: solrClient (zápis) a solrClientSearch (čtení), bez timeout konfigurace"
+  },
+
+  "issues": [
+    {
+      "id": "SOLR-001",
+      "severity": "Kritická",
+      "title": "Překlep multiValued='fslse' v entities schématu",
+      "file": "solr/entities/conf/managed-schema:157",
+      "description": "Pole samostatny_nalez_projekt má multiValued=\"fslse\" (překlep). Solr přijme neplatnou hodnotu a chování závisí na verzi.",
+      "fix": "Opravit na multiValued=\"false\""
+    },
+    {
+      "id": "SOLR-002",
+      "severity": "Vysoká",
+      "title": "luceneMatchVersion 9.4 vs. solr-solrj 9.10.1",
+      "file": "solr/entities/conf/solrconfig.xml:38",
+      "description": "Všechny solrconfig.xml mají luceneMatchVersion=9.4, ale klientská knihovna je 9.10.1. Nové Lucene optimalizace nejsou aktivovány.",
+      "fix": "Aktualizovat luceneMatchVersion na aktuální verzi Solr serveru ve všech 14 solrconfig.xml"
+    },
+    {
+      "id": "SOLR-003",
+      "severity": "Vysoká",
+      "title": "BoolField bez docValues — pomalejší filtrování",
+      "file": "solr/entities/conf/managed-schema:622",
+      "description": "Typ BoolField nemá docValues=true. Boolean pole (is_deleted, searchable, akce_je_nz) jsou intenzivně filtrována v SearchUtils.java, LogAnalytics.java, ImageServlet.java. Bez docValues přístup přes FieldCache.",
+      "fix": "Přidat docValues=true do BoolField v managed-schema"
+    },
+    {
+      "id": "SOLR-004",
+      "severity": "Vysoká",
+      "title": "FedoraHarvester.indexModels() — max_results=10 000 000 bez stránkování",
+      "file": "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/fedora/FedoraHarvester.java:263",
+      "description": "Načítá potenciálně celý repozitář do JSONObject v paměti. Riziko OutOfMemoryError.",
+      "fix": "Implementovat cursor-based pagination"
+    },
+    {
+      "id": "SOLR-005",
+      "severity": "Vysoká",
+      "title": "SolrSearcher.getAllKatastry() — setRows(100000) bez ověření overflow",
+      "file": "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/index/SolrSearcher.java:566",
+      "description": "Tiché oříznutí při >100000 katastrech. Celá HashMap v paměti bez TTL.",
+      "fix": "Ověřit numFound <= rows; přidat cursor nebo explicitní limit s logem"
+    },
+    {
+      "id": "SOLR-006",
+      "severity": "Střední",
+      "title": "rdate (DateRangeField) bez docValues — nelze sortovat/facetovat",
+      "file": "solr/entities/conf/managed-schema:666",
+      "description": "Pole projekt_datum_zahajeni, projekt_datum_ukonceni, projekt_datum_provedeni jsou rdate. DateRangeField nepodporuje docValues.",
+      "fix": "Pro sort/facet přidat duplicitní pdate pole; rdate ponechat pro range queries"
+    },
+    {
+      "id": "SOLR-007",
+      "severity": "Střední",
+      "title": "az_dj_nazev: zakomentováno v schématu (type=string) vs. aktivní pole (type=text_general)",
+      "file": "solr/entities/conf/managed-schema:116 vs. :342",
+      "description": "Naznačuje neúplný refaktoring — zakomentovaný string field a aktivní text_general field.",
+      "fix": "Odstranit zakomentovaný fragment; zdokumentovat změnu typu"
+    },
+    {
+      "id": "SOLR-008",
+      "severity": "Střední",
+      "title": "OAI kolekce — managed-schema.xml (s příponou) vs. managed-schema (bez přípony)",
+      "file": "solr/oai/conf/managed-schema.xml",
+      "description": "Odlišná naming konvence. Solr 9 managed schema mode preferuje soubor bez přípony.",
+      "fix": "Přejmenovat na managed-schema"
+    },
+    {
+      "id": "SOLR-009",
+      "severity": "Střední",
+      "title": "Vícenásobné setRows(10000) dotazy bez pagination",
+      "file": "DokumentSearcher.java:94,123; AkceSearcher.java:139; ProjektSearcher.java:85,103,124,279,291,307",
+      "description": "Výsledky načítány do paměti jako JSONArray. U větší databáze: paměťové problémy a pomalá odezva.",
+      "fix": "Implementovat cursor-based iteraci nebo explicitní pagination"
+    },
+    {
+      "id": "SOLR-010",
+      "severity": "Nízká",
+      "title": "copyField source='*' v heslar a soubor kolekcích",
+      "file": "solr/heslar/conf/managed-schema:144; solr/soubor/conf/managed-schema:52",
+      "description": "Kopíruje i numerická pole a datumy do fulltext pole text_all. Zbytečná duplicita dat v indexu.",
+      "fix": "Explicitní seznam zdrojových polí pro copyField"
+    },
+    {
+      "id": "SOLR-011",
+      "severity": "Nízká",
+      "title": "Citlivá pole email a telefon uložena jako plaintext v uzivatel kolekci",
+      "file": "solr/uzivatel/conf/managed-schema:125-126",
+      "description": "Pole email a telefon jsou indexed=true, stored=true. Přístup k Solr admin rozhraní umožňuje extrakci všech kontaktů.",
+      "fix": "Omezit přístup k uzivatel kolekci; zvážit field-level security"
+    }
+  ]
+}

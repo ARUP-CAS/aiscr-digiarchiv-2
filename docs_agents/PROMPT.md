@@ -57,9 +57,16 @@ At the start of every agent session, execute in this exact order:
    are missing (do not treat a missing directory as an error — simply note its absence).
 5. Compute SHA-256 hashes of all source files listed in the cache.
 6. Detect changed files by comparing hashes; mark affected tasks as pending.
-7. Select the next pending task from the task registry (see TASK REGISTRY below).
-8. Execute the task, respecting task size limits.
-9. Update all relevant analysis files and the cache.
+7. **Select the next task to execute using this priority order:**
+   a. Any task with status `split` that has at least one sub-task with status `pending` —
+      resume the split task by executing the next pending sub-task.
+   b. Otherwise, the first task with status `pending` in the task registry order.
+   **Never skip a `split` task with incomplete sub-tasks to move on to the next task.**
+8. Execute the task (or sub-task), respecting task size limits.
+9. Update all relevant analysis files and the cache:
+   - After completing a sub-task: set that sub-task's status to `done`.
+   - After ALL sub-tasks of a split task are `done`: set the parent task status to `done`.
+   - **Never set a parent task to `done` while any of its sub-tasks are still `pending`.**
 
 ---
 
@@ -333,6 +340,16 @@ Create: `docs_agents/solr_analysis.json`
 
 **Purpose:** Analyse the Solr search engine configuration and indexing patterns.
 
+### Reading strategy for large schemas
+
+Configset `entities/managed-schema` has 1000+ lines. For any schema file exceeding
+`max_lines_per_file` (2000), use a grep-first approach — do **not** read the entire file at once:
+
+1. Grep `<field\|<copyField\|<uniqueKey` to extract all field declarations.
+2. Read targeted sections (e.g. a specific field type block) only as needed.
+3. Prioritise deep analysis of: `entities`, `work`, `heslar`, `soubor`.
+   Summarise remaining configsets at a higher level.
+
 Inspect:
 
 - configsets in `solr/` (schema.xml, solrconfig.xml, managed-schema)
@@ -342,17 +359,27 @@ Inspect:
 - how each AMČR record type (dokument, projekt, akce, lokalita, nález, 3D model)
   is mapped to Solr documents
 - incremental vs. full reindexation triggers
+- for collections `uzivatel`, `uzivatel_ui`, `organizations`: check whether sensitive fields
+  (email, telefon, heslo, adresa) have `indexed="false"` or field-level security; escalate
+  any exposure to `bugs.md`
 
 Detect:
 
 - schema fields used in queries but missing an index
-- stored fields that are never returned — wasted storage
+- stored fields that are never returned — wasted storage:
+  heuristic — grep for `setFields` calls across the Java codebase; fields absent from all
+  `setFields()` invocations and not referenced in `/search` handler or result transformations
+  are candidates; mark as "potenciálně nevyužité" (runtime confirmation needed)
 - query patterns causing full collection scans
 - missing field type optimisations (e.g. `docValues` on sort fields)
-- inconsistencies between the Java model and the Solr schema
+- inconsistencies between the Java model and the Solr schema; technique:
+  extract field names from `addField()` calls in indexing Java files and compare against
+  explicit and dynamic fields in the schema; focus on fields with prefixes `adb_*`, `az_*`,
+  `dokument_*` in `ArcheologickyZaznam`
 - schema changes that would require reindexation without a migration note
-- mismatch between `solr-solrj` client version (known_facts.solr_client_version) and the Solr
-  server version declared in configuration or Docker files
+- mismatch between `solr-solrj` client version (`known_facts.solr_client_version`) and the Solr
+  server version; if Docker files are absent (confirmed by T01/T05), compare `solr-solrj`
+  version in `pom.xml` against `luceneMatchVersion` in `solrconfig.xml`
 
 Record severe issues in `bugs.md`.
 
@@ -696,6 +723,18 @@ Detect:
 
 Create and maintain: `docs_agents/review_cache.json`
 
+**Task status semantics:**
+
+| Status    | Meaning |
+|-----------|---------|
+| `pending` | Not yet started or files changed since last review |
+| `done`    | Fully completed — all sub-tasks done (if any) |
+| `split`   | Task was too large and divided into sub-tasks; **at least one sub-task is still `pending`** |
+| `skipped` | Explicitly skipped (e.g. no relevant files found) |
+
+**A task MUST remain `split` (not advance to `done`) until every sub-task reaches `done`.**
+The initialization sequence will resume a `split` task before picking any other `pending` task.
+
 ```json
 {
   "schema_version": "2",
@@ -883,3 +922,17 @@ The final report must include:
 6. Cross-reference all bugs with existing GitHub Issues before filing.
 7. For Solr configsets: if a configset is large, create one sub-task per configset (e.g., T03a, T03b).
 8. ThumbnailsGenerator is in scope for T01 (structure) and T05 (Docker), not for T03 or T04.
+
+### Split task rules (prevent partial completion being treated as done)
+
+9. When a task must be split, **immediately** set the parent task status to `split` in the cache
+   and create all planned sub-task entries with status `pending` **before** executing the first
+   sub-task. This ensures that even if the session ends mid-task, the remaining sub-tasks are
+   visible in the cache and will be resumed next session.
+10. Each sub-task must have a clearly defined `scope` field in the cache (e.g. a file glob,
+    a configset name, or a Java package). The next agent uses this to know exactly what remains.
+11. A parent task's status MUST be `split` (not `done`) while any sub-task is `pending`.
+    Only when the last sub-task transitions to `done` may the parent be set to `done`.
+12. At session start (step 7 of INITIALIZATION SEQUENCE), before selecting any `pending` task,
+    scan all tasks for status `split`. If found, continue with the first `pending` sub-task of
+    that split task. This takes priority over all other pending tasks.

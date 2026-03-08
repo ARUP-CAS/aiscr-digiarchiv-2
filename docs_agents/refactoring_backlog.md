@@ -9,6 +9,26 @@
 
 <!-- Architektonické problémy, bezpečnostní dluhy, Solr výkon -->
 
+### [T03] BoolField bez docValues — pomalejší filtrování na is_deleted, searchable, akce_je_nz
+- **Zjištění:** Typ `BoolField` v entities, uzivatel, organizations managed-schema nemá `docValues=true`. Boolean filtry (`-is_deleted:true`, `searchable:true`) jsou volány v každém dotazu (SearchUtils.java, LogAnalytics.java, ImageServlet.java). Bez docValues Solr používá pomalejší FieldCache.
+- **Dopad:** Zvýšená latence filtrování; zejména patrné u kolekcí s miliony záznamů.
+- **Návrh:** Přidat `docValues="true"` do `<fieldType name="boolean">` ve všech dotčených managed-schema. Vyžaduje reload schématu, nikoli plnou reindexaci (docValues se budou updatovat postupně).
+
+### [T03] FedoraHarvester.indexModels() bez cursor pagination — riziko OOM
+- **Zjištění:** `max_results=10000000` bez stránkování načte celý repozitář do paměti. `checkDatestamp()` ve stejné třídě správně používá CursorMark.
+- **Dopad:** Plná reindexace může způsobit OOM a pád aplikačního serveru.
+- **Návrh:** Refaktorovat `indexModels()` na cursor-based iteraci (vzor z `checkDatestamp()`).
+
+### [T03] Překlep multiValued="fslse" v entities schématu
+- **Zjištění:** `solr/entities/conf/managed-schema:157` — pole `samostatny_nalez_projekt` má překlep v boolean atributu.
+- **Dopad:** Nedefinované chování při indexaci záznamu samostatného nálezu.
+- **Návrh:** Opravit na `multiValued="false"` a provést reindexaci.
+
+### [T03] luceneMatchVersion=9.4 vs. solr-solrj 9.10.1 — konfigurační mismatch
+- **Zjištění:** Všech 14 `solrconfig.xml` má `luceneMatchVersion=9.4`, klient je 9.10.1.
+- **Dopad:** Starší Lucene chování; chybí optimalizace verzí 9.5–9.10.
+- **Návrh:** Synchronizovat `luceneMatchVersion` s verzí Solr serveru; full reindexace.
+
 ### [T02] Saxon 8.7 — kriticky zastaralý XSLT procesor
 - **Zjištění:** `net.sf.saxon:saxon:8.7` (vydán 2006) — aktuální je Saxon-HE 12.x. Chybí ~18 let bezpečnostních záplat.
 - **Dopad:** Bezpečnostní riziko; Saxon 8.7 nepodporuje XSLT 3.0 (rozpor s AGENTS.md).
@@ -28,6 +48,26 @@
 ## Střední priorita
 
 <!-- Optimalizace, XSLT refaktoring, Docker build -->
+
+### [T03] setRows(10000) bez pagination v Searcher třídách
+- **Zjištění:** DokumentSearcher (2×), AkceSearcher, ProjektSearcher (5×), PIANSearcher, LokalitaSearcher — všechny volají `setRows(10000)` bez ověření přetečení.
+- **Dopad:** Paměťové problémy; tiché oříznutí výsledků při větší databázi.
+- **Návrh:** Cursor-based iterace nebo explicitní pagination.
+
+### [T03] rdate (DateRangeField) bez docValues na datech projektů
+- **Zjištění:** projekt_datum_zahajeni, projekt_datum_ukonceni, projekt_datum_provedeni jsou `rdate`. DateRangeField nepodporuje docValues.
+- **Dopad:** Nelze sortovat ani facetovat podle těchto dat.
+- **Návrh:** Přidat duplicitní pdate pole pro sort/facet; ponechat rdate pro range queries.
+
+### [T03] oai/conf/managed-schema.xml — nestandartní přípona souboru
+- **Zjištění:** Ostatní kolekce mají `managed-schema` bez přípony, oai má `managed-schema.xml`.
+- **Dopad:** Potenciální problém při managed schema API.
+- **Návrh:** Přejmenovat na `managed-schema`.
+
+### [T03] copyField source="*" v heslar a soubor kolekcích
+- **Zjištění:** Wildcard copyField kopíruje i numerická pole a datumy do fulltext pole.
+- **Dopad:** Zbytečné duplikování dat v indexu; větší paměťová náročnost.
+- **Návrh:** Explicitní seznam zdrojových polí.
 
 ### [T02] javax.mail v Jakarta EE 11 projektu
 - **Zjištění:** `javax.mail:mail:1.4.7` používá starý `javax` namespace; Jakarta EE 11 očekává `jakarta.mail`.
