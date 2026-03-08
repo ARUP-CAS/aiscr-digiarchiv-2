@@ -129,8 +129,19 @@ important_files:
   - web/pom.xml
   - web/src/main/ng/package.json
   - web/src/main/ng/tsconfig.json
+  - web/src/main/ng/angular.json          # Angular build konfigurace (production profily, optimalizace)
+  - web/src/main/webapp/META-INF/context.xml  # Tomcat deployment descriptor
   - ThumbnailsGenerator/pom.xml
   # docker-compose soubory nejsou součástí tohoto repozitáře
+
+known_facts:
+  xslt_processor: "Saxon"
+  saxon_version: "8.7"                    # kriticky zastaralý; cílová verze Saxon-HE 12.x
+  java_version_web: "17"
+  java_version_thumbnails: "1.8"          # nekonzistentní s hlavní aplikací
+  jakarta_ee_version: "11.0.0"            # všechny závislosti musí používat jakarta.* namespace
+  angular_version: "21"
+  solr_client_version: "9.10.1"           # musí odpovídat verzi Solr serveru
 
 ignored_directories:
   - .git
@@ -293,8 +304,10 @@ Analyze:
 Detect:
 
 - tightly coupled Java modules
-- modules with excessive responsibilities
-- outdated dependencies (versions)
+- Java classes with excessive responsibilities (god classes — LOC > 500; map their internal deps)
+- outdated or end-of-life (EOL) dependencies — flag if project has no security updates since > 2 years
+- Maven dependencies using `javax.*` namespace in a Jakarta EE project (expect `jakarta.*`)
+- Maven dependencies with version ranges (e.g. `[0.4,0.5)`) — non-deterministic build risk
 - missing or redundant test dependencies
 
 Record architectural issues in `refactoring_backlog.md`.
@@ -338,6 +351,8 @@ Detect:
 - missing field type optimisations (e.g. `docValues` on sort fields)
 - inconsistencies between the Java model and the Solr schema
 - schema changes that would require reindexation without a migration note
+- mismatch between `solr-solrj` client version (known_facts.solr_client_version) and the Solr
+  server version declared in configuration or Docker files
 
 Record severe issues in `bugs.md`.
 
@@ -386,7 +401,9 @@ Detect:
 - transformations without a header comment (purpose, input namespace)
 - hardcoded values tightly coupled to the current AMČR API response structure
 - missing namespace declarations or inconsistent prefixes
-- XSLT 1.0 patterns that could be replaced with XSLT 2.0 / 3.0 constructs
+- XSLT 1.0 patterns that could be replaced with XSLT 2.0 / 3.0 constructs; note that the
+  current processor (Saxon known_facts.saxon_version) may not support all XSLT 3.0 features —
+  flag any XSLT 3.0 constructs already used as incompatible with the deployed processor
 - duplicated named templates that could be extracted to a shared file
 - transformations lacking test fixtures
 
