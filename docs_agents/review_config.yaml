@@ -119,17 +119,20 @@ tasks:
 important_directories:
   - web/src/main/java
   - web/src/main/resources
-  - web/src/main/webapp
-  - web/src/test
+  - web/src/main/ng         # Angular frontend (NE web/src/main/webapp — ten jen JSP/web descriptor)
   - solr
   - ThumbnailsGenerator
   - .github
+  # POZNÁMKA: web/src/test neexistuje — projekt nemá automatizované Java testy (zjištěno T01)
 
 important_files:
   - AGENTS.md
-  - web/pom.xml           # ověřit — nebo build.gradle
-  - web/package.json
-  - docker-compose.yml    # ověřit skutečné názvy souborů
+  - web/pom.xml
+  - web/src/main/ng/package.json   # npm konfigurace Angular frontendu
+  - web/src/main/ng/tsconfig.json  # TypeScript konfigurace
+  - ThumbnailsGenerator/pom.xml
+  # POZNÁMKA: docker-compose soubory nejsou součástí tohoto repozitáře (zjištěno T01)
+  #           Infrastrukturní konfigurace je v externím repozitáři.
 
 ignored_directories:
   - .git
@@ -159,6 +162,24 @@ vendored_exclusions:
   note: >
     Vendorované soubory nesmí být hodnoceny pro interní kvalitu kódu v žádném tasku.
     Mohou být referencovány (např. kontrola SRI atributů v šablonách).
+
+known_facts:
+  # Fakta zjištěná během review — slouží k orientaci budoucích agentů
+  - fact: "Žádné automatizované Java testy — adresář web/src/test neexistuje"
+    discovered_in: T01
+    relevant_for: [T06, T08, T09]
+  - fact: "Docker/infrastrukturní konfigurace není součástí tohoto repozitáře"
+    discovered_in: T01
+    relevant_for: [T05]
+  - fact: "14 Solr kolekcí — T03 pravděpodobně vyžaduje split na sub-tasky (T03a–T03n)"
+    discovered_in: T01
+    relevant_for: [T03]
+  - fact: "Angular frontend se nachází v web/src/main/ng/, nikoli v web/src/main/webapp/"
+    discovered_in: T01
+    relevant_for: [T07]
+  - fact: "10 ze 14 Solr kolekcí sdílí identický solrconfig.xml"
+    discovered_in: T01
+    relevant_for: [T03]
 
 prompt_evolution:
   suggestions_path: docs_agents/prompt_evolution/
