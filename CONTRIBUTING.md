@@ -184,6 +184,17 @@ a mergují do `dev` výhradně po lidském review.
 
 Podrobnosti viz `AGENTS.md` a `docs_agents/PROMPT.md`.
 
+### Jak spustit review session
+
+Otevřete nový kontext AI agenta a jako první zprávu vložte:
+
+```
+Přečti docs_agents/PROMPT.md a pokračuj v review.
+```
+
+Agent si načte `AGENTS.md`, stav z `docs_agents/review_cache.json` a zahájí
+další čekající task dle registru v `docs_agents/PROMPT.md`.
+
 ---
 
 ## Kontakt

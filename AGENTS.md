@@ -1,5 +1,10 @@
 # AGENTS.md — Instructions for AI Agents
 
+Rules in this file apply to the entire `aiscr-digiarchiv-2` repository.
+A nested `AGENTS.md` in a subdirectory takes precedence for that subtree.
+
+---
+
 ## Repository Overview
 
 This repository contains the **Digitální archiv AMČR** application used within the Archaeological Information System of the Czech Republic (AIS CR).
@@ -15,8 +20,6 @@ Key components include:
 - Supporting utilities such as the thumbnail generator
 
 This repository is part of the **ARUP-CAS AIS CR ecosystem**.
-
-Rules in this file apply to the entire repository unless overridden by a nested `AGENTS.md` file in a subdirectory.
 
 ---
 
@@ -36,16 +39,26 @@ Purpose:
 
 These files store persistent context accumulated across previous AI review sessions. Reading them prevents duplicated work and provides architectural context.
 
-If information inside `docs_agents` contradicts repository governance rules defined in:
+### Resolving Inconsistencies
 
-- `AGENTS.md`
-- `CONTRIBUTING.md`
-- repository coding standards
-- CI workflow configuration
+If content in `docs_agents/` contradicts high-level repository rules or governance
+defined in this document (`AGENTS.md`), `CONTRIBUTING.md`, or other authoritative
+project documentation, agents must treat those higher-level documents as the
+**source of truth**.
 
-those higher-level rules must be treated as authoritative.
+In such cases agents should:
 
-Agents should update the affected `docs_agents` files to restore consistency when discrepancies are detected.
+1. Prefer the high-level governance rules defined in:
+   - `AGENTS.md`
+   - `CONTRIBUTING.md`
+   - repository coding standards
+   - CI workflow configuration
+2. Adapt or update affected files in `docs_agents/` to align with those rules.
+3. Record the adjustment in the review history (for example `review_cache.json`
+   or `refactoring_backlog.md`) when relevant.
+
+This ensures long-running AI review artefacts remain consistent with
+current repository governance.
 
 ---
 
@@ -325,10 +338,7 @@ Files include:
 ### PROMPT.md
 
 Instructions for running long-term AI-assisted review sessions.
-
-### PROMPT_RUN.md
-
-Explains how to execute a review session using `PROMPT.md`.
+Contains the initialization sequence, task registry and execution procedure.
 
 ### review_config.yaml
 

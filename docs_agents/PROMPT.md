@@ -74,7 +74,6 @@ docs_agents/
   documentation_analysis.json
   frontend_analysis.json
   PROMPT.md
-  PROMPT_RUN.md
   prompt_evolution/README.md
   review_reports/README.md
   refactoring_backlog.md
