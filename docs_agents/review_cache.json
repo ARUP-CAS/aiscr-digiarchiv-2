@@ -8,7 +8,7 @@
       "completed_at": "2026-03-08",
       "report_path": "docs_agents/review_reports/T01.md"
     },
-    "T02": { "status": "pending", "completed_at": null, "report_path": null },
+    "T02": { "status": "done", "completed_at": "2026-03-08", "report_path": "docs_agents/review_reports/T02.md" },
     "T03": { "status": "pending", "completed_at": null, "report_path": null },
     "T04": { "status": "pending", "completed_at": null, "report_path": null },
     "T05": { "status": "pending", "completed_at": null, "report_path": null },
@@ -134,6 +134,16 @@
       "sha256": "1932378f8d32072a551b0cc928bd8948fc350626487713c1ee55263ec6e31847",
       "last_reviewed": "2026-03-08",
       "task_id": "T01"
+    },
+    "web/src/main/ng/package.json": {
+      "sha256": "4474b30437847ee844537edb586171a6c2edcc36e7bd7d0de7f0793a89a60585",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T02"
+    },
+    "ThumbnailsGenerator/pom.xml": {
+      "sha256": "0135611dab53c88ec7ee94b8d0c2dde65ed1f3e7d023d9aa3354c411de18a9f2",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T02"
     }
   }
 }
