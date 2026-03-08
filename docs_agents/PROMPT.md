@@ -26,7 +26,7 @@ All of the following components are **in scope** for this review:
 - Java application code (`web/`)
 - Solr configuration and schemas (`solr/`)
 - XSLT transformation files (`web/src/main/resources/`)
-- TypeScript / JavaScript / SCSS frontend (`web/src/main/webapp/`)
+- TypeScript / JavaScript / SCSS frontend (`web/src/main/ng/`)
 - ThumbnailsGenerator utility (`ThumbnailsGenerator/`)
 - infrastructure configuration (docker-compose files)
 - CI/CD configuration (`.github/`)
@@ -51,13 +51,15 @@ or to list CDN dependencies), but their internal content must not be audited.
 At the start of every agent session, execute in this exact order:
 
 1. Read `AGENTS.md` — contains repository-specific agent instructions that take precedence.
-2. Read `docs_agents/review_config.yaml` — load configuration.
+2. Read `docs_agents/review_config.yaml` — load configuration, including `known_facts`.
 3. Read `docs_agents/review_cache.json` — load progress state.
-4. Compute SHA-256 hashes of all source files listed in the cache.
-5. Detect changed files by comparing hashes; mark affected tasks as pending.
-6. Select the next pending task from the task registry (see TASK REGISTRY below).
-7. Execute the task, respecting task size limits.
-8. Update all relevant analysis files and the cache.
+4. Verify that directories listed in `important_directories` actually exist; record any that
+   are missing (do not treat a missing directory as an error — simply note its absence).
+5. Compute SHA-256 hashes of all source files listed in the cache.
+6. Detect changed files by comparing hashes; mark affected tasks as pending.
+7. Select the next pending task from the task registry (see TASK REGISTRY below).
+8. Execute the task, respecting task size limits.
+9. Update all relevant analysis files and the cache.
 
 ---
 
@@ -75,7 +77,9 @@ docs_agents/
   frontend_analysis.json
   PROMPT.md
   prompt_evolution/README.md
+  prompt_evolution/<task_id>_prompt_update.md
   review_reports/README.md
+  review_reports/<task_id>.md
   refactoring_backlog.md
   repository_map.json
   review_cache.json
@@ -115,17 +119,18 @@ cache_strategy:
 important_directories:
   - web/src/main/java
   - web/src/main/resources
-  - web/src/main/webapp
-  - web/src/test
+  - web/src/main/ng         # Angular frontend (web/src/main/webapp obsahuje jen JSP/web descriptor)
   - solr
   - ThumbnailsGenerator
   - .github
 
 important_files:
   - AGENTS.md
-  - web/pom.xml           # or build.gradle — verify
-  - web/package.json
-  - docker-compose.yml    # verify actual filename(s)
+  - web/pom.xml
+  - web/src/main/ng/package.json
+  - web/src/main/ng/tsconfig.json
+  - ThumbnailsGenerator/pom.xml
+  # docker-compose soubory nejsou součástí tohoto repozitáře
 
 ignored_directories:
   - .git
@@ -281,7 +286,7 @@ Analyze:
 
 - Java package dependencies within `web/src/main/java/`
 - Maven (or Gradle) production and test dependencies from `web/pom.xml` / `web/build.gradle`
-- npm dependencies from `web/package.json`
+- npm dependencies from `web/src/main/ng/package.json`
 - Docker service dependencies (startup order, `depends_on`)
 - dependency on the external AMČR API (`aiscr-webamcr`)
 
@@ -410,7 +415,12 @@ Create: `docs_agents/docker_analysis.json`
 
 **Purpose:** Analyse Docker configuration and build efficiency.
 
-Inspect ALL docker files found in the repository root:
+**Poznámka (zjištěno T01):** Docker soubory nejsou součástí tohoto repozitáře.
+Pokud nejsou nalezeny žádné `Dockerfile` ani `docker-compose*.yml` soubory, zaznamenej
+tuto skutečnost v `docker_analysis.json` a v reportu uveď dopad na reprodukovatelnost
+prostředí. Netraktuj absenci jako chybu tasku — úloha je tím pádem kratší.
+
+Inspect ALL docker files found in the repository (if present):
 
 - `Dockerfile` variants
 - all `docker-compose*.yml` files
@@ -508,8 +518,8 @@ Skip any file or directory matching at least one of these conditions:
 
 **Analyse these files:**
 
-- `web/package.json` — build scripts, dependency management
-- custom TypeScript / JavaScript in `web/src/main/webapp/` outside vendored subdirectories
+- `web/src/main/ng/package.json` — build scripts, dependency management
+- custom TypeScript / JavaScript in `web/src/main/ng/` outside vendored subdirectories
 - custom SCSS / CSS (files without third-party copyright headers)
 - HTML / Thymeleaf templates — inline `<script>` blocks and inline styles
 
