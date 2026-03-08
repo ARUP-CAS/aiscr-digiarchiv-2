@@ -9,7 +9,7 @@
       "report_path": "docs_agents/review_reports/T01.md"
     },
     "T02": { "status": "done", "completed_at": "2026-03-08", "report_path": "docs_agents/review_reports/T02.md" },
-    "T03": { "status": "pending", "completed_at": null, "report_path": null },
+    "T03": { "status": "done", "completed_at": "2026-03-08", "report_path": "docs_agents/review_reports/T03.md" },
     "T04": { "status": "pending", "completed_at": null, "report_path": null },
     "T05": { "status": "pending", "completed_at": null, "report_path": null },
     "T06": { "status": "pending", "completed_at": null, "report_path": null },
@@ -134,6 +134,31 @@
       "sha256": "1932378f8d32072a551b0cc928bd8948fc350626487713c1ee55263ec6e31847",
       "last_reviewed": "2026-03-08",
       "task_id": "T01"
+    },
+    "solr/entities/conf/solrconfig.xml": {
+      "sha256": "6162add2b0f5642710a10c94e83ef23ab6676464853f1921c9e57b7d46144d38",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T03"
+    },
+    "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/index/SolrClientFactory.java": {
+      "sha256": "b7b166525661030c1d46701126d29a92a92b04ae0437ca973f010d03d2904d5f",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T03"
+    },
+    "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/index/IndexUtils.java": {
+      "sha256": "2355e5feff2146e60860ad8893102d1e90fcf65741975983721a39f2ccc626b1",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T03"
+    },
+    "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/index/SolrSearcher.java": {
+      "sha256": "01384b5843e879e17c1713de59c7f153d007ba389e101960b7ef2176697472c8",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T03"
+    },
+    "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/fedora/FedoraHarvester.java": {
+      "sha256": "695e96ed999b03117877713492d00e03e592513a0179c11a30927c120b0235bc",
+      "last_reviewed": "2026-03-08",
+      "task_id": "T03"
     },
     "web/src/main/ng/package.json": {
       "sha256": "4474b30437847ee844537edb586171a6c2edcc36e7bd7d0de7f0793a89a60585",
