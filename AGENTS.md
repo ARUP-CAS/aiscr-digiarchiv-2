@@ -18,11 +18,11 @@ utilities.
 
 Key components include:
 
--   Java / Spring application (`web/`)
--   Apache Solr search configuration (`solr/`)
--   XSLT transformations for presentation
--   Docker-based development and deployment environment
--   Supporting utilities such as the thumbnail generator
+- Java / Spring application (`web/`)
+- Apache Solr search configuration (`solr/`)
+- XSLT transformations for presentation
+- Docker-based development and deployment environment
+- Supporting utilities such as the thumbnail generator
 
 This repository is part of the **ARUP-CAS AIS CR ecosystem**.
 
@@ -34,11 +34,11 @@ Before starting any work, agents must gather repository context.
 
 Agents must read:
 
--   `docs_agents/repository_map.json`
--   `docs_agents/review_cache.json`
--   `docs_agents/bugs.md`
--   `docs_agents/refactoring_backlog.md`
--   `docs_agents/PROMPT.md`
+- `docs_agents/repository_map.json`
+- `docs_agents/review_cache.json`
+- `docs_agents/bugs.md`
+- `docs_agents/refactoring_backlog.md`
+- `docs_agents/PROMPT.md`
 
 Purpose:
 
@@ -77,11 +77,11 @@ All AI-generated artefacts must be stored in:
 
 Examples include:
 
--   audit reports
--   architecture analysis
--   dependency analysis
--   prompt evolution notes
--   review outputs
+- audit reports
+- architecture analysis
+- dependency analysis
+- prompt evolution notes
+- review outputs
 
 Agent branches must follow the naming convention:
 
@@ -89,14 +89,14 @@ Agent branches must follow the naming convention:
 
 Examples:
 
--   `agents/gpt/review-solr-config`
--   `agents/claude/refactor-xslt`
+- `agents/gpt/review-solr-config`
+- `agents/claude/refactor-xslt`
 
 Rules:
 
--   Agent branches must always be created **from `dev`**
--   Agents must **never push directly to protected branches**
--   AI-generated work must be **reviewed by a human before merge**
+- Agent branches must always be created **from `dev`**
+- Agents must **never push directly to protected branches**
+- AI-generated work must be **reviewed by a human before merge**
 
 AI-generated analysis artefacts must not be mixed with application code.
 
@@ -109,10 +109,10 @@ Merging into `main` is performed exclusively by human maintainers.
 Agents should aim for **small, safe, reviewable improvements** aligned
 with:
 
--   repository coding conventions
--   CI requirements
--   project documentation
--   long-term maintainability
+- repository coding conventions
+- CI requirements
+- project documentation
+- long-term maintainability
 
 Agents must avoid large refactors unless explicitly requested.
 
@@ -125,14 +125,14 @@ technical review of the repository**.
 
 Agents must:
 
--   gather repository context before starting work
--   avoid repeating previously recorded work
--   prefer incremental improvements
--   record findings in `docs_agents/`
--   keep changes minimal and well scoped
--   follow existing coding conventions
--   ensure compatibility with the CI pipeline
--   suggest improvements to `AGENTS.md` when appropriate
+- gather repository context before starting work
+- avoid repeating previously recorded work
+- prefer incremental improvements
+- record findings in `docs_agents/`
+- keep changes minimal and well scoped
+- follow existing coding conventions
+- ensure compatibility with the CI pipeline
+- suggest improvements to `AGENTS.md` when appropriate
 
 Agents should prioritise consistency with existing code rather than
 introducing stylistic changes.
@@ -145,9 +145,9 @@ Skills are **optional helpers**, not mandatory tools.
 
 Typical useful skills include:
 
--   `doc` --- reviewing and editing documentation artefacts
--   `gh-fix-ci` --- diagnosing and fixing CI failures
--   `gh-address-comments` --- incorporating pull request review comments
+- `doc` --- reviewing and editing documentation artefacts
+- `gh-fix-ci` --- diagnosing and fixing CI failures
+- `gh-address-comments` --- incorporating pull request review comments
 
 Agents should use such capabilities only when they improve quality or
 efficiency.
@@ -175,11 +175,11 @@ record the finding in `docs_agents`.
 
 Agents may modify:
 
--   application code in `web/`
--   configuration files
--   CI configuration
--   documentation
--   files inside `docs_agents/`
+- application code in `web/`
+- configuration files
+- CI configuration
+- documentation
+- files inside `docs_agents/`
 
 Agents may also create analysis or documentation files when useful.
 
@@ -187,11 +187,11 @@ Agents may also create analysis or documentation files when useful.
 
 Agents must not modify generated or external artefacts such as:
 
--   `node_modules/`
--   `_site/`
--   `target/`
--   `build/`
--   `dist/`
+- `node_modules/`
+- `_site/`
+- `target/`
+- `build/`
+- `dist/`
 
 Agents must also avoid modifying external dependencies unless explicitly
 requested.
@@ -207,34 +207,34 @@ Technologies detected in this repository include:
 
 ### Backend
 
--   Java
--   Spring Framework
+- Java
+- Spring Framework
 
 ### Search Infrastructure
 
--   Apache Solr
+- Apache Solr
 
 ### Transformation Layer
 
--   XSLT (Saxon processor, XSLT 2.0 / 3.0)
+- XSLT (Saxon processor, XSLT 2.0 / 3.0)
 
 ### Frontend / Assets
 
--   TypeScript
--   SCSS
+- TypeScript
+- SCSS
 
 ### Build System
 
--   Maven or Gradle
+- Maven or Gradle
 
 ### Infrastructure
 
--   Docker
--   Docker Compose
+- Docker
+- Docker Compose
 
 ### CI/CD
 
--   GitHub Actions
+- GitHub Actions
 
 ### Coding Standards (Summary)
 
@@ -245,30 +245,30 @@ Important examples:
 
 Java
 
--   Prefer constructor injection for Spring components (avoid field
+- Prefer constructor injection for Spring components (avoid field
     injection).
--   Log significant exceptions before handling or rethrowing them.
--   Use parameterised queries for JPQL / SQL.
--   Public classes and methods in `web/` should include meaningful
+- Log significant exceptions before handling or rethrowing them.
+- Use parameterised queries for JPQL / SQL.
+- Public classes and methods in `web/` should include meaningful
     Javadoc.
 
 TypeScript / JavaScript
 
--   Respect strict typing (`strict: true`).
--   Avoid the `any` type where possible.
--   Prefer `async/await` over callback-based patterns.
+- Respect strict typing (`strict: true`).
+- Avoid the `any` type where possible.
+- Prefer `async/await` over callback-based patterns.
 
 XSLT
 
--   Each XSLT file should include a header comment describing its
+- Each XSLT file should include a header comment describing its
     purpose.
--   Use XSLT 2.0 / 3.0 features available in the Saxon processor.
--   Maintain consistent namespace prefixes.
+- Use XSLT 2.0 / 3.0 features available in the Saxon processor.
+- Maintain consistent namespace prefixes.
 
 SCSS
 
--   Follow BEM naming conventions.
--   Shared values should be placed in variables files.
+- Follow BEM naming conventions.
+- Shared values should be placed in variables files.
 
 Agents must avoid introducing inconsistent formatting or stylistic
 changes unrelated to the task.
@@ -285,34 +285,34 @@ Typical branch flow:
 
 Rules:
 
--   All development targets the **`dev` branch**
--   Never push directly to **`main`**
--   Always open a Pull Request
+- All development targets the **`dev` branch**
+- Never push directly to **`main`**
+- Always open a Pull Request
 
 Branch naming conventions:
 
 Application work:
 
--   `feature/<topic>`
--   `bugfix/<topic>`
--   `docs/<topic>`
+- `feature/<topic>`
+- `bugfix/<topic>`
+- `docs/<topic>`
 
 Agent branches:
 
--   `agents/<agent-name>/<topic>`
+- `agents/<agent-name>/<topic>`
 
 Examples:
 
--   `feature/add-thumbnail-cache`
--   `bugfix/fix-solr-query`
--   `docs/update-api-docs`
--   `agents/gpt/review-solr-config`
+- `feature/add-thumbnail-cache`
+- `bugfix/fix-solr-query`
+- `docs/update-api-docs`
+- `agents/gpt/review-solr-config`
 
 Pull Requests must include:
 
--   motivation
--   description of changes
--   testing summary
+- motivation
+- description of changes
+- testing summary
 
 Use **Draft PRs** for unfinished work.
 
@@ -329,22 +329,22 @@ Typical checks include:
 
 Minimum:
 
--   `mvn compile`
--   `mvn test`
--   `npm run build`
+- `mvn compile`
+- `mvn test`
+- `npm run build`
 
 If the required tooling is not available in the execution environment:
 
--   clearly state this in the PR or task summary
--   perform at least a static review of modified files
--   never claim that tests passed if they could not be executed
+- clearly state this in the PR or task summary
+- perform at least a static review of modified files
+- never claim that tests passed if they could not be executed
 
 When relevant, agents should also:
 
--   run targeted tests for affected modules
--   validate XSLT transformations against example API XML data
--   ensure that changes do not break Solr configuration
--   confirm that CI configuration remains valid
+- run targeted tests for affected modules
+- validate XSLT transformations against example API XML data
+- ensure that changes do not break Solr configuration
+- confirm that CI configuration remains valid
 
 Always briefly document what verification steps were performed.
 
@@ -398,16 +398,15 @@ This repository is part of the **AIS CR infrastructure** maintained by
 
 Related repositories include:
 
--   aiscr-webamcr --- AMČR web application
--   aiscr-api-home --- AIS CR API entry point
--   aiscr-webamcr-help --- AMČR user documentation
--   aiscr-digiarchiv-2 --- digital archive system
+- aiscr-webamcr --- AMČR web application
+- aiscr-api-home --- AIS CR API entry point
+- aiscr-webamcr-help --- AMČR user documentation
 
 Changes in shared infrastructure such as:
 
--   APIs
--   Solr schemas
--   shared data models
+- APIs
+- Solr schemas
+- shared data models
 
 may affect multiple repositories.
 
