@@ -56,7 +56,7 @@ aiscr-digiarchiv-2/
 │   ├── src/main/resources/   # Konfigurace, XSLT transformace
 │   ├── src/main/webapp/      # Frontend (TypeScript, SCSS, HTML šablony)
 │   └── src/test/             # Unit a integrační testy
-├── docs_agents/          # Dokumentace a konfigurace pro AI agenty
+├── .agents/              # Dokumentace a konfigurace pro AI agenty
 ├── AGENTS.md             # Pravidla a instrukce pro AI coding agenty
 ├── CITATION.cff          # Citační metadata
 └── README.md             # Tento soubor
@@ -131,7 +131,7 @@ Viz `CONTRIBUTING.md` pro podrobný vývojový postup.
 Repozitář obsahuje konfiguraci pro AI coding agenty (OpenAI Codex, Claude Code a další):
 
 - `AGENTS.md` — pravidla a konvence pro agenty
-- `docs_agents/` — průběžné audity, analýzy a backlog
+- `.agents/` — průběžné audity, analýzy a backlog
 
 ---
 

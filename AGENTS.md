@@ -34,11 +34,11 @@ Before starting any work, agents must gather repository context.
 
 Agents must read:
 
-- `docs_agents/repository_map.json`
-- `docs_agents/review_cache.json`
-- `docs_agents/bugs.md`
-- `docs_agents/refactoring_backlog.md`
-- `docs_agents/PROMPT.md`
+- `.agents/analysis/repository_map.json`
+- `.agents/config/review_cache.json`
+- `.agents/reports/bugs.md`
+- `.agents/reports/refactoring_backlog.md`
+- `.agents/prompts/review_codebase.md`
 
 Purpose:
 
@@ -48,7 +48,7 @@ architectural context.
 
 ### Resolving Inconsistencies
 
-If content in `docs_agents/` contradicts high-level repository rules or governance
+If content in `.agents/` contradicts high-level repository rules or governance
 defined in this document (`AGENTS.md`), `CONTRIBUTING.md`, or other authoritative
 project documentation, agents must treat those higher-level documents as the
 **source of truth**.
@@ -60,7 +60,7 @@ In such cases agents should:
    - `CONTRIBUTING.md`
    - repository coding standards
    - CI workflow configuration
-2. Adapt or update affected files in `docs_agents/` to align with those rules.
+2. Adapt or update affected files in `.agents/` to align with those rules.
 3. Record the adjustment in the review history (for example `review_cache.json`
    or `refactoring_backlog.md`) when relevant.
 
@@ -73,7 +73,7 @@ current repository governance.
 
 All AI-generated artefacts must be stored in:
 
-`docs_agents/`
+`.agents/`
 
 Examples include:
 
@@ -128,7 +128,7 @@ Agents must:
 - gather repository context before starting work
 - avoid repeating previously recorded work
 - prefer incremental improvements
-- record findings in `docs_agents/`
+- record findings in `.agents/`
 - keep changes minimal and well scoped
 - follow existing coding conventions
 - ensure compatibility with the CI pipeline
@@ -165,7 +165,7 @@ sources in order of authority:
 4.  Repository documentation
 
 If discrepancies are detected, prefer the higher-priority source and
-record the finding in `docs_agents`.
+record the finding in `.agents`.
 
 ------------------------------------------------------------------------
 
@@ -179,7 +179,7 @@ Agents may modify:
 - configuration files
 - CI configuration
 - documentation
-- files inside `docs_agents/`
+- files inside `.agents/`
 
 Agents may also create analysis or documentation files when useful.
 
@@ -350,41 +350,48 @@ Always briefly document what verification steps were performed.
 
 ------------------------------------------------------------------------
 
-## docs_agents Structure
+## .agents Structure
 
-The `docs_agents/` directory stores persistent AI review context.
+The `.agents/` directory stores persistent AI review context.
+It is organized into subfolders:
 
-Files include:
+### prompts/
 
-### PROMPT.md
-
-Instructions for running long-term AI-assisted review sessions.
+`review_codebase.md`\
+Instructions for running long-term AI-assisted review sessions.\
 Contains the initialization sequence, task registry and execution procedure.
 
-### review_config.yaml
+`prompt_evolution/`\
+Suggestions for improving the review prompt, accumulated across sessions.
 
-Configuration for automated review modules based on the repository
-stack.
+### config/
 
-### repository_map.json
+`review_config.yaml`\
+Configuration for automated review modules based on the repository stack.
 
-High-level structural overview of the repository.
-
-### dependency_graph.json
-
-Overview of dependencies between frameworks, services, and repository
-modules.
-
-### review_cache.json
-
+`review_cache.json`\
 Persistent storage of results from previous AI review sessions.
 
-### bugs.md
+### analysis/
 
+`repository_map.json`\
+High-level structural overview of the repository.
+
+`dependency_graph.json`\
+Overview of dependencies between frameworks, services, and repository modules.
+
+`*_analysis.json`\
+Task-specific analysis outputs (Solr, XSLT, Docker, security, etc.).
+
+### reports/
+
+`review_reports/`\
+Task completion reports (`<task_id>.md`).
+
+`bugs.md`\
 Structured log of discovered issues.
 
-### refactoring_backlog.md
-
+`refactoring_backlog.md`\
 Long-term improvement backlog.
 
 Agents should update these files whenever relevant findings are made.
