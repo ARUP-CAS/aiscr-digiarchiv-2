@@ -38,21 +38,21 @@ tasks:
   - id: T01
     name: repository_map
     description: Mapování struktury repozitáře
-    target_file: docs_agents/repository_map.json
+    target_file: .agents/repository_map.json
     priority: 1
     status: pending
 
   - id: T02
     name: dependency_graph
     description: Graf interních a externích závislostí (Maven + npm)
-    target_file: docs_agents/dependency_graph.json
+    target_file: .agents/dependency_graph.json
     priority: 2
     status: pending
 
   - id: T03
     name: solr_analysis
     description: Analýza Solr schémat, konfigurací a indexovacích vzorů
-    target_file: docs_agents/solr_analysis.json
+    target_file: .agents/solr_analysis.json
     priority: 3
     status: pending
     note: >
@@ -62,56 +62,56 @@ tasks:
   - id: T04
     name: xslt_analysis
     description: Analýza XSLT transformací a jejich vazby na AMČR API
-    target_file: docs_agents/xslt_analysis.json
+    target_file: .agents/xslt_analysis.json
     priority: 4
     status: pending
 
   - id: T05
     name: docker_analysis
     description: Analýza všech Dockerfile a docker-compose souborů
-    target_file: docs_agents/docker_analysis.json
+    target_file: .agents/docker_analysis.json
     priority: 5
     status: pending
 
   - id: T06
     name: security_analysis
     description: Bezpečnostní audit (Spring Security, secrets, autentizace, CORS)
-    target_file: docs_agents/security_analysis.json
+    target_file: .agents/security_analysis.json
     priority: 6
     status: pending
 
   - id: T07
     name: frontend_analysis
     description: Analýza vlastního TypeScript/JS/SCSS kódu (vendorované knihovny vyloučeny)
-    target_file: docs_agents/frontend_analysis.json
+    target_file: .agents/frontend_analysis.json
     priority: 7
     status: pending
 
   - id: T08
     name: documentation_analysis
     description: Analýza stavu dokumentace (README, Javadoc, XSLT komentáře)
-    target_file: docs_agents/documentation_analysis.json
+    target_file: .agents/documentation_analysis.json
     priority: 8
     status: pending
 
   - id: T09
     name: cicd_analysis
     description: Analýza GitHub Actions a CI pipeline
-    target_file: docs_agents/cicd_analysis.json
+    target_file: .agents/cicd_analysis.json
     priority: 9
     status: pending
 
   - id: T10
     name: scripts_analysis
     description: Analýza build a deployment skriptů
-    target_file: docs_agents/scripts_analysis.json
+    target_file: .agents/scripts_analysis.json
     priority: 10
     status: pending
 
   - id: T11
     name: final_audit
     description: Finální souhrnný audit všech zjištění
-    target_file: docs_agents/review_reports/final_audit.md
+    target_file: .agents/review_reports/final_audit.md
     priority: 11
     status: blocked
     requires: [T01, T02, T03, T04, T05, T06, T07, T08, T09, T10]
@@ -182,10 +182,10 @@ known_facts:
     relevant_for: [T03]
 
 prompt_evolution:
-  suggestions_path: docs_agents/prompt_evolution/
+  suggestions_path: .agents/prompts/prompt_evolution/
   apply_manually: true
   reviewer: human
   note: >
     Návrhy se hromadí v prompt_evolution/ napříč sezeními.
-    Lidský reviewer aplikuje schválené návrhy do docs_agents/PROMPT.md
+    Lidský reviewer aplikuje schválené návrhy do .agents/prompts/review_codebase.md
     před zahájením nového cyklu auditu.

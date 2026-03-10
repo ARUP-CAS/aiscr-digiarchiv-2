@@ -54,7 +54,7 @@ aiscr-digiarchiv-2/
 │   ├── src/main/resources/   # Configuration, XSLT transformations
 │   ├── src/main/webapp/      # Frontend (TypeScript, SCSS, HTML templates)
 │   └── src/test/             # Unit and integration tests
-├── docs_agents/          # Documentation and configuration for AI agents
+├── .agents/              # Documentation and configuration for AI agents
 ├── AGENTS.md             # Rules and instructions for AI coding agents
 ├── CITATION.cff          # Citation metadata
 └── README.md             # This file
@@ -129,7 +129,7 @@ See `CONTRIBUTING.md` for the detailed development workflow.
 The repository includes configuration for AI coding agents (OpenAI Codex, Claude Code, and others):
 
 - `AGENTS.md` — rules and conventions for agents
-- `docs_agents/` — ongoing audits, analyses, and backlog
+- `.agents/` — ongoing audits, analyses, and backlog
 
 ---
 
