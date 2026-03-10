@@ -36,9 +36,8 @@ Digitální archiv AMČR je součástí Archeologického informačního systému
 | --- | --- |
 | Backend | Java, Spring |
 | Vyhledávání | Apache Solr |
-| Datové transformace | XSLT 2.0/3.0 (Saxon) |
-| Frontend | TypeScript, SCSS, HTML (Thymeleaf) |
-| Infrastruktura | Docker, Docker Compose |
+| Datové transformace | XSLT 2.0 (Saxon 8.7) |
+| Frontend | Angular 21 (TypeScript, SCSS) |
 | CI/CD | GitHub Actions |
 | Generování náhledů | ThumbnailsGenerator (standalone Java) |
 
@@ -48,17 +47,19 @@ Digitální archiv AMČR je součástí Archeologického informačního systému
 
 ```text
 aiscr-digiarchiv-2/
-├── .github/              # GitHub Actions CI/CD workflows, CODEOWNERS
+├── .github/              # GitHub Actions CI/CD workflows
 ├── ThumbnailsGenerator/  # Standalone Java utilita pro generování náhledů
 ├── solr/                 # Konfigurace Apache Solr (schémata, configsets)
 ├── web/                  # Hlavní webová aplikace
 │   ├── src/main/java/        # Java backend (Spring)
 │   ├── src/main/resources/   # Konfigurace, XSLT transformace
-│   ├── src/main/webapp/      # Frontend (TypeScript, SCSS, HTML šablony)
-│   └── src/test/             # Unit a integrační testy
+│   ├── src/main/ng/          # Angular frontend (TypeScript, SCSS)
+│   ├── src/main/webapp/      # JSP / web deskriptory (NENÍ frontend)
+│   └── src/test/             # (aktuálně neexistuje — bez Java testů)
 ├── .agents/              # Dokumentace a konfigurace pro AI agenty
 ├── AGENTS.md             # Pravidla a instrukce pro AI coding agenty
 ├── CITATION.cff          # Citační metadata
+├── CODEOWNERS            # Pravidla pro vlastníky kódu
 └── README.md             # Tento soubor
 ```
 
@@ -69,22 +70,19 @@ aiscr-digiarchiv-2/
 ### Prerekvizity
 
 - Java 17+
-- Maven 3.8+ (nebo Gradle — ověřte přítomnost `web/pom.xml` vs. `web/build.gradle`)
-- Node.js 18+ a npm (pro TypeScript a SCSS build)
-- Docker a Docker Compose
+- Maven 3.8+
+- Node.js 18+ a npm (pro Angular frontend)
 
 ### Spuštění lokálně
 
 ```bash
-# 1. Spustit Solr
-docker compose up solr -d
-
-# 2. Sestavit a spustit webovou aplikaci
+# 1. Sestavit a spustit webovou aplikaci
 cd web
 mvn clean package
 mvn spring-boot:run
 
-# 3. Sestavit frontend (je-li potřeba odděleně)
+# 2. Sestavit frontend (je-li potřeba odděleně)
+cd src/main/ng
 npm install
 npm run build
 ```

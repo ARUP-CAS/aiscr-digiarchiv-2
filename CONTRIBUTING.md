@@ -177,6 +177,24 @@ Sledujte changelog AMČR a po každé API změně upstream otestujte transformac
 
 ---
 
+## Dokumentační governance
+
+- `README.md` / `README_en.md` — veřejné vstupní body; popisují projekt, technologický stack
+  a základní strukturu repozitáře.
+- `CONTRIBUTING.md` — **zdroj pravdy** pro vývojový workflow (větve, PR, commity, testy)
+  a bezpečnostní minimální standardy.
+- `AGENTS.md` — pravidla a rozsah pro AI coding agenty; má přednost před obsahem
+  v `.agents/`, pokud si odporují.
+- `.agents/` — konfigurace, prompty a výstupy analytických agentů; generované soubory
+  (analysis/report) se needitují ručně.
+- `.agents/config/review_config.yaml` — **zdroj pravdy** pro konfiguraci review systému;
+  embedded příklady v promtech se mu musí přizpůsobit.
+
+Pokud se informace o stejném tématu v těchto souborech liší, aktualizujte nejprve
+`CONTRIBUTING.md` / `AGENTS.md` a následně upravte ostatní dokumenty, aby byly v souladu.
+
+---
+
 ## AI agenti
 
 Větve generované AI agenty (`agents/{agent_name}/<topic>`) se větvují od `dev`  

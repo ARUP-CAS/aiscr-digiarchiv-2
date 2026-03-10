@@ -108,86 +108,9 @@ Create and maintain:
 
 ## CONFIGURATION FILE
 
-Create and maintain: `.agents/config/review_config.yaml`
-
-```yaml
-repository: aiscr-digiarchiv-2
-branch: dev
-
-task_size_limits:
-  max_files_per_task: 20
-  max_lines_per_task: 6000    # total line budget per task
-  max_lines_per_file: 2000    # threshold for a single file
-  large_file_strategy: split_task
-  prefer_single_module_per_task: true
-
-cache_strategy:
-  hash_algorithm: sha256
-  hash_target: file_content
-  cache_format:
-    file_path: string
-    sha256: string
-    last_reviewed: iso8601
-    task_id: string
-
-important_directories:
-  - web/src/main/java
-  - web/src/main/resources
-  - web/src/main/ng         # Angular frontend (web/src/main/webapp obsahuje jen JSP/web descriptor)
-  - solr
-  - ThumbnailsGenerator
-  - .github
-
-important_files:
-  - AGENTS.md
-  - web/pom.xml
-  - web/src/main/ng/package.json
-  - web/src/main/ng/tsconfig.json
-  - web/src/main/ng/angular.json          # Angular build konfigurace (production profily, optimalizace)
-  - web/src/main/webapp/META-INF/context.xml  # Tomcat deployment descriptor
-  - ThumbnailsGenerator/pom.xml
-  # docker-compose soubory nejsou součástí tohoto repozitáře
-
-known_facts:
-  xslt_processor: "Saxon"
-  saxon_version: "8.7"                    # kriticky zastaralý; cílová verze Saxon-HE 12.x
-  java_version_web: "17"
-  java_version_thumbnails: "1.8"          # nekonzistentní s hlavní aplikací
-  jakarta_ee_version: "11.0.0"            # všechny závislosti musí používat jakarta.* namespace
-  angular_version: "21"
-  solr_client_version: "9.10.1"           # musí odpovídat verzi Solr serveru
-
-ignored_directories:
-  - .git
-  - node_modules
-  - target
-  - build
-  - dist
-  - .gradle
-  - coverage
-
-vendored_exclusions:
-  directories:
-    - vendor/
-    - vendors/
-    - lib/
-    - libs/
-    - node_modules/
-    - dist/
-  file_patterns:
-    - "*.min.js"
-    - "*.min.css"
-  copyright_headers:
-    - "/*!"
-    - "* @license"
-    - "* jQuery"
-    - "* Bootstrap"
-
-prompt_evolution:
-  suggestions_path: .agents/prompts/prompt_evolution/
-  apply_manually: true
-  reviewer: human
-```
+Create and maintain: `.agents/config/review_config.yaml`.
+This file is the **single source of truth** for review configuration; any
+embedded examples in this prompt must stay in sync with it.
 
 ---
 

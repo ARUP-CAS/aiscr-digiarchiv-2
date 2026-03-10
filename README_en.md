@@ -34,9 +34,8 @@ The AMCR Digital Archive is part of the Archaeological Information System of the
 | --- | --- |
 | Backend | Java, Spring |
 | Search | Apache Solr |
-| Data transformations | XSLT 2.0/3.0 (Saxon) |
-| Frontend | TypeScript, SCSS, HTML (Thymeleaf) |
-| Infrastructure | Docker, Docker Compose |
+| Data transformations | XSLT 2.0 (Saxon 8.7) |
+| Frontend | Angular 21 (TypeScript, SCSS) |
 | CI/CD | GitHub Actions |
 | Preview generation | ThumbnailsGenerator (standalone Java) |
 
@@ -46,17 +45,19 @@ The AMCR Digital Archive is part of the Archaeological Information System of the
 
 ```text
 aiscr-digiarchiv-2/
-├── .github/              # GitHub Actions CI/CD workflows, CODEOWNERS
+├── .github/              # GitHub Actions CI/CD workflows
 ├── ThumbnailsGenerator/  # Standalone Java utility for preview generation
 ├── solr/                 # Apache Solr configuration (schemas, configsets)
 ├── web/                  # Main web application
 │   ├── src/main/java/        # Java backend (Spring)
 │   ├── src/main/resources/   # Configuration, XSLT transformations
-│   ├── src/main/webapp/      # Frontend (TypeScript, SCSS, HTML templates)
-│   └── src/test/             # Unit and integration tests
+│   ├── src/main/ng/          # Angular frontend (TypeScript, SCSS)
+│   ├── src/main/webapp/      # JSP / web descriptors (NOT the frontend)
+│   └── src/test/             # (currently absent — no Java test sources)
 ├── .agents/              # Documentation and configuration for AI agents
 ├── AGENTS.md             # Rules and instructions for AI coding agents
 ├── CITATION.cff          # Citation metadata
+├── CODEOWNERS            # Code ownership rules
 └── README.md             # This file
 ```
 
@@ -67,22 +68,19 @@ aiscr-digiarchiv-2/
 ### Prerequisites
 
 - Java 17+
-- Maven 3.8+ (or Gradle — verify presence of `web/pom.xml` vs. `web/build.gradle`)
-- Node.js 18+ and npm (for TypeScript and SCSS build)
-- Docker and Docker Compose
+- Maven 3.8+
+- Node.js 18+ and npm (for the Angular frontend)
 
 ### Running locally
 
 ```bash
-# 1. Start Solr
-docker compose up solr -d
-
-# 2. Build and run the web application
+# 1. Build and run the web application
 cd web
 mvn clean package
 mvn spring-boot:run
 
-# 3. Build frontend (if required separately)
+# 2. Build the frontend (if required separately)
+cd src/main/ng
 npm install
 npm run build
 ```
