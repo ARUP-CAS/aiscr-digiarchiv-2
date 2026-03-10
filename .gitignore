@@ -13,3 +13,4 @@ web/src/main/webapp/index.csr.html
 # agents
 .codex/
 .claude/
+.cursor/
