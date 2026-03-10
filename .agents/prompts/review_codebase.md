@@ -51,8 +51,8 @@ or to list CDN dependencies), but their internal content must not be audited.
 At the start of every agent session, execute in this exact order:
 
 1. Read `AGENTS.md` — contains repository-specific agent instructions that take precedence.
-2. Read `.agents/review_config.yaml` — load configuration, including `known_facts`.
-3. Read `.agents/review_cache.json` — load progress state.
+2. Read `.agents/config/review_config.yaml` — load configuration, including `known_facts`.
+3. Read `.agents/config/review_cache.json` — load progress state.
 4. Verify that directories listed in `important_directories` actually exist; record any that
    are missing (do not treat a missing directory as an error — simply note its absence).
 5. Compute SHA-256 hashes of all source files listed in the cache.
@@ -108,7 +108,7 @@ Create and maintain:
 
 ## CONFIGURATION FILE
 
-Create and maintain: `.agents/review_config.yaml`
+Create and maintain: `.agents/config/review_config.yaml`
 
 ```yaml
 repository: aiscr-digiarchiv-2
@@ -201,67 +201,67 @@ tasks:
   - id: T01
     name: repository_map
     description: Mapování struktury repozitáře
-    target_file: .agents/repository_map.json
+    target_file: .agents/analysis/repository_map.json
     priority: 1
 
   - id: T02
     name: dependency_graph
     description: Graf interních a externích závislostí (Maven + npm)
-    target_file: .agents/dependency_graph.json
+    target_file: .agents/analysis/dependency_graph.json
     priority: 2
 
   - id: T03
     name: solr_analysis
     description: Analýza Solr schémat, konfigurací a indexovacích vzorů
-    target_file: .agents/solr_analysis.json
+    target_file: .agents/analysis/solr_analysis.json
     priority: 3
 
   - id: T04
     name: xslt_analysis
     description: Analýza XSLT transformací a jejich vazby na AMČR API
-    target_file: .agents/xslt_analysis.json
+    target_file: .agents/analysis/xslt_analysis.json
     priority: 4
 
   - id: T05
     name: docker_analysis
     description: Analýza všech Dockerfile a docker-compose souborů
-    target_file: .agents/docker_analysis.json
+    target_file: .agents/analysis/docker_analysis.json
     priority: 5
 
   - id: T06
     name: security_analysis
     description: Bezpečnostní audit (Spring Security, secrets, autentizace, CORS)
-    target_file: .agents/security_analysis.json
+    target_file: .agents/analysis/security_analysis.json
     priority: 6
 
   - id: T07
     name: frontend_analysis
     description: Analýza vlastního TypeScript/JS/SCSS kódu (vendorované knihovny vyloučeny)
-    target_file: .agents/frontend_analysis.json
+    target_file: .agents/analysis/frontend_analysis.json
     priority: 7
 
   - id: T08
     name: documentation_analysis
     description: Analýza stavu dokumentace (README, Javadoc, XSLT komentáře)
-    target_file: .agents/documentation_analysis.json
+    target_file: .agents/analysis/documentation_analysis.json
     priority: 8
 
   - id: T09
     name: cicd_analysis
     description: Analýza GitHub Actions a CI pipeline
-    target_file: .agents/cicd_analysis.json
+    target_file: .agents/analysis/cicd_analysis.json
     priority: 9
 
   - id: T10
     name: scripts_analysis
     description: Analýza build a deployment skriptů
-    target_file: .agents/scripts_analysis.json
+    target_file: .agents/analysis/scripts_analysis.json
     priority: 10
 
   - id: T11
     name: final_audit
     description: Finální souhrnný audit všech zjištění
-    target_file: .agents/review_reports/final_audit.md
+    target_file: .agents/reports/review_reports/final_audit.md
     priority: 11
     requires: [T01, T02, T03, T04, T05, T06, T07, T08, T09, T10]
 ```
@@ -270,7 +270,7 @@ tasks:
 
 ## REPOSITORY MAP (T01)
 
-Create: `.agents/repository_map.json`
+Create: `.agents/analysis/repository_map.json`
 
 **Purpose:** Provide a structural index of the repository.
 
@@ -303,7 +303,7 @@ Include:
 
 ## DEPENDENCY GRAPH (T02)
 
-Create: `.agents/dependency_graph.json`
+Create: `.agents/analysis/dependency_graph.json`
 
 **Purpose:** Map internal and external dependencies.
 
@@ -324,7 +324,7 @@ Detect:
 - Maven dependencies with version ranges (e.g. `[0.4,0.5)`) — non-deterministic build risk
 - missing or redundant test dependencies
 
-Record architectural issues in `refactoring_backlog.md`.
+Record architectural issues in `.agents/reports/refactoring_backlog.md`.
 
 ```json
 {
@@ -343,7 +343,7 @@ Record architectural issues in `refactoring_backlog.md`.
 
 ## SOLR ANALYSIS (T03)
 
-Create: `.agents/solr_analysis.json`
+Create: `.agents/analysis/solr_analysis.json`
 
 **Purpose:** Analyse the Solr search engine configuration and indexing patterns.
 
@@ -368,7 +368,7 @@ Inspect:
 - incremental vs. full reindexation triggers
 - for collections `uzivatel`, `uzivatel_ui`, `organizations`: check whether sensitive fields
   (email, telefon, heslo, adresa) have `indexed="false"` or field-level security; escalate
-  any exposure to `bugs.md`
+  any exposure to `.agents/reports/bugs.md`
 
 Detect:
 
@@ -388,7 +388,7 @@ Detect:
   server version; if Docker files are absent (confirmed by T01/T05), compare `solr-solrj`
   version in `pom.xml` against `luceneMatchVersion` in `solrconfig.xml`
 
-Record severe issues in `bugs.md`.
+Record severe issues in `.agents/reports/bugs.md`.
 
 ```json
 {
@@ -417,7 +417,7 @@ Record severe issues in `bugs.md`.
 
 ## XSLT ANALYSIS (T04)
 
-Create: `.agents/xslt_analysis.json`
+Create: `.agents/analysis/xslt_analysis.json`
 
 **Purpose:** Analyse XSLT transformations and their coupling to the AMČR API.
 
@@ -441,8 +441,8 @@ Detect:
 - duplicated named templates that could be extracted to a shared file
 - transformations lacking test fixtures
 
-Record severe issues in `bugs.md`.
-For each XSLT file that lacks a header comment, add a note to `refactoring_backlog.md`.
+Record severe issues in `.agents/reports/bugs.md`.
+For each XSLT file that lacks a header comment, add a note to `.agents/reports/refactoring_backlog.md`.
 
 ```json
 {
@@ -462,13 +462,13 @@ For each XSLT file that lacks a header comment, add a note to `refactoring_backl
 
 ## DOCKER BUILD ANALYSIS (T05)
 
-Create: `.agents/docker_analysis.json`
+Create: `.agents/analysis/docker_analysis.json`
 
 **Purpose:** Analyse Docker configuration and build efficiency.
 
 **Poznámka (zjištěno T01):** Docker soubory nejsou součástí tohoto repozitáře.
 Pokud nejsou nalezeny žádné `Dockerfile` ani `docker-compose*.yml` soubory, zaznamenej
-tuto skutečnost v `docker_analysis.json` a v reportu uveď dopad na reprodukovatelnost
+tuto skutečnost v `.agents/analysis/docker_analysis.json` a v reportu uveď dopad na reprodukovatelnost
 prostředí. Netraktuj absenci jako chybu tasku — úloha je tím pádem kratší.
 
 Inspect ALL docker files found in the repository (if present):
@@ -502,7 +502,7 @@ Detect:
 
 ## SECURITY ANALYSIS (T06)
 
-Create: `.agents/security_analysis.json`
+Create: `.agents/analysis/security_analysis.json`
 
 **Purpose:** Security audit of the production system.
 
@@ -549,7 +549,7 @@ Severity mapping:
 
 ## FRONTEND ANALYSIS (T07)
 
-Create: `.agents/frontend_analysis.json`
+Create: `.agents/analysis/frontend_analysis.json`
 
 **Purpose:** Analyse **custom** frontend code written by Digitální archiv developers
 (TypeScript ~17 %, JavaScript ~6 %, HTML ~15 %, SCSS ~4 %).
@@ -626,7 +626,7 @@ Skip any file or directory matching at least one of these conditions:
 
 ## DOCUMENTATION ANALYSIS (T08)
 
-Create: `.agents/documentation_analysis.json`
+Create: `.agents/analysis/documentation_analysis.json`
 
 **Purpose:** Analyse documentation quality across the repository.
 
@@ -668,7 +668,7 @@ Detect:
 
 ## CI/CD ANALYSIS (T09)
 
-Create: `.agents/cicd_analysis.json`
+Create: `.agents/analysis/cicd_analysis.json`
 
 **Purpose:** Analyse automation, testing and deployment pipeline.
 
@@ -705,7 +705,7 @@ Detect:
 
 ## SCRIPTS ANALYSIS (T10)
 
-Create: `.agents/scripts_analysis.json`
+Create: `.agents/analysis/scripts_analysis.json`
 
 **Purpose:** Analyse operational and development scripts.
 
@@ -728,7 +728,7 @@ Detect:
 
 ## REVIEW CACHE
 
-Create and maintain: `.agents/review_cache.json`
+Create and maintain: `.agents/config/review_cache.json`
 
 **Task status semantics:**
 
@@ -780,7 +780,7 @@ The initialization sequence will resume a `split` task before picking any other 
 
 ## BUG TRACKING
 
-Create and maintain: `.agents/bugs.md`
+Create and maintain: `.agents/reports/bugs.md`
 
 Before adding a bug entry:
 
@@ -808,13 +808,13 @@ Each bug entry:
 
 When a bug of severity `Kritická` is found:
 
-1. Record it in `bugs.md` as usual.
+1. Record it in `.agents/reports/bugs.md` as usual.
 2. Prepend the following block to the current session summary (do not bury it
    in the report body):
 
    ```markdown
    ⚠️  KRITICKÁ CHYBA — BUG-XXX: <stručný popis>
-   Viz .agents/bugs.md. Před dalším taskem doporučeno lidské review.
+   Viz .agents/reports/bugs.md. Před dalším taskem doporučeno lidské review.
    ```
 
 3. Do not start the next task in the same session until the finding is recorded
@@ -824,7 +824,7 @@ When a bug of severity `Kritická` is found:
 
 ## REFACTORING BACKLOG
 
-Create and maintain: `.agents/refactoring_backlog.md`
+Create and maintain: `.agents/reports/refactoring_backlog.md`
 
 ```markdown
 # Refactoring backlog
@@ -843,7 +843,7 @@ Create and maintain: `.agents/refactoring_backlog.md`
 
 ## REPORT OUTPUT
 
-Each completed task must produce: `.agents/review_reports/<task_id>.md`
+Each completed task must produce: `.agents/reports/review_reports/<task_id>.md`
 
 The report must be written in Czech and include:
 
@@ -869,7 +869,7 @@ The report must be written in Czech and include:
 <!-- Sekce pro prompt evolution -->
 ```
 
-Also update relevant analysis JSON files, `bugs.md`, and `refactoring_backlog.md`.
+Also update relevant analysis JSON files, `.agents/reports/bugs.md`, and `.agents/reports/refactoring_backlog.md`.
 
 ---
 

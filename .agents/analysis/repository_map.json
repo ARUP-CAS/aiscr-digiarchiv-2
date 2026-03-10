@@ -19,7 +19,7 @@
       "build_system": "Maven (pom.xml)",
       "main_class": "cz.incad.arup.thumbnailsgenerator.ThumbsGenerator"
     },
-    "docs_agents": {
+    ".agents": {
       "purpose": "Persistentní kontextové soubory pro AI review sesí",
       "files_maintained_by": "AI agenti"
     },
