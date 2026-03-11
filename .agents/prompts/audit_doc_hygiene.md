@@ -34,7 +34,7 @@ Locate all instruction-bearing files in the repository. Typical candidates:
 - `README.md`, `README_en.md` (or other language variants)
 - `CONTRIBUTING.md`
 - `CLAUDE.md`, `AGENTS.md`, `CODEX.md`, `COPILOT.md`, `.cursorrules`
-- `.github/CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md`
+- `.github/CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md` (this repo uses `CODEOWNERS` at repo root)
 - Any `AGENTS.md` in subdirectories (nested overrides)
 - Agent prompt files (e.g. `.agents/prompts/*.md`)
 - Agent config files (e.g. `.agents/config/*.yaml`, `.agents/config/*.json`)

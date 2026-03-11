@@ -39,11 +39,7 @@ No automated tests exist — `web/src/test/` is absent.
 
 ## Commit Format
 
-```
-[type] Stručný popis v češtině (#issue)
-```
-
-Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `style`, `perf`
+Commit format and allowed types: see `CONTRIBUTING.md` § Commit zprávy.
 
 ## Known Critical Issues (from .agents/reports/bugs.md)
 

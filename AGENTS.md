@@ -128,11 +128,17 @@ introducing stylistic changes.
 
 ### Recommended Skills
 
-Optional capabilities that may improve maintenance efficiency:
+Optional capabilities that may improve maintenance efficiency. Invoke when relevant:
 
-- `doc` — reviewing and editing documentation artefacts
-- `gh-fix-ci` — diagnosing and fixing CI failures
-- `gh-address-comments` — incorporating pull request review comments
+- **`gh-fix-ci`** — Use when a PR has **failing GitHub Actions** checks. Requires `gh` auth (`gh auth login`); uses the skill’s script or `gh pr checks` / `gh run view` to fetch logs, summarize failures, then plan and fix after your approval. Only covers GitHub Actions (external CI is out of scope).
+- **`gh-address-comments`** — Use when **addressing review comments** on the open PR for the current branch. Uses `gh` and the skill’s `fetch_comments.py` to list threads, then you choose which comments to address; the agent applies the fixes. Run `gh auth status` first; if not logged in, authenticate then retry.
+
+### Recommended subagents
+
+For larger or riskier changes, run a dedicated subagent in parallel; review rules remain in this file and `CONTRIBUTING.md`.
+
+- **code-reviewer** — Use for multi-file changes, refactors, or when touching Java + Angular together. Configuration is tool-specific; quality criteria are in `AGENTS.md` and `CONTRIBUTING.md`.
+- **security-reviewer** (optional) — Use when changing auth, CORS, or security-sensitive code. Cross-check with `.agents/reports/bugs.md` and `.agents/analysis/security_analysis.json`.
 
 ---
 
@@ -147,6 +153,21 @@ order of authority:
 4. Repository documentation
 
 Record any discrepancies in `.agents/`.
+
+---
+
+## Shared automation and rules (no .cursor)
+
+Shared rules and automation context for AI agents must live in **versioned** locations so they are not affected by `.gitignore`:
+
+- **This file (`AGENTS.md`)**: Agent governance, scope, behaviour, recommended skills.
+- **`CONTRIBUTING.md`**: Branch/PR workflow, commit format, testing.
+- **`CLAUDE.md`**: Quick orientation, paths, build commands, gotchas.
+- **`.agents/`**: Prompts (e.g. `prompts/review_codebase.md`), config (`config/review_config.yaml`), reports (`reports/bugs.md`).
+
+Do **not** rely on `.cursor/`, `.claude/`, or `.codex/` for team-shared configuration — those directories are in `.gitignore`. Put only local or personal overrides there; canonical rules stay in the paths above.
+
+Detailed automation recommendations (MCP, skills, hooks, subagents) are in `.agents/reports/automation_recommendations.md`.
 
 ---
 
@@ -193,28 +214,10 @@ Rules:
 
 ## Branch and PR Rules
 
-See `CONTRIBUTING.md` for the full contribution workflow.
-
-Summary:
-
-- All development targets `dev`
-- Never push directly to `main`
-- Always open a Pull Request
-- Agent branches: `agents/<agent-name>/<topic>`
-- Use Draft PRs for unfinished work
+See `CONTRIBUTING.md` for the full contribution workflow (branch from `dev`, PR to `dev`, agent branches `agents/<agent-name>/<topic>`, Draft PRs for WIP).
 
 ---
 
 ## Testing Expectations
 
-See `CONTRIBUTING.md` for detailed testing requirements.
-
-Minimum before submitting changes:
-
-```bash
-cd web && mvn compile -q && mvn test    # Java
-cd web/src/main/ng && npm run build     # Angular
-```
-
-If tooling is not available: state this in the PR, perform static review,
-never claim tests passed if they could not be executed.
+See `CONTRIBUTING.md` for detailed testing requirements. Minimum: `cd web && mvn compile -q && mvn test` and `cd web/src/main/ng && npm run build`; or from repo root `scripts/pre-pr-check.sh` / `scripts/pre-pr-check.ps1`. If tooling is unavailable, state so in the PR and perform static review.

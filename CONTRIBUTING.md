@@ -146,6 +146,16 @@ cd web && mvn compile -q && mvn test
 npm run build
 ```
 
+Alternativně ze kořene repozitáře (Bash nebo PowerShell):
+
+```bash
+./scripts/pre-pr-check.sh    # Linux / macOS / Git Bash
+```
+
+```powershell
+.\scripts\pre-pr-check.ps1    # Windows PowerShell
+```
+
 **Při změnách XSLT:**  
 Validujte transformace proti vzorovým XML datům z AMČR API.
 
