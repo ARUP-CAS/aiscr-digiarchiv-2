@@ -22,7 +22,12 @@
 /.agents/                   @motyc
 
 # Projektová dokumentace a pravidla
-/AGENTS.md                  @motyc @albertoh
-/CONTRIBUTING.md            @motyc @albertoh
-/README.md                  @motyc @albertoh
-/CITATION.cff               @motyc @albertoh
+/CONTRIBUTING.md            @motyc
+/README.md                  @motyc
+/README_en.md                  @motyc
+/CITATION.cff               @motyc
+
+# AI review infrastruktura — VŽDY vyžaduje lidský review před mergem
+/.agents/                      @motyc
+/AGENTS.md                      @motyc
+/CLAUDE.md                      @motyc
