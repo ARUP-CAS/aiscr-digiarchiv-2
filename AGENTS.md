@@ -77,6 +77,13 @@ Read all of:
 - `.agents/reports/refactoring_backlog.md` — improvement backlog
 - `.agents/prompts/review_codebase.md` — task registry and execution procedure
 
+For **incremental updates** (after a full audit cycle is complete):
+
+- `.agents/prompts/review_update.md` — incremental update workflow (U01–U06)
+- `.agents/scripts/review_tools.py` — validation CLI (`hash`, `cross-validate`,
+  `coverage-gaps`, `id-inventory`, `lint-artifacts`, `prompt-evolution`,
+  `repo-structure`, `status`, `all`)
+
 ### For general agents (feature work, bugfixes, refactoring)
 
 Read at minimum:
@@ -163,7 +170,7 @@ Shared rules and automation context for AI agents must live in **versioned** loc
 - **This file (`AGENTS.md`)**: Agent governance, scope, behaviour, recommended skills.
 - **`CONTRIBUTING.md`**: Branch/PR workflow, commit format, testing.
 - **`CLAUDE.md`**: Quick orientation, paths, build commands, gotchas.
-- **`.agents/`**: Prompts (e.g. `prompts/review_codebase.md`), config (`config/review_config.yaml`), reports (`reports/bugs.md`).
+- **`.agents/`**: Prompts (e.g. `prompts/review_codebase.md`, `prompts/review_update.md`), config (`config/review_config.yaml`), reports (`reports/bugs.md`), scripts (`scripts/review_tools.py`).
 
 Do **not** rely on `.cursor/`, `.claude/`, or `.codex/` for team-shared configuration — those directories are in `.gitignore`. Put only local or personal overrides there; canonical rules stay in the paths above.
 

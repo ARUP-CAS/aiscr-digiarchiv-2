@@ -1,6 +1,10 @@
 ThumbnailsGenerator/target/
 ThumbnailsGenerator/nbactions.xml
 
+# build artifacts
+__pycache__/
+*.pyc
+
 # system files
 .DS_Store
 web/src/.DS_Store
