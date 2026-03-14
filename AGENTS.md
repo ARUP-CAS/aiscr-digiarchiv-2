@@ -103,6 +103,22 @@ or other authoritative project documentation:
 
 ---
 
+## AI-Generated Content
+
+All AI-generated artefacts must be stored in `.agents/`.
+AI-generated analysis must not be mixed with application code.
+
+Agent branches must follow the naming convention:
+`agents/<agent-name>/<topic>` (branched from `dev`).
+
+Rules:
+
+- Agents must **never push directly to protected branches** (`main`, `dev`)
+- AI-generated work must be **reviewed by a human before merge**
+- Merging into `main` is performed exclusively by human maintainers
+
+---
+
 ## Goal
 
 Agents should aim for **small, safe, reviewable improvements** aligned with:
@@ -163,21 +179,6 @@ Record any discrepancies in `.agents/`.
 
 ---
 
-## Shared automation and rules (no .cursor)
-
-Shared rules and automation context for AI agents must live in **versioned** locations so they are not affected by `.gitignore`:
-
-- **This file (`AGENTS.md`)**: Agent governance, scope, behaviour, recommended skills.
-- **`CONTRIBUTING.md`**: Branch/PR workflow, commit format, testing.
-- **`CLAUDE.md`**: Quick orientation, paths, build commands, gotchas.
-- **`.agents/`**: Prompts (e.g. `prompts/review_codebase.md`, `prompts/review_update.md`), config (`config/review_config.yaml`), reports (`reports/bugs.md`), scripts (`scripts/review_tools.py`).
-
-Do **not** rely on `.cursor/`, `.claude/`, or `.codex/` for team-shared configuration — those directories are in `.gitignore`. Put only local or personal overrides there; canonical rules stay in the paths above.
-
-Detailed automation recommendations (MCP, skills, hooks, subagents) are in `.agents/reports/automation_recommendations.md`.
-
----
-
 ## Scope
 
 ### In Scope
@@ -203,19 +204,18 @@ explicitly required by the task.
 
 ---
 
-## AI-Generated Content
+## Shared automation and rules (no .cursor)
 
-All AI-generated artefacts must be stored in `.agents/`.
-AI-generated analysis must not be mixed with application code.
+Shared rules and automation context for AI agents must live in **versioned** locations so they are not affected by `.gitignore`:
 
-Agent branches must follow the naming convention:
-`agents/<agent-name>/<topic>` (branched from `dev`).
+- **This file (`AGENTS.md`)**: Agent governance, scope, behaviour, recommended skills.
+- **`CONTRIBUTING.md`**: Branch/PR workflow, commit format, testing.
+- **`CLAUDE.md`**: Quick orientation, paths, build commands, gotchas.
+- **`.agents/`**: Prompts (e.g. `prompts/review_codebase.md`, `prompts/review_update.md`), config (`config/review_config.yaml`), reports (`reports/bugs.md`), scripts (`scripts/review_tools.py`).
 
-Rules:
+Do **not** rely on `.cursor/`, `.claude/`, or `.codex/` for team-shared configuration — those directories are in `.gitignore`. Put only local or personal overrides there; canonical rules stay in the paths above.
 
-- Agents must **never push directly to protected branches** (`main`, `dev`)
-- AI-generated work must be **reviewed by a human before merge**
-- Merging into `main` is performed exclusively by human maintainers
+Detailed automation recommendations (MCP, skills, hooks, subagents) are in `.agents/reports/automation_recommendations.md`.
 
 ---
 
@@ -228,3 +228,9 @@ See `CONTRIBUTING.md` for the full contribution workflow (branch from `dev`, PR 
 ## Testing Expectations
 
 See `CONTRIBUTING.md` for detailed testing requirements. Minimum: `cd web && mvn compile -q && mvn test` and `cd web/src/main/ng && npm run build`; or from repo root `scripts/pre-pr-check.sh` / `scripts/pre-pr-check.ps1`. If tooling is unavailable, state so in the PR and perform static review.
+
+---
+
+## Repository Context
+
+This repository is part of the AIS CR ecosystem. Related repositories: `aiscr-webamcr`, `aiscr-api-home`, `aiscr-webamcr-help`. Agents working across repositories should preserve consistency in documentation and review processes.

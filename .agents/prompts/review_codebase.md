@@ -116,78 +116,11 @@ embedded examples in this prompt must stay in sync with it.
 
 ## TASK REGISTRY
 
-The following tasks are executed in order. Each session picks the next pending task.
+**Single source of truth:** `.agents/config/review_config.yaml` → `tasks:`.
+Do not duplicate the task list here. This prompt contains per-task execution instructions below.
+
+Each session picks the next pending task (see "Select the next task" in the procedure above).
 Tasks are marked `done` in the cache after completion, `pending` if files changed.
-
-```yaml
-tasks:
-  - id: T01
-    name: repository_map
-    description: Mapování struktury repozitáře
-    target_file: .agents/analysis/repository_map.json
-    priority: 1
-
-  - id: T02
-    name: dependency_graph
-    description: Graf interních a externích závislostí (Maven + npm)
-    target_file: .agents/analysis/dependency_graph.json
-    priority: 2
-
-  - id: T03
-    name: solr_analysis
-    description: Analýza Solr schémat, konfigurací a indexovacích vzorů
-    target_file: .agents/analysis/solr_analysis.json
-    priority: 3
-
-  - id: T04
-    name: xslt_analysis
-    description: Analýza XSLT transformací a jejich vazby na AMČR API
-    target_file: .agents/analysis/xslt_analysis.json
-    priority: 4
-
-  - id: T05
-    name: docker_analysis
-    description: Analýza všech Dockerfile a docker-compose souborů
-    target_file: .agents/analysis/docker_analysis.json
-    priority: 5
-
-  - id: T06
-    name: security_analysis
-    description: Bezpečnostní audit (Spring Security, secrets, autentizace, CORS)
-    target_file: .agents/analysis/security_analysis.json
-    priority: 6
-
-  - id: T07
-    name: frontend_analysis
-    description: Analýza vlastního TypeScript/JS/SCSS kódu (vendorované knihovny vyloučeny)
-    target_file: .agents/analysis/frontend_analysis.json
-    priority: 7
-
-  - id: T08
-    name: documentation_analysis
-    description: Analýza stavu dokumentace (README, Javadoc, XSLT komentáře)
-    target_file: .agents/analysis/documentation_analysis.json
-    priority: 8
-
-  - id: T09
-    name: cicd_analysis
-    description: Analýza GitHub Actions a CI pipeline
-    target_file: .agents/analysis/cicd_analysis.json
-    priority: 9
-
-  - id: T10
-    name: scripts_analysis
-    description: Analýza build a deployment skriptů
-    target_file: .agents/analysis/scripts_analysis.json
-    priority: 10
-
-  - id: T11
-    name: final_audit
-    description: Finální souhrnný audit všech zjištění
-    target_file: .agents/reports/review_reports/final_audit.md
-    priority: 11
-    requires: [T01, T02, T03, T04, T05, T06, T07, T08, T09, T10]
-```
 
 ---
 
