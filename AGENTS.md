@@ -18,8 +18,10 @@ This repository is part of the **ARUP-CAS AIS CR ecosystem**.
 Related repositories:
 
 - `aiscr-webamcr` — AMČR web application (upstream data source)
-- `aiscr-api-home` — AIS CR API entry point
+- `aiscr-api-home` — AIS CR API documentation and canonical source of truth for endpoint definitions
 - `aiscr-webamcr-help` — AMČR user documentation
+
+**External APIs:** This repo **exposes** File API (digiarchiv.aiscr.cz) and OAI-PMH (api.aiscr.cz/oai); it **consumes** AMČR (amcr.aiscr.cz) for user accounts and data. Canonical API docs and live endpoint definitions: [aiscr-api-home](https://github.com/ARUP-CAS/aiscr-api-home), https://api.aiscr.cz/. Do not duplicate endpoint specs here.
 
 Changes to shared infrastructure (APIs, Solr schemas, data models) may affect
 multiple repositories. Agents must prefer **conservative, compatible changes**.
