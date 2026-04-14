@@ -300,6 +300,8 @@
         "f_typ_nalezu:dokument_cast.komponenta[*].komponenta_typ_nalezu",
         "f_druh_nalezu:dokument_cast.komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:dokument_cast.komponenta[*].komponenta_nalez_predmet[*].druh.id",
+        "f_kategorie:dokument_cast.komponenta[*].komponenta_nalez_objekt[*].komponenta_kategorie_nalezu",
+        "f_kategorie:dokument_cast.komponenta[*].komponenta_nalez_predmet[*].komponenta_kategorie_nalezu",
         "f_specifikace:dokument_cast.komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
         "f_specifikace:dokument_cast.komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
         "f_format:dokument_extra_data.format.id",
@@ -397,6 +399,10 @@
         "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
+                
+        "f_kategorie:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].komponenta_kategorie_nalezu",
+        "f_kategorie:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].komponenta_kategorie_nalezu",
+                
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
         "f_ez_typ:az_ext_zdroj.ext_zdroj_typ.id",
@@ -533,6 +539,10 @@
         "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
         "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
+                
+        "f_kategorie:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].komponenta_kategorie_nalezu",
+        "f_kategorie:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].komponenta_kategorie_nalezu",
+                
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
         "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
         "f_lokalita_zachovalost:lokalita_zachovalost",
@@ -638,6 +648,9 @@
         "f_katastr:samostatny_nalez_chranene_udaje.katastr.value",
         "f_obdobi:samostatny_nalez_obdobi",
         "f_druh_nalezu:samostatny_nalez_druh_nalezu",
+                
+        "f_kategorie:samostatny_nalez_kategorie_nalezu",
+                
         "f_specifikace:samostatny_nalez_specifikace",
         "f_nalezce:samostatny_nalez_nalezce",
         "f_nalezove_okolnosti:samostatny_nalez_okolnosti",

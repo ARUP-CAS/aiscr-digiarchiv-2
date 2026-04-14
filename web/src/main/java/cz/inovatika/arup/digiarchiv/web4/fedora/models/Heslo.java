@@ -67,19 +67,11 @@ public class Heslo implements FedoraModel {
 
 //      <xs:element name="hierarchie_vyse" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_vyseType"/> <!-- "{nadrazena_hesla}" -->
     @JacksonXmlProperty(localName = "hierarchie_vyse")
-    private List<HierarchieVyse> hierarchie_vyse;
-
-    public List<HierarchieVyse> getHierarchieVyse() {
-        return hierarchie_vyse;
-    }
+    private List<HierarchieVyse> hierarchie_vyse = new ArrayList();
 
 //      <xs:element name="hierarchie_nize" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_nizeType"/> <!-- "{podrazena_hesla}" -->
     @JacksonXmlProperty(localName = "hierarchie_nize")
-    private List<HierarchieNize> hierarchie_nize;
-
-    public List<HierarchieNize> getHierarchieNize() {
-        return hierarchie_nize;
-    }
+    private List<HierarchieNize> hierarchie_nize = new ArrayList();
 
 //  <xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
     @JacksonXmlProperty(localName = "historie")
@@ -113,6 +105,14 @@ public class Heslo implements FedoraModel {
         }
         if (zkratka_en != null) {
             idoc.setField("zkratka_en", zkratka_en.getValue());
+        }
+        
+        for (HierarchieVyse v : hierarchie_vyse) {
+            IndexUtils.addFieldNonRepeat(idoc, "hierarchie_vyse", v.heslo_nadrazene.getId());
+        }
+        
+        for (HierarchieNize v : hierarchie_nize) {
+            IndexUtils.addFieldNonRepeat(idoc, "hierarchie_nize", v.heslo_podrazene.getId());
         }
 
         IndexUtils.setDateStamp(idoc, ident_cely);

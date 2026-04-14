@@ -175,6 +175,11 @@ public class SamostatnyNalez implements FedoraModel {
         IndexUtils.addVocabField(idoc, fieldPrefix + "okolnosti", okolnosti);
         IndexUtils.addVocabField(idoc, fieldPrefix + "obdobi", obdobi);
         IndexUtils.addVocabField(idoc, fieldPrefix + "druh_nalezu", druh_nalezu);
+        if (druh_nalezu != null) {
+            IndexUtils.addFieldNonRepeat(idoc, fieldPrefix + "kategorie_nalezu", SolrSearcher.getNalezKategorie(druh_nalezu.getId()));
+        }
+        
+                
         IndexUtils.addVocabField(idoc, fieldPrefix + "specifikace", specifikace);
         IndexUtils.addVocabField(idoc, fieldPrefix + "predano_organizace", predano_organizace);
         IndexUtils.addRefField(idoc, fieldPrefix + "nalezce", nalezce);
