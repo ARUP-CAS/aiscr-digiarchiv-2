@@ -1,7 +1,11 @@
 {
   "solrhost": "http://localhost:8983/solr/",
   "isTestEnv": false,
+  "isPaused": false,
+  "pausedMsg": "<p>Work in progress</p><p>Come back later</p>",
   "OAI": {
+  "isPaused": false, 
+  "pausedMsg": "<p>OAI not available</p><p>Work in progress</p><p>Come back later</p>",
     "baseUrl": "https://api.aiscr.cz",
     "currentVersion": "2.2",
     "repositoryName": "Archaeological Map of the Czech Republic (AMCR)",
