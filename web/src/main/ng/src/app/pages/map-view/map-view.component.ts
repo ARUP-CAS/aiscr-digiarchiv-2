@@ -109,6 +109,7 @@ export class MapViewComponent {
 
   layersControl = { baseLayers: {}, overlays: {} };
   osmInfo = '<span aria-hidden="true"> | </span>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.';
+  cuzkInfo = '<a href="https://geoportal.cuzk.gov.cz/Dokumenty/Podminky.pdf" rel="nofollow">© ĆÚZK</a>';
   osm: any;
 
   info: string;
@@ -599,7 +600,7 @@ export class MapViewComponent {
 
   setAttribution() {
     this.map.attributionControl.removeAttribution(this.info);
-    this.info = this.service.getTranslation('map.desc.info') + (this.activeBaseLayerOSM ? this.osmInfo : '') + this.lfAttribution;
+    this.info = this.service.getTranslation('map.desc.info') + (this.activeBaseLayerOSM ? this.osmInfo : this.cuzkInfo) + this.lfAttribution;
     this.map.attributionControl.addAttribution(this.info);
     this.map.attributionControl.setPrefix(false);
   }
