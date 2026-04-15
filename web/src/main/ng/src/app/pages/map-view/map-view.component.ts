@@ -177,7 +177,7 @@ export class MapViewComponent {
     this.state.bodyClass = 'app-page-results';
     this.isBrowser = isPlatformBrowser(platformId);
 
-    this.osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    this.osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: this.config.mapOptions.maxZoom,
       maxNativeZoom: 19,
       className: 'osm',
