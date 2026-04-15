@@ -423,7 +423,7 @@ export class MapViewComponent {
     map.on('exitFullscreen', () => map.invalidateSize());
 
     map.on('baselayerchange', (e: any) => {
-      this.activeBaseLayerOSM = e.layer.options['name'] === 'osm';
+      this.activeBaseLayerOSM = e.layer.options['className'] === 'osm';
       this.setAttribution();
     });
 
