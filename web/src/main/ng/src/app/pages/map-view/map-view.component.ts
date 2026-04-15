@@ -108,7 +108,7 @@ export class MapViewComponent {
   };
 
   layersControl = { baseLayers: {}, overlays: {} };
-  osmInfo = '<span aria-hidden="true"> | </span>Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>. ';
+  osmInfo = '<span aria-hidden="true"> | </span>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.';
   osm: any;
 
   info: string;
@@ -177,10 +177,11 @@ export class MapViewComponent {
     this.state.bodyClass = 'app-page-results';
     this.isBrowser = isPlatformBrowser(platformId);
 
-    this.osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    this.osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: this.config.mapOptions.maxZoom,
       maxNativeZoom: 19,
-      className: 'osm'
+      className: 'osm',
+      referrerPolicy: 'strict-origin-when-cross-origin'
     });
     this.clusters = L.markerClusterGroup();
     this.markers = L.featureGroup();
