@@ -148,12 +148,12 @@
               </tbody>
             </table>
             <mat-accordion multi="true">
-              @for (dok_jednotka of _result.az_dokumentacni_jednotka; track dok_jednotka) {
+              @for (dok_jednotka of az_dokumentacni_jednotka(); track dok_jednotka) {
                 <app-dok-jednotka [result]="dok_jednotka" [pians]="_result.az_dj_pian" [adbs]="_result.az_dj_adb"></app-dok-jednotka>
               }
             </mat-accordion>
           </mat-expansion-panel>
-          @if (_result.az_ext_zdroj?.length > 0) {
+          @if (az_ext_zdroj().length > 0) {
             <mat-expansion-panel [expanded]="true">
               <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
                 <mat-panel-title>
@@ -161,7 +161,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="app-clean-mg">
-                @for (extZdroj of _result.az_ext_zdroj; track extZdroj) {
+                @for (extZdroj of az_ext_zdroj(); track extZdroj) {
                   <app-externi-zdroj [result]="extZdroj" ></app-externi-zdroj>
                 }
               </ul>
