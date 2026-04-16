@@ -129,7 +129,7 @@ export class StatsComponent implements OnInit {
   ips: { name: string, type: string, value: number }[];
   users: { name: string, type: string, value: number }[];
   entities: { name: string, type: string, value: number }[];
-  index_entities:  {field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[] = [];
+  index_entities = signal<{field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[]>([]);
   subs: any[] = [];
 
   datumod: Date;
@@ -165,10 +165,9 @@ export class StatsComponent implements OnInit {
       'uzivatel'
     ];
     
-  cores_info: any = {}; 
+  cores_info = signal<any>(null); 
   
-  ruian: { name: string, type: string, value: number }[];
-
+  ruian = signal<{ name: string, type: string, value: number }[]>([]);
 
   constructor(
     // @Inject(MAT_DATE_FORMATS) private dateFormatConfig: MultiDateFormat,
@@ -255,9 +254,9 @@ export class StatsComponent implements OnInit {
     p.show_deleted = this.show_deleted;
     p.only_visible = this.only_visible;
     this.service.indexStats(p as HttpParams).subscribe((resp: any) => {
-      this.index_entities = resp.index_entities;
-      this.cores_info = resp.cores;
-      this.ruian = resp.ruian;
+      this.index_entities.set([...resp.index_entities]);
+      this.cores_info.set(resp.cores); 
+      this.ruian.set([...resp.ruian]);
       this.loading.set(false);
     });
   }
@@ -293,8 +292,8 @@ export class StatsComponent implements OnInit {
       this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
 
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
-      this.cores_info = resp.cores;
-      this.ruian = resp.ruian;
+      // this.cores_info.set(resp.cores); 
+      // this.ruian.set([...resp.ruian]);
       this.loading.set(false);
     });
   }
