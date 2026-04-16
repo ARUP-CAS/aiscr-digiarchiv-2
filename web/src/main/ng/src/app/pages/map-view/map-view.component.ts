@@ -184,7 +184,18 @@ export class MapViewComponent {
       className: 'osm',
       referrerPolicy: 'strict-origin-when-cross-origin'
     });
-    this.clusters = L.markerClusterGroup();
+    this.clusters = L.markerClusterGroup({
+      chunkedLoading: true, chunkInterval: 10,
+      chunkProgress: (processed: number, total: number, elapsed: number, layersArray: any) => {
+        if (elapsed > 1000) {
+          // if it takes more than a second to load, display the progress bar:
+          this.loading.set(true);
+        }
+        this.loading.set(processed < total);
+        
+      }
+    });
+    
     this.markers = L.featureGroup();
 
     this.baseLayers = {
@@ -302,7 +313,7 @@ export class MapViewComponent {
       this.pianIdChanged = false;
       return;
     }
-    
+
     if (this.mapIdChanged) {
       this.state.mapResult.set(null);
     }
@@ -449,7 +460,6 @@ export class MapViewComponent {
         if (this.heatmapLayer) {
           this.map.removeLayer(this.heatmapLayer);
         }
-        
       }
     });
 
@@ -521,7 +531,6 @@ export class MapViewComponent {
   doZoom() {
     if (this.settingsBounds) {
       // maps bounds changed by code.
-      
       if (this.isDocumentHandle) {
         // Jsme v documentu, nepotrebujeme znovu nacist data
         return;
@@ -652,7 +661,7 @@ export class MapViewComponent {
     }
     this.loading.set(true);
     this.service.search(p as HttpParams).subscribe((resp: any) => {
-      this.loading.set(false);
+      //this.loading.set(false);
       this.state.numFound = resp.response.numFound;
       this.state.setFacets(resp);
       this.processResponse(resp);
@@ -680,9 +689,9 @@ export class MapViewComponent {
           } else {
             this.setClusterDataByPian(res.response.docs);
           }
-          setTimeout(() => {
-            this.loading.set(false);
-          }, 100)
+          // setTimeout(() => {
+          //   this.loading.set(false);
+          // }, 100)
 
         });
         break;
@@ -922,9 +931,9 @@ export class MapViewComponent {
         docIds: docIds,
         pian_chranene_udaje: pian.pian_chranene_udaje
       });
+
       // this.markersList.push(mrk);
-      mrk.addTo(this.markers);
-      
+      mrk.addTo(this.markers)
       this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, docIds);
     });
   }
@@ -944,13 +953,7 @@ export class MapViewComponent {
     const ids2 = ids.splice(0, idsSize);
     this.service.getIdAsChild(ids2.map(p => p.id), entity).subscribe((res: any) => {
       this.processMarkersResp(res.response.docs, ids2, isId);
-      // if (res.response.docs.length < idsSize) {
-      //   // To znamena konec
-
-      //   this.stopLoadingMarkers();
-      // } else {
       if (ids.length > 0) {
-        //this.loading.set(true);
         this.loadNextMarkers(ids, entity, isId)
       } else {
         this.stopLoadingMarkers();
@@ -995,7 +998,7 @@ export class MapViewComponent {
       }
     });
     this.loading.set(true);
-    this.loadingMarkers .set(true);
+    this.loadingMarkers.set(true);
     this.loadNextMarkers(pianIds, 'pian', isId);
   }
 
@@ -1028,7 +1031,7 @@ export class MapViewComponent {
       }
 
     });
-    this.loadingMarkers .set(false);
+    this.loadingMarkers.set(false);
     if (this.currentMapId && !this.state.mapResult()) {
       this.getMarkerById(this.currentMapId, false, false);
     }
@@ -1180,12 +1183,12 @@ export class MapViewComponent {
           this.setPianId(ident_cely, docIds);
         });
         layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
-        
+
         layer.addTo(this.markers);
-        if (this.mapIdChanged && this.currentMapId ) {
-           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
+        if (this.mapIdChanged && this.currentMapId) {
+          this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
         }
-        
+
       }
     } catch (e) {
       console.log(e)
