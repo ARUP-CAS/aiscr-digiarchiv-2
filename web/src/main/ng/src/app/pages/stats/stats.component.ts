@@ -29,7 +29,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import { LabelLayout } from "echarts/features";
 import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
-import 'moment/locale/cs';
+// import 'moment/locale/cs';
 import { MatCheckbox } from "@angular/material/checkbox";
 
 export class MultiDateFormat {
@@ -353,6 +353,40 @@ export class StatsComponent implements OnInit {
       text: title,
       left: 'center'
     };
+
+  }
+
+  exportStats(field: string, pivotField: string,  pivotValue: string) {
+    console.log(field,pivotField,  pivotValue);
+
+
+    this.loading.set(true);
+
+    const p: any = {};
+    p.page = 0;
+    p.show_deleted = this.show_deleted;
+    p.only_visible = this.only_visible;
+    p.field = field;
+    p.pivotField = pivotField;
+    p.pivotValue = pivotValue;
+    this.service.exportIndexStats(p as HttpParams).subscribe((resp: any) => {
+      
+      const blob: Blob = new Blob([resp], { type: 'text/plain' });
+      const fileName: string = `export_${field}${pivotField ? `_${pivotField}` : ''}${pivotValue!==null ? `_${pivotValue}` : ''}.csv`;
+      const objectUrl: string = URL.createObjectURL(blob);
+      const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+
+      a.href = objectUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+
+      document.body.removeChild(a);
+      URL.revokeObjectURL(objectUrl);
+
+      this.loading.set(false);
+    });
+
 
   }
 

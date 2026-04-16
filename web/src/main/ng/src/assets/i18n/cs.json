@@ -831,7 +831,8 @@
     "interval_day": "Den",
     "interval_week": "Týden",
     "interval_month": "Měsíc",
-    "id_count": "{{count}} z {{total}}"
+    "id_count": "{{count}} z {{total}}",
+    "export": "Stahovat CSV soubor"
   },
   "commonFacets": {
     "noevidence": "Negativní zjištění",

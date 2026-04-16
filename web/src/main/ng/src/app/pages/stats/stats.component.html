@@ -185,12 +185,18 @@
             <mat-checkbox [(ngModel)]="show_deleted" (ngModelChange)="getIndex()">{{ 'stats.show_deleted' | translate }}</mat-checkbox>
             <mat-checkbox [(ngModel)]="only_visible" (change)="getIndex()">{{ 'stats.only_visible' | translate }}</mat-checkbox>
             @for (f of index_entities; track $index) {
-              <div class="app-item">
-                <span><strong>{{ f.value }}</strong></span><span class="app-count">({{ f.count }})</span>
+              <div class="app-item app-va-center">
+                <span ><strong>{{ f.value }}</strong></span><span class="app-count">({{ f.count }}) </span>
+                <a (click)="exportStats(f.value, null, null)">
+                  <mat-icon class="app-small-icon ">open_in_new</mat-icon>
+                </a>
                 @if (f.pivot) {
                   @for (p of f.pivot; track $index) {
-                    <div class="app-item">
+                    <div class="app-item app-va-center">
                       &#160;&#160;<span>{{ 'stats.stav' | translate }}: {{ p.value }}</span><span class="app-count">({{ p.count }})</span>
+                      <a [title]="'stats.export' | translate" (click)="exportStats(f.value, p.field, p.value)" class="app-small-icon">
+                        <mat-icon class="app-small-icon">open_in_new</mat-icon>
+                      </a>
                     </div>
                   }
                 }
