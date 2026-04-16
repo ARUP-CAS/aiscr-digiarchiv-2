@@ -352,7 +352,10 @@ public class HandleServlet extends HttpServlet {
             case "samostatny_nalez":
 //-- A: samostatny_nalez/pristupnost = A AND samostatny_nalez/stav = 4
 //-- B: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user}
-//-- C: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} OR projekt/organizace = {user}.organizace
+//-- C: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) 
+//                OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} 
+//                OR projekt/organizace = {user}.organizace
+//                OR (samostatny_nalez_predano_organizace = {user}.organizace)
 //-- D-E: bez omezení
                 if (userPr.equalsIgnoreCase("A") && stav == 4) {
                     return true;
@@ -373,6 +376,10 @@ public class HandleServlet extends HttpServlet {
 
                 } else if (userPr.equalsIgnoreCase("C")) {
                     if (docPr.compareToIgnoreCase("C") <= 0 && stav == 4) {
+                        return true;
+                    }
+                    
+                    if (userOrg.equals(doc.optString("samostatny_nalez_predano_organizace"))) { 
                         return true;
                     }
 
@@ -430,7 +437,7 @@ public class HandleServlet extends HttpServlet {
         SolrClient client = getSolrClientSearch();
         SolrQuery query = new SolrQuery("*")
                 .addSort("datestamp", SolrQuery.ORDER.desc)
-                .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,soubor:[json],historie:[json]")
+                .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]")
                 .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"");
         JSONObject json = SolrSearcher.jsonSelect(client, "entities", query);
         if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
