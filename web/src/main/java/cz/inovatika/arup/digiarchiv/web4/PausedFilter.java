@@ -57,6 +57,11 @@ public class PausedFilter implements Filter {
             boolean paused = Options.getInstance().getBoolean("isPaused", false);
             String msg = Options.getInstance().getString("pausedMsg", "Work in progress");
             
+            
+            if (path != null && path.contains("config")) {
+                Options.resetInstance();
+            }
+            
             if (path != null && path.contains("/oai")) {
                 paused = Options.getInstance().getJSONObject("OAI").optBoolean("isPaused", false);
                 msg = Options.getInstance().getJSONObject("OAI").optString("pausedMsg", "Work in progress");
