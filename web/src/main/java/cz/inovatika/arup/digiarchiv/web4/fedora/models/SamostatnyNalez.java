@@ -306,7 +306,7 @@ public class SamostatnyNalez implements FedoraModel {
         }
 
         String projektId = (String) doc.getFieldValue("projekt");
-        String sn_predano_organizace = (String) doc.getFieldValue("organizace");
+        String sn_predano_organizace = (String) doc.getFirstValue("organizace");
 
         SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
                 .setFields("samostatny_nalez_projekt");
