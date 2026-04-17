@@ -53,14 +53,12 @@ public class PausedFilter implements Filter {
             HttpServletRequest req =(HttpServletRequest) request;
             
             String path = req.getPathInfo();
+            if (req.getRequestURI().contains("config")) {
+                Options.resetInstance();
+            }
             
             boolean paused = Options.getInstance().getBoolean("isPaused", false);
             String msg = Options.getInstance().getString("pausedMsg", "Work in progress");
-            
-            
-            if (path != null && path.contains("config")) {
-                Options.resetInstance();
-            }
             
             if (path != null && path.contains("/oai")) {
                 paused = Options.getInstance().getJSONObject("OAI").optBoolean("isPaused", false);
@@ -68,15 +66,13 @@ public class PausedFilter implements Filter {
             }
             
             if (paused) {
-            
-
                 HttpServletResponse resp =(HttpServletResponse) response;
                 resp.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE); 
-                resp.setHeader("WWW-Authenticate", "BASIC realm=\"Your realm\"");
-
-                resp.setContentType("what you need");
+                resp.setContentType("text/html;charset=UTF-8");
                 PrintWriter writer = resp.getWriter();
+                writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
                 writer.print(msg);
+                writer.print("</body></html>");
                 
             } else {
                 chain.doFilter(request, response);
