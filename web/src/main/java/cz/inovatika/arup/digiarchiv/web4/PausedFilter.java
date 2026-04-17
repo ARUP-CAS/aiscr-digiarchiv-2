@@ -4,6 +4,7 @@
  */
 package cz.inovatika.arup.digiarchiv.web4;
 
+import static cz.inovatika.arup.digiarchiv.web4.HandleServlet.LOGGER;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -17,6 +18,8 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,6 +27,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebFilter(filterName = "PausedFilter", urlPatterns = {"/*"})
 public class PausedFilter implements Filter {
+    
+    public static final Logger LOGGER = Logger.getLogger(PausedFilter.class.getName());
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -73,7 +78,7 @@ public class PausedFilter implements Filter {
                 writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
                 writer.print(msg);
                 writer.print("</body></html>");
-                
+                LOGGER.log(Level.INFO, "System is paused. {0}", req.getRequestURI()); 
             } else {
                 chain.doFilter(request, response);
             }

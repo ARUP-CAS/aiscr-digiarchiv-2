@@ -142,7 +142,7 @@ public class HandleServlet extends HttpServlet {
             new File(destDir + sb.toString()).mkdirs();
             return destDir + sb.toString();
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return null;
         }
     }
