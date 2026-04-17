@@ -2,10 +2,10 @@
   "solrhost": "http://localhost:8983/solr/",
   "isTestEnv": false,
   "isPaused": false,
-  "pausedMsg": "<p>Work in progress</p><p>Come back later</p>",
+  "pausedMsg": "<div style=\"display:flex;align-items:center;justify-content:center;min-height:60vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#f4f6f8;color:#333;text-align:center;\"><div style=\"max-width:500px;padding:40px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);\"><h1 style=\"margin-bottom:10px;font-size:32px;color:#2c3e50;\">503</h1><p><strong>Služba je dočasně nedostupná</strong></p><p>Probíhá plánovaná údržba. Zkuste to prosím znovu později.</p><p style=\"color:#666;font-size:14px;\">Děkujeme za pochopení</p><div style=\"margin:20px 0;height:1px;background:#e0e0e0;\"></div><p><strong>Service temporarily unavailable</strong></p><p>We are currently performing scheduled maintenance. Please try again later.</p><p style=\"color:#666;font-size:14px;\">Thank you for your understanding</p></div></div>",
   "OAI": {
   "isPaused": false, 
-  "pausedMsg": "<p>OAI not available</p><p>Work in progress</p><p>Come back later</p>",
+  "pausedMsg": "<div style=\"display:flex;align-items:center;justify-content:center;min-height:60vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#f4f6f8;color:#333;text-align:center;\"><div style=\"max-width:500px;padding:40px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);\"><h1 style=\"margin-bottom:10px;font-size:32px;color:#2c3e50;\">503</h1><p><strong>Služba je dočasně nedostupná</strong></p><p>Probíhá plánovaná údržba. Zkuste to prosím znovu později.</p><p style=\"color:#666;font-size:14px;\">Děkujeme za pochopení</p><div style=\"margin:20px 0;height:1px;background:#e0e0e0;\"></div><p><strong>Service temporarily unavailable</strong></p><p>We are currently performing scheduled maintenance. Please try again later.</p><p style=\"color:#666;font-size:14px;\">Thank you for your understanding</p></div></div>",
     "baseUrl": "https://api.aiscr.cz",
     "currentVersion": "2.2",
     "repositoryName": "Archaeological Map of the Czech Republic (AMCR)",
