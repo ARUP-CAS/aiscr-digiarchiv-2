@@ -366,8 +366,10 @@ export class StatsComponent implements OnInit {
     p.show_deleted = this.show_deleted;
     p.only_visible = this.only_visible;
     p.field = field;
-    p.pivotField = pivotField;
-    p.pivotValue = pivotValue;
+    if (pivotField) {
+      p.pivotField = pivotField;
+      p.pivotValue = pivotValue;
+    }
     this.service.exportIndexStats(p as HttpParams).subscribe((resp: any) => {
       
       const blob: Blob = new Blob([resp], { type: 'text/plain' });
