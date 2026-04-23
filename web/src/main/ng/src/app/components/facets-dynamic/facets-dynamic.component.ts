@@ -24,7 +24,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
-import 'moment/locale/cs';
+// import 'moment/locale/cs';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 
 
