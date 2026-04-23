@@ -356,8 +356,6 @@ export class StatsComponent implements OnInit {
   }
 
   exportStats(field: string, pivotField: string,  pivotValue: string) {
-    console.log(field,pivotField,  pivotValue);
-
 
     this.loading.set(true);
 
@@ -373,7 +371,13 @@ export class StatsComponent implements OnInit {
     this.service.exportIndexStats(p as HttpParams).subscribe((resp: any) => {
       
       const blob: Blob = new Blob([resp], { type: 'text/plain' });
-      const fileName: string = `export_${field}${pivotField ? `_${pivotField}` : ''}${pivotValue!==null ? `_${pivotValue}` : ''}.csv`;
+      const now = (new Date()).toISOString().substring(0,19);
+      let fileName: string;
+      if (field === 'ruian') {
+        fileName = `export_${pivotField}.${now}.csv`;
+      } else {
+        fileName = `export_${field}${pivotField ? `_${pivotField}` : ''}${pivotValue!==null ? `_${pivotValue}` : ''}.${now}.csv`;
+      }
       const objectUrl: string = URL.createObjectURL(blob);
       const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
 

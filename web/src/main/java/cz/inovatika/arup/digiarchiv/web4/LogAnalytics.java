@@ -201,15 +201,49 @@ public class LogAnalytics {
     }
     
     private static String exportEntities(HttpServletRequest request, SolrClient client) {
-        // request.getParameter("id"), request.getParameter("type")
+        String core = "entities";
+        String fl = "ident_cely,datestamp,indextime,is_deleted";
+        String fq = "entity:" + request.getParameter("field");
+        String field = request.getParameter("field");
+        boolean isEntity = false;
+        switch(field) {
+            case "ruian": {
+                core = "ruian";
+                fq = "entity:" + request.getParameter("pivotField");
+                break;
+            }
+            case "heslar": {
+                core = "heslar";
+                break;
+            }
+            case "organizations": {
+                core = "organizations";
+                fq = "";
+                break;
+            }
+            case "osoba": {
+                core = "osoba";
+                fq = "";
+                break;
+            }
+            case "uzivatel": {
+                core = "uzivatel";
+                fq = ""; 
+                break;
+            }
+            default: {
+                fl += ",searchable,pristupnost,stav";
+                isEntity = true;
+            }
+        }
         SolrQuery query = new SolrQuery()
                 .setQuery("*:*")
                 .setRows(1000000)
-                //.setSort("datestamp", SolrQuery.ORDER.asc)
-                .addFilterQuery("entity:" + request.getParameter("field"))
-                .setFields("entity,ident_cely,datestamp,searchable,indextime,pristupnost,stav,is_deleted");
+                //.setSort("datestamp", SolrQuery.ORDER.asc) 
+                .addFilterQuery(fq)
+                .setFields(fl);
 
-        if (request.getParameter("pivotField") != null) {
+        if (request.getParameter("pivotField") != null && isEntity) {
             query.addFilterQuery(request.getParameter("pivotField") + ":\"" + request.getParameter("pivotValue") + "\"");
         }
         
@@ -222,7 +256,7 @@ public class LogAnalytics {
             query.addFilterQuery("searchable:true");
         }
 
-        String ret = csv(query, client, "entities");
+        String ret = csv(query, client, core);
         return ret;
     }
 
