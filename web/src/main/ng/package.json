@@ -29,7 +29,7 @@
     "@ngu/carousel": "20.0.1",
     "@ngx-translate/core": "17.0.0",
     "@ngx-translate/http-loader": "17.0.0",
-    "axios": "1.15.0",
+    "axios": "1.15.2",
     "echarts": "6.0.0",
     "express": "5.2.1",
     "heatmap.js": "2.0.5",
