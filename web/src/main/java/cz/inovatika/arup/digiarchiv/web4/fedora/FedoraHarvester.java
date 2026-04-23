@@ -202,9 +202,9 @@ public class FedoraHarvester {
             Instant start = Instant.now();
             String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
             String lastDate = from;
-            if (lastDate == null) {
-                lastDate = readUpdateFile(); // 2023-08-01T00:00:00.000Z
-            }
+//            if (lastDate == null) {
+//                lastDate = readUpdateFile(); // 2023-08-01T00:00:00.000Z
+//            }
             if (lastDate == null) {
                 lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
             }
@@ -241,7 +241,7 @@ public class FedoraHarvester {
 
             writeRetToFile("update", start);
             writeStatusFile("update", STATUS_FINISHED);
-            if (until != null) {
+            if (until == null) {
                 writeUpdateFile(start);
             }
             if (total > 0) {
