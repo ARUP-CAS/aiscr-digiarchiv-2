@@ -831,7 +831,8 @@
     "interval_day": "Day",
     "interval_week": "Week",
     "interval_month": "Month",
-    "id_count": "{{count}} of {{total}}"
+    "id_count": "{{count}} of {{total}}",
+    "export": "Export as CSV file"
   },
   "commonFacets": {
     "noevidence": "Negative evidence",

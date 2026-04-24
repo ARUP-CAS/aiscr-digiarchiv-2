@@ -161,6 +161,7 @@
    <field name="samostatny_nalez_obdobi" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_presna_datace" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_druh_nalezu" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="samostatny_nalez_kategorie_nalezu" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_specifikace" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_pocet" type="text_general" indexed="true" stored="true" multiValued="false" /> 
    <field name="samostatny_nalez_poznamka" type="string" indexed="true" stored="true" multiValued="false" /> 

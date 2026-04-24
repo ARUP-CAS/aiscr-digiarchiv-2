@@ -800,6 +800,7 @@
        <str name="facet.field">f_typ_nalezu</str>
        <str name="facet.field">f_specifikace</str>
        <str name="facet.field">f_druh_nalezu</str>
+       <str name="facet.field">f_kategorie</str>
        <str name="facet.field">f_typ_vyzkumu</str>
        
        <str name="facet.field">dokument_kategorie_dokumentu</str>

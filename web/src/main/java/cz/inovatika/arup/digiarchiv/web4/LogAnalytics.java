@@ -131,9 +131,9 @@ public class LogAnalytics {
                 String fq = "indextime:[" + from + " TO " + to + "]";
                 query.addFilterQuery(fq);
             } else {
-                // query.setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR");
+                query.setParam("f.indextime.facet.range.start", "NOW/YEAR-1YEAR");
                 // prvni zaznam "2024-11-08T11:53:40.718Z"
-                query.setParam("f.indextime.facet.range.start", "2024-11-01T00:00:00Z");
+                // query.setParam("f.indextime.facet.range.start", "2024-11-01T00:00:00Z");
             }
 
             if (request.getParameter("entity") != null) {
@@ -142,24 +142,6 @@ public class LogAnalytics {
             }
 
             JSONObject ret = json(query, client, "logs");
-            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
-                JSONObject r = entities(request, client);
-                ret.put("index_entities", r.getJSONObject("facet_counts")
-                        .getJSONObject("facet_pivot").getJSONArray("entity,stav"));
-                ret.put("ruian", ruian(request, client).getJSONObject("facet_counts")
-                        .getJSONObject("facet_fields").getJSONArray("entity"));
-                JSONObject cores = new JSONObject();
-                cores.put("heslar", coreTotal(request, client, "heslar").getJSONObject("response")
-                        .getInt("numFound"));
-                cores.put("organizations", coreTotal(request, client, "organizations").getJSONObject("response")
-                        .getInt("numFound"));
-                cores.put("osoba", coreTotal(request, client, "osoba").getJSONObject("response")
-                        .getInt("numFound"));
-                cores.put("uzivatel", coreTotal(request, client, "uzivatel").getJSONObject("response")
-                        .getInt("numFound"));
-                ret.put("cores", cores);
-            //ret.put("cores", cores(request, client).getJSONObject("status"));
-            }
             return ret;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -217,6 +199,66 @@ public class LogAnalytics {
         JSONObject ret = json(query, client, "entities");
         return ret;
     }
+    
+    private static String exportEntities(HttpServletRequest request, SolrClient client) {
+        String core = "entities";
+        String fl = "ident_cely,datestamp,indextime,is_deleted";
+        String fq = "entity:" + request.getParameter("field");
+        String field = request.getParameter("field");
+        boolean isEntity = false;
+        switch(field) {
+            case "ruian": {
+                core = "ruian";
+                fq = "entity:" + request.getParameter("pivotField");
+                break;
+            }
+            case "heslar": {
+                core = "heslar";
+                break;
+            }
+            case "organizations": {
+                core = "organizations";
+                fq = "";
+                break;
+            }
+            case "osoba": {
+                core = "osoba";
+                fq = "";
+                break;
+            }
+            case "uzivatel": {
+                core = "uzivatel";
+                fq = ""; 
+                break;
+            }
+            default: {
+                fl += ",searchable,pristupnost,stav";
+                isEntity = true;
+            }
+        }
+        SolrQuery query = new SolrQuery()
+                .setQuery("*:*")
+                .setRows(1000000)
+                //.setSort("datestamp", SolrQuery.ORDER.asc) 
+                .addFilterQuery(fq)
+                .setFields(fl);
+
+        if (request.getParameter("pivotField") != null && isEntity) {
+            query.addFilterQuery(request.getParameter("pivotField") + ":\"" + request.getParameter("pivotValue") + "\"");
+        }
+        
+        if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
+            query.addFilterQuery("-is_deleted:true");
+        }
+
+        if (Boolean.parseBoolean(request.getParameter("only_visible"))) {
+            query.addFilterQuery("-is_deleted:true");
+            query.addFilterQuery("searchable:true");
+        }
+
+        String ret = csv(query, client, core);
+        return ret;
+    }
 
     private static JSONObject ruian(HttpServletRequest request, SolrClient client) {
         // request.getParameter("id"), request.getParameter("type")
@@ -255,6 +297,21 @@ public class LogAnalytics {
         JSONObject ret = json(query, client, core);
         return ret;
     }
+    
+    
+    
+    public static String exportStatsIndex(HttpServletRequest request) {
+        String ret = "";
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
+                ret = exportEntities(request, client);
+            }
+            return ret;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error exporting stats.", ex);
+            return ex.toString();
+        }
+    }
 
 
     private static JSONObject cores(HttpServletRequest request, SolrClient client) {
@@ -287,6 +344,23 @@ public class LogAnalytics {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return new JSONObject().put("error", ex);
+        }
+    }
+    
+    public static String csv(SolrQuery query, SolrClient client, String core) {
+        query.set("wt", "csv");
+        try {
+
+            QueryRequest req = new QueryRequest(query);
+            req.setPath("/select");
+
+            req.setResponseParser(new InputStreamResponseParser("csv"));
+            NamedList<Object> resp = client.request(req, core);
+            InputStream is = (InputStream) resp.get("stream");
+            return IOUtils.toString(is, "UTF-8");
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return ex.toString();
         }
     }
 

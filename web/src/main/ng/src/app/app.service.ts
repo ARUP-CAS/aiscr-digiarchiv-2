@@ -284,6 +284,16 @@ export class AppService {
   }
 
   /**
+   * Fired for export index stats in stats page
+   * @param params the params
+   */
+  exportIndexStats(params: HttpParams): Observable<string> {
+    this.state.hasError = false;
+    return this.get(`/search/export_stats_index`, params, 'text')
+      .pipe(map((response: any) => response));;
+  }
+
+  /**
    * Fired search in results page
    * @param params the params
    */

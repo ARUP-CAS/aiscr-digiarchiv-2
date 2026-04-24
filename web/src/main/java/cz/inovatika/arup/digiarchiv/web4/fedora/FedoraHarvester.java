@@ -202,9 +202,9 @@ public class FedoraHarvester {
             Instant start = Instant.now();
             String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix");
             String lastDate = from;
-            if (lastDate == null) {
-                lastDate = readUpdateFile(); // 2023-08-01T00:00:00.000Z
-            }
+//            if (lastDate == null) {
+//                lastDate = readUpdateFile(); // 2023-08-01T00:00:00.000Z
+//            }
             if (lastDate == null) {
                 lastDate = SolrSearcher.getLastDatestamp().toInstant().toString(); // 2023-08-01T00:00:00.000Z
             }
@@ -241,7 +241,7 @@ public class FedoraHarvester {
 
             writeRetToFile("update", start);
             writeStatusFile("update", STATUS_FINISHED);
-            if (until != null) {
+            if (until == null) {
                 writeUpdateFile(start);
             }
             if (total > 0) {
@@ -689,13 +689,13 @@ public class FedoraHarvester {
         sdoc.addField("is_deleted", fieldModifier);  // add the map as the field value
         // Find the core
         String core = null;
-        if (id.startsWith("U")) {
+        if (id.startsWith("U-")) {
             core = "uzivatel";
-        } else if (id.startsWith("ORG")) {
+        } else if (id.startsWith("ORG-")) {
             core = "organizations";
-        } else if (id.startsWith("OS")) {
+        } else if (id.startsWith("OS-")) {
             core = "osoba";
-        } else if (id.startsWith("HES")) {
+        } else if (id.startsWith("HES-")) {
             core = "heslar";
         } 
         
@@ -703,10 +703,11 @@ public class FedoraHarvester {
             if (!idocs.containsKey(core)) {
                 idocs.put(core, new ArrayList());
             }
-            idocs.get(core).add(idoc);
+            idocs.get(core).add(sdoc);
+        } else {
+            idocsEntities.add(sdoc);
         }
             
-        idocsEntities.add(sdoc);
         idocsOAI.add(sdoc);
 
     }

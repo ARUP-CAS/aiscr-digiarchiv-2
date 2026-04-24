@@ -29,7 +29,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import { LabelLayout } from "echarts/features";
 import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
-import 'moment/locale/cs';
+// import 'moment/locale/cs';
 import { MatCheckbox } from "@angular/material/checkbox";
 
 export class MultiDateFormat {
@@ -129,7 +129,7 @@ export class StatsComponent implements OnInit {
   ips: { name: string, type: string, value: number }[];
   users: { name: string, type: string, value: number }[];
   entities: { name: string, type: string, value: number }[];
-  index_entities:  {field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[] = [];
+  index_entities = signal<{field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[]>([]);
   subs: any[] = [];
 
   datumod: Date;
@@ -165,10 +165,9 @@ export class StatsComponent implements OnInit {
       'uzivatel'
     ];
     
-  cores_info: any = {}; 
+  cores_info = signal<any>(null); 
   
-  ruian: { name: string, type: string, value: number }[];
-
+  ruian = signal<{ name: string, type: string, value: number }[]>([]);
 
   constructor(
     // @Inject(MAT_DATE_FORMATS) private dateFormatConfig: MultiDateFormat,
@@ -188,11 +187,18 @@ export class StatsComponent implements OnInit {
 
     this.service.currentLang.subscribe(res => {
       this.search(this.route.snapshot.queryParams);
+      if (this.state.logged && (this.state.user.pristupnost === 'D' || this.state.user.pristupnost === 'E')) {
+        this.getIndex();
+      }
+      
       this.setTitle();
     });
 
     this.subs.push(this.route.queryParams.subscribe(val => {
       this.search(val);
+      if (this.state.logged && (this.state.user.pristupnost === 'D' || this.state.user.pristupnost === 'E')) {
+        this.getIndex();
+      }
     }));
   }
 
@@ -248,9 +254,9 @@ export class StatsComponent implements OnInit {
     p.show_deleted = this.show_deleted;
     p.only_visible = this.only_visible;
     this.service.indexStats(p as HttpParams).subscribe((resp: any) => {
-      this.index_entities = resp.index_entities;
-      this.cores_info = resp.cores;
-      this.ruian = resp.ruian;
+      this.index_entities.set([...resp.index_entities]);
+      this.cores_info.set(resp.cores); 
+      this.ruian.set([...resp.ruian]);
       this.loading.set(false);
     });
   }
@@ -286,9 +292,8 @@ export class StatsComponent implements OnInit {
       this.setGraphData(resp.facet_counts.facet_ranges.indextime.counts);
 
       this.totalIds = resp.stats.stats_fields.ident_cely.countDistinct;
-      this.index_entities = resp.index_entities;
-      this.cores_info = resp.cores;
-      this.ruian = resp.ruian;
+      // this.cores_info.set(resp.cores); 
+      // this.ruian.set([...resp.ruian]);
       this.loading.set(false);
     });
   }
@@ -347,6 +352,46 @@ export class StatsComponent implements OnInit {
       text: title,
       left: 'center'
     };
+
+  }
+
+  exportStats(field: string, pivotField: string,  pivotValue: string) {
+
+    this.loading.set(true);
+
+    const p: any = {};
+    p.page = 0;
+    p.show_deleted = this.show_deleted;
+    p.only_visible = this.only_visible;
+    p.field = field;
+    if (pivotField) {
+      p.pivotField = pivotField;
+      p.pivotValue = pivotValue;
+    }
+    this.service.exportIndexStats(p as HttpParams).subscribe((resp: any) => {
+      
+      const blob: Blob = new Blob([resp], { type: 'text/plain' });
+      const now = (new Date()).toISOString().substring(0,19);
+      let fileName: string;
+      if (field === 'ruian') {
+        fileName = `export_${pivotField}.${now}.csv`;
+      } else {
+        fileName = `export_${field}${pivotField ? `_${pivotField}` : ''}${pivotValue!==null ? `_${pivotValue}` : ''}.${now}.csv`;
+      }
+      const objectUrl: string = URL.createObjectURL(blob);
+      const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+
+      a.href = objectUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+
+      document.body.removeChild(a);
+      URL.revokeObjectURL(objectUrl);
+
+      this.loading.set(false);
+    });
+
 
   }
 

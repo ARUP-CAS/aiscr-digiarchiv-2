@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
+import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -69,6 +70,9 @@ public class Komponenta {
 
     @Field
     public String komponenta_typ_nalezu;
+    
+    @Field
+    public String komponenta_kategoria_nalezu;
 
     public void fillSolrFields(SolrInputDocument idoc, String prefix) {
         DocumentObjectBinder dob = new DocumentObjectBinder();
@@ -84,15 +88,18 @@ public class Komponenta {
             komponenta_typ_nalezu = IndexUtils.getTypNalezu("objekt");
         }
         for (NalezObjekt no : komponenta_nalez_objekt) {
+            no.setNalezKategorie();
             IndexUtils.addJSONField(kdoc, "komponenta_nalez_objekt", no);
             idoc.addField("nalez_dokumentu_pocet", no.pocet);
             idoc.addField("nalez_dokumentu_poznamka", no.poznamka);
+            
         }
         if (!komponenta_nalez_predmet.isEmpty()) {
             // komponenta_typ_nalezu = "predmet";
             komponenta_typ_nalezu = "HES-001126";
         }
         for (NalezPredmet np : komponenta_nalez_predmet) {
+            np.setNalezKategorie();
             IndexUtils.addJSONField(kdoc, "komponenta_nalez_predmet", np);
             idoc.addField("nalez_dokumentu_pocet", np.pocet);
             idoc.addField("nalez_dokumentu_poznamka", np.poznamka);

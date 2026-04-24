@@ -175,6 +175,11 @@ public class SamostatnyNalez implements FedoraModel {
         IndexUtils.addVocabField(idoc, fieldPrefix + "okolnosti", okolnosti);
         IndexUtils.addVocabField(idoc, fieldPrefix + "obdobi", obdobi);
         IndexUtils.addVocabField(idoc, fieldPrefix + "druh_nalezu", druh_nalezu);
+        if (druh_nalezu != null) {
+            IndexUtils.addFieldNonRepeat(idoc, fieldPrefix + "kategorie_nalezu", SolrSearcher.getNalezKategorie(druh_nalezu.getId()));
+        }
+        
+                
         IndexUtils.addVocabField(idoc, fieldPrefix + "specifikace", specifikace);
         IndexUtils.addVocabField(idoc, fieldPrefix + "predano_organizace", predano_organizace);
         IndexUtils.addRefField(idoc, fieldPrefix + "nalezce", nalezce);
@@ -290,7 +295,7 @@ public class SamostatnyNalez implements FedoraModel {
 
 //-- A: stav = 4
 //-- B: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
-//-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace)
+//-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)
 //-- D-E: bez omezení
         long st = (long) doc.getFieldValue("stav");
         String userPr = user.optString("pristupnost", "A");
@@ -301,6 +306,7 @@ public class SamostatnyNalez implements FedoraModel {
         }
 
         String projektId = (String) doc.getFieldValue("projekt");
+        String sn_predano_organizace = (String) doc.getFirstValue("organizace");
 
         SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
                 .setFields("samostatny_nalez_projekt");
@@ -324,7 +330,8 @@ public class SamostatnyNalez implements FedoraModel {
         } else if (userPr.equalsIgnoreCase("C")
                 && (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
                 && userId.equals((String) doc.getFieldValue("historie_uzivatel"))) 
-                || (userOrg.equals(projektOrg)))) {
+                || (userOrg.equals(projektOrg))
+                || (userOrg.equals(sn_predano_organizace)))) { 
             return true;
         } else if (userPr.equalsIgnoreCase("B")
                 && "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))

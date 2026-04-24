@@ -63,7 +63,6 @@ public class I18n {
   public void load(String locale) throws IOException, URISyntaxException, InterruptedException {
 
     String filename = InitServlet.asSafePath(locale) + ".json";
-
     File fdef = new File(InitServlet.DEFAULT_I18N_DIR + File.separator + filename);
     JSONObject def = new JSONObject();
     if (fdef.exists() && fdef.canRead()) {
@@ -91,7 +90,7 @@ public class I18n {
     //Load Solr keys
     //JSONObject heslarDoc = new JSONObject();
     String urlHeslar = opts.getString("solrhost", "http://localhost:8983/solr/")
-            + "heslar/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + locale;
+            + "heslar/export?q=*:*&fq=-is_deleted:true&wt=json&sort=ident_cely%20asc&fl=ident_cely," + locale;
 //    InputStream inputStream = RESTHelper.inputStream(urlHeslar);
 //    String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
 //    JSONArray docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");
@@ -106,7 +105,7 @@ public class I18n {
       field += "_en";
     } 
     String urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/")
-            + "organizations/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely," + field;
+            + "organizations/export?q=*:*&fq=-is_deleted:true&wt=json&sort=ident_cely%20asc&fl=ident_cely," + field;
     docs = getFromSolr(urlOrg);
     for (int i = 0; i < docs.length(); i++) {
       def.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
@@ -114,7 +113,7 @@ public class I18n {
     
     // Kraje
     urlOrg = opts.getString("solrhost", "http://localhost:8983/solr/") 
-            + "ruian/export?q=*:*&fq=entity:ruian_kraj&wt=json&sort=ident_cely%20asc&fl=ident_cely,nazev," + field;
+            + "ruian/export?q=*:*&fq=-is_deleted:true&fq=entity:ruian_kraj&wt=json&sort=ident_cely%20asc&fl=ident_cely,nazev," + field;
     docs = getFromSolr(urlOrg);
     for (int i = 0; i < docs.length(); i++) {
       def.put(docs.getJSONObject(i).getString("ident_cely"), docs.getJSONObject(i).optString(field));
@@ -123,7 +122,7 @@ public class I18n {
     
     //Pristupnost indexujeme zkratky
     String urlPr = opts.getString("solrhost", "http://localhost:8983/solr/")
-            + "heslar/select?q=nazev_heslare:pristupnost&wt=json&fl=ident_cely,zkratka," + locale;
+            + "heslar/select?q=nazev_heslare:pristupnost&fq=-is_deleted:true&wt=json&fl=ident_cely,zkratka," + locale;
 //    inputStream = RESTHelper.inputStream(urlPr);
 //    solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
 //    docs = new JSONObject(solrResp).getJSONObject("response").getJSONArray("docs");

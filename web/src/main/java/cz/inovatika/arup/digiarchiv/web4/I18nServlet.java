@@ -47,7 +47,7 @@ public class I18nServlet extends HttpServlet {
       
       out.print(js.toString());
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "Error", ex);
     } 
   }
 

@@ -1,5 +1,5 @@
 
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -72,6 +72,7 @@ export class LokalitaComponent extends Entity {
     });
   }
 
+  az_dokumentacni_jednotka = signal<any[]>([]);
   override getFullId() {
     this.service.getId(this._result.ident_cely).subscribe((res: any) => {
       this._result = res.response.docs[0];
@@ -85,10 +86,12 @@ export class LokalitaComponent extends Entity {
           }
         }
       });
+      this.az_dokumentacni_jednotka.set([...this._result.az_dokumentacni_jednotka]);
       this.hasDetail = true;
     });
   }
 
+  az_ext_zdroj = signal<any[]>([]);
   getExtZdroj() {
     if (this._result.az_ext_zdroj) {
       const orig = JSON.parse(JSON.stringify(this._result.az_ext_zdroj));
@@ -115,6 +118,7 @@ export class LokalitaComponent extends Entity {
             }
             return res;
           })
+          this.az_ext_zdroj.set([...this._result.az_ext_zdroj]);
         });
       }
     }

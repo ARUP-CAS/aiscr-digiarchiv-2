@@ -443,6 +443,38 @@ public class SolrSearcher {
             doc.getJSONArray(key).remove(j);
         }
     }
+    
+    
+
+    private static void initNalezKategorie() {
+        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            nalezKategorie = new HashMap<>();
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("nazev_heslare:objekt_druh OR nazev_heslare:predmet_druh")
+                    .setRows(100000)
+                    .setFields("ident_cely,hierarchie_vyse,hierarchie_nize");
+            JSONObject jo = json(client, "heslar", query);
+            JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject doc = ja.getJSONObject(i);
+                if (doc.has("hierarchie_vyse")) {
+                    nalezKategorie.put(doc.getString("ident_cely"), doc.getJSONArray("hierarchie_vyse").getString(0));
+                }
+                
+            }
+
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static synchronized String getNalezKategorie(String id) {
+        if (nalezKategorie == null) {
+            initNalezKategorie();
+        }
+        return nalezKategorie.get(id);
+    }
+    
 
 //    public static String getPristupnostBySoubor(String id, String field) {
 //        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
@@ -472,10 +504,11 @@ public class SolrSearcher {
 //    }
     private static Map<String, JSONObject> okresy = null;
     private static Map<String, JSONObject> katastry = null;
+    private static Map<String, String> nalezKategorie = null;
 
     private static void initOkresy() {
         try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            okresy = new HashMap();
+            okresy = new HashMap<>();
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_okres")
                     .setRows(100);
@@ -560,7 +593,7 @@ public class SolrSearcher {
 
     private static void initKatastry() {
         try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            katastry = new HashMap();
+            katastry = new HashMap<>();
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_katastr")
                     .setRows(100000)
@@ -577,7 +610,7 @@ public class SolrSearcher {
         }
     }
 
-    public static JSONObject getOkresNazevByKatastr(String ruian) {
+    public static synchronized JSONObject getOkresNazevByKatastr(String ruian) {
         if (katastry == null) {
             initKatastry();
         }

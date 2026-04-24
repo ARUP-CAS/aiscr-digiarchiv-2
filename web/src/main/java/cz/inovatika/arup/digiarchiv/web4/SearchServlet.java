@@ -547,6 +547,18 @@ public class SearchServlet extends HttpServlet {
                 return json.toString();
             }
         },
+        EXPORT_STATS_INDEX {
+
+            @Override
+            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+                try {
+                    response.setContentType("text/plain;charset=UTF-8");
+                    return LogAnalytics.exportStatsIndex(request);
+                } catch (Exception ex) {
+                    return ex.toString();
+                }
+            }
+        },
         MAPA {
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
