@@ -448,7 +448,7 @@ public class SolrSearcher {
 
     private static void initNalezKategorie() {
         try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            nalezKategorie = new HashMap();
+            nalezKategorie = new HashMap<>();
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("nazev_heslare:objekt_druh OR nazev_heslare:predmet_druh")
                     .setRows(100000)
@@ -508,7 +508,7 @@ public class SolrSearcher {
 
     private static void initOkresy() {
         try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            okresy = new HashMap();
+            okresy = new HashMap<>();
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_okres")
                     .setRows(100);
@@ -593,7 +593,7 @@ public class SolrSearcher {
 
     private static void initKatastry() {
         try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            katastry = new HashMap();
+            katastry = new HashMap<>();
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_katastr")
                     .setRows(100000)

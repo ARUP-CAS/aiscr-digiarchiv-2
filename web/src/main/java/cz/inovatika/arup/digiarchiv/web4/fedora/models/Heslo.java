@@ -67,15 +67,15 @@ public class Heslo implements FedoraModel {
 
 //      <xs:element name="hierarchie_vyse" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_vyseType"/> <!-- "{nadrazena_hesla}" -->
     @JacksonXmlProperty(localName = "hierarchie_vyse")
-    private List<HierarchieVyse> hierarchie_vyse = new ArrayList();
+    private List<HierarchieVyse> hierarchie_vyse = new ArrayList<>();
 
 //      <xs:element name="hierarchie_nize" minOccurs="0" maxOccurs="unbounded" type="amcr:hierarchie_nizeType"/> <!-- "{podrazena_hesla}" -->
     @JacksonXmlProperty(localName = "hierarchie_nize")
-    private List<HierarchieNize> hierarchie_nize = new ArrayList();
+    private List<HierarchieNize> hierarchie_nize = new ArrayList<>();
 
 //  <xs:element name="historie" minOccurs="0" maxOccurs="unbounded" type="amcr:historieType"/> <!-- "{historie.historie_set}" -->
     @JacksonXmlProperty(localName = "historie")
-    public List<Historie> historie = new ArrayList();
+    public List<Historie> historie = new ArrayList<>();
 
 //      <xs:element name="dokument_typ_material_rada" minOccurs="0" maxOccurs="unbounded" type="amcr:dokument_typ_material_radaType"/> <!-- "{dokument_typ_material_rada}" -->
 //      <xs:element name="datace" minOccurs="0" maxOccurs="1" type="amcr:dataceType"/> <!-- "{datace_obdobi}" -->

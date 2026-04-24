@@ -685,7 +685,7 @@ public class FedoraHarvester {
         sdoc.addField("ident_cely", id);
         sdoc.addField("datestamp", idoc.getFieldValue("datestamp"));
         Map<String, Object> fieldModifier = new HashMap<>(1);
-        fieldModifier.put("set", "true");
+        fieldModifier.put("set", true);
         sdoc.addField("is_deleted", fieldModifier);  // add the map as the field value
         // Find the core
         String core = null;
