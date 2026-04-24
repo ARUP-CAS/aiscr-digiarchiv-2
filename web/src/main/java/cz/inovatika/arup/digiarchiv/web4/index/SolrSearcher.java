@@ -468,7 +468,7 @@ public class SolrSearcher {
         }
     }
 
-    public static String getNalezKategorie(String id) {
+    public static synchronized String getNalezKategorie(String id) {
         if (nalezKategorie == null) {
             initNalezKategorie();
         }
@@ -610,7 +610,7 @@ public class SolrSearcher {
         }
     }
 
-    public static JSONObject getOkresNazevByKatastr(String ruian) {
+    public static synchronized JSONObject getOkresNazevByKatastr(String ruian) {
         if (katastry == null) {
             initKatastry();
         }
