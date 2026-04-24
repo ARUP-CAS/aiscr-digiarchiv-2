@@ -48,6 +48,7 @@ public class PausedFilter implements Filter {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
@@ -120,14 +121,9 @@ public class PausedFilter implements Filter {
     }
 
     /**
-     * Destroy method for this filter
-     */
-    public void destroy() {
-    }
-
-    /**
      * Init method for this filter
      */
+    @Override
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
@@ -163,24 +159,6 @@ public class PausedFilter implements Filter {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Failed to send generic error response.", ex);
         }
-    }
-    
-    public static String getStackTrace(Throwable t) {
-        String stackTrace = null;
-        try {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            t.printStackTrace(pw);
-            pw.close();
-            sw.close();
-            stackTrace = sw.getBuffer().toString();
-        } catch (Exception ex) {
-        }
-        return stackTrace;
-    }
-    
-    public void log(String msg) {
-        filterConfig.getServletContext().log(msg);
     }
     
 }
