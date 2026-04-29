@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, inject, LOCALE_ID, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,25 +10,27 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppService } from './app.service';
 import { AppState } from './app.state';
 import { AppConfiguration } from './app-configuration';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, registerLocaleData } from '@angular/common';
 
-import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS, provideNativeDateAdapter } from '@angular/material/core';
-import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorI18n } from './components/paginator/paginator-i18n';
 
+import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 
+import localeCs from '@angular/common/locales/cs';
+registerLocaleData(localeCs);
 
 export const MY_FORMATS = {
   parse: {
     // dateInput: 'YYYY-MM-DD',
-    dateInput: 'DD.MM.YYYY'
+    dateInput: 'dd.MM.yyyy'
   },
   display: {
-    dateInput: 'DD.MM.YYYY',
-    monthYearLabel: 'MMM YYYY',
+    dateInput: 'dd.MM.yyyy',
+    monthYearLabel: 'MMM yyyy',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
+    monthYearA11yLabel: 'MMMM yyyy',
   },
 };
 
@@ -45,9 +47,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
 
-    provideNativeDateAdapter(),
+    // provideNativeDateAdapter(),
+    // provideMomentDateAdapter(), 
     { provide: MAT_DATE_LOCALE, useValue: 'cs-CZ' },
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
+    provideLuxonDateAdapter(),
+    //{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
 
     provideTranslateService({

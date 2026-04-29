@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatDatepicker } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -11,7 +10,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { Moment } from 'moment';
 
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
@@ -23,58 +21,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
-// import 'moment/locale/cs';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
-
-
-export class MultiDateFormat {
-  value = '';
-  constructor() { }
-  get display() {
-    switch (this.value) {
-      case 'mm.yyyy':
-        return {
-          dateInput: 'MM.YYYY',
-          monthYearLabel: 'MM YYYY',
-          dateA11yLabel: 'MM.YYYY',
-          monthYearA11yLabel: 'MM YYYY',
-        };
-      case 'yyyy':
-        return {
-          dateInput: 'YYYY',
-          monthYearLabel: 'MM YYYY',
-          dateA11yLabel: 'MM.YYYY',
-          monthYearA11yLabel: 'MM YYYY',
-        };
-      default:
-        return {
-          dateInput: 'DD.MM.YYYY',
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        }
-    }
-
-  }
-  get parse() {
-    switch (this.value) {
-      case 'mm.yyyy':
-        return {
-          dateInput: 'MM.YYYY'
-        };
-      case 'yyyy':
-        return {
-          dateInput: 'YYYY'
-        };
-      default:
-        return {
-          dateInput: 'DD.MM.YYYY'
-        }
-    }
-
-  }
-}
 
 @Component({
   imports: [
@@ -84,7 +30,7 @@ export class MultiDateFormat {
     MatDatepickerModule, MatRadioModule, MatButtonModule, MatInputModule
   ],
   providers: [
-    provideMomentDateAdapter(), { provide: MAT_DATE_FORMATS, useClass: MultiDateFormat }],
+  ],
   selector: 'app-facets-dynamic',
   templateUrl: './facets-dynamic.component.html',
   styleUrls: ['./facets-dynamic.component.scss']
@@ -158,11 +104,24 @@ export class FacetsDynamicComponent implements OnInit {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
-  chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>, field: string) {
+  // chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>, field: string) {
+  //   console.log(normalizedYear, datepicker)
+  //   if (field === 'from') {
+  //     this.rokod = normalizedYear.year();
+  //   } else {
+  //     this.rokdo = normalizedYear.year();
+  //   }
+
+  //   this.rokoddate.setValue(new Date(this.rokoddate.value.setFullYear(this.rokod)));
+  //   this.rokdodate.setValue(new Date(this.rokdodate.value.setFullYear(this.rokdo)));
+  //   datepicker.close();
+  // }
+
+  chosenYearHandler(normalizedYear: any, datepicker: any, field: string) {
     if (field === 'from') {
-      this.rokod = normalizedYear.year();
+      this.rokod = normalizedYear.c.year;
     } else {
-      this.rokdo = normalizedYear.year();
+      this.rokdo = normalizedYear.c.year;
     }
 
     this.rokoddate.setValue(new Date(this.rokoddate.value.setFullYear(this.rokod)));

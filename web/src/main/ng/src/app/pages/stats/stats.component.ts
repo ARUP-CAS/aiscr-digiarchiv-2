@@ -17,7 +17,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
-import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 
 import * as echarts from 'echarts/core';
@@ -27,58 +26,8 @@ import { LineChart } from 'echarts/charts';
 import { TooltipComponent, GridComponent, TitleComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LabelLayout } from "echarts/features";
-import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
-// import 'moment/locale/cs';
 import { MatCheckbox } from "@angular/material/checkbox";
-
-export class MultiDateFormat {
-  value = '';
-  constructor() { }
-  get display() {
-    switch (this.value) {
-      case 'mm.yyyy':
-        return {
-          dateInput: 'MM.YYYY',
-          monthYearLabel: 'MM YYYY',
-          dateA11yLabel: 'MM.YYYY',
-          monthYearA11yLabel: 'MM YYYY',
-        };
-      case 'yyyy':
-        return {
-          dateInput: 'YYYY',
-          monthYearLabel: 'MM YYYY',
-          dateA11yLabel: 'MM.YYYY',
-          monthYearA11yLabel: 'MM YYYY',
-        };
-      default:
-        return {
-          dateInput: 'DD.MM.YYYY',
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        }
-    }
-
-  }
-  get parse() {
-    switch (this.value) {
-      case 'mm.yyyy':
-        return {
-          dateInput: 'MM.YYYY'
-        };
-      case 'yyyy':
-        return {
-          dateInput: 'YYYY'
-        };
-      default:
-        return {
-          dateInput: 'DD.MM.YYYY'
-        }
-    }
-
-  }
-}
 
 @Component({
   imports: [
@@ -100,15 +49,6 @@ export class MultiDateFormat {
 ],
   providers: [
     provideEchartsCore({ echarts }),
-    provideMomentDateAdapter(), 
-    
-    { provide: MAT_DATE_LOCALE, useValue: 'cs-CZ' },
-    // {
-    //   provide: DateAdapter,
-    //   useClass: MomentDateAdapter,
-    //   deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    // },
-    { provide: MAT_DATE_FORMATS, useClass: MultiDateFormat }
   ],
   selector: 'app-stats',
   templateUrl: './stats.component.html',
@@ -170,7 +110,6 @@ export class StatsComponent implements OnInit {
   ruian = signal<{ name: string, type: string, value: number }[]>([]);
 
   constructor(
-    // @Inject(MAT_DATE_FORMATS) private dateFormatConfig: MultiDateFormat,
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private router: Router,
