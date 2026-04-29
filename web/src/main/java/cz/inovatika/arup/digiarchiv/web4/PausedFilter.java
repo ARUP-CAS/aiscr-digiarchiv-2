@@ -52,7 +52,7 @@ public class PausedFilter implements Filter {
             HttpServletRequest req =(HttpServletRequest) request;
             
             String path = req.getPathInfo();
-            if (req.getRequestURI().contains("config")) {
+            if (req.getRequestURI().contains("config") && (request.getParameter("reset") != null)) {
                 Options.resetInstance();
             }
             
