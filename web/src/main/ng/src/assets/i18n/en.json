@@ -167,6 +167,7 @@
       "f_autor": "Document - author",
       "f_rada": "Document - series",
       "f_material_dokumentu": "Document - material",
+      "dokument_licence": "Document - licence",
       "f_typ_dokumentu_posudek": "Document - expert report type",
       "f_jazyk_dokumentu": "Document - language",
       "f_ulozeni_originalu": "Document - location of original",
