@@ -303,6 +303,7 @@
       "f_udalost_typ": "Dokument - typ dokumentované události",
       "adb_vyskovy_bod_typ": "ADB - typ výškového bodu",
       "f_kraj": "Kraj",
+      "f_kraj_rada": "Územní příslušnost",
       "commonFacets": "Obvyklé dotazy"
     }
   },
@@ -787,6 +788,10 @@
     "neuvedeno": "Neuvedeno",
     "pas": "Samostatné nálezy",
     "ddata3d": "3D modely"
+  },
+  "f_kraj_rada": {
+    "C": "Čechy",
+    "M": "Morava a Slezsko"
   },
 
 

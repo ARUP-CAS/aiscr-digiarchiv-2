@@ -303,6 +303,7 @@
       "f_udalost_typ": "Document - type of event",
       "adb_vyskovy_bod_typ": "ADP - type of elevation point",
       "f_kraj": "Region",
+      "f_kraj_rada": "Territorial jurisdiction",
       "commonFacets": "Common queries"
     }
   },
@@ -787,6 +788,10 @@
     "neuvedeno": "Unspecified",
     "pas": "Individual finds",
     "ddata3d": "3D models"
+  },
+  "f_kraj_rada": {
+    "C": "Czech",
+    "M": "Morava and Silesia"
   },
 
 

@@ -406,6 +406,7 @@
    <field name="f_organizace" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_okres" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_kraj" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_kraj_rada" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <field name="f_katastr" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_katastr_A" type="string" indexed="true" stored="true" multiValued="true" /> 

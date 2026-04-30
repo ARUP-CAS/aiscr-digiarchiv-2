@@ -66,7 +66,11 @@ public class NeidentAkce {
         IndexUtils.addRefField(kdoc, "okres", okres);
         IndexUtils.addRefField(kdoc, "katastr", katastr);
         IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres.getValue());
-        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(okres.getId()).getString("kraj")); 
+        
+        JSONObject okresIndex = SolrSearcher.getOkresByKod(okres.getId());
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okresIndex.optString("kraj"));
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okresIndex.getString("rada_id"));
+            
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), "A");
 
         for (Vocab v : vedouci) {
