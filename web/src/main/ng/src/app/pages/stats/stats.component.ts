@@ -79,10 +79,10 @@ export class StatsComponent implements OnInit {
 
   // insoType: string = 'O';
   // extType: string;
-  series: any = [];
+  series = signal<any[]>([]);
   legend: any = [];
 
-  chartOptions: EChartsOption = {
+  chartOptions = signal<EChartsOption>({
     tooltip: {},
     xAxis: {
     },
@@ -93,7 +93,7 @@ export class StatsComponent implements OnInit {
       bottom: 0,
     },
     color: ['rgb(0, 153, 168)', '#fac858'],
-  };
+  });
 
   show_deleted: boolean = false;
   only_visible: boolean = false;
@@ -247,7 +247,7 @@ export class StatsComponent implements OnInit {
   }
 
   setGraphData(counts: { name: string, type: string, value: number }[]) {
-    this.series = [];
+    const series = [];
     const xAxisData: string[] = [];
     const values: any[] = [];
     let maxY = 0;
@@ -256,7 +256,7 @@ export class StatsComponent implements OnInit {
       xAxisData.push(this.datePipe.transform(element.name, 'dd.MM.yyyy'));
       maxY = Math.max(element.value, maxY);
     });
-    this.series.push({
+    series.push({
       // source: 'source.name',
       name: this.service.getTranslation('stats.graphName'),
       field: 'indextime',
@@ -276,21 +276,30 @@ export class StatsComponent implements OnInit {
     });
     this.legend.push(this.service.getTranslation('stats.graphLegend'));
 
-    this.chartOptions.xAxis = {
-      data: xAxisData,
-      silent: false,
-      splitLine: {
-        show: true,
-      },
-    };
-    this.chartOptions.series = this.series;
-    this.chartOptions.legend = { data: this.legend, bottom: 0 };
+    this.series.set([...series]);
+    const title = this.service.getTranslation('stats.graphTitle.' + (this.interval ? this.interval : 'WEEK'));
 
-    let title = this.service.getTranslation('stats.graphTitle.' + (this.interval ? this.interval : 'WEEK'));
-    this.chartOptions.title = {
-      text: title,
-      left: 'center'
-    };
+    // this.chartOptions().title = {
+    //   text: title,
+    //   left: 'center'
+    // };
+    // this.chartOptions().series = this.series();
+    // this.chartOptions().legend = { data: this.legend, bottom: 0 };
+    this.chartOptions.update(co => ({...co, 
+      xAxis: {
+        data: xAxisData,
+        silent: false,
+        splitLine: {
+          show: true,
+        },
+      },
+      legend: { data: this.legend, bottom: 0 },
+      title: {
+        text: title,
+        left: 'center'
+      },
+      series: this.series()
+    }));
 
   }
 

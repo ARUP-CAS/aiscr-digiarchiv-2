@@ -46,8 +46,8 @@
           </mat-list>
         </div>
         <div class="app-right app-fxFlex">
-          @if (!loading() && series.length > 0) {
-            <div class="app-graph" echarts [options]="chartOptions"></div>
+          @if (!loading() && series().length > 0) {
+            <div class="app-graph" echarts [options]="chartOptions()"></div>
           }
         </div>
       </mat-card-content>
