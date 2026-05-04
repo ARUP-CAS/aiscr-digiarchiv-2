@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject, LOCALE_ID, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, inject, LOCALE_ID, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -15,6 +15,7 @@ import { DatePipe, DecimalPipe, registerLocaleData } from '@angular/common';
 import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorI18n } from './components/paginator/paginator-i18n';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha-2';
 
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 
@@ -68,6 +69,15 @@ export const appConfig: ApplicationConfig = {
       useFactory: createCustomMatPaginatorIntl
     },
 
+    //importProvidersFrom(RecaptchaV3Module),
+    //ReCaptchaV3Service,
+
+    importProvidersFrom(RecaptchaV3Module),
+    {
+      provide: RECAPTCHA_V3_SITE_KEY,
+      useValue: "6Ld-VoUdAAAAAHJBY8-h6I-h6Gf2nFwY-gY4ndre",
+    },
+    
     provideHttpClient(withFetch()),
     // { provide: APP_INITIALIZER, useFactory: (config: AppConfiguration) => () => config.load(), deps: [AppConfiguration], multi: true },
     TranslateService,

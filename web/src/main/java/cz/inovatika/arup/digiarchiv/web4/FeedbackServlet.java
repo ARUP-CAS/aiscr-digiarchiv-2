@@ -8,6 +8,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.mail.SimpleEmail;
 import org.json.JSONObject;
@@ -34,9 +39,31 @@ public class FeedbackServlet extends HttpServlet {
           throws ServletException, IOException {
       response.setContentType("application/json;charset=UTF-8");
       JSONObject js = new JSONObject(IOUtils.toString(request.getInputStream(), "UTF-8"));
+      
+      if (Boolean.parseBoolean(request.getParameter("verify"))) {
+          try {
+              response.getWriter().println(verify(js));
+          } catch (Exception ex) {
+              LOGGER.log(Level.SEVERE, null, ex);
+              response.getWriter().println(ex);
+          }
+          return;
+      }
       String systemMail = Options.getInstance().getJSONObject("mail").getString("destMail");
       sendMail(js.getString("name"), systemMail, js.getString("text"), js.getString("ident_cely"), js.getString("mail")).toString();
       response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text"), js.getString("ident_cely"), systemMail).toString());
+  }
+  
+  private String verify(JSONObject body) throws URISyntaxException, IOException, InterruptedException {
+      
+      String url = "https://recaptchaenterprise.googleapis.com/v1/projects/ais-cr-1684933938335/assessments?key=" + Options.getInstance().getString("reCaptchaApiKey");
+      HttpClient client = HttpClient.newHttpClient();
+      HttpRequest request = HttpRequest.newBuilder()
+            .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+            .uri(new URI(url))
+            .build();
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    return response.body(); 
   }
 
   private JSONObject sendMail(String fromName, String fromMail, String text, String ident_cely, String toMail) {
