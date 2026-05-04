@@ -11,7 +11,7 @@ import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module, ReCaptchaV3Service } from "ng-recaptcha-2";
+import { RECAPTCHA_SETTINGS, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module, ReCaptchaV3Service } from "ng-recaptcha-2";
 import { MatInputModule } from '@angular/material/input';
 import { environment } from '../../../environments/environment';
 
