@@ -22,9 +22,6 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <!-- <button (click)="executeRecaptchaV3()">Submit</button> -->
-  <!-- <button mat-button (click)="captchaRef.execute()">{{ 'captchaRef' }}</button>
-  <button mat-button (click)="captchaRef.reset()">{{ 'reset' }}</button> -->
   <button matButton="filled" [disabled]="(uname.errors || email.errors || !reCaptchaValid)" (click)="sendFeedback()">{{ 'dialog.button.Odeslat' | translate }}</button>
   <button mat-button mat-dialog-close cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>
 </div>

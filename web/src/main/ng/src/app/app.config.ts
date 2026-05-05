@@ -17,6 +17,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorI18n } from './components/paginator/paginator-i18n';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha-2';
+import { environment } from '../environments/environment';
 
 
 
@@ -71,7 +72,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(RecaptchaV3Module),
     {
       provide: RECAPTCHA_V3_SITE_KEY,
-      useValue: "6Ld-VoUdAAAAAHJBY8-h6I-h6Gf2nFwY-gY4ndre",
+      useValue: environment.recaptcha.siteKey,
     },
     
     provideHttpClient(withFetch()),

@@ -69,10 +69,8 @@ export class FeedbackDialogComponent implements OnInit {
   }
 
   public executeRecaptchaV3() {
-    console.log(`Recaptcha v3 execution requested...`);
     this.recaptchaV3Service.execute('myAction').subscribe(
       (token: any) => {
-        //console.log('Recaptcha v3 token', token);
         this.verify(token);
       },
       (error: any) => {
@@ -82,7 +80,6 @@ export class FeedbackDialogComponent implements OnInit {
   }
 
   verify(token: string) {
-    //console.log(`Verify token...`, token);
     this.service.verifyRecaptcha(token).subscribe((res: any) => {
       // console.log(res);
       if (res.tokenProperties?.valid && res.riskAnalysis?.score > this.config.reCaptchaScore) {
