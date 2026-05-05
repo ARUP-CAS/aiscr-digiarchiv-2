@@ -84,6 +84,10 @@ export class FeedbackDialogComponent implements OnInit {
       // console.log(res);
       if (res.tokenProperties?.valid && res.riskAnalysis?.score > this.config.reCaptchaScore) {
         this.reCaptchaValid = true;
+      } else {
+        setTimeout(() => {
+          this.executeRecaptchaV3(  );
+        }, 2000)
       }
 
     });
