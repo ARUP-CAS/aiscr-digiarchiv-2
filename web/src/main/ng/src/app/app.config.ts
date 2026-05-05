@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -16,6 +16,8 @@ import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS, provideNativeDateAdapte
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorI18n } from './components/paginator/paginator-i18n';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha-2';
+import { environment } from '../environments/environment';
 
 
 
@@ -64,6 +66,15 @@ export const appConfig: ApplicationConfig = {
       useFactory: createCustomMatPaginatorIntl
     },
 
+    //importProvidersFrom(RecaptchaV3Module),
+    //ReCaptchaV3Service,
+
+    importProvidersFrom(RecaptchaV3Module),
+    {
+      provide: RECAPTCHA_V3_SITE_KEY,
+      useValue: environment.recaptcha.siteKey,
+    },
+    
     provideHttpClient(withFetch()),
     // { provide: APP_INITIALIZER, useFactory: (config: AppConfiguration) => () => config.load(), deps: [AppConfiguration], multi: true },
     TranslateService,

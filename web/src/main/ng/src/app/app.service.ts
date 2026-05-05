@@ -459,9 +459,15 @@ export class AppService {
 
 
 
-  verifyRecaptcha(reCaptchaMsg: string) {
-    const url = '/feedback';
-    return this.post(url, { reCaptchaMsg, key: environment.recaptcha.siteKey });
+  verifyRecaptcha(token: string) {
+    const body = {
+      event: {
+        token: token,
+        siteKey: environment.recaptcha.siteKey,
+      }
+    }
+    const url = '/feedback?verify=true';
+    return this.post(url, body);
   }
   
   feedback(name: string, mail: string, text: string, ident_cely: string) {
