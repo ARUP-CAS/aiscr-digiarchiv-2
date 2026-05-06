@@ -334,7 +334,9 @@ public class SolrSearcher {
                     query.addFilterQuery(fq);
                 } else if (dateFacets.contains(field)) {
                     String[] parts = request.getParameter(field).split(":")[0].split(",");
-                    String fq = field + ":[" + parts[0] + "T00:00:00Z TO " + parts[1] + "T23:59:59Z]";
+                    String from = parts[0].equals("null") ? "*" : parts[0] + "T00:00:00Z";
+                    String to = parts[1].equals("null") ? "*" : parts[1] + "T23:59:59Z";
+                    String fq = field + ":[" + from + " TO " + to + "]";
                     query.addFilterQuery(fq);
                 } else if (numberFacets.contains(field)) {
                     String[] parts = request.getParameter(field).split(":")[0].split(",", 2);

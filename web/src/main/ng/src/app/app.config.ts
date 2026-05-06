@@ -26,7 +26,7 @@ registerLocaleData(localeCs);
 export const MY_FORMATS = {
   parse: {
     // dateInput: 'YYYY-MM-DD',
-    dateInput: 'dd.MM.yyyy'
+    dateInput: 'd.M.yyyy'
   },
   display: {
     dateInput: 'dd.MM.yyyy',

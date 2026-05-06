@@ -51,7 +51,9 @@
       @switch(filterField.type) {
         @case ('date') {
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="'facet.input.Datum od' | translate" (click)="datum_od.open()">
+            <mat-hint>dd.MM.yyyy</mat-hint>
+            <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="('facet.input.Datum od' | translate)"
+            title="(dd.MM.yyyy)" (click)="datum_od.open()">
             <mat-datepicker-toggle matSuffix [for]="datum_od"></mat-datepicker-toggle>
             <mat-datepicker #datum_od startView="multi-year"></mat-datepicker>
           </mat-form-field>

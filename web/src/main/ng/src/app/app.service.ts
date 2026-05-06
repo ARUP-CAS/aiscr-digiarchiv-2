@@ -589,6 +589,15 @@ export class AppService {
               if (filterField && filterField.type === 'number') {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
+              } else if (filterField && filterField.type === 'date') {
+                const oddo = parts[0].split(',');
+                if (oddo[0] === 'null') {
+                  display = this.getTranslation('to') + ' ' + oddo[1];
+                } else if (oddo[1] === 'null') {
+                  display = this.getTranslation('from') + ' ' + oddo[0];
+                } else {
+                  display = null;
+                }
               } else {
                 // display = this.getHeslarTranslation(parts[0], field);
                 display = null;
