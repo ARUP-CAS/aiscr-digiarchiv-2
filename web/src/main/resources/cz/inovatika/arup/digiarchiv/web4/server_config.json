@@ -101,6 +101,7 @@
   },
   "auth": "https://amcr.aiscr.cz/api/",
   "reCaptchaApiKey": "",
+  "reCaptchaProjectId": "",
   "fedora": {
     "api.point": "https://fedora.aiscr.cz/rest/AMCR/",
     "search.point": "https://fedora.aiscr.cz/rest/fcr:search?",

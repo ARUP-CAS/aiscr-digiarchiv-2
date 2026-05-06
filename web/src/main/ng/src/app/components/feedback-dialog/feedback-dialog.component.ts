@@ -1,6 +1,6 @@
 
 import { HttpClient } from '@angular/common/http';
-import { Component, importProvidersFrom, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -11,7 +11,7 @@ import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module, ReCaptchaV3Service } from "ng-recaptcha-2";
+import { RECAPTCHA_SETTINGS, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module, ReCaptchaV3Service } from "ng-recaptcha-2";
 import { MatInputModule } from '@angular/material/input';
 import { environment } from '../../../environments/environment';
 
@@ -69,10 +69,8 @@ export class FeedbackDialogComponent implements OnInit {
   }
 
   public executeRecaptchaV3() {
-    console.log(`Recaptcha v3 execution requested...`);
     this.recaptchaV3Service.execute('myAction').subscribe(
       (token: any) => {
-        //console.log('Recaptcha v3 token', token);
         this.verify(token);
       },
       (error: any) => {
@@ -82,11 +80,14 @@ export class FeedbackDialogComponent implements OnInit {
   }
 
   verify(token: string) {
-    //console.log(`Verify token...`, token);
     this.service.verifyRecaptcha(token).subscribe((res: any) => {
       // console.log(res);
       if (res.tokenProperties?.valid && res.riskAnalysis?.score > this.config.reCaptchaScore) {
         this.reCaptchaValid = true;
+      } else {
+        setTimeout(() => {
+          this.executeRecaptchaV3(  );
+        }, 2000)
       }
 
     });
