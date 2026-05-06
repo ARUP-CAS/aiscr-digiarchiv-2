@@ -46,8 +46,8 @@
           </mat-list>
         </div>
         <div class="app-right app-fxFlex">
-          @if (!loading() && series.length > 0) {
-            <div class="app-graph" echarts [options]="chartOptions"></div>
+          @if (!loading() && series().length > 0) {
+            <div class="app-graph" echarts [options]="chartOptions()"></div>
           }
         </div>
       </mat-card-content>
@@ -184,32 +184,44 @@
           <mat-card-content>
             <mat-checkbox [(ngModel)]="show_deleted" (ngModelChange)="getIndex()">{{ 'stats.show_deleted' | translate }}</mat-checkbox>
             <mat-checkbox [(ngModel)]="only_visible" (change)="getIndex()">{{ 'stats.only_visible' | translate }}</mat-checkbox>
-            @for (f of index_entities; track $index) {
-              <div class="app-item">
-                <span><strong>{{ f.value }}</strong></span><span class="app-count">({{ f.count }})</span>
+            @for (f of index_entities(); track $index) {
+              <div class="app-item app-va-center">
+                <span ><strong>{{ f.value }}</strong></span><span class="app-count">({{ f.count }}) </span>
+                <a (click)="exportStats(f.value, null, null)">
+                  <mat-icon class="app-small-icon ">open_in_new</mat-icon>
+                </a>
                 @if (f.pivot) {
                   @for (p of f.pivot; track $index) {
-                    <div class="app-item">
+                    <div class="app-item app-va-center">
                       &#160;&#160;<span>{{ 'stats.stav' | translate }}: {{ p.value }}</span><span class="app-count">({{ p.count }})</span>
+                      <a [title]="'stats.export' | translate" (click)="exportStats(f.value, p.field, p.value)" class="app-small-icon">
+                        <mat-icon class="app-small-icon">open_in_new</mat-icon>
+                      </a>
                     </div>
                   }
                 }
               </div>
             }
-            @if (ruian && !only_visible) {
+            @if (ruian().length > 0 && !only_visible) {
               <div class="app-item"> --- </div>
-              @for (c of ruian; track $index) {
+              @for (c of ruian(); track $index) {
                   <div class="app-item">
                     <span><strong>{{ c.name | translate }}</strong></span><span class="app-count">({{ c.value }})</span>
+                      <a [title]="'stats.export' | translate" (click)="exportStats('ruian', c.name, c.name)" class="app-small-icon">
+                        <mat-icon class="app-small-icon">open_in_new</mat-icon>
+                      </a>
                   </div>
               }
             }
-            @if (cores_info && !only_visible) {
+            @if (cores_info() && !only_visible) {
               <div class="app-item"> --- </div>
               @for (c of cores; track $index) {
-                @if (cores_info[c]) {
+                @if (cores_info()[c]) {
                   <div class="app-item">
-                    <span><strong>{{ c }}</strong></span><span class="app-count">({{ cores_info[c] }})</span>
+                    <span><strong>{{ c }}</strong></span><span class="app-count">({{ cores_info()[c] }})</span>
+                      <a [title]="'stats.export' | translate" (click)="exportStats(c, null, null)" class="app-small-icon">
+                        <mat-icon class="app-small-icon">open_in_new</mat-icon>
+                      </a>
                   </div>
                 }
               }

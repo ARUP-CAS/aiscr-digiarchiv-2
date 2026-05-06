@@ -113,6 +113,12 @@ public class DokumentCast {
                     for (int j = 0; j < f_kraj.length(); j++) {
                         IndexUtils.addFieldNonRepeat(idoc, "f_kraj", f_kraj.getString(j)); 
                     }
+                    if (pr_chranene_udaje.has("f_kraj_rada")) {
+                        JSONArray f_kraj_rada = pr_chranene_udaje.getJSONArray("f_kraj_rada");
+                        for (int j = 0; j < f_kraj.length(); j++) {
+                            IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", f_kraj_rada.getString(j)); 
+                        } 
+                    }
                     
 
                     JSONObject li = new JSONObject()
@@ -136,6 +142,7 @@ public class DokumentCast {
             
                             IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres); 
                             IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
+                            IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", kat.optString("rada_id"));
                             JSONObject li2 = new JSONObject()
                                     .put("pristupnost", doc.getString("pristupnost"))
                                     .put("katastr", k)
@@ -190,6 +197,7 @@ public class DokumentCast {
                         String kraj = kat.getString("kraj");
                         IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
                         IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
+                        IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", kat.optString("rada_id"));
                         JSONObject li2 = new JSONObject()
                                 .put("pristupnost", doc.getString("pristupnost"))
                                 .put("katastr", k)

@@ -800,11 +800,12 @@
        <str name="facet.field">f_typ_nalezu</str>
        <str name="facet.field">f_specifikace</str>
        <str name="facet.field">f_druh_nalezu</str>
+       <str name="facet.field">f_kategorie</str>
        <str name="facet.field">f_typ_vyzkumu</str>
        
        <str name="facet.field">dokument_kategorie_dokumentu</str>
        <str name="facet.field">f_typ_dokumentu</str>
-	   
+       <str name="facet.field">dokument_licence</str>
 	   
        <str name="facet.field">f_okres</str>
 	   
@@ -853,6 +854,7 @@
        <str name="facet.field">f_adb_typ_sondy</str>
        <str name="facet.field">f_adb_podnet</str>
        <str name="facet.field">f_kraj</str>
+       <str name="facet.field">f_kraj_rada</str>
 
      </lst>
   </initParams>

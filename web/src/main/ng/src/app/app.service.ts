@@ -284,6 +284,16 @@ export class AppService {
   }
 
   /**
+   * Fired for export index stats in stats page
+   * @param params the params
+   */
+  exportIndexStats(params: HttpParams): Observable<string> {
+    this.state.hasError = false;
+    return this.get(`/search/export_stats_index`, params, 'text')
+      .pipe(map((response: any) => response));;
+  }
+
+  /**
    * Fired search in results page
    * @param params the params
    */
@@ -449,9 +459,15 @@ export class AppService {
 
 
 
-  verifyRecaptcha(reCaptchaMsg: string) {
-    const url = '/feedback';
-    return this.post(url, { reCaptchaMsg, key: environment.recaptcha.siteKey });
+  verifyRecaptcha(token: string) {
+    const body = {
+      event: {
+        token: token,
+        siteKey: environment.recaptcha.siteKey,
+      }
+    }
+    const url = '/feedback?verify=true';
+    return this.post(url, body);
   }
   
   feedback(name: string, mail: string, text: string, ident_cely: string) {
@@ -573,6 +589,15 @@ export class AppService {
               if (filterField && filterField.type === 'number') {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
+              } else if (filterField && filterField.type === 'date') {
+                const oddo = parts[0].split(',');
+                if (oddo[0] === 'null') {
+                  display = this.getTranslation('to') + ' ' + oddo[1];
+                } else if (oddo[1] === 'null') {
+                  display = this.getTranslation('from') + ' ' + oddo[0];
+                } else {
+                  display = null;
+                }
               } else {
                 // display = this.getHeslarTranslation(parts[0], field);
                 display = null;

@@ -167,6 +167,7 @@
       "f_autor": "Document - author",
       "f_rada": "Document - series",
       "f_material_dokumentu": "Document - material",
+      "dokument_licence": "Document - licence",
       "f_typ_dokumentu_posudek": "Document - expert report type",
       "f_jazyk_dokumentu": "Document - language",
       "f_ulozeni_originalu": "Document - location of original",
@@ -303,6 +304,7 @@
       "f_udalost_typ": "Document - type of event",
       "adb_vyskovy_bod_typ": "ADP - type of elevation point",
       "f_kraj": "Region",
+      "f_kraj_rada": "Territorial jurisdiction",
       "commonFacets": "Common queries"
     }
   },
@@ -788,6 +790,10 @@
     "pas": "Individual finds",
     "ddata3d": "3D models"
   },
+  "f_kraj_rada": {
+    "C": "Czech",
+    "M": "Morava and Silesia"
+  },
 
 
   "alert": {
@@ -831,7 +837,8 @@
     "interval_day": "Day",
     "interval_week": "Week",
     "interval_month": "Month",
-    "id_count": "{{count}} of {{total}}"
+    "id_count": "{{count}} of {{total}}",
+    "export": "Export as CSV file"
   },
   "commonFacets": {
     "noevidence": "Negative evidence",

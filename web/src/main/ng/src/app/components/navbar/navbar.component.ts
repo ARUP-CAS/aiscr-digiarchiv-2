@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter, inject, signal } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { DOCUMENT } from '@angular/common';
@@ -14,6 +14,7 @@ import { AppState } from '../../app.state';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 
 @Component({
   imports: [
@@ -27,12 +28,15 @@ import { RouterModule } from '@angular/router';
     MatFormFieldModule,
     MatDialogModule,
     MatToolbarModule
-],
+  ],
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+
+  private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
+  private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
 
   // sidenav
   @Output() public sidenavToggle = new EventEmitter();
@@ -48,6 +52,14 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.service.currentLang.subscribe(res => {
+
+      this._locale.set(this.state.currentLang);
+      this._adapter.setLocale(this._locale());
+
+
+    });
 
     this.service.getLogged(true).subscribe((res: any) => {
       this.state.setLogged(res);

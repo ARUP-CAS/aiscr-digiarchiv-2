@@ -334,7 +334,9 @@ public class SolrSearcher {
                     query.addFilterQuery(fq);
                 } else if (dateFacets.contains(field)) {
                     String[] parts = request.getParameter(field).split(":")[0].split(",");
-                    String fq = field + ":[" + parts[0] + "T00:00:00Z TO " + parts[1] + "T23:59:59Z]";
+                    String from = parts[0].equals("null") ? "*" : parts[0] + "T00:00:00Z";
+                    String to = parts[1].equals("null") ? "*" : parts[1] + "T23:59:59Z";
+                    String fq = field + ":[" + from + " TO " + to + "]";
                     query.addFilterQuery(fq);
                 } else if (numberFacets.contains(field)) {
                     String[] parts = request.getParameter(field).split(":")[0].split(",", 2);
@@ -443,6 +445,38 @@ public class SolrSearcher {
             doc.getJSONArray(key).remove(j);
         }
     }
+    
+    
+
+    private static void initNalezKategorie() {
+        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            nalezKategorie = new HashMap<>();
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("nazev_heslare:objekt_druh OR nazev_heslare:predmet_druh")
+                    .setRows(100000)
+                    .setFields("ident_cely,hierarchie_vyse,hierarchie_nize");
+            JSONObject jo = json(client, "heslar", query);
+            JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject doc = ja.getJSONObject(i);
+                if (doc.has("hierarchie_vyse")) {
+                    nalezKategorie.put(doc.getString("ident_cely"), doc.getJSONArray("hierarchie_vyse").getString(0));
+                }
+                
+            }
+
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static synchronized String getNalezKategorie(String id) {
+        if (nalezKategorie == null) {
+            initNalezKategorie();
+        }
+        return nalezKategorie.get(id);
+    }
+    
 
 //    public static String getPristupnostBySoubor(String id, String field) {
 //        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
@@ -470,12 +504,42 @@ public class SolrSearcher {
 //            return null;
 //        }
 //    }
+    private static Map<String, JSONObject> kraje = null;
     private static Map<String, JSONObject> okresy = null;
     private static Map<String, JSONObject> katastry = null;
+    private static Map<String, String> nalezKategorie = null;
+
+    private static void initKraje() {
+        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            kraje = new HashMap<>();
+            SolrQuery query = new SolrQuery("*")
+                    .addFilterQuery("entity:ruian_kraj")
+                    .setRows(100);
+            //.setFields("kod, nazev");
+            JSONObject jo = json(client, "ruian", query);
+            JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject doc = ja.getJSONObject(i);
+                kraje.put(doc.getString("kod"), doc);
+            }
+
+        } catch (IOException | SolrServerException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static JSONObject getKrajRadaBykod(String kod) {
+
+        if (kraje == null) {
+            initKraje();
+        }
+        return kraje.get(kod);
+    }
+    
 
     private static void initOkresy() {
         try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            okresy = new HashMap();
+            okresy = new HashMap<>();
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_okres")
                     .setRows(100);
@@ -531,7 +595,7 @@ public class SolrSearcher {
         }
     }
 
-    public static JSONObject getKrajByOkres(String ruianOkresu) {
+    public static JSONObject getOkresByKod(String ruianOkresu) {
         if (okresy == null) {
             initOkresy();
         }
@@ -560,11 +624,11 @@ public class SolrSearcher {
 
     private static void initKatastry() {
         try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            katastry = new HashMap();
+            katastry = new HashMap<>();
             SolrQuery query = new SolrQuery("*")
                     .addFilterQuery("entity:ruian_katastr")
                     .setRows(100000)
-                    .setFields("kod, okres_nazev, kraj_nazev, kraj, okres");
+                    .setFields("kod, okres_nazev, kraj_nazev, kraj, okres, rada_id");
             JSONObject jo = json(client, "ruian", query);
             JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
             for (int i = 0; i < ja.length(); i++) {
@@ -577,7 +641,7 @@ public class SolrSearcher {
         }
     }
 
-    public static JSONObject getOkresNazevByKatastr(String ruian) {
+    public static synchronized JSONObject getOkresNazevByKatastr(String ruian) {
         if (katastry == null) {
             initKatastry();
         }
@@ -676,7 +740,7 @@ public class SolrSearcher {
             // JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
             for (int i = 0; i < docs.length(); i++) {
                 JSONObject doc = docs.getJSONObject(i);
-                int razeni = doc.getInt("razeni");
+                int razeni = doc.optInt("razeni", 0); 
                 if ("objekt_druh".equals(doc.getString("nazev_heslare"))) {
                     razeni += 4000;
                 }

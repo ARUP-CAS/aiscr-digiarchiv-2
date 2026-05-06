@@ -1,6 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web4.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 /**
  *
  * @author alberto
@@ -27,5 +28,10 @@ public class NalezObjekt {
     @JacksonXmlProperty(localName = "poznamka")
     public String poznamka;
     
+    public String komponenta_kategorie_nalezu;
+    
+    public void setNalezKategorie() {
+        komponenta_kategorie_nalezu = SolrSearcher.getNalezKategorie(druh.getId());
+    }
   
 }

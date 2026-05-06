@@ -39,6 +39,15 @@
       }
     }
   }
-}
-  
 
+  .leaflet-popup-content-wrapper {
+
+    .leaflet-popup-content {
+      width: max-content !important;
+
+      .app-popup-item {
+        cursor: pointer;
+      }
+    }
+  }
+}

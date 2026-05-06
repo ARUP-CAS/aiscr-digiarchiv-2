@@ -93,6 +93,7 @@
                     <a (click)="clickFacet(facetField.field, facet)" class="app-text">
                       @switch(facetField.field) {
                         @case ('dokument_kategorie_dokumentu') { {{ 'dokument_kategorie_dokumentu.' + facet.name | translate }} }
+                        @case ('f_kraj_rada') { {{ 'f_kraj_rada.' + facet.name | translate }} }
                           @default { {{ facet.name | translate }} }
                           }
                     </a>

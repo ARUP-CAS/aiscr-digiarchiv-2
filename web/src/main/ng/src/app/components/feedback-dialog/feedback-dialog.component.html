@@ -1,6 +1,5 @@
 <h1 mat-dialog-title>{{ 'dialog.title.Odeslat komentář' | translate }}</h1>
 <div mat-dialog-content class="app-pt-1">
-  <re-captcha id="recaptcha" name="recaptcha" size="invisible" #captchaRef (resolved)="resolved($event)" (error)="errored($event)" errorMode="handled"></re-captcha>
   <div class="app-fxLayout app-column app-gap-4">
     <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.desc.Jméno' | translate }}</mat-label>
@@ -23,6 +22,9 @@
   </div>
 </div>
 <div mat-dialog-actions>
+  <!-- <button (click)="executeRecaptchaV3()">Submit</button> -->
+  <!-- <button mat-button (click)="captchaRef.execute()">{{ 'captchaRef' }}</button>
+  <button mat-button (click)="captchaRef.reset()">{{ 'reset' }}</button> -->
   <button matButton="filled" [disabled]="(uname.errors || email.errors || !reCaptchaValid)" (click)="sendFeedback()">{{ 'dialog.button.Odeslat' | translate }}</button>
   <button mat-button mat-dialog-close cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>
 </div>

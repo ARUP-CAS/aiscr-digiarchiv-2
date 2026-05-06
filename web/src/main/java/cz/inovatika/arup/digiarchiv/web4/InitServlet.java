@@ -93,8 +93,7 @@ public class InitServlet extends HttpServlet {
             I18n.getInstance().getLocale("en");
             LOGGER.log(Level.FINE, "Locales loaded"); 
         } catch (IOException | JSONException |URISyntaxException | InterruptedException ex) {
-            LOGGER.log(Level.SEVERE, "Error loading locales");
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error loading locales", ex);
         }
 
         LOGGER.log(Level.INFO, "CONFIG_DIR is -> {0}", CONFIG_DIR);
