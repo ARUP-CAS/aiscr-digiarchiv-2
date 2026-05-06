@@ -416,6 +416,10 @@ export class MapViewComponent {
       measureControlTitleOff: this.service.getTranslation('map.desc.measureOff'), //  'Turn off PolylineMeasure'Title for the control going to be switched off
     }).addTo(map);
 
+    map.on('tooltipopen', () => {
+      this.map.closePopup();
+    });
+
     map.on('polylinemeasure:toggle', (e: any) => {
       this.usingMeasure = e.sttus
     });
