@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 //import * as L from 'leaflet'
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { geoJSON, LatLngBounds, Marker, tileLayer } from 'leaflet';
+import { geoJSON, LatLng, LatLngBounds, Marker, tileLayer } from 'leaflet';
 
 import 'leaflet.markercluster';
 // import { locationFilter } from './location';
@@ -49,6 +49,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 
 declare var L: any;
+
+import * as turf from '@turf/turf';
 
 export class AppMarkerOptions {
   id: string;
@@ -192,11 +194,12 @@ export class MapViewComponent {
           this.loading.set(true);
         }
         this.loading.set(processed < total);
-        
+
       }
     });
-    
+
     this.markers = L.featureGroup();
+    this.shapes = [];
 
     this.baseLayers = {
       "ČÚZK - Základní mapy ČR": this.cuzkZM,
@@ -369,6 +372,7 @@ export class MapViewComponent {
     this.markersList = [];
     this.markers.clearLayers();
     this.clusters.clearLayers();
+    this.shapes = [];
   }
 
   onMapReady(map: L.Map) {
@@ -428,6 +432,7 @@ export class MapViewComponent {
 
     this.markers.clearLayers();
     this.clusters.clearLayers();
+    this.shapes = [];
     // map.addLayer(this.markers);
 
     map.on('enterFullscreen', () => map.invalidateSize());
@@ -457,6 +462,7 @@ export class MapViewComponent {
         this.clusters.clearLayers();
         this.markers.clearLayers();
         this.markersList = [];
+        this.shapes = [];
         if (this.heatmapLayer) {
           this.map.removeLayer(this.heatmapLayer);
         }
@@ -713,12 +719,14 @@ export class MapViewComponent {
     if (count > this.config.mapOptions.docsForCluster) {
       this.showType = 'heat';
       this.markersList = [];
+      this.shapes = [];
       this.markers.clearLayers();
       this.clusters.clearLayers();
     } else if (count > this.maxNumMarkers && this.map.getZoom() < this.options.maxZoom) {
       this.showType = 'cluster';
       if (oldType !== this.showType) {
         this.markersList = [];
+        this.shapes = [];
         this.markers.clearLayers();
         this.clusters.clearLayers();
       }
@@ -729,6 +737,7 @@ export class MapViewComponent {
       this.showType = 'marker';
       if (oldType !== this.showType) {
         this.markersList = [];
+        this.shapes = [];
         this.markers.clearLayers();
         this.clusters.clearLayers();
       }
@@ -813,6 +822,7 @@ export class MapViewComponent {
     this.markers.clearLayers();
     this.clusters.clearLayers();
     this.clusterList = [];
+    this.shapes = [];
     docs.forEach(doc => {
       const coords: any = doc.loc_rpt[0].split(',');
       const mrk: any = L.marker([coords[0], coords[1]], { riseOnHover: true, icon: doc.typ === 'bod' ? this.iconPoint : this.icon });
@@ -831,6 +841,7 @@ export class MapViewComponent {
   setClusterDataByLoc(docs: any[]) {
     this.markers.clearLayers();
     this.markersList = [];
+    this.shapes = [];
     this.clusters.clearLayers();
     this.clusterList = [];
     docs.forEach(doc => {
@@ -1047,6 +1058,7 @@ export class MapViewComponent {
   setMarkers(docs: SolrDocument[], clean: boolean, isId: boolean) {
     if (clean) {
       this.markersList = [];
+      this.shapes = [];
       this.markers.clearLayers();
       this.clusters.clearLayers();
     }
@@ -1156,6 +1168,8 @@ export class MapViewComponent {
     return id + ' (' + this.service.getTranslation(presnost) + ') (' + t + ': ' + p + ')';
   }
 
+  shapes: any[] = [];
+  activeLayer: string;
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docIds: string[]) {
     if (this.config.mapOptions.skipShapePrecisionIds.includes(presnost)) {
       return;
@@ -1169,6 +1183,7 @@ export class MapViewComponent {
       const wJson = wkt.toJson();
       wJson.id = ident_cely;
       wJson.docIds = docIds;
+      wJson.presnost = presnost;
       if (wJson.type !== 'Point') {
         const layer = geoJSON((wJson as any), {
           style: () => ({
@@ -1180,10 +1195,56 @@ export class MapViewComponent {
         }
         );
         layer.on('click', (e) => {
-          this.setPianId(ident_cely, docIds);
+          const layers: any[] = this.detectMultipleShapes(e.latlng);
+          if (layers.length === 1) {
+            this.setPianId(ident_cely, docIds);
+          }
         });
-        layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
+        // layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
 
+        layer.on('mouseout', (e) => {
+          // this.map.closePopup();
+          this.activeLayer = null;
+        });
+
+        layer.on('mousemove', (e) => {
+          const layers: any[] = this.detectMultipleShapes(e.latlng);
+          const layersId = layers.map(la => la.geometry.id).join(' ')
+          if (this.activeLayer === layersId) {
+            return;
+          }
+          this.activeLayer = layersId;
+          let popupContent = document.createElement("div");
+          popupContent.className = 'app-leaflet-popup-content'
+          layers.forEach(la => {
+            const div = document.createElement("div");
+            div.className = 'app-popup-item'
+            div.innerHTML = this.popUpHtml(la.geometry.id, la.geometry.presnost, la.geometry.docIds);
+
+            div.onclick = (e) => {
+              this.setPianId(la.geometry.id, la.geometry.docIds);
+              setTimeout(() => {
+                this.map.closePopup();
+              }, 100)
+
+            }
+            popupContent.appendChild(div)
+            
+          });
+          
+          layer.unbindPopup();
+          const popup = L.popup({className: '.app-leaflet-popup-content'}).setContent(popupContent).setLatLng(e.latlng);
+          if (layers.length > 0) {
+            this.map.openPopup(popup);
+          }
+          // if (layers.length === 1) {
+          // } else if (layers.length > 1) {
+          //   layer.bindPopup(popupContent, { maxHeight: 400, className: 'app-leaflet-popup-content' });
+          //   //console.log(p)
+          // }
+        });
+
+        this.shapes.push(layer.getLayers()[0]);
         layer.addTo(this.markers);
         if (this.mapIdChanged && this.currentMapId) {
           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
@@ -1194,6 +1255,26 @@ export class MapViewComponent {
       console.log(e)
     }
 
+  }
+
+  detectMultipleShapes(latlng: LatLng): any[] {
+
+    const clickedPoint = turf.point([latlng.lng, latlng.lat]);
+    const layers: any[] = [];
+    this.shapes.forEach(sh => {
+      //console.log(sh)
+      if (sh.feature.geometry.type === 'Polygon') {
+        if (turf.booleanPointInPolygon(clickedPoint, sh.feature as any)) {
+          layers.push(sh.feature);
+        }
+      } else if (sh.feature.geometry.type === 'LineString') {
+        if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.00001 })) {
+          layers.push(sh.feature);
+        }
+      }
+    });
+    // console.log(layers.map(la => la.geometry.id));
+    return layers;
   }
 
   getMarkerById(docId: string, setResponse: boolean, zoom: boolean) {
