@@ -315,6 +315,13 @@ export class AppService {
     return this.get(`/search/id`, params);
   }
 
+  getHandle(id: string, shouldLog: boolean = true): Observable<any> {
+    const params: HttpParams = new HttpParams()
+      .set('id', id)
+      .set('shouldLog', shouldLog);
+    return this.get(`/search/handle`, params);
+  }
+
   logViewer(id: string, entity: string): Observable<any> {
     const params: HttpParams = new HttpParams()
       .set('id', id)

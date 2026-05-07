@@ -299,7 +299,7 @@ public class SamostatnyNalez implements FedoraModel {
 //-- B: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
 //-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)
 //-- D-E: bez omezení
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         String userId = user.optString("ident_cely", "A");
         String userOrg = "none";

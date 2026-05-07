@@ -106,7 +106,7 @@ public class PIAN implements FedoraModel {
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
 //-- A: stav = 2
 //-- B-E: bez omezení
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("B") >= 0) {
             return true;

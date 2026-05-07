@@ -354,7 +354,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
 
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("A") > 0 || st == 3) {
             return true;

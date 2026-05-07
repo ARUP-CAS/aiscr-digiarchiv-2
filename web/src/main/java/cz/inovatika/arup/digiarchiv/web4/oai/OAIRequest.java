@@ -609,7 +609,7 @@ public class OAIRequest {
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
             long stav = 0;
             if (doc.containsKey("stav")) {
-                stav = (long) doc.getFieldValue("stav");
+                stav = ((Number) doc.getFieldValue("stav")).longValue();
             }
             String ret = xml;
             if (ret.contains("<amcr:oznamovatel>")

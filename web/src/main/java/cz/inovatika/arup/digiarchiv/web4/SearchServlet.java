@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
+import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Uzivatel;
 import cz.inovatika.arup.digiarchiv.web4.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web4.index.EntitySearcher;
@@ -15,12 +16,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -142,6 +148,47 @@ public class SearchServlet extends HttpServlet {
                         return doc.toString();
                     } else {
                         return "{}";
+                    }
+
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                    json.put("error", ex);
+                }
+                return json.toString();
+            }
+        },
+        HANDLE {
+            @Override
+            String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+                JSONObject json = new JSONObject();
+                try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+
+                    SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+                            .setFacet(false);
+                    query.setFields("entity,is_deleted,searchable,stav"); 
+
+                    QueryResponse resp = client.query("entities", query);
+                    
+                    if (resp.getResults().getNumFound() == 0) {
+                        json.put("error", "not_found");
+                    } else {
+                        SolrDocument doc = resp.getResults().get(0);
+                        System.out.println(doc);
+                        boolean searchable = doc.containsKey("searchable") && (boolean)doc.get("searchable");
+                        if ((boolean)doc.get("is_deleted")) {
+                            json.put("error", "is_deleted");
+//                        } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
+//                            json.put("error", "not_searchable");
+                        } else {
+                            String entity = (String) doc.get("entity");
+                            FedoraModel fm = FedoraModel.getFedoraModel(entity);
+                            if (fm.filterOAI(LoginServlet.user(request), doc)) {
+                                return Actions.ID.doPerform(request, response);
+                            } else {
+                                json.put("error", "forbidden");
+                            }
+                        }
                     }
 
                 } catch (Exception ex) {
@@ -424,15 +471,15 @@ public class SearchServlet extends HttpServlet {
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
                 String entity = "" + request.getParameter("entity");
-                    if (request.getParameter("id") != null) {
-                        return Actions.ID.doPerform(request, response);
-                    }
-                    EntitySearcher searcher = SearchUtils.getSearcher(entity);
-                    if (searcher == null) {
-                        return new JSONObject().put("error", "unrecognized entity").toString();
-                    }
-                    //return searcher.export(request);
-                    return searcher.search(request).toString();
+                if (request.getParameter("id") != null) {
+                    return Actions.ID.doPerform(request, response);
+                }
+                EntitySearcher searcher = SearchUtils.getSearcher(entity);
+                if (searcher == null) {
+                    return new JSONObject().put("error", "unrecognized entity").toString();
+                }
+                //return searcher.export(request);
+                return searcher.search(request).toString();
             }
         },
         PIANS {
