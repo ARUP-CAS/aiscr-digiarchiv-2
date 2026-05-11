@@ -144,6 +144,8 @@ public class Projekt implements FedoraModel {
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String pr = SearchUtils.getPristupnostMap().get(pristupnost.getId());
             idoc.setField("pristupnost", pr);
+            IndexUtils.setDateStamp(idoc, ident_cely);
+            IndexUtils.setDateStampFromHistory(idoc, historie);
             boolean searchable = false;
             if (!projekt_dokument.isEmpty()) {
                 // check if related are searchable
@@ -197,8 +199,6 @@ public class Projekt implements FedoraModel {
                 }
             }
             idoc.setField("searchable", searchable);
-            IndexUtils.setDateStamp(idoc, ident_cely);
-            IndexUtils.setDateStampFromHistory(idoc, historie);
 
             IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
 

@@ -92,6 +92,9 @@ public class ArcheologickyZaznam implements FedoraModel {
         boolean searchable = stav == 3;
         idoc.setField("searchable", searchable);
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
+        IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
+        
         IndexUtils.addRefField(idoc, "az_okres", az_okres);
         IndexUtils.addRefField(idoc, "okres_sort", az_okres); 
         
@@ -113,13 +116,34 @@ public class ArcheologickyZaznam implements FedoraModel {
             IndexUtils.addRefField(idoc, "az_ext_zdroj", v.ext_zdroj);
         }
 
-        IndexUtils.setDateStamp(idoc, ident_cely);
-        IndexUtils.setDateStampFromHistory(idoc, historie);
+        if (az_akce != null) {
+            az_akce.fillSolrFields(idoc);
+        }
+
+        if (az_lokalita != null) {
+            az_lokalita.fillSolrFields(idoc);
+        }
+        
+        String pr = (String) idoc.getFieldValue("pristupnost");
+        List<String> prSufix = new ArrayList<>();
+
+        if ("A".compareTo(pr) >= 0) {
+            prSufix.add("A");
+        }
+        if ("B".compareTo(pr) >= 0) {
+            prSufix.add("B");
+        }
+        if ("C".compareTo(pr) >= 0) {
+            prSufix.add("C");
+        }
+        if ("D".compareTo(pr) >= 0) {
+            prSufix.add("D");
+        }
 
         List<SolrInputDocument> djdocs = new ArrayList<>();
         try {
             for (DokumentacniJednotka dj : az_dokumentacni_jednotka) {
-                SolrInputDocument djdoc = dj.createSolrDoc();
+                SolrInputDocument djdoc = dj.createSolrDoc(idoc);
                 djdocs.add(djdoc);
 
                 IndexUtils.addJSONField(idoc, "az_dokumentacni_jednotka", dj);
@@ -153,30 +177,6 @@ public class ArcheologickyZaznam implements FedoraModel {
             }
         } catch (Exception ex) {
             Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (az_akce != null) {
-            az_akce.fillSolrFields(idoc);
-        }
-
-        if (az_lokalita != null) {
-            az_lokalita.fillSolrFields(idoc);
-        }
-        
-        String pr = (String) idoc.getFieldValue("pristupnost");
-        List<String> prSufix = new ArrayList<>();
-
-        if ("A".compareTo(pr) >= 0) {
-            prSufix.add("A");
-        }
-        if ("B".compareTo(pr) >= 0) {
-            prSufix.add("B");
-        }
-        if ("C".compareTo(pr) >= 0) {
-            prSufix.add("C");
-        }
-        if ("D".compareTo(pr) >= 0) {
-            prSufix.add("D");
         }
         
         setFacets(idoc, prSufix);

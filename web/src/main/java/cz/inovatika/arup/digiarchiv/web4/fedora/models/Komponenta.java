@@ -74,11 +74,18 @@ public class Komponenta {
     @Field
     public String komponenta_kategoria_nalezu;
 
-    public void fillSolrFields(SolrInputDocument idoc, String prefix) {
+    public void fillSolrFields(SolrInputDocument rootDoc, SolrInputDocument parentDoc, String prefix) {
         DocumentObjectBinder dob = new DocumentObjectBinder();
         SolrInputDocument kdoc = dob.toSolrInputDocument(this);
         IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
         IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
+        kdoc.setField("datestamp", rootDoc.getFieldValue("datestamp"));
+        String pristupnost = (String) rootDoc.getFieldValue("pristupnost");
+        if (rootDoc.getFieldValue("entity").equals("dokument")) {
+            pristupnost ="A";
+        } 
+        kdoc.setField("pristupnost", pristupnost);
+        kdoc.setField("komponenta_zdroj", rootDoc.getFieldValue("entity"));
         for (Vocab a : komponenta_aktivita) {
             // IndexUtils.addVocabField(kdoc, "aktivita", a);
             IndexUtils.addJSONField(kdoc, "komponenta_aktivita", a);
@@ -90,8 +97,8 @@ public class Komponenta {
         for (NalezObjekt no : komponenta_nalez_objekt) {
             no.setNalezKategorie();
             IndexUtils.addJSONField(kdoc, "komponenta_nalez_objekt", no);
-            idoc.addField("nalez_dokumentu_pocet", no.pocet);
-            idoc.addField("nalez_dokumentu_poznamka", no.poznamka);
+            rootDoc.addField("nalez_dokumentu_pocet", no.pocet);
+            rootDoc.addField("nalez_dokumentu_poznamka", no.poznamka);
             
         }
         if (!komponenta_nalez_predmet.isEmpty()) {
@@ -101,23 +108,26 @@ public class Komponenta {
         for (NalezPredmet np : komponenta_nalez_predmet) {
             np.setNalezKategorie();
             IndexUtils.addJSONField(kdoc, "komponenta_nalez_predmet", np);
-            idoc.addField("nalez_dokumentu_pocet", np.pocet);
-            idoc.addField("nalez_dokumentu_poznamka", np.poznamka);
+            rootDoc.addField("nalez_dokumentu_pocet", np.pocet);
+            rootDoc.addField("nalez_dokumentu_poznamka", np.poznamka);
         }
         kdoc.setField("komponenta_typ_nalezu", komponenta_typ_nalezu);
 
-        idoc.addField("komponenta_dokument_ident_cely", ident_cely);
+        rootDoc.addField("komponenta_dokument_ident_cely", ident_cely);
         if (jistota != null) {
             komponenta_jistota = Boolean.parseBoolean(jistota);
             kdoc.addField("komponenta_jistota", komponenta_jistota);
-            idoc.addField("komponenta_dokument_jistota", komponenta_jistota);
-            idoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
+            rootDoc.addField("komponenta_dokument_jistota", komponenta_jistota);
+            rootDoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
         } else {
             komponenta_jistota = null;
             kdoc.removeField("komponenta_jistota");
         }
-        idoc.addField("komponenta_dokument_presna_datace", komponenta_presna_datace);
-        idoc.addField("komponenta_dokument_poznamka", komponenta_poznamka);
+        rootDoc.addField("komponenta_dokument_presna_datace", komponenta_presna_datace);
+        rootDoc.addField("komponenta_dokument_poznamka", komponenta_poznamka);
+        
+        //Add fields from parent and root documents
+        //IndexUtils.addSecuredFieldNonRepeat(kdoc, "f_katastr", hlavni_katastr.getValue(), pristupnost);
 
         try {
             IndexUtils.addAndCommit("entities", kdoc);

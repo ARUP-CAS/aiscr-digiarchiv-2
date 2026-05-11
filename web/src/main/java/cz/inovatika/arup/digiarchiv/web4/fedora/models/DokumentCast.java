@@ -65,11 +65,6 @@ public class DokumentCast {
         IndexUtils.addVocabField(idoc, "dokument_cast_projekt", projekt);
         IndexUtils.addFieldNonRepeat(idoc, "dokument_cast_ident_cely", ident_cely);
 
-        for (Komponenta k : komponenta) {
-            k.fillSolrFields(idoc, "dokument_cast");
-            IndexUtils.addJSONField(kdoc, "dokument_cast_komponenta", k);
-        }
-
         if (neident_akce != null) {
             neident_akce.fillSolrFields(idoc, pristupnost.toUpperCase());
             IndexUtils.addJSONField(kdoc, "dokument_cast_neident_akce", neident_akce);
@@ -84,6 +79,12 @@ public class DokumentCast {
         }
         // IndexUtils.addFieldNonRepeat(idoc, "location_info", location_info);
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
+
+        for (Komponenta k : komponenta) {
+            k.fillSolrFields(idoc, kdoc, "dokument_cast");
+            IndexUtils.addJSONField(kdoc, "dokument_cast_komponenta", k);
+            idoc.addField("komponenta_ident_cely", k.ident_cely);
+        }
 
         try {
             IndexUtils.addAndCommit("entities", kdoc);

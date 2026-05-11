@@ -60,16 +60,16 @@ public class DokumentacniJednotka {
     @JacksonXmlProperty(localName = "komponenta")
     public List<Komponenta> dj_komponenta = new ArrayList();
 
-    public SolrInputDocument createSolrDoc() {
+    public SolrInputDocument createSolrDoc(SolrInputDocument idoc) {
 
         DocumentObjectBinder dob = new DocumentObjectBinder();
-        SolrInputDocument idoc = dob.toSolrInputDocument(this);
+        SolrInputDocument djdoc = dob.toSolrInputDocument(this);
         //akceDoc.setField("entity", "akce");
         //akceDoc.setField("pristupnost", pristupnost);
-        IndexUtils.addVocabField(idoc, "dj_pian", dj_pian);
-        IndexUtils.addVocabField(idoc, "dj_typ", dj_typ);
+        IndexUtils.addVocabField(djdoc, "dj_pian", dj_pian);
+        IndexUtils.addVocabField(djdoc, "dj_typ", dj_typ);
 
-        IndexUtils.addVocabField(idoc, "dj_adb", adb_ident_cely);
+        IndexUtils.addVocabField(djdoc, "dj_adb", adb_ident_cely);
         if (adb_ident_cely != null) {
             try {
                 String xml = FedoraUtils.requestXml("record/" + adb_ident_cely.getId() + "/metadata");
@@ -83,34 +83,36 @@ public class DokumentacniJednotka {
         }
 
         for (Komponenta k : dj_komponenta) {
-            k.fillSolrFields(idoc, "dokumentacni_jednotka");
-            IndexUtils.addJSONField(idoc, "dj_komponenta", k);
+            k.fillSolrFields(idoc, djdoc, "dokumentacni_jednotka");
+            IndexUtils.addJSONField(djdoc, "dj_komponenta", k);
         }
 
-        return idoc;
+        return djdoc;
 
     }
 
-    public void fillSolrFields(SolrInputDocument idoc) {
-
-        // IndexUtils.addVocabField(idoc, "typ", typ);
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            idoc.addField("dokumentacni_jednotka", objectMapper.writeValueAsString(this));
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        IndexUtils.addFieldNonRepeat(idoc, "dj_ident_cely", ident_cely);
-        IndexUtils.addFieldNonRepeat(idoc, "dj_nazev", dj_nazev);
-        IndexUtils.addFieldNonRepeat(idoc, "dj_negativni_jednotka", dj_negativni_jednotka);
-        for (Komponenta k : dj_komponenta) {
-            k.fillSolrFields(idoc, "dokumentacni_jednotka");
-        }
-
-        if (dj_pian != null) {
-            // Add fields from PIAN.
-        }
-    }
+//    public void fillSolrFields(SolrInputDocument idoc) {
+//
+//        // IndexUtils.addVocabField(idoc, "typ", typ);
+//            DocumentObjectBinder dob = new DocumentObjectBinder();
+//            SolrInputDocument djdoc = dob.toSolrInputDocument(this);
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            idoc.addField("dokumentacni_jednotka", objectMapper.writeValueAsString(this));
+//        } catch (JsonProcessingException ex) {
+//            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        IndexUtils.addFieldNonRepeat(idoc, "dj_ident_cely", ident_cely);
+//        IndexUtils.addFieldNonRepeat(idoc, "dj_nazev", dj_nazev);
+//        IndexUtils.addFieldNonRepeat(idoc, "dj_negativni_jednotka", dj_negativni_jednotka);
+//        for (Komponenta k : dj_komponenta) {
+//            k.fillSolrFields(idoc, djdoc, "dokumentacni_jednotka");
+//        }
+//
+//        if (dj_pian != null) {
+//            // Add fields from PIAN.
+//        }
+//    }
 
 }
