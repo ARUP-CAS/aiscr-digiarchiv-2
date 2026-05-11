@@ -178,8 +178,8 @@ public class SearchServlet extends HttpServlet {
                         boolean searchable = doc.containsKey("searchable") && (boolean)doc.get("searchable");
                         if ((boolean)doc.get("is_deleted")) {
                             json.put("error", "is_deleted");
-//                        } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
-//                            json.put("error", "not_searchable");
+                        } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
+                            json.put("error", "not_searchable");
                         } else {
                             String entity = (String) doc.get("entity");
                             FedoraModel fm = FedoraModel.getFedoraModel(entity);

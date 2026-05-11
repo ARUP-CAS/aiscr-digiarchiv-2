@@ -638,7 +638,11 @@
       "error": "Chyba",
       "search_error": "Chyba při odeslání dotazu",
       "login_server_error": "Přihlášení není momentálně dostupné",
-      "invalid_page": "Neplatné číslo stránky"
+      "invalid_page": "Neplatné číslo stránky",
+      "document_not_found": "Záznam neexistuje",
+      "document_is_deleted": "Záznam byl smazán",
+      "document_not_searchable": "Záznam existuje, ale není dostupný bez přihlášení",
+      "document_forbidden": "Záznam není dostupný danému uživateli"
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
