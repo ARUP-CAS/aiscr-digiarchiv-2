@@ -71,6 +71,7 @@
   @if (panel) {
     <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
   }
+  <mat-icon class="app-entity-komponenta  " [matTooltip]="'entities.komponenta.title' | translate">{{ config.entityIcons["komponenta"] }}</mat-icon>
 {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} 
   <mat-icon>link</mat-icon></a> – <app-inline-filter [field]="'f_obdobi'" [value]="_result.komponenta_obdobi.id" [heslar]="'obdobi_druha'"></app-inline-filter>
 @if ((_result.hasOwnProperty('komponenta_jistota') && !_result['komponenta_jistota'])  || _result.komponenta_presna_datace) 
@@ -85,6 +86,28 @@
 </ng-template>
 
 <ng-template #contentTmpl>
+
+  <div class="app-metadata app-mb-4">
+      <div>
+        <label class="app-label">{{ 'card.desc.Původ' | translate }}:</label>&#160;
+        {{ 'entities.' + _result.komponenta_zdroj + '.title' | translate}} ({{ _result.komponenta_zdroj_ident_cely }})
+          <span class="app-pipe"></span>
+          @if (_result.pristupnost) {
+            <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
+            <app-inline-filter [isChild]="isChild()" [field]="'pristupnost'" [value]="_result.pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
+          }
+        </div>
+    </div>
+
+    @if (_result.komponenta_aktivita?.length > 0) {
+      <label class="app-label">{{ 'card.desc.Aktivita' | translate }}:</label>&#160;
+      &#160;@for (aktivita of _result.komponenta_aktivita; track aktivita.id; let last = $last) 
+      {<app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>@if (!last) {
+      <span>,&#160;</span>
+      }}
+      }
+
+  
 
   <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument()">
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader (click)="panelHeader._toggle()" [class.app-mb-n4]="_result.komponenta_poznamka === null">

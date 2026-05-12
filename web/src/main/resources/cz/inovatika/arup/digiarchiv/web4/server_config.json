@@ -680,6 +680,43 @@
         "soubor_nazev"
                 
       ]
+    },
+    "komponenta": {
+      "header": [
+        "komponenta_zdroj",
+        "komponenta_obdobi"
+      ],
+      "detail": [],
+      "facets": [
+        "f_katastr",
+        "f_okres",
+        "f_katastr",
+                "f_dj_typ", "f_vedouci", 
+        "f_typ_lokality:lokalita_typ_lokality",
+        "f_druh_lokality:lokalita_druh",
+        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
+        "f_obdobi:komponenta_obdobi.id",
+        "f_areal:komponenta_areal.id",
+        "f_aktivita:komponenta_aktivita.id",
+        "f_aktivita:komponenta_aktivita[*].id",
+        "f_typ_nalezu:komponenta_typ_nalezu",
+        "f_druh_nalezu:komponenta_nalez_objekt.druh.id",
+        "f_druh_nalezu:komponenta_nalez_objekt[*].druh.id",
+        "f_druh_nalezu:komponenta_nalez_predmet.druh.id",
+        "f_druh_nalezu:komponenta_nalez_predmet[*].druh.id",
+                
+        "f_kategorie:komponenta_kategorie_nalezu",
+        "f_kategorie:komponenta_kategorie_nalezu",
+                
+        "f_specifikace:komponenta_nalez_objekt.specifikace.id",
+        "f_specifikace:komponenta_nalez_objekt[*].specifikace.id",
+        "f_specifikace:komponenta_nalez_predmet.specifikace.id",
+        "f_specifikace:komponenta_nalez_predmet[*].specifikace.id"
+      ],
+      "full_text": [
+        "komponenta_zdroj",
+        "komponenta_presna_datace"
+      ]
     }
   }
 }

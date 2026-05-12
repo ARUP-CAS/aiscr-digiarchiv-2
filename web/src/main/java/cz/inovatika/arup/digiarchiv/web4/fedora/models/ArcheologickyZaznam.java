@@ -98,9 +98,9 @@ public class ArcheologickyZaznam implements FedoraModel {
         IndexUtils.addRefField(idoc, "az_okres", az_okres);
         IndexUtils.addRefField(idoc, "okres_sort", az_okres); 
         
-            JSONObject okres = SolrSearcher.getOkresByKod(az_okres.getId());
-            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okres.getString("kraj"));
-            IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okres.getString("rada_id"));
+        JSONObject okres = SolrSearcher.getOkresByKod(az_okres.getId());
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okres.getString("kraj"));
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okres.getString("rada_id"));
             
 
         if (az_chranene_udaje != null) {
@@ -215,20 +215,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
             }
         }
-
-//        Object[] fields = idoc.getFieldNames().toArray();
-//        for (Object f : fields) {
-//            String s = (String) f;
-//            if (s.contains(".")) {
-//                IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
-//            } else {
-//                if (indexFields.contains(s)) {
-//                    for (String sufix : prSufix) {
-//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
-//                    }
-//                }
-//            }
-//        }
+        
         for (String sufix : prSufix) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, az_chranene_udaje.hlavni_katastr);
             for (Vocab v : az_chranene_udaje.dalsi_katastr) {

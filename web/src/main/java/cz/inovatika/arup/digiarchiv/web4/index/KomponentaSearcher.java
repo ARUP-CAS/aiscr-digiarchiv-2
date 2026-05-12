@@ -1,6 +1,8 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
+import cz.inovatika.arup.digiarchiv.web4.Options;
+import static cz.inovatika.arup.digiarchiv.web4.index.LetSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -83,7 +86,35 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public JSONObject search(HttpServletRequest request) {
-        return new JSONObject();
+        JSONObject json = new JSONObject();
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery()
+                    .setFacet(true);
+            setQuery(request, query);
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            SolrSearcher.addFavorites(jo, client, request);
+            return jo;
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            json.put("error", ex);
+        }
+        return json;
+    }
+    
+    public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
+        SolrSearcher.addCommonParams(request, query, ENTITY);
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        query.set("df", "text_all_" + pristupnost);
+        query.setFields(getSearchFields(pristupnost));
+        if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+            SolrSearcher.addLocationParams(request, query);
+        }
+
+        SolrSearcher.addFilters(request, query, pristupnost);
     }
 
     @Override
