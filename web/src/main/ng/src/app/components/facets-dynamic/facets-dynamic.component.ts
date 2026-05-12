@@ -37,13 +37,13 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class FacetsDynamicComponent implements OnInit {
   rokoddate = new FormControl(new Date());
-  rokod: number;
+  rokod: number = null;
   rokdodate = new FormControl(new Date());
-  rokdo: number;
+  rokdo: number = null;
   datumod: Date;
   datumdo: Date;
-  numberod: number;
-  numberdo: number;
+  numberod: number = null;
+  numberdo: number = null;
   filterField: { type: string, field: string };
   filterFieldValue: string;
   filterOperator: string;
@@ -72,7 +72,28 @@ export class FacetsDynamicComponent implements OnInit {
     }
   }
 
+  canFilter(): boolean {
+    if (!this.filterField) {
+      return false;
+    }
+    switch (this.filterField.type) {
+      case 'date':
+        return !!this.datumod || !!this.datumdo;
+      case 'number':
+        return this.numberod !== null || this.numberdo !== null;
+      case 'rok':
+        return !!this.rokod || !!this.rokdo;
+      case 'boolean':
+        return true;
+      default:
+        return !!this.filterFieldValue;
+    }
+  }
+
   addFilter() {
+    if (!this.canFilter()) {
+      return;
+    }
     this.state.isFacetsCollapsed = true;
     document.getElementById('content-scroller').scrollTo(0, 0);
     const params: any = {};
