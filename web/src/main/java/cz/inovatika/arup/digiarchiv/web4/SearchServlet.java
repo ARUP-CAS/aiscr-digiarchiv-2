@@ -169,17 +169,24 @@ public class SearchServlet extends HttpServlet {
                     query.setFields("entity,is_deleted,searchable,stav"); 
 
                     QueryResponse resp = client.query("entities", query);
+                    System.out.println(resp);
                     
                     if (resp.getResults().getNumFound() == 0) {
                         json.put("error", "not_found");
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "not_found");
                     } else {
                         SolrDocument doc = resp.getResults().get(0);
                         System.out.println(doc);
                         boolean searchable = doc.containsKey("searchable") && (boolean)doc.get("searchable");
                         if ((boolean)doc.get("is_deleted")) {
-                            json.put("error", "is_deleted");
+                            json.put("error", "is_deleted"); 
+                            response.setStatus(HttpServletResponse.SC_GONE);
+                            response.sendError(HttpServletResponse.SC_GONE, "is_deleted");
                         } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
                             json.put("error", "not_searchable");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "not_searchable");
                         } else {
                             String entity = (String) doc.get("entity");
                             FedoraModel fm = FedoraModel.getFedoraModel(entity);
@@ -187,7 +194,9 @@ public class SearchServlet extends HttpServlet {
                                 return Actions.ID.doPerform(request, response);
                             } else {
                                 json.put("error", "forbidden");
-                            }
+                                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "forbidden");
+                            }  
                         }
                     }
 

@@ -97,12 +97,12 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.state.imagesLoaded = 0;
     this.state.hasError = false;
     this.result.set(null);
-    this.service.getHandle(id, true).subscribe((resp: SolrResponse) => {
+    this.service.getHandle(id, true).subscribe((resp: any) => {
       this.state.loading.set(false);
       this.loading.set(false);
-      if (resp.error) {
+      if (resp.error || resp.status != 200) {
         this.state.hasError = true;
-        this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.document_' + resp.error);
+        this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.document_' + resp.status);
         return;
       }
       this.state.setSearchResponse(resp);

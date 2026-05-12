@@ -639,10 +639,10 @@
       "search_error": "Error searching",
       "login_server_error": "Login not available. Try later.",
       "invalid_page": "Invalid page",
-      "document_not_found": "Document not found",
-      "document_is_deleted": "Document was deleted",
-      "document_not_searchable": "Document dont reachable without login",
-      "document_forbidden": "Document forbidden"
+      "document_404": "Document not found",
+      "document_410": "Document was deleted",
+      "document_401": "Document dont reachable without login",
+      "document_403": "Document forbidden"
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
