@@ -38,6 +38,7 @@
     "shape": {
       "color": "#222",
       "fillColor": "#00f",
+      "fillColorOver": "#a5cf0c",
       "weight": 2,
       "fillOpacity": 0.3
     },

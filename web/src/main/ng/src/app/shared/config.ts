@@ -55,6 +55,7 @@ export class Configuration {
     shape: {
       color: string,
       fillColor: string,
+      fillColorOver: string,
       weight: number,
       fillOpacity: number
     },

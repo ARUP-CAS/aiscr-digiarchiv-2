@@ -86,7 +86,7 @@
 </ng-template>
 
 <ng-template #contentTmpl>
-
+  @if(!isChild()) {
   <div class="app-metadata app-mb-4">
       <div>
         <label class="app-label">{{ 'card.desc.Původ' | translate }}:</label>&#160;
@@ -106,7 +106,7 @@
       <span>,&#160;</span>
       }}
       }
-
+  }
   
 
   <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument()">

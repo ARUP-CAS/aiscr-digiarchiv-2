@@ -1213,14 +1213,15 @@ export class MapViewComponent {
 
         layer.on('mousemove', (e) => {
           const layers: any[] = this.detectMultipleShapes(e.latlng);
-          const layersId = layers.map(la => la.geometry.id).join(' ')
+          const layersId = layers.map(la => la.getLayers()[0].feature.geometry.id).join(' ')
           if (this.activeLayer === layersId) {
             return;
           }
           this.activeLayer = layersId;
           let popupContent = document.createElement("div");
           popupContent.className = 'app-leaflet-popup-content'
-          layers.forEach(la => {
+          layers.forEach(geoLa => {
+            const la = geoLa.getLayers()[0].feature;
             const div = document.createElement("div");
             div.className = 'app-popup-item'
             div.innerHTML = this.popUpHtml(la.geometry.id, la.geometry.presnost, la.geometry.docIds);
@@ -1231,7 +1232,23 @@ export class MapViewComponent {
                 this.map.closePopup();
               }, 100)
 
-            }
+            };
+
+            div.onmouseover = (e) => {
+              geoLa.setStyle({
+                  color: this.config.mapOptions.shape.fillColorOver,
+                  fillColor: this.config.mapOptions.shape.fillColorOver
+              });
+              geoLa.brinToFront();
+            };
+
+            div.onmouseout = (e) => {
+              geoLa.setStyle({
+                  color: this.config.mapOptions.shape.color,
+                  fillColor: this.config.mapOptions.shape.fillColor
+              });
+            };
+            
             popupContent.appendChild(div)
             
           });
@@ -1248,7 +1265,7 @@ export class MapViewComponent {
           // }
         });
 
-        this.shapes.push(layer.getLayers()[0]);
+        this.shapes.push(layer);
         layer.addTo(this.markers);
         if (this.mapIdChanged && this.currentMapId) {
           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
@@ -1265,19 +1282,22 @@ export class MapViewComponent {
 
     const clickedPoint = turf.point([latlng.lng, latlng.lat]);
     const layers: any[] = [];
-    this.shapes.forEach(sh => {
-      //console.log(sh)
+    this.shapes.forEach(layer => {
+      const sh = layer.getLayers()[0];
       if (sh.feature.geometry.type === 'Polygon') {
         if (turf.booleanPointInPolygon(clickedPoint, sh.feature as any)) {
-          layers.push(sh.feature);
+          layers.push(layer);
         }
       } else if (sh.feature.geometry.type === 'LineString') {
-        if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.00001 })) {
-          layers.push(sh.feature);
+        if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.0000001 })) {
+          layers.push(layer);
         }
       }
+
+      // if (layer.getBounds().contains(latlng)) {
+      //   layers.push(layer);
+      // }
     });
-    // console.log(layers.map(la => la.geometry.id));
     return layers;
   }
 
