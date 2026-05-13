@@ -156,7 +156,9 @@ public class Komponenta {
         if ("D".compareTo(pristupnost) >= 0) {
             prSufix.add("D");
         }
+        setFieldsFromSelf(kdoc, prSufix);
         setFieldsFromRoot(kdoc, rootDoc, prSufix);
+        setFieldsFromParent(kdoc, parentDoc, prSufix);
         setFullText(kdoc);
 
         for (String sufix : SolrSearcher.prSufixAll) {
@@ -170,37 +172,68 @@ public class Komponenta {
             Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
         }
     }
-
-    private void setFieldsFromRoot(SolrInputDocument idoc, SolrInputDocument rootDoc, List<String> prSufix) {
-
-        /**
-         *
-         * Přístupnost Organizace Kraj Okres Katastr Komponenta - * Nález - *
-         * Akce/lokalita - typ dokumentační jednotky Akce/projekt - vedoucí Akce
-         * - typ Lokalita - * Dokument - kategorie Dokument - řada Dokument -
-         * typ Dokument - dokumentované tvary (příznaky) ADB - * PIAN - * Sam.
-         * nález - nálezce Sam. nález - okolnosti
-         */
-        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONArray("facets").toList();
-
+    
+    private void setFieldsFromSelf(SolrInputDocument idoc, List<String> prSufix) {
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONObject("facets").getJSONArray("self").toList();
         for (Object f : indexFields) {
             String s = (String) f;
             if (s.contains(":")) {
                 String dest = s.split(":")[0];
                 String orig = s.split(":")[1];
                 IndexUtils.addByPath(idoc, orig, dest, prSufix, false);
-            } else {
-                for (String sufix : prSufix) {
-                    if (rootDoc.containsKey(s)) {
-                        for (Object v : rootDoc.getFieldValues(s)) {
-                            IndexUtils.addFieldNonRepeat(idoc, s, v);
-                        }
-                    }
-                    if (rootDoc.containsKey(s + "_" + sufix)) {
-                        IndexUtils.addFieldNonRepeat(idoc, s + "_" + sufix, rootDoc.getFieldValues(s + "_" + sufix));
+            } 
+
+        }
+    }
+
+        /**
+         *
+         * Přístupnost 
+         * Organizace 
+         * Kraj 
+         * Okres 
+         * Katastr 
+         * Komponenta - * 
+         * Nález - *
+         * Akce/lokalita - typ dokumentační jednotky 
+         * Akce/projekt - vedoucí Akce
+         * - typ Lokalita - * 
+         * Dokument - kategorie Dokument - řada Dokument -
+         * typ Dokument - dokumentované tvary (příznaky) ADB - * PIAN - * Sam.
+         * nález - nálezce Sam. nález - okolnosti
+         */
+    
+    private void setFieldsFromRoot(SolrInputDocument idoc, SolrInputDocument rootDoc, List<String> prSufix) {
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONObject("facets").getJSONArray("root").toList();
+        setFieldsFromSuper(idoc, rootDoc, prSufix, indexFields);
+    }
+    
+    private void setFieldsFromParent(SolrInputDocument idoc, SolrInputDocument parentDoc, List<String> prSufix) {
+        List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONObject("facets").getJSONArray("parent").toList();
+        setFieldsFromSuper(idoc, parentDoc, prSufix, indexFields);
+    }
+
+    private void setFieldsFromSuper(SolrInputDocument idoc, SolrInputDocument origDoc, List<String> prSufix, List<Object> indexFields) {
+
+        for (Object f : indexFields) {
+            String s = (String) f;
+            String dest = s;
+            String orig = s;
+            if (s.contains(":")) {
+                dest = s.split(":")[0];
+                orig = s.split(":")[1];
+            } 
+            for (String sufix : prSufix) {
+                if (origDoc.containsKey(orig) && origDoc.getFieldValues(orig) != null) {
+                    for (Object v : origDoc.getFieldValues(orig)) {
+                        IndexUtils.addFieldNonRepeat(idoc, dest, v);
                     }
                 }
+                if (origDoc.containsKey(orig + "_" + sufix)) {
+                    IndexUtils.addFieldNonRepeat(idoc, dest + "_" + sufix, origDoc.getFieldValues(orig + "_" + sufix));
+                }
             }
+            
 
         }
     }
