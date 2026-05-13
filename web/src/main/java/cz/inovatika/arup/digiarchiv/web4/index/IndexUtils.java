@@ -233,9 +233,20 @@ public class IndexUtils {
     }
 
     public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix, boolean isSecured) {
-        boolean secured = path.contains("chranene_udaje") || isSecured;
         String[] parts = path.split("\\.", 2);
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
+        addValuesByPath(idoc, path, field, prSufix, isSecured, vals);
+    }
+
+    public static void addByPath(SolrInputDocument destDoc, SolrInputDocument origDoc, String path, String field, List<String> prSufix, boolean isSecured) {
+        String[] parts = path.split("\\.", 2);
+        Collection<Object> vals = origDoc.getFieldValues(parts[0]);
+        addValuesByPath(destDoc, path, field, prSufix, isSecured, vals);
+    }
+    
+    public static void addValuesByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix, boolean isSecured, Collection<Object> vals) {
+        boolean secured = path.contains("chranene_udaje") || isSecured;
+        String[] parts = path.split("\\.", 2);
         if (vals == null) {
             return;
         }

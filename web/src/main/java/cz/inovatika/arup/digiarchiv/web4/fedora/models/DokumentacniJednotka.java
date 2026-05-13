@@ -62,14 +62,6 @@ public class DokumentacniJednotka {
 
     public SolrInputDocument createSolrDoc(SolrInputDocument idoc) {
 
-        DocumentObjectBinder dob = new DocumentObjectBinder();
-        SolrInputDocument djdoc = dob.toSolrInputDocument(this);
-        //akceDoc.setField("entity", "akce");
-        //akceDoc.setField("pristupnost", pristupnost);
-        IndexUtils.addVocabField(djdoc, "dj_pian", dj_pian);
-        IndexUtils.addVocabField(djdoc, "dj_typ", dj_typ);
-
-        IndexUtils.addVocabField(djdoc, "dj_adb", adb_ident_cely);
         if (adb_ident_cely != null) {
             try {
                 String xml = FedoraUtils.requestXml("record/" + adb_ident_cely.getId() + "/metadata");
@@ -82,10 +74,20 @@ public class DokumentacniJednotka {
             }
         }
 
+        DocumentObjectBinder dob = new DocumentObjectBinder();
+        SolrInputDocument djdoc = dob.toSolrInputDocument(this);
+        //akceDoc.setField("entity", "akce");
+        //akceDoc.setField("pristupnost", pristupnost);
+        IndexUtils.addVocabField(djdoc, "dj_pian", dj_pian);
+        IndexUtils.addVocabField(djdoc, "dj_typ", dj_typ);
+        IndexUtils.addJSONField(djdoc, "dj_adb", dj_adb);
+
         for (Komponenta k : dj_komponenta) {
             k.fillSolrFields(idoc, djdoc, "dokumentacni_jednotka");
             IndexUtils.addJSONField(djdoc, "dj_komponenta", k);
         }
+        djdoc.removeField("dj_adb");
+        IndexUtils.addVocabField(djdoc, "dj_adb", adb_ident_cely);
 
         return djdoc;
 

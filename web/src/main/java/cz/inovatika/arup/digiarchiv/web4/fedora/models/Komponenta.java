@@ -196,11 +196,17 @@ public class Komponenta {
          * Komponenta - * 
          * Nález - *
          * Akce/lokalita - typ dokumentační jednotky 
-         * Akce/projekt - vedoucí Akce
-         * - typ Lokalita - * 
-         * Dokument - kategorie Dokument - řada Dokument -
-         * typ Dokument - dokumentované tvary (příznaky) ADB - * PIAN - * Sam.
-         * nález - nálezce Sam. nález - okolnosti
+         * Akce/projekt - vedoucí 
+         * Akce - typ 
+         * Lokalita - * 
+         * Dokument - kategorie 
+         * Dokument - řada 
+         * Dokument - typ 
+         * Dokument - dokumentované tvary (příznaky) 
+         * ADB - * 
+         * PIAN - * 
+         * Sam. nález - nálezce 
+         * Sam. nález - okolnosti
          */
     
     private void setFieldsFromRoot(SolrInputDocument idoc, SolrInputDocument rootDoc, List<String> prSufix) {
@@ -222,6 +228,9 @@ public class Komponenta {
             if (s.contains(":")) {
                 dest = s.split(":")[0];
                 orig = s.split(":")[1];
+                if (s.contains(".")) {
+                    IndexUtils.addByPath(idoc, origDoc, orig, dest, prSufix, false);
+                }
             } 
             for (String sufix : prSufix) {
                 if (origDoc.containsKey(orig) && origDoc.getFieldValues(orig) != null) {

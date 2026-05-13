@@ -241,7 +241,7 @@
         "dokument_autor",
         "rok_vzniku:dokument_rok_vzniku",
         "dokument_rok_vzniku",
-                "dokument_kategorie_dokumentu",
+        "dokument_kategorie_dokumentu",
         "dokument_typ_dokumentu",
         "dokument_material_originalu",
         "dokument_rada",
@@ -413,7 +413,16 @@
         "f_ez_typ:az_ext_zdroj.ext_zdroj_typ.id",
         "f_ez_autor:az_ext_zdroj.ext_zdroj_autor.value",
         "f_ez_autor:az_ext_zdroj.ext_zdroj_editor.value",
-        "f_ez_casopis:az_ext_zdroj.ext_zdroj_casopis_denik_nazev"
+        "f_ez_casopis:az_ext_zdroj.ext_zdroj_casopis_denik_nazev",
+                
+        "f_adb_typ_sondy:az_dokumentacni_jednotka.dj_adb.adb_typ_sondy.id",
+        "f_adb_podnet:az_dokumentacni_jednotka.dj_adb.adb_podnet.id",
+        "adb_vyskovy_bod_typ:az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.vyskovy_bod[*].typ.id",
+                
+                
+        "f_pian_presnost:pian_presnost",
+        "f_pian_typ:pian_typ",
+        "f_pian_zm10:pian_chranene_udaje.zm10"
                 
       ],
       "full_text": [
@@ -488,10 +497,7 @@
         "f_vedouci:akce_hlavni_vedouci",
         "f_vedouci:akce_vedouci_akce_ostatni.vedouci.value",
         "f_organizace:akce_organizace",
-        "f_organizace:akce_vedouci_akce_ostatni.organizace.id",
-        "f_adb_typ_sondy:az_dokumentacni_jednotka.dj_adb.adb_typ_sondy.id",
-        "f_adb_podnet:az_dokumentacni_jednotka.dj_adb.adb_podnet.id",
-        "adb_vyskovy_bod_typ:az_dokumentacni_jednotka.dj_adb.adb_chranene_udaje.vyskovy_bod[*].typ.id"
+        "f_organizace:akce_vedouci_akce_ostatni.organizace.id"
       ],
       "full_text": [
         "akce_hlavni_vedouci",
@@ -537,24 +543,8 @@
         "f_okres:az_okres",
         "f_typ_lokality:lokalita_typ_lokality",
         "f_druh_lokality:lokalita_druh",
-        "f_dj_typ:az_dokumentacni_jednotka.dj_typ.id",
-        "f_obdobi:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_obdobi.id",
-        "f_areal:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_areal.id",
-        "f_aktivita:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_aktivita[*].id",
-        "f_typ_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_typ_nalezu",
-        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].druh.id",
-        "f_druh_nalezu:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].druh.id",
-                
-        "f_kategorie:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].komponenta_kategorie_nalezu",
-        "f_kategorie:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].komponenta_kategorie_nalezu",
-                
-        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_objekt[*].specifikace.id",
-        "f_specifikace:az_dokumentacni_jednotka.dj_komponenta[*].komponenta_nalez_predmet[*].specifikace.id",
-        "f_lokalita_zachovalost:lokalita_zachovalost",
         "f_jistota:lokalita_jistota",
-        "f_pian_presnost:pian_presnost",
-        "f_pian_typ:pian_typ",
-        "f_pian_zm10:pian_chranene_udaje.zm10"
+        "f_lokalita_zachovalost:lokalita_zachovalost"
       ],
       "full_text": [
         "lokalita_typ_lokality",
@@ -716,10 +706,18 @@
             "f_organizace:dokument_organizace",
             "f_typ_vyzkumu",
             "f_typ_lokality:lokalita_typ_lokality",
-            "f_druh_lokality:lokalita_druh"
+            "f_druh_lokality:lokalita_druh",
+            "dokument_kategorie_dokumentu",
+            "f_typ_dokumentu:dokument_typ_dokumentu",
+            "f_rada:dokument_rada", 
+            "f_tvar:dokument_tvar.tvar.id", 
+            "f_tvar:dokument_tvar[0].tvar.id"
          ],
         "parent":[
-            "f_dj_typ:dj_typ"
+            "f_dj_typ:dj_typ",
+            "f_adb_typ_sondy:dj_adb.adb_typ_sondy.id",
+            "f_adb_podnet:dj_adb.adb_podnet.id",
+            "adb_vyskovy_bod_typ:dj_adb.adb_chranene_udaje.vyskovy_bod[*].typ.id"
          ]    
       }, 
       "full_text": [
