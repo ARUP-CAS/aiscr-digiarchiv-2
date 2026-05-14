@@ -332,7 +332,7 @@ export class AppService {
       }))
       .pipe(finalize(() => this.stopLoading()))
       .pipe(catchError((err: any) => {
-        return of(err)
+        return of({...err, error: true})
       }));
 
     // return this.get(`/search/handle`, params);

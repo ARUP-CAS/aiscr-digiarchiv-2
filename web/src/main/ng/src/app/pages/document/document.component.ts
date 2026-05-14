@@ -100,7 +100,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.service.getHandle(id, true).subscribe((resp: any) => {
       this.state.loading.set(false);
       this.loading.set(false);
-      if (resp.error || resp.status != 200) {
+      if (resp.error) {
         this.state.hasError = true;
         this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.document_' + resp.status);
         return;
