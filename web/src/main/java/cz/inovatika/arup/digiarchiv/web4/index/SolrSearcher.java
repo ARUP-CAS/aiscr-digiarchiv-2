@@ -741,7 +741,7 @@ public class SolrSearcher {
             for (int i = 0; i < docs.length(); i++) {
                 JSONObject doc = docs.getJSONObject(i);
                 int razeni = doc.optInt("razeni", 0); 
-                if ("objekt_druh".equals(doc.getString("nazev_heslare"))) {
+                if ("objekt_druh".equals(doc.optString("nazev_heslare"))) {
                     razeni += 4000;
                 }
                 ret.put(doc.getString("ident_cely"), razeni);
