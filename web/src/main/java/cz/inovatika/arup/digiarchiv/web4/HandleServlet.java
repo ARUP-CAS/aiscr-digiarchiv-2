@@ -1,5 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
+import static cz.inovatika.arup.digiarchiv.web4.SearchServlet.LOGGER;
+import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web4.imagging.ImageSupport;
 import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
@@ -34,6 +36,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -88,6 +93,11 @@ public class HandleServlet extends HttpServlet {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         } else {
+
+            // check 
+            if (!checkId(id, request, response)) {
+                return;
+            }
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             File cacheFile = new File(getCacheDir(InitServlet.asSafePath(id)) + InitServlet.asSafePath(id));
@@ -98,10 +108,6 @@ public class HandleServlet extends HttpServlet {
                 if (!Options.getInstance().getBoolean("isTestEnv", false) && cacheFile.exists() && (new Date(cacheFile.lastModified())).toInstant().isAfter(deadline)) {
                     out.println(org.apache.commons.io.FileUtils.readFileToString(cacheFile, "UTF-8"));
                 } else {
-
-//                try (InputStream inputStream = RESTHelper.inputStream(url)) {
-//                    out.println(org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8"));
-//                }
                     HttpRequest hrequest = HttpRequest.newBuilder()
                             .uri(new URI(url))
                             .GET()
@@ -113,7 +119,7 @@ public class HandleServlet extends HttpServlet {
                         HttpResponse<String> hresponse = httpclient.send(hrequest, HttpResponse.BodyHandlers.ofString());
                         String s = hresponse.body();
                         if (!Options.getInstance().getBoolean("isTestEnv", false)) {
-                            FileUtils.writeStringToFile(cacheFile, s, "UTF-8"); 
+                            FileUtils.writeStringToFile(cacheFile, s, "UTF-8");
                         }
                         out.println(s);
                     }
@@ -378,8 +384,8 @@ public class HandleServlet extends HttpServlet {
                     if (docPr.compareToIgnoreCase("C") <= 0 && stav == 4) {
                         return true;
                     }
-                    
-                    if (userOrg.equals(doc.optString("samostatny_nalez_predano_organizace"))) { 
+
+                    if (userOrg.equals(doc.optString("samostatny_nalez_predano_organizace"))) {
                         return true;
                     }
 
@@ -416,55 +422,106 @@ public class HandleServlet extends HttpServlet {
         }
     }
 
+    private static boolean checkId(String id, HttpServletRequest request, HttpServletResponse response) {
+        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+
+            SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
+                    .setFacet(false);
+            query.setFields("entity,is_deleted,searchable,stav");
+
+            QueryResponse resp = client.query("entities", query);
+            String msg = Options.getInstance().getJSONObject("Handle").optString("msg", "not_found");
+            String code_txt;
+
+            if (resp.getResults().getNumFound() == 0) {
+                code_txt = HttpServletResponse.SC_NOT_FOUND+"";
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            } else {
+                SolrDocument doc = resp.getResults().get(0);
+                boolean searchable = doc.containsKey("searchable") && (boolean) doc.get("searchable");
+                if ((boolean) doc.get("is_deleted")) {
+                    code_txt = HttpServletResponse.SC_GONE+"";
+                    response.setStatus(HttpServletResponse.SC_GONE);
+                } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
+                    code_txt = HttpServletResponse.SC_UNAUTHORIZED+"";
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                } else {
+                    String entity = (String) doc.get("entity");
+                    FedoraModel fm = FedoraModel.getFedoraModel(entity);
+                    if (fm.filterOAI(LoginServlet.user(request), doc)) {
+                        return true;
+                    } else {
+                        code_txt = HttpServletResponse.SC_FORBIDDEN+"";
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
+                    }
+                }
+            }
+            String cs = I18n.getInstance().getLocale("cs").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code_txt);
+            String en = I18n.getInstance().getLocale("en").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code_txt);
+            msg = msg.replaceAll("###code###", code_txt).replaceAll("###code_txt_cs###", cs).replaceAll("###code_txt_en###", en);
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter writer = response.getWriter();
+            writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
+            writer.print(msg);
+            writer.print("</body></html>");
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error checking id {0}", ex);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        return false;
+    }
+
     private static JSONObject getDocument(String id, JSONObject user) {
         try {
 
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2
-        String soubor_filepath = "rest/AMCR/record/" + id;
+            String soubor_filepath = "rest/AMCR/record/" + id;
 
-        if (id.contains("thumb") && !id.contains("page") && !id.endsWith("thumb")) {
+            if (id.contains("thumb") && !id.contains("page") && !id.endsWith("thumb")) {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/1            
-            LOGGER.log(Level.WARNING, "{0} is invalid", id);
-            return new JSONObject().put("invalid", true);
-        }
+                LOGGER.log(Level.WARNING, "{0} is invalid", id);
+                return new JSONObject().put("invalid", true);
+            }
 
-        if (id.contains("thumb")) {
+            if (id.contains("thumb")) {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/page/1            
-            soubor_filepath = soubor_filepath.substring(0, soubor_filepath.indexOf("/thumb"));
-        }
+                soubor_filepath = soubor_filepath.substring(0, soubor_filepath.indexOf("/thumb"));
+            }
 
-        SolrClient client = getSolrClientSearch();
-        SolrQuery query = new SolrQuery("*")
-                .addSort("datestamp", SolrQuery.ORDER.desc)
-                .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]")
-                .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"");
-        JSONObject json = SolrSearcher.jsonSelect(client, "entities", query);
-        if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
-            LOGGER.log(Level.WARNING, "{0} not found", id);
-            return new JSONObject().put("not_found", true);
-        }
-        JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
+            SolrClient client = getSolrClientSearch();
+            SolrQuery query = new SolrQuery("*")
+                    .addSort("datestamp", SolrQuery.ORDER.desc)
+                    .setFields("entity,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]")
+                    .addFilterQuery("soubor_filepath:\"" + soubor_filepath + "\"");
+            JSONObject json = SolrSearcher.jsonSelect(client, "entities", query);
+            if (json.getJSONObject("response").getJSONArray("docs").length() == 0) {
+                LOGGER.log(Level.WARNING, "{0} not found", id);
+                return new JSONObject().put("not_found", true);
+            }
+            JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 
-        if (!isAllowed(id, doc, user)) {
+            if (!isAllowed(id, doc, user)) {
 
-            LOGGER.log(Level.WARNING, "{0} not allowed", id);
-            return new JSONObject().put("not_allowed", true);
-        }
+                LOGGER.log(Level.WARNING, "{0} not allowed", id);
+                return new JSONObject().put("not_allowed", true);
+            }
 
-        JSONArray soubor = doc.getJSONArray("soubor");
-        for (int i = 0; i < soubor.length(); i++) {
-            JSONObject sdoc = soubor.getJSONObject(i);
-            if (soubor_filepath.equals(sdoc.optString("path"))) {
+            JSONArray soubor = doc.getJSONArray("soubor");
+            for (int i = 0; i < soubor.length(); i++) {
+                JSONObject sdoc = soubor.getJSONObject(i);
+                if (soubor_filepath.equals(sdoc.optString("path"))) {
 //                doc.put("id", sdoc.optString("id"));
 //                doc.put("mimetype", sdoc.optString("mimetype"));
 //                doc.put("path", sdoc.optString("path"));
 //                doc.put("nazev", sdoc.optString("nazev"));
-                sdoc.put("entity", doc.optString("entity"));
-                return sdoc;
+                    sdoc.put("entity", doc.optString("entity"));
+                    return sdoc;
+                }
             }
-        }
-        return new JSONObject().put("not_found", true);
+            return new JSONObject().put("not_found", true);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             SolrClientFactory.resetSolrClientSearch();

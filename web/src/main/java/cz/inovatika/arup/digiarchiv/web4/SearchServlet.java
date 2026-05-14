@@ -166,7 +166,6 @@ public class SearchServlet extends HttpServlet {
                     query.setFields("entity,is_deleted,searchable,stav"); 
 
                     QueryResponse resp = client.query("entities", query);
-                    System.out.println(resp);
                     
                     if (resp.getResults().getNumFound() == 0) {
                         json.put("error", "not_found");
@@ -174,7 +173,6 @@ public class SearchServlet extends HttpServlet {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND, "not_found");
                     } else {
                         SolrDocument doc = resp.getResults().get(0);
-                        System.out.println(doc);
                         boolean searchable = doc.containsKey("searchable") && (boolean)doc.get("searchable");
                         if ((boolean)doc.get("is_deleted")) {
                             json.put("error", "is_deleted"); 
