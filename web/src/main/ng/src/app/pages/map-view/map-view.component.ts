@@ -228,6 +228,9 @@ export class MapViewComponent {
       if (window.innerWidth < this.config.hideMenuWidth) {
         this.opened = false;
         this.state.sidenavOpened = false;
+        if (this.map) {
+          this.map.closePopup();
+        }
       }
     }));
 
@@ -318,6 +321,9 @@ export class MapViewComponent {
     }
 
     if (this.mapIdChanged) {
+      if (this.map) {
+        this.map.closePopup();
+      }
       this.state.mapResult.set(null);
     }
     if (!this.currentMapId) {
@@ -873,6 +879,7 @@ export class MapViewComponent {
   }
 
   clearPian() {
+    this.map.closePopup();
     this.state.setFacetChanged();
     this.pianIdChanged = true;
     this.router.navigate([], { queryParams: { pian_id: null, page: 0 }, queryParamsHandling: 'merge' });
@@ -1219,12 +1226,19 @@ export class MapViewComponent {
           }
           this.activeLayer = layersId;
           let popupContent = document.createElement("div");
-          popupContent.className = 'app-leaflet-popup-content'
+          popupContent.className = 'app-leaflet-popup-content';
+          if (layers.length > 1) {
+            const divTitle = document.createElement("div");
+            divTitle.className = 'app-popup-title'
+            divTitle.innerHTML = this.service.getTranslation('map.desc.multipleLayers');
+            popupContent.appendChild(divTitle);
+          }
           layers.forEach(geoLa => {
             const la = geoLa.getLayers()[0].feature;
             const div = document.createElement("div");
             div.className = 'app-popup-item'
-            div.innerHTML = this.popUpHtml(la.geometry.id, la.geometry.presnost, la.geometry.docIds);
+            div.innerHTML = this.popUpHtml(la.geometry.id, la.geometry.presnost, la.geometry.docIds) ;
+            //+ ' <mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">flip_to_front</mat=icon>';
 
             div.onclick = (e) => {
               this.setPianId(la.geometry.id, la.geometry.docIds);
@@ -1249,7 +1263,7 @@ export class MapViewComponent {
               });
             };
             
-            popupContent.appendChild(div)
+            popupContent.appendChild(div);
             
           });
           

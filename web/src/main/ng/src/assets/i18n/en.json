@@ -553,7 +553,8 @@
       "tooltipTextDelete": "Press SHIFT-key and click to <b>delete point</b>",
       "tooltipTextMove": "Click and drag to <b>move point</b><br>",
       "tooltipTextResume": "<br>Press CTRL-key and click to <b>resume line</b>",
-      "tooltipTextAdd": "Press CTRL-key and click to <b>add point</b>"
+      "tooltipTextAdd": "Press CTRL-key and click to <b>add point</b>",
+      "multipleLayers": "Multiple layers overlap."
     },
     "tooltip": {
       "Odstranit tento filtr": "Remove this filter",
