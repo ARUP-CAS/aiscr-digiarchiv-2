@@ -904,18 +904,6 @@ export class MapViewComponent {
       this.state.setSearchResponse(res, 'map');
 
       this.setMarkers(res.response.docs, clean, false);
-      // if (this.currentMapId) {
-      //   const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
-      //   this.state.setMapResult(doc, false);
-      //   if (this.shouldZoomOnMarker) {
-      //     this.zoomOnMapResult(doc);
-      //   }
-      // } else {
-      //   if (this.setToMarkerZoom) {
-      //     this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
-      //     this.setToMarkerZoom = false;
-      //   }
-      // }
       if (this.setToMarkerZoom) {
         this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
         this.setToMarkerZoom = false;
@@ -1213,9 +1201,20 @@ export class MapViewComponent {
         });
         // layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
 
+        layer.on('mouseover', (e) => {
+          layer.setStyle({
+              color: this.config.mapOptions.shape.fillColorOver,
+              fillColor: this.config.mapOptions.shape.fillColorOver
+          });
+        });
+
         layer.on('mouseout', (e) => {
           // this.map.closePopup();
           this.activeLayer = null;
+          layer.setStyle({
+              color: this.config.mapOptions.shape.color,
+              fillColor: this.config.mapOptions.shape.fillColor
+          });
         });
 
         layer.on('mousemove', (e) => {
@@ -1281,7 +1280,7 @@ export class MapViewComponent {
 
         this.shapes.push(layer);
         layer.addTo(this.markers);
-        if (this.mapIdChanged && this.currentMapId) {
+        if (this.mapIdChanged && this.currentMapId && this.currentPianId === ident_cely) {
           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
         }
 
@@ -1303,7 +1302,7 @@ export class MapViewComponent {
           layers.push(layer);
         }
       } else if (sh.feature.geometry.type === 'LineString') {
-        if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.0000001 })) {
+        if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.0000000001 })) {
           layers.push(layer);
         }
       }
@@ -1328,7 +1327,9 @@ export class MapViewComponent {
         this.state.mapResult.set(doc);
       }
       this.clearSelectedMarker();
+      console.log('A')
       this.setMarkers(res.response.docs, false, true);
+      console.log(zoom)
       if (zoom) {
         this.zoomOnMapResult(doc);
       }
@@ -1362,6 +1363,7 @@ export class MapViewComponent {
 
     this.hitMarker(doc);
     const bounds: any = this.getBoundsByDoc(doc);
+    console.log(bounds);
     this.map.setView(bounds.getCenter(), Math.max(this.config.mapOptions.hitZoomLevel, this.map.getZoom()));
     if (!this.map.getBounds().contains(bounds)) {
       // Markers outside view in this zoom
