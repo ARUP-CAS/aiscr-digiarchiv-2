@@ -640,10 +640,10 @@
       "search_error": "Chyba při odeslání dotazu",
       "login_server_error": "Přihlášení není momentálně dostupné",
       "invalid_page": "Neplatné číslo stránky",
-      "document_404": "Záznam neexistuje",
-      "document_410": "Záznam byl smazán",
-      "document_401": "Záznam existuje, ale není dostupný bez přihlášení",
-      "document_403": "Záznam není dostupný danému uživateli"
+      "document_404": "Záznam se nepodařilo najít.",
+      "document_410": "Záznam byl odstraněn.",
+      "document_401": "Záznam existuje, ale není dostupný bez přihlášení.",
+      "document_403": "Pro zobrazení záznamu nemáte dostatečná oprávnění."
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
