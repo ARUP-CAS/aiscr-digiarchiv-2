@@ -640,10 +640,10 @@
       "search_error": "Error searching",
       "login_server_error": "Login not available. Try later.",
       "invalid_page": "Invalid page",
-      "document_404": "Document not found",
-      "document_410": "Document was deleted",
-      "document_401": "Document dont reachable without login",
-      "document_403": "Document forbidden"
+      "document_404": "The record could not be found.",
+      "document_410": "The record has been deleted.",
+      "document_401": "The record exists but is not accessible without logging in.",
+      "document_403": "You do not have sufficient permissions to view the record."
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
