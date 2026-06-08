@@ -164,7 +164,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
             AkceSearcher as = new AkceSearcher();
             query.setFields(as.getChildSearchFields("A"));
             try {
-                JSONObject sub = SolrSearcher.json(client, "entities", query);
+                JSONObject sub = SolrSearcher.jsonSelect(client, "entities", query);
                 JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < subs.length(); j++) {

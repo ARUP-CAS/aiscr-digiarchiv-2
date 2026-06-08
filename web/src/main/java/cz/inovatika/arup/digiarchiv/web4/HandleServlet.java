@@ -1,6 +1,5 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
-import static cz.inovatika.arup.digiarchiv.web4.SearchServlet.LOGGER;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraUtils;
 import cz.inovatika.arup.digiarchiv.web4.imagging.ImageSupport;
@@ -452,7 +451,7 @@ public class HandleServlet extends HttpServlet {
                         return true;
                     } else {
                         code_txt = HttpServletResponse.SC_FORBIDDEN+"";
-                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN); 
 
                     }
                 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web4.Options;
+import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,7 +26,7 @@ import org.json.JSONObject;
  * @author alberto
  */
 @JsonInclude(Include.NON_NULL)
-public class Komponenta {
+public class Komponenta implements FedoraModel {
 
     @Field
     public String entity = "komponenta";
@@ -79,6 +81,28 @@ public class Komponenta {
 
     @Field
     public String komponenta_kategoria_nalezu;
+    
+    
+
+    @Override
+    public String coreName() {
+        return "entities";
+    }
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
+
+    @Override
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception {
+        
+    }
+
+    @Override
+    public boolean filterOAI(JSONObject user, SolrDocument doc) {
+        return true;
+    }
 
     public void fillSolrFields(SolrInputDocument rootDoc, SolrInputDocument parentDoc, String prefix) {
         DocumentObjectBinder dob = new DocumentObjectBinder();

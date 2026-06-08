@@ -243,11 +243,9 @@ public class SearchServlet extends HttpServlet {
                         if (cs != null) {
                             cs.getRelated(jo, client, request);
                             if (!cs.isRelatedSearchable()) {
-                                jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
+                                //jo.getJSONObject("response").put("numFound", 0).put("docs", new JSONArray());
                             }
                         }
-                        // json = jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
-
                     }
                     // Remove stats
                     jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");

@@ -9,8 +9,11 @@ import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.ADB;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.ArcheologickyZaznam;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Dokument;
+import cz.inovatika.arup.digiarchiv.web4.fedora.models.DokumentCast;
+import cz.inovatika.arup.digiarchiv.web4.fedora.models.DokumentacniJednotka;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.ExtZdroj;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Heslo;
+import cz.inovatika.arup.digiarchiv.web4.fedora.models.Komponenta;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Let;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Organizace;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Osoba;
@@ -20,6 +23,7 @@ import cz.inovatika.arup.digiarchiv.web4.fedora.models.RUIANKraj;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.RUIANOkres;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.SamostatnyNalez;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Uzivatel;
+import cz.inovatika.arup.digiarchiv.web4.fedora.models.VyskovyBod;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -213,6 +217,14 @@ return sr.getLocalName();
         switch (model) {
             case "adb":
                 return new ADB();
+            case "vyskovy_bod":
+                return new VyskovyBod();
+            case "komponenta":
+                return new Komponenta();
+            case "dokumentacni_jednotka":
+                return new DokumentacniJednotka(); 
+            case "dokument_cast":
+                return new DokumentCast(); 
             case "let":
                 return new Let();
             case "ext_zdroj":

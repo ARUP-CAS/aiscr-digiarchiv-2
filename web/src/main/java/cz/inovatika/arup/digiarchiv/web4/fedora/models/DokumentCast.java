@@ -1,6 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web4.fedora.models;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +21,7 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public class DokumentCast {
+public class DokumentCast implements FedoraModel {
 
     @Field
     public String entity = "dokument_cast";
@@ -283,5 +285,23 @@ public class DokumentCast {
             }
         }
     }
+@Override
+    public String coreName() {
+        return "entities";
+    }
+    
+    @Override
+    public boolean isSearchable(){
+        return true;
+    }
 
+    @Override
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception {
+        
+    }
+
+    @Override
+    public boolean filterOAI(JSONObject user, SolrDocument doc) {
+        return true;
+    }
 }

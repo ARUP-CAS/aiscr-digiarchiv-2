@@ -1,7 +1,5 @@
 package cz.inovatika.arup.digiarchiv.web4.fedora.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraUtils;
@@ -12,13 +10,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONObject;
 
 /**
  *
  * @author alberto
  */
-public class DokumentacniJednotka {
+public class DokumentacniJednotka implements FedoraModel {
 
     @Field
     public String entity = "dokumentacni_jednotka";
@@ -93,28 +93,23 @@ public class DokumentacniJednotka {
 
     }
 
-//    public void fillSolrFields(SolrInputDocument idoc) {
-//
-//        // IndexUtils.addVocabField(idoc, "typ", typ);
-//            DocumentObjectBinder dob = new DocumentObjectBinder();
-//            SolrInputDocument djdoc = dob.toSolrInputDocument(this);
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            idoc.addField("dokumentacni_jednotka", objectMapper.writeValueAsString(this));
-//        } catch (JsonProcessingException ex) {
-//            Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        IndexUtils.addFieldNonRepeat(idoc, "dj_ident_cely", ident_cely);
-//        IndexUtils.addFieldNonRepeat(idoc, "dj_nazev", dj_nazev);
-//        IndexUtils.addFieldNonRepeat(idoc, "dj_negativni_jednotka", dj_negativni_jednotka);
-//        for (Komponenta k : dj_komponenta) {
-//            k.fillSolrFields(idoc, djdoc, "dokumentacni_jednotka");
-//        }
-//
-//        if (dj_pian != null) {
-//            // Add fields from PIAN.
-//        }
-//    }
+    @Override
+    public String coreName() {
+        return "entities";
+    }
 
+    @Override
+    public boolean isSearchable() {
+        return true;
+    }
+
+    @Override
+    public void fillSolrFields(SolrInputDocument idoc) throws Exception {
+
+    }
+
+    @Override
+    public boolean filterOAI(JSONObject user, SolrDocument doc) {
+        return true;
+    }
 }
