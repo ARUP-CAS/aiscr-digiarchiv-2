@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Component, OnInit, Inject, AfterViewInit, signal, effect } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -44,6 +44,7 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   conditions: Condition[] = [];
   formats = ['GML', 'WKT', 'GeoJSON'];
   exportUrls = signal<{ url: string, format: string }[]>([]);
+  subs: any[] = [];
 
   constructor(
     private windowRef: AppWindowRef,
@@ -61,9 +62,19 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.service.currentLang.subscribe(res => {
+    this.subs.push(this.service.currentLang.subscribe(res => {
       this.setExportUrl();
-    });
+    }));
+
+    this.subs.push(this.router.events.subscribe(val => {
+      if (val instanceof NavigationEnd) {
+        this.setExportUrl();
+      }
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach(s => s.unsubscribe());
   }
 
   setExportUrl() {
