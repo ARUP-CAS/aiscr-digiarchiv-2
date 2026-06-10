@@ -290,13 +290,13 @@
   ],
   "defaultRows": 50,
   "entities": [
-    "komponenta",
     "dokument",
     "projekt",
     "akce",
     "lokalita",
     "samostatny_nalez",
-    "knihovna_3d"
+    "knihovna_3d",
+    "komponenta"
   ],
   "entityIcons": {
     "komponenta": "extension",
