@@ -6,10 +6,58 @@
 @mixin setHomeCardEntityColor() {
   @each $entity, $color in $entities {
     &.app-entity-#{$entity} {
-      background-color: $color !important;
+      background-color: $color;
     } 
   }
 }
+
+.app-entity-komponenta {
+  /*
+  background: linear-gradient(
+    135deg,
+    #5882c4 0%,
+    #5882c4 16%,
+    #F39225 32%,
+    #247e4b 48%,
+    #951E7A 64%,
+    #85140E 80%,
+    #778e98 100%
+  ) !important;
+  */
+  background-color: #5882c4 !important;
+  /*
+  background-image:
+    conic-gradient(
+      from 45deg at 50% 50%,
+      #5882c4 0deg 52deg,
+      #F39225 52deg 104deg,
+      #247e4b 104deg 156deg,
+      #951E7A 156deg 208deg,
+      #85140E 208deg 260deg,
+      #778e98 260deg 312deg,
+      #5882c4 312deg 360deg
+    ) !important;
+  background-size: 84px 84px !important;
+  background-position: 0 0 !important;
+  */
+  background-image:
+    conic-gradient(
+      from 45deg at 50% 50%,
+      #5882c4 0deg 52deg,
+      #F39225 52deg 104deg,
+      #247e4b 104deg 156deg,
+      #951E7A 156deg 208deg,
+      #85140E 208deg 260deg,
+      #778e98 260deg 312deg,
+      #5882c4 312deg 360deg
+    ) !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+
+
 
 .app-entities-wrapper {
   &.app-doctype-expanded {
@@ -113,10 +161,10 @@
       flex: 1 1 100%;
       min-width: 100%;
       box-sizing: border-box;
-      margin-right: 32px;
+      margin-right: 16px;
       color: var(--app-color-lightnes);
 
-      &.app-5 {
+      &.app-6 {
         margin-right: 0;
       }
 
@@ -143,9 +191,10 @@
       }
 
       @media only screen and (min-width: 960px) {
-        $flex-width: 16.6666%;
-        flex: 1 1 calc(#{$flex-width} - 32px);
-        min-width: calc(#{$flex-width} - 32px);
+        //$flex-width: 16.6666%;
+        $flex-width: 14.2222%;
+        flex: 1 1 calc(#{$flex-width} - 16px);
+        min-width: calc(#{$flex-width} - 16px);
       }
 
       a {
@@ -285,7 +334,7 @@
     $flex-width: 100%;
     flex: 1 1 $flex-width !important;
     min-width: $flex-width;
-    margin-right: 32px;
+    margin-right: 16px;
 
     &:last-child {
       margin-right: 0;
