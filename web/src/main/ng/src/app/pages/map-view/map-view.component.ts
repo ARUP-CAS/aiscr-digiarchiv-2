@@ -333,7 +333,8 @@ export class MapViewComponent {
       if (this.mapIdChanged && !this.route.snapshot.queryParamMap.has('loc_rpt')) {
         // Zpracujeme tady jen kdyz nemame souracnice
         // Pokud mame, zkontrolujeme na konci ziskani markeru
-        this.getMarkerById(this.currentMapId, false, true);
+        this.getHandle();
+        //this.getMarkerById(this.currentMapId, false, true);
         return;
       }
     }
@@ -1314,6 +1315,26 @@ export class MapViewComponent {
     return layers;
   }
 
+  getHandle() {
+    this.service.getHandle(this.currentMapId, true).subscribe((resp: any) => {
+      this.state.loading.set(false);
+      this.loading.set(false);
+      if (resp.error) {
+        this.state.hasError = true;
+        this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.document_' + resp.status);
+        return;
+      }
+      this.state.setSearchResponse(resp, 'map');
+      const doc = resp.response.docs.find((d: any) => d.ident_cely === this.currentMapId);
+      if (this.currentMapId !== this.state.mapResult()?.ident_cely) {
+        this.state.mapResult.set(doc);
+      }
+      this.clearSelectedMarker();
+      this.setMarkers(resp.response.docs, false, true);
+      this.zoomOnMapResult(doc);
+    });
+  }
+
   getMarkerById(docId: string, setResponse: boolean, zoom: boolean) {
     //this.state.loading.set(true);
     const p: any = Object.assign({}, this.route.snapshot.queryParams);
@@ -1327,9 +1348,7 @@ export class MapViewComponent {
         this.state.mapResult.set(doc);
       }
       this.clearSelectedMarker();
-      console.log('A')
       this.setMarkers(res.response.docs, false, true);
-      console.log(zoom)
       if (zoom) {
         this.zoomOnMapResult(doc);
       }

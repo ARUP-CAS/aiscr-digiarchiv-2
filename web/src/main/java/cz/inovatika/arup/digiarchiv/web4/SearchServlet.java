@@ -214,7 +214,7 @@ public class SearchServlet extends HttpServlet {
                     query.setRequestHandler("/search");
                     if (entity == null) {
                         query.setFields("entity");
-                        JSONObject jo = SearchUtils.json(query, client, "entities");
+                        JSONObject jo = SearchUtils.json(query, client, "entities", false);
                         if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
                             return jo.toString();
                         }
@@ -230,7 +230,18 @@ public class SearchServlet extends HttpServlet {
                     } else {
                         query.setFields("*");
                     }
-                    JSONObject jo = SearchUtils.json(query, client, "entities");
+                    
+                    query.add("stats", "true");
+                    query.add("stats.field", "datum_zverejneni");
+                    query.add("stats.field", "samostatny_nalez_datum_nalezu");
+                    query.add("stats.field", "datum_provedeni_od");
+                    query.add("stats.field", "datum_provedeni_do");
+                    query.add("stats.field", "extra_data_datum_vzniku");
+                    query.add("stats.field", "let_datum");
+                    query.add("stats.field", "dokument_rok_vzniku");
+                    query.add("stats.field", "rok_vydani");
+               
+                    JSONObject jo = SearchUtils.json(query, client, "entities", false);
                     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
                         if (searcher != null) {
                             //if ("pian".equals(entity) || "adb".equals(entity) || "ext_zdroj".equals(entity)) {
@@ -248,8 +259,10 @@ public class SearchServlet extends HttpServlet {
                         }
                     }
                     // Remove stats
-                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
-                    jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+                    if (jo.has("stats")) {
+                        jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
+                        jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
+                    }
 
                     if (Boolean.parseBoolean(request.getParameter("shouldLog"))) {
                         LogAnalytics.log(request, request.getParameter("id"), "id", entity);
