@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{ 'dialog.title.museion_predmety' | translate }} {{ data.id }} - {{ data.typ }}</h1>
+<h1 mat-dialog-title>{{ 'museion.predmety' | translate }} {{ data.id }} - {{ data.typ }}</h1>
 <div mat-dialog-content class="app-pt-1">
   <div class="app-fxLayout app-column app-gap-4">
     @if(predmety()) {
@@ -10,7 +10,7 @@
       @for (f of columns; track $index; let idx = $index) {
 
       <ng-container [matColumnDef]="f">
-        <th mat-header-cell *matHeaderCellDef> {{ 'museion.' + f | translate}} </th>
+        <th mat-header-cell *matHeaderCellDef [title]="'museion.desc.' + f | translate"> {{ 'museion.' + f | translate}} </th>
         <td mat-cell *matCellDef="let element"> {{element[f]}} </td>
       </ng-container>
       }

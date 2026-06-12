@@ -57,6 +57,7 @@
       "default": "Full view (caption, thumbnail, description)",
       "Export": "Export",
       "Favorites": "Favorites",
+      "Museion": "Museion",
       "Zobrazit časovou osu":  "Display time chart",
       "Skrýt časovou osu": "Hide time chart"
     }
@@ -848,5 +849,36 @@
   "commonFacets": {
     "noevidence": "Negative evidence",
     "posevidence": "Pozitive evidence"
+  },
+  "museion": {
+    "zobrazit_predmety": "Show findings in Museion",
+    "predmety": "Predmety",
+    "organizaceId": "Identifikátor organizace (správce sbírky, muzea)",
+    "pocetSys": "Počet inventárních čísel v systematické evidenci",
+    "pocetPom": "Počet evidenčních čísel v pomocné evidenci",
+    "predmetSys": "Seznam objektů \"předmět\" v systematické evidenci",
+    "predmetPom": "Seznam objektů \"předmět\" v pomocné evidenci",
+
+
+    "cislo": "Inventární číslo nebo číslo pomocné evidence",
+    "nazev" : "Název nebo jméno sbírkového předmětu nezávisle",
+    "popis": "Odborný popis předmětu",
+    "datace": "Datace vzniku nebo sběru (nálezu)",
+    "lokalita": "Lokalita sběru nebo nálezu sbírkového předmětu nezávisle na specializaci (na typu) - normalizovaná lokalita sběru/nálezu sbírkového předmětu.",
+    "material": "Odborný popis - seznam materiálů, ze kterých je sbírkový předmět vyroben.",
+    "technika":" Odborný popis - seznam použitých technik, které jsou na předmětu rozpoznány.",
+    "rozmer": "Odborný popis - rozměry předmětu.",
+    "desc" : {
+      "cislo": "Inventární číslo nebo číslo pomocné evidence",
+      "nazev" : "Název nebo jméno sbírkového předmětu nezávisle",
+      "popis": "Odborný popis předmětu",
+      "datace": "Datace vzniku nebo sběru (nálezu)",
+      "lokalita": "Lokalita sběru nebo nálezu sbírkového předmětu nezávisle na specializaci (na typu) - normalizovaná lokalita sběru/nálezu sbírkového předmětu.",
+      "material": "Odborný popis - seznam materiálů, ze kterých je sbírkový předmět vyroben.",
+      "technika":" Odborný popis - seznam použitých technik, které jsou na předmětu rozpoznány.",
+      "rozmer": "Odborný popis - rozměry předmětu."
+    }
+
+
   }
 }

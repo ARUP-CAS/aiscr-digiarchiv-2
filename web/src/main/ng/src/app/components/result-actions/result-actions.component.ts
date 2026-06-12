@@ -38,9 +38,7 @@ export class ResultActionsComponent {
   readonly ident_cely_api = input<any>();
 
   isFav = signal<boolean>(false);
-  withMuseion: Signal<boolean> = computed(() => this.result().entity === 'akce' ||
-    this.result().entity === 'projekt' ||
-    this.result().entity === 'samostatny_nalez');
+  withMuseion: Signal<boolean> = computed(() => this.result().inMuseion);
 
   @Output() onToggleDetail = new EventEmitter<string>();
 

@@ -125,9 +125,7 @@ public class MuseionClient {
         try {
             
             PredmetyStatistika resp = predmetyStatistika();
-            
             ObjectMapper objectMapper = new ObjectMapper();
-                
             return new JSONObject(objectMapper.writeValueAsString(resp)); 
             
         } catch (Exception ex) {
@@ -136,17 +134,20 @@ public class MuseionClient {
         }
     }
     
-    public String predmetyStatistikaAsFilter() {
+    private static List<String> _ids = null;
+    public synchronized static List<String> getIds() {
+        if (_ids == null) {
+            MuseionClient m = new MuseionClient();
+                PredmetyStatistika stats = m.predmetyStatistika();
+                _ids = stats.amcrIdPom;
+                _ids.addAll(stats.amcrIdSys);
+            }
+        return _ids;
+    }
+    public String predmetyStatistikaAsFilter() { 
 
         try {
-            
-            PredmetyStatistika stats = predmetyStatistika(); 
-            
-            List<String> ids = stats.amcrIdPom;
-            ids.addAll(stats.amcrIdSys);
-            
-            return "ident_cely:(\""+ String.join("\" OR \"", ids) + "\")";
-            
+            return "ident_cely:(\""+ String.join("\" OR \"", getIds()) + "\")";
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
             return "";

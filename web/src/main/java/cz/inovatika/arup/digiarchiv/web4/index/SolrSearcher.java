@@ -916,6 +916,7 @@ public class SolrSearcher {
             if (LoginServlet.userId(request) != null) {
                 addIsFavorite(client, doc, LoginServlet.userId(request));
             }
+            doc.put("inMuseion", MuseionClient.getIds().contains(doc.getString("ident_cely"))); 
         }
     }
 
