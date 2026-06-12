@@ -106,6 +106,18 @@ public class MuseionServlet extends HttpServlet {
                 }
                 return json;
             }
+        },
+        RESET {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    MuseionClient.resetIds(); 
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
         };
 
         abstract JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception;

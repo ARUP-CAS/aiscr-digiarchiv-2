@@ -115,7 +115,7 @@ public class MuseionClient {
             return (PredmetyStatistika)parseXml(xml, PredmetyStatistika.class, "statistika");
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
+            LOGGER.log(Level.SEVERE, "Error getting predmetyStatistika: {0}", ex);
             return null;
         }
     }
@@ -129,7 +129,7 @@ public class MuseionClient {
             return new JSONObject(objectMapper.writeValueAsString(resp)); 
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
+            LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsJSON: {0}", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -144,12 +144,15 @@ public class MuseionClient {
             }
         return _ids;
     }
+    public synchronized static void resetIds() {
+        _ids = null;
+    }
     public String predmetyStatistikaAsFilter() { 
 
         try {
             return "ident_cely:(\""+ String.join("\" OR \"", getIds()) + "\")";
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
+            LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsFilter: {0}", ex);
             return "";
         }
     }
