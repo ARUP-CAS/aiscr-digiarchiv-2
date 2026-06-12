@@ -12,6 +12,10 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -135,12 +139,18 @@ public class MuseionClient {
     }
     
     private static List<String> _ids = null;
+    private static LocalDateTime statsTime = LocalDateTime.now(ZoneOffset.UTC);
     public synchronized static List<String> getIds() {
-        if (_ids == null) {
+        
+        int cacheExpirationTime = Options.getInstance().getJSONObject("museion").optInt("cacheExpirationHours", 3);
+        Instant deadline = Instant.now().minus(cacheExpirationTime, ChronoUnit.HOURS);
+        boolean expired = statsTime.toInstant(ZoneOffset.UTC).isBefore(deadline);
+        if (_ids == null || expired) {
             MuseionClient m = new MuseionClient();
                 PredmetyStatistika stats = m.predmetyStatistika();
                 _ids = stats.amcrIdPom;
                 _ids.addAll(stats.amcrIdSys);
+                statsTime = LocalDateTime.now(ZoneOffset.UTC);
             }
         return _ids;
     }

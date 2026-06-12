@@ -732,6 +732,7 @@
   "museion" : {
     "end_point": "https://vyvoj.museion.cz/w4m/service/nalezyAmcr",
     "clientId": "",
-    "clientSecret": ""
+    "clientSecret": "",
+    "cacheExpirationHours": "2"
   }
 }
