@@ -5,6 +5,12 @@
     </button>
   }
 
+@if (withMuseion()) {
+  <button matIconButton [matTooltip]="'card.tooltip.Museion' | translate" (click)="showMuseionPredmety()">
+    <mat-icon>museum</mat-icon>
+  </button>
+}
+
   <button matIconButton [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
     <mat-icon>link</mat-icon>
   </button>

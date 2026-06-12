@@ -523,6 +523,11 @@ export class AppService {
     return this.get(url);
   }
 
+  museionPredmety(id: string, typ: string) {
+    const url = '/museion/predmety_by_id';
+    return this.get(url, new HttpParams().set('id', id).set('typ', typ));
+  }
+
   setCrumbs(params: ParamMap) {
     this.state.breadcrumbs = [];
     this.state.conditions = [];

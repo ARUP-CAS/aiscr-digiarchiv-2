@@ -108,6 +108,7 @@ export class AppState {
 
   hideWithoutThumbs = false;
   inFavorites = signal<boolean>(false);
+  inMuseion = signal<boolean>(false);
   obdobi: any;
 
   breadcrumbs: Crumb[];

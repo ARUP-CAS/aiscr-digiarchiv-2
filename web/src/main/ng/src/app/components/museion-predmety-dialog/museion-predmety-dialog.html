@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{ 'dialog.title.museion_predmety' | translate }} {{ data.id }} - {{ data.typ }}</h1>
+<div mat-dialog-content class="app-pt-1">
+  <div class="app-fxLayout app-column app-gap-4">
+    @if(predmety()) {
+    <div>{{ 'museion.organizaceId' | translate}}: {{ predmety().organizaceId | translate}}</div>
+    <div>{{ 'museion.pocetPom' | translate}}: {{ predmety().pocetPom | translate}}</div>
+    <div>{{ 'museion.pocetSys' | translate}}: {{ predmety().pocetSys | translate}}</div>
+
+    <table mat-table [dataSource]="predmety().predmetSys">
+      @for (f of columns; track $index; let idx = $index) {
+
+      <ng-container [matColumnDef]="f">
+        <th mat-header-cell *matHeaderCellDef> {{ 'museion.' + f | translate}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[f]}} </td>
+      </ng-container>
+      }
+
+      <tr mat-header-row *matHeaderRowDef="columns sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
+    }
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>
+</div>

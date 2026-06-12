@@ -93,6 +93,19 @@ public class MuseionServlet extends HttpServlet {
                 }
                 return json;
             }
+        },
+        STATISTIKA {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    MuseionClient m = new MuseionClient();
+                    json.put("statistika", m.predmetyStatistikaAsJSON()); 
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
         };
 
         abstract JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception;

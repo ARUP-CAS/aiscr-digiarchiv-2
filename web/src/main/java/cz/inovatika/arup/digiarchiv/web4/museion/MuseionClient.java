@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLInputFactory;
@@ -41,7 +42,7 @@ public class MuseionClient {
     }
     
     XMLInputFactory _xmlFactory = XMLInputFactory.newFactory();
-    public <T> PredmetyDleAmcr parseXml(String xml) throws Exception {
+    public <T> Object parseXml(String xml, Class clazz, String name) throws Exception {
         try {
             XMLStreamReader sr = _xmlFactory.createXMLStreamReader(new StringReader(xml));
             JacksonXmlModule module = new JacksonXmlModule();
@@ -50,9 +51,10 @@ public class MuseionClient {
             xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
             xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
             sr.nextTag();
-            sr.nextTag();
-            sr.nextTag();
-            return (PredmetyDleAmcr) xmlMapper.readValue(sr, PredmetyDleAmcr.class);
+            while(!sr.getLocalName().equals(name) && sr.hasNext()) {
+                sr.nextTag();
+            }
+            return xmlMapper.readValue(sr, clazz);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error parsing {0}", xml);
             // Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -81,15 +83,73 @@ public class MuseionClient {
                     clientId, clientSecret, amcrId, amcrTyp);
             
             String xml = request(body);
-            PredmetyDleAmcr resp = parseXml(xml);
+            PredmetyDleAmcr resp = (PredmetyDleAmcr)parseXml(xml, PredmetyDleAmcr.class, "predmetyDleAmcrIdResponse");
             
             ObjectMapper objectMapper = new ObjectMapper();
-                
             return new JSONObject(objectMapper.writeValueAsString(resp));
             
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
             return new JSONObject().put("error", ex);
+        }
+    }
+    
+    public PredmetyStatistika predmetyStatistika() {
+
+        try {
+            String body = String.format(
+                    "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://iispp.npu.cz/ServiceAuth\" xmlns:nal=\"http://www.museion.cz/NalezyAmcrService\">\n"
+                    + "    <soapenv:Header>\n"
+                    + "        <ser:AuthToken>\n"
+                    + "            <clientId>%s</clientId>\n"
+                    + "            <clientSecret>%s</clientSecret>\n"
+                    + "        </ser:AuthToken>\n"
+                    + "    </soapenv:Header>\n"
+                    + "    <soapenv:Body>\n"
+                    + "        <nal:predmetyStatistikaRequest/>\n"
+                    + "    </soapenv:Body>\n"
+                    + "</soapenv:Envelope>",
+                    clientId, clientSecret);
+            
+            String xml = request(body);
+            return (PredmetyStatistika)parseXml(xml, PredmetyStatistika.class, "statistika");
+            
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
+            return null;
+        }
+    }
+    
+    public JSONObject predmetyStatistikaAsJSON() {
+
+        try {
+            
+            PredmetyStatistika resp = predmetyStatistika();
+            
+            ObjectMapper objectMapper = new ObjectMapper();
+                
+            return new JSONObject(objectMapper.writeValueAsString(resp)); 
+            
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
+            return new JSONObject().put("error", ex);
+        }
+    }
+    
+    public String predmetyStatistikaAsFilter() {
+
+        try {
+            
+            PredmetyStatistika stats = predmetyStatistika(); 
+            
+            List<String> ids = stats.amcrIdPom;
+            ids.addAll(stats.amcrIdSys);
+            
+            return "ident_cely:(\""+ String.join("\" OR \"", ids) + "\")";
+            
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
+            return "";
         }
     }
 }

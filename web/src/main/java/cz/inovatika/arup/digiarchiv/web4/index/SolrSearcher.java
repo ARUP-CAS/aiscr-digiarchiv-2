@@ -2,6 +2,8 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
+import cz.inovatika.arup.digiarchiv.web4.museion.MuseionClient;
+import cz.inovatika.arup.digiarchiv.web4.museion.PredmetyStatistika;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -198,6 +200,12 @@ public class SolrSearcher {
             } else {
                 query.addFilterQuery("ident_cely:emtpyrecord");
             }
+        }
+
+        if (request.getParameter("inMuseion") != null) {
+                 MuseionClient m = new MuseionClient();
+                 String fq = m.predmetyStatistikaAsFilter();
+                query.addFilterQuery(fq);
         }
         query.set("facet", "true");
 
@@ -1101,6 +1109,28 @@ public class SolrSearcher {
             d.setTime(0);
             return d;
         }
+    }
+    
+    public static JSONObject getMuseion(SolrClient client) {
+        try {
+            
+            MuseionClient m = new MuseionClient();
+            PredmetyStatistika stats = m.predmetyStatistika(); 
+            
+            List<String> ids = stats.amcrIdPom;
+            ids.addAll(stats.amcrIdSys);
+            
+            String filter = "ident_cely:(\""+ String.join("\" OR \"", ids) + "\")";
+            
+            SolrQuery query = new SolrQuery("*:*");
+            
+            query.addFilterQuery(filter);
+            return SearchUtils.json(query, client, "entities");
+
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, "Error {0}", ex);
+        }
+        return null;
     }
 
 //  public static void cleanRepeated(SolrInputDocument idoc) {
