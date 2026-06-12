@@ -2,7 +2,7 @@
 
 footer {
   width: calc(100% - #{32px});
-  padding: 32px 16px;
+  padding: 32px 16px 24px 16px;
   background-color: var(--app-footer-color-bg);
   color: var(--app-footer-color);;
 
@@ -54,6 +54,12 @@ footer {
         filter: invert(75%);
         height: 39px;
       }
+    }
+  }
+
+  .app-info-wrapper {
+    & > span {
+      margin-bottom: 8px;
     }
   }
 }

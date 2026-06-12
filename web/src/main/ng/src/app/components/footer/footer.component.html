@@ -28,7 +28,7 @@
         </a>
       </div>
 
-      <div class="app-fxLayout app-row app-center-v app-gap-2 app-info-wrapper">
+      <div class="app-fxLayout app-row app-center-v app-gap-2 app-info-wrapper app-wrap">
         <span>
           {{ 'footer.desc.Archeologický ústav AV ČR, Praha, v. v. i.' | translate }} © {{ currentYear }}
         </span>
@@ -52,7 +52,9 @@
           <a (click)="showLicence()"><mat-icon>info</mat-icon></a>
         </span>
         <span class="app-pipe app-mr-4"></span>
-        <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v410" title="Version info" target="_blank">{{ 'footer.desc.Verze' | translate }} v4.1.0</a>
+        <span>
+          <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v410" title="Version info" target="_blank">{{ 'footer.desc.Verze' | translate }} v4.1.0</a>
+        </span>
       </div>
     </div>
   </div>
