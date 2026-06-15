@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
+import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 
 export interface Predmet {
   aktivita: string,
@@ -53,7 +54,9 @@ export interface PredmetyDleAmcr {
 
 @Component({
   selector: 'app-museion-predmety-dialog',
-  imports: [TranslateModule, MatDialogModule, MatButtonModule, MatTooltipModule, MatTableModule],
+  imports: [TranslateModule, MatDialogModule, MatButtonModule, MatTooltipModule, MatTableModule,
+    CdkDrag, CdkDragHandle
+  ],
   templateUrl: './museion-predmety-dialog.html',
   styleUrl: './museion-predmety-dialog.scss',
 })
@@ -74,7 +77,6 @@ export class MuseionPredmetyDialog {
 
   ngOnInit(): void {
     this.service.museionPredmety(this.data.id, this.data.typ).subscribe((res: any) => {
-      console.log(res);
       if (res.hasError) {
         alert(this.service.getTranslation('dialog.alert.feedback_failed') + ": " + res.error);
       } else {

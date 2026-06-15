@@ -115,7 +115,7 @@ export class ResultActionsComponent {
     this.state.dialogRef = this.dialog.open(MuseionPredmetyDialog, {
       width: '900px',
       data: { id: this.result().ident_cely, typ: typ },
-      panelClass: 'app-feedback-dialog'
+      panelClass: 'app-resizable-dialog'
     });
   }
 
