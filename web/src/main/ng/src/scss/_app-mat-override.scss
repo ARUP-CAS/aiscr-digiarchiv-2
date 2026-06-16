@@ -49,6 +49,50 @@
       list-item-label-text-weight: 400,
       list-item-label-text-font: 'Roboto Condensed, sans-serif'
     ));
+    
+    &.komponenta {
+      border: 1px solid var(--app-color-gray-4);
+
+      &.app-active {
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2); 
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+      }
+
+      .app-left {
+        border-right: 1px solid var(--app-color-gray-4);
+        padding: 0 11px;
+
+        img {
+          height: 24px;
+        }
+      }
+
+      .app-right {
+        span {
+          &:first-child {
+            background: linear-gradient(
+            90deg,
+            #5882c4 0%,
+            #F39225 20%,
+            #247e4b 40%,
+            #951E7A 60%,
+            #85140E 80%,
+            #778e98 100%
+            );
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+          }
+          &:last-child {
+            color: var(--app-color-gray-6);
+          }
+        }
+        
+      }
+    }
 
     padding: 0;
     margin-bottom: 8px;
