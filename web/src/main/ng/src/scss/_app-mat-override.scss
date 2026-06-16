@@ -5,6 +5,7 @@
 @use "theme-colors" as my-theme;
 @use "app-mixins-icon" as *;
 @use "app-mixins-entity-color" as *;
+@use "app-mixins-entity-bg-color" as *;
 @use "app-mixins-entity-facet-color" as *;
 @use "app-mixins-entity-card-color" as *;
 
@@ -472,6 +473,32 @@
   }
   .app-card-result {
     @include setEntityCardColor();
+
+    &.app-entity-komponenta {
+      .mat-mdc-card-title {
+        .app-icon-component {
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+          margin-right: 4px;
+          margin-top: -2px;
+          display: inline-block;
+          background-color: var(--app-color-gray-6);
+
+          mask: url(../assets/img/logo/logo-component.svg) no-repeat center;
+          mask-size: contain;
+
+          -webkit-mask: url(../assets/img/logo/logo-component.svg) no-repeat center;
+          -webkit-mask-size: contain;
+
+          @include setEntityBgColor();
+
+         /*  &.dokument {
+            background-color: #F39225;
+          } */
+        }
+      }
+    }
 
     a {
       &:hover {
