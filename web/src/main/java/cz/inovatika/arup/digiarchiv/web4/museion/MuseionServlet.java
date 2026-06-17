@@ -1,14 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web4.museion;
 
-import cz.inovatika.arup.digiarchiv.web4.fedora.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.inovatika.arup.digiarchiv.web4.*;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.ServletException;
@@ -17,7 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -101,6 +93,19 @@ public class MuseionServlet extends HttpServlet {
                 try {
                     MuseionClient m = new MuseionClient();
                     json.put("statistika", m.predmetyStatistikaAsJSON()); 
+                } catch (JSONException ex) {
+                    json.put("error", ex.toString());
+                }
+                return json;
+            }
+        },
+        INDEX {
+            @Override
+            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+                JSONObject json = new JSONObject();
+                try {
+                    MuseionClient m = new MuseionClient();
+                    json.put("statistika", m.indexStatistika());  
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }

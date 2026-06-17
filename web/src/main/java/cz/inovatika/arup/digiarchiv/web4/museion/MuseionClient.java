@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import cz.inovatika.arup.digiarchiv.web4.Options;
+import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -16,11 +17,15 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -29,141 +34,213 @@ import org.json.JSONObject;
  */
 public class MuseionClient {
 
-    public static final Logger LOGGER = Logger.getLogger(MuseionClient.class.getName());
+  public static final Logger LOGGER = Logger.getLogger(MuseionClient.class.getName());
 
-    private static final String API_POINT = Options.getInstance().getJSONObject("museion").getString("end_point");
-    private static final String clientId = Options.getInstance().getJSONObject("museion").getString("clientId");
-    private static final String clientSecret = Options.getInstance().getJSONObject("museion").getString("clientSecret");
-    private static final HttpClient client = HttpClient.newHttpClient();
+  // private static final String API_POINT = Options.getInstance().getJSONObject("museion").getString("end_point");
+//    private static final String clientId = Options.getInstance().getJSONObject("museion").getString("clientId");
+//    private static final String clientSecret = Options.getInstance().getJSONObject("museion").getString("clientSecret");
+  private static final HttpClient client = HttpClient.newHttpClient();
 
-    private String request(String body) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(API_POINT))
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return response.body();
+  private String request(String body, String url) throws URISyntaxException, IOException, InterruptedException {
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(new URI(url))
+            .POST(HttpRequest.BodyPublishers.ofString(body))
+            .build();
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    return response.body();
+  }
+
+  XMLInputFactory _xmlFactory = XMLInputFactory.newFactory();
+
+  public <T> Object parseXml(String xml, Class clazz, String name) throws Exception {
+    try {
+      XMLStreamReader sr = _xmlFactory.createXMLStreamReader(new StringReader(xml));
+      JacksonXmlModule module = new JacksonXmlModule();
+      module.setDefaultUseWrapper(false);
+      XmlMapper xmlMapper = new XmlMapper(module);
+      xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+      xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+      sr.nextTag();
+      while (!sr.getLocalName().equals(name) && sr.hasNext()) {
+        sr.nextTag();
+      }
+      return xmlMapper.readValue(sr, clazz);
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error parsing {0}", xml);
+      // Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
+      throw new Exception(ex);
     }
-    
-    XMLInputFactory _xmlFactory = XMLInputFactory.newFactory();
-    public <T> Object parseXml(String xml, Class clazz, String name) throws Exception {
-        try {
-            XMLStreamReader sr = _xmlFactory.createXMLStreamReader(new StringReader(xml));
-            JacksonXmlModule module = new JacksonXmlModule();
-            module.setDefaultUseWrapper(false);
-            XmlMapper xmlMapper = new XmlMapper(module);
-            xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            xmlMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-            sr.nextTag();
-            while(!sr.getLocalName().equals(name) && sr.hasNext()) {
-                sr.nextTag();
-            }
-            return xmlMapper.readValue(sr, clazz);
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error parsing {0}", xml);
-            // Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
-            throw new Exception(ex);
+  }
+  
+  public PredmetyDleAmcr requestPredmetyDleAmcrId(String amcrId, String amcrTyp, String url, String clientId, String clientSecret) throws Exception {
+    String body = String.format(
+                "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://iispp.npu.cz/ServiceAuth\" xmlns:nal=\"http://www.museion.cz/NalezyAmcrService\">\n"
+                + "    <soapenv:Header>\n"
+                + "        <ser:AuthToken>\n"
+                + "            <clientId>%s</clientId>\n"
+                + "            <clientSecret>%s</clientSecret>\n"
+                + "        </ser:AuthToken>\n"
+                + "    </soapenv:Header>\n"
+                + "    <soapenv:Body>\n"
+                + "        <nal:predmetyDleAmcrIdRequest>\n"
+                + "            <amcrId>%s</amcrId>\n"
+                + "            <amcrTyp>%s</amcrTyp>\n"
+                + "        </nal:predmetyDleAmcrIdRequest>\n"
+                + "    </soapenv:Body>\n"
+                + "</soapenv:Envelope>",
+                clientId, clientSecret, amcrId, amcrTyp);
+
+        String xml = request(body, url);
+        return (PredmetyDleAmcr) parseXml(xml, PredmetyDleAmcr.class, "predmetyDleAmcrIdResponse");
+  }
+
+  public JSONObject predmetyDleAmcrId(String amcrId, String amcrTyp) {
+    JSONObject ret = new JSONObject();
+    try {
+
+      JSONArray end_points = Options.getInstance().getJSONObject("museion").getJSONArray("end_points");
+
+      for (int i = 0; i < end_points.length(); i++) {
+        JSONObject js = end_points.getJSONObject(i);
+        String url = js.getString("url");
+        PredmetyDleAmcr resp = requestPredmetyDleAmcrId(amcrId, amcrTyp, url, js.getString("clientId"), js.getString("clientSecret"));
+        ObjectMapper objectMapper = new ObjectMapper();
+        ret.put(resp.organizaceId, new JSONObject(objectMapper.writeValueAsString(resp)));
+      }
+      return ret;
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
+      return new JSONObject().put("error", ex);
+    }
+  }
+
+  public PredmetyStatistika predmetyStatistika(String url, String clientId, String clientSecret) {
+
+    try {
+      String body = String.format(
+              "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://iispp.npu.cz/ServiceAuth\" xmlns:nal=\"http://www.museion.cz/NalezyAmcrService\">\n"
+              + "    <soapenv:Header>\n"
+              + "        <ser:AuthToken>\n"
+              + "            <clientId>%s</clientId>\n"
+              + "            <clientSecret>%s</clientSecret>\n"
+              + "        </ser:AuthToken>\n"
+              + "    </soapenv:Header>\n"
+              + "    <soapenv:Body>\n"
+              + "        <nal:predmetyStatistikaRequest/>\n"
+              + "    </soapenv:Body>\n"
+              + "</soapenv:Envelope>",
+              clientId, clientSecret);
+
+      String xml = request(body, url);
+      PredmetyStatistika s = (PredmetyStatistika) parseXml(xml, PredmetyStatistika.class, "statistika");
+      return s;
+
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error getting predmetyStatistika: {0}", ex);
+      return null;
+    }
+  }
+
+  public JSONObject predmetyStatistikaAsJSON() {
+    JSONObject ret = new JSONObject();
+
+    try {
+      JSONArray end_points = Options.getInstance().getJSONObject("museion").getJSONArray("end_points");
+
+      for (int i = 0; i < end_points.length(); i++) {
+        JSONObject js = end_points.getJSONObject(i);
+        String url = js.getString("url");
+        PredmetyStatistika stats = predmetyStatistika(url, js.getString("clientId"), js.getString("clientSecret"));
+        if (stats != null) {
+          ObjectMapper objectMapper = new ObjectMapper();
+          ret.put(stats.organizaceId, new JSONObject(objectMapper.writeValueAsString(stats)));
         }
+      }
+      return ret;
+
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsJSON: {0}", ex);
+      return new JSONObject().put("error", ex);
     }
+  }
 
-    public JSONObject predmetyDleAmcrId(String amcrId, String amcrTyp) {
+  private static List<String> _ids = null;
+  private static LocalDateTime statsTime = LocalDateTime.now(ZoneOffset.UTC);
 
-        try {
-            String body = String.format(
-                    "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://iispp.npu.cz/ServiceAuth\" xmlns:nal=\"http://www.museion.cz/NalezyAmcrService\">\n"
-                    + "    <soapenv:Header>\n"
-                    + "        <ser:AuthToken>\n"
-                    + "            <clientId>%s</clientId>\n"
-                    + "            <clientSecret>%s</clientSecret>\n"
-                    + "        </ser:AuthToken>\n"
-                    + "    </soapenv:Header>\n"
-                    + "    <soapenv:Body>\n"
-                    + "        <nal:predmetyDleAmcrIdRequest>\n"
-                    + "            <amcrId>%s</amcrId>\n"
-                    + "            <amcrTyp>%s</amcrTyp>\n"
-                    + "        </nal:predmetyDleAmcrIdRequest>\n"
-                    + "    </soapenv:Body>\n"
-                    + "</soapenv:Envelope>",
-                    clientId, clientSecret, amcrId, amcrTyp);
-            
-            String xml = request(body);
-            PredmetyDleAmcr resp = (PredmetyDleAmcr)parseXml(xml, PredmetyDleAmcr.class, "predmetyDleAmcrIdResponse");
-            
-            ObjectMapper objectMapper = new ObjectMapper();
-            return new JSONObject(objectMapper.writeValueAsString(resp));
-            
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", ex);
-            return new JSONObject().put("error", ex);
+  public synchronized static List<String> getIds() {
+
+    int cacheExpirationTime = Options.getInstance().getJSONObject("museion").optInt("cacheExpirationHours", 3);
+    Instant deadline = Instant.now().minus(cacheExpirationTime, ChronoUnit.HOURS);
+    boolean expired = statsTime.toInstant(ZoneOffset.UTC).isBefore(deadline);
+    if (_ids == null || expired) {
+      MuseionClient m = new MuseionClient();
+      PredmetyStatistika stats = m.predmetyStatistika("", "", "");
+      if (stats != null) {
+        _ids = stats.amcrIdPom;
+        _ids.addAll(stats.amcrIdSys);
+      } else {
+        _ids = new ArrayList();
+      }
+      statsTime = LocalDateTime.now(ZoneOffset.UTC);
+    }
+    return _ids;
+  }
+
+  public synchronized static void resetIds() {
+    _ids = null;
+  }
+
+  public String predmetyStatistikaAsFilter() {
+
+    try {
+      List<String> ids = getIds();
+      if (ids != null) {
+        return "ident_cely:(\"" + String.join("\" OR \"", getIds()) + "\")";
+      } else {
+        return "";
+      }
+
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsFilter: {0}", ex);
+      return ""; 
+    }
+  }
+
+  public JSONObject indexStatistika() {
+    JSONObject ret = new JSONObject();
+    try {
+
+      JSONArray end_points = Options.getInstance().getJSONObject("museion").getJSONArray("end_points");
+
+      for (int i = 0; i < end_points.length(); i++) {
+        JSONObject js = end_points.getJSONObject(i);
+        String url = js.getString("url");
+        PredmetyStatistika stats = predmetyStatistika(url, js.getString("clientId"), js.getString("clientSecret"));
+        if (stats != null) {
+          SolrClient solr = SolrClientFactory.getSolrClient();
+          List<SolrInputDocument> idocs = new ArrayList();
+          for (String id : stats.amcrIdSys) {
+            SolrInputDocument idoc = new SolrInputDocument();
+            idoc.setField("id", stats.organizaceId + "_" + id);
+            idoc.setField("end_point", url);
+            idoc.setField("organizaceId", stats.organizaceId);
+            idoc.setField("type", "amcrIdSys");
+            idoc.setField("amcrId", id);
+            //idoc.setField("entity", stats.entity);
+            idocs.add(idoc);
+          }
+          if (!idocs.isEmpty()) {
+            solr.add("museion", idocs);
+          }
+          solr.commit("museion"); 
+
         }
-    }
-    
-    public PredmetyStatistika predmetyStatistika() {
+      }
 
-        try {
-            String body = String.format(
-                    "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://iispp.npu.cz/ServiceAuth\" xmlns:nal=\"http://www.museion.cz/NalezyAmcrService\">\n"
-                    + "    <soapenv:Header>\n"
-                    + "        <ser:AuthToken>\n"
-                    + "            <clientId>%s</clientId>\n"
-                    + "            <clientSecret>%s</clientSecret>\n"
-                    + "        </ser:AuthToken>\n"
-                    + "    </soapenv:Header>\n"
-                    + "    <soapenv:Body>\n"
-                    + "        <nal:predmetyStatistikaRequest/>\n"
-                    + "    </soapenv:Body>\n"
-                    + "</soapenv:Envelope>",
-                    clientId, clientSecret);
-            
-            String xml = request(body);
-            return (PredmetyStatistika)parseXml(xml, PredmetyStatistika.class, "statistika");
-            
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error getting predmetyStatistika: {0}", ex);
-            return null;
-        }
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsFilter: {0}", ex);
+      ret.put("error", ex);
     }
-    
-    public JSONObject predmetyStatistikaAsJSON() {
-
-        try {
-            
-            PredmetyStatistika resp = predmetyStatistika();
-            ObjectMapper objectMapper = new ObjectMapper();
-            return new JSONObject(objectMapper.writeValueAsString(resp)); 
-            
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsJSON: {0}", ex);
-            return new JSONObject().put("error", ex);
-        }
-    }
-    
-    private static List<String> _ids = null;
-    private static LocalDateTime statsTime = LocalDateTime.now(ZoneOffset.UTC);
-    public synchronized static List<String> getIds() {
-        
-        int cacheExpirationTime = Options.getInstance().getJSONObject("museion").optInt("cacheExpirationHours", 3);
-        Instant deadline = Instant.now().minus(cacheExpirationTime, ChronoUnit.HOURS);
-        boolean expired = statsTime.toInstant(ZoneOffset.UTC).isBefore(deadline);
-        if (_ids == null || expired) {
-            MuseionClient m = new MuseionClient();
-                PredmetyStatistika stats = m.predmetyStatistika();
-                _ids = stats.amcrIdPom;
-                _ids.addAll(stats.amcrIdSys);
-                statsTime = LocalDateTime.now(ZoneOffset.UTC);
-            }
-        return _ids;
-    }
-    public synchronized static void resetIds() {
-        _ids = null;
-    }
-    public String predmetyStatistikaAsFilter() { 
-
-        try {
-            return "ident_cely:(\""+ String.join("\" OR \"", getIds()) + "\")";
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsFilter: {0}", ex);
-            return "";
-        }
-    }
+    return ret;
+  }
 }

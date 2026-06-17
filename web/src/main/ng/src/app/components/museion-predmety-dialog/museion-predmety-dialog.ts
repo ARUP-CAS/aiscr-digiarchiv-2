@@ -1,4 +1,4 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, computed, Inject, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { AppService } from '../../app.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { MatSelectModule } from "@angular/material/select";
+import { FormsModule } from '@angular/forms';
 
 export interface Predmet {
   aktivita: string,
@@ -46,44 +48,67 @@ export interface Predmet {
 }
 
 export interface PredmetyDleAmcr {
-  organizaceId: string;
-  pocetPom: string;
-  pocetSys: string;
-  predmetSys: Predmet[];
+    organizaceId: string;
+    pocetPom: string;
+    pocetSys: string;
+    predmetSys: Predmet[];
+    predmetPom: Predmet[];
 }
 
 @Component({
   selector: 'app-museion-predmety-dialog',
   imports: [TranslateModule, MatDialogModule, MatButtonModule, MatTooltipModule, MatTableModule,
-    CdkDrag, CdkDragHandle
-  ],
+    CdkDrag, CdkDragHandle, MatSelectModule, FormsModule],
   templateUrl: './museion-predmety-dialog.html',
   styleUrl: './museion-predmety-dialog.scss',
 })
 export class MuseionPredmetyDialog {
 
-  predmety = signal<PredmetyDleAmcr>(null);
+  predmetyDleAmcrIdAll = signal<{[organizaceId: string]: PredmetyDleAmcr}>(null);
+  predmetyDleAmcrId = signal<PredmetyDleAmcr>(null);
+  predmety = signal<Predmet[]>([]);
+  organizaceIds = signal<string[]>([]);
+  selectedOrganizace: string;
+  
+  // predmetyDleAmcrId = computed(() => this.predmetyDleAmcrIdAll()[this.selectedOrganizace()]);
+  // predmety = computed(() => [...this.predmetyDleAmcrId().predmetSys, ...this.predmetyDleAmcrId().predmetPom]);
 
   columns = ['aktivita', 'areal', 'cislo', 'cisloCes', 'cisloEvidCes', 'dataceUrceni', 'dataceVzniku', 'datumNabyti',
-  'datumNalezu', 'datumStav', 'datumZapisu', 'druhObjektu', 'fond', 'hloubka', 'kompletnost', 
-  'komponenta', 'kontextObjekt', 'kontextPlocha', 'kontextStratigrafie', 'material', 'mnozstviSlovy', 'okolnosti', 'oznaceni',
-  'pocetCasti', 'pocetKusu', 'podsbirka', 'popis', 'popisCasti', 'popisStav', 
-  'poznamkaUrceni', 'prirustkoveCislo', 'rozmer', 'sbirka', 'stav', 'technika']
+    'datumNalezu', 'datumStav', 'datumZapisu', 'druhObjektu', 'fond', 'hloubka', 'kompletnost',
+    'komponenta', 'kontextObjekt', 'kontextPlocha', 'kontextStratigrafie', 'material', 'mnozstviSlovy', 'okolnosti', 'oznaceni',
+    'pocetCasti', 'pocetKusu', 'podsbirka', 'popis', 'popisCasti', 'popisStav',
+    'poznamkaUrceni', 'prirustkoveCislo', 'rozmer', 'sbirka', 'stav', 'technika']
 
   constructor(
     public dialogRef: MatDialogRef<MuseionPredmetyDialog>,
     @Inject(MAT_DIALOG_DATA) public data: { id: string, typ: string },
-    private service: AppService) { }
+    private service: AppService) { 
+
+    }
 
   ngOnInit(): void {
     this.service.museionPredmety(this.data.id, this.data.typ).subscribe((res: any) => {
       if (res.hasError) {
         alert(this.service.getTranslation('dialog.alert.feedback_failed') + ": " + res.error);
       } else {
-      this.predmety.set(res.predmetyDleAmcrId);
-
+        this.organizaceIds.set(Object.keys(res.predmetyDleAmcrId));
+        this.predmetyDleAmcrIdAll.set(res.predmetyDleAmcrId);
+        this.selectedOrganizace = this.organizaceIds()[0];
+        this.selectOrganizace();
       }
     });
+  }
+
+  selectOrganizace() {
+    // this.selectedOrganizace.set(id);
+    if (!this.selectedOrganizace) {
+      return;
+    }
+    this.predmetyDleAmcrId.set(this.predmetyDleAmcrIdAll()[this.selectedOrganizace]);
+    this.predmety.set([
+      ...(this.predmetyDleAmcrId().predmetSys ? this.predmetyDleAmcrId().predmetSys : []), 
+      ...(this.predmetyDleAmcrId().predmetPom ? this.predmetyDleAmcrId().predmetPom : [])
+    ]);
   }
 
 }

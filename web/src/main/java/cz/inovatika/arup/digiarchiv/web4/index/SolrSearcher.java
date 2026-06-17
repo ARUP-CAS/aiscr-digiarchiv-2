@@ -3,7 +3,6 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.museion.MuseionClient;
-import cz.inovatika.arup.digiarchiv.web4.museion.PredmetyStatistika;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -204,7 +203,8 @@ public class SolrSearcher {
 
         if (request.getParameter("inMuseion") != null) {
                  MuseionClient m = new MuseionClient();
-                 String fq = m.predmetyStatistikaAsFilter();
+                 // String fq = m.predmetyStatistikaAsFilter();
+                 String fq = "{!join fromIndex=museion to=ident_cely from=amcrId}type:*";
                 query.addFilterQuery(fq);
         }
         query.set("facet", "true");
@@ -916,7 +916,20 @@ public class SolrSearcher {
             if (LoginServlet.userId(request) != null) {
                 addIsFavorite(client, doc, LoginServlet.userId(request));
             }
-            doc.put("inMuseion", MuseionClient.getIds().contains(doc.getString("ident_cely"))); 
+            addInMuseion(client, doc);
+//            if (MuseionClient.getIds() != null) {
+//                doc.put("inMuseion", MuseionClient.getIds().contains(doc.getString("ident_cely"))); 
+//            }
+            
+        }
+    }
+
+    public static void addInMuseion(SolrClient client, JSONObject doc) {
+        String ident_cely = doc.getString("ident_cely");
+        SolrQuery query = new SolrQuery("amcrId:\"" + ident_cely + "\"").setRows(1);
+        JSONObject jo = SearchUtils.json(query, client, "museion");
+        if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+            doc.put("inMuseion", true);
         }
     }
 
@@ -1112,21 +1125,21 @@ public class SolrSearcher {
         }
     }
     
-    public static JSONObject getMuseion(SolrClient client) {
+    public static JSONObject getMuseion(SolrClient client) { 
         try {
             
-            MuseionClient m = new MuseionClient();
-            PredmetyStatistika stats = m.predmetyStatistika(); 
-            
-            List<String> ids = stats.amcrIdPom;
-            ids.addAll(stats.amcrIdSys);
-            
-            String filter = "ident_cely:(\""+ String.join("\" OR \"", ids) + "\")";
-            
-            SolrQuery query = new SolrQuery("*:*");
-            
-            query.addFilterQuery(filter);
-            return SearchUtils.json(query, client, "entities");
+//            MuseionClient m = new MuseionClient();
+//            PredmetyStatistika stats = m.predmetyStatistika(); 
+//            
+//            List<String> ids = stats.amcrIdPom;
+//            ids.addAll(stats.amcrIdSys);
+//            
+//            String filter = "ident_cely:(\""+ String.join("\" OR \"", ids) + "\")";
+//            
+//            SolrQuery query = new SolrQuery("*:*");
+//            
+//            query.addFilterQuery(filter);
+//            return SearchUtils.json(query, client, "entities");
 
         } catch (Exception ex) {
             LOGGER.log(Level.WARNING, "Error {0}", ex);

@@ -70,4 +70,6 @@ public class PredmetyStatistika {
     @JacksonXmlProperty(localName = "pocetSysSamNalez")
     public int pocetSysSamNalez;
     
+    public String end_point; 
+    
 }

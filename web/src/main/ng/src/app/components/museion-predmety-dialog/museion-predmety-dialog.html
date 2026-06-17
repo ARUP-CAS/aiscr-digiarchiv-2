@@ -2,12 +2,24 @@
   {{ data.id }} - {{ data.typ }}</h1>
 <div mat-dialog-content class="app-pt-1">
   <div class="app-fxLayout app-column app-gap-4">
-    @if(predmety()) {
-    <div>{{ 'museion.organizaceId' | translate}}: {{ predmety().organizaceId | translate}}</div>
-    <div>{{ 'museion.pocetPom' | translate}}: {{ predmety().pocetPom | translate}}</div>
-    <div>{{ 'museion.pocetSys' | translate}}: {{ predmety().pocetSys | translate}}</div>
     <div>
-      <table mat-table [dataSource]="predmety().predmetSys">
+      <!-- {{ 'museion.organizaceId' | translate}}: {{ predmetyDleAmcrId().organizaceId | translate}} -->
+
+
+      <mat-select [(ngModel)]="selectedOrganizace" (selectionChange)="selectOrganizace()">
+        <mat-label>{{ 'museion.organizaceId' | translate}}</mat-label>
+        @for (f of organizaceIds(); track $index;) {
+        <mat-option [value]="f">{{ f | translate}}</mat-option>
+        }
+      </mat-select>
+
+    </div>
+    @if(predmetyDleAmcrId()) {
+
+    <div>{{ 'museion.pocetPom' | translate}}: {{ predmetyDleAmcrId().pocetPom | translate}}</div>
+    <div>{{ 'museion.pocetSys' | translate}}: {{ predmetyDleAmcrId().pocetSys | translate}}</div>
+    <div>
+      <table mat-table [dataSource]="predmety()">
         @for (f of columns; track $index; let idx = $index) {
 
         <ng-container [matColumnDef]="f">

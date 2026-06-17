@@ -730,9 +730,13 @@
     "msg": "<div style=\"display:flex;align-items:center;justify-content:center;min-height:60vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#f4f6f8;color:#333;text-align:center;\"><div style=\"max-width:500px;padding:40px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);\"><h1 style=\"margin-bottom:10px;font-size:32px;color:#2c3e50;\">###code###</h1><p><strong>###code_txt_cs###</strong></p><p><a href=\"/\">Home</a></p><div style=\"margin:20px 0;height:1px;background:#e0e0e0;\"></div><p><strong>###code_txt_en###</strong></p><p><a href=\"/\">Home</a></p></div></div>"
   },
   "museion" : {
-    "end_point": "https://vyvoj.museion.cz/w4m/service/nalezyAmcr",
-    "clientId": "",
-    "clientSecret": "",
-    "cacheExpirationHours": "2"
+      "end_points": [
+        {
+          "url": "https://vyvoj.museion.cz/w4m/service/nalezyAmcr",
+          "clientId": "",
+          "clientSecret": ""
+        }
+      ],
+    "cacheExpirationHours": "2" 
   }
 }
