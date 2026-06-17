@@ -70,7 +70,7 @@
             @if (state.facetsLoading()) {
               <div class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
             }
-            @if (state.breadcrumbs?.length > 0 || state.inFavorites()) {
+            @if (state.breadcrumbs?.length > 0 || state.inFavorites() || state.inMuseion()) {
               <app-facets-used></app-facets-used>
             }
             <app-facets></app-facets>
@@ -200,7 +200,7 @@
             <mat-tab-group [selectedIndex]="1">
               <mat-tab [label]="'sidenav.tab.Filtry' | translate">
                 <div class="app-facets">
-                  @if (state.breadcrumbs?.length > 0 || state.inFavorites()) {
+                  @if (state.breadcrumbs?.length > 0 || state.inFavorites() || state.inMuseion()) {
                     <app-facets-used></app-facets-used>
                   }
                   <app-facets></app-facets>
