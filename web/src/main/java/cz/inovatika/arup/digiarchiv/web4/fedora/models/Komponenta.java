@@ -32,7 +32,7 @@ public class Komponenta implements FedoraModel {
     public String entity = "komponenta";
 
     @Field
-    public boolean searchable = true;
+    public boolean searchable;
 
 //<xs:element name="ident_cely" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "{ident_cely}" -->
     @JacksonXmlProperty(localName = "ident_cely")
@@ -81,8 +81,6 @@ public class Komponenta implements FedoraModel {
 
     @Field
     public String komponenta_kategoria_nalezu;
-    
-    
 
     @Override
     public String coreName() {
@@ -91,7 +89,7 @@ public class Komponenta implements FedoraModel {
     
     @Override
     public boolean isSearchable(){
-        return true;
+        return searchable;
     }
 
     @Override
@@ -109,6 +107,8 @@ public class Komponenta implements FedoraModel {
         SolrInputDocument kdoc = dob.toSolrInputDocument(this);
         IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
         IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
+        kdoc.setField("searchable", rootDoc.getFieldValue("searchable")); 
+        kdoc.setField("is_deleted", rootDoc.getFieldValue("is_deleted")); 
         kdoc.setField("datestamp", rootDoc.getFieldValue("datestamp"));
         String pristupnost = (String) rootDoc.getFieldValue("pristupnost");
         if (rootDoc.getFieldValue("entity").equals("dokument")) {

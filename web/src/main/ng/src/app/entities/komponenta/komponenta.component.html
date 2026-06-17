@@ -71,7 +71,7 @@
   @if (panel) {
     <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
   }
-  <div class="app-icon-component dokument"></div><!--alberto doplnit dynamicky class dokument, projekt, akce ... atd. podle toho se pak obarvi ikona -->
+  <div class="app-icon-component dokument" [ngClass]="'app-facet-entity ' + _result.komponenta_zdroj"></div>
   <!-- <img src="assets/img/logo/logo-component.svg" /> -->
   <!-- <mat-icon class="app-entity-komponenta  " [matTooltip]="'entities.komponenta.title' | translate">{{ config.entityIcons["komponenta"] }}</mat-icon> -->
 {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} 
