@@ -9,7 +9,6 @@ import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -252,7 +251,7 @@ public class SamostatnyNalez implements FedoraModel {
             if (s.contains(".")) {
                 IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
             } else {
-                for (String sufix : prSufix) {
+                for (String sufix : SolrSearcher.prSufixAll) {
                     if (idoc.containsKey(s)) {
                         IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
                     }
@@ -262,24 +261,7 @@ public class SamostatnyNalez implements FedoraModel {
                 }
 
             }
-        } 
-//        
-//        for (Object f : indexFields) {
-//            String s = (String) f;
-//            if (s.contains(".")) {
-//                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
-//            } else {
-//                for (String sufix : SolrSearcher.prSufixAll) {
-//                    if (idoc.containsKey(s)) {
-//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
-//                    }
-//                    if (idoc.containsKey(s + "_" + sufix)) {
-//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
-//                    }
-//                }
-//                
-//            }
-//        }
+        }
 
         // Add value of vocab fields
         for (String sufix : SolrSearcher.prSufixAll) {
