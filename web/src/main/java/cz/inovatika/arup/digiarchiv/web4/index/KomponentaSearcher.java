@@ -26,7 +26,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
     private boolean parentSearchable;
 
     @Override
-    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
@@ -40,7 +40,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                         .addFilterQuery("komponenta_dokument_ident_cely:\"" + doc.getString("ident_cely") + "\"");
                 query.setFields(dfs);
                 
-                JSONObject r = SolrSearcher.json(client, "entities", query);
+                JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
                 ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
                 JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
                 for (int j = 0; j < reldocs.length(); j++) {
@@ -54,7 +54,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                 AkceSearcher as = new AkceSearcher();
                 query.setFields(as.getChildSearchFields("A"));
                 try {
-                    JSONObject sub = SolrSearcher.json(client, "entities", query);
+                    JSONObject sub = SolrSearcher.jsonSelect(client, "entities", query);
                     JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
                     
                     for (int j = 0; j < subs.length(); j++) {

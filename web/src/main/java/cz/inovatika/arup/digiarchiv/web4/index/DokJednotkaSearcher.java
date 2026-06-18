@@ -23,7 +23,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     private boolean parentSearchable;
 
     @Override
-    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
         PIANSearcher ps = new PIANSearcher();
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
@@ -42,7 +42,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             AkceSearcher as = new AkceSearcher();
             query.setFields(as.getChildSearchFields("A"));
             try {
-                JSONObject sub = SolrSearcher.json(client, "entities", query);
+                JSONObject sub = SolrSearcher.jsonSelect(client, "entities", query);
                 JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < subs.length(); j++) {
@@ -56,7 +56,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             }
 
             if (doc.has("dj_pian")) {
-                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields);
+                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields, false);
                 if (sub != null) {
                     doc.append("pian", sub);
                 }

@@ -144,7 +144,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
         PIANSearcher ps = new PIANSearcher();
         String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -177,7 +177,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
             }
 
             if (doc.has("dj_pian")) {
-                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields);
+                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields, false);
                 if (sub != null) {
                     doc.append("pian", sub);
                 }
