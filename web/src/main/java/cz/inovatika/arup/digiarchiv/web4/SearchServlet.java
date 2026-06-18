@@ -158,48 +158,56 @@ public class SearchServlet extends HttpServlet {
             @Override
             String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-                JSONObject json = new JSONObject();
-                try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-
-                    SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
-                            .setFacet(false);
-                    query.setFields("entity,is_deleted,searchable,stav"); 
-
-                    QueryResponse resp = client.query("entities", query);
-                    
-                    if (resp.getResults().getNumFound() == 0) {
-                        json.put("error", "not_found");
-                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "not_found");
-                    } else {
-                        SolrDocument doc = resp.getResults().get(0);
-                        boolean searchable = doc.containsKey("searchable") && (boolean)doc.get("searchable");
-                        if ((boolean)doc.get("is_deleted")) {
-                            json.put("error", "is_deleted"); 
-                            response.setStatus(HttpServletResponse.SC_GONE);
-                            response.sendError(HttpServletResponse.SC_GONE, "is_deleted");
-                        } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
-                            json.put("error", "not_searchable");
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "not_searchable");
-                        } else {
-                            String entity = (String) doc.get("entity");
-                            FedoraModel fm = FedoraModel.getFedoraModel(entity);
-                            if (fm.filterOAI(LoginServlet.user(request), doc)) {
-                                return Actions.ID.doPerform(request, response);
-                            } else {
-                                json.put("error", "forbidden");
-                                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "forbidden");
-                            }  
-                        }
-                    }
-
-                } catch (Exception ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                    json.put("error", ex);
-                }
-                return json.toString();
+              
+              JSONObject json = new JSONObject();
+              int code = HandleServlet.checkId(request.getParameter("id"), request, response);
+              if (code != 200) {
+                json.put("error", code + ""); 
+                  return json.toString();
+              } else {
+                return Actions.ID.doPerform(request, response);
+              }
+//                try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+//
+//                    SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
+//                            .setFacet(false);
+//                    query.setFields("entity,is_deleted,searchable,stav"); 
+//
+//                    QueryResponse resp = client.query("entities", query);
+//                    
+//                    if (resp.getResults().getNumFound() == 0) {
+//                        json.put("error", "not_found");
+//                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+//                        //response.sendError(HttpServletResponse.SC_NOT_FOUND, "not_found"); 
+//                    } else {
+//                        SolrDocument doc = resp.getResults().get(0);
+//                        boolean searchable = doc.containsKey("searchable") && (boolean)doc.get("searchable");
+//                        if ((boolean)doc.get("is_deleted")) {
+//                            json.put("error", "is_deleted"); 
+//                            response.setStatus(HttpServletResponse.SC_GONE);
+//                            //response.sendError(HttpServletResponse.SC_GONE, "is_deleted");
+//                        } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
+//                            json.put("error", "not_searchable");
+//                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                            //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "not_searchable");
+//                        } else {
+//                            String entity = (String) doc.get("entity");
+//                            FedoraModel fm = FedoraModel.getFedoraModel(entity);
+//                            if (fm.filterOAI(LoginServlet.user(request), doc)) {
+//                                return Actions.ID.doPerform(request, response);
+//                            } else {
+//                                json.put("error", "forbidden");
+//                                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//                                //response.sendError(HttpServletResponse.SC_FORBIDDEN, "forbidden");
+//                            }  
+//                        }
+//                    }
+//
+//                } catch (Exception ex) {
+//                    LOGGER.log(Level.SEVERE, null, ex);
+//                    json.put("error", ex);
+//                }
+//                return json.toString();
             }
         },
         ID {

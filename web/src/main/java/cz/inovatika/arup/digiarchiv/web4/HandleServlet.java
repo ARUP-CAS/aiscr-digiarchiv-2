@@ -94,8 +94,23 @@ public class HandleServlet extends HttpServlet {
         } else {
 
             // check 
-            if (!checkId(id, request, response)) {
-                return;
+            int code = checkId(id, request, response);
+            if (code != 200) {
+              try {
+                String msg = Options.getInstance().getJSONObject("Handle").optString("msg", "not_found");
+                String cs = I18n.getInstance().getLocale("cs").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+                String en = I18n.getInstance().getLocale("en").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+                msg = msg.replaceAll("###code###", code+"").replaceAll("###code_txt_cs###", cs).replaceAll("###code_txt_en###", en);
+                response.setContentType("text/html;charset=UTF-8");
+                PrintWriter writer = response.getWriter();
+                writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
+                writer.print(msg);
+                writer.print("</body></html>");
+              } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, "Error checking id {0}", ex);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+              }
+              return;
             }
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
@@ -117,7 +132,8 @@ public class HandleServlet extends HttpServlet {
                             .build()) {
                         HttpResponse<String> hresponse = httpclient.send(hrequest, HttpResponse.BodyHandlers.ofString());
                         String s = hresponse.body();
-                        if (!Options.getInstance().getBoolean("isTestEnv", false)) {
+                        // Write cache only for non logged 
+                        if (!Options.getInstance().getBoolean("isTestEnv", false) && !LoginServlet.isLogged(request)) {
                             FileUtils.writeStringToFile(cacheFile, s, "UTF-8");
                         }
                         out.println(s);
@@ -421,7 +437,8 @@ public class HandleServlet extends HttpServlet {
         }
     }
 
-    private static boolean checkId(String id, HttpServletRequest request, HttpServletResponse response) {
+    public static int checkId(String id, HttpServletRequest request, HttpServletResponse response) {
+        int code = 0;
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
             SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
@@ -429,47 +446,39 @@ public class HandleServlet extends HttpServlet {
             query.setFields("entity,is_deleted,searchable,stav");
 
             QueryResponse resp = client.query("entities", query);
-            String msg = Options.getInstance().getJSONObject("Handle").optString("msg", "not_found");
-            String code_txt;
+            
 
             if (resp.getResults().getNumFound() == 0) {
-                code_txt = HttpServletResponse.SC_NOT_FOUND+"";
+                code = HttpServletResponse.SC_NOT_FOUND;
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             } else {
                 SolrDocument doc = resp.getResults().get(0);
                 boolean searchable = doc.containsKey("searchable") && (boolean) doc.get("searchable");
                 if ((boolean) doc.get("is_deleted")) {
-                    code_txt = HttpServletResponse.SC_GONE+"";
+                    code = HttpServletResponse.SC_GONE;
                     response.setStatus(HttpServletResponse.SC_GONE);
                 } else if (!searchable && !LoginServlet.isLogged(request.getSession())) {
-                    code_txt = HttpServletResponse.SC_UNAUTHORIZED+"";
+                    code = HttpServletResponse.SC_UNAUTHORIZED;
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 } else {
                     String entity = (String) doc.get("entity");
                     FedoraModel fm = FedoraModel.getFedoraModel(entity);
                     if (fm.filterOAI(LoginServlet.user(request), doc)) {
-                        return true;
+                        return 200;
                     } else {
-                        code_txt = HttpServletResponse.SC_FORBIDDEN+"";
+                        code = HttpServletResponse.SC_FORBIDDEN;
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN); 
 
                     }
                 }
             }
-            String cs = I18n.getInstance().getLocale("cs").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code_txt);
-            String en = I18n.getInstance().getLocale("en").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code_txt);
-            msg = msg.replaceAll("###code###", code_txt).replaceAll("###code_txt_cs###", cs).replaceAll("###code_txt_en###", en);
-            response.setContentType("text/html;charset=UTF-8");
-            PrintWriter writer = response.getWriter();
-            writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
-            writer.print(msg);
-            writer.print("</body></html>");
+            
 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error checking id {0}", ex);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        return false;
+        return code;
     }
 
     private static JSONObject getDocument(String id, JSONObject user) {
