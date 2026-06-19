@@ -20,7 +20,7 @@
     <div>{{ 'museion.pocetSys' | translate}}: {{ predmetyDleAmcrId().pocetSys | translate}}</div>
     <div>
       <table mat-table [dataSource]="predmety()">
-        @for (f of columns; track $index; let idx = $index) {
+        @for (f of columns(); track $index; let idx = $index) {
 
         <ng-container [matColumnDef]="f">
           <th mat-header-cell *matHeaderCellDef [title]="'museion.desc.' + f | translate"> {{ 'museion.' + f |
@@ -29,8 +29,8 @@
         </ng-container>
         }
 
-        <tr mat-header-row *matHeaderRowDef="columns sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="columns() sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns();"></tr>
       </table>
     </div>
       }

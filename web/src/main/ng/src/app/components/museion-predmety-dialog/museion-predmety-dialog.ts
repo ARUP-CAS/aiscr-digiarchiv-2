@@ -53,6 +53,7 @@ export interface PredmetyDleAmcr {
     pocetSys: string;
     predmetSys: Predmet[];
     predmetPom: Predmet[];
+    pristup: string;
 }
 
 @Component({
@@ -73,11 +74,16 @@ export class MuseionPredmetyDialog {
   // predmetyDleAmcrId = computed(() => this.predmetyDleAmcrIdAll()[this.selectedOrganizace()]);
   // predmety = computed(() => [...this.predmetyDleAmcrId().predmetSys, ...this.predmetyDleAmcrId().predmetPom]);
 
-  columns = ['aktivita', 'areal', 'cislo', 'cisloCes', 'cisloEvidCes', 'dataceUrceni', 'dataceVzniku', 'datumNabyti',
+  columnsFull = ['aktivita', 'areal', 'cislo', 'cisloCes', 'cisloEvidCes', 'dataceUrceni', 'dataceVzniku', 'datumNabyti',
     'datumNalezu', 'datumStav', 'datumZapisu', 'druhObjektu', 'fond', 'hloubka', 'kompletnost',
     'komponenta', 'kontextObjekt', 'kontextPlocha', 'kontextStratigrafie', 'material', 'mnozstviSlovy', 'okolnosti', 'oznaceni',
     'pocetCasti', 'pocetKusu', 'podsbirka', 'popis', 'popisCasti', 'popisStav',
     'poznamkaUrceni', 'prirustkoveCislo', 'rozmer', 'sbirka', 'stav', 'technika']
+
+  columnsBasic = ['cislo'];
+
+  pristup = 'FULL'; // FULL | BASIC
+  columns = signal<string[]>([]);
 
   constructor(
     public dialogRef: MatDialogRef<MuseionPredmetyDialog>,
@@ -105,6 +111,8 @@ export class MuseionPredmetyDialog {
       return;
     }
     this.predmetyDleAmcrId.set(this.predmetyDleAmcrIdAll()[this.selectedOrganizace]);
+    this.pristup = this.predmetyDleAmcrId().pristup;
+    this.columns.set([...(this.pristup === 'FULL' ? this.columnsFull : this.columnsBasic)])
     this.predmety.set([
       ...(this.predmetyDleAmcrId().predmetSys ? this.predmetyDleAmcrId().predmetSys : []), 
       ...(this.predmetyDleAmcrId().predmetPom ? this.predmetyDleAmcrId().predmetPom : [])

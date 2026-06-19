@@ -176,8 +176,8 @@ public class MuseionClient {
       MuseionClient m = new MuseionClient();
       PredmetyStatistika stats = m.predmetyStatistika("", "", "");
       if (stats != null) {
-        _ids = stats.amcrIdPom;
-        _ids.addAll(stats.amcrIdSys);
+//        _ids = stats.amcrIdPom;
+//        _ids.addAll(stats.amcrIdSys);
       } else {
         _ids = new ArrayList();
       }
@@ -209,7 +209,7 @@ public class MuseionClient {
   public JSONObject indexStatistika() {
     JSONObject ret = new JSONObject();
     try {
-
+      JSONObject entitaMap = Options.getInstance().getJSONObject("museion").getJSONObject("entita");
       JSONArray end_points = Options.getInstance().getJSONObject("museion").getJSONArray("end_points");
 
       for (int i = 0; i < end_points.length(); i++) {
@@ -219,14 +219,14 @@ public class MuseionClient {
         if (stats != null) {
           SolrClient solr = SolrClientFactory.getSolrClient();
           List<SolrInputDocument> idocs = new ArrayList();
-          for (String id : stats.amcrIdSys) {
+          for (AmcrEntita entita : stats.amcrIdSys) {
             SolrInputDocument idoc = new SolrInputDocument();
-            idoc.setField("id", stats.organizaceId + "_" + id);
+            idoc.setField("id", stats.organizaceId + "_" + entita.id);
             idoc.setField("end_point", url);
-            idoc.setField("organizaceId", stats.organizaceId);
+            idoc.setField("organizaceId", stats.organizaceId); 
             idoc.setField("type", "amcrIdSys");
-            idoc.setField("amcrId", id);
-            //idoc.setField("entity", stats.entity);
+            idoc.setField("amcrId", entita.id);
+            idoc.setField("entity", entitaMap.optString(entita.typ));
             idocs.add(idoc);
           }
           if (!idocs.isEmpty()) {

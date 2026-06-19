@@ -737,6 +737,11 @@
           "clientSecret": ""
         }
       ],
+    "entita": {
+      "A": "akce",
+      "P": "projekt",
+      "S": "samostatny_nalez"
+    },
     "cacheExpirationHours": "2" 
   }
 }

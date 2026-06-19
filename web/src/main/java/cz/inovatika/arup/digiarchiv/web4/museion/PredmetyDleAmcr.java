@@ -22,6 +22,7 @@ public class PredmetyDleAmcr {
  *         <element name="pocetSys" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         <element name="predmetPom" type="{http://www.museion.cz/NalezyAmcrService}predmet" maxOccurs="unbounded" minOccurs="0"/>
  *         <element name="predmetSys" type="{http://www.museion.cz/NalezyAmcrService}predmet" maxOccurs="unbounded" minOccurs="0"/>
+<xs:element name="pristup" type="xs:string"/>
  *       </sequence>
  *     </restriction>
  *   </complexContent>
@@ -31,7 +32,10 @@ public class PredmetyDleAmcr {
  * 
  */
     
-    @JacksonXmlProperty(localName = "organizaceId")
+    @JacksonXmlProperty(localName = "pristup")
+    public String pristup;
+    
+    @JacksonXmlProperty(localName = "organizaceId") 
     public String organizaceId;
     
     @JacksonXmlProperty(localName = "pocetPom")

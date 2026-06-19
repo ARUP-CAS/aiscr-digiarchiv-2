@@ -38,12 +38,12 @@ public class PredmetyStatistika {
  */
     
     @JacksonXmlProperty(localName = "amcrIdPom")
-    public List<String> amcrIdPom;
+    public List<AmcrEntita> amcrIdPom;
     
     @JacksonXmlProperty(localName = "amcrIdSys")
-    public List<String> amcrIdSys;
+    public List<AmcrEntita> amcrIdSys;
     
-    @JacksonXmlProperty(localName = "organizaceId")
+    @JacksonXmlProperty(localName = "organizaceId") 
     public String organizaceId;
     
     @JacksonXmlProperty(localName = "pocetPomAkce")
