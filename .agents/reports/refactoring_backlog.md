@@ -1,11 +1,16 @@
 # Refactoring backlog — Digitální archiv AMČR (aiscr-digiarchiv-2)
 
-> Všechny záznamy jsou psány v češtině.
+> Legacy entries remain mostly in Czech; newly touched review prose follows the canonical English-default rule with verbatim Czech preserved where exact source wording matters.
 > Strukturální zlepšení objevená během auditu.
+>
+> **Poznámka k prioritě vs. závažnosti:** Sekce priorit (High / Medium / Low)
+> odrážejí **prioritu refaktoringu** (dopad na architekturu a business logiku) a
+> mohou se lišit od **závažnosti bugu** v `bugs.md`, která odráží technické riziko
+> samotného defektu. Oba údaje jsou záměrné a mají odlišný hodnoticí rámec.
 
 ---
 
-## Vysoká priorita
+## High Priority
 
 <!-- Architektonické problémy, bezpečnostní dluhy, Solr výkon -->
 
@@ -45,7 +50,7 @@
 - **Návrh:** Přidat unit testy pro SearchUtils, IndexUtils, FormatUtils, FedoraUtils.
   Zvážit integrační testy Solr dotazů.
 
-## Střední priorita
+## Medium Priority
 
 <!-- Optimalizace, XSLT refaktoring, Docker build -->
 
@@ -110,7 +115,7 @@
 - **Dopad:** Lokální spuštění aplikace není možné bez externích zdrojů; ztěžuje onboarding.
 - **Návrh:** Přidat vývojový `docker-compose.yml` nebo dokumentovat odkaz na infrastrukturní repozitář.
 
-## Nízká priorita
+## Low Priority
 
 <!-- Kosmetické úpravy, dokumentace, minor code quality -->
 

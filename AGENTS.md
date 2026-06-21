@@ -68,23 +68,36 @@ repository. Infrastructure configuration is maintained externally.
 
 Before starting any work, agents must gather repository context.
 
-### For review agents (running `.agents/prompts/review_codebase.md`)
+### For review agents (running the canonical `aiscr-codebase-review` workflow)
+
+The operational codebase-review workflow is the hub-canonical `aiscr-codebase-review`,
+authored in `aiscr-management` and delivered here through the repo-local assistant
+workflow surfaces (`.cursor/`, `.claude/`, `.codex/`, `.gemini/`). There is no
+long-form review prompt under `.agents/prompts/` — the workflow skill is the sole
+operational source.
+
+**Review output language:** Use the canonical English-default rule with a quotation
+carve-out — keep new review workflow prose English by default, while preserving
+verbatim Czech quotations, source comments, docstrings, documentation excerpts,
+GitHub issue titles, and AIS CR domain identifiers (Projekt, Akce, Lokalita,
+Dokument, PIAN, Hesláře, …) where exact wording matters. Use severity values
+`Critical` / `High` / `Medium` / `Low` in newly touched review artifacts. This
+supersedes the legacy "all review outputs in Czech" rule.
 
 Read all of:
 
 - `.agents/config/review_cache.json` — progress state
-- `.agents/config/review_config.yaml` — configuration
+- `.agents/config/review_config.yaml` — configuration (Tier 3 repo scope, incl. `phase_outputs`)
 - `.agents/analysis/repository_map.json` — structural index
 - `.agents/reports/bugs.md` — discovered issues
 - `.agents/reports/refactoring_backlog.md` — improvement backlog
-- `.agents/prompts/review_codebase.md` — task registry and execution procedure
 
 For **incremental updates** (after a full audit cycle is complete):
 
-- `.agents/prompts/review_update.md` — incremental update workflow (U01–U06)
 - `.agents/scripts/review_tools.py` — validation CLI (`hash`, `cross-validate`,
   `coverage-gaps`, `id-inventory`, `lint-artifacts`, `prompt-evolution`,
-  `repo-structure`, `status`, `all`)
+  `repo-structure`, `status`, `all`); the incremental update mode (U01–U06) is part
+  of the canonical `aiscr-codebase-review` workflow
 
 ### For general agents (feature work, bugfixes, refactoring)
 
@@ -140,6 +153,7 @@ The `.agents/` framework supports **long-running incremental technical review**.
 Agents must:
 
 - gather repository context before starting work
+- use the canonical codebase-review language rule for review artifacts: English by default, while preserving verbatim Czech quotations, source text, domain identifiers, and user-facing Czech documentation excerpts where those exact words matter
 - avoid repeating previously recorded work
 - prefer incremental improvements
 - record findings in `.agents/`
@@ -206,16 +220,16 @@ explicitly required by the task.
 
 ---
 
-## Shared automation and rules (no .cursor)
+## Shared automation and rules
 
-Shared rules and automation context for AI agents must live in **versioned** locations so they are not affected by `.gitignore`:
+Shared rules and automation context for AI agents live in **versioned** locations:
 
 - **This file (`AGENTS.md`)**: Agent governance, scope, behaviour, recommended skills.
 - **`CONTRIBUTING.md`**: Branch/PR workflow, commit format, testing.
 - **`CLAUDE.md`**: Quick orientation, paths, build commands, gotchas.
-- **`.agents/`**: Prompts (e.g. `prompts/review_codebase.md`, `prompts/review_update.md`), config (`config/review_config.yaml`), reports (`reports/bugs.md`), scripts (`scripts/review_tools.py`).
+- **`.agents/`**: config (`config/review_config.yaml`), reports (`reports/bugs.md`), scripts (`scripts/review_tools.py`); the codebase-review workflow is the delivered `aiscr-codebase-review` skill, not a `.agents/prompts/` file.
 
-Do **not** rely on `.cursor/`, `.claude/`, or `.codex/` for team-shared configuration — those directories are in `.gitignore`. Put only local or personal overrides there; canonical rules stay in the paths above.
+Agent-vendor folders such as `.cursor/`, `.claude/`, `.codex/`, `.gemini/`, `.clinerules/`, and `.qodo/` are **tracked repository content** when materialized from the `aiscr-management` hub via direct-bundle sync; treat them as governed delivery surfaces, not gitignored scratch space. Only machine-local files (for example `*/mcp*.json` and `.claude/settings.local.json`) stay in `.gitignore`.
 
 Detailed automation recommendations (MCP, skills, hooks, subagents) are in `.agents/reports/automation_recommendations.md`.
 
