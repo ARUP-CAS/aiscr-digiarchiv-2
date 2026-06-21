@@ -16,7 +16,6 @@
     "export-mapa": "Map Export",
     "record": "Record "
   },
-
   "navbar": {
     "desc": {
       "logo_desc": "AMCR Digital Archive",
@@ -28,8 +27,6 @@
       "Close": "Close menu"
     }
   },
-
-
   "searchbar": {
     "input": {
       "Zadejte vyhledávací dotaz": "Enter search query"
@@ -43,8 +40,6 @@
       "Zavřít mapu": "Close map"
     }
   },
-
-
   "toolbar": {
     "menu": {
       "row": "Line view (caption only)",
@@ -62,8 +57,6 @@
       "Skrýt časovou osu": "Hide time chart"
     }
   },
-
-
   "paginator": {
     "desc": {
       "Číslo stránky": "Page number",
@@ -99,8 +92,6 @@
       "desc": " descending"
     }
   },
-
-
   "facet": {
     "title": {
       "Typy záznamů": "Record types",
@@ -309,8 +300,6 @@
       "commonFacets": "Common queries"
     }
   },
-
-
   "card": {
     "field": {
       "f_typ_dokumentu": "Type",
@@ -528,8 +517,6 @@
       "idnotfound": "The referenced record could not be found. The record may have been deleted, is temporarily unavailable, or has not yet been archived. If there are any remaining issues, please contact us."
     }
   },
-
-
   "sidenav": {
     "tab": {
       "Info": "The displayed results correspond to the current map window.",
@@ -540,8 +527,6 @@
       "Filtrace / Výsledky": "Filtration/Results"
     }
   },
-
-
   "map": {
     "desc": {
       "select area": "Filter area",
@@ -573,8 +558,6 @@
     },
     "zoomToResults": "The number of results found is: {{numFound}}. To view the results, zoom in on the map or use filtering."
   },
-
-
   "footer": {
     "desc": {
       "Kontakt": "Contact",
@@ -590,8 +573,6 @@
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
     }
   },
-
-
   "dialog": {
     "title": {
       "Přihlášení uživatele": "User login",
@@ -665,8 +646,6 @@
       "Stáhněte soubor": "Download file"
     }
   },
-
-
   "export": {
     "field": {
       "ident_cely": "Identifier",
@@ -678,13 +657,11 @@
       "popis": "Description",
       "poznamka": "Note",
       "obdobi": "Period",
-
       "dokument_autor": "Document - author",
       "dokument_rok_vzniku": "Document - year of creation",
       "dokument_typ_dokumentu": "Document type",
       "dokument_material_originalu": "Original material",
       "dokument_oznaceni_originalu": "Document - original label",
-
       "projekt_typ_projektu": "Project - type",
       "akce_datum_zahajeni": "Start date",
       "akce_datum_ukonceni": "End date",
@@ -729,8 +706,6 @@
       "WKT": "WKT"
     }
   },
-
-
   "entities": {
     "dokument": {
       "title": "Documents",
@@ -784,8 +759,6 @@
       "title": "Document Content Parts"
     }
   },
-
-
   "dokument_kategorie_dokumentu": {
     "texty": "Texts",
     "foto": "Photographs",
@@ -800,14 +773,10 @@
     "C": "Czech",
     "M": "Morava and Silesia"
   },
-
-
   "alert": {
     "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed.",
     "sessionTimeout": "You have been automatically logged off due to inactivity."
   },
-
-
   "f_aktivita_sidlistni": "residential",
   "f_aktivita_pohrebni": "burial",
   "f_aktivita_vyrobni": "production",
@@ -818,7 +787,6 @@
   "f_aktivita_boj": "fighting",
   "f_aktivita_jina": "other activity",
   "f_aktivita_intruze": "find intrusion",
-
   "stats": {
     "ident_cely": "Record ID",
     "type": "Event",
@@ -851,34 +819,84 @@
     "posevidence": "Pozitive evidence"
   },
   "museion": {
-    "zobrazit_predmety": "Show findings in Museion",
-    "predmety": "Predmety",
-    "organizaceId": "Identifikátor organizace (správce sbírky, muzea)",
-    "pocetSys": "Počet inventárních čísel v systematické evidenci",
-    "pocetPom": "Počet evidenčních čísel v pomocné evidenci",
-    "predmetSys": "Seznam objektů \"předmět\" v systematické evidenci",
-    "predmetPom": "Seznam objektů \"předmět\" v pomocné evidenci",
-
-
-    "cislo": "Inventární číslo nebo číslo pomocné evidence",
-    "nazev" : "Název nebo jméno sbírkového předmětu nezávisle",
-    "popis": "Odborný popis předmětu",
-    "datace": "Datace vzniku nebo sběru (nálezu)",
-    "lokalita": "Lokalita sběru nebo nálezu sbírkového předmětu nezávisle na specializaci (na typu) - normalizovaná lokalita sběru/nálezu sbírkového předmětu.",
-    "material": "Odborný popis - seznam materiálů, ze kterých je sbírkový předmět vyroben.",
-    "technika":" Odborný popis - seznam použitých technik, které jsou na předmětu rozpoznány.",
-    "rozmer": "Odborný popis - rozměry předmětu.",
-    "desc" : {
-      "cislo": "Inventární číslo nebo číslo pomocné evidence",
-      "nazev" : "Název nebo jméno sbírkového předmětu nezávisle",
-      "popis": "Odborný popis předmětu",
-      "datace": "Datace vzniku nebo sběru (nálezu)",
-      "lokalita": "Lokalita sběru nebo nálezu sbírkového předmětu nezávisle na specializaci (na typu) - normalizovaná lokalita sběru/nálezu sbírkového předmětu.",
-      "material": "Odborný popis - seznam materiálů, ze kterých je sbírkový předmět vyroben.",
-      "technika":" Odborný popis - seznam použitých technik, které jsou na předmětu rozpoznány.",
-      "rozmer": "Odborný popis - rozměry předmětu."
+    "zobrazit_predmety": "Show registered items in connected Museion systems",
+    "predmety": "Items registered for the record",
+    "organizaceId": "Collection manager",
+    "pocetSys": "Number of inventory numbers in systematic records",
+    "pocetPom": "Number of registration numbers in auxiliary records",
+    "predmetSys": "List of items in systematic records",
+    "predmetPom": "List of items in auxiliary records",
+    "aktivita": "Activity",
+    "areal": "Area",
+    "cislo": "Registration number",
+    "cisloCes": "CES number",
+    "cisloEvidCes": "CES collection number",
+    "dataceUrceni": "Dating of identification",
+    "dataceVzniku": "Dating of origin",
+    "datumNabyti": "Date of acquisition",
+    "datumNalezu": "Date of find",
+    "datumStav": "Date of condition description",
+    "datumZapisu": "Date of registration",
+    "druhObjektu": "Object type",
+    "fond": "Fund",
+    "hloubka": "Find depth",
+    "kompletnost": "Completeness",
+    "komponenta": "Component",
+    "kontextObjekt": "Object",
+    "kontextPlocha": "Area",
+    "kontextStratigrafie": "Stratigraphic unit",
+    "material": "Material",
+    "mnozstviSlovy": "Quantity",
+    "okolnosti": "Circumstances",
+    "oznaceni": "Designation",
+    "pocetCasti": "Number of parts",
+    "pocetKusu": "Number of pieces",
+    "podsbirka": "Sub-collection",
+    "popis": "Description",
+    "popisCasti": "Description of parts",
+    "popisStav": "Condition description",
+    "poznamkaUrceni": "Note",
+    "prirustkoveCislo": "Accession number",
+    "rozmer": "Dimensions",
+    "sbirka": "Collection",
+    "stav": "Condition",
+    "technika": "Technique",
+    "desc": {
+      "aktivita": "Activity.",
+      "areal": "Area.",
+      "cislo": "Inventory number or auxiliary registration number, depending on the type.",
+      "cisloCes": "CES number.",
+      "cisloEvidCes": "CES collection registration number.",
+      "dataceUrceni": "Dating of the identification (expert description) of the item.",
+      "dataceVzniku": "Dating of origin (period) of the collection item.",
+      "datumNabyti": "Date of acquisition.",
+      "datumNalezu": "Date of find.",
+      "datumStav": "Date when the physical condition of the item was determined.",
+      "datumZapisu": "Date of entry into systematic records.",
+      "druhObjektu": "Object type.",
+      "fond": "Name of the fund.",
+      "hloubka": "Find depth.",
+      "kompletnost": "Completeness.",
+      "komponenta": "Component.",
+      "kontextObjekt": "Context - object.",
+      "kontextPlocha": "Context – area.",
+      "kontextStratigrafie": "Context – stratigraphy.",
+      "material": "Expert description – list of materials from which the collection item is made.",
+      "mnozstviSlovy": "Quantity in words.",
+      "okolnosti": "Find circumstances.",
+      "oznaceni": "Name (item name) of the collection item.",
+      "pocetCasti": "Number of item parts.",
+      "pocetKusu": "Number of pieces.",
+      "podsbirka": "Name of the sub-collection.",
+      "popis": "Expert description of the item that identifies it. Description of appearance, function, production, etc.",
+      "popisCasti": "Description of item parts.",
+      "popisStav": "Description of the current physical condition of the item.",
+      "poznamkaUrceni": "Note on the identification (expert description) of the item.",
+      "prirustkoveCislo": "Accession number.",
+      "rozmer": "Expert description – item dimensions.",
+      "sbirka": "Name of the collection.",
+      "stav": "Name of the current physical condition of the item.",
+      "technika": "Expert description – list of techniques used that are recognized on the item."
     }
-
-
   }
 }
