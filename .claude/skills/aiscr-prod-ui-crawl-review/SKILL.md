@@ -54,7 +54,7 @@ Do not promote or implement spawned backlog inside this skill.
 ## Steps
 
 1. Confirm **target repo path** (checkout). Confirm **staging vs production**; production requires explicit approval.
-2. Follow that repo’s **INITIALIZATION SEQUENCE** (e.g. **aiscr-webamcr:** `review_tools.py`; **aiscr-digiarchiv-2:** steps in its prompt—see plan appendix).
+2. Follow that repo’s **INITIALIZATION SEQUENCE** (e.g. **aiscr-webamcr:** `review_tools.py`; **aiscr-digiarchiv-2:** directory + hash steps as documented—see plan appendix). Enrolled siblings drive this via the canonical `aiscr-codebase-review` workflow, not a standalone prompt.
 3. Read `deployed_verify:` (or adopt the allowlist template via governance bootstrap if missing—separate change/PR).
 4. Execute checks per plan (Tier 1; Tier 2 if policy allows); record `inconclusive_reasons` when blocked (auth, bot wall).
 5. Write outputs in the target repo's active codebase-review output language. For repos governed by `aiscr-codebase-review`, that is the canonical **English-default with the Czech verbatim quotation carve-out** (source comments, docstrings, GitHub issue titles, and AIS CR domain identifiers stay Czech). For repos with their own review-output language rules, follow those.

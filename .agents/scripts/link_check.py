@@ -194,7 +194,7 @@ def is_ignored_by_git(root: Path, rel_path: str) -> bool:
             timeout=5,
         )
         return proc.returncode == 0
-    except FileNotFoundError, subprocess.TimeoutExpired:
+    except (FileNotFoundError, subprocess.TimeoutExpired):
         return False
 
 
