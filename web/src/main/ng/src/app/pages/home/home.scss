@@ -50,12 +50,6 @@
     color: var(--app-color-gray-6);
     background-color: var(--app-color-gray-2);
   }
-
-  // to delete this old version after David confirmation
-  // background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' shape-rendering='geometricPrecision' viewBox='0 0 700 260' preserveAspectRatio='none'%3E%3Cpath fill='%235882c4' d='M-10-10H362L333 38L382 76L318 118L246 132L178 164L116 132L-10 154Z'/%3E%3Cpath fill='%23F39225' d='M-10 154L116 132L178 164L246 132L318 118L354 154L286 198L318 270H-10Z'/%3E%3Cpath fill='%23247e4b' d='M362-10H536L508 30L558 65L486 104L538 142L354 154L318 118L382 76L333 38Z'/%3E%3Cpath fill='%23951E7A' d='M354 154L538 142L472 185L512 270H318L286 198Z'/%3E%3Cpath fill='%2385140E' d='M536-10H710V118L626 96L558 65L508 30Z'/%3E%3Cpath fill='%23778e98' d='M558 65L626 96L710 118V270H512L472 185L538 142L486 104Z'/%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.5' stroke-width='7' stroke-linejoin='miter' stroke-linecap='butt'%3E%3Cpath d='M362-10L333 38L382 76L318 118L246 132L178 164L116 132L-10 154'/%3E%3Cpath d='M116 132L178 164L246 132L318 118L354 154L286 198L318 270'/%3E%3Cpath d='M362-10L333 38L382 76L318 118L354 154L538 142L486 104L558 65L508 30L536-10'/%3E%3Cpath d='M354 154L538 142L472 185L512 270'/%3E%3Cpath d='M536-10L508 30L558 65L626 96L710 118'/%3E%3Cpath d='M558 65L486 104L538 142L472 185L512 270'/%3E%3C/g%3E%3C/svg%3E") !important;
-  // background-size: 100% 100% !important;
-  // background-position: center !important;
-  // background-repeat: no-repeat !important;
 }
 
 
@@ -100,7 +94,7 @@
       }
     }
 
-    @media only screen and (min-width: 600px) and (max-width: 959px) {
+    @media only screen and (min-width: 600px) and (max-width: 1229px) {
       .mat-mdc-card {
         &.app-card-entity {
           &.app-1 {
