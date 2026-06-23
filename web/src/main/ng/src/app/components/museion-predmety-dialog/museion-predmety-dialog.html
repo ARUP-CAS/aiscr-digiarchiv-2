@@ -1,23 +1,27 @@
 <h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>{{ 'museion.predmety' | translate }}
   {{ data.id }} - {{ data.typ }}</h1>
 <div mat-dialog-content class="app-pt-1">
+  @if(loading()) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+  @if(!loading()) {
   <div class="app-fxLayout app-column app-gap-4">
-    <div>
-      <!-- {{ 'museion.organizaceId' | translate}}: {{ predmetyDleAmcrId().organizaceId | translate}} -->
+    <div class="app-fxLayout app-column app-gap-4">
+      <div>
+        <!-- {{ 'museion.organizaceId' | translate}}: {{ predmetyDleAmcrId().organizaceId | translate}} -->
+          <mat-form-field appearance="outline">
+          <mat-label>{{ 'museion.organizaceId' | translate}}</mat-label>
+        <mat-select [(ngModel)]="selectedOrganizace" (selectionChange)="selectOrganizace()">
+          @for (f of organizaceIds(); track $index;) {
+          <mat-option [value]="f">{{ f | translate}}</mat-option>
+          }
+        </mat-select></mat-form-field>
 
+      </div>
 
-      <mat-select [(ngModel)]="selectedOrganizace" (selectionChange)="selectOrganizace()">
-        <mat-label>{{ 'museion.organizaceId' | translate}}</mat-label>
-        @for (f of organizaceIds(); track $index;) {
-        <mat-option [value]="f">{{ f | translate}}</mat-option>
-        }
-      </mat-select>
-
+      <div>{{ 'museion.pocetPom' | translate}}: {{ predmetyDleAmcrId().pocetPom | translate}}</div>
+      <div>{{ 'museion.pocetSys' | translate}}: {{ predmetyDleAmcrId().pocetSys | translate}}</div>
     </div>
-    @if(predmetyDleAmcrId()) {
-
-    <div>{{ 'museion.pocetPom' | translate}}: {{ predmetyDleAmcrId().pocetPom | translate}}</div>
-    <div>{{ 'museion.pocetSys' | translate}}: {{ predmetyDleAmcrId().pocetSys | translate}}</div>
     <div>
       <table mat-table [dataSource]="predmety()">
         @for (f of columns(); track $index; let idx = $index) {
@@ -33,8 +37,9 @@
         <tr mat-row *matRowDef="let row; columns: columns();"></tr>
       </table>
     </div>
-      }
+
   </div>
+  }
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>

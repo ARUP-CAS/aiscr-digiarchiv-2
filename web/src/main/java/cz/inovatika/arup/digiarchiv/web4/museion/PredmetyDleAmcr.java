@@ -47,4 +47,7 @@ public class PredmetyDleAmcr {
     @JacksonXmlProperty(localName = "predmetSys")
     public List<Predmet> predmetSys;
     
+    @JacksonXmlProperty(localName = "predmetPom")
+    public List<Predmet> predmetPom;
+    
 }

@@ -2,8 +2,6 @@
 package cz.inovatika.arup.digiarchiv.web4.museion;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import javax.xml.datatype.XMLGregorianCalendar;
-import org.apache.solr.client.solrj.beans.Field;
 
 /**
  *

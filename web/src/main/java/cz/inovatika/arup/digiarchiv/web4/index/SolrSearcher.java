@@ -1,6 +1,5 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
-import cz.inovatika.arup.digiarchiv.web4.LogAnalytics;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.museion.MuseionClient;
@@ -911,6 +910,7 @@ public class SolrSearcher {
       jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lat");
       jo.getJSONObject("stats").getJSONObject("stats_fields").remove("lng");
     }
+    SolrSearcher.addMuseionAll(jo, client);
     return jo;
   }
 
@@ -987,6 +987,17 @@ public class SolrSearcher {
 //                doc.put("inMuseion", MuseionClient.getIds().contains(doc.getString("ident_cely"))); 
 //            }
 
+    }
+  }
+
+  public static void addMuseionAll(JSONObject jo, SolrClient client) {
+    if (!jo.has("response")) {
+      return;
+    }
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      addInMuseion(client, doc);
     }
   }
 

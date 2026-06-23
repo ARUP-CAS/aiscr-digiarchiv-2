@@ -229,6 +229,16 @@ public class MuseionClient {
             idoc.setField("entity", entitaMap.optString(entita.typ));
             idocs.add(idoc);
           }
+          for (AmcrEntita entita : stats.amcrIdPom) {
+            SolrInputDocument idoc = new SolrInputDocument();
+            idoc.setField("id", stats.organizaceId + "_" + entita.id);
+            idoc.setField("end_point", url);
+            idoc.setField("organizaceId", stats.organizaceId); 
+            idoc.setField("type", "amcrIdSys");
+            idoc.setField("amcrId", entita.id);
+            idoc.setField("entity", entitaMap.optString(entita.typ));
+            idocs.add(idoc);
+          }
           if (!idocs.isEmpty()) {
             solr.add("museion", idocs);
           }

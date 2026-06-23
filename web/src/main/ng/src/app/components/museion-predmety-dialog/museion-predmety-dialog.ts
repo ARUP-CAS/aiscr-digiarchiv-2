@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MatSelectModule } from "@angular/material/select";
 import { FormsModule } from '@angular/forms';
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 export interface Predmet {
   aktivita: string,
@@ -59,12 +60,13 @@ export interface PredmetyDleAmcr {
 @Component({
   selector: 'app-museion-predmety-dialog',
   imports: [TranslateModule, MatDialogModule, MatButtonModule, MatTooltipModule, MatTableModule,
-    CdkDrag, CdkDragHandle, MatSelectModule, FormsModule],
+    CdkDrag, CdkDragHandle, MatSelectModule, FormsModule, MatProgressBarModule],
   templateUrl: './museion-predmety-dialog.html',
   styleUrl: './museion-predmety-dialog.scss',
 })
 export class MuseionPredmetyDialog {
 
+  loading = signal<boolean>(true);
   predmetyDleAmcrIdAll = signal<{[organizaceId: string]: PredmetyDleAmcr}>(null);
   predmetyDleAmcrId = signal<PredmetyDleAmcr>(null);
   predmety = signal<Predmet[]>([]);
@@ -74,11 +76,40 @@ export class MuseionPredmetyDialog {
   // predmetyDleAmcrId = computed(() => this.predmetyDleAmcrIdAll()[this.selectedOrganizace()]);
   // predmety = computed(() => [...this.predmetyDleAmcrId().predmetSys, ...this.predmetyDleAmcrId().predmetPom]);
 
-  columnsFull = ['aktivita', 'areal', 'cislo', 'cisloCes', 'cisloEvidCes', 'dataceUrceni', 'dataceVzniku', 'datumNabyti',
-    'datumNalezu', 'datumStav', 'datumZapisu', 'druhObjektu', 'fond', 'hloubka', 'kompletnost',
-    'komponenta', 'kontextObjekt', 'kontextPlocha', 'kontextStratigrafie', 'material', 'mnozstviSlovy', 'okolnosti', 'oznaceni',
-    'pocetCasti', 'pocetKusu', 'podsbirka', 'popis', 'popisCasti', 'popisStav',
-    'poznamkaUrceni', 'prirustkoveCislo', 'rozmer', 'sbirka', 'stav', 'technika']
+  columnsFull = ['cislo','prirustkoveCislo',
+'cisloCes',
+'cisloEvidCES',
+'fond',
+'sbirka',
+'podsbirka',
+'datumNalezu',
+'datumNabyti',
+'datumZapisu',
+'oznaceni',
+'popis',
+'material',
+'technika',
+'komponenta',
+'dataceVzniku',
+'areal',
+'aktivita',
+'druhObjektu',
+'okolnosti',
+'kontextPlocha',
+'kontextObjekt',
+'kontextStratigrafie',
+'hloubka',
+'mnozstviSlovy',
+'pocetKusu',
+'pocetCasti',
+'popisCasti',
+'rozmer',
+'kompletnost',
+'stav',
+'popisStav',
+'datumStav',
+'poznamkaUrceni',
+'dataceUrceni']
 
   columnsBasic = ['cislo'];
 
@@ -93,6 +124,7 @@ export class MuseionPredmetyDialog {
     }
 
   ngOnInit(): void {
+    this.loading.set(true);
     this.service.museionPredmety(this.data.id, this.data.typ).subscribe((res: any) => {
       if (res.hasError) {
         alert(this.service.getTranslation('dialog.alert.feedback_failed') + ": " + res.error);
@@ -102,6 +134,7 @@ export class MuseionPredmetyDialog {
         this.selectedOrganizace = this.organizaceIds()[0];
         this.selectOrganizace();
       }
+      this.loading.set(false);
     });
   }
 
