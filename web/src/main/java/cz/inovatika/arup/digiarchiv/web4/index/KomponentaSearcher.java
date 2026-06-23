@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
@@ -20,136 +21,165 @@ import org.json.JSONObject;
  */
 public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
-    public static final Logger LOGGER = Logger.getLogger(KomponentaSearcher.class.getName());
+  public static final Logger LOGGER = Logger.getLogger(KomponentaSearcher.class.getName());
 
-    final String ENTITY = "komponenta"; 
-    private boolean parentSearchable;
+  final String ENTITY = "komponenta";
+  private boolean parentSearchable;
 
-    @Override
-    public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
+  @Override
+  public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
-        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) {
-            try {
-                JSONObject doc = ja.getJSONObject(i);
-                
-                DokumentSearcher ds = new DokumentSearcher("dokument");
-                String dfs = String.join(",", ds.getChildSearchFields("D"));
-                SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("entity:dokument")
-                        .addFilterQuery("komponenta_dokument_ident_cely:\"" + doc.getString("ident_cely") + "\"");
-                query.setFields(dfs);
-                
-                JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
-                ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
-                JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
-                for (int j = 0; j < reldocs.length(); j++) {
-                    JSONObject cdj = reldocs.getJSONObject(j);
-                    doc.append("dokument", cdj);
-                    doc.put("datestamp", cdj.getString("datestamp"));
-                }
-                
-                String ident_cely = doc.getString("ident_cely");
-                query = new SolrQuery("*").addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"");
-                AkceSearcher as = new AkceSearcher();
-                query.setFields(as.getChildSearchFields("A"));
-                try {
-                    JSONObject sub = SolrSearcher.jsonSelect(client, "entities", query);
-                    JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
-                    
-                    for (int j = 0; j < subs.length(); j++) {
-                        doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
-                        doc.put("datestamp", subs.getJSONObject(i).getString("datestamp"));
-                    }
-                    parentSearchable = true;
-                    
-                } catch (SolrServerException | IOException ex) {
-                    Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (SolrServerException ex) {
-                Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      try {
+        JSONObject doc = ja.getJSONObject(i);
 
-    @Override
-    public boolean isRelatedSearchable() {
-        return parentSearchable;
-    }
+        DokumentSearcher ds = new DokumentSearcher("dokument");
+        String dfs = String.join(",", ds.getChildSearchFields("D"));
+        SolrQuery query = new SolrQuery("*")
+                .addFilterQuery("entity:dokument")
+                .addFilterQuery("komponenta_dokument_ident_cely:\"" + doc.getString("ident_cely") + "\"");
+        query.setFields(dfs);
 
-    @Override
-    public void processAsChild(HttpServletRequest request, JSONObject jo) {
-
-    }
-
-    @Override
-    public JSONObject search(HttpServletRequest request) {
-        JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            SolrQuery query = new SolrQuery()
-                    .setFacet(true);
-            setQuery(request, query);
-            JSONObject jo = SearchUtils.json(query, client, "entities");
-            SolrSearcher.addFavorites(jo, client, request);
-            return jo;
-
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            json.put("error", ex);
-        }
-        return json;
-    }
-    
-    public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
-        SolrSearcher.addCommonParams(request, query, ENTITY);
-        String pristupnost = LoginServlet.pristupnost(request.getSession());
-        if ("E".equals(pristupnost)) {
-            pristupnost = "D";
-        }
-        query.set("df", "text_all_" + pristupnost);
-        query.setFields(getSearchFields(pristupnost));
-        if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-            SolrSearcher.addLocationParams(request, query);
+        JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
+        ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
+        JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
+        for (int j = 0; j < reldocs.length(); j++) {
+          JSONObject cdj = reldocs.getJSONObject(j);
+          doc.append("dokument", cdj);
+          doc.put("datestamp", cdj.getString("datestamp"));
         }
 
-        SolrSearcher.addFilters(request, query, pristupnost);
+        String ident_cely = doc.getString("ident_cely");
+        query = new SolrQuery("*").addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"");
+        AkceSearcher as = new AkceSearcher();
+        query.setFields(as.getChildSearchFields("A"));
+        try {
+          JSONObject sub = SolrSearcher.jsonSelect(client, "entities", query);
+          JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
+
+          for (int j = 0; j < subs.length(); j++) {
+            doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
+            doc.put("datestamp", subs.getJSONObject(i).getString("datestamp"));
+          }
+          parentSearchable = true;
+
+        } catch (SolrServerException | IOException ex) {
+          Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      } catch (SolrServerException ex) {
+        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (IOException ex) {
+        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
+  @Override
+  public boolean isRelatedSearchable() {
+    return parentSearchable;
+  }
+
+  @Override
+  public void processAsChild(HttpServletRequest request, JSONObject jo) {
+
+  }
+
+  @Override
+  public JSONObject search(HttpServletRequest request) {
+    JSONObject json = new JSONObject();
+    try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery()
+              .setFacet(true);
+      setQuery(request, query);
+      JSONObject jo = SearchUtils.json(query, client, "entities");
+      SolrSearcher.addFavorites(jo, client, request);
+      return jo;
+
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, null, ex);
+      json.put("error", ex);
+    }
+    return json;
+  }
+
+  public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
+    SolrSearcher.addCommonParams(request, query, ENTITY);
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    if ("E".equals(pristupnost)) {
+      pristupnost = "D";
+    }
+    query.set("df", "text_all_" + pristupnost);
+    query.setFields(getSearchFields(pristupnost));
+    if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+      SolrSearcher.addLocationParams(request, query);
     }
 
-    @Override
-    public String export(HttpServletRequest request) {
-        return "";
+    SolrSearcher.addFilters(request, query, pristupnost);
+  }
+
+  @Override
+  public String export(HttpServletRequest request) {
+    return "";
+  }
+
+  @Override
+  public String[] getSearchFields(String pristupnost) {
+    //return new String[]{"*,komponenta_aktivita:[json],komponenta_areal:[json],komponenta_obdobi:[json],komponenta_nalez_objekt:[json],komponenta_nalez_predmet:[json]"};
+
+    List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+    List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONArray("header").toList();
+    List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONArray("detail").toList();
+
+    fields.addAll(headerFields);
+    fields.addAll(detailFields);
+
+    fields.add("pian_id:az_dj_pian");
+    fields.add("loc_rpt:loc_rpt_" + pristupnost);
+    fields.add("loc:loc_rpt_" + pristupnost);
+    fields.add("katastr:f_katastr_" + pristupnost);
+    fields.add("okres:f_okres");
+
+    String[] ret = fields.toArray(new String[0]);
+    return ret;
+
+  }
+
+  @Override
+  public void filter(JSONObject jo, String pristupnost, String org) {
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      String organizace = doc.optString("akce_organizace");
+      String docPr = doc.getString("pristupnost");
+
+      boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
+      if (docPr.compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
+        doc.remove("chranene_udaje");
+        doc.remove("az_chranene_udaje");
+        doc.remove("akce_chranene_udaje");
+      }
     }
+  }
 
-    @Override
-    public String[] getSearchFields(String pristupnost) {
-        return new String[]{"*,komponenta_aktivita:[json],komponenta_areal:[json],komponenta_obdobi:[json],komponenta_nalez_objekt:[json],komponenta_nalez_predmet:[json]"};
-    }
+  @Override
+  public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
-    @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+  }
 
-    }
+  @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return getSearchFields(pristupnost);
+  }
 
-    @Override
-    public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
+  @Override
+  public String[] getRelationsFields() {
+    return new String[]{"*,komponenta_aktivita:[json],komponenta_obdobi:[json]"};
+  }
 
-    }
+  @Override
+  public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
-    @Override
-    public String[] getChildSearchFields(String pristupnost) {
-        return getSearchFields(pristupnost);
-    }
-
-    @Override
-    public String[] getRelationsFields() {
-        return new String[]{"*,komponenta_aktivita:[json],komponenta_obdobi:[json]"};
-    }
-
-    @Override
-    public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
-
-    }
+  }
 
 }

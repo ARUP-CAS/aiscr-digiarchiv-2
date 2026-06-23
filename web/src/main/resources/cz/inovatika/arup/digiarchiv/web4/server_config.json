@@ -674,9 +674,21 @@
     "komponenta": {
       "header": [
         "komponenta_zdroj",
-        "komponenta_obdobi"
+        "komponenta_obdobi",
+        "komponenta_aktivita:[json]",
+        "komponenta_zdroj",
+        "komponenta_zdroj_ident_cely",
+        "komponenta_poznamka",
+        "okres",
+        "az_chranene_udaje:[json]"
       ],
-      "detail": [],
+      "detail": [
+        "komponenta_areal:[json]",
+        "komponenta_obdobi:[json]",
+        "komponenta_nalez_objekt:[json]",
+        "komponenta_nalez_predmet:[json]" 
+      ],
+      
       "facets": {
         "self":[
             "f_obdobi:komponenta_obdobi.id",
@@ -711,7 +723,8 @@
             "f_typ_dokumentu:dokument_typ_dokumentu",
             "f_rada:dokument_rada", 
             "f_tvar:dokument_tvar.tvar.id", 
-            "f_tvar:dokument_tvar[0].tvar.id"
+            "f_tvar:dokument_tvar[0].tvar.id",
+            "az_chranene_udaje"
          ],
         "parent":[
             "f_dj_typ:dj_typ",

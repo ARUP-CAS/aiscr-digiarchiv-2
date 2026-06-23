@@ -110,6 +110,7 @@ public class Komponenta implements FedoraModel {
         kdoc.setField("searchable", rootDoc.getFieldValue("searchable")); 
         kdoc.setField("is_deleted", rootDoc.getFieldValue("is_deleted")); 
         kdoc.setField("datestamp", rootDoc.getFieldValue("datestamp"));
+        
         String pristupnost = (String) rootDoc.getFieldValue("pristupnost");
         if (rootDoc.getFieldValue("entity").equals("dokument")) {
             pristupnost = "A";
