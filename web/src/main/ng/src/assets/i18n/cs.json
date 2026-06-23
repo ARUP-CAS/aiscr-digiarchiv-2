@@ -465,7 +465,9 @@
       "dalsi_katastry": "Další katastry",
       "lokalita_zachovalost": "Stav dochování",
       "lokalita_jistota": "Jistota určení",
-      "geom_system": "Primární EPSG"
+      "geom_system": "Primární EPSG",
+      "Původ": "Původ",
+      "Aktivita": "Aktivita"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",

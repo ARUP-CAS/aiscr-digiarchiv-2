@@ -76,7 +76,7 @@ export class Entity {
         this.setImg();
         this.checkRelations();
         this.hasDetail = false;
-        this.detailExpanded = this.inDocument;// && !this.mapDetail;
+        this._detailExpanded = this.inDocument();// && !this.mapDetail;
         if (this.mapDetail() || (isPlatformBrowser(this.platformId) && this.inDocument())) {
           this.getFullId();
         }
@@ -92,7 +92,7 @@ export class Entity {
     this.service.currentLang.subscribe(l => {
       this.setBibTex();
     });
-    if (this.inDocument) {
+    if (this.inDocument()) {
       this.state.documentProgress = 0;
       this.state.loading.set(false);;
     }
@@ -185,7 +185,7 @@ export class Entity {
   }
 
   print() {
-    if (this.inDocument) {
+    if (this.inDocument()) {
       this.service.print();
     } else {
       this.state.printing.set(true);

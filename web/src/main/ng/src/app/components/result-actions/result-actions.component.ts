@@ -31,7 +31,7 @@ export class ResultActionsComponent {
 
   readonly result = input<any>();
   readonly bibTex = input<string>();
-  readonly isDocumentDialogOpen = input<boolean>();
+  readonly isDocumentDialogOpen = input<boolean>(false);
   readonly detailExpanded = input<boolean>();
   readonly inDocument = input<boolean>();
   readonly mapDetail = input<boolean>();

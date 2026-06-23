@@ -1,7 +1,7 @@
-@if (!inDocument()) {
+@if (inDocument()) {
   <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
 }
-@if (inDocument()) {
+@if (!inDocument()) {
   <mat-card class="app-card-result " [class.app-card-child]="isChild()" [class.app-entity-komponenta]="!isChild()">
     <mat-card-header>
       <mat-card-title class="app-fxLayout app-row app-gap-4">
@@ -88,6 +88,7 @@
 </ng-template>
 
 <ng-template #contentTmpl>
+ 
   @if(!isChild()) {
   <div class="app-metadata app-mb-4">
       <div>

@@ -465,7 +465,9 @@
       "dalsi_katastry": "Additional cadastres",
       "lokalita_zachovalost": "State of preservation",
       "lokalita_jistota": "Level of confidence",
-      "geom_system": "Primary EPSG"
+      "geom_system": "Primary EPSG",
+      "Původ": "Origin",
+      "Aktivita": "Activity"
     },
     "button": {
       "Skrýt detail": "Hide detail",
