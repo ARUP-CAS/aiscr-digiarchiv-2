@@ -35,7 +35,7 @@
                       {{r[field.name] + '' | translate}}
                     }
                     @if (field.heslar) {
-                      {{r[field.name] | translate}}
+                      {{r[field.name] + '' | translate}}
                     }
                     @if (!field.heslar && field.type === 'date') {
                       {{r[field.name] | date : 'yyyy-MM-dd'}}
