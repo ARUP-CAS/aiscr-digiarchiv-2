@@ -21,13 +21,13 @@
                 <td>
                   @if (field.byPath) {
                     @if (field.heslar) {
-                      {{ getByPath(r, field.name) | translate}}
+                      {{ getByPath(r, field.name, field.map) | translate}}
                     }
                     @if (!field.heslar && field.type === 'date') {
-                      {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
+                      {{ getByPath(r, field.name, field.map) | date : 'yyyy-MM-dd'}}
                     }
                     @if (!field.heslar && field.type !== 'date') {
-                      {{ getByPath(r, field.name) }}
+                      {{ getByPath(r, field.name, field.map) }}
                     }
                   }
                   @if (!field.byPath) {

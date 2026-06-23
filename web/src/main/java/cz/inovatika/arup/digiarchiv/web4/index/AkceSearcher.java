@@ -25,7 +25,7 @@ public class AkceSearcher implements EntitySearcher {
     final String ENTITY = "akce";
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, String pristupnost, String org) { 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
@@ -36,11 +36,10 @@ public class AkceSearcher implements EntitySearcher {
             if (docPr.compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
                 doc.remove("chranene_udaje");
                 doc.remove("az_chranene_udaje");
-                doc.remove("akce_chranene_udaje");
-            }
+                doc.remove("akce_chranene_udaje"); 
+            } 
         }
-
-    }
+    } 
 
     @Override
     public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {

@@ -867,12 +867,13 @@
         "label": "okres"
       },
       {
-        "name": "az_chranene_udaje?.hlavni_katastr.value",
+        "name": "az_chranene_udaje.hlavni_katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "az_chranene_udaje?.dalsi_katastr[0] ? doc.az_chranene_udaje.dalsi_katastr.map(dk => dk.value).join(', ') : ''",
+        "name": "az_chranene_udaje.dalsi_katastr",
+        "map": true,
         "byPath": true,
         "label": "dalsi_katastry"
       },
@@ -929,17 +930,18 @@
         "label": "okres"
       },
       {
-        "name": "az_chranene_udaje?.hlavni_katastr.value",
+        "name": "az_chranene_udaje.hlavni_katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "az_chranene_udaje?.dalsi_katastr[0] ? doc.az_chranene_udaje.dalsi_katastr.map(dk => dk.value).join(', ') : ''",
+        "name": "az_chranene_udaje.dalsi_katastr",
+        "map": true,
         "byPath": true,
         "label": "dalsi_katastry"
       },
       {
-        "name": "lokalita_chranene_udaje?.nazev",
+        "name": "lokalita_chranene_udaje.nazev",
         "byPath": true,
         "label": "lokalita_nazev"
       },
@@ -952,7 +954,7 @@
         "heslar": "druh_lokality_druha"
       },
       {
-        "name": "lokalita_chranene_udaje?.popis",
+        "name": "lokalita_chranene_udaje.popis",
         "byPath": true,
         "label": "popis"
       },
@@ -970,12 +972,12 @@
         "label": "okres"
       },
       {
-        "name": "projekt_chranene_udaje?.hlavni_katastr.value",
+        "name": "projekt_chranene_udaje.hlavni_katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "projekt_chranene_udaje?.hlavni_katastr.dalsi_katastr.value",
+        "name": "projekt_chranene_udaje.hlavni_katastr.dalsi_katastr.value",
         "byPath": true,
         "label": "dalsi_katastry"
       },
@@ -1018,12 +1020,12 @@
         "label": "okres"
       },
       {
-        "name": "samostatny_nalez_chranene_udaje?.katastr.value",
+        "name": "samostatny_nalez_chranene_udaje.katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "samostatny_nalez_chranene_udaje?.lokalizace",
+        "name": "samostatny_nalez_chranene_udaje.lokalizace",
         "byPath": true,
         "label": "lokalizace"
       },

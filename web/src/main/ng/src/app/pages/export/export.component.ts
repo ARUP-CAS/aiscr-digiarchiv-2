@@ -14,9 +14,9 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, 
+    TranslateModule, RouterModule,
     MatProgressBarModule, DatePipe
-],
+  ],
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.scss']
@@ -38,7 +38,7 @@ export class ExportComponent implements OnInit {
 
 
   ngOnInit(): void {
-      this.setTitle();
+    this.setTitle();
     this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
@@ -50,23 +50,44 @@ export class ExportComponent implements OnInit {
 
   }
 
-  getByPath(doc: any, path: string) {
-    // let res = path.split('.').reduce(function(o, k) {
-    //   return o && o[k];
-    // }, doc);
-    // return res;
+  deepFind(obj: any, path: string) {
+    let paths = path.split('.')
+      , current = obj
+      , i;
+
+    for (i = 0; i < paths.length; ++i) {
+      // console.log(paths[i], current[paths[i]]);
+      if (current[paths[i]] == undefined) {
+        return undefined;
+      } else {
+        current = current[paths[i]];
+      }
+    }
+    return current;
+  }
+
+  getByPath(doc: any, path: string, map: boolean) {
     try {
-      return window.eval('doc.' + path)
+      //return eval('doc.' + path);
+      const o = this.deepFind(doc, path);
+      if (map) {
+        const m = o.map((dk: any) => dk.value).join(', ');
+        return m
+      } else {
+        return o
+      }
+      
     } catch (e: any) {
+      console.log(e)
       return '';
     }
-    
+
   }
 
   setTitle() {
-    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc') 
-    + ' | ' + this.service.getTranslation('title.export') 
-    + ' - ' + this.service.getTranslation('entities.'+ this.state.entity+'.title') );
+    this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc')
+      + ' | ' + this.service.getTranslation('title.export')
+      + ' - ' + this.service.getTranslation('entities.' + this.state.entity + '.title'));
   }
 
   search(params: Params) {
