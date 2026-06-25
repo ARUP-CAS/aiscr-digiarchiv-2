@@ -230,7 +230,12 @@ public class SamostatnyNalez implements FedoraModel {
 
         setFacets(idoc, prSufix);
         setFullText(idoc, prSufix);
+        
+        Komponenta k = new Komponenta();
+        k.fromSamostatnyNalez(idoc); 
     }
+    
+    
 
     public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("facets").toList();
@@ -384,8 +389,8 @@ class SnChraneneUdaje {
             final WKTReader reader = new WKTReader();
             try {
                 Geometry geometry = reader.read(wktStr);
-        // Point p = geometry.getCentroid();
-        Point p = geometry.getInteriorPoint();
+                // Point p = geometry.getCentroid();
+                Point p = geometry.getInteriorPoint();
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

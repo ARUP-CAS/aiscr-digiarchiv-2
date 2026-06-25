@@ -119,9 +119,9 @@
   <div class="app-icon-component dokument" [ngClass]="'app-facet-entity ' + _result.komponenta_zdroj"></div>
   <!-- <img src="assets/img/logo/logo-component.svg" /> -->
   <!-- <mat-icon class="app-entity-komponenta  " [matTooltip]="'entities.komponenta.title' | translate">{{ config.entityIcons["komponenta"] }}</mat-icon> -->
-  {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + _result.ident_cely"
+  {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a [routerLink]="'/id/' + (_result.komponenta_zdroj === 'samostatny_nalez' ? _result.komponenta_zdroj_ident_cely : _result.ident_cely)" 
     [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge"
-    [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }}
+    [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.komponenta_zdroj === 'samostatny_nalez' ? _result.komponenta_zdroj_ident_cely : _result.ident_cely }}
     <mat-icon>link</mat-icon></a> – <app-inline-filter [field]="'f_obdobi'" [value]="_result.komponenta_obdobi.id"
     [heslar]="'obdobi_druha'"></app-inline-filter>
   @if ((_result.hasOwnProperty('komponenta_jistota') && !_result['komponenta_jistota']) ||
