@@ -107,17 +107,6 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         fields.add("loc:loc_rpt_" + pristupnost);
 
         String[] ret = fields.toArray(new String[0]);
-
-//        String[] ret = new String[]{"ident_cely, datestamp, entity, stav, pristupnost",
-//            "samostatny_nalez_evidencni_cislo, samostatny_nalez_projekt, samostatny_nalez_okres, samostatny_nalez_hloubka, samostatny_nalez_poznamka, samostatny_nalez_nalezove_okolnosti",
-//            "obdobi, presna_datace, druh_nalezu, specifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace", "predmet_kategorie",
-//            "datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor, soubor_filepath",
-//            "soubor:[json]", "katastr:f_katastr_" + pristupnost,
-//            "chranene_udaje:[json]",
-//            "lokalizace:f_lokalizace_" + pristupnost,
-//            "f_katastr:f_katastr_" + pristupnost,
-//            "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost,
-//            "lat:lat_" + pristupnost, "lng:lng_" + pristupnost};
         return ret;
     }
 

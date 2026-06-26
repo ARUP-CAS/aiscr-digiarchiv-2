@@ -34,12 +34,13 @@
         <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.katastr"></app-inline-filter>
         <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result.okres"></app-inline-filter>)</span>
       </div>
-        @if (_result.az_chranene_udaje?.hlavni_katastr) {
+      @if (_result.az_chranene_udaje?.hlavni_katastr) {
       <div>
         <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
       </div>
-        }
+      }
+      @if(_result.komponenta_aktivita?.length > 0) {
       <div>
         <label class="app-label">{{ 'card.desc.Aktivity' | translate }}:</label>&#160;
         @for (aktivita of _result.komponenta_aktivita; track
@@ -48,12 +49,15 @@
           (!last) {
           <span>,&#160;</span>
           }}
-       
       </div>
+      }
+      @if(_result.komponenta_poznamka) {
       <div>
         <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;
         {{ _result.komponenta_poznamka }}
       </div>
+      }
+
     </div>
 
   </mat-card-content>
@@ -145,10 +149,79 @@
 
   @if(!isChild()) {
 
+    <mat-card-content>
+      <div class="app-card-detail">
+        <mat-accordion multi="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
+              <mat-panel-title>
+                {{ 'card.panelTitle.Popis komponenty' | translate }}:
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table>
+              <tbody>
 
 
-  }
+      @if (_result.samostatny_nalez_geom_system) {
+        <tr>
+          <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+          <td>{{ _result.samostatny_nalez_geom_system }}</td>
+        </tr>
+      }
+      @if (_result.samostatny_nalez_chranene_udaje?.geom_gml) {
+        <tr>
+          <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+          <td>{{ _result.samostatny_nalez_chranene_udaje?.geom_gml }}<br/>
+            @if (_result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml) {
+              {{ _result.samostatny_nalez_chranene_udaje?.geom_sjtsk_gml }}
+            }
+          </td>
+        </tr>
+      }
+      @if (_result.dokument_extra_data?.geom_gml) {
+        <tr>
+          <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+          <td>{{ _result.dokument_extra_data?.geom_gml }}<br/>
+            @if (_result.dokument_extra_data?.geom_sjtsk_gml) {
+              {{ _result.dokument_extra_data?.geom_sjtsk_gml }}
+            }
+          </td>
+        </tr>
+      }
+      @if (_result.samostatny_nalez_chranene_udaje?.geom_wkt) {
+        <tr>
+          <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+          <td>EPSG:{{ _result.samostatny_nalez_chranene_udaje.geom_wkt.epsg }}, {{ _result.samostatny_nalez_chranene_udaje?.geom_wkt.value }}<br/>
+            @if (_result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt) {
+              EPSG:{{ _result.samostatny_nalez_chranene_udaje.geom_sjtsk_wkt.epsg }},
+              {{ _result.samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt.value }}
+            }
+          </td>
+        </tr>
+      }
+      @if (_result.dokument_extra_data?.geom_wkt) {
+        <tr>
+          <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+          <td>EPSG:{{ _result.dokument_extra_data.geom_wkt.epsg }}, {{ _result.dokument_extra_data?.geom_wkt.value }}<br/>
+            @if (_result.dokument_extra_data?.geom_sjtsk_wkt) {
+              EPSG:{{ _result.dokument_extra_data.geom_sjtsk_wkt.epsg }},
+              {{ _result.dokument_extra_data?.geom_sjtsk_wkt.value }}
+            }
+          </td>
+        </tr>
+      }
+              </tbody>
+            </table>
 
+            @if (_result.pian) {
+              <app-pian [result]="_result.pian[0]" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
+            }
+          </mat-expansion-panel>
+          <!-- <app-related [related]="related()" [mapDetail]="mapDetail()"></app-related> -->
+        </mat-accordion>
+      </div>
+    </mat-card-content>
+  } @else {
 
   <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner" [class.app-mb-4]="inDocument()">
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto" #panelHeader
@@ -159,11 +232,6 @@
       </mat-panel-title>
       }
     </mat-expansion-panel-header>
-    @if (_result.komponenta_poznamka) {
-    <div>
-      <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;{{ _result.komponenta_poznamka }}
-    </div>
-    }
     @if (_result.komponenta_nalez_objekt?.length > 0 || _result.komponenta_nalez_predmet?.length > 0) {
     <mat-expansion-panel #panel1 [expanded]="true" hideToggle class="app-panel-inner">
       <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
@@ -188,5 +256,8 @@
       </ul>
     </mat-expansion-panel>
     }
-  </mat-expansion-panel>
+  </mat-expansion-panel>    
+  }
+
+
 </ng-template>

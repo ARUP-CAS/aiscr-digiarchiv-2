@@ -19,10 +19,11 @@ import { LokalitaComponent } from "../lokalita/lokalita.component";
 import { NalezComponent } from "../nalez/nalez.component";
 import { Entity } from '../entity/entity';
 import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
+import { PianComponent } from "../pian/pian.component";
 
 @Component({
   imports: [
-    TranslateModule, RouterModule,  CommonModule,
+    TranslateModule, RouterModule, CommonModule,
     MatCardModule, MatIconModule, MatSidenavModule, MatTabsModule,
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule,
@@ -31,7 +32,8 @@ import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
     forwardRef(() => DokumentComponent),
     forwardRef(() => LokalitaComponent),
     forwardRef(() => NalezComponent),
-    DokJednotkaComponent
+    DokJednotkaComponent,
+    PianComponent
 ],
   selector: 'app-komponenta',
   templateUrl: './komponenta.component.html',

@@ -686,7 +686,10 @@
         "komponenta_areal:[json]",
         "komponenta_obdobi:[json]",
         "komponenta_nalez_objekt:[json]",
-        "komponenta_nalez_predmet:[json]" 
+        "komponenta_nalez_predmet:[json]",
+        "samostatny_nalez_chranene_udaje:[json]",
+        "dokument_extra_data:[json]",
+        "pian_ident_cely"
       ],
       
       "facets": {
@@ -724,7 +727,8 @@
             "f_rada:dokument_rada", 
             "f_tvar:dokument_tvar.tvar.id", 
             "f_tvar:dokument_tvar[0].tvar.id",
-            "az_chranene_udaje"
+            "az_chranene_udaje",
+            "dokument_extra_data"
          ],
         "parent":[
             "f_dj_typ:dj_typ",

@@ -94,6 +94,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
       SolrSearcher.addFavorites(jo, client, request);
+      addPians(jo, client, request);
       return jo;
 
     } catch (Exception ex) {
@@ -164,7 +165,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   @Override
   public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
-
+    addPians(jo, client, request);
   }
 
   @Override
@@ -181,5 +182,34 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
   }
+  
+  public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("pian_ident_cely")) {
+                JSONArray cdjs = doc.getJSONArray("pian_ident_cely");
+                
+                String[] pians = (String[]) cdjs.toList().toArray(String[]::new);
+        
+                SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", pians ) + "\")")
+                    .addFilterQuery("entity:pian")
+                    .setSort("ident_cely", SolrQuery.ORDER.asc)
+                        .setFields(fields)
+                    .setParam("stats", false)
+                    .setFacet(false);
+                JSONObject joPians = SearchUtils.json(query, client, "entities");
+                doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs"));
+            }
+        }
+    }
 
 }
