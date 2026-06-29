@@ -304,6 +304,7 @@
     "samostatny_nalez": "location_on",
     "pian": "location_on",
     "knihovna_3d": "3d_rotation",
+    "ddata3d": "3d_rotation",
     "projekt": "dynamic_feed",
     "akce": "brush",
     "lokalita": "tour",

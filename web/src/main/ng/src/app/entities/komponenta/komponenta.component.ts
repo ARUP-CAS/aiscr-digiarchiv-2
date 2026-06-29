@@ -1,5 +1,5 @@
 import { Component, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -20,6 +20,7 @@ import { NalezComponent } from "../nalez/nalez.component";
 import { Entity } from '../entity/entity';
 import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
 import { PianComponent } from "../pian/pian.component";
+import { RelatedComponent } from '../../components/related/related.component';
 
 @Component({
   imports: [
@@ -28,9 +29,10 @@ import { PianComponent } from "../pian/pian.component";
     MatProgressBarModule, MatTooltipModule, MatExpansionModule,
     InlineFilterComponent, MatButtonModule,
     ResultActionsComponent,
-    forwardRef(() => AkceComponent),
-    forwardRef(() => DokumentComponent),
-    forwardRef(() => LokalitaComponent),
+    forwardRef(() => RelatedComponent),
+    // forwardRef(() => AkceComponent),
+    // forwardRef(() => DokumentComponent),
+    // forwardRef(() => LokalitaComponent),
     forwardRef(() => NalezComponent),
     DokJednotkaComponent,
     PianComponent
@@ -57,6 +59,23 @@ export class KomponentaComponent extends Entity {
        howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
+  }
+
+  override checkRelations() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
+      return;
+    }
+
+    const related: { entity: string; ident_cely: string; }[] = [];
+    this.relationsChecked = true;
+    if (this.result().komponenta_zdroj_ident_cely) {
+      related.push({entity: this.result().komponenta_zdroj, ident_cely: this.result().komponenta_zdroj_ident_cely})
+    }
+    this.related.set(related);
+
   }
 
 

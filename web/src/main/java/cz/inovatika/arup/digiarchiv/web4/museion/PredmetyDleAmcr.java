@@ -1,14 +1,9 @@
-
 package cz.inovatika.arup.digiarchiv.web4.museion;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
-/**
- *
- * @author alber
- */
 @JacksonXmlRootElement(localName = "predmetyDleAmcrIdResponse")
 public class PredmetyDleAmcr {
     

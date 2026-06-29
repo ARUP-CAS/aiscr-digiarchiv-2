@@ -28,6 +28,10 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   @Override
   public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    getRelated(jo, client, request, true);
+  }
+  
+  public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request, boolean inHandle) {
 
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
@@ -41,7 +45,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                 .addFilterQuery("komponenta_dokument_ident_cely:\"" + doc.getString("ident_cely") + "\"");
         query.setFields(dfs);
 
-        JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
+        JSONObject r = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
         ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
         JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
         for (int j = 0; j < reldocs.length(); j++) {
@@ -55,7 +59,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         AkceSearcher as = new AkceSearcher();
         query.setFields(as.getChildSearchFields("A"));
         try {
-          JSONObject sub = SolrSearcher.jsonSelect(client, "entities", query);
+          JSONObject sub = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
           JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
           for (int j = 0; j < subs.length(); j++) {
@@ -165,6 +169,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   @Override
   public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    getRelated(jo, client, request, false);
     addPians(jo, client, request);
   }
 
@@ -180,7 +185,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   @Override
   public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
-
+    getRelated(jo, client, request, false);
   }
   
   public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
