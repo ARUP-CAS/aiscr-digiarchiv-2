@@ -474,7 +474,7 @@
               }
               <mat-accordion multi="true">
                 @for(kd of dokument_cast.komponenta; track kd.ident_cely) {
-                <app-komponenta [result]="kd"></app-komponenta>
+                <app-komponenta [result]="kd" [isChild]="true"></app-komponenta>
                 }
 
                 @if (dokument_cast.neident_akce) {
