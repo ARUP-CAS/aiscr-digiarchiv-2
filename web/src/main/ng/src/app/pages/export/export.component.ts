@@ -1,7 +1,7 @@
 
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Params, RouterModule } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -11,11 +11,13 @@ import { AppState } from '../../app.state';
 import { SolrResponse } from '../../shared/solr-response';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DatePipe } from '@angular/common';
+import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 
 @Component({
   imports: [
     TranslateModule, RouterModule,
-    MatProgressBarModule, DatePipe
+    MatProgressBarModule, DatePipe,
+    MatPaginatorModule
   ],
   selector: 'app-export',
   templateUrl: './export.component.html',
@@ -24,11 +26,14 @@ import { DatePipe } from '@angular/common';
 export class ExportComponent implements OnInit {
 
   docs: any[] = [];
+  pageIndex: number = 0;
+  numFound: number;
 
   constructor(
     private ref: ChangeDetectorRef,
     private titleService: Title,
     private route: ActivatedRoute,
+    private router: Router,
     public config: AppConfiguration,
     public state: AppState,
     private service: AppService
@@ -44,6 +49,8 @@ export class ExportComponent implements OnInit {
       this.setTitle();
       this.ref.detectChanges();
     });
+    
+    this.pageIndex = this.route.snapshot.queryParams['page'] ? this.route.snapshot.queryParams['page'] : 0;
     this.route.queryParams.subscribe(val => {
       this.search(val);
     });
@@ -57,7 +64,7 @@ export class ExportComponent implements OnInit {
 
     for (i = 0; i < paths.length; ++i) {
       // console.log(paths[i], current[paths[i]]);
-      if (current[paths[i]] == undefined) {
+      if (current[paths[i]] === undefined) {
         return undefined;
       } else {
         current = current[paths[i]];
@@ -70,13 +77,13 @@ export class ExportComponent implements OnInit {
     try {
       //return eval('doc.' + path);
       const o = this.deepFind(doc, path);
-      if (map) {
+      if (map && o) {
         const m = o.map((dk: any) => dk.value).join(', ');
         return m
       } else {
         return o
       }
-      
+
     } catch (e: any) {
       console.log(e)
       return '';
@@ -88,6 +95,14 @@ export class ExportComponent implements OnInit {
     this.titleService.setTitle(this.service.getTranslation('navbar.desc.logo_desc')
       + ' | ' + this.service.getTranslation('title.export')
       + ' - ' + this.service.getTranslation('entities.' + this.state.entity + '.title'));
+  }
+
+  pageChanged(e: PageEvent) {
+    const params: any = {};
+    params.rows = e.pageSize;
+    params.page = e.pageIndex;
+    this.pageIndex = e.pageIndex + 1;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
   search(params: Params) {
@@ -103,7 +118,7 @@ export class ExportComponent implements OnInit {
         return;
       }
       this.docs = resp.response.docs;
-
+      this.numFound = resp.response.numFound;
     });
   }
 

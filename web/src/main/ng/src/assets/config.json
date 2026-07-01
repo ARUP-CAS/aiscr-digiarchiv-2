@@ -1043,11 +1043,11 @@
         "label": "obdobi"
       },
       {
-        "name": "samostatny_nalez_druh",
+        "name": "samostatny_nalez_druh_nalezu",
         "heslar": "f_druh_nalezu"
       },
       {
-        "name": "predmet_kategorie",
+        "name": "samostatny_nalez_kategorie_nalezu",
         "heslar": "predmet_kategorie"
       },
       {

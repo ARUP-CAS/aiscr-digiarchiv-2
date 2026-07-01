@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
-import static cz.inovatika.arup.digiarchiv.web4.index.LetSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,10 +14,6 @@ import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- *
- * @author alberto
- */
 public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   public static final Logger LOGGER = Logger.getLogger(KomponentaSearcher.class.getName());
