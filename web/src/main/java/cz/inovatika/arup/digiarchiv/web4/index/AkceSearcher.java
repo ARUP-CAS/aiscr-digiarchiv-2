@@ -2,15 +2,18 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
+import static cz.inovatika.arup.digiarchiv.web4.index.SamostatnyNalezSearcher.LOGGER;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.common.params.CursorMarkParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -208,8 +211,23 @@ public class AkceSearcher implements EntitySearcher {
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            // System.out.println(query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY);
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            String format = request.getParameter("format");
+            if (format == null) {
+              format = "json";
+            }
+            switch (format) {
+              case "csv":
+                return SearchUtils.csv(query, client, "entities");
+              case "json": 
+                return jo.toString();
+              default: 
+                return SearchUtils.json(query, client, "entities").toString();
+            }
+            
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return ex.toString();

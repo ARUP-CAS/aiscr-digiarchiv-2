@@ -25,6 +25,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.CursorMarkParams;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -108,6 +109,25 @@ public class SolrSearcher {
     //query.setParam("facet.heatmap.distErr", "0.04");
     query.setParam("facet.heatmap", "{!key=loc_rpt}" + locField)
             .setParam("facet.heatmap.maxCells", "1000000");
+  }
+  
+  public static void addExportParams(SolrQuery query, String entity) {
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    List<String> fs = new ArrayList();
+    for (int i = 0; i < exFields.length(); i++) {
+      JSONObject doc = exFields.getJSONObject(i);
+      String f = exFields.getJSONObject(i).getString("name");
+      if (f.contains(".")) {
+        f = f.split("\\.")[0] + ":[json]";
+      }
+      fs.add(f);
+    }
+    query.setFields(fs.toArray(new String[0]));
+    query.set("stats", false);
+    query.set("facet", false);
+    //query.addSort(query.getSorts().getFirst());
+    query.setParam("sort" , query.getSortField() + ",ident_cely asc");
+    query.set(CursorMarkParams.CURSOR_MARK_PARAM, CursorMarkParams.CURSOR_MARK_START); 
   }
 
   public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {

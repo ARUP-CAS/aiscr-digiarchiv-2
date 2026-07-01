@@ -439,6 +439,18 @@ public class SearchServlet extends HttpServlet {
 
       }
     },
+    EXPORT {
+      @Override
+      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String entity = "" + request.getParameter("entity");
+          EntitySearcher searcher = SearchUtils.getSearcher(entity);
+          if (searcher == null) {
+            return new JSONObject().put("error", "unrecognized entity").toString();
+          }
+        return searcher.export(request);
+      }
+    },
     EXPORT_MAPA {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -451,8 +463,8 @@ public class SearchServlet extends HttpServlet {
         if (searcher == null) {
           return new JSONObject().put("error", "unrecognized entity").toString();
         }
-        //return searcher.export(request);
-        return searcher.search(request).toString();
+        return searcher.export(request);
+        // return searcher.search(request).toString();
       }
     },
     PIANS {

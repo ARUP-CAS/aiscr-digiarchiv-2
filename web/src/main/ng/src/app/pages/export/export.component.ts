@@ -111,7 +111,7 @@ export class ExportComponent implements OnInit {
     if (!p['entity']) {
       p['entity'] = 'dokument';
     }
-    this.service.search(p as HttpParams).subscribe((resp: SolrResponse) => {
+    this.service.export(p as HttpParams).subscribe((resp: any) => {
       this.state.loading.set(false);
       if (resp.error) {
         return;

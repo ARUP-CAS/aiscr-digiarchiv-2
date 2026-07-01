@@ -257,6 +257,15 @@ export class AppService {
   }
 
   /**
+   * Fired for main search in export page
+   * @param params the params
+   */
+  export(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/export`, params);
+  }
+
+  /**
    * Fired for main search in results page
    * @param params the params
    */
