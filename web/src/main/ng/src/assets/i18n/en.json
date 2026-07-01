@@ -652,6 +652,9 @@
   "export": {
     "field": {
       "ident_cely": "Identifier",
+      "handle": "URL in Digiarchivu",
+      "api_prefix": "URL in API",
+      "show_in_AMCR": "URL in AMČR",
       "okres": "District",
       "katastr": "Cadastre",
       "pristupnost": "Acessibility",

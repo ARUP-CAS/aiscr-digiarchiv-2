@@ -316,7 +316,7 @@
     "mplany": "map",
     "ddata": "storage"
   },
-  "exportRowsLimit": 1000,
+  "exportRowsLimit": 100,
   "filterFields": [
     {
       "type": "text",

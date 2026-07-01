@@ -8,6 +8,10 @@
         <thead>
           <tr>
             <th>#</th>
+            <th>{{ 'export.field.handle' | translate }}</th>
+            @for (item of config.choiceApi; track item) {
+              <th>{{ 'export.field.' + item.label | translate }}</th>
+            }
             @for (field of config.exportFields[state.entity]; track field) {
               <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
             }
@@ -17,6 +21,10 @@
           @for (r of docs; track r; let idx = $index) {
             <tr>
               <td>{{idx + 1}}</td>
+              <td>{{ config.serverUrl + 'id/' + r['ident_cely']}}</td>
+              @for (item of config.choiceApi; track item) {
+                <td>{{ item.url + r['ident_cely']}}</td>
+              }
               @for (field of config.exportFields[state.entity]; track field) {
                 <td>
                   @if (field.byPath) {

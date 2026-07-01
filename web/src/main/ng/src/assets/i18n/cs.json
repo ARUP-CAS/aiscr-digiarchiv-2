@@ -652,6 +652,9 @@
   "export": {
     "field": {
       "ident_cely": "Identifikátor",
+      "handle": "URL v Digiarchivu",
+      "api_prefix": "URL v API",
+      "show_in_AMCR": "URL v AMČR",
       "okres": "Okres",
       "katastr": "Katastr",
       "pristupnost": "Přístupnost",

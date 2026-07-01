@@ -41,13 +41,12 @@ export class ExportComponent implements OnInit {
     this.state.bodyClass = 'app-page-export';
   }
 
-
   ngOnInit(): void {
     this.setTitle();
     this.state.hasError = false;
     this.service.currentLang.subscribe(res => {
       this.setTitle();
-      this.ref.detectChanges();
+      this.ref.detectChanges(); 
     });
     
     this.pageIndex = this.route.snapshot.queryParams['page'] ? this.route.snapshot.queryParams['page'] : 0;
