@@ -14,12 +14,9 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
-/**
- *
- * @author alberto
- */
-public class LokalitaSearcher implements EntitySearcher {
+ class LokalitaSearcher implements EntitySearcher {
 
     public static final Logger LOGGER = Logger.getLogger(LokalitaSearcher.class.getName());
 
@@ -224,7 +221,36 @@ public class LokalitaSearcher implements EntitySearcher {
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY);
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            String format = request.getParameter("format");
+            if (format == null) {
+              format = "json";
+            }
+            switch (format) {
+              case "csv":
+              case "xlsx":  
+                List<String> labels = SolrSearcher.getExportField(ENTITY, "label");
+                JSONArray ls = new JSONArray(labels);
+                String ret = org.json.CDL.rowToString(new JSONArray(labels));
+                try {
+                  ret += org.json.CDL.toString(ls, jo.getJSONObject("response").getJSONArray("docs"));
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, "Error", ex);
+                    return ex.toString();
+                }
+                return ret;
+              case "xml": 
+                return "<?xml version=\"1.0\" encoding=\"utf-8\"?><docs>" + XML.toString(jo.getJSONObject("response").getJSONArray("docs"), "doc") + "</docs>";
+              case "json": 
+                return jo.toString();
+              default: 
+                return SearchUtils.json(query, client, "entities").toString();
+            }
+            
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return ex.toString();

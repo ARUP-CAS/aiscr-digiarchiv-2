@@ -1,5 +1,5 @@
 
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
@@ -10,8 +10,9 @@ import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { SolrResponse } from '../../shared/solr-response';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { AppWindowRef } from '../../app.window-ref';
 
 @Component({
   imports: [
@@ -30,6 +31,8 @@ export class ExportComponent implements OnInit {
   numFound: number;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    private windowRef: AppWindowRef,
     private ref: ChangeDetectorRef,
     private titleService: Title,
     private route: ActivatedRoute,
@@ -126,6 +129,20 @@ export class ExportComponent implements OnInit {
       return result.soubor.length;
     } else {
       return 0;
+    }
+  }
+
+  downloadFormat(format: string) {
+    const api = format === 'xlsx' ? 'api/xlsx' : '/api/search/export';
+    const s = this.config.context + api +  document.location.search + '&format=' + format;
+    // alert(s);
+    // return s;
+    if (isPlatformBrowser(this.platformId)) {
+      const link = this.windowRef.nativeWindow.document.createElement('a');
+      link.href = s;
+      link.download = 'export.' + format;
+      link.click();
+      this.service.showInfoDialog(this.service.getTranslation('dialog.desc.export_started'), 2000);
     }
   }
 

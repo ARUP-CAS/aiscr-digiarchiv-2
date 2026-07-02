@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
+import com.jayway.jsonpath.JsonPath;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.museion.MuseionClient;
@@ -14,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.InputStream;
+import java.util.Collection;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -111,11 +113,23 @@ public class SolrSearcher {
             .setParam("facet.heatmap.maxCells", "1000000");
   }
   
+  public static List<String> getExportField(String entity, String field) {
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    List<String> fs = new ArrayList();
+    for (int i = 0; i < exFields.length(); i++) {
+      String f = exFields.getJSONObject(i).getString("name");
+      if (exFields.getJSONObject(i).has(field)) {
+        f = exFields.getJSONObject(i).getString(field);
+      }
+      fs.add(f);
+    }
+    return fs;
+  }
+  
   public static void addExportParams(SolrQuery query, String entity) {
     JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     List<String> fs = new ArrayList();
     for (int i = 0; i < exFields.length(); i++) {
-      JSONObject doc = exFields.getJSONObject(i);
       String f = exFields.getJSONObject(i).getString("name");
       if (f.contains(".")) {
         f = f.split("\\.")[0] + ":[json]";
@@ -1242,6 +1256,43 @@ public class SolrSearcher {
     }
     return null;
   }
+  
+  public static void processExportDocs(JSONArray docs, String entity) {
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    //List<String> fs = new ArrayList();
+    
+    for (int d = 0; d < docs.length(); d++) {
+      JSONObject doc = docs.getJSONObject(d);
+      for (int i = 0; i < exFields.length(); i++) {
+        JSONObject f = exFields.getJSONObject(i);
+        String name = f.getString("name");
+        if (name.contains(".") && doc.has(name.split("\\.")[0])) {
+          String val = readValuesByPath(name, doc.getJSONObject(name.split("\\.")[0]));
+          doc.put(f.getString("label"), val);
+        } 
+        //fs.add(f);
+      }
+    }
+    
+  }
+  
+  public static String readValuesByPath(String path, JSONObject json) {
+    String[] parts = path.split("\\.", 2);
+        try {
+            Object jpReturns = JsonPath.read(json.toString(), "$." + parts[1]);
+            if (jpReturns instanceof List) {
+                List<String> svals = (List<String>) jpReturns;
+                return String.join(", ", (String[])svals.toArray(new String[0]));
+            } else {
+              return (String)jpReturns;
+            }
+        } catch (Exception pnfex) {
+            LOGGER.log(Level.FINE, "No value for ", json);
+        }
+
+    
+    return "";
+   }
 
 //  public static void cleanRepeated(SolrInputDocument idoc) {
 //    for (String field : idoc.getFieldNames()) {

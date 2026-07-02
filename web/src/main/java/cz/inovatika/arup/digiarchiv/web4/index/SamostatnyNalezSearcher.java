@@ -8,13 +8,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.common.params.CursorMarkParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
 /**
  *
@@ -92,13 +91,26 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
             String format = request.getParameter("format");
             if (format == null) {
               format = "json";
             }
             switch (format) {
               case "csv":
-                return SearchUtils.csv(query, client, "entities");
+              case "xlsx":  
+                List<String> labels = SolrSearcher.getExportField(ENTITY, "label");
+                JSONArray ls = new JSONArray(labels);
+                String ret = org.json.CDL.rowToString(new JSONArray(labels));
+                try {
+                  ret += org.json.CDL.toString(ls, jo.getJSONObject("response").getJSONArray("docs"));
+                } catch (Exception ex) {
+                    LOGGER.log(Level.SEVERE, "Error", ex);
+                    return ex.toString();
+                }
+                return ret;
+              case "xml": 
+                return "<?xml version=\"1.0\" encoding=\"utf-8\"?><docs>" + XML.toString(jo.getJSONObject("response").getJSONArray("docs"), "doc") + "</docs>";
               case "json": 
                 return jo.toString();
               default: 

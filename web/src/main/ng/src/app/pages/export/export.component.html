@@ -29,13 +29,16 @@
                 <td>
                   @if (field.byPath) {
                     @if (field.heslar) {
-                      {{ getByPath(r, field.name, field.map) | translate}}
+                      {{ r[field.label] ? (r[field.label] + '' | translate) : '' }}
+                      <!-- {{ getByPath(r, field.name, field.map) | translate}} -->
                     }
                     @if (!field.heslar && field.type === 'date') {
-                      {{ getByPath(r, field.name, field.map) | date : 'yyyy-MM-dd'}}
+                      {{ r[field.label] ? (r[field.label] + '' | date : 'yyyy-MM-dd') : '' }}
+                      <!-- {{ getByPath(r, field.name, field.map) | date : 'yyyy-MM-dd'}} -->
                     }
                     @if (!field.heslar && field.type !== 'date') {
-                      {{ getByPath(r, field.name, field.map) }}
+                      {{r[field.label] ? r[field.label] : ''}}
+                      <!-- {{ getByPath(r, field.name, field.map) }} -->
                     }
                   }
                   @if (!field.byPath) {
@@ -58,8 +61,14 @@
           }
         </tbody>
       </table>
-      @if (numFound > docs.length) {
       <div class="app-fxLayout app-row app-baseline">
+        <a (click)="downloadFormat('csv')" [download]="'export.csv'">csv</a> 
+        <span class="app-pipe"></span>
+        <a (click)="downloadFormat('xlsx')" [download]="'export.xlsx'">xlsx</a> 
+        <span class="app-pipe"></span>
+        <a (click)="downloadFormat('xml')" [download]="'export.xml'">xml</a>
+
+      @if (numFound > docs.length) {
         <mat-paginator class="app-fxFlex"
           [hidePageSize]="true"
           [length]="numFound"
@@ -68,8 +77,8 @@
           [pageSizeOptions]="[10, 100, 1000]"
           (page)="pageChanged($event)">
         </mat-paginator>
-      </div>
       }
+      </div>
     }
   </div>
 }

@@ -1,8 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
-import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.fedora.models.Uzivatel;
-import cz.inovatika.arup.digiarchiv.web4.index.ComponentSearcher;
 import cz.inovatika.arup.digiarchiv.web4.index.EntitySearcher;
 import cz.inovatika.arup.digiarchiv.web4.index.PIANSearcher;
 import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
@@ -22,8 +20,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -442,12 +438,17 @@ public class SearchServlet extends HttpServlet {
     EXPORT {
       @Override
       String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        String format = request.getParameter("format");
+        if ("csv".equals(format)) {
+          response.setContentType("text/csv;charset=UTF-8");
+        } else if ("xml".equals(format)) {
+          response.setContentType("text/xml;charset=UTF-8");
+        }
         String entity = "" + request.getParameter("entity");
-          EntitySearcher searcher = SearchUtils.getSearcher(entity);
-          if (searcher == null) {
-            return new JSONObject().put("error", "unrecognized entity").toString();
-          }
+        EntitySearcher searcher = SearchUtils.getSearcher(entity);
+        if (searcher == null) {
+          return new JSONObject().put("error", "unrecognized entity").toString();
+        }
         return searcher.export(request);
       }
     },

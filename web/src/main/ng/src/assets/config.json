@@ -873,7 +873,7 @@
         "label": "katastr"
       },
       {
-        "name": "az_chranene_udaje.dalsi_katastr",
+        "name": "az_chranene_udaje.dalsi_katastr[*].value",
         "map": true,
         "byPath": true,
         "label": "dalsi_katastry"
@@ -936,7 +936,7 @@
         "label": "katastr"
       },
       {
-        "name": "az_chranene_udaje.dalsi_katastr",
+        "name": "az_chranene_udaje.dalsi_katastr[*].value",
         "map": true,
         "byPath": true,
         "label": "dalsi_katastry"
