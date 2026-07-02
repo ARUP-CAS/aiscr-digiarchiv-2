@@ -6,6 +6,7 @@ package cz.inovatika.arup.digiarchiv.web4;
 
 import cz.inovatika.arup.digiarchiv.web4.index.EntitySearcher;
 import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
+import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,27 +14,28 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.StringReader;
+import java.time.Instant;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
 
 /**
  *
  * @author alber
  */
-@WebServlet(name = "XLSXServlet", urlPatterns = {"/xlsx"})
-public class XLSXServlet extends HttpServlet {
+@WebServlet(name = "ExportServlet", urlPatterns = {"/exp"})
+public class ExportServlet extends HttpServlet {
 
-  public static final Logger LOGGER = Logger.getLogger(XLSXServlet.class.getName());
+  public static final Logger LOGGER = Logger.getLogger(ExportServlet.class.getName());
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,16 +48,45 @@ public class XLSXServlet extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    response.setContentType("application/xlsx;charset=UTF-8");
     try {
-      response.setHeader("Content-Disposition", "filename=export.xlsx");
       String entity = "" + request.getParameter("entity");
       EntitySearcher searcher = SearchUtils.getSearcher(entity);
       if (searcher == null) {
         return;
       }
-      String csv = searcher.export(request);
-      csvToXLSX(csv, response, entity);
+      JSONObject jo = searcher.export(request);
+      String format = request.getParameter("format");
+      Instant now = Instant.now();
+      response.setHeader("Content-Disposition", "filename=export_" + entity + "_" + now.toEpochMilli() + "." + format);
+      switch (format) {
+        case "csv":
+        case "xlsx":
+          List<String> labels = SolrSearcher.getExportField(entity, "label");
+          JSONArray ls = new JSONArray(labels);
+          String csv = org.json.CDL.rowToString(new JSONArray(labels));
+          csv += org.json.CDL.toString(ls, jo.getJSONObject("response").getJSONArray("docs"));
+          if ("xlsx".equals(format)) {
+            response.setContentType("application/xlsx;charset=UTF-8");
+            csvToXLSX(csv, response, entity);
+          } else {
+            response.setContentType("text/csv;charset=UTF-8");
+            response.getWriter().print(csv);
+          }
+          break;
+        case "xml":
+          response.setContentType("text/xml;charset=UTF-8");
+          String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><docs>" + XML.toString(jo.getJSONObject("response").getJSONArray("docs"), "doc") + "</docs>";
+          response.getWriter().print(xml);
+          break;
+        case "json":
+          response.setContentType("application/json;charset=UTF-8");
+          response.getWriter().print(jo.getJSONObject("response").getJSONArray("docs").toString());
+          break;
+        default:
+          response.setContentType("application/json;charset=UTF-8");
+          response.getWriter().print(jo.toString());
+      }
+
     } catch (Exception e1) {
       LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

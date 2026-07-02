@@ -81,8 +81,8 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public JSONObject export(HttpServletRequest request) {
+        return new JSONObject();
     }
 
     @Override

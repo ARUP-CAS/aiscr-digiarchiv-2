@@ -133,10 +133,7 @@ export class ExportComponent implements OnInit {
   }
 
   downloadFormat(format: string) {
-    const api = format === 'xlsx' ? 'api/xlsx' : '/api/search/export';
-    const s = this.config.context + api +  document.location.search + '&format=' + format;
-    // alert(s);
-    // return s;
+    const s = this.config.context + 'api/exp' +  document.location.search + '&format=' + format; 
     if (isPlatformBrowser(this.platformId)) {
       const link = this.windowRef.nativeWindow.document.createElement('a');
       link.href = s;

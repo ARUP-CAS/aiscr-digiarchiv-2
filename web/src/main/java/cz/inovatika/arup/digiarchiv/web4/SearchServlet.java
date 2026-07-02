@@ -449,7 +449,7 @@ public class SearchServlet extends HttpServlet {
         if (searcher == null) {
           return new JSONObject().put("error", "unrecognized entity").toString();
         }
-        return searcher.export(request);
+        return searcher.export(request).toString();
       }
     },
     EXPORT_MAPA {
@@ -464,7 +464,7 @@ public class SearchServlet extends HttpServlet {
         if (searcher == null) {
           return new JSONObject().put("error", "unrecognized entity").toString();
         }
-        return searcher.export(request);
+        return searcher.export(request).toString();
         // return searcher.search(request).toString();
       }
     },

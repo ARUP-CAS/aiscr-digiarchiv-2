@@ -86,8 +86,8 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        return "";
+    public JSONObject export(HttpServletRequest request) {
+        return new JSONObject();
     }
 
     @Override

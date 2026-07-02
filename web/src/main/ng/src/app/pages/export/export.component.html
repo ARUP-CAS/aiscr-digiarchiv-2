@@ -62,11 +62,15 @@
         </tbody>
       </table>
       <div class="app-fxLayout app-row app-baseline">
+        <span class="app-pipe"></span>
         <a (click)="downloadFormat('csv')" [download]="'export.csv'">csv</a> 
         <span class="app-pipe"></span>
         <a (click)="downloadFormat('xlsx')" [download]="'export.xlsx'">xlsx</a> 
         <span class="app-pipe"></span>
         <a (click)="downloadFormat('xml')" [download]="'export.xml'">xml</a>
+        <span class="app-pipe"></span>
+        <a (click)="downloadFormat('json')" [download]="'export.json'">json</a>
+        <span class="app-pipe"></span>
 
       @if (numFound > docs.length) {
         <mat-paginator class="app-fxFlex"

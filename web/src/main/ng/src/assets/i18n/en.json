@@ -601,6 +601,7 @@
       "Jméno": "Name",
       "Komentář": "Comment",
       "download_started": "Download started",
+      "export_started": "Export started",
       "viewerInfo": "The content is displayed in preview quality. Use the download icon to get the content in full quality."
     },
     "input": {
