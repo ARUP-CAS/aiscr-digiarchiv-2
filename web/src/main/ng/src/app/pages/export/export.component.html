@@ -1,13 +1,17 @@
 @if (state.loading()) {
   <div class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
 }
-@if (docs.length > 0) {
+@if (!state.loading() && docs.length > 0) {
   <div>
     @if (docs.length > 0) {
       <table>
         <thead>
           <tr>
             <th>#</th>
+            <th>{{ 'export.field.handle' | translate }}</th>
+            @for (item of config.choiceApi; track item) {
+              <th>{{ 'export.field.' + item.label | translate }}</th>
+            }
             @for (field of config.exportFields[state.entity]; track field) {
               <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
             }
@@ -17,17 +21,24 @@
           @for (r of docs; track r; let idx = $index) {
             <tr>
               <td>{{idx + 1}}</td>
+              <td>{{ config.serverUrl + 'id/' + r['ident_cely']}}</td>
+              @for (item of config.choiceApi; track item) {
+                <td>{{ item.url + r['ident_cely']}}</td>
+              }
               @for (field of config.exportFields[state.entity]; track field) {
                 <td>
                   @if (field.byPath) {
                     @if (field.heslar) {
-                      {{ getByPath(r, field.name) | translate}}
+                      {{ r[field.label] ? (r[field.label] + '' | translate) : '' }}
+                      <!-- {{ getByPath(r, field.name, field.map) | translate}} -->
                     }
                     @if (!field.heslar && field.type === 'date') {
-                      {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
+                      {{ r[field.label] ? (r[field.label] + '' | date : 'yyyy-MM-dd') : '' }}
+                      <!-- {{ getByPath(r, field.name, field.map) | date : 'yyyy-MM-dd'}} -->
                     }
                     @if (!field.heslar && field.type !== 'date') {
-                      {{ getByPath(r, field.name) }}
+                      {{r[field.label] ? r[field.label] : ''}}
+                      <!-- {{ getByPath(r, field.name, field.map) }} -->
                     }
                   }
                   @if (!field.byPath) {
@@ -35,13 +46,13 @@
                       {{r[field.name] + '' | translate}}
                     }
                     @if (field.heslar) {
-                      {{r[field.name] | translate}}
+                      {{ r[field.name] ? (r[field.name] + '' | translate) : '' }}
                     }
                     @if (!field.heslar && field.type === 'date') {
                       {{r[field.name] | date : 'yyyy-MM-dd'}}
                     }
                     @if (!field.heslar && field.type !== 'date' && field.type !== 'boolean') {
-                      {{r[field.name]}}
+                      {{r[field.name] ? r[field.name] : ''}}
                     }
                   }
                 </td>
@@ -50,6 +61,28 @@
           }
         </tbody>
       </table>
+      <div class="app-fxLayout app-row app-baseline">
+        <span class="app-pipe"></span>
+        <a (click)="downloadFormat('csv')" [download]="'export.csv'">csv</a> 
+        <span class="app-pipe"></span>
+        <a (click)="downloadFormat('xlsx')" [download]="'export.xlsx'">xlsx</a> 
+        <span class="app-pipe"></span>
+        <a (click)="downloadFormat('xml')" [download]="'export.xml'">xml</a>
+        <span class="app-pipe"></span>
+        <a (click)="downloadFormat('json')" [download]="'export.json'">json</a>
+        <span class="app-pipe"></span>
+
+      @if (numFound > docs.length) {
+        <mat-paginator class="app-fxFlex"
+          [hidePageSize]="true"
+          [length]="numFound"
+          [pageSize]="config.exportRowsLimit"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="[10, 100, 1000]"
+          (page)="pageChanged($event)">
+        </mat-paginator>
+      }
+      </div>
     }
   </div>
 }

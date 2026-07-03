@@ -113,14 +113,20 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
+    public JSONObject export(HttpServletRequest request) {
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY);
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            return jo;
+            
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            return new JSONObject().put("error",ex.toString());
         }
     }
 
@@ -144,7 +150,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
         PIANSearcher ps = new PIANSearcher();
         String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -164,7 +170,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
             AkceSearcher as = new AkceSearcher();
             query.setFields(as.getChildSearchFields("A"));
             try {
-                JSONObject sub = SolrSearcher.json(client, "entities", query);
+                JSONObject sub = SolrSearcher.jsonSelect(client, "entities", query);
                 JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < subs.length(); j++) {
@@ -177,7 +183,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
             }
 
             if (doc.has("dj_pian")) {
-                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields);
+                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields, false);
                 if (sub != null) {
                     doc.append("pian", sub);
                 }

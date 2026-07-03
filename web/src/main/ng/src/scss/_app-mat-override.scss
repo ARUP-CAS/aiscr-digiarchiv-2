@@ -5,6 +5,7 @@
 @use "theme-colors" as my-theme;
 @use "app-mixins-icon" as *;
 @use "app-mixins-entity-color" as *;
+@use "app-mixins-entity-bg-color" as *;
 @use "app-mixins-entity-facet-color" as *;
 @use "app-mixins-entity-card-color" as *;
 
@@ -49,6 +50,50 @@
       list-item-label-text-weight: 400,
       list-item-label-text-font: 'Roboto Condensed, sans-serif'
     ));
+    
+    &.komponenta {
+      border: 1px solid var(--app-color-gray-4);
+
+      &.app-active {
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2); 
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+      }
+
+      .app-left {
+        border-right: 1px solid var(--app-color-gray-4);
+        padding: 0 11px;
+
+        img {
+          height: 24px;
+        }
+      }
+
+      .app-right {
+        span {
+          &:first-child {
+            background: linear-gradient(
+            90deg,
+            #5882c4 0%,
+            #F39225 20%,
+            #247e4b 40%,
+            #951E7A 60%,
+            #85140E 80%,
+            #778e98 100%
+            );
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+          }
+          &:last-child {
+            color: var(--app-color-gray-6);
+          }
+        }
+        
+      }
+    }
 
     padding: 0;
     margin-bottom: 8px;
@@ -428,6 +473,31 @@
   }
   .app-card-result {
     @include setEntityCardColor();
+
+    &.app-entity-komponenta {
+      .mat-mdc-card-title {
+        .app-icon-component {
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+          margin-right: 4px;
+          display: inline-block;
+          background-color: var(--app-color-gray-6);
+
+          mask: url(../assets/img/logo/logo-component.svg) no-repeat center;
+          mask-size: contain;
+
+          -webkit-mask: url(../assets/img/logo/logo-component.svg) no-repeat center;
+          -webkit-mask-size: contain;
+
+          @include setEntityBgColor();
+
+         /*  &.dokument {
+            background-color: #F39225;
+          } */
+        }
+      }
+    }
 
     a {
       &:hover {

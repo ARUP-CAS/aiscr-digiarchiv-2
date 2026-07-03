@@ -228,6 +228,9 @@ export class MapViewComponent {
       if (window.innerWidth < this.config.hideMenuWidth) {
         this.opened = false;
         this.state.sidenavOpened = false;
+        if (this.map) {
+          this.map.closePopup();
+        }
       }
     }));
 
@@ -318,6 +321,9 @@ export class MapViewComponent {
     }
 
     if (this.mapIdChanged) {
+      if (this.map) {
+        this.map.closePopup();
+      }
       this.state.mapResult.set(null);
     }
     if (!this.currentMapId) {
@@ -327,7 +333,8 @@ export class MapViewComponent {
       if (this.mapIdChanged && !this.route.snapshot.queryParamMap.has('loc_rpt')) {
         // Zpracujeme tady jen kdyz nemame souracnice
         // Pokud mame, zkontrolujeme na konci ziskani markeru
-        this.getMarkerById(this.currentMapId, false, true);
+        this.getHandle();
+        //this.getMarkerById(this.currentMapId, false, true);
         return;
       }
     }
@@ -873,6 +880,7 @@ export class MapViewComponent {
   }
 
   clearPian() {
+    this.map.closePopup();
     this.state.setFacetChanged();
     this.pianIdChanged = true;
     this.router.navigate([], { queryParams: { pian_id: null, page: 0 }, queryParamsHandling: 'merge' });
@@ -897,18 +905,6 @@ export class MapViewComponent {
       this.state.setSearchResponse(res, 'map');
 
       this.setMarkers(res.response.docs, clean, false);
-      // if (this.currentMapId) {
-      //   const doc = res.response.docs.find(d => d.ident_cely === this.currentMapId);
-      //   this.state.setMapResult(doc, false);
-      //   if (this.shouldZoomOnMarker) {
-      //     this.zoomOnMapResult(doc);
-      //   }
-      // } else {
-      //   if (this.setToMarkerZoom) {
-      //     this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
-      //     this.setToMarkerZoom = false;
-      //   }
-      // }
       if (this.setToMarkerZoom) {
         this.map.setView(bounds.getCenter(), this.config.mapOptions.hitZoomLevel);
         this.setToMarkerZoom = false;
@@ -1206,24 +1202,43 @@ export class MapViewComponent {
         });
         // layer.bindTooltip(this.popUpHtml(ident_cely, presnost, docIds));
 
+        layer.on('mouseover', (e) => {
+          layer.setStyle({
+              color: this.config.mapOptions.shape.fillColorOver,
+              fillColor: this.config.mapOptions.shape.fillColorOver
+          });
+        });
+
         layer.on('mouseout', (e) => {
           // this.map.closePopup();
           this.activeLayer = null;
+          layer.setStyle({
+              color: this.config.mapOptions.shape.color,
+              fillColor: this.config.mapOptions.shape.fillColor
+          });
         });
 
         layer.on('mousemove', (e) => {
           const layers: any[] = this.detectMultipleShapes(e.latlng);
-          const layersId = layers.map(la => la.geometry.id).join(' ')
+          const layersId = layers.map(la => la.getLayers()[0].feature.geometry.id).join(' ')
           if (this.activeLayer === layersId) {
             return;
           }
           this.activeLayer = layersId;
           let popupContent = document.createElement("div");
-          popupContent.className = 'app-leaflet-popup-content'
-          layers.forEach(la => {
+          popupContent.className = 'app-leaflet-popup-content';
+          if (layers.length > 1) {
+            const divTitle = document.createElement("div");
+            divTitle.className = 'app-popup-title'
+            divTitle.innerHTML = this.service.getTranslation('map.desc.multipleLayers');
+            popupContent.appendChild(divTitle);
+          }
+          layers.forEach(geoLa => {
+            const la = geoLa.getLayers()[0].feature;
             const div = document.createElement("div");
             div.className = 'app-popup-item'
-            div.innerHTML = this.popUpHtml(la.geometry.id, la.geometry.presnost, la.geometry.docIds);
+            div.innerHTML = this.popUpHtml(la.geometry.id, la.geometry.presnost, la.geometry.docIds) ;
+            //+ ' <mat-icon class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color">flip_to_front</mat=icon>';
 
             div.onclick = (e) => {
               this.setPianId(la.geometry.id, la.geometry.docIds);
@@ -1231,8 +1246,24 @@ export class MapViewComponent {
                 this.map.closePopup();
               }, 100)
 
-            }
-            popupContent.appendChild(div)
+            };
+
+            div.onmouseover = (e) => {
+              geoLa.setStyle({
+                  color: this.config.mapOptions.shape.fillColorOver,
+                  fillColor: this.config.mapOptions.shape.fillColorOver
+              });
+              geoLa.brinToFront();
+            };
+
+            div.onmouseout = (e) => {
+              geoLa.setStyle({
+                  color: this.config.mapOptions.shape.color,
+                  fillColor: this.config.mapOptions.shape.fillColor
+              });
+            };
+            
+            popupContent.appendChild(div);
             
           });
           
@@ -1248,9 +1279,9 @@ export class MapViewComponent {
           // }
         });
 
-        this.shapes.push(layer.getLayers()[0]);
+        this.shapes.push(layer);
         layer.addTo(this.markers);
-        if (this.mapIdChanged && this.currentMapId) {
+        if (this.mapIdChanged && this.currentMapId && this.currentPianId === ident_cely) {
           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
         }
 
@@ -1265,20 +1296,43 @@ export class MapViewComponent {
 
     const clickedPoint = turf.point([latlng.lng, latlng.lat]);
     const layers: any[] = [];
-    this.shapes.forEach(sh => {
-      //console.log(sh)
+    this.shapes.forEach(layer => {
+      const sh = layer.getLayers()[0];
       if (sh.feature.geometry.type === 'Polygon') {
         if (turf.booleanPointInPolygon(clickedPoint, sh.feature as any)) {
-          layers.push(sh.feature);
+          layers.push(layer);
         }
       } else if (sh.feature.geometry.type === 'LineString') {
-        if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.00001 })) {
-          layers.push(sh.feature);
+        if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.0000000001 })) {
+          layers.push(layer);
         }
       }
+
+      // if (layer.getBounds().contains(latlng)) {
+      //   layers.push(layer);
+      // }
     });
-    // console.log(layers.map(la => la.geometry.id));
     return layers;
+  }
+
+  getHandle() {
+    this.service.getHandle(this.currentMapId, true).subscribe((resp: any) => {
+      this.state.loading.set(false);
+      this.loading.set(false);
+      if (resp.error) {
+        this.state.hasError = true;
+        this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.document_' + resp.status);
+        return;
+      }
+      this.state.setSearchResponse(resp, 'map');
+      const doc = resp.response.docs.find((d: any) => d.ident_cely === this.currentMapId);
+      if (this.currentMapId !== this.state.mapResult()?.ident_cely) {
+        this.state.mapResult.set(doc);
+      }
+      this.clearSelectedMarker();
+      this.setMarkers(resp.response.docs, false, true);
+      this.zoomOnMapResult(doc);
+    });
   }
 
   getMarkerById(docId: string, setResponse: boolean, zoom: boolean) {
@@ -1328,6 +1382,7 @@ export class MapViewComponent {
 
     this.hitMarker(doc);
     const bounds: any = this.getBoundsByDoc(doc);
+    console.log(bounds);
     this.map.setView(bounds.getCenter(), Math.max(this.config.mapOptions.hitZoomLevel, this.map.getZoom()));
     if (!this.map.getBounds().contains(bounds)) {
       // Markers outside view in this zoom

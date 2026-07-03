@@ -47,6 +47,11 @@
         <mat-icon>get_app</mat-icon>
       </a>
       <span class="app-pipe"></span>
+      <a (click)="toggleInMuseion()" [class.app-color-fav]="state.inMuseion()" [matTooltip]="'toolbar.tooltip.Museion' | translate" class="app-d-inline-flex">
+        <mat-icon>museum</mat-icon>
+      </a>
+        
+      <span class="app-pipe"></span>
       @if (state.logged) {
         <a (click)="toggleFavorites()" [class.app-color-fav]="state.inFavorites()" [matTooltip]="'toolbar.tooltip.Favorites' | translate" class="app-d-inline-flex">
           <mat-icon>grade</mat-icon>
@@ -65,7 +70,7 @@
             @if (state.facetsLoading()) {
               <div class="app-display-table app-loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></div>
             }
-            @if (state.breadcrumbs?.length > 0 || state.inFavorites()) {
+            @if (state.breadcrumbs?.length > 0 || state.inFavorites() || state.inMuseion()) {
               <app-facets-used></app-facets-used>
             }
             <app-facets></app-facets>
@@ -149,6 +154,11 @@
                   </button>
                 </mat-menu>
                 <a [href]="exportUrl" [matTooltip]="'toolbar.tooltip.Export' | translate" target="_blank"><mat-icon>get_app</mat-icon></a>
+                
+      <span class="app-pipe"></span>
+      <a (click)="toggleInMuseion()" [class.app-color-fav]="state.inMuseion()" [matTooltip]="'toolbar.tooltip.Museion' | translate" class="app-d-inline-flex">
+        <mat-icon>museum</mat-icon>
+      </a>
                   <span class="app-pipe"></span>
                   @if (state.logged) {
                     <a (click)="toggleFavorites()" [class.app-color-fav]="state.inFavorites()"
@@ -190,7 +200,7 @@
             <mat-tab-group [selectedIndex]="1">
               <mat-tab [label]="'sidenav.tab.Filtry' | translate">
                 <div class="app-facets">
-                  @if (state.breadcrumbs?.length > 0 || state.inFavorites()) {
+                  @if (state.breadcrumbs?.length > 0 || state.inFavorites() || state.inMuseion()) {
                     <app-facets-used></app-facets-used>
                   }
                   <app-facets></app-facets>

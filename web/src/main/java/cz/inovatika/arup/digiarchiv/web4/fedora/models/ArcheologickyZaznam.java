@@ -92,12 +92,15 @@ public class ArcheologickyZaznam implements FedoraModel {
         boolean searchable = stav == 3;
         idoc.setField("searchable", searchable);
         idoc.setField("pristupnost", SearchUtils.getPristupnostMap().get(pristupnost.getId()));
+        IndexUtils.setDateStamp(idoc, ident_cely);
+        IndexUtils.setDateStampFromHistory(idoc, historie);
+        
         IndexUtils.addRefField(idoc, "az_okres", az_okres);
         IndexUtils.addRefField(idoc, "okres_sort", az_okres); 
         
-            JSONObject okres = SolrSearcher.getOkresByKod(az_okres.getId());
-            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okres.getString("kraj"));
-            IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okres.getString("rada_id"));
+        JSONObject okres = SolrSearcher.getOkresByKod(az_okres.getId());
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okres.getString("kraj"));
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okres.getString("rada_id"));
             
 
         if (az_chranene_udaje != null) {
@@ -113,13 +116,34 @@ public class ArcheologickyZaznam implements FedoraModel {
             IndexUtils.addRefField(idoc, "az_ext_zdroj", v.ext_zdroj);
         }
 
-        IndexUtils.setDateStamp(idoc, ident_cely);
-        IndexUtils.setDateStampFromHistory(idoc, historie);
+        if (az_akce != null) {
+            az_akce.fillSolrFields(idoc);
+        }
+
+        if (az_lokalita != null) {
+            az_lokalita.fillSolrFields(idoc);
+        }
+        
+        String pr = (String) idoc.getFieldValue("pristupnost");
+        List<String> prSufix = new ArrayList<>();
+
+        if ("A".compareTo(pr) >= 0) {
+            prSufix.add("A");
+        }
+        if ("B".compareTo(pr) >= 0) {
+            prSufix.add("B");
+        }
+        if ("C".compareTo(pr) >= 0) {
+            prSufix.add("C");
+        }
+        if ("D".compareTo(pr) >= 0) {
+            prSufix.add("D");
+        }
 
         List<SolrInputDocument> djdocs = new ArrayList<>();
         try {
             for (DokumentacniJednotka dj : az_dokumentacni_jednotka) {
-                SolrInputDocument djdoc = dj.createSolrDoc();
+                SolrInputDocument djdoc = dj.createSolrDoc(idoc);
                 djdocs.add(djdoc);
 
                 IndexUtils.addJSONField(idoc, "az_dokumentacni_jednotka", dj);
@@ -153,30 +177,6 @@ public class ArcheologickyZaznam implements FedoraModel {
             }
         } catch (Exception ex) {
             Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (az_akce != null) {
-            az_akce.fillSolrFields(idoc);
-        }
-
-        if (az_lokalita != null) {
-            az_lokalita.fillSolrFields(idoc);
-        }
-        
-        String pr = (String) idoc.getFieldValue("pristupnost");
-        List<String> prSufix = new ArrayList<>();
-
-        if ("A".compareTo(pr) >= 0) {
-            prSufix.add("A");
-        }
-        if ("B".compareTo(pr) >= 0) {
-            prSufix.add("B");
-        }
-        if ("C".compareTo(pr) >= 0) {
-            prSufix.add("C");
-        }
-        if ("D".compareTo(pr) >= 0) {
-            prSufix.add("D");
         }
         
         setFacets(idoc, prSufix);
@@ -215,20 +215,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
             }
         }
-
-//        Object[] fields = idoc.getFieldNames().toArray();
-//        for (Object f : fields) {
-//            String s = (String) f;
-//            if (s.contains(".")) {
-//                IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
-//            } else {
-//                if (indexFields.contains(s)) {
-//                    for (String sufix : prSufix) {
-//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
-//                    }
-//                }
-//            }
-//        }
+        
         for (String sufix : prSufix) {
             IndexUtils.addRefField(idoc, "text_all_" + sufix, az_chranene_udaje.hlavni_katastr);
             for (Vocab v : az_chranene_udaje.dalsi_katastr) {
@@ -354,7 +341,7 @@ public class ArcheologickyZaznam implements FedoraModel {
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
 
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("A") > 0 || st == 3) {
             return true;

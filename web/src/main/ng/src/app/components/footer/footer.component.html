@@ -1,67 +1,60 @@
 <footer>
   <div class="app-container">
-    <div class="app-fxLayout app-row app-footer-wrapper">
-      <div class="app-left">
-        <p>
-          {{ 'footer.desc.Archeologický ústav AV ČR, Praha, v. v. i.' | translate }} © {{ currentYear }}.
-        </p>
-        <p class="app-middle">
-          <span>
-             {{'footer.desc.Kontakt' | translate}} <a (click)="showKontakt()"><mat-icon>info</mat-icon></a>
-          </span>
-          <span class="app-pipe"></span>
-          <span>
-            Created by
-            <a href="http://www.inovatika.cz" title="Inovatika" target="_blank">
-              <img src="./assets/img/logo-inovatika.png" alt="Inovatika" class="app-logo" />
-            </a>
-          </span>
-          <span class="app-pipe"></span>
-          <span>
-            <a href="http://creativecommons.org/licenses/by-nc/4.0/" [title]="'footer.license.cc_by_nc' | translate" target="_blank">
-              <img src="assets/img/logo-cc.png" [alt]="'footer.license.cc_by_nc' | translate" />
-            </a>&#160;
-            <a (click)="showLicence()"><mat-icon>info</mat-icon></a>
-          </span>
-        </p>
-        <p>
-          <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v403" title="Version info"
-            target="_blank">{{ 'footer.desc.Verze' | translate }} v4.0.3</a>
-        </p>
+    <div class="app-fxLayout app-column">
+      <div class="app-fxLayout app-row app-center-v app-gap-4 app-logos-wrapper app-wrap">
+        <a href="https://www.re3data.org/repository/r3d100013576" [title]="'footer.desc.Digitální archiv archeologické mapy České republiky' | translate" target="_blank">
+          <img src="assets/img/logo/logo-re3.png" [alt]="'footer.desc.Digitální archiv archeologické mapy České republiky' | translate" class="app-logo-re3" />
+        </a>
+        <a href="https://opjak.cz/" [title]="'footer.desc.Operační program Výzkum, vývoj a vzdělávání' | translate" target="_blank">
+          <img src="assets/img/logo/logo-eu.png" [alt]="'footer.desc.Operační program  Výzkum, vývoj a vzdělávání' | translate" class="app-logo-eu" />
+        </a>
+        <a href="https://msmt.gov.cz/" [title]="'footer.desc.Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate" target="_blank">
+          <img src="assets/img/logo/logo-msmt.png" [alt]="'footer.desc.Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate" class="app-logo-msmt" />
+        </a>
+        <a href="https://www.avcr.cz/" [title]="'footer.desc.Programy strategie AV21' | translate" target="_blank">
+          <img src="assets/img/logo/logo-avcr.png" [alt]="'footer.desc.Programy strategie AV21' | translate" class="app-logo-avcr" />
+        </a>
+        <a href="https://www.arub.cz/" [title]="'footer.desc.Programy strategie AV21' | translate" target="_blank">
+          <img src="assets/img/logo/logo-arub.png" [alt]="'footer.desc.Programy strategie AV21' | translate" class="app-logo-arub" />
+        </a>
+        <a href="https://www.arup.cas.cz/" [title]="'footer.desc.Programy strategie AV21' | translate" target="_blank">
+          <img src="assets/img/logo/logo-aru.png" [alt]="'footer.desc.Programy strategie AV21' | translate" class="app-logo-aru" />
+        </a>
+        <a href="https://www.aiscr.cz/" [title]="'footer.desc.Archeologický informační systém České republiky' | translate" target="_blank">
+          <img src="assets/img/logo/logo-ais.png" [alt]="'footer.desc.Archeologický informační systém České republiky' | translate" class="app-logo-ais" />
+        </a>
+        <a href="https://www.vyzkumne-infrastruktury.cz/" [title]="'footer.desc.Velké výzkumné infrastruktury' | translate" target="_blank">
+          <img src="assets/img/logo/logo-vvi.png" [alt]="'footer.desc.Velké výzkumné infrastruktury' | translate" class="app-logo-vvi" />
+        </a>
       </div>
-      <div class="app-right">
-        <p>
-          <a href="https://opvvv.msmt.cz/"
-            [title]="'footer.desc.Operační program Výzkum, vývoj a vzdělávání' | translate" target="_blank">
-            <img src="assets/img/logo-eu.png"
-              [alt]="'footer.desc.Operační program  Výzkum, vývoj a vzdělávání' | translate" class="app-logo-eu" />
+
+      <div class="app-fxLayout app-row app-center-v app-gap-2 app-info-wrapper app-wrap">
+        <span>
+          AIS CR © {{ currentYear }}
+        </span>
+        <span class="app-pipe app-mr-4"></span>
+        <span class="app-fxLayout app-row app-center-v app-gap-2">
+          <span>{{'footer.desc.Kontakt' | translate}}</span>
+          <a (click)="showKontakt()"><mat-icon>info</mat-icon></a>
+        </span>
+        <span class="app-pipe app-mr-4"></span>
+        <span>
+          Created by
+          <a href="http://www.inovatika.cz" title="Inovatika" target="_blank">
+            <img src="./assets/img/logo-inovatika.png" alt="Inovatika" class="app-logo" />
           </a>
-          <a href="http://www.msmt.cz/"
-            [title]="'footer.desc.Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate"
-            target="_blank">
-            <img src="assets/img/logo-msmt.png"
-              [alt]="'footer.desc.Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate"
-              class="app-logo-msmt" />
+        </span>
+        <span class="app-pipe app-mr-4"></span>
+        <span class="app-fxLayout app-row app-center-v app-gap-2">
+          <a href="http://creativecommons.org/licenses/by-nc/4.0/" [title]="'footer.license.cc_by_nc' | translate" target="_blank">
+            <img src="assets/img/logo-cc.png" [alt]="'footer.license.cc_by_nc' | translate" />
           </a>
-          <a href="http://www.aiscr.cz/"
-            [title]="'footer.desc.Archeologický informační systém České republiky' | translate" target="_blank">
-            <img src="assets/img/logo-ais.png"
-              [alt]="'footer.desc.Archeologický informační systém České republiky' | translate" class="app-logo-ais" />
-          </a>
-          <a href="http://www.ariadne-infrastructure.eu/" [title]="'footer.desc.Ariadne' | translate" target="_blank">
-            <img src="assets/img/logo-ariadne.png" [alt]="'footer.desc.Ariadne' | translate" class="app-logo-adriane" />
-          </a>
-          <a href="http://av21.avcr.cz/" [title]="'footer.desc.Programy strategie AV21' | translate" target="_blank">
-            <img src="assets/img/logo-avcr.png" [alt]="'footer.desc.Programy strategie AV21' | translate"
-              class="app-logo-avcr" />
-          </a>
-          <a href="https://www.re3data.org/repository/r3d100013576"
-            [title]="'footer.desc.Digitální archiv archeologické mapy České republiky' | translate" target="_blank">
-            <img src="https://www.re3data.org/public/badges/s/dark/100013576.svg"
-              [alt]="'footer.desc.Digitální archiv archeologické mapy České republiky' | translate"
-              class="app-logo-re3data" />
-          </a>
-        </p>
+          <a (click)="showLicence()"><mat-icon>info</mat-icon></a>
+        </span>
+        <span class="app-pipe app-mr-4"></span>
+        <span>
+          <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v410" title="Version info" target="_blank">{{ 'footer.desc.Verze' | translate }} v4.1.0</a>
+        </span>
       </div>
     </div>
   </div>

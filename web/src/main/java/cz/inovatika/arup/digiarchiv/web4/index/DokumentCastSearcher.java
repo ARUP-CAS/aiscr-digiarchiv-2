@@ -23,7 +23,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     private boolean parentSearchable = true;
 
     @Override
-    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         String fields = "*,ident_cely,entity,dokument_cast_archeologicky_zaznam,dokument_cast_neident_akce:[json]";
@@ -39,7 +39,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                         .addFilterQuery("dokument_cast_ident_cely:\"" + doc.getString("ident_cely") + "\"");
                 query.setFields(dfs);
 
-                JSONObject r = SolrSearcher.json(client, "entities", query);
+                JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
                 ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
                 JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
                 for (int j = 0; j < reldocs.length(); j++) {
@@ -52,7 +52,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                     JSONArray cdjs = doc.getJSONArray("dokument_cast_archeologicky_zaznam");
                     for (int j = 0; j < cdjs.length(); j++) {
                         String cdj = cdjs.getString(j);
-                        JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                        JSONObject sub = SolrSearcher.getById(client, cdj, fields, false);
                         if (sub != null) {
                             doc.put(sub.getString("entity"), sub);
                             doc.put("datestamp", sub.getString("datestamp"));
@@ -86,8 +86,8 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        return "";
+    public JSONObject export(HttpServletRequest request) {
+        return new JSONObject();
     }
 
     @Override

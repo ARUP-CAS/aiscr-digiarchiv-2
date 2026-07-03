@@ -80,15 +80,8 @@ public class LetSearcher implements EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            SolrQuery query = new SolrQuery();
-            setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
-        }
+    public JSONObject export(HttpServletRequest request) {
+        return new JSONObject();
     }
 
     @Override

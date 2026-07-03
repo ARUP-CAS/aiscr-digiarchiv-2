@@ -4,7 +4,6 @@ import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,6 +15,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
 /**
  *
@@ -321,14 +321,21 @@ public class ProjektSearcher implements EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
+    public JSONObject export(HttpServletRequest request) {
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY);
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            
+            return jo;
+            
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            return new JSONObject().put("error",ex.toString());
         }
     }
 

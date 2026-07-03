@@ -108,6 +108,7 @@ export class AppState {
 
   hideWithoutThumbs = false;
   inFavorites = signal<boolean>(false);
+  inMuseion = signal<boolean>(false);
   obdobi: any;
 
   breadcrumbs: Crumb[];
@@ -287,6 +288,7 @@ export class AppState {
   processParams(params: ParamMap) {
     this.hideWithoutThumbs = params.has('hideWithoutThumbs') ? params.get('hideWithoutThumbs') === 'true' : false;
     this.inFavorites.set(params.has('inFavorites') ? params.get('inFavorites') === 'true' : false);
+    this.inMuseion.set(params.has('inMuseion') ? params.get('inMuseion') === 'true' : false);
     this.entity = params.has('entity') ? params.get('entity') : 'dokument';
     this.sorts_by_entity = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
     this.page = params.has('page') ? +params.get('page') : 0;

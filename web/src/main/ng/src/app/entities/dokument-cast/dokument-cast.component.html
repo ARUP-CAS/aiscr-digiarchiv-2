@@ -57,7 +57,7 @@
 
       <mat-accordion multi="true">
         @for (kd of _result.dokument_cast_komponenta; track kd) {
-          <app-komponenta  [result]="kd"></app-komponenta>
+          <app-komponenta  [result]="kd" [isChild]="true"></app-komponenta>
         }
         @if (_result.dokument_cast_neident_akce) {
           <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">

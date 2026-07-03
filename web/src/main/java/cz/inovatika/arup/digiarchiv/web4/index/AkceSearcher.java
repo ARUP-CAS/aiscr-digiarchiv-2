@@ -13,6 +13,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
 /**
  *
@@ -25,7 +26,7 @@ public class AkceSearcher implements EntitySearcher {
     final String ENTITY = "akce";
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, String pristupnost, String org) { 
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
@@ -36,11 +37,10 @@ public class AkceSearcher implements EntitySearcher {
             if (docPr.compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
                 doc.remove("chranene_udaje");
                 doc.remove("az_chranene_udaje");
-                doc.remove("akce_chranene_udaje");
-            }
+                doc.remove("akce_chranene_udaje"); 
+            } 
         }
-
-    }
+    } 
 
     @Override
     public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
@@ -205,15 +205,20 @@ public class AkceSearcher implements EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
+    public JSONObject export(HttpServletRequest request) {
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            // System.out.println(query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY);
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            return jo;
+            
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            return new JSONObject().put("error",ex.toString());
         }
     }
 

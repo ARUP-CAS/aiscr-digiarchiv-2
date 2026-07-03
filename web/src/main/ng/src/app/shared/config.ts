@@ -55,6 +55,7 @@ export class Configuration {
     shape: {
       color: string,
       fillColor: string,
+      fillColorOver: string,
       weight: number,
       fillOpacity: number
     },
@@ -69,7 +70,7 @@ export class Configuration {
   selRows: number[];
   defaultRows: number;
   exportRowsLimit: number;
-  exportFields: {[entity: string]: {name: string, label?: string, heslar?: string, secured?: boolean, byPath?: boolean, type: string}[]};
+  exportFields: {[entity: string]: {name: string, label?: string, heslar?: string, secured?: boolean, byPath?: boolean, map?: boolean, type: string}[]};
   urlFields: string[];
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};

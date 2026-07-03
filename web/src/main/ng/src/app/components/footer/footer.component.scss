@@ -2,98 +2,64 @@
 
 footer {
   width: calc(100% - #{32px});
-  padding: 0 16px;
+  padding: 32px 16px 24px 16px;
   background-color: var(--app-footer-color-bg);
-  color: var(--app-footer-color);
+  color: var(--app-footer-color);;
 
-  .app-footer-wrapper {
-    flex-flow: wrap;
-    min-height: var(--app-footer-height);
+  a {
+    color: currentColor;
+  }
 
-    @media only screen and (min-width: 960px) {
-      height: var(--app-footer-height);
-    }
+  img {
+    vertical-align: middle;
+  }
 
-    .app-left,
-    .app-right {
-      $flex-width: 100%;
-      flex: 1 1 $flex-width;
-      min-width: $flex-width;
+  .app-logo {
+    height: 16px;
+    vertical-align: text-top;
+  }
 
-      p {
-        margin-top: 0;;
+  .mat-icon {
+    @include setIcon($size: 20, $position: sub);
+  }
+
+  .app-logos-wrapper {
+    img {
+      margin-bottom: 20px;
+
+      &.app-logo-re3 {
+        height: 44px;
       }
-    }
-
-    a {
-      color: currentColor;
-    }
-
-    $flex-left-width: 400px;
-
-    .app-left {
-      padding-top: 32px;
-
-      img {
-        vertical-align: middle;
+      &.app-logo-eu,
+      &.app-logo-msmt  {
+        filter: invert(75%);
+        height: 34px; 
       }
-
-      .app-logo {
-        height: 16px;
-        vertical-align: text-top;
+      &.app-logo-avcr {
+        filter: invert(25%);
+        height: 39px;
       }
-
-      .mat-icon {
-        @include setIcon($size: 20, $position: sub);
+      &.app-logo-arub {
+        filter: invert(75%);
+        height: 34px;
       }
-
-      // mq
-      @media only screen and (min-width: 960px) {
-        $flex-width: $flex-left-width;
-        flex: 1 1 $flex-width;
-        min-width: $flex-width;
+      &.app-logo-aru {
+        filter: invert(75%);
+        height: 39px;
       }
-
-      @media only screen and (max-width: 420px) {
-        .app-middle {
-          & > span {
-            display: block;
-            margin-bottom: 8px;
-          }
-
-          .app-pipe {
-            display: none;
-          }
-        }
+      &.app-logo-ais {
+        height: 49px;
       }
-    }
-
-    .app-right {
-      padding-top: 0;
-
-      img {
-        height: 60px;
-        margin: 0 16px 16px 0;
-      }
-
-      // mq
-      @media only screen and (min-width: 960px) {
-        $flex-width: calc(100% - #{$flex-left-width});
-        flex: 1 1 $flex-width;
-        min-width: $flex-width;
-        text-align: right;
-        padding-top: 32px;
+      &.app-logo-vvi {
+        filter: invert(75%);
+        height: 39px;
       }
     }
   }
-}
 
-::ng-deep .app-consent {
-  position: relative;
-
-  .mdc-icon-button {
-    position: absolute;
-    top: -10px;
-    right: 0px;
+  .app-info-wrapper {
+    & > span {
+      margin-bottom: 8px;
+    }
   }
 }

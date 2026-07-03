@@ -2,7 +2,6 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
-import static cz.inovatika.arup.digiarchiv.web4.index.ADBSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +24,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
   private boolean parentSearchable;
 
   @Override
-  public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+  public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fields = "*";
@@ -33,7 +32,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
       JSONObject doc = ja.getJSONObject(i);
       if (doc.has("vyskovy_bod_parent")) {
         String p = doc.getString("vyskovy_bod_parent");
-        JSONObject sub = SolrSearcher.getById(client, p, fields);
+        JSONObject sub = SolrSearcher.getById(client, p, fields, false);
         if (sub != null) {
           doc.append(sub.getString("entity"), sub);
           doc.put("datestamp", sub.getString("datestamp"));
@@ -82,8 +81,8 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public JSONObject export(HttpServletRequest request) {
+        return new JSONObject();
     }
 
     @Override

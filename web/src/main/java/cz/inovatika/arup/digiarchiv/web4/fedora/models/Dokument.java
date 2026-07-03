@@ -228,13 +228,15 @@ public class Dokument implements FedoraModel {
         }
 
         for (DokumentCast dc : dokument_cast) {
-            dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
-            // IndexUtils.addJSONField(idoc, "dokument_cast", dc);
-            if (idoc.containsKey("dokument_cast_akce")) {
-                for (Object val : idoc.getFieldValues("dokument_cast_akce")) {
-                    processAkce(idoc, (String) val);
-                }
+            //if (idoc.containsKey("dokument_cast_akce")) {
+//                for (Object val : idoc.getFieldValues("dokument_cast_akce")) {
+//                    processAkce(idoc, (String) val);
+//                }
+//            }
+            if (dc.archeologicky_zaznam != null) {
+                    processAkce(idoc, dc.archeologicky_zaznam.getId());
             }
+            dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
 
         if (dokument_let != null) {
@@ -366,7 +368,7 @@ public class Dokument implements FedoraModel {
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
 //-- A: stav = 3
 //-- B-E: bez omezení 
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("B") >= 0) {
             return true;

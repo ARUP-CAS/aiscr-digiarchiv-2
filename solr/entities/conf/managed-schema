@@ -346,6 +346,8 @@
 	
    
    <!-- komponenta fields -->
+   <field name="komponenta_zdroj" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="komponenta_zdroj_ident_cely" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="komponenta_obdobi" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="komponenta_jistota" type="boolean" indexed="true" stored="true" multiValued="false" /> 
    <field name="komponenta_presna_datace" type="string" indexed="true" stored="true" multiValued="false" /> 

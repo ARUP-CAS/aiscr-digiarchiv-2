@@ -146,5 +146,15 @@ public class I18n {
     }
     return locales.get(locale);
   }
+  
+  public static String translate(String key, String locale) {
+    try {
+      String lang = locale != null ? locale : "cs";
+      return getInstance().getLocale(lang).optString(key, key);
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error translating", ex);
+      return key;
+    }
+  }
 
 }

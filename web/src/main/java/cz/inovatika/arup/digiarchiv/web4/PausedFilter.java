@@ -75,6 +75,7 @@ public class PausedFilter implements Filter {
                 LOGGER.log(Level.INFO, "System is paused. {0}", req.getRequestURI()); 
             } else {
                 chain.doFilter(request, response);
+                return;
             }
             
         } catch (Throwable t) {

@@ -115,6 +115,10 @@ public class LoginServlet extends HttpServlet {
         return session.getAttribute("user") != null;
     }
 
+    public static boolean isLogged(HttpServletRequest req) {
+        return req.getSession(false) != null && req.getSession(false).getAttribute("user") != null;
+    }
+
     enum Actions {
 
         TOKEN {
