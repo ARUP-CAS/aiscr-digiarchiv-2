@@ -25,6 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -57,14 +58,14 @@ public class ExportServlet extends HttpServlet {
       JSONObject jo = searcher.export(request);
       String format = request.getParameter("format");
       Instant now = Instant.now();
-      response.setHeader("Content-Disposition", "filename=export_" + entity + "_" + now.toEpochMilli() + "." + format);
+      //response.setHeader("Content-Disposition", "filename=export_" + entity + "_" + now.toEpochMilli() + "." + format);
       switch (format) {
         case "csv":
         case "xlsx":
           List<String> labels = SolrSearcher.getExportField(entity, "label");
           JSONArray ls = new JSONArray(labels);
           String csv = org.json.CDL.rowToString(new JSONArray(labels));
-          csv += org.json.CDL.toString(ls, jo.getJSONObject("response").getJSONArray("docs"));
+          csv += toString(entity, jo.getJSONObject("response").getJSONArray("docs"), ',', request.getParameter("lang"));
           if ("xlsx".equals(format)) {
             response.setContentType("application/xlsx;charset=UTF-8");
             csvToXLSX(csv, response, entity);
@@ -80,7 +81,15 @@ public class ExportServlet extends HttpServlet {
           break;
         case "json":
           response.setContentType("application/json;charset=UTF-8");
-          response.getWriter().print(jo.getJSONObject("response").getJSONArray("docs").toString());
+          JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+          JSONArray ret = new JSONArray();
+          JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+          for (int i = 0; i < ja.length(); i += 1) {
+            JSONObject doc = ja.getJSONObject(i);
+            ret.put(translateJSON(doc, exFields, request.getParameter("lang")));
+          }
+      
+          response.getWriter().print(ret.toString());
           break;
         default:
           response.setContentType("application/json;charset=UTF-8");
@@ -93,6 +102,101 @@ public class ExportServlet extends HttpServlet {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e1.toString());
       response.getWriter().print(e1.toString());
     }
+  }
+
+  private static JSONObject translateJSON(JSONObject jo, JSONArray exFields, String locale) throws JSONException {
+    JSONObject ret = new JSONObject();
+    if (exFields == null || exFields.isEmpty()) {
+      return null;
+    }
+    for (int i = 0; i < exFields.length(); i += 1) {
+      JSONObject f = exFields.getJSONObject(i);
+      String name = f.optString("name");
+      String field = f.optString("label", name);
+      Object val = jo.opt(field);
+      if (val == null) {
+        val = jo.opt(name);
+      }
+      if (val != null && f.has("heslar")) {
+        val = I18n.translate((String) val, locale);
+      }
+      ret.put(field, val);
+    }
+    return ret;
+  }
+
+  private static JSONArray toJSONArray(JSONObject jo, JSONArray exFields, String locale) throws JSONException {
+    if (exFields == null || exFields.isEmpty()) {
+      return null;
+    }
+    JSONArray ja = new JSONArray();
+    for (int i = 0; i < exFields.length(); i += 1) {
+      JSONObject f = exFields.getJSONObject(i);
+      String name = f.optString("name");
+      Object val = jo.opt(f.optString("label", name));
+      if (val != null && f.has("heslar")) {
+        val = I18n.translate((String) val, locale);
+      }
+      ja.put(val);
+    }
+    return ja;
+  }
+
+  /**
+   * Produce a comma delimited text from a JSONArray of JSONObjects using a
+   * provided list of names. The list of names is not included in the output.
+   */
+  private static String toString(String entity, JSONArray ja, char delimiter, String locale) throws JSONException {
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    if (exFields == null || exFields.length() == 0) {
+      return null;
+    }
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < ja.length(); i += 1) {
+      JSONObject jo = ja.optJSONObject(i);
+      if (jo != null) {
+        sb.append(rowToString(toJSONArray(jo, exFields, locale), delimiter));
+      }
+    }
+    return sb.toString();
+  }
+
+  /**
+   * Produce a comma delimited text row from a JSONArray. Values containing the
+   * comma character will be quoted. Troublesome characters may be removed.
+   *
+   * @param ja A JSONArray of strings.
+   * @param delimiter custom delimiter char
+   * @return A string ending in NEWLINE.
+   */
+  public static String rowToString(JSONArray ja, char delimiter) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < ja.length(); i += 1) {
+      if (i > 0) {
+        sb.append(delimiter);
+      }
+      Object object = ja.opt(i);
+      if (object != null) {
+        String string = object.toString();
+        if (!string.isEmpty() && (string.indexOf(delimiter) >= 0
+                || string.indexOf('\n') >= 0 || string.indexOf('\r') >= 0
+                || string.indexOf(0) >= 0 || string.charAt(0) == '"')) {
+          sb.append('"');
+          int length = string.length();
+          for (int j = 0; j < length; j += 1) {
+            char c = string.charAt(j);
+            if (c >= ' ' && c != '"') {
+              sb.append(c);
+            }
+          }
+          sb.append('"');
+        } else {
+          sb.append(string);
+        }
+      }
+    }
+    sb.append('\n');
+    return sb.toString();
   }
 
   public static void csvToXLSX(String csv, HttpServletResponse response, String entity) {
