@@ -10,7 +10,8 @@ Prompty a pomocná dokumentace pro AI agenty pracující v tomto repozitáři. P
 - `setup_dev.md` — onboarding a nastavení vývojového prostředí.
 - `hooks_reference.md` — doporučené lokální hooks (PostToolUse / PreToolUse).
 
-## Prompt evolution
+## Evidence workflow-evolution
 
-Podsložka `prompt_evolution/` obsahuje návrhy na vylepšení hlavního review promptu
-generované na konci jednotlivých tasků (`<task_id>_prompt_update.md`).
+Starší soubory `.agents/prompts/prompt_evolution/` byly klasifikovány a zachovány
+v `.agents/reports/workflow_evolution_legacy_evidence.md`. Aktivní zpětná vazba
+z U05 zůstává pouze evidencí, dokud člověk výslovně neschválí předání do backlogu.

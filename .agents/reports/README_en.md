@@ -14,6 +14,7 @@ This directory stores durable outputs from the long-running codebase-review life
 - `bugs.md` records confirmed bug findings with severity, source location, issue linkage, recommendation, and originating review task.
 - `refactoring_backlog.md` records structural and architectural improvement candidates grouped by priority.
 - `automation_recommendations.md` records assistant automation recommendations when present.
+- `workflow_evolution_legacy_evidence.md` preserves classified evidence from the retired prompt-evolution channel.
 - `doc_hygiene_audit_*.md` are dated documentation-hygiene audit snapshots.
 
 ## Agent Rules

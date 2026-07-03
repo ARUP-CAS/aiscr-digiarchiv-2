@@ -203,13 +203,14 @@ tech_stack:
   thumbnails: ["ThumbnailsGenerator", "Java 1.8 (EOL)"]
 
 prompt_evolution:
-  suggestions_path: .agents/prompts/prompt_evolution/
+  legacy_evidence_report: .agents/reports/workflow_evolution_legacy_evidence.md
   apply_manually: true
   reviewer: human
   note: >
-    Návrhy se hromadí v prompt_evolution/ napříč sezeními.
-    Lidský reviewer aplikuje schválené návrhy do kanonického workflow
-    aiscr-codebase-review (dodaného přes skill surfaces) před zahájením nového cyklu.
+    Starší soubory prompt_evolution byly klasifikovány a zachovány v
+    .agents/reports/workflow_evolution_legacy_evidence.md.
+    Nová zpětná vazba z U05 zůstává lokální evidencí tohoto repozitáře,
+    dokud člověk výslovně neschválí předání report-to-backlog.
 
 follow_up:
   # Inkrementální update (U01–U06) vlastní kanonické workflow aiscr-codebase-review

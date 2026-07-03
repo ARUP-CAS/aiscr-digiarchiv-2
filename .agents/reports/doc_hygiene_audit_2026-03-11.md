@@ -34,10 +34,7 @@
 | `.agents/README.md` | 22 | CS | Developers, agents |
 | `.agents/prompts/review_codebase.md` | 519 | EN/CS | Review agents |
 | `.agents/prompts/audit_doc_hygiene.md` | 236 | EN | Any agent (audit prompt) |
-| `.agents/prompts/prompt_evolution/README.md` | — | CS | Maintainers |
-| `.agents/prompts/prompt_evolution/T01_prompt_update.md` | — | CS | Prompt evolution |
-| `.agents/prompts/prompt_evolution/T02_prompt_update.md` | — | CS | Prompt evolution |
-| `.agents/prompts/prompt_evolution/T03_prompt_update.md` | — | CS | Prompt evolution |
+| `.agents/reports/workflow_evolution_legacy_evidence.md` | — | EN | Starší evidence workflow-evolution |
 | `.agents/config/review_config.yaml` | 188 | YAML | Review system, agents |
 | `.agents/config/review_cache.json` | 171 | JSON | Review system state |
 | `.agents/reports/bugs.md` | — | CS | Developers, agents |
