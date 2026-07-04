@@ -1,0 +1,14 @@
+{
+  "name": "aiscr-digiarchiv-2",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Repo-root tooling dependencies for the AMCR Digital Archive (OpenSpec)",
+  "scripts": {
+    "openspec:validate": "node ./node_modules/@fission-ai/openspec/bin/openspec.js validate --all",
+    "openspec:cli": "node ./node_modules/@fission-ai/openspec/bin/openspec.js",
+    "openspec:update": "node ./node_modules/@fission-ai/openspec/bin/openspec.js update"
+  },
+  "devDependencies": {
+    "@fission-ai/openspec": "1.5.0"
+  }
+}
