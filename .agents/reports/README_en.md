@@ -13,7 +13,6 @@ This directory stores durable outputs from the long-running codebase-review life
 - `review_reports/` contains per-phase reports (`T01.md` … `T11.md`) and the consolidated `final_audit.md` summary.
 - `bugs.md` records confirmed bug findings with severity, source location, issue linkage, recommendation, and originating review task.
 - `refactoring_backlog.md` records structural and architectural improvement candidates grouped by priority.
-- `automation_recommendations.md` records assistant automation recommendations when present.
 - `workflow_evolution_legacy_evidence.md` preserves classified evidence from the retired prompt-evolution channel.
 - `doc_hygiene_audit_*.md` are dated documentation-hygiene audit snapshots.
 
@@ -24,3 +23,4 @@ This directory stores durable outputs from the long-running codebase-review life
 - Preserve verbatim Czech quotations, source comments, docstrings, documentation excerpts, GitHub issue titles, and AIS CR domain identifiers when exact wording matters.
 - Use severity values `Critical`, `High`, `Medium`, and `Low` in newly touched review artifacts.
 - Do not recreate long-form review prompt files under `.agents/prompts/`; the operational workflow is the delivered `aiscr-codebase-review` skill (modes full / update).
+- For ecosystem-wide automation recommendations (MCP, skills, hooks, subagents), use the hub reference cited in `AGENTS.md`; do not add sibling-local copies under `.agents/reports/`.

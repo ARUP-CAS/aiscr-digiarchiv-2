@@ -6,9 +6,7 @@ Prompty a pomocná dokumentace pro AI agenty pracující v tomto repozitáři. P
 
 - Codebase review: operační workflow je kanonické `aiscr-codebase-review` (režimy full T01–T11 / update U01–U06), dodané přes skill surfaces `.cursor/` / `.claude/` / `.codex/` / `.gemini/`; samostatné prompty `review_codebase.md` / `review_update.md` již v této složce nejsou.
 - `audit_doc_hygiene.md` — přenositelný prompt pro audit dokumentace (duplicit, drift, governance).
-- `project_conventions.md` — shrnutí projektových konvencí pro agenty (větve, commity, kód…).
-- `setup_dev.md` — onboarding a nastavení vývojového prostředí.
-- `hooks_reference.md` — doporučené lokální hooks (PostToolUse / PreToolUse).
+- `postmortem_template.md` — šablona pro incident postmortem.
 
 ## Evidence workflow-evolution
 

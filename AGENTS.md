@@ -273,7 +273,7 @@ Shared rules and automation context for AI agents live in **versioned** location
 
 Agent-vendor folders such as `.cursor/`, `.claude/`, `.codex/`, `.gemini/`, `.clinerules/`, and `.qodo/` are **tracked repository content** when materialized from the `aiscr-management` hub via direct-bundle sync; treat them as governed delivery surfaces, not gitignored scratch space. Only machine-local files (for example `*/mcp*.json` and per-vendor `settings.local.json` files) stay in `.gitignore`.
 
-Detailed automation recommendations (MCP, skills, hooks, subagents) are in `.agents/reports/automation_recommendations.md`.
+Detailed automation recommendations (MCP, skills, hooks, subagents) are maintained in **`aiscr-management`** repository.
 
 ---
 
