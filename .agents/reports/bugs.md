@@ -1,67 +1,67 @@
-# Evidované chyby — Digitální archiv AMČR (aiscr-digiarchiv-2)
+# Tracked bugs — Digitální archiv AMČR (aiscr-digiarchiv-2)
 
-> Legacy entries remain mostly in Czech; newly touched review prose follows the canonical English-default rule with verbatim Czech preserved where exact source wording matters.
-> Před přidáním nové chyby ověř existující GitHub Issues (aktuálně 60 otevřených).
+> Review prose follows the canonical English-default rule; verbatim Czech is preserved where exact source wording, field names, or AIS CR domain identifiers matter.
+> Before adding a new bug, check the existing GitHub Issues (currently 60 open).
 >
-> Stavy: `již evidováno (Issue #XXX)` | `rozšíření existujícího issue #XXX` | `nový kandidát na issue`
+> Statuses: `already tracked (Issue #XXX)` | `extends existing issue #XXX` | `new issue candidate`
 >
 > Severity values: `Critical` | `High` | `Medium` | `Low`
 
 ---
 
-### BUG-001: Saxon 8.7 — kriticky zastaralý XSLT procesor bez bezpečnostních záplat
+### BUG-001: Saxon 8.7 — critically outdated XSLT processor without security patches
 
-- **Soubor:** `web/pom.xml:125`
+- **File:** `web/pom.xml:125`
 - **Severity:** High
-- **GitHub Issue:** nový kandidát na issue
-- **Popis:** Maven závislost `net.sf.saxon:saxon:8.7` pochází z roku 2006 (cca 18 let stará verze). Aktuální open-source verze je Saxon-HE 12.x. Absence bezpečnostních záplat za 18 let vývoje představuje bezpečnostní riziko při zpracování vstupního XML z Fedora API. AGENTS.md deklaruje použití XSLT 2.0/3.0 procesoru, ale Saxon 8.7 XSLT 3.0 nepodporuje a má jen částečnou XSLT 2.0 podporu.
-- **Navrhovaná oprava:** Nahradit závislost za `net.sf.saxon:Saxon-HE:12.5` (open-source, zpětně kompatibilní pro XSLT 2.0, plná XSLT 3.0 podpora). Po upgradu ověřit existující XSLT transformace.
+- **GitHub Issue:** new issue candidate
+- **Description:** The Maven dependency `net.sf.saxon:saxon:8.7` dates from 2006 (roughly an 18-year-old version). The current open-source version is Saxon-HE 12.x. The absence of security patches over 18 years of development represents a security risk when processing input XML from the Fedora API. AGENTS.md declares the use of an XSLT 2.0/3.0 processor, but Saxon 8.7 does not support XSLT 3.0 and has only partial XSLT 2.0 support.
+- **Recommended fix:** Replace the dependency with `net.sf.saxon:Saxon-HE:12.5` (open source, backward compatible for XSLT 2.0, full XSLT 3.0 support). After the upgrade, verify the existing XSLT transformations.
 - **Task:** T02
 
 ---
 
-### BUG-002: javax.mail namespace nekompatibilní s Jakarta EE 11
+### BUG-002: javax.mail namespace incompatible with Jakarta EE 11
 
-- **Soubor:** `web/pom.xml:78`
+- **File:** `web/pom.xml:78`
 - **Severity:** Medium
-- **GitHub Issue:** nový kandidát na issue
-- **Popis:** Závislost `javax.mail:mail:1.4.7` používá starý `javax` namespace. Projekt cílí na Jakarta EE 11, která používá `jakarta.*` namespace. Na moderních application serverech (Tomcat 10+, WildFly 27+) může dojít ke classloading konfliktu nebo nefunkčnímu odesílání e-mailů.
-- **Navrhovaná oprava:** Nahradit za `jakarta.mail:jakarta.mail-api` + implementaci (Angus Mail: `org.eclipse.angus:angus-mail`). Aktualizovat i `org.apache.commons:commons-email`, který staví na javax.mail.
+- **GitHub Issue:** new issue candidate
+- **Description:** The dependency `javax.mail:mail:1.4.7` uses the old `javax` namespace. The project targets Jakarta EE 11, which uses the `jakarta.*` namespace. On modern application servers (Tomcat 10+, WildFly 27+) this may cause a classloading conflict or non-functional email sending.
+- **Recommended fix:** Replace with `jakarta.mail:jakarta.mail-api` + an implementation (Angus Mail: `org.eclipse.angus:angus-mail`). Also update `org.apache.commons:commons-email`, which is built on javax.mail.
 - **Task:** T02
 
 ---
 
-<!-- Záznamy přidávají agenti po dokončení jednotlivých tasků -->
+<!-- Entries are added by agents after completing individual tasks -->
 
 ---
 
-### BUG-003: Překlep multiValued="fslse" v entities schématu — nedefinované chování indexace
+### BUG-003: Typo multiValued="fslse" in the entities schema — undefined indexing behavior
 
-- **Soubor:** `solr/entities/conf/managed-schema:157`
+- **File:** `solr/entities/conf/managed-schema:157`
 - **Severity:** Critical
-- **GitHub Issue:** nový kandidát na issue
-- **Popis:** Pole `samostatny_nalez_projekt` má `multiValued="fslse"` — překlep místo `"false"`. Solr přijímá neplatný boolean atribut a jeho chování závisí na verzi. Může způsobit neočekávané multi-valued chování (ukládání více hodnot do single-value pole) nebo selhání indexace záznamu samostatného nálezu s chybou parse výjimky.
-- **Navrhovaná oprava:** Opravit na `multiValued="false"`. Po opravě provést reindexaci kolekce entities (nebo alespoň záznamy typu `samostatny_nalez`).
+- **GitHub Issue:** new issue candidate
+- **Description:** The field `samostatny_nalez_projekt` has `multiValued="fslse"` — a typo instead of `"false"`. Solr accepts the invalid boolean attribute and its behavior depends on the version. It may cause unexpected multi-valued behavior (storing multiple values in a single-value field) or failure to index a samostatný nález record with a parse exception error.
+- **Recommended fix:** Fix to `multiValued="false"`. After the fix, reindex the entities collection (or at least records of type `samostatny_nalez`).
 - **Task:** T03
 
 ---
 
-### BUG-004: FedoraHarvester.indexModels() — hardcodovaný limit 10 000 000 záznamů bez stránkování
+### BUG-004: FedoraHarvester.indexModels() — hardcoded limit of 10,000,000 records without pagination
 
-- **Soubor:** `web/src/main/java/cz/inovatika/arup/digiarchiv/web4/fedora/FedoraHarvester.java:263`
+- **File:** `web/src/main/java/cz/inovatika/arup/digiarchiv/web4/fedora/FedoraHarvester.java:263`
 - **Severity:** High
-- **GitHub Issue:** nový kandidát na issue
-- **Popis:** Metoda `indexModels()` nastavuje `max_results=10000000` a načítá celou odpověď Fedora API jako jeden `JSONObject` do paměti JVM. Při rozsáhlé databázi (tisíce dokumentů s metadaty) to vede k `OutOfMemoryError`. Paradoxně `checkDatestamp()` ve stejné třídě správně používá `CursorMark` pro iteraci — ale `indexModels()` toto neimplementuje. Plná reindexace (triggered např. po migraci) tak může shodit aplikační server.
-- **Navrhovaná oprava:** Implementovat cursor-based pagination pomocí `CursorMarkParams` (stejně jako `checkDatestamp()`), nebo offset-based stránkování s `batchSize=1000`.
+- **GitHub Issue:** new issue candidate
+- **Description:** The `indexModels()` method sets `max_results=10000000` and loads the entire Fedora API response as a single `JSONObject` into JVM memory. With a large database (thousands of documents with metadata) this leads to an `OutOfMemoryError`. Paradoxically, `checkDatestamp()` in the same class correctly uses `CursorMark` for iteration — but `indexModels()` does not implement this. A full reindex (triggered, for example, after a migration) can therefore bring down the application server.
+- **Recommended fix:** Implement cursor-based pagination using `CursorMarkParams` (as `checkDatestamp()` does), or offset-based pagination with `batchSize=1000`.
 - **Task:** T03
 
 ---
 
-### BUG-005: luceneMatchVersion=9.4 vs. solr-solrj 9.10.1 — konfigurační nesoulad ve všech 14 kolekcích
+### BUG-005: luceneMatchVersion=9.4 vs. solr-solrj 9.10.1 — configuration mismatch across all 14 collections
 
-- **Soubor:** `solr/entities/conf/solrconfig.xml:38` (a dalších 13 souborů solrconfig.xml)
+- **File:** `solr/entities/conf/solrconfig.xml:38` (and 13 more solrconfig.xml files)
 - **Severity:** High
-- **GitHub Issue:** nový kandidát na issue
-- **Popis:** Všechny `solrconfig.xml` soubory deklarují `<luceneMatchVersion>9.4</luceneMatchVersion>`, zatímco klientská knihovna `solr-solrj` má verzi 9.10.1 (viz `web/pom.xml:119`). Pokud Solr server běží ve verzi 9.10.x (odpovídající klientovi), stará `luceneMatchVersion` způsobuje: (1) neaktivaci Lucene 9.5–9.10 optimalizací indexu a tokenizace; (2) potenciální rozdíly v chování analyzerů při plné reindexaci vs. dotazování. Žádná migration note neexistuje.
-- **Navrhovaná oprava:** Zjistit aktuální verzi Solr serveru. Aktualizovat `luceneMatchVersion` na shodnou hodnotu ve všech 14 `solrconfig.xml`. Následně provést plnou reindexaci všech kolekcí.
+- **GitHub Issue:** new issue candidate
+- **Description:** All `solrconfig.xml` files declare `<luceneMatchVersion>9.4</luceneMatchVersion>`, while the client library `solr-solrj` is at version 9.10.1 (see `web/pom.xml:119`). If the Solr server runs version 9.10.x (matching the client), the old `luceneMatchVersion` causes: (1) non-activation of the Lucene 9.5–9.10 index and tokenization optimizations; (2) potential differences in analyzer behavior between full reindexing and querying. No migration note exists.
+- **Recommended fix:** Determine the current Solr server version. Update `luceneMatchVersion` to a matching value in all 14 `solrconfig.xml` files. Then perform a full reindex of all collections.
 - **Task:** T03
