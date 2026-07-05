@@ -39,6 +39,13 @@ tasks:
     description: Graf interních a externích závislostí (Maven + npm)
     target_file: .agents/analysis/dependency_graph.json
     priority: 2
+    note: >
+      Java-specifické heuristiky závislostí: preferuj `jakarta.*` před legacy
+      `javax.*` (cíl Jakarta EE 11); Maven version ranges (např. `[0.4,0.5)`)
+      označ jako riziko reprodukovatelnosti; Saxon artefakt byl přejmenován
+      `net.sf.saxon:saxon` → `net.sf.saxon:Saxon-HE` (cíl Saxon-HE 12.x);
+      pro interní Java závislosti použij `jdeps`; u god-class (>500 LOC) analyzuj
+      závislosti na úrovni tříd, ne jen balíčků.
 
   - id: T03
     name: solr_analysis
@@ -48,6 +55,18 @@ tasks:
     note: >
       Pokud je Solr konfigurace rozsáhlá, vytvoř sub-tasky T03a, T03b atd.
       Typy záznamů AMČR: dokument, projekt, akce, lokalita, samostatný nález, 3D model.
+      Prioritizuj hloubkovou analýzu kolekcí `entities`, `work`, `heslar` a
+      `soubor`; ostatní kolekce shrň stručněji. God-class `SolrSearcher` a
+      `FedoraHarvester` slouží jako vstupní body Java analýzy. U schémat nad
+      1000 řádků použij grep-first: nejdřív extrahuj `<field`, `<copyField` a
+      `<uniqueKey`. Detekuj neshody Java↔Solr polí (názvy z `addField()` vs
+      schéma; prefixy `adb_*`, `az_*`, `dokument_*` v `ArcheologickyZaznam`).
+      Předej T03→T04: Saxon 8.7 zpracovává XSLT transformace Fedora API —
+      kontroluj nekompatibilní konstrukty (`xs:`, `for-each-group`, `sequence`).
+    warning: >
+      Citlivé kolekce `uzivatel`, `uzivatel_ui` a `organizations` kontroluj na
+      pole email, telefon, heslo a adresa; expozici citlivých polí eskaluj do
+      `bugs.md`.
 
   - id: T04
     name: xslt_analysis
@@ -192,6 +211,12 @@ known_facts:
   - fact: "10 ze 14 Solr kolekcí sdílí identický solrconfig.xml"
     discovered_in: T01
     relevant_for: [T03]
+  - fact: "God-class vstupní body Solr/Fedora analýzy: SolrSearcher (web4/index/) a FedoraHarvester (web4/fedora/)"
+    discovered_in: T03
+    relevant_for: [T03, T04]
+  - fact: "Citlivé Solr kolekce s osobními údaji: uzivatel, uzivatel_ui, organizations (email, telefon, heslo, adresa)"
+    discovered_in: T03
+    relevant_for: [T03, T06]
 
 tech_stack:
   backend: [Java 17, Spring, "Jakarta EE 11"]
@@ -203,12 +228,12 @@ tech_stack:
   thumbnails: ["ThumbnailsGenerator", "Java 1.8 (EOL)"]
 
 prompt_evolution:
-  legacy_evidence_report: .agents/reports/workflow_evolution_legacy_evidence.md
   apply_manually: true
   reviewer: human
   note: >
-    Starší soubory prompt_evolution byly klasifikovány a zachovány v
-    .agents/reports/workflow_evolution_legacy_evidence.md.
+    Starší evidence prompt_evolution byla klasifikována; využitelná pravidla
+    byla zapracována do tohoto review_config.yaml a do kanonického workflow
+    aiscr-codebase-review. Dočasný report legacy evidence byl odstraněn.
     Nová zpětná vazba z U05 zůstává lokální evidencí tohoto repozitáře,
     dokud člověk výslovně neschválí předání report-to-backlog.
 
