@@ -1,7 +1,7 @@
 repository: aiscr-digiarchiv-2
 branch: dev
 github_url: https://github.com/ARUP-CAS/aiscr-digiarchiv-2/tree/dev
-open_issues: 60  # k datu inicializace (07-03-2026)
+open_issues: 60  # as of initialization date (07-03-2026)
 
 # Task priority is defined by the `priority` field on each task.
 # Do not add a separate review_priorities list — it would conflict with task priority fields.
@@ -9,12 +9,12 @@ open_issues: 60  # k datu inicializace (07-03-2026)
 
 task_size_limits:
   max_files_per_task: 20
-  max_lines_per_task: 6000    # celkový budget úlohy
-  max_lines_per_file: 2000    # práh pro jednotlivý soubor
+  max_lines_per_task: 6000    # total task budget
+  max_lines_per_file: 2000    # threshold per individual file
   large_file_strategy: split_task
-  # Pokud soubor překročí max_lines_per_file:
-  #   split_task        → rozděl úlohu na sub-tasky (T03a, T03b, ...)
-  #   truncate_with_note → analyzuj prvních 2000 řádků, zaznamenej zkrácení
+  # If a file exceeds max_lines_per_file:
+  #   split_task        → split the task into sub-tasks (T03a, T03b, ...)
+  #   truncate_with_note → analyze the first 2000 lines, record truncation
   prefer_single_module_per_task: true
 
 cache_strategy:
@@ -30,89 +30,89 @@ tasks:
   # target_file paths are relative to repo root; analysis outputs under .agents/analysis/, final report under .agents/reports/review_reports/
   - id: T01
     name: repository_map
-    description: Mapování struktury repozitáře
+    description: Repository structure mapping
     target_file: .agents/analysis/repository_map.json
     priority: 1
 
   - id: T02
     name: dependency_graph
-    description: Graf interních a externích závislostí (Maven + npm)
+    description: Graph of internal and external dependencies (Maven + npm)
     target_file: .agents/analysis/dependency_graph.json
     priority: 2
     note: >
-      Java-specifické heuristiky závislostí: preferuj `jakarta.*` před legacy
-      `javax.*` (cíl Jakarta EE 11); Maven version ranges (např. `[0.4,0.5)`)
-      označ jako riziko reprodukovatelnosti; Saxon artefakt byl přejmenován
-      `net.sf.saxon:saxon` → `net.sf.saxon:Saxon-HE` (cíl Saxon-HE 12.x);
-      pro interní Java závislosti použij `jdeps`; u god-class (>500 LOC) analyzuj
-      závislosti na úrovni tříd, ne jen balíčků.
+      Java-specific dependency heuristics: prefer `jakarta.*` over legacy
+      `javax.*` (target Jakarta EE 11); flag Maven version ranges (e.g. `[0.4,0.5)`)
+      as reproducibility risk; Saxon artifact was renamed
+      `net.sf.saxon:saxon` → `net.sf.saxon:Saxon-HE` (target Saxon-HE 12.x);
+      use `jdeps` for internal Java dependencies; for god-class (>500 LOC) analyze
+      dependencies at class level, not package level only.
 
   - id: T03
     name: solr_analysis
-    description: Analýza Solr schémat, konfigurací a indexovacích vzorů
+    description: Analysis of Solr schemas, configurations, and indexing patterns
     target_file: .agents/analysis/solr_analysis.json
     priority: 3
     note: >
-      Pokud je Solr konfigurace rozsáhlá, vytvoř sub-tasky T03a, T03b atd.
-      Typy záznamů AMČR: dokument, projekt, akce, lokalita, samostatný nález, 3D model.
-      Prioritizuj hloubkovou analýzu kolekcí `entities`, `work`, `heslar` a
-      `soubor`; ostatní kolekce shrň stručněji. God-class `SolrSearcher` a
-      `FedoraHarvester` slouží jako vstupní body Java analýzy. U schémat nad
-      1000 řádků použij grep-first: nejdřív extrahuj `<field`, `<copyField` a
-      `<uniqueKey`. Detekuj neshody Java↔Solr polí (názvy z `addField()` vs
-      schéma; prefixy `adb_*`, `az_*`, `dokument_*` v `ArcheologickyZaznam`).
-      Předej T03→T04: Saxon 8.7 zpracovává XSLT transformace Fedora API —
-      kontroluj nekompatibilní konstrukty (`xs:`, `for-each-group`, `sequence`).
+      If Solr configuration is extensive, create sub-tasks T03a, T03b, etc.
+      AMČR record types: dokument, projekt, akce, lokalita, samostatný nález, 3D model.
+      Prioritize in-depth analysis of collections `entities`, `work`, `heslar`, and
+      `soubor`; summarize other collections more briefly. God-class `SolrSearcher` and
+      `FedoraHarvester` serve as Java analysis entry points. For schemas over
+      1000 lines use grep-first: extract `<field`, `<copyField`, and
+      `<uniqueKey` first. Detect Java↔Solr field mismatches (names from `addField()` vs
+      schema; prefixes `adb_*`, `az_*`, `dokument_*` in `ArcheologickyZaznam`).
+      Hand off T03→T04: Saxon 8.7 processes Fedora API XSLT transforms —
+      check for incompatible constructs (`xs:`, `for-each-group`, `sequence`).
     warning: >
-      Citlivé kolekce `uzivatel`, `uzivatel_ui` a `organizations` kontroluj na
-      pole email, telefon, heslo a adresa; expozici citlivých polí eskaluj do
+      For sensitive collections `uzivatel`, `uzivatel_ui`, and `organizations` check
+      email, telefon, heslo, and adresa fields; escalate exposure of sensitive fields to
       `bugs.md`.
 
   - id: T04
     name: xslt_analysis
-    description: Analýza XSLT transformací a jejich vazby na AMČR API
+    description: Analysis of XSLT transforms and their binding to the AMČR API
     target_file: .agents/analysis/xslt_analysis.json
     priority: 4
 
   - id: T05
     name: docker_analysis
-    description: Analýza všech Dockerfile a docker-compose souborů
+    description: Analysis of all Dockerfile and docker-compose files
     target_file: .agents/analysis/docker_analysis.json
     priority: 5
 
   - id: T06
     name: security_analysis
-    description: Bezpečnostní audit (Spring Security, secrets, autentizace, CORS)
+    description: Security audit (Spring Security, secrets, authentication, CORS)
     target_file: .agents/analysis/security_analysis.json
     priority: 6
 
   - id: T07
     name: frontend_analysis
-    description: Analýza vlastního TypeScript/JS/SCSS kódu (vendorované knihovny vyloučeny)
+    description: Analysis of custom TypeScript/JS/SCSS code (vendored libraries excluded)
     target_file: .agents/analysis/frontend_analysis.json
     priority: 7
 
   - id: T08
     name: documentation_analysis
-    description: Analýza stavu dokumentace (README, Javadoc, XSLT komentáře)
+    description: Documentation state analysis (README, Javadoc, XSLT comments)
     target_file: .agents/analysis/documentation_analysis.json
     priority: 8
 
   - id: T09
     name: cicd_analysis
-    description: Analýza GitHub Actions a CI pipeline
+    description: GitHub Actions and CI pipeline analysis
     target_file: .agents/analysis/cicd_analysis.json
     priority: 9
 
   - id: T10
     name: scripts_analysis
-    description: Analýza build a deployment skriptů
+    description: Build and deployment script analysis
     target_file: .agents/analysis/scripts_analysis.json
     priority: 10
 
   - id: T11
     name: final_audit
-    description: Finální souhrnný audit všech zjištění
+    description: Final summary audit of all findings
     target_file: .agents/reports/review_reports/final_audit.md
     priority: 11
     requires: [T01, T02, T03, T04, T05, T06, T07, T08, T09, T10]
@@ -150,20 +150,20 @@ phase_outputs:
 important_directories:
   - web/src/main/java
   - web/src/main/resources
-  - web/src/main/ng         # Angular frontend (NE web/src/main/webapp — ten jen JSP/web descriptor)
+  - web/src/main/ng         # Angular frontend (NOT web/src/main/webapp — that is JSP/web descriptor only)
   - solr
   - ThumbnailsGenerator
   - .github
-  # POZNÁMKA: web/src/test neexistuje — projekt nemá automatizované Java testy (zjištěno T01)
+  # NOTE: web/src/test does not exist — the project has no automated Java tests (discovered in T01)
 
 important_files:
   - AGENTS.md
   - web/pom.xml
-  - web/src/main/ng/package.json   # npm konfigurace Angular frontendu
-  - web/src/main/ng/tsconfig.json  # TypeScript konfigurace
+  - web/src/main/ng/package.json   # npm configuration for Angular frontend
+  - web/src/main/ng/tsconfig.json  # TypeScript configuration
   - ThumbnailsGenerator/pom.xml
-  # POZNÁMKA: docker-compose soubory nejsou součástí tohoto repozitáře (zjištěno T01)
-  #           Infrastrukturní konfigurace je v externím repozitáři.
+  # NOTE: docker-compose files are not part of this repository (discovered in T01)
+  #       Infrastructure configuration lives in an external repository.
 
 ignored_directories:
   - .git
@@ -191,30 +191,30 @@ vendored_exclusions:
     - "* jQuery"
     - "* Bootstrap"
   note: >
-    Vendorované soubory nesmí být hodnoceny pro interní kvalitu kódu v žádném tasku.
-    Mohou být referencovány (např. kontrola SRI atributů v šablonách).
+    Vendored files must not be assessed for internal code quality in any task.
+    They may be referenced (e.g. SRI attribute checks in templates).
 
 known_facts:
-  # Fakta zjištěná během review — slouží k orientaci budoucích agentů
-  - fact: "Žádné automatizované Java testy — adresář web/src/test neexistuje"
+  # Facts discovered during review — orient future agents
+  - fact: "No automated Java tests — directory web/src/test does not exist"
     discovered_in: T01
     relevant_for: [T06, T08, T09]
-  - fact: "Docker/infrastrukturní konfigurace není součástí tohoto repozitáře"
+  - fact: "Docker/infrastructure configuration is not part of this repository"
     discovered_in: T01
     relevant_for: [T05]
-  - fact: "14 Solr kolekcí — T03 pravděpodobně vyžaduje split na sub-tasky (T03a–T03n)"
+  - fact: "14 Solr collections — T03 likely requires split into sub-tasks (T03a–T03n)"
     discovered_in: T01
     relevant_for: [T03]
-  - fact: "Angular frontend se nachází v web/src/main/ng/, nikoli v web/src/main/webapp/"
+  - fact: "Angular frontend is located at web/src/main/ng/, not web/src/main/webapp/"
     discovered_in: T01
     relevant_for: [T07]
-  - fact: "10 ze 14 Solr kolekcí sdílí identický solrconfig.xml"
+  - fact: "10 of 14 Solr collections share an identical solrconfig.xml"
     discovered_in: T01
     relevant_for: [T03]
-  - fact: "God-class vstupní body Solr/Fedora analýzy: SolrSearcher (web4/index/) a FedoraHarvester (web4/fedora/)"
+  - fact: "God-class Solr/Fedora analysis entry points: SolrSearcher (web4/index/) and FedoraHarvester (web4/fedora/)"
     discovered_in: T03
     relevant_for: [T03, T04]
-  - fact: "Citlivé Solr kolekce s osobními údaji: uzivatel, uzivatel_ui, organizations (email, telefon, heslo, adresa)"
+  - fact: "Sensitive Solr collections with personal data: uzivatel, uzivatel_ui, organizations (email, telefon, heslo, adresa)"
     discovered_in: T03
     relevant_for: [T03, T06]
 
@@ -231,16 +231,16 @@ prompt_evolution:
   apply_manually: true
   reviewer: human
   note: >
-    Starší evidence prompt_evolution byla klasifikována; využitelná pravidla
-    byla zapracována do tohoto review_config.yaml a do kanonického workflow
-    aiscr-codebase-review. Dočasný report legacy evidence byl odstraněn.
-    Nová zpětná vazba z U05 zůstává lokální evidencí tohoto repozitáře,
-    dokud člověk výslovně neschválí předání report-to-backlog.
+    Older prompt_evolution evidence was classified; usable rules were incorporated
+    into this review_config.yaml and the canonical aiscr-codebase-review workflow.
+    The temporary legacy evidence report was removed.
+    New U05 feedback remains local evidence for this repository until a human
+    explicitly approves report-to-backlog handoff.
 
 follow_up:
-  # Inkrementální update (U01–U06) vlastní kanonické workflow aiscr-codebase-review
-  # (režim `codebase-review-mode-update`); samostatný soubor review_update.md již
-  # v tomto repozitáři není.
+  # Incremental update (U01–U06) is owned by the canonical aiscr-codebase-review
+  # workflow (mode `codebase-review-mode-update`); no standalone review_update.md
+  # file remains in this repository.
   workflow: aiscr-codebase-review
   mode: codebase-review-mode-update
   phases: [U01, U02, U03, U04, U05, U06]
