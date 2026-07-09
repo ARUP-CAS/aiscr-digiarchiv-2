@@ -18,3 +18,6 @@ web/src/main/webapp/index.csr.html
 .codex/
 .claude/
 .cursor/
+
+#node
+node_modules/
