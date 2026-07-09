@@ -597,7 +597,9 @@
   "export": {
     "field": {
       "ident_cely": "Identifikátor",
-      "handle": "Trvalý odkaz",
+      "handle": "Trvalý odkaz - Digitální archiv",
+      "api_prefix": "Trvalý odkaz - API",
+      "show_in_AMCR": "Trvalý odkaz - AMČR",
       "okres": "Okres",
       "katastr": "Katastr",
       "pristupnost": "Přístupnost",

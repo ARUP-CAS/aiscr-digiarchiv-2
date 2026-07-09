@@ -597,7 +597,9 @@
   "export": {
     "field": {
       "ident_cely": "Identifier",
-      "handle": "Stable URL",
+      "handle": "Stable URL - Digital Archive",
+      "api_prefix": "Stable URL - API",
+      "show_in_AMCR": "Stable URL - AMCR",      
       "okres": "District",
       "katastr": "Cadastre",
       "pristupnost": "Acessibility",
