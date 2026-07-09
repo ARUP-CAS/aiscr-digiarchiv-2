@@ -35,7 +35,7 @@
 
   <mat-card-content [class.app-detail-closed]="!_detailExpanded">
     @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
-      <div class="app-thumb app-fxLayout app-row app-fill app-center-v app-center-h" [matTooltip]="'Obrázek není k dispozici' | translate">
+      <div class="app-thumb app-fxLayout app-row app-fill app-center-v app-center-h" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
     }
