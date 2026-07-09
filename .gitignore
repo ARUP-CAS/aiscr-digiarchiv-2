@@ -19,5 +19,6 @@ web/src/main/webapp/index.csr.html
 .claude/
 .cursor/
 
-#node
+#local environments
 node_modules/
+.venv/
