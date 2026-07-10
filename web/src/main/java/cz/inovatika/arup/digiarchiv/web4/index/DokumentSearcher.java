@@ -71,11 +71,15 @@ public class DokumentSearcher implements EntitySearcher {
         try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            SolrSearcher.addExportParams(query, ENTITY);
+            String entity = request.getParameter("entity");
+            if (entity == null) {
+              entity = ENTITY;
+            }
+            SolrSearcher.addExportParams(query, entity);
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), entity);
             
             return jo;
             
@@ -291,7 +295,6 @@ public class DokumentSearcher implements EntitySearcher {
 ////              "okres","f_okres","location_info:[json]");
 //        }
         query.setFields(getSearchFields(pristupnost));
-
     }
 
     /**

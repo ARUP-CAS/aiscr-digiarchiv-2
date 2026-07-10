@@ -857,7 +857,8 @@
         "heslar": "areal_druha"
       },
       {
-        "name": "dokument_extra_data_odkaz",
+        "name": "extra_data_odkaz",
+        "label": "dokument_extra_data_odkaz",
         "heslar": "odkaz"
       }
     ],
