@@ -111,12 +111,16 @@ export class ResultActionsComponent {
   }
 
   showMuseionPredmety() {
+
+    
     const typ = this.museionTypes[this.result().entity];
     this.state.dialogRef = this.dialog.open(MuseionPredmetyDialog, {
       width: '900px',
       data: { id: this.result().ident_cely, typ: typ },
       panelClass: 'app-resizable-dialog'
     });
+
+
   }
 
 }

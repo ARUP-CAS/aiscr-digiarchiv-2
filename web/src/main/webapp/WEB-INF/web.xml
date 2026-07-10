@@ -42,6 +42,7 @@
         <url-pattern>/registrace</url-pattern>
         <url-pattern>/results/*</url-pattern>
         <url-pattern>/map/*</url-pattern>
+        <url-pattern>/museion/*</url-pattern>
         <url-pattern>/print/*</url-pattern>
         <url-pattern>/stats</url-pattern>
         <url-pattern>/favorites</url-pattern>

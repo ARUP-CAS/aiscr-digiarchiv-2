@@ -145,6 +145,10 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.commonFacets;
     }
 
+    public get showMuseion() {
+        return this.config.showMuseion;
+    }
+
     server = '';
 
     constructor(

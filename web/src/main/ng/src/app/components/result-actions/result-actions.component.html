@@ -6,9 +6,9 @@
   }
 
 @if (withMuseion()) {
-  <button matIconButton [matTooltip]="'museion.zobrazit_predmety' | translate" (click)="showMuseionPredmety()">
+  <a matIconButton [matTooltip]="'museion.zobrazit_predmety' | translate" target="_blank" [href]="'museion/' + result().ident_cely">
     <mat-icon>museum</mat-icon>
-  </button>
+  </a>
 }
 
   <button matIconButton [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">

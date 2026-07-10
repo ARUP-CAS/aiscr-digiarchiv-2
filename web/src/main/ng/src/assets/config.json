@@ -1090,5 +1090,6 @@
     }
   ],
   "feedBackMaxLength": 4000,
-		"commonFacets": []
+	"commonFacets": [],
+  "showMuseion": false
 }

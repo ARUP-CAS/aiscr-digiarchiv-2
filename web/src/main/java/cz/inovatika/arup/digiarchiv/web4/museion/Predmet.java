@@ -88,16 +88,16 @@ public class Predmet {
     public String dataceVzniku;
     
     @JacksonXmlProperty(localName = "datumNabyti")
-    public XMLGregorianCalendar datumNabyti;
+    public String datumNabyti;
     
     @JacksonXmlProperty(localName = "datumNalezu")
-    public XMLGregorianCalendar datumNalezu;
+    public String datumNalezu;
     
     @JacksonXmlProperty(localName = "datumStav")
     public String datumStav;
     
     @JacksonXmlProperty(localName = "datumZapisu")
-    public XMLGregorianCalendar datumZapisu;
+    public String datumZapisu;
     
     @JacksonXmlProperty(localName = "druhObjektu")
     public String druhObjektu;

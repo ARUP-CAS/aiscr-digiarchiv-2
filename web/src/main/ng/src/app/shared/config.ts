@@ -14,6 +14,7 @@ export class Configuration {
   defaultLang: string;
   facets: string[];
   noPoradiFacets: {[key: string]: boolean};
+  showMuseion: boolean;
   // dateFacets: string[];
   // numberFacets: string[];
 
