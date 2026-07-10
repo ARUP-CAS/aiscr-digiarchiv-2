@@ -130,12 +130,16 @@ public class SolrSearcher {
     JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     List<String> fs = new ArrayList();
     for (int i = 0; i < exFields.length(); i++) {
+      
       String f = exFields.getJSONObject(i).getString("name");
-      if (f.contains(".")) {
+      if (exFields.getJSONObject(i).has("field")) {
+        f = exFields.getJSONObject(i).getString("field");
+      } else if (f.contains(".")){
         f = f.split("\\.")[0] + ":[json]";
       }
       fs.add(f);
     }
+    fs.add("pristupnost");
     query.setFields(fs.toArray(new String[0]));
     query.set("stats", false);
     query.set("facet", false);

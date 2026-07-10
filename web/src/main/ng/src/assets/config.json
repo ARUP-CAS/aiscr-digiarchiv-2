@@ -803,11 +803,13 @@
       },
       {
         "name": "location_info[0].okres",
+        "field": "location_info:[json]",
         "byPath": true,
         "label": "okres"
       },
       {
         "name": "location_info[0].katastr",
+        "field": "location_info:[json]",
         "byPath": true,
         "label": "katastr"
       },
