@@ -729,9 +729,11 @@
             "f_tvar:dokument_tvar.tvar.id", 
             "f_tvar:dokument_tvar[0].tvar.id",
             "az_chranene_udaje",
-            "dokument_extra_data"
+            "dokument_extra_data",
+            "lokalita_jistota"
          ],
         "parent":[
+            "az_chranene_udaje",
             "f_dj_typ:dj_typ",
             "f_adb_typ_sondy:dj_adb.adb_typ_sondy.id",
             "f_adb_podnet:dj_adb.adb_podnet.id",

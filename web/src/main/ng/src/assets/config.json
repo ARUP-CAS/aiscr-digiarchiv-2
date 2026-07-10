@@ -1075,6 +1075,48 @@
         "name": "pristupnost",
         "heslar": "pristupnost"
       }
+    ],
+    "komponenta":[
+      {
+        "name": "ident_cely"
+      },
+      {
+        "name": "f_okres",
+        "label": "okres"
+      },
+      {
+        "name": "samostatny_nalez_chranene_udaje.katastr.value",
+        "byPath": true,
+        "label": "katastr"
+      },
+      {
+        "name": "az_chranene_udaje.hlavni_katastr.value",
+        "byPath": true,
+        "label": "katastr"
+      },
+      {
+        "name": "az_chranene_udaje.dalsi_katastr[*].value",
+        "map": true,
+        "byPath": true,
+        "label": "dalsi_katastry"
+      },
+      {
+        "name": "samostatny_nalez_obdobi",
+        "heslar": "obdobi_druha",
+        "label": "obdobi"
+      },
+      {
+        "name": "komponenta_presna_datace"
+      },
+      {
+        "name": "lokalita_jistota"
+      },
+      {
+        "name": "komponenta_areal"
+      },
+      {
+        "name": "komponenta_aktivita"
+      }
     ]
   },
   "choiceApi": [

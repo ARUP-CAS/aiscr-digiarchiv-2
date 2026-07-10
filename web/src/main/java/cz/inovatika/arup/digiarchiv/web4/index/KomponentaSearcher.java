@@ -153,7 +153,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
     fields.add("loc_rpt:loc_rpt_" + pristupnost);
     fields.add("loc:loc_rpt_" + pristupnost);
     fields.add("katastr:f_katastr_" + pristupnost);
-    fields.add("okres:f_okres");
+    fields.add("okres:f_okres"); 
 
     String[] ret = fields.toArray(new String[0]);
     return ret;
