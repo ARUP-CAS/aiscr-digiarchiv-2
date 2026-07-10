@@ -8,18 +8,29 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
-import { SolrResponse } from '../../shared/solr-response';
+import { Sort } from '../../shared/config';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { DatePipe, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { AppWindowRef } from '../../app.window-ref';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule,
-    MatProgressBarModule, DatePipe,
-    MatPaginatorModule
-  ],
+    TranslateModule, RouterModule, CommonModule, FormsModule,
+    MatProgressBarModule, DatePipe, MatTooltipModule,
+    MatPaginatorModule, MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule
+],
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.scss']
@@ -41,7 +52,7 @@ export class ExportComponent implements OnInit {
     public state: AppState,
     private service: AppService
   ) {
-    this.state.bodyClass = 'app-page-export';
+    this.state.bodyClass = 'app-page-export'; 
   }
 
   ngOnInit(): void {
@@ -52,7 +63,8 @@ export class ExportComponent implements OnInit {
       this.ref.detectChanges(); 
     });
     
-    this.pageIndex = this.route.snapshot.queryParams['page'] ? this.route.snapshot.queryParams['page'] : 0;
+    //this.pageIndex = this.route.snapshot.queryParams['page'] ? this.route.snapshot.queryParams['page'] : 0;
+    this.pageIndex = this.state.page + 1;
     this.route.queryParams.subscribe(val => {
       this.search(val);
     });
@@ -104,8 +116,29 @@ export class ExportComponent implements OnInit {
     params.rows = e.pageSize;
     params.page = e.pageIndex;
     this.pageIndex = e.pageIndex + 1;
+    this.state.pageChanged = true;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
+
+  setPage() {
+    const params: any = {};
+    params.page = this.pageIndex - 1;
+    this.state.page = this.pageIndex - 1;
+    this.state.pageChanged = true;
+    // document.getElementById('scroll-wrapper').scrollTop = 0;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
+  sortBy(sort: Sort) {
+      this.state.sort = sort;
+  
+      if (this.state.ui) {
+        this.state.ui.rows = this.state.rows;
+        this.state.ui.sort[this.state.entity] = sort.field;
+      }
+  
+      this.router.navigate([], { queryParams: { sort: sort.field, page: 0 }, queryParamsHandling: 'merge' });
+    }
 
   search(params: Params) {
     this.state.loading.set(true);

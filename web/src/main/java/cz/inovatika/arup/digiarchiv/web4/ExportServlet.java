@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package cz.inovatika.arup.digiarchiv.web4;
 
 import cz.inovatika.arup.digiarchiv.web4.index.EntitySearcher;
@@ -61,18 +57,16 @@ public class ExportServlet extends HttpServlet {
       //response.setHeader("Content-Disposition", "filename=export_" + entity + "_" + now.toEpochMilli() + "." + format);
       switch (format) {
         case "csv":
-        case "xlsx":
           List<String> labels = SolrSearcher.getExportField(entity, "label");
           JSONArray ls = new JSONArray(labels);
           String csv = org.json.CDL.rowToString(new JSONArray(labels));
           csv += toString(entity, jo.getJSONObject("response").getJSONArray("docs"), ',', request.getParameter("lang"));
-          if ("xlsx".equals(format)) {
-            response.setContentType("application/xlsx;charset=UTF-8");
-            csvToXLSX(csv, response, entity);
-          } else {
-            response.setContentType("text/csv;charset=UTF-8");
-            response.getWriter().print(csv);
-          }
+          response.setContentType("text/csv;charset=UTF-8");
+          response.getWriter().print(csv);
+          break;
+        case "xlsx":
+          response.setContentType("application/xlsx;charset=UTF-8");
+          csvToXLSX(response, jo.getJSONObject("response").getJSONArray("docs"), entity, ',', request.getParameter("lang"));
           break;
         case "xml":
           response.setContentType("text/xml;charset=UTF-8");
@@ -88,7 +82,7 @@ public class ExportServlet extends HttpServlet {
             JSONObject doc = ja.getJSONObject(i);
             ret.put(translateJSON(doc, exFields, request.getParameter("lang")));
           }
-      
+
           response.getWriter().print(ret.toString());
           break;
         default:
@@ -199,23 +193,55 @@ public class ExportServlet extends HttpServlet {
     return sb.toString();
   }
 
-  public static void csvToXLSX(String csv, HttpServletResponse response, String entity) {
+  /**
+   * Fills a xlsx row from a JSONArray. Values containing the comma character
+   * will be quoted. Troublesome characters may be removed.
+   *
+   * @param ja A JSONArray of strings.
+   * @param delimiter custom delimiter char
+   * @param currentRow xlsx row
+   */
+  public static void rowToXLSX(JSONArray ja, char delimiter, XSSFRow currentRow) {
+    for (int i = 0; i < ja.length(); i += 1) {
+      XSSFCell cell = currentRow.createCell(i);
+      cell.setCellType(CellType.STRING);
+      StringBuilder sb = new StringBuilder();
+      Object object = ja.opt(i);
+      if (object != null) {
+          cell.setCellValue(object.toString());
+      }
+    }
+  }
+
+  /**
+   * Fills a xlsx a sheet using a provided list of names. The list of names is
+   * not included in the output.
+   */
+  private static void toXLSX(String entity, JSONArray ja, char delimiter, String locale, XSSFSheet sheet) throws JSONException {
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    if (exFields == null || exFields.length() == 0) {
+      return;
+    }
+
+    int rowNum = 0;
+    List<String> labels = SolrSearcher.getExportField(entity, "label");
+    JSONArray ls = new JSONArray(labels);
+    XSSFRow currentRow = sheet.createRow(rowNum++);
+    rowToXLSX(ls, delimiter, currentRow);
+    for (int i = 0; i < ja.length(); i += 1) {
+      JSONObject jo = ja.optJSONObject(i);
+      if (jo != null) {
+        currentRow = sheet.createRow(rowNum++);
+        rowToXLSX(toJSONArray(jo, exFields, locale), delimiter, currentRow);
+      }
+    }
+  }
+
+  public static void csvToXLSX(HttpServletResponse response, JSONArray docs, String entity, char delimiter, String locale) {
     try {
       XSSFWorkbook workBook = new XSSFWorkbook();
       XSSFSheet sheet = workBook.createSheet(entity);
-      String currentLine = null;
-      int rowNum = 0;
-      BufferedReader br = new BufferedReader(new StringReader(csv));
-      while ((currentLine = br.readLine()) != null) {
-        String str[] = currentLine.split(",");
-        XSSFRow currentRow = sheet.createRow(rowNum++);
-        for (int i = 0; i < str.length; i++) {
-          XSSFCell cell = currentRow.createCell(i);
-          cell.setCellType(CellType.STRING);
-          cell.setCellValue(str[i]);
-        }
-      }
-      br.close();
+      toXLSX(entity, docs, delimiter, locale, sheet);
       workBook.write(response.getOutputStream());
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, ex.getMessage(), ex);

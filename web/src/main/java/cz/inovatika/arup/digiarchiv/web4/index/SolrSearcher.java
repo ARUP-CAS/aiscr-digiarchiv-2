@@ -145,7 +145,7 @@ public class SolrSearcher {
     query.set("facet", false);
     //query.addSort(query.getSorts().getFirst());
     query.setParam("sort" , query.getSortField() + ",ident_cely asc");
-    query.set(CursorMarkParams.CURSOR_MARK_PARAM, CursorMarkParams.CURSOR_MARK_START); 
+    //query.set(CursorMarkParams.CURSOR_MARK_PARAM, CursorMarkParams.CURSOR_MARK_START); 
   }
 
   public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {
