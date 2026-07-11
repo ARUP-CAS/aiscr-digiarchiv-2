@@ -9,9 +9,11 @@
 
 ---
 
+<!-- Entries are added by agents after completing individual tasks -->
+
 ### BUG-001: Saxon 8.7 — critically outdated XSLT processor without security patches
 
-- **File:** `web/pom.xml:125`
+- **Files:** `web/pom.xml:125`
 - **Severity:** High
 - **GitHub Issue:** new issue candidate
 - **Description:** The Maven dependency `net.sf.saxon:saxon:8.7` dates from 2006 (roughly an 18-year-old version). The current open-source version is Saxon-HE 12.x. The absence of security patches over 18 years of development represents a security risk when processing input XML from the Fedora API. AGENTS.md declares the use of an XSLT 2.0/3.0 processor, but Saxon 8.7 does not support XSLT 3.0 and has only partial XSLT 2.0 support.
@@ -22,7 +24,7 @@
 
 ### BUG-002: javax.mail namespace incompatible with Jakarta EE 11
 
-- **File:** `web/pom.xml:78`
+- **Files:** `web/pom.xml:78`
 - **Severity:** Medium
 - **GitHub Issue:** new issue candidate
 - **Description:** The dependency `javax.mail:mail:1.4.7` uses the old `javax` namespace. The project targets Jakarta EE 11, which uses the `jakarta.*` namespace. On modern application servers (Tomcat 10+, WildFly 27+) this may cause a classloading conflict or non-functional email sending.
@@ -31,13 +33,9 @@
 
 ---
 
-<!-- Entries are added by agents after completing individual tasks -->
-
----
-
 ### BUG-003: Typo multiValued="fslse" in the entities schema — undefined indexing behavior
 
-- **File:** `solr/entities/conf/managed-schema:157`
+- **Files:** `solr/entities/conf/managed-schema:157`
 - **Severity:** Critical
 - **GitHub Issue:** new issue candidate
 - **Description:** The field `samostatny_nalez_projekt` has `multiValued="fslse"` — a typo instead of `"false"`. Solr accepts the invalid boolean attribute and its behavior depends on the version. It may cause unexpected multi-valued behavior (storing multiple values in a single-value field) or failure to index a samostatný nález record with a parse exception error.
@@ -48,7 +46,7 @@
 
 ### BUG-004: FedoraHarvester.indexModels() — hardcoded limit of 10,000,000 records without pagination
 
-- **File:** `web/src/main/java/cz/inovatika/arup/digiarchiv/web4/fedora/FedoraHarvester.java:263`
+- **Files:** `web/src/main/java/cz/inovatika/arup/digiarchiv/web4/fedora/FedoraHarvester.java:263`
 - **Severity:** High
 - **GitHub Issue:** new issue candidate
 - **Description:** The `indexModels()` method sets `max_results=10000000` and loads the entire Fedora API response as a single `JSONObject` into JVM memory. With a large database (thousands of documents with metadata) this leads to an `OutOfMemoryError`. Paradoxically, `checkDatestamp()` in the same class correctly uses `CursorMark` for iteration — but `indexModels()` does not implement this. A full reindex (triggered, for example, after a migration) can therefore bring down the application server.
@@ -59,7 +57,7 @@
 
 ### BUG-005: luceneMatchVersion=9.4 vs. solr-solrj 9.10.1 — configuration mismatch across all 14 collections
 
-- **File:** `solr/entities/conf/solrconfig.xml:38` (and 13 more solrconfig.xml files)
+- **Files:** `solr/entities/conf/solrconfig.xml:38` (and 13 more solrconfig.xml files)
 - **Severity:** High
 - **GitHub Issue:** new issue candidate
 - **Description:** All `solrconfig.xml` files declare `<luceneMatchVersion>9.4</luceneMatchVersion>`, while the client library `solr-solrj` is at version 9.10.1 (see `web/pom.xml:119`). If the Solr server runs version 9.10.x (matching the client), the old `luceneMatchVersion` causes: (1) non-activation of the Lucene 9.5–9.10 index and tokenization optimizations; (2) potential differences in analyzer behavior between full reindexing and querying. No migration note exists.
