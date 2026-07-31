@@ -1,11 +1,11 @@
 
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Params, RouterModule } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 
 import * as Wkt from 'wicket';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -13,11 +13,26 @@ import { AppConfiguration } from '../../app-configuration';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { SolrResponse } from '../../shared/solr-response';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
+import { Sort } from '../../shared/config';
+import { AppWindowRef } from '../../app.window-ref';
 
 @Component({
   imports: [
-    TranslateModule, RouterModule, 
-    MatProgressBarModule, DatePipe
+    TranslateModule, RouterModule, CommonModule, FormsModule,
+    MatProgressBarModule, DatePipe, MatTooltipModule,
+    MatPaginatorModule, MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule
 ],
   selector: 'app-export-mapa',
   templateUrl: './export-mapa.component.html',
@@ -26,13 +41,18 @@ import { SolrResponse } from '../../shared/solr-response';
 export class ExportMapaComponent implements OnInit {
 
   docs = signal<any[]>([]);
+  pageIndex: number = 0;
+  numFound: number;
   format: string | undefined;
   hasPian = true;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    private windowRef: AppWindowRef,
     private ref: ChangeDetectorRef,
     private titleService: Title,
     private route: ActivatedRoute,
+    private router: Router,
     public config: AppConfiguration,
     public state: AppState,
     private service: AppService
@@ -73,6 +93,35 @@ export class ExportMapaComponent implements OnInit {
     }
     
   }
+
+  pageChanged(e: PageEvent) {
+    const params: any = {};
+    params.rows = e.pageSize;
+    params.page = e.pageIndex;
+    this.pageIndex = e.pageIndex + 1;
+    this.state.pageChanged = true;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
+  setPage() {
+    const params: any = {};
+    params.page = this.pageIndex - 1;
+    this.state.page = this.pageIndex - 1;
+    this.state.pageChanged = true;
+    // document.getElementById('scroll-wrapper').scrollTop = 0;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
+  sortBy(sort: Sort) {
+      this.state.sort = sort;
+  
+      if (this.state.ui) {
+        this.state.ui.rows = this.state.rows;
+        this.state.ui.sort[this.state.entity] = sort.field;
+      }
+  
+      this.router.navigate([], { queryParams: { sort: sort.field, page: 0 }, queryParamsHandling: 'merge' });
+    }
 
   search(params: Params) {
     const p = Object.assign({}, params);
@@ -170,5 +219,17 @@ export class ExportMapaComponent implements OnInit {
       }
 
     });
+  }
+  
+
+  downloadFormat(format: string) {
+    const s = this.config.context + 'api/exp' +  document.location.search + '&format=' + format; 
+    if (isPlatformBrowser(this.platformId)) {
+      const link = this.windowRef.nativeWindow.document.createElement('a');
+      link.href = s;
+      link.download = 'export.' + format;
+      link.click();
+      this.service.showInfoDialog(this.service.getTranslation('dialog.desc.export_started'), 2000);
+    }
   }
 }
