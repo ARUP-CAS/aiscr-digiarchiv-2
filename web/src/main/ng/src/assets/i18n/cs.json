@@ -642,7 +642,11 @@
       "f_obdobi": "Komponenta - období",
       "f_areal": "Komponenta - areál",
       "dokument_extra_data_odkaz": "Dokument - odkaz",
-      "akce_je_nz": "Akce - nahrazuje NZ"
+      "akce_je_nz": "Akce - nahrazuje NZ",
+      "komponenta_presna_datace": "Komponenta dok. - přesná datace",
+      "lokalita_jistota": "Jistota určení",
+      "komponenta_aktivita": "Komponenta - aktivita",
+      "komponenta_areal": "Komponenta - areál"
     },
     "desc": {
       "Pian": "PIAN",

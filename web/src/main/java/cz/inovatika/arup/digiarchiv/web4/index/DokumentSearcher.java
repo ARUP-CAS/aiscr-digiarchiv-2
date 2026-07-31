@@ -3,7 +3,7 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,8 +14,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.XML;
+import org.json.JSONObject; 
 
 /**
  *

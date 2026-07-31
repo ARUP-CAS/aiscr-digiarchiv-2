@@ -12,8 +12,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.XML;
+import org.json.JSONObject; 
 
 public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
@@ -116,7 +115,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
       SolrSearcher.addLocationParams(request, query);
     }
 
-    SolrSearcher.addFilters(request, query, pristupnost);
+    SolrSearcher.addFilters(request, query, pristupnost); 
   }
 
   @Override

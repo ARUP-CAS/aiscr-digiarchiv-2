@@ -642,7 +642,11 @@
       "f_obdobi": "Component - period",
       "f_areal": "Component - activity area",
       "dokument_extra_data_odkaz": "Document - link",
-      "akce_je_nz": "Fieldwork - substitutes report"
+      "akce_je_nz": "Fieldwork - substitutes report",
+      "komponenta_presna_datace": "Doc. component - precise dating",
+      "lokalita_jistota": "Level of confidence",
+      "komponenta_aktivita": "Component - activity",
+      "komponenta_areal": "Component - activity area"
     },
     "desc": {
       "Pian": "Spatial Unit",

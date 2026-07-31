@@ -1291,8 +1291,17 @@ public class SolrSearcher {
         JSONObject f = exFields.getJSONObject(i);
         String name = f.getString("name");
         if (name.contains(".") && doc.has(name.split("\\.")[0])) {
-          String val = readValuesByPath(name, doc.getJSONObject(name.split("\\.")[0]));
-          doc.put(f.getString("label"), val);
+          Object o = doc.get(name.split("\\.")[0]);
+//          String val = readValuesByPath(name, o);
+//          doc.put(f.getString("label"), val);
+            
+          if (o instanceof JSONObject) {
+            String val = readValuesByPath(name, (JSONObject)o);
+            doc.put(f.getString("label"), val);
+          } else if (o instanceof JSONArray) {
+            String val = readValuesByPath(f.getString("path"), o);
+            doc.put(f.getString("label"), val);
+          }  
         }
         //fs.add(f);
       }
@@ -1300,10 +1309,10 @@ public class SolrSearcher {
     
   }
   
-  public static String readValuesByPath(String path, JSONObject json) {
+  public static String readValuesByPath(String path, Object json) {
     String[] parts = path.split("\\.", 2);
     try {
-      Object jpReturns = JsonPath.read(json.toString(), "$." + parts[1]);
+      Object jpReturns = JsonPath.read(json.toString(), "$." + parts[1]);  
       if (jpReturns instanceof List) {
         List<String> svals = (List<String>) jpReturns;
         return String.join(", ", (String[]) svals.toArray(new String[0]));

@@ -14,7 +14,10 @@
               <th>{{ 'export.field.' + item.label | translate }}</th>
             }
             @for (field of config.exportFields[state.entity]; track field) {
-              <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
+              @if (!field.hidden) {
+                <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
+              }
+              
             }
           </tr>
         </thead>
@@ -27,6 +30,7 @@
                 <td>{{ item.url + r['ident_cely']}}</td>
               }
               @for (field of config.exportFields[state.entity]; track field) {
+                @if (!field.hidden) {
                 <td>
                   @if (field.byPath) {
                     @if (field.heslar) {
@@ -57,6 +61,7 @@
                     }
                   }
                 </td>
+              }
               }
             </tr>
           }

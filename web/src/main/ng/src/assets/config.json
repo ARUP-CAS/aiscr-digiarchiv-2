@@ -1085,12 +1085,19 @@
         "label": "okres"
       },
       {
+        "name": "f_katastr",
+        "byPath": true,
+        "label": "katastr"
+      },
+      {
         "name": "samostatny_nalez_chranene_udaje.katastr.value",
+        "hidden": true,
         "byPath": true,
         "label": "katastr"
       },
       {
         "name": "az_chranene_udaje.hlavni_katastr.value",
+        "hidden": true,
         "byPath": true,
         "label": "katastr"
       },
@@ -1112,10 +1119,15 @@
         "name": "lokalita_jistota"
       },
       {
-        "name": "komponenta_areal"
+        "name": "komponenta_areal.value",
+        "byPath": true,
+        "label": "f_areal"
       },
       {
-        "name": "komponenta_aktivita"
+        "name": "komponenta_aktivita.value",
+        "path": "a.[*].value", 
+        "label": "komponenta_aktivita",
+        "byPath": true
       }
     ]
   },
