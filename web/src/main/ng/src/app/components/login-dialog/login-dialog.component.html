@@ -26,7 +26,7 @@
     <span class="app-label">{{ 'dialog.desc.Uživatelská role' | translate }}:</span>&#160;<strong>{{ state.user.skupina[0].value | translate }}</strong><br />
     <span class="app-label">{{ 'dialog.desc.Organizace' | translate }}:</span>&#160;<strong>{{ state.user.organizace.id | translate }}</strong>
 
-    @if(state.user.pristupnost === 'D') {
+    @if(state.user.pristupnost === 'E') {
     <hr />
     <span class="app-label">{{ 'Aktualizovat konfiguraci' | translate }}:</span>&#160;<a href="api/config?reset=true" target="_blank">config?reset=true</a><br />
     <span class="app-label">{{ 'Aktualizovat index z Fedory' | translate }}:</span>&#160;<a href="/api/fedora/index_update" target="_blank">api/fedora/index_update</a><br />
