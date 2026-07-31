@@ -7,6 +7,7 @@ import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import static cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory.getSolrClientSearch;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -115,6 +116,13 @@ public class HandleServlet extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             File cacheFile = new File(getCacheDir(InitServlet.asSafePath(id)) + InitServlet.asSafePath(id));
+            if (request.getServletPath().contains("map")) {
+              System.out.println(request.getPathInfo());
+//              String safePath = request.getPathInfo();
+//              RequestDispatcher rd = request.getRequestDispatcher(safePath);
+//              rd.forward(request, response);
+              return;
+            }
             String url = "http://localhost:4000/id/" + InitServlet.asSafePath(id);
             try (PrintWriter out = response.getWriter()) {
 
