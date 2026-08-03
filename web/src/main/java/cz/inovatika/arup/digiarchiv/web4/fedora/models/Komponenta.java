@@ -125,7 +125,7 @@ public class Komponenta implements FedoraModel {
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
     IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
-    kdoc.setField("searchable", rootDoc.getFieldValue("searchable"));
+    kdoc.setField("searchable", parentDoc.getFieldValue("searchable"));
     kdoc.setField("is_deleted", rootDoc.getFieldValue("is_deleted"));
     kdoc.setField("datestamp", rootDoc.getFieldValue("datestamp"));
 

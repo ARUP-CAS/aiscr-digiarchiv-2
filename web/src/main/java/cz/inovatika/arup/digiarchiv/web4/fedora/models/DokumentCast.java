@@ -68,16 +68,16 @@ public class DokumentCast implements FedoraModel {
         IndexUtils.addFieldNonRepeat(idoc, "dokument_cast_ident_cely", ident_cely);
 
         if (neident_akce != null) {
-            neident_akce.fillSolrFields(idoc, pristupnost.toUpperCase());
+            neident_akce.fillSolrFields(idoc, kdoc, pristupnost.toUpperCase());
             IndexUtils.addJSONField(kdoc, "dokument_cast_neident_akce", neident_akce);
             //IndexUtils.addJSONField(idoc, "dokument_cast_neident_akce", neident_akce);
         }
 
         if (archeologicky_zaznam != null) {
-            addLocation(idoc, pristupnost.toUpperCase());
+            addLocation(idoc, kdoc, pristupnost.toUpperCase());
         }
         if (projekt != null) {
-            addProjekt(idoc, pristupnost.toUpperCase());
+            addProjekt(idoc, kdoc, pristupnost.toUpperCase());
         }
         // IndexUtils.addFieldNonRepeat(idoc, "location_info", location_info);
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
@@ -96,7 +96,7 @@ public class DokumentCast implements FedoraModel {
         }
     }
 
-    private void addProjekt(SolrInputDocument idoc, String pristupnost) {
+    private void addProjekt(SolrInputDocument idoc, SolrInputDocument kdoc, String pristupnost) {
         SolrQuery query = new SolrQuery("ident_cely:\"" + projekt.getId() + "\"")
                 .setFields("*,projekt_chranene_udaje:[json]");
         try {
@@ -111,15 +111,22 @@ public class DokumentCast implements FedoraModel {
                             "f_katastr",
                             k,
                             doc.getString("pristupnost"));
+                    IndexUtils.addSecuredFieldNonRepeat(kdoc,
+                            "f_katastr",
+                            k,
+                            doc.getString("pristupnost"));
                     IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("projekt_okres"));
+                    IndexUtils.addFieldNonRepeat(kdoc, "f_okres", doc.getString("projekt_okres"));
                     JSONArray f_kraj = pr_chranene_udaje.optJSONArray("f_kraj");
                     for (int j = 0; j < f_kraj.length(); j++) {
                         IndexUtils.addFieldNonRepeat(idoc, "f_kraj", f_kraj.getString(j)); 
+                        IndexUtils.addFieldNonRepeat(kdoc, "f_kraj", f_kraj.getString(j)); 
                     }
                     if (pr_chranene_udaje.has("f_kraj_rada")) {
                         JSONArray f_kraj_rada = pr_chranene_udaje.getJSONArray("f_kraj_rada");
                         for (int j = 0; j < f_kraj.length(); j++) {
                             IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", f_kraj_rada.getString(j)); 
+                            IndexUtils.addFieldNonRepeat(kdoc, "f_kraj_rada", f_kraj_rada.getString(j)); 
                         } 
                     }
                     
@@ -129,6 +136,7 @@ public class DokumentCast implements FedoraModel {
                             .put("katastr", k)
                             .put("okres", doc.getString("projekt_okres"));
                     IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
+                    IndexUtils.addFieldNonRepeat(kdoc, "location_info", li.toString());
 
                     JSONArray dalsi_katastr = pr_chranene_udaje.getJSONArray("dalsi_katastr");
 
@@ -136,6 +144,7 @@ public class DokumentCast implements FedoraModel {
                         k = dalsi_katastr.getJSONObject(j).optString("value");
                         if (k != null) {
                             SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
+                            SolrSearcher.addSecuredFieldNonRepeat(kdoc, "f_katastr", k, doc.getString("pristupnost"));
                             //String okres = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
                             
                             JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
@@ -146,11 +155,15 @@ public class DokumentCast implements FedoraModel {
                             IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres); 
                             IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                             IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", kat.optString("rada_id"));
+                            IndexUtils.addFieldNonRepeat(kdoc, "f_okres", okres); 
+                            IndexUtils.addFieldNonRepeat(kdoc, "f_kraj", kraj);
+                            IndexUtils.addFieldNonRepeat(kdoc, "f_kraj_rada", kat.optString("rada_id"));
                             JSONObject li2 = new JSONObject()
                                     .put("pristupnost", doc.getString("pristupnost"))
                                     .put("katastr", k)
                                     .put("okres", okres);
                             IndexUtils.addFieldNonRepeat(idoc, "location_info", li2.toString());
+                            IndexUtils.addFieldNonRepeat(kdoc, "location_info", li2.toString());
                         }
                     }
                 }
@@ -160,7 +173,7 @@ public class DokumentCast implements FedoraModel {
         }
     }
 
-    private void addLocation(SolrInputDocument idoc, String pristupnost) throws Exception {
+    private void addLocation(SolrInputDocument idoc, SolrInputDocument kdoc, String pristupnost) throws Exception {
         SolrQuery query = new SolrQuery("ident_cely:\"" + archeologicky_zaznam.getId() + "\"")
                 .setFields("*,az_okres,pristupnost,az_chranene_udaje:[json] ");
 
@@ -171,7 +184,9 @@ public class DokumentCast implements FedoraModel {
             idoc.addField("dokument_cast_" + doc.getString("entity"), archeologicky_zaznam.getId());
 
             idoc.addField("f_vedouci", doc.optString("akce_hlavni_vedouci", null));
+            kdoc.addField("f_vedouci", doc.optString("akce_hlavni_vedouci", null));
             IndexUtils.addFieldNonRepeat(idoc, "f_okres", doc.getString("az_okres"));
+            IndexUtils.addFieldNonRepeat(kdoc, "f_okres", doc.getString("az_okres"));
 
             String k = null;
             JSONArray dalsi_katastr = new JSONArray();
@@ -183,29 +198,39 @@ public class DokumentCast implements FedoraModel {
                         "f_katastr",
                         k,
                         doc.getString("pristupnost"));
+                IndexUtils.addSecuredFieldNonRepeat(kdoc,
+                        "f_katastr",
+                        k,
+                        doc.getString("pristupnost"));
 
                 JSONObject li = new JSONObject()
                         .put("pristupnost", doc.getString("pristupnost"))
                         .put("katastr", k)
                         .put("okres", doc.getString("az_okres"));
                 IndexUtils.addFieldNonRepeat(idoc, "location_info", li.toString());
+                IndexUtils.addFieldNonRepeat(kdoc, "location_info", li.toString());
 
                 dalsi_katastr = az_chranene_udaje.getJSONArray("dalsi_katastr");
                 for (int j = 0; j < dalsi_katastr.length(); j++) {
                     k = dalsi_katastr.getJSONObject(j).optString("value");
                     if (k != null) {
                         SolrSearcher.addSecuredFieldNonRepeat(idoc, "f_katastr", k, doc.getString("pristupnost"));
+                        SolrSearcher.addSecuredFieldNonRepeat(kdoc, "f_katastr", k, doc.getString("pristupnost"));
                         JSONObject kat = SolrSearcher.getOkresNazevByKatastr(dalsi_katastr.getJSONObject(j).optString("id"));
                         String okres = kat.getString("okres_nazev");
                         String kraj = kat.getString("kraj");
                         IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres);
                         IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
                         IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", kat.optString("rada_id"));
+                        IndexUtils.addFieldNonRepeat(kdoc, "f_okres", okres);
+                        IndexUtils.addFieldNonRepeat(kdoc, "f_kraj", kraj);
+                        IndexUtils.addFieldNonRepeat(kdoc, "f_kraj_rada", kat.optString("rada_id"));
                         JSONObject li2 = new JSONObject()
                                 .put("pristupnost", doc.getString("pristupnost"))
                                 .put("katastr", k)
                                 .put("okres", okres);
                         IndexUtils.addFieldNonRepeat(idoc, "location_info", li2.toString());
+                        IndexUtils.addFieldNonRepeat(kdoc, "location_info", li2.toString());
                     }
                 }
 
@@ -217,12 +242,14 @@ public class DokumentCast implements FedoraModel {
                     JSONArray val = doc.optJSONArray(key);
                     for (int i = 0; i < val.length(); i++) {
                         SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
+                        SolrSearcher.addFieldNonRepeat(kdoc, key, val.opt(i));
                     }
                 } else if (key.startsWith("lat") || key.startsWith("lng")) {
                     // SolrSearcher.addFieldNonRepeat(idoc, "lng" + key.substring(3), pianDoc.opt(key));
                     JSONArray val = doc.optJSONArray(key);
                     for (int i = 0; i < val.length(); i++) {
                         SolrSearcher.addFieldNonRepeat(idoc, key, val.getBigDecimal(i).toString());
+                        SolrSearcher.addFieldNonRepeat(kdoc, key, val.getBigDecimal(i).toString());
                     }
 
                 } else if (key.equals("pian_id")) {
@@ -231,6 +258,7 @@ public class DokumentCast implements FedoraModel {
                     for (int i = 0; i < val.length(); i++) {
                         // SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
                         addPian(idoc, val.optString(i), pristupnost);
+                        addPian(kdoc, val.optString(i), pristupnost);
                     }
 
                 }

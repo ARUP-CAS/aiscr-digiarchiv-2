@@ -56,28 +56,29 @@
             @for (field of config.exportFields[state.entity]; track field) {
               <td>
                 @if (field.byPath) {
-                  @if (field.heslar) {
+                  @if (field.translated) {
                     {{ getByPath(r, field.name) | translate}}
-                  }
-                  @if (!field.heslar && field.type === 'date') {
-                    {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
-                  }
-                  @if (!field.heslar && field.type !== 'date') {
-                    {{ getByPath(r, field.name) }}
+                  } @else {
+                    @if (field.type === 'date') {
+                      {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
+                    } @else {
+                      {{ getByPath(r, field.name) }}
+                    }
                   }
                 }
-                @if (!field.byPath) {
+                @else {
                   @if (field.type === 'boolean') {
                     {{r[field.name] + '' | translate}}
                   }
-                  @if (field.heslar) {
+                  @if (field.translated) {
                     {{r[field.name] | translate}}
-                  }
-                  @if (!field.heslar && field.type === 'date') {
-                    {{r[field.name] | date : 'yyyy-MM-dd'}}
-                  }
-                  @if (!field.heslar && field.type !== 'date' && field.type !== 'boolean') {
-                    {{r[field.name]}}
+                  } @else {
+                    @if (field.type === 'date') {
+                      {{r[field.name] | date : 'yyyy-MM-dd'}}
+                    }
+                    @if (field.type !== 'date' && field.type !== 'boolean') {
+                      {{r[field.name]}}
+                    }
                   }
                 }
               </td>

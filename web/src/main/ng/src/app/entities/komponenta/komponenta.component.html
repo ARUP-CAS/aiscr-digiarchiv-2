@@ -46,13 +46,17 @@
 
       <div>
         <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
-        <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result.katastr"></app-inline-filter>
+        @for(katastr of _result.katastr; track katastr; let last = $last) {
+          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="katastr"></app-inline-filter>
+          @if (!last) {
+            <span>,&#160;</span>
+            }
+        }
         <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'"
             [value]="_result.okres"></app-inline-filter>)</span>
       </div>
       @if (_result.az_chranene_udaje?.hlavni_katastr) {
       <div>
-        <label class="app-label">{{ 'card.desc.Další katastry' | translate }}:</label>&#160;
         <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'"
           [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
       </div>

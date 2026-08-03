@@ -178,9 +178,9 @@ public class LogAnalytics {
     }
 
     private static JSONObject entities(HttpServletRequest request, SolrClient client) {
-        // request.getParameter("id"), request.getParameter("type")
         SolrQuery query = new SolrQuery()
                 .setQuery("*")
+                .addFilterQuery("-komponenta_zdroj:samostatny_nalez") // odstranime mezi komponenty ze SN 
                 .setFacet(true)
                 .setRows(0)
                 .setFacetMinCount(1)
@@ -206,7 +206,7 @@ public class LogAnalytics {
         String fq = "entity:" + request.getParameter("field");
         String field = request.getParameter("field");
         boolean isEntity = false;
-        switch(field) {
+        switch (field) {
             case "ruian": {
                 core = "ruian";
                 fq = "entity:" + request.getParameter("pivotField");

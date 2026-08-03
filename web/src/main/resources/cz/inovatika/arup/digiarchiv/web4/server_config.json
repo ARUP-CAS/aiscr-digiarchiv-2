@@ -714,9 +714,6 @@
             "f_specifikace:komponenta_nalez_predmet[*].specifikace.id" 
         ],
         "root":[
-            "f_kraj",
-            "f_okres",
-            "f_katastr",
             "f_vedouci", 
             "f_organizace",
             "f_organizace:dokument_organizace",
@@ -733,6 +730,9 @@
             "lokalita_jistota"
          ],
         "parent":[
+            "f_kraj",
+            "f_okres",
+            "f_katastr",
             "az_chranene_udaje",
             "f_dj_typ:dj_typ",
             "f_adb_typ_sondy:dj_adb.adb_typ_sondy.id",

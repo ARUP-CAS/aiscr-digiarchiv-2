@@ -190,7 +190,7 @@
                 <a (click)="exportStats(f.value, null, null)">
                   <mat-icon class="app-small-icon ">open_in_new</mat-icon>
                 </a>
-                @if (f.pivot) {
+                @if (f.pivot && f.value !== 'komponenta') {
                   @for (p of f.pivot; track $index) {
                     <div class="app-item app-va-center">
                       &#160;&#160;<span>{{ 'stats.stav' | translate }}: {{ p.value }}</span><span class="app-count">({{ p.count }})</span>
