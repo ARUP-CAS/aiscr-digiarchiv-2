@@ -33,31 +33,29 @@
                 @if (!field.hidden) {
                 <td>
                   @if (field.byPath) {
-                    @if (field.heslar) {
+                    @if (field.translated) {
                       {{ r[field.label] ? (r[field.label] + '' | translate) : '' }}
-                      <!-- {{ getByPath(r, field.name, field.map) | translate}} -->
-                    }
-                    @if (!field.heslar && field.type === 'date') {
-                      {{ r[field.label] ? (r[field.label] + '' | date : 'yyyy-MM-dd') : '' }}
-                      <!-- {{ getByPath(r, field.name, field.map) | date : 'yyyy-MM-dd'}} -->
-                    }
-                    @if (!field.heslar && field.type !== 'date') {
-                      {{r[field.label] ? r[field.label] : ''}}
-                      <!-- {{ getByPath(r, field.name, field.map) }} -->
+                    } @else {
+                      @if (field.type === 'date') {
+                        {{ r[field.label] ? (r[field.label] + '' | date : 'yyyy-MM-dd') : '' }}
+                      } @else {
+                        {{r[field.label] ? r[field.label] : ''}}
+                      }
                     }
                   }
                   @if (!field.byPath) {
                     @if (field.type === 'boolean') {
                       {{r[field.name] + '' | translate}}
                     }
-                    @if (field.heslar) {
+                    @if (field.translated) {
                       {{ r[field.name] ? (r[field.name] + '' | translate) : '' }}
-                    }
-                    @if (!field.heslar && field.type === 'date') {
-                      {{r[field.name] | date : 'yyyy-MM-dd'}}
-                    }
-                    @if (!field.heslar && field.type !== 'date' && field.type !== 'boolean') {
-                      {{r[field.name] ? r[field.name] : ''}}
+                    } @else {
+                      @if (field.type === 'date') {
+                        {{r[field.name] | date : 'yyyy-MM-dd'}}
+                      }
+                      @if (field.type !== 'date' && field.type !== 'boolean') {
+                        {{r[field.name] ? r[field.name] : ''}}
+                      }
                     }
                   }
                 </td>

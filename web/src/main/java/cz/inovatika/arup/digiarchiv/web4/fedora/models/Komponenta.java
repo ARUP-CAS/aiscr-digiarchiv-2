@@ -112,6 +112,7 @@ public class Komponenta implements FedoraModel {
     v.setKey((String) idoc.getFieldValue("samostatny_nalez_obdobi"));
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", v);
     kdoc.setField("entity", "komponenta");
+    setFullText(kdoc);
     try {
       IndexUtils.addAndCommit("entities", kdoc);
     } catch (Exception ex) {

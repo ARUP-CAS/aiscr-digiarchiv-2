@@ -742,6 +742,7 @@
       }, 
       "full_text": [
         "komponenta_zdroj",
+        "komponenta_zdroj_ident_cely",
         "komponenta_presna_datace"
       ]
     }

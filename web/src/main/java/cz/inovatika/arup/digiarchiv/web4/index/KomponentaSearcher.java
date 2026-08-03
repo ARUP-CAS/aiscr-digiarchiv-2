@@ -40,7 +40,9 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                 .addFilterQuery("komponenta_dokument_ident_cely:\"" + doc.getString("ident_cely") + "\"");
         query.setFields(dfs);
 
-        JSONObject r = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
+        JSONObject r = inHandle ? 
+                SolrSearcher.jsonSelect(client, "entities", query) : 
+                SolrSearcher.json(client, "entities", query);
         ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
         JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
         for (int j = 0; j < reldocs.length(); j++) {
