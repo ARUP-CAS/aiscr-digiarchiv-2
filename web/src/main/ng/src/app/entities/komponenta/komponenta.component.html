@@ -44,6 +44,7 @@
         }
       </div>
 
+      
       <div>
         <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
         @for(katastr of _result.katastr; track katastr; let last = $last) {
@@ -52,15 +53,15 @@
             <span>,&#160;</span>
             }
         }
+
+        @if (_result.az_chranene_udaje?.hlavni_katastr) {
+          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'"
+            [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
+        }
+
         <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'"
             [value]="_result.okres"></app-inline-filter>)</span>
       </div>
-      @if (_result.az_chranene_udaje?.hlavni_katastr) {
-      <div>
-        <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'"
-          [value]="_result.az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
-      </div>
-      }
       @if(_result.komponenta_aktivita?.length > 0) {
       <div>
         <label class="app-label">{{ 'card.desc.Aktivity' | translate }}:</label>&#160;

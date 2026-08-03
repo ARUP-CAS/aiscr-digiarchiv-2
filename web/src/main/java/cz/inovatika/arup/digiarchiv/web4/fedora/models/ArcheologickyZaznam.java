@@ -156,7 +156,9 @@ public class ArcheologickyZaznam implements FedoraModel {
 
                 for (Komponenta k : dj.dj_komponenta) {
                     idoc.addField("komponenta_ident_cely", k.ident_cely);
+                    djdoc.addField("komponenta_ident_cely", k.ident_cely);
                     idoc.addField("komponenta_dokument_presna_datace", k.komponenta_presna_datace);
+                    djdoc.addField("komponenta_dokument_presna_datace", k.komponenta_presna_datace);
                 }
                 if (az_akce != null) {
                     IndexUtils.addFieldNonRepeat(idoc, "f_dj_typ", djdoc.getFieldValue("dj_typ"));
@@ -164,7 +166,7 @@ public class ArcheologickyZaznam implements FedoraModel {
 
                 // add loc field by pian
                 if (djdoc.getFieldValue("dj_pian") != null) {
-                    addPian(idoc, (String) djdoc.getFieldValue("dj_pian"), (String) idoc.getFieldValue("pristupnost"));
+                    addPian(idoc, djdoc, (String) djdoc.getFieldValue("dj_pian"), (String) idoc.getFieldValue("pristupnost"));
                 }
 
                 //add adb fields
@@ -288,9 +290,11 @@ public class ArcheologickyZaznam implements FedoraModel {
         }
     }
 
-    private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
+    private void addPian(SolrInputDocument idoc, SolrInputDocument djdoc, String pian, String pristupnost) throws Exception {
         idoc.addField("pian_id", pian);
         idoc.addField("pian_ident_cely", pian);
+        djdoc.addField("pian_id", pian);
+        djdoc.addField("pian_ident_cely", pian);
         SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
                 .setFields("*,pian_chranene_udaje:[json]");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
@@ -303,6 +307,9 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
                 IndexUtils.addFieldNonRepeat(idoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
+                IndexUtils.addFieldNonRepeat(djdoc, "f_pian_typ", pianDoc.getString("pian_typ"));
+                IndexUtils.addFieldNonRepeat(djdoc, "f_pian_presnost", pianDoc.getString("pian_presnost"));
+                IndexUtils.addSecuredFieldNonRepeat(djdoc, "f_pian_zm10", pianDoc.getJSONObject("pian_chranene_udaje").getString("zm10"), pristupnost);
 
                 for (String key : pianDoc.keySet()) {
                     switch (key) {
@@ -320,6 +327,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                                 JSONArray val = pianDoc.optJSONArray(key);
                                 for (int i = 0; i < val.length(); i++) {
                                     SolrSearcher.addFieldNonRepeat(idoc, key, val.opt(i));
+                                    SolrSearcher.addFieldNonRepeat(djdoc, key, val.opt(i));
                                 }
 
                             } else if (key.startsWith("lat") || key.startsWith("lng")) {
@@ -327,6 +335,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                                 JSONArray val = pianDoc.optJSONArray(key);
                                 for (int i = 0; i < val.length(); i++) {
                                     SolrSearcher.addFieldNonRepeat(idoc, key, val.getBigDecimal(i).toString());
+                                    SolrSearcher.addFieldNonRepeat(djdoc, key, val.getBigDecimal(i).toString());
                                 }
 
                             } else {

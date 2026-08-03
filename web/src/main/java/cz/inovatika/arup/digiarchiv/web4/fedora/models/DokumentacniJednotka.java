@@ -81,6 +81,7 @@ public class DokumentacniJednotka implements FedoraModel {
         IndexUtils.addVocabField(djdoc, "dj_pian", dj_pian);
         IndexUtils.addVocabField(djdoc, "dj_typ", dj_typ);
         IndexUtils.addJSONField(djdoc, "dj_adb", dj_adb);
+        djdoc.setField("f_okres", idoc.getFieldValues("f_okres"));
 
         for (Komponenta k : dj_komponenta) {
             k.fillSolrFields(idoc, djdoc, "dokumentacni_jednotka");

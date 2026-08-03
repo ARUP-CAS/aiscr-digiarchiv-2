@@ -690,6 +690,7 @@
         "komponenta_nalez_predmet:[json]",
         "samostatny_nalez_chranene_udaje:[json]",
         "dokument_extra_data:[json]",
+        "pian_id",
         "pian_ident_cely"
       ],
       
@@ -733,6 +734,8 @@
             "f_kraj",
             "f_okres",
             "f_katastr",
+            "lng", "lat", "loc", "loc_rpt", 
+            "pian_ident_cely", "pian_id","f_pian_typ","f_pian_presnost", "f_pian_zm10", 
             "az_chranene_udaje",
             "f_dj_typ:dj_typ",
             "f_adb_typ_sondy:dj_adb.adb_typ_sondy.id",
