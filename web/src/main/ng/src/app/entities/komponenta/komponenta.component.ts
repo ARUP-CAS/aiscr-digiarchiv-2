@@ -53,10 +53,10 @@ export class KomponentaComponent extends Entity {
   override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-      `@misc{https://digiarchiv.aiscr.cz/id/${this.result().ident_cely},
+      `@misc{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely},
        author = {Archeologický informační systém České republiky},
-       title = {Záznam ${this.result().ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this.result().ident_cely}},
+       title = {Záznam ${this._result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
@@ -71,17 +71,16 @@ export class KomponentaComponent extends Entity {
 
     const related: { entity: string; ident_cely: string; }[] = [];
     this.relationsChecked = true;
-    if (this.result().komponenta_zdroj_ident_cely) {
-      related.push({entity: this.result().komponenta_zdroj, ident_cely: this.result().komponenta_zdroj_ident_cely})
+    if (this._result().komponenta_zdroj_ident_cely) {
+      related.push({entity: this._result().komponenta_zdroj, ident_cely: this._result().komponenta_zdroj_ident_cely})
     }
-    this.related.set(related);
+    this.related.set([...related]);
 
   }
 
 
   hasAktivita(field: string) {
-    const result = this.result();
-    return result[field] && result[field][0] !== '0';
+    return this._result()[field] && this._result()[field][0] !== '0';
   }
 
 }

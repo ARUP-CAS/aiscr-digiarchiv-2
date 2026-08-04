@@ -125,7 +125,9 @@ public class Komponenta implements FedoraModel {
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
     IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
-    kdoc.setField("searchable", parentDoc.getFieldValue("searchable"));
+    kdoc.setField("searchable", 
+            Boolean.parseBoolean(parentDoc.getFieldValue("searchable").toString()) && 
+            Boolean.parseBoolean(rootDoc.getFieldValue("searchable").toString()));
     kdoc.setField("is_deleted", rootDoc.getFieldValue("is_deleted"));
     kdoc.setField("datestamp", rootDoc.getFieldValue("datestamp"));
 
@@ -148,6 +150,7 @@ public class Komponenta implements FedoraModel {
     for (NalezObjekt no : komponenta_nalez_objekt) {
       no.setNalezKategorie();
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_objekt", no);
+      //kdoc.addField("f_kategorie", no.komponenta_kategorie_nalezu);
       rootDoc.addField("nalez_dokumentu_pocet", no.pocet);
       rootDoc.addField("nalez_dokumentu_poznamka", no.poznamka);
 
@@ -159,6 +162,7 @@ public class Komponenta implements FedoraModel {
     for (NalezPredmet np : komponenta_nalez_predmet) {
       np.setNalezKategorie();
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_predmet", np);
+      //kdoc.addField("f_kategorie", np.komponenta_kategorie_nalezu);
       rootDoc.addField("nalez_dokumentu_pocet", np.pocet);
       rootDoc.addField("nalez_dokumentu_poznamka", np.poznamka);
     }
@@ -167,7 +171,6 @@ public class Komponenta implements FedoraModel {
     rootDoc.addField("komponenta_dokument_ident_cely", ident_cely);
     if (jistota != null) {
       komponenta_jistota = Boolean.parseBoolean(jistota);
-      kdoc.addField("komponenta_jistota", komponenta_jistota);
       rootDoc.addField("komponenta_dokument_jistota", komponenta_jistota);
       rootDoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
     } else {

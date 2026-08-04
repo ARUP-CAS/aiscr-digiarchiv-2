@@ -52,16 +52,22 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         }
 
         String ident_cely = doc.getString("ident_cely");
-        query = new SolrQuery("*").addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"");
+        query = new SolrQuery("*")
+                //.addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"")
+                .addFilterQuery("ident_cely:\"" + doc.getString("komponenta_zdroj_ident_cely") + "\"");
         AkceSearcher as = new AkceSearcher();
         query.setFields(as.getChildSearchFields("A"));
         try {
           JSONObject sub = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
           JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
+          
           for (int j = 0; j < subs.length(); j++) {
             doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
-            doc.put("datestamp", subs.getJSONObject(i).getString("datestamp"));
+            if (subs.getJSONObject(i).has("datestamp")) {
+              doc.put("datestamp", subs.getJSONObject(i).optString("datestamp"));
+            }
+            
           }
           parentSearchable = true;
 

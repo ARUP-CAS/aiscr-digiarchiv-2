@@ -705,10 +705,8 @@
             "f_druh_nalezu:komponenta_nalez_objekt[*].druh.id",
             "f_druh_nalezu:komponenta_nalez_predmet.druh.id",
             "f_druh_nalezu:komponenta_nalez_predmet[*].druh.id",
-
-            "f_kategorie:komponenta_kategorie_nalezu",
-            "f_kategorie:komponenta_kategorie_nalezu",
-
+            "f_kategorie:komponenta_nalez_objekt.komponenta_kategorie_nalezu",
+            "f_kategorie:komponenta_nalez_predmet.komponenta_kategorie_nalezu",
             "f_specifikace:komponenta_nalez_objekt.specifikace.id",
             "f_specifikace:komponenta_nalez_objekt[*].specifikace.id",
             "f_specifikace:komponenta_nalez_predmet.specifikace.id",

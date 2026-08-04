@@ -11,20 +11,20 @@
     @if(!isChild()){
       <mat-card-actions class="app-fxLayout app-row app-end-v">
         <div class="app-fxFlex app-metadata">
-          @if(_result.dokument?.length > 0){
+          @if(_result().dokument?.length > 0){
             <ng-container>
-              {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{_result.dokument?.length}}</strong>
+              {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{_result().dokument?.length}}</strong>
               <span class="app-pipe"></span>
             </ng-container>
           }
-          @if(_result.knihovna_3d?.length > 0){
+          @if(_result().knihovna_3d?.length > 0){
             <ng-container>
-              {{ 'card.desc.Počet 3D dokumentů' | translate }}: <strong>{{_result.knihovna_3d.length}}</strong>
+              {{ 'card.desc.Počet 3D dokumentů' | translate }}: <strong>{{_result().knihovna_3d.length}}</strong>
               <span class="app-pipe"></span>
             </ng-container>
           }
         </div>
-        <app-result-actions [inDocument]="inDocument()" [result]="result" [detailExpanded]="detailExpanded()" [mapDetail]="true"
+        <app-result-actions [inDocument]="inDocument()" [result]="_result()" [detailExpanded]="detailExpanded()" [mapDetail]="true"
         (onToggleDetail)="toggleDetail()"></app-result-actions>
       </mat-card-actions>
     }
@@ -40,28 +40,28 @@
     <mat-icon  (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
   }
   {{ 'card.panelTitle.Komponenta' | translate }}&#160;
-  @if (_result.ident_cely) {
+  @if (_result().ident_cely) {
     <a
-      [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank"
-      class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }}
+      [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank"
+      class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }}
       <mat-icon>link</mat-icon></a>&#160;–&#160;
     }
-    @if (_result.obdobi) {
-      <app-inline-filter [isChild]="isChild()" [field]="'f_obdobi'" [value]="_result.obdobi"
+    @if (_result().obdobi) {
+      <app-inline-filter [isChild]="isChild()" [field]="'f_obdobi'" [value]="_result().obdobi"
       [heslar]="'obdobi_druha'"></app-inline-filter>
     }
-    @if (_result.jistota || _result.presna_datace) {
-      (@if (_result.jistota) {
-      {{ _result.jistota |
+    @if (_result().jistota || _result().presna_datace) {
+      (@if (_result().jistota) {
+      {{ _result().jistota |
       translate }};
-      }{{ _result.presna_datace }})
+      }{{ _result().presna_datace }})
     }
-    @if (_result.areal) {
+    @if (_result().areal) {
       &#160;–&#160;<app-inline-filter [isChild]="isChild()" [field]="'f_areal'"
-    [value]="_result.areal" [heslar]="'areal_druha'"></app-inline-filter>
+    [value]="_result().areal" [heslar]="'areal_druha'"></app-inline-filter>
   }
-  @if (_result.aktivita?.length > 0) {
-    &#160;(@for (ak of _result.aktivita; track ak; let last = $last) {
+  @if (_result().aktivita?.length > 0) {
+    &#160;(@for (ak of _result().aktivita; track ak; let last = $last) {
     <app-inline-filter [isChild]="isChild()"
     [field]="'f_aktivita'" [value]="ak" [heslar]="'f_aktivita'"></app-inline-filter>
     @if (!last) {
@@ -82,10 +82,10 @@
         </mat-panel-title>
       }
     </mat-expansion-panel-header>
-    @if (_result.poznamka) {
-      {{ _result.poznamka }}
+    @if (_result().poznamka) {
+      {{ _result().poznamka }}
     }
-    @if (_result.nalez_dokumentu) {
+    @if (_result().nalez_dokumentu) {
       <mat-expansion-panel #panel [expanded]="true" hideToggle class="app-panel-inner">
         <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
           <mat-panel-title>
@@ -94,16 +94,16 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul class="app-list-inside">
-          @if (_result.nalez_dokumentu.length) {
-            @for (nalez_dokumentu of _result.nalez_dokumentu; track nalez_dokumentu) {
+          @if (_result().nalez_dokumentu.length) {
+            @for (nalez_dokumentu of _result().nalez_dokumentu; track nalez_dokumentu) {
               <li>
                 <app-nalez [result]="nalez_dokumentu"></app-nalez>
               </li>
             }
           }
-          @if (!_result.nalez_dokumentu.length) {
+          @if (!_result().nalez_dokumentu.length) {
             <li>
-              <app-nalez [result]="_result.nalez_dokumentu"></app-nalez>
+              <app-nalez [result]="_result().nalez_dokumentu"></app-nalez>
             </li>
           }
         </ul>
@@ -111,7 +111,7 @@
     }
   </mat-expansion-panel>
 
-  @if ((_result.dokument || _result.knihovna_3d)  && !isChild()) {
+  @if ((_result().dokument || _result().knihovna_3d)  && !isChild()) {
     <mat-expansion-panel [expanded]="true"
       class="app-panel-related-items">
       <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
@@ -120,12 +120,12 @@
           {{ 'card.panelTitle.Související záznamy' | translate }}:
         </mat-panel-title>
       </mat-expansion-panel-header>
-      @if (_result.dokument) {
-        <app-dokument [result]="_result.dokument[0]" [isChild]="true"
+      @if (_result().dokument) {
+        <app-dokument [result]="_result().dokument[0]" [isChild]="true"
         class="app-related-item"></app-dokument>
       }
-      @if (_result.knihovna_3d) {
-        <app-dokument [result]="_result.knihovna_3d[0]" [isChild]="true"
+      @if (_result().knihovna_3d) {
+        <app-dokument [result]="_result().knihovna_3d[0]" [isChild]="true"
         class="app-related-item"></app-dokument>
       }
     </mat-expansion-panel>

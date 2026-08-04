@@ -65,7 +65,7 @@ export class ResultActionsComponent {
   apiIdentCely(item: { label: string, metadataPrefix: string, url: string, useParent: boolean }) {
     const ident_cely_api = this.ident_cely_api();
     // console.log(item.useParent)
-    return ((item.useParent || this.result().entity === 'komponenta') && ident_cely_api) ? ident_cely_api : this.result().ident_cely;
+    return ((item.useParent || this.result().komponenta_zdroj === 'samostatny_nalez') && ident_cely_api) ? ident_cely_api : this.result().ident_cely;
   }
 
   toggleDetail() {
