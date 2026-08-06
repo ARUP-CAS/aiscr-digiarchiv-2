@@ -22,6 +22,12 @@
           } -->
           <a [class.app-disabled-link]="currentPage >= selectedFile().rozsah" (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
         </div>
+        <div class=" app-fxLayout app-row app-center-v">
+          <mat-select [(ngModel)]="selectedDist">
+            @for(d of selectedFile().distribuce; track d) {
+              <mat-option [value]="d">{{ d }}</mat-option>
+            }
+          </mat-select></div>
         <div class="app-metadata app-fxLayout app-row app-center-v">
           <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile().size_mb}}MB</strong></span><span class="app-pipe"></span><!--
           --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong></span><span class="app-pipe"></span>

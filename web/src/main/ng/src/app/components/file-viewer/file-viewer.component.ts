@@ -52,11 +52,13 @@ export class FileViewerComponent implements OnInit {
 
   files = signal<File[]>([]);
   selectedFile = signal<File>(null); 
+  selectedDist = 'orig';
 
   currentPage: number = 1;
   currentPageDisplayed = signal(1);
   fileid = 0;
   carouselItems: any[] = [];
+
 
   @ViewChild('carousel') carousel: NguCarousel<any>;
 
@@ -113,7 +115,7 @@ export class FileViewerComponent implements OnInit {
   }
 
   downloadUrl() {
-    return this.config.context + '/api/img/full?id=' + this.selectedFile().id;
+    return this.config.context + '/api/img/full?id=' + this.selectedFile().id + '&dist=' + this.selectedDist;
   }
 
   imgPoint(doc: any, size: string) {
@@ -145,6 +147,7 @@ export class FileViewerComponent implements OnInit {
           link.href = this.downloadUrl();
           link.download = this.selectedFile().nazev;
           link.click();
+          console.log(this.downloadUrl())
           this.service.showInfoDialog(this.service.getTranslation('dialog.desc.download_started'), 2000);
         }
 
@@ -221,12 +224,18 @@ export class FileViewerComponent implements OnInit {
         file.size_mb = f.size_mb;
         file.pages = new Array(file.rozsah);
         file.filepath = f.filepath;
+        file.distribuce.push('orig');
+        f.historie.forEach((h:{datum_zmeny: number, id: string,poznamka:string,typ_zmeny: string}) => {
+          if (!file.distribuce.includes(h.poznamka) && h.typ_zmeny === 'DIST01') {
+            file.distribuce.push(h.poznamka)
+          }
+        });
         // file.setSize(true);
         files.push(file);
+      });
         files.sort((a, b) => {
           return a.nazev.localeCompare(b.nazev);
         });
-      });
       this.files.set(files);
       this.fileid = new Date().getTime();
       this.selectFile(this.files()[0], 0);

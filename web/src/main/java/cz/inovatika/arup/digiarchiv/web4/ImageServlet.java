@@ -117,7 +117,7 @@ public class ImageServlet extends HttpServlet {
         return null;
     }
 
-    private static void writeImg(HttpServletResponse response, String id, String imgSize, ServletContext ctx) throws Exception {
+    private static void writeImg(HttpServletResponse response, String id, String imgSize, String dist, ServletContext ctx) throws Exception {
 
         SolrQuery query = new SolrQuery();
         query.setQuery("id:\"" + id + "\"");
@@ -135,6 +135,8 @@ public class ImageServlet extends HttpServlet {
         if (url.contains("record")) {
             url = url.substring(url.indexOf("record"));
         }
+        
+        
         
         InputStream is = FedoraUtils.requestInputStream(url); 
 
@@ -172,7 +174,7 @@ public class ImageServlet extends HttpServlet {
                 String id = request.getParameter("id");
                 if (id != null && !id.equals("")) {
                     try {
-                        writeImg(response, id, "thumb", ctx);
+                        writeImg(response, id, "thumb", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, "Error getting thumb from fedora"); 
                         LOGGER.log(Level.SEVERE, null, ex);    
@@ -191,7 +193,7 @@ public class ImageServlet extends HttpServlet {
                 String id = request.getParameter("id"); 
                 if (id != null && !id.equals("")) {
                     try {
-                        writeImg(response, id, "thumb-large", ctx);
+                        writeImg(response, id, "thumb-large", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
                         emptyImg(response, ctx);
@@ -229,10 +231,12 @@ public class ImageServlet extends HttpServlet {
                         }
                         response.setHeader("Content-Disposition", "filename=" + doc.getString("nazev"));
                         
-                        String url = doc.getString("path") + "/orig";
+                        String dist = request.getParameter("dist");
+                        String url = doc.getString("path") + "/" + dist;
                         if ( url.contains("record")) {
                             url = url.substring(url.indexOf("record"));
                         }
+                        
                         InputStream is = FedoraUtils.requestInputStream(url);
                         FileUtils.copyInputStreamToFile(is, f);
                         LOGGER.log(Level.FINE, "bytes received: {0}", f.length());

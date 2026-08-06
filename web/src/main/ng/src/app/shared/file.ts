@@ -7,6 +7,7 @@ export class File {
   pages: any[];
   humanFileSize: string;
   filepath: string;
+  distribuce: string[] = [];
 
   setSize(si: number) {
     var thresh = si ? 1000 : 1024;

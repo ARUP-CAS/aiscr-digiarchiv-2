@@ -15,7 +15,7 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-public class Soubor implements FedoraModel {
+public class Soubor {
   
 //<xs:element name="id" minOccurs="1" maxOccurs="1" type="xs:string"/> <!-- "soub-{id}" -->
   @JacksonXmlProperty(localName = "id")
@@ -57,21 +57,13 @@ public class Soubor implements FedoraModel {
   public List<Historie> historie = new ArrayList();
   
     
-    @Override
-    public boolean isSearchable(){
-        return true;
-    }
 
-  @Override
+
   public void fillSolrFields(SolrInputDocument idoc) {
       IndexUtils.setDateStamp(idoc, id);
         IndexUtils.setDateStampFromHistory(idoc, historie);
   }
 
-  @Override
-  public String coreName() {
-    return "soubor";
-  }
   
   public SolrInputDocument createSolrDoc() {
     
@@ -82,10 +74,4 @@ public class Soubor implements FedoraModel {
     return idoc;
     
   }
-
-    @Override
-    public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-  
 }
