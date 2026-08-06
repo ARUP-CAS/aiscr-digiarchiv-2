@@ -1,5 +1,10 @@
 @if (!isChild()) {
 <mat-card class="app-card-result " [class.app-card-child]="isChild()" [class.app-entity-komponenta]="!isChild()">
+  @if (mapDetail()) {
+  <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+    <mat-icon>clear</mat-icon>
+  </a>
+  }
   <mat-card-header>
     <mat-card-title class="app-fxLayout app-row app-gap-4">
       <div class="app-fxFlex">
@@ -346,16 +351,18 @@
   <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
   }
   @if (!isChild()) {
-  <div class="app-icon-component dokument" [ngClass]="'app-facet-entity ' + _result().komponenta_zdroj"></div>
-  }
-  <!-- <img src="assets/img/logo/logo-component.svg" /> -->
-  <!-- <mat-icon class="app-entity-komponenta  " [matTooltip]="'entities.komponenta.title' | translate">{{ config.entityIcons["komponenta"] }}</mat-icon> -->
-  {{ 'card.panelTitle.Komponenta' | translate }}&#160;<a
+    <div class="app-icon-component dokument" [ngClass]="'app-facet-entity ' + _result().komponenta_zdroj"></div>
+    <span class="app-ident-format">{{ _result().ident_cely }}</span>
+  } @else {
+    {{ 'card.panelTitle.Komponenta' | translate }}&#160;
+    <a
     [routerLink]="'/id/' + (_result().komponenta_zdroj === 'samostatny_nalez' ? _result().komponenta_zdroj_ident_cely : _result().ident_cely)"
     [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge"
     [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().komponenta_zdroj === 'samostatny_nalez' ?
     _result().komponenta_zdroj_ident_cely : _result().ident_cely }}
-    <mat-icon>link</mat-icon></a> – <app-inline-filter [field]="'f_obdobi'" [value]="_result().komponenta_obdobi.id"
+    <mat-icon>link</mat-icon></a>
+  }
+  – <app-inline-filter [field]="'f_obdobi'" [value]="_result().komponenta_obdobi.id"
     [heslar]="'obdobi_druha'"></app-inline-filter>
   @if ((_result().hasOwnProperty('komponenta_jistota') && !_result()['komponenta_jistota']) ||
   _result().komponenta_presna_datace)

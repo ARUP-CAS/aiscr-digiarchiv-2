@@ -130,7 +130,6 @@ export class Entity {
 
   getFullId() {
     this.service.getId(this._result().ident_cely).subscribe((res: any) => {
-      console.log('KKK')
       this._result.set({...res.response.docs[0]});
       this.hasDetail = true;
     });

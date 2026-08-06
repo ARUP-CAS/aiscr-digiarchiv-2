@@ -1039,6 +1039,8 @@ export class MapViewComponent {
         if (doc.pian_chranene_udaje) {
           this.addShapeLayer(doc.ident_cely, doc.pian_presnost, doc.pian_chranene_udaje?.geom_wkt.value, [doc.ident_cely]);
         }
+      } else {
+        this.setMarkersByPian([doc], isId);
       }
 
     });
@@ -1069,7 +1071,10 @@ export class MapViewComponent {
       // this.markersList = [];
       // this.markers.clearLayers();
     }
-    const byLoc = docs[0]['entity'] === 'knihovna_3d' || docs[0]['entity'] === 'samostatny_nalez' || docs[0]['entity'] === 'pian';
+    const byLoc = docs[0]['entity'] === 'knihovna_3d' || 
+                  docs[0]['entity'] === 'samostatny_nalez' || 
+                  docs[0]['entity'] === 'pian' || 
+                  docs[0]['entity'] === 'komponenta';
 
     if (byLoc) {
       this.setMarkersByLoc(docs, isId)

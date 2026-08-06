@@ -50,10 +50,6 @@ export class RelatedComponent implements OnInit {
     private service: AppService
   ) {
     effect(() => {
-    });
-  }
-
-  ngOnInit(): void {
       this.ids = this.related();
       if (this.ids.length === 0) {
         return;
@@ -67,11 +63,15 @@ export class RelatedComponent implements OnInit {
       this.toProcess.set(JSON.parse(JSON.stringify(this.ids)));
       this.tp = JSON.parse(JSON.stringify(this.ids));
       if (this.state.printing() || this.router.isActive('print', false)) {
-        this.state.loading.set(true);;
+        this.state.loading.set(true);
         this.getRecords(true)
       } else {
         this.getRecords(false);
       }
+    });
+  }
+
+  ngOnInit(): void {
   }
 
   getRecords(loadAll: boolean) {

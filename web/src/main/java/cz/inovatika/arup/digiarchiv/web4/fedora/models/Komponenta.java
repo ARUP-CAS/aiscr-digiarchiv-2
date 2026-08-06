@@ -189,6 +189,13 @@ public class Komponenta implements FedoraModel {
         Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error adding PIAN {0}", ex);
       }
     }
+    if (rootDoc.getFieldValue("pian_id") != null && "dokument".equals(rootDoc.getFieldValue("entity"))) {
+      try {
+        addPian(kdoc, (String) rootDoc.getFieldValue("pian_id"), pristupnost);
+      } catch (Exception ex) {
+        Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error adding PIAN {0}", ex);
+      }
+    }
     List<String> prSufix = new ArrayList<>();
     if ("A".compareTo(pristupnost) >= 0) {
       prSufix.add("A");
@@ -296,16 +303,19 @@ public class Komponenta implements FedoraModel {
     }
   }
 
-  private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
+  private void addPian(SolrInputDocument idoc, String pian, String pristupnostOrig) throws Exception {
     idoc.addField("pian_id", pian);
     idoc.addField("pian_ident_cely", pian);
     SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
             .setFields("*,pian_chranene_udaje:[json]");
     JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
-
+    String pristupnost = pristupnostOrig;
     if (json.getJSONObject("response").getInt("numFound") > 0) {
       for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
         JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
+        
+        pristupnost = pianDoc.getString("pristupnost");
+        idoc.setField("pristupnost", pristupnost);
 
         // IndexUtils.setSecuredJSONField(idoc, "pian", pianDoc, pristupnost);
         IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));

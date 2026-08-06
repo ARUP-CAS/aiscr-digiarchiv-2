@@ -125,7 +125,7 @@ export class DokumentComponent extends Entity {
         panelClass: 'app-file-viewer',
         width: '1000px',
         height: '900px',
-        data: this._result
+        data: this._result()
       });
     } else {
       const msg = this.service.getTranslation('alert.insuficient rights');
