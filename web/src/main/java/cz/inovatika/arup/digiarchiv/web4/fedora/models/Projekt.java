@@ -250,6 +250,15 @@ public class Projekt implements FedoraModel {
                 idoc.addField("soubor_filepath", s.path);
                 idoc.addField("soubor_rozsah", s.rozsah);
                 idoc.addField("soubor_size_bytes", s.size_mb);
+                List<String> d = new ArrayList();
+                for (Historie h : s.historie) {
+                  if ("DIST01".equals(h.typ_zmeny)) {
+                    d.add(h.poznamka);
+                  } else if ("DIST10".equals(h.typ_zmeny)){
+                    d.remove(h.poznamka);
+                  }
+                }
+                idoc.addField("soubor_distri", d);
 
             }
 //            if (!idocs.isEmpty()) {

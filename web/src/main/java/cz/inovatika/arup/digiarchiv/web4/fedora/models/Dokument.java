@@ -208,6 +208,15 @@ public class Dokument implements FedoraModel {
                 idoc.addField("soubor_rozsah", s.rozsah);
                 idoc.addField("soubor_size_mbytes", s.size_mb);
                 idoc.addField("soubor_mimetype", s.mimetype);
+                List<String> d = new ArrayList();
+                for (Historie h : s.historie) {
+                  if ("DIST01".equals(h.typ_zmeny)) {
+                    d.add(h.poznamka);
+                  } else if ("DIST10".equals(h.typ_zmeny)){
+                    d.remove(h.poznamka);
+                  }
+                }
+                idoc.addField("soubor_distri", d);
     
             }
 //            if (!idocs.isEmpty()) {

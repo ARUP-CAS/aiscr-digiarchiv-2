@@ -65,6 +65,9 @@ public class FedoraServlet extends HttpServlet {
                         File targetFile = new File(path);
                         FileUtils.copyInputStreamToFile(is, targetFile);
                         return;
+                    } else if (actionToDo.equals(Actions.REQUEST)){
+                        out.print(FedoraUtils.request(StringEscapeUtils.escapeHtml4(request.getParameter("url"))));
+                        return;
                     }
                     response.setContentType("application/json;charset=UTF-8");
                     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1

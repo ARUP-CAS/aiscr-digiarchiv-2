@@ -855,6 +855,7 @@
        <str name="facet.field">f_adb_podnet</str>
        <str name="facet.field">f_kraj</str>
        <str name="facet.field">f_kraj_rada</str>
+       <str name="facet.field">soubor_distri</str>
 
      </lst>
   </initParams>
