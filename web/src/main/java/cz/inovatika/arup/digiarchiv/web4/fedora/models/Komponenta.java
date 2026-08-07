@@ -209,6 +209,10 @@ public class Komponenta implements FedoraModel {
     if ("D".compareTo(pristupnost) >= 0) {
       prSufix.add("D");
     }
+    if (rootDoc.getFieldValue("az_chranene_udaje") != null) {
+      List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONObject("facets").getJSONArray("az_chranene_udaje").toList();
+      setFieldsFromSuper(kdoc, rootDoc, prSufix, indexFields);
+    }
     setFieldsFromSelf(kdoc, prSufix);
     setFieldsFromRoot(kdoc, rootDoc, prSufix);
     setFieldsFromParent(kdoc, parentDoc, prSufix);

@@ -67,6 +67,26 @@
         <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'"
             [value]="_result().okres"></app-inline-filter>)</span>
       </div>
+
+
+      @if (_result().az_chranene_udaje?.dalsi_katastr.length > 0) {
+          <div>
+            <label class="app-label">{{ 'card.desc.dalsi_katastry' | translate }}:</label>&#160;
+            @for (k of _result().az_chranene_udaje.dalsi_katastr; track k; let last = $last) {
+              <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
+              @if (!last) {
+                <span>;&#160;</span>
+              }
+            }
+            (@for (k of _result().az_chranene_udaje.okresy; track k; let last = $last) {
+            <app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="k"></app-inline-filter>@if (!last) {
+            <span
+            >;&#160;</span>
+          }
+          })
+        </div>
+      }
+      
       @if(_result().komponenta_aktivita?.length > 0) {
       <div>
         <label class="app-label">{{ 'card.desc.Aktivity' | translate }}:</label>&#160;
