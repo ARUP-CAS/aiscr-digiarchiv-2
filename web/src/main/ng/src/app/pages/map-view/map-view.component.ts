@@ -913,6 +913,8 @@ export class MapViewComponent {
   }
 
   processMarkersResp(resp: any[], ids: { id: string, docIds: string[] }[], isId: boolean) {
+
+
     resp.forEach(pian => {
       if (!pian.loc_rpt?.[0]) {
         return;
@@ -1014,34 +1016,70 @@ export class MapViewComponent {
   }
 
   setMarkersByLoc(docs: SolrDocument[], isId: boolean) {
-    const pianIds: { id: string, docId: string }[] = [];
+    const pianIds: { id: string, docIds: string[] }[] = [];
     docs.forEach((doc: any) => {
-      if (!doc.pian_id) {
+      if (doc.pian) {
+        const pian = doc.pian[0];
+        const pi = pianIds.find(p => p.id === pian.ident_cely);
+        if (pi) {
+          if (!pi.docIds.includes(doc.ident_cely)) {
+            pi.docIds.push(doc.ident_cely);
+          }
+        } else {
+          pianIds.push({id: pian.ident_cely, docIds: [doc.ident_cely]});
+        }
+      }
+    });
+    docs.forEach((doc: any) => {
         doc.loc_rpt.forEach((loc_rpt: string) => {
           const coords = loc_rpt.split(',');
-          const mrk = this.addMarker({
-            id: doc.ident_cely,
-            isPian: false,
-            lat: parseFloat(coords[0]),
-            lng: parseFloat(coords[1]),
-            presnost: '',
-            typ: 'bod',
-            docIds: [doc.ident_cely],
-            pian_chranene_udaje: doc.pian_chranene_udaje
-          });
-          if (doc.ident_cely === this.currentMapId) {
-            mrk.setIcon(this.hitIcon);
+          if (!doc.pian_id) {
+              const mrk = this.addMarker({
+                id: doc.ident_cely,
+                isPian: false,
+                lat: parseFloat(coords[0]),
+                lng: parseFloat(coords[1]),
+                presnost: '',
+                typ: 'bod',
+                docIds: [doc.ident_cely],
+                pian_chranene_udaje: doc.pian_chranene_udaje
+              });
+              if (doc.ident_cely === this.currentMapId) {
+                mrk.setIcon(this.hitIcon);
+              }
+              // this.markersList.push(mrk);
+              mrk.addTo(this.markers);
+          } else if (doc['entity'] === 'komponenta') {
+            const pian = doc.pian[0];
+
+            // const docIds = pianIds.find(p => p.id === pian.ident_cely).docIds
+            let markerInList = this.markersList.find(p => p.options.id === pian.ident_cely);
+            if (markerInList) {
+                // if (!markerInList.options.docIds.includes(doc.ident_cely)) {
+                //   markerInList.options.docIds.push(doc.ident_cely);
+                // }
+                if (markerInList.options.docIds.includes(this.currentMapId)) {
+                  markerInList.setIcon(this.hitIcon);
+                }
+            } else {
+              const mrk = this.addMarker({
+                id: pian.ident_cely,
+                isPian: true,
+                lat: parseFloat(coords[0]),
+                lng: parseFloat(coords[1]),
+                presnost: pian.pian_presnost,
+                typ: pian.pian_typ,
+                docIds: pianIds.find(p => p.id === pian.ident_cely).docIds,
+                pian_chranene_udaje: pian.pian_chranene_udaje
+              });
+              mrk.addTo(this.markers);
+            }
           }
-          // this.markersList.push(mrk);
-          mrk.addTo(this.markers);
         });
         // Je to pian
         if (doc.pian_chranene_udaje) {
           this.addShapeLayer(doc.ident_cely, doc.pian_presnost, doc.pian_chranene_udaje?.geom_wkt.value, [doc.ident_cely]);
         }
-      } else {
-        this.setMarkersByPian([doc], isId);
-      }
 
     });
     this.loadingMarkers.set(false);
