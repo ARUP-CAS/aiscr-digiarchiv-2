@@ -11,10 +11,10 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
+import org.apache.solr.client.solrj.response.InputStreamResponseParser;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -60,7 +60,7 @@ public class LogAnalytics {
     public static JSONObject stats(HttpServletRequest request) {
 //        NoOpResponseParser dontMessWithSolr = new NoOpResponseParser();
 //        dontMessWithSolr.setWriterType("json");
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             // request.getParameter("id"), request.getParameter("type")
             SolrQuery query = new SolrQuery()
                     .setQuery("*")
@@ -151,7 +151,7 @@ public class LogAnalytics {
 
     public static JSONObject statsIndex(HttpServletRequest request) {
         JSONObject ret = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
                 JSONObject r = entities(request, client);
                 ret.put("index_entities", r.getJSONObject("facet_counts")
@@ -302,7 +302,7 @@ public class LogAnalytics {
     
     public static String exportStatsIndex(HttpServletRequest request) {
         String ret = "";
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             if (LoginServlet.pristupnost(request.getSession()).compareToIgnoreCase("C") > 0) {
                 ret = exportEntities(request, client);
             }
@@ -371,7 +371,7 @@ public class LogAnalytics {
         int totalDocs = 0;
         int rows = 100;
         JSONObject jo = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
             SolrQuery query = new SolrQuery("*")
                     //.addFilterQuery("-entity:*") 

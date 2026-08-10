@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;

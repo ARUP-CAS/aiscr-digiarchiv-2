@@ -23,8 +23,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.request.SolrQuery;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -90,7 +90,7 @@ public class ImageServlet extends HttpServlet {
     }
 
     private static JSONObject getDocument(String id) throws Exception {
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*") 
                     .addSort("datestamp", SolrQuery.ORDER.desc)
                     .setFields("entity,soubor:[json]")

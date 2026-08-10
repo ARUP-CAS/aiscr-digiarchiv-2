@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.Http2SolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 
 /**
  *
@@ -28,7 +28,7 @@ public class SolrClientFactory {
                 if (solrClient == null) {
                     // Replace with your Solr URL and appropriate client implementation
                     String solrUrl = Options.getInstance().getString("solrhost");
-                    solrClient = new Http2SolrClient.Builder(solrUrl).build();
+                    solrClient = new HttpJettySolrClient.Builder(solrUrl).build();
                     // For a Solr Cloud setup, you would use CloudSolrClient
                     // String zkHost = "localhost:2181/solr";
                     // solrClient = new CloudSolrClient.Builder().withZkHost(zkHost).build();
@@ -44,7 +44,7 @@ public class SolrClientFactory {
                 if (solrClientSearch == null) {
                     // Replace with your Solr URL and appropriate client implementation
                     String solrUrl = Options.getInstance().getString("solrhost");
-                    solrClientSearch = new Http2SolrClient.Builder(solrUrl).build();
+                    solrClientSearch = new HttpJettySolrClient.Builder(solrUrl).build();
                     // For a Solr Cloud setup, you would use CloudSolrClient
                     // String zkHost = "localhost:2181/solr";
                     // solrClient = new CloudSolrClient.Builder().withZkHost(zkHost).build();

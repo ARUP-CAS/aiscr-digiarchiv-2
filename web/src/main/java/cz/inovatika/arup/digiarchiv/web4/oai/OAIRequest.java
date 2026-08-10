@@ -31,9 +31,9 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -149,7 +149,7 @@ public class OAIRequest {
     }
 
     public static String metadataFormats(HttpServletRequest req, String version) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             String identifier = req.getParameter("identifier");
             if (identifier != null) {
@@ -180,7 +180,7 @@ public class OAIRequest {
     }
 
     private static void storeResumptionToken(String token, JSONObject data) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrInputDocument idoc = new SolrInputDocument();
             idoc.setField("id", token);
             idoc.setField("type", "resumptionToken");
@@ -202,7 +202,7 @@ public class OAIRequest {
     }
 
     private static JSONObject retrieveResumptionToken(String resumptionToken) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("id:" + resumptionToken)
                     .setFields("data:[json]")
                     .addFilterQuery("type:resumptionToken")
@@ -322,7 +322,7 @@ public class OAIRequest {
             ret.append("<ListRecords>");
         }
 
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String model = req.getParameter("set");
             String from = req.getParameter("from");
             String until = req.getParameter("until");
@@ -493,7 +493,7 @@ public class OAIRequest {
                 .append(requestTag(req, version));
 
         ret.append("<GetRecord>\n");
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             if (req.getParameter("identifier").length() < prefix.length()) {
                 return idDoesNotExist(req, version);

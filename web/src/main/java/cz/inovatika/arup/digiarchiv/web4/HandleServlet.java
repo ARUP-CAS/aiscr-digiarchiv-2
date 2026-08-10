@@ -37,8 +37,8 @@ import javax.imageio.ImageIO;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.json.JSONArray;
@@ -484,7 +484,7 @@ public class HandleServlet extends HttpServlet {
 
   public static int checkId(String id, HttpServletRequest request, HttpServletResponse response) {
     int code = 0;
-    try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
               .setFacet(false);

@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
@@ -141,7 +141,7 @@ public class Projekt implements FedoraModel {
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String pr = SearchUtils.getPristupnostMap().get(pristupnost.getId());
             idoc.setField("pristupnost", pr);
             IndexUtils.setDateStamp(idoc, ident_cely);

@@ -7,10 +7,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject; 
 
@@ -95,7 +95,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   @Override
   public JSONObject search(HttpServletRequest request) {
     JSONObject json = new JSONObject();
-    try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery()
               .setFacet(true);
       setQuery(request, query);
@@ -128,7 +128,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   @Override
   public JSONObject export(HttpServletRequest request) {
-    try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             SolrSearcher.addExportParams(query, ENTITY);

@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -86,7 +86,7 @@ public class Indexer {
         LOGGER.log(Level.INFO, "Getting solr client at {0} ", String.format("%s%s",
                 host(),
                 core));
-        SolrClient server = new HttpSolrClient.Builder(String.format("%s%s",
+        SolrClient server = new HttpJettySolrClient.Builder(String.format("%s%s",
                 host(),
                 core)).build();
         return server;
