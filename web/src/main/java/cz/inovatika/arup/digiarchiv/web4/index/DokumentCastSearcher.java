@@ -63,7 +63,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
 
                 // SolrSearcher.addChildField(client, doc, "dokument_cast_ident_cely", "dokument", dfs);
             } catch (SolrServerException | IOException ex) {
-                Logger.getLogger(DokumentCastSearcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DokumentCastSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
 
         }

@@ -59,7 +59,7 @@ public class SearchUtils {
             }
             // LOGGER.log(Level.INFO, "obdobi: {0}", obdobi_poradi.size());
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 
@@ -84,7 +84,7 @@ public class SearchUtils {
             }
             // LOGGER.log(Level.INFO, "obdobi: {0}", obdobi_poradi.size());
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             pristupnostMap = null;
         }
     }
@@ -96,7 +96,7 @@ public class SearchUtils {
         try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(coreUrl).build()) {
             return client.query(query).getResults();
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return null;
         }
     }
@@ -113,7 +113,7 @@ public class SearchUtils {
             }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error retrieving {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             throw ex;
         }
     }
@@ -154,7 +154,7 @@ public class SearchUtils {
             InputStream is = (InputStream) resp.get("stream");
             return new JSONObject(IOUtils.toString(is, "UTF-8")); 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -172,7 +172,7 @@ public class SearchUtils {
             InputStream is = (InputStream) resp.get("stream");
             return IOUtils.toString(is, "UTF-8"); 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return ex.toString();
         }
     }
@@ -195,7 +195,7 @@ public class SearchUtils {
             solr.deleteByQuery(collection, query, 1);
             ret.put("resp", "success");
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             ret.put("error", ex.toString());
         }
         return ret;

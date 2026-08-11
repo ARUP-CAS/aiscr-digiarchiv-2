@@ -68,7 +68,7 @@ public class OAIRequest {
                 dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
                 dcTransformers.put(xmlns_amcr, dcTransformer);
             } catch (IOException ex) {
-                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             }
         }
         return dcTransformers.get(xmlns_amcr);
@@ -174,7 +174,7 @@ public class OAIRequest {
                     .append("</OAI-PMH>");
             return ret.toString();
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return ex.toString();
         }
     }
@@ -196,7 +196,7 @@ public class OAIRequest {
             client.add("work", idoc);
             client.commit("work");
         } catch (Exception ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
         }
 
     }
@@ -215,7 +215,7 @@ public class OAIRequest {
             SolrDocument doc = docs.get(0);
             return new JSONObject((String) doc.getFirstValue("data"));
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return null;
         }
     }
@@ -439,13 +439,13 @@ public class OAIRequest {
             }
 
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         } catch (Exception ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         }
         if (onlyIdentifiers) {
@@ -510,10 +510,10 @@ public class OAIRequest {
 
             appendRecord(ret, doc, req, false, metadataPrefix, version);
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         } catch (Exception ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         }
         ret.append("</GetRecord>\n</OAI-PMH>");
@@ -574,7 +574,7 @@ public class OAIRequest {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.2/";
                     }                    
                 } catch (TransformerException ex) {
-                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
                 }
             }
 
@@ -582,7 +582,7 @@ public class OAIRequest {
                 try {
                     xml = transformToDC(xml, xmlns_amcr);
                 } catch (TransformerException ex) {
-                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
                 }
             }
             ret.append(xml);
@@ -649,7 +649,7 @@ public class OAIRequest {
             try {
                 return transformToForbidden(xml);
             } catch (TransformerException ex) {
-                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
                 return ERROR_404_MSG;
             }
         }

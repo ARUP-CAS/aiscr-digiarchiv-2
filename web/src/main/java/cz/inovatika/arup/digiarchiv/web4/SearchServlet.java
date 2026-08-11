@@ -144,7 +144,7 @@ public class SearchServlet extends HttpServlet {
           }
 
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();
@@ -163,7 +163,7 @@ public class SearchServlet extends HttpServlet {
           try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             json = SolrSearcher.getFullId(request, client, true);
           } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
           }
           return json.toString();
@@ -205,7 +205,7 @@ public class SearchServlet extends HttpServlet {
 //                    }
 //
 //                } catch (Exception ex) {
-//                    LOGGER.log(Level.SEVERE, null, ex);
+//                    LOGGER.log(Level.SEVERE, "", ex);
 //                    json.put("error", ex);
 //                }
 //                return json.toString();
@@ -224,7 +224,7 @@ public class SearchServlet extends HttpServlet {
           }
 
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();
@@ -287,7 +287,7 @@ public class SearchServlet extends HttpServlet {
           return jo.toString();
 
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();
@@ -306,7 +306,7 @@ public class SearchServlet extends HttpServlet {
           return jo.toString();
 
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();
@@ -335,7 +335,7 @@ public class SearchServlet extends HttpServlet {
           return jo.toString();
 
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();
@@ -392,7 +392,7 @@ public class SearchServlet extends HttpServlet {
           return jo.toString();
 
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();
@@ -426,7 +426,7 @@ public class SearchServlet extends HttpServlet {
           Uzivatel.updateUI(request);
           return jo.toString();
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           return new JSONObject().put("error", ex).toString();
         }
 
@@ -508,7 +508,7 @@ public class SearchServlet extends HttpServlet {
         try {
           ret = SolrSearcher.getThesauri();
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           ret.put("error", ex);
         }
         return ret.toString();
@@ -634,7 +634,7 @@ public class SearchServlet extends HttpServlet {
           return jo.toString();
 
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();

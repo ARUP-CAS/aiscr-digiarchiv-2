@@ -92,7 +92,7 @@ public class HandleServlet extends HttpServlet {
         AppState.writeGetFileFinished(ip, InitServlet.asSafePath(id), success);
         //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile end");
       } catch (Exception ex) {
-        LOGGER.log(Level.SEVERE, null, ex);
+        LOGGER.log(Level.SEVERE, "", ex);
       }
     } else {
 
@@ -154,7 +154,7 @@ public class HandleServlet extends HttpServlet {
 
       } catch (Exception ex) {
         LOGGER.log(Level.SEVERE, "Error processing {0} from {1}", new String[]{request.getRequestURI(), url});
-        LOGGER.log(Level.SEVERE, null, ex);
+        LOGGER.log(Level.SEVERE, "", ex);
       }
     }
   }
@@ -238,7 +238,7 @@ public class HandleServlet extends HttpServlet {
 
         } catch (Exception ex) {
           response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           return false;
         }
       }
@@ -334,7 +334,7 @@ public class HandleServlet extends HttpServlet {
         return true;
 
       } catch (Exception ex) {
-        LOGGER.log(Level.SEVERE, null, ex);
+        LOGGER.log(Level.SEVERE, "", ex);
       } finally {
         f.delete();
       }
@@ -574,7 +574,7 @@ public class HandleServlet extends HttpServlet {
       }
       return new JSONObject().put("not_found", true);
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       SolrClientFactory.resetSolrClientSearch();
       return null;
     }

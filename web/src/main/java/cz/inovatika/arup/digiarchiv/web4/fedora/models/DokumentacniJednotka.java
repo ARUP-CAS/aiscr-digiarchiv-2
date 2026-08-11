@@ -70,7 +70,7 @@ public class DokumentacniJednotka implements FedoraModel {
                     vb.geom_gml = FedoraModel.getAsXml(vb.geom_gml);
                 }
             } catch (Exception ex) {
-                Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DokumentacniJednotka.class.getName()).log(Level.SEVERE, "", ex);
             }
         }
 

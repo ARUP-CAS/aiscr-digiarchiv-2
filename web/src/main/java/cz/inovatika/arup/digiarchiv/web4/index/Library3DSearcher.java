@@ -85,7 +85,7 @@ public class Library3DSearcher implements EntitySearcher {
       SolrSearcher.addFavorites(jo, client, request);
       return jo;
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       json.put("error", ex);
     }
     return json;
@@ -229,7 +229,7 @@ public class Library3DSearcher implements EntitySearcher {
         }
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }

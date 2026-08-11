@@ -164,7 +164,7 @@ public class Projekt implements FedoraModel {
                         searchable = true;
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             if (!projekt_samostatny_nalez.isEmpty()) {
@@ -180,7 +180,7 @@ public class Projekt implements FedoraModel {
                         addLocFromSN(ja, idoc);
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
 
@@ -195,7 +195,7 @@ public class Projekt implements FedoraModel {
                         searchable = true;
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             idoc.setField("searchable", searchable);
@@ -265,7 +265,7 @@ public class Projekt implements FedoraModel {
 //                IndexUtils.getClientBin().add("soubor", idocs, 10);
 //            }
 //        } catch (SolrServerException | IOException ex) {
-//            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, "", ex);
 //        }
 
             if (projekt_chranene_udaje != null) {
@@ -395,7 +395,7 @@ public class Projekt implements FedoraModel {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, "", ex);
         }
     }
 

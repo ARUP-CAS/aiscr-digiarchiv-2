@@ -65,7 +65,7 @@ public class PIANSearcher implements EntitySearcher {
                     }
                 }
             } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
 
             doc.put("az_dj_pian", az_dj_pian);
@@ -120,7 +120,7 @@ public class PIANSearcher implements EntitySearcher {
 //                    doc.append("lokalita", cdj);
 //                }
             } catch (Exception ex) {
-                Logger.getLogger(PIANSearcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PIANSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -142,7 +142,7 @@ public class PIANSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -246,7 +246,7 @@ public class PIANSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -265,7 +265,7 @@ public class PIANSearcher implements EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }

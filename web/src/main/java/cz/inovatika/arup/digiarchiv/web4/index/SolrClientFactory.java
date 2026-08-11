@@ -60,7 +60,7 @@ public class SolrClientFactory {
             try {
                 solrClient.close();
             } catch (IOException ex) {
-                Logger.getLogger(SolrClientFactory.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SolrClientFactory.class.getName()).log(Level.SEVERE, "", ex);
             }
         }
         solrClient = null;
@@ -72,7 +72,7 @@ public class SolrClientFactory {
             try {
                 solrClientSearch.close();
             } catch (IOException ex) {
-                Logger.getLogger(SolrClientFactory.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SolrClientFactory.class.getName()).log(Level.SEVERE, "", ex);
             }
         }
         solrClientSearch = null;

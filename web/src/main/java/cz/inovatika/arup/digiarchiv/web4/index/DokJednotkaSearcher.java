@@ -52,7 +52,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
                 parentSearchable = true;
 
             } catch (SolrServerException | IOException ex) {
-                Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
 
             if (doc.has("dj_pian")) {

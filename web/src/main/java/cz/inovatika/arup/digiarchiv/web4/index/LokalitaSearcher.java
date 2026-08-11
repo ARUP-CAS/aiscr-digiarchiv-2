@@ -86,7 +86,7 @@ import org.json.XML;
                         valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("az_dokument", valid_dokuments);
@@ -210,7 +210,7 @@ import org.json.XML;
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -230,7 +230,7 @@ import org.json.XML;
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }

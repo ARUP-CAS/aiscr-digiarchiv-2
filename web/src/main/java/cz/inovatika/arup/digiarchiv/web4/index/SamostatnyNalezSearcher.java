@@ -76,7 +76,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -96,7 +96,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }

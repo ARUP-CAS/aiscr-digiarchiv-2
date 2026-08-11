@@ -72,12 +72,12 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
           parentSearchable = true;
 
         } catch (SolrServerException | IOException ex) {
-          Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, "", ex);
         }
       } catch (SolrServerException ex) {
-        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, "", ex);
       } catch (IOException ex) {
-        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, "", ex);
       }
     }
   }
@@ -105,7 +105,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
       return jo;
 
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       json.put("error", ex);
     }
     return json;
@@ -140,7 +140,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
   }

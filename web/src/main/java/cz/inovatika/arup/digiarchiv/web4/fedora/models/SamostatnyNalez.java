@@ -215,7 +215,7 @@ public class SamostatnyNalez implements FedoraModel {
 //                IndexUtils.getClientBin().add("soubor", idocs, 10);
 //            }
         } catch (Exception ex) {
-            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, "", ex);
         }
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -378,7 +378,7 @@ class SnChraneneUdaje {
             geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml); 
             // System.out.println(xml);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
         }
 
         IndexUtils.setSecuredJSONField(idoc, "samostatny_nalez_chranene_udaje", this);

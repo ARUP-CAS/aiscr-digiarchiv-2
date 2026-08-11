@@ -44,7 +44,7 @@ public class FeedbackServlet extends HttpServlet {
             try {
                 response.getWriter().println(verify(js));
             } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Verification failed");
             }
             return;
@@ -90,7 +90,7 @@ public class FeedbackServlet extends HttpServlet {
             email.send();
             ret.put("hasError", false);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error sending mail", ex);
             ret.put("hasError", true).put("error", ex);
         }
         return ret;

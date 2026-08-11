@@ -67,7 +67,7 @@ public class MuseionClient {
       return xmlMapper.readValue(sr, clazz);
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, "Error parsing {0}", xml);
-      // Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
+      // Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, "", ex);
       throw new Exception(ex);
     }
   }

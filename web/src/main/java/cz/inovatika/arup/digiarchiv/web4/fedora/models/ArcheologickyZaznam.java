@@ -178,7 +178,7 @@ public class ArcheologickyZaznam implements FedoraModel {
                 IndexUtils.addAndCommit("entities", djdocs);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ArcheologickyZaznam.class.getName()).log(Level.SEVERE, "", ex);
         }
         
         setFacets(idoc, prSufix);

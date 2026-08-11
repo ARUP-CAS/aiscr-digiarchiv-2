@@ -59,7 +59,7 @@ public class DokumentSearcher implements EntitySearcher {
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             return jo;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -83,7 +83,7 @@ public class DokumentSearcher implements EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }
@@ -119,7 +119,7 @@ public class DokumentSearcher implements EntitySearcher {
                         
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
@@ -139,7 +139,7 @@ public class DokumentSearcher implements EntitySearcher {
                         dokument_cast_projekt.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("dokument_cast_projekt", dokument_cast_projekt);
@@ -409,7 +409,7 @@ public class DokumentSearcher implements EntitySearcher {
                 }
             }
         } catch (IOException | SolrServerException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return null;
         }
     }

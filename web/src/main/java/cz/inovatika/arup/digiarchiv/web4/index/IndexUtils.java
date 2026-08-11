@@ -72,7 +72,7 @@ public class IndexUtils {
             solr.add(collection, idocs, 10);
             // client.commit(collection);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 
@@ -82,7 +82,7 @@ public class IndexUtils {
             solr.add(collection, idoc, 10);
             // client.commit(collection);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 
@@ -162,7 +162,7 @@ public class IndexUtils {
                 ObjectMapper objectMapper = new ObjectMapper();
                 idoc.addField(field, objectMapper.writeValueAsString(o));
             } catch (JsonProcessingException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -173,7 +173,7 @@ public class IndexUtils {
                 ObjectMapper objectMapper = new ObjectMapper();
                 idoc.setField(field, objectMapper.writeValueAsString(o));
             } catch (JsonProcessingException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -184,7 +184,7 @@ public class IndexUtils {
                 ObjectMapper objectMapper = new ObjectMapper();
                 idoc.setField(prefix + "_chranene_udaje", objectMapper.writeValueAsString(o));
             } catch (JsonProcessingException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -299,7 +299,7 @@ public class IndexUtils {
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        idoc.addField("chranene_udaje", objectMapper.writeValueAsString(o));
 //      } catch (JsonProcessingException ex) {
-//        LOGGER.log(Level.SEVERE, null, ex);
+//        LOGGER.log(Level.SEVERE, "", ex);
 //      }
 //    }
 //  }

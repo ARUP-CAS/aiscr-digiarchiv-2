@@ -80,7 +80,7 @@ public class InitServlet extends HttpServlet {
                 Files.createDirectories(Paths.get(TEMP_DIR));
             }
         } catch (IOException ex) {
-            Logger.getLogger(InitServlet.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error creating dirs", ex);
         }
 
         // clear index status. In case of restart while running
@@ -91,9 +91,9 @@ public class InitServlet extends HttpServlet {
             //Init locales
             I18n.getInstance().getLocale("cs");
             I18n.getInstance().getLocale("en");
-            LOGGER.log(Level.FINE, "Locales loaded"); 
-        } catch (IOException | JSONException |URISyntaxException | InterruptedException ex) {
-            LOGGER.log(Level.SEVERE, "Error loading locales", ex);
+            LOGGER.log(Level.INFO, "Locales loaded"); 
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error loading locales {0}", ex);
         }
 
         LOGGER.log(Level.INFO, "CONFIG_DIR is -> {0}", CONFIG_DIR);
@@ -112,7 +112,7 @@ public class InitServlet extends HttpServlet {
             File f = new File(InitServlet.CONFIG_DIR + File.separator + type + "_" + "status.txt");
             FileUtils.writeStringToFile(f, status, "UTF-8");
         } catch (IOException ex) {
-            Logger.getLogger(InitServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InitServlet.class.getName()).log(Level.SEVERE, "Error writing status file", ex);
         }
     }
     

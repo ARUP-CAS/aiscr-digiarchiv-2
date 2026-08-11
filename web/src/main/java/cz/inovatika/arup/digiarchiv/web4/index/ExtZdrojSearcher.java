@@ -63,9 +63,9 @@ public class ExtZdrojSearcher implements EntitySearcher {
 //                    doc.append(cdj.getString("entity"), cdj);
 //                }
 //            } catch (SolrServerException ex) {
-//                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, "", ex);
 //            } catch (IOException ex) {
-//                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(ExtZdrojSearcher.class.getName()).log(Level.SEVERE, "", ex);
 //            }
 //        }
     }
@@ -86,7 +86,7 @@ public class ExtZdrojSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -105,7 +105,7 @@ public class ExtZdrojSearcher implements EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }

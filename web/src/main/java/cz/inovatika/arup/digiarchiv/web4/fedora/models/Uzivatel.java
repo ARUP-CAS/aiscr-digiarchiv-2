@@ -185,7 +185,7 @@ public class Uzivatel implements FedoraModel {
           client.add("uzivatel_ui", idoc);
           client.commit("uzivatel_ui");
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 

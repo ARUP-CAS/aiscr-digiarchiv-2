@@ -145,7 +145,7 @@ public class AkceSearcher implements EntitySearcher {
                         valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
                 
             } 
@@ -198,7 +198,7 @@ public class AkceSearcher implements EntitySearcher {
             //LOGGER.log(Level.INFO, "hotovo");
             return jo;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -217,7 +217,7 @@ public class AkceSearcher implements EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }

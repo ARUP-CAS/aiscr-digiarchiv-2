@@ -91,7 +91,7 @@ public class ProjektSearcher implements EntitySearcher {
                         valid_dokuments.put(jad.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_dokument", valid_dokuments);
@@ -110,7 +110,7 @@ public class ProjektSearcher implements EntitySearcher {
                         samostatny_nalez.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_samostatny_nalez", samostatny_nalez);
@@ -136,7 +136,7 @@ public class ProjektSearcher implements EntitySearcher {
                         }
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_archeologicky_zaznam", projekt_archeologicky_zaznam);
@@ -264,7 +264,7 @@ public class ProjektSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -313,7 +313,7 @@ public class ProjektSearcher implements EntitySearcher {
                         valid_dokuments.put(jad.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_dokument", valid_dokuments);
@@ -334,7 +334,7 @@ public class ProjektSearcher implements EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }

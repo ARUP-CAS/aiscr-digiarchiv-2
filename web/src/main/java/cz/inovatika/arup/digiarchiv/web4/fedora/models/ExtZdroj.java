@@ -175,7 +175,7 @@ public class ExtZdroj implements FedoraModel {
             }
             
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(ExtZdroj.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExtZdroj.class.getName()).log(Level.SEVERE, "", ex);
         }
     }
 

@@ -223,7 +223,7 @@ public class Dokument implements FedoraModel {
 //                IndexUtils.getClientBin().add("soubor", idocs, 10);
 //            }
         } catch (Exception ex) {
-            Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, "", ex);
         }
 
         for (Tvar tv : dokument_tvar) {

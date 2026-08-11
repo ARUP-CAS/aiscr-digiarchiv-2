@@ -509,7 +509,7 @@ public class SolrSearcher {
       }
       
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
   
@@ -542,7 +542,7 @@ public class SolrSearcher {
 //                }
 //            }
 //        } catch (IOException | SolrServerException ex) {
-//            LOGGER.log(Level.SEVERE, null, ex);
+//            LOGGER.log(Level.SEVERE, "", ex);
 //            return null;
 //        }
 //    }
@@ -566,7 +566,7 @@ public class SolrSearcher {
       }
       
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
   
@@ -593,7 +593,7 @@ public class SolrSearcher {
       }
       
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
   
@@ -612,7 +612,7 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
     
@@ -631,7 +631,7 @@ public class SolrSearcher {
         return null;
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
@@ -657,7 +657,7 @@ public class SolrSearcher {
         return null;
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
     
@@ -678,7 +678,7 @@ public class SolrSearcher {
       }
       
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
   
@@ -703,7 +703,7 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
@@ -722,7 +722,7 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
@@ -740,7 +740,7 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
@@ -757,7 +757,7 @@ public class SolrSearcher {
         return null;
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
@@ -788,7 +788,7 @@ public class SolrSearcher {
         ret.put(doc.getString("ident_cely"), razeni);
       }
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       ret.put("error", ex);
     }
     return ret;
@@ -807,7 +807,7 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return new JSONObject();
     }
   }
@@ -833,7 +833,7 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
@@ -900,7 +900,7 @@ public class SolrSearcher {
         return null;
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
     
@@ -1249,7 +1249,7 @@ public class SolrSearcher {
         return (Date) rsp.getResults().get(0).getFirstValue("datestamp");
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       Date d = new Date();
       d.setTime(0);
       return d;

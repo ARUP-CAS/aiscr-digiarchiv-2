@@ -169,7 +169,7 @@ public class FedoraHarvester {
             ret.put("errors", errors);
             LOGGER.log(Level.INFO, "Harvest finished in {0}", interval);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             ret.put("error", ex);
         }
         writeRetToFile("index", start);
@@ -250,7 +250,7 @@ public class FedoraHarvester {
             }
             LOGGER.log(Level.INFO, "Update finished in {0}", interval);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             writeStatusFile("update", STATUS_FINISHED);
         }
         return ret;
@@ -299,7 +299,7 @@ public class FedoraHarvester {
             }
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             ret.put("error", ex);
         }
         return ret;
@@ -366,7 +366,7 @@ public class FedoraHarvester {
             ret.put("errors", errors);
             LOGGER.log(Level.INFO, "Index models finished in {0}", interval);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             errors.put(ex);
         }
         writeRetToFile("models", start);
@@ -385,7 +385,7 @@ public class FedoraHarvester {
             SolrClient solr = SolrClientFactory.getSolrClient();
             indexModels(models, solr);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             writeStatusFile("index", STATUS_FINISHED);
             errors.put(ex);
         }
@@ -488,7 +488,7 @@ public class FedoraHarvester {
             return null;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return null;
         }
     }
@@ -507,7 +507,7 @@ public class FedoraHarvester {
             return xml;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return ex.toString();
         }
     }
@@ -518,7 +518,7 @@ public class FedoraHarvester {
             return FedoraUtils.getJsonMetadataById(id);
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -529,7 +529,7 @@ public class FedoraHarvester {
             return FedoraUtils.getJsonById(id);
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -795,7 +795,7 @@ public class FedoraHarvester {
 
                 }
             } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -814,7 +814,7 @@ public class FedoraHarvester {
             processTime += Instant.now().toEpochMilli() - start;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error processing record {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             writeToErrorsFile(id);
             errors.put(model + " " + id + ":  " + ex.toString());
             // throw new Exception(ex);
@@ -864,7 +864,7 @@ public class FedoraHarvester {
                         idocs.get(core).add(idoc);
                 }
             } catch (Exception ex) {
-                // LOGGER.log(Level.SEVERE, null, ex);
+                // LOGGER.log(Level.SEVERE, "", ex);
                 throw ex;
             }
         }
@@ -1010,12 +1010,12 @@ public class FedoraHarvester {
                         ret.put("totalBad", totalBad);
                         LOGGER.log(Level.INFO, "Finished. total: {0}. Bad: {1}", new Object[]{totalDocs, totalBad});
                     } catch (SolrServerException e) {
-                        LOGGER.log(Level.SEVERE, null, e);
+                        LOGGER.log(Level.SEVERE, "", e);
                     }
                 }
             }
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             writeStatusFile("index", STATUS_FINISHED);
             errors.put(ex);
         }

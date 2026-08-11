@@ -92,7 +92,7 @@ public class DokumentCast implements FedoraModel {
             IndexUtils.addAndCommit("entities", kdoc);
         } catch (Exception ex) {
             Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing dokument_cast {0}", ident_cely);
-            // Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, null, ex);
+            // Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "", ex);
         }
     }
 
@@ -169,7 +169,7 @@ public class DokumentCast implements FedoraModel {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(DokumentCast.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DokumentCast.class.getName()).log(Level.SEVERE, "", ex);
         }
     }
 

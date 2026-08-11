@@ -53,7 +53,7 @@ public class LogAnalytics {
                         ip, ident_cely, type});
             solr.add("logs", idoc, 1000);
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 
@@ -144,7 +144,7 @@ public class LogAnalytics {
             JSONObject ret = json(query, client, "logs");
             return ret;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -172,7 +172,7 @@ public class LogAnalytics {
             }
             return ret;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -325,7 +325,7 @@ public class LogAnalytics {
             InputStream is = (InputStream) resp.get("stream");
             return new JSONObject(IOUtils.toString(is, "UTF-8"));
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -342,7 +342,7 @@ public class LogAnalytics {
             InputStream is = (InputStream) resp.get("stream");
             return new JSONObject(IOUtils.toString(is, "UTF-8"));
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -359,7 +359,7 @@ public class LogAnalytics {
             InputStream is = (InputStream) resp.get("stream");
             return IOUtils.toString(is, "UTF-8");
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return ex.toString();
         }
     }
@@ -431,7 +431,7 @@ public class LogAnalytics {
 //                        done = true;
 //                    }
                 } catch (SolrServerException e) {
-                    LOGGER.log(Level.SEVERE, null, e);
+                    LOGGER.log(Level.SEVERE, "", e);
 
                     Date end = new Date();
                     String msg = String.format("fixEntity finished with error. Thumbs :%1$d", totalDocs);
@@ -453,7 +453,7 @@ public class LogAnalytics {
             return jo;
 
         } catch (IOException | JSONException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return jo;
         }
 

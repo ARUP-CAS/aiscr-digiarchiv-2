@@ -177,7 +177,7 @@ public class ImageServlet extends HttpServlet {
                         writeImg(response, id, "thumb", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, "Error getting thumb from fedora"); 
-                        LOGGER.log(Level.SEVERE, null, ex);    
+                        LOGGER.log(Level.SEVERE, "", ex);    
                         emptyImg(response, ctx);
                     }
                 } else {
@@ -195,7 +195,7 @@ public class ImageServlet extends HttpServlet {
                     try {
                         writeImg(response, id, "thumb-large", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.SEVERE, "", ex);
                         emptyImg(response, ctx);
                     }
                 } else {
@@ -247,7 +247,7 @@ public class ImageServlet extends HttpServlet {
                         is.close();
 
                     } catch (Exception ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.SEVERE, "", ex);
                         emptyImg(response, ctx);
                     } finally {
                         f.delete(); 

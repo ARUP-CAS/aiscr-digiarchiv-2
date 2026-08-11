@@ -106,7 +106,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -125,7 +125,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
     }
@@ -179,7 +179,7 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
                 parentSearchable = true;
 
             } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
 
             if (doc.has("dj_pian")) {
