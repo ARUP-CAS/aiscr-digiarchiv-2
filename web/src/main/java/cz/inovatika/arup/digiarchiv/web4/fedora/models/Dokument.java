@@ -199,29 +199,8 @@ public class Dokument implements FedoraModel {
 //        List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
-//                SolrInputDocument djdoc = s.createSolrDoc();
-//                idocs.add(djdoc);
-                IndexUtils.addJSONField(idoc, "soubor", s);
-                idoc.addField("soubor_id", s.id);
-                idoc.addField("soubor_nazev", s.nazev);
-                idoc.addField("soubor_filepath", s.path);
-                idoc.addField("soubor_rozsah", s.rozsah);
-                idoc.addField("soubor_size_mbytes", s.size_mb);
-                idoc.addField("soubor_mimetype", s.mimetype);
-                List<String> d = new ArrayList();
-                for (Historie h : s.historie) {
-                  if ("DIST01".equals(h.typ_zmeny)) {
-                    d.add(h.poznamka);
-                  } else if ("DIST10".equals(h.typ_zmeny)){
-                    d.remove(h.poznamka);
-                  }
-                }
-                idoc.addField("soubor_distri", d);
-    
+              s.fillSolrFields(idoc);
             }
-//            if (!idocs.isEmpty()) {
-//                IndexUtils.getClientBin().add("soubor", idocs, 10);
-//            }
         } catch (Exception ex) {
             Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, "", ex);
         }

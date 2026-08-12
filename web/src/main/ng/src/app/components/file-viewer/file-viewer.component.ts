@@ -52,7 +52,7 @@ export class FileViewerComponent implements OnInit {
 
   files = signal<File[]>([]);
   selectedFile = signal<File>(null); 
-  selectedDist = 'orig';
+  selectedDist: {path: string,filename: string,size: number,mimetype: string};
 
   currentPage: number = 1;
   currentPageDisplayed = signal(1);
@@ -115,7 +115,7 @@ export class FileViewerComponent implements OnInit {
   }
 
   downloadUrl() {
-    return this.config.context + '/api/img/full?id=' + this.selectedFile().id + '&dist=' + this.selectedDist;
+    return this.config.context + '/api/img/full?id=' + this.selectedFile().id + '&dist=' + this.selectedDist.path;
   }
 
   imgPoint(doc: any, size: string) {
@@ -145,7 +145,7 @@ export class FileViewerComponent implements OnInit {
 
           const link = this.windowRef.nativeWindow.document.createElement('a');
           link.href = this.downloadUrl();
-          link.download = this.selectedFile().nazev;
+          link.download = this.selectedDist.filename;
           link.click();
           console.log(this.downloadUrl())
           this.service.showInfoDialog(this.service.getTranslation('dialog.desc.download_started'), 2000);
@@ -224,12 +224,13 @@ export class FileViewerComponent implements OnInit {
         file.size_mb = f.size_mb;
         file.pages = new Array(file.rozsah);
         file.filepath = f.filepath;
-        file.distribuce.push('orig');
-        f.historie.forEach((h:{datum_zmeny: number, id: string,poznamka:string,typ_zmeny: string}) => {
-          if (!file.distribuce.includes(h.poznamka) && h.typ_zmeny === 'DIST01') {
-            file.distribuce.push(h.poznamka)
-          }
-        });
+        file.distribuce = f.distribuce;
+        //file.distribuce.push('orig');
+        // f.historie.forEach((h:{datum_zmeny: number, id: string,poznamka:string,typ_zmeny: string}) => {
+        //   if (!file.distribuce.includes(h.poznamka) && h.typ_zmeny === 'DIST01') {
+        //     file.distribuce.push(h.poznamka)
+        //   }
+        // });
         // file.setSize(true);
         files.push(file);
       });
@@ -239,6 +240,9 @@ export class FileViewerComponent implements OnInit {
       this.files.set(files);
       this.fileid = new Date().getTime();
       this.selectFile(this.files()[0], 0);
+      console.log(this.selectedFile().distribuce)
+      this.selectedDist = this.selectedFile().distribuce[0];
+      console.log(this.selectedDist)
       // this.selectedFile = this.files[0];
       // this.currentPage = 1;
       this.showing.set(true);

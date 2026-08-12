@@ -214,8 +214,9 @@ public class ImageServlet extends HttpServlet {
                     return;
                 }
                 String id = request.getParameter("id");
+                String dist = request.getParameter("dist");
                 if (id != null && !id.equals("")) {
-                        File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR ));
+                        File f = File.createTempFile("img-", "-"+dist.replace("/", ""), new File(InitServlet.TEMP_DIR ));
                     try {
 
                         JSONObject doc = getDocument(id);
@@ -224,14 +225,22 @@ public class ImageServlet extends HttpServlet {
                         }
 
                         String mime = doc.getString("mimetype");
+                        String filename = doc.getString("nazev");
+                        JSONArray distribuce = doc.getJSONArray("distribuce");
+                        for (int i =0 ; i< distribuce.length(); i++) {
+                          JSONObject d = distribuce.getJSONObject(i);
+                          if (dist.equals(d.optString("path"))) {
+                            mime = d.optString("mimetype");
+                            filename = d.optString("filename");
+                          }
+                        }
                         if (mime != null) {
                             response.setContentType(mime);
                         } else {
                             response.setContentType("image/jpeg");
                         }
-                        response.setHeader("Content-Disposition", "filename=" + doc.getString("nazev"));
+                        response.setHeader("Content-Disposition", "filename=" + filename);
                         
-                        String dist = request.getParameter("dist");
                         String url = doc.getString("path") + "/" + dist;
                         if ( url.contains("record")) {
                             url = url.substring(url.indexOf("record"));

@@ -25,16 +25,18 @@
         <div class=" app-fxLayout app-row app-center-v">
           <mat-select [(ngModel)]="selectedDist">
             @for(d of selectedFile().distribuce; track d) {
-              <mat-option [value]="d">{{ d }}</mat-option>
+              <mat-option [value]="d">{{ d.path }}</mat-option>
             }
           </mat-select></div>
-        <div class="app-metadata app-fxLayout app-row app-center-v">
-          <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile().size_mb}}MB</strong></span><span class="app-pipe"></span><!--
-          --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong></span><span class="app-pipe"></span>
-          @if (selectedFile() !== null) {
-            <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile().nazev"><mat-icon class="app-va-center">get_app</mat-icon></a>
+          @if(selectedDist) {
+          <div class="app-metadata app-fxLayout app-row app-center-v">
+            <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedDist.size}}MB</strong></span><span class="app-pipe"></span><!--
+            --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{selectedDist.mimetype}}</strong></span><span class="app-pipe"></span>
+            @if (selectedFile() !== null) {
+              <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedDist.filename"><mat-icon class="app-va-center">get_app</mat-icon></a>
+            }
+          </div>
           }
-        </div>
       </div>
     }
     <mat-card class="app-card-info app-row-gap-16">
