@@ -87,6 +87,8 @@ export class NavbarComponent implements OnInit {
           this.state.setLogged(res);
           clearInterval(this.loggedChecker);
           alert(this.service.getTranslation('alert.sessionTimeout'));
+          this.state.user = null;
+          document.location.reload();
         }
       });
     } else {
