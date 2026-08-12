@@ -750,7 +750,7 @@ public class SolrSearcher {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
               .setRows(1).setFields("ui:[json]");
-      JSONObject jo = json(client, "uzivatel_ui", query);
+      JSONObject jo = jsonSelect(client, "uzivatel_ui", query);
       if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
         return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONObject("ui");
       } else {
@@ -1067,7 +1067,7 @@ public class SolrSearcher {
   public static void addIsFavorite(SolrClient client, JSONObject doc, String username) {
     String ident_cely = doc.getString("ident_cely");
     SolrQuery query = new SolrQuery("uniqueid:" + username + "_" + ident_cely).setRows(1);
-    JSONObject jo = SearchUtils.json(query, client, "favorites");
+    JSONObject jo = SearchUtils.json(query, client, "favorites", false);
     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
       doc.put("isFav", true);
     }

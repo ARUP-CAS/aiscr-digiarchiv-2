@@ -706,6 +706,7 @@
     "f_pian_presnost",
     "f_pian_zm10",
     "f_let_pozorovatel",
+    "f_pozorovatel",
     "f_let_organizace",
     "f_let_pocasi",
     "f_let_dohlednost",
@@ -713,7 +714,8 @@
     "f_let_letiste_cil",
     "f_ez_typ",
     "f_ez_autor",
-    "f_ez_casopis"
+    "f_ez_casopis",
+    "soubor_distri"
   ],
   "urlFields": [
     "f_organizace",
@@ -761,7 +763,9 @@
     "f_typ_projektu",
     "inv_cislo",
     "samostatny_nalez_predano_organizace",
-    "predmet_kategorie"
+    "predmet_kategorie",
+    "soubor_distri",
+    "f_pozorovatel"
   ],
   "uiVars": {
     "panelHeightInCard": "36px"

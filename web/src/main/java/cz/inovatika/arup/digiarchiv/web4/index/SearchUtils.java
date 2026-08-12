@@ -137,7 +137,6 @@ public class SearchUtils {
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core, boolean onlySearchable) { 
         query.set("wt", "json");
-        
         query.set("json.nl", "arrarr");
         query.addFilterQuery("-is_deleted:true");
         String qt;
