@@ -137,8 +137,10 @@ public class SearchUtils {
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core, boolean onlySearchable) { 
         query.set("wt", "json");
+        
+        query.set("json.nl", "arrarr");
         query.addFilterQuery("-is_deleted:true");
-        String qt = "/search";
+        String qt;
         if (onlySearchable) {
             qt = "/search";
         } else {
@@ -152,7 +154,8 @@ public class SearchUtils {
             qreq.setResponseParser(new InputStreamResponseParser("json")); 
             NamedList<Object> resp = client.request(qreq, core);
             InputStream is = (InputStream) resp.get("stream");
-            return new JSONObject(IOUtils.toString(is, "UTF-8")); 
+            String s = IOUtils.toString(is, "UTF-8");
+            return new JSONObject(s); 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);

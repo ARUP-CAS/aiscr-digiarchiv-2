@@ -145,10 +145,17 @@ export class AppState {
     this.sort = cfg.sorts[0];
   }
 
-  setEntityTotals(facet: { name: string, type: string, value: number }[]) {
-    facet.forEach(f => {
-      this.totals[f.name] = f.value;
-    });
+  setEntityTotals(facet: [string, number][]) {
+
+
+    facet.forEach((v: [string, number]) => {
+      this.totals[v[0]] = v[1];
+          });
+
+
+    // facet.forEach(f => {
+    //   this.totals[f.name] = f.value;
+    // });
   }
 
   setSearchResponse(resp: SolrResponse, typ: string = 'results') {
@@ -197,10 +204,12 @@ export class AppState {
     }
     this.config.facets.forEach(f => {
       if (resp.facet_counts.facet_fields[f]) {
-        const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
-        ff.forEach(v => {
-          v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
-          // v.poradi = 
+        const ff: { name: string, type: string, value: number, operator: string }[] = [];
+        resp.facet_counts.facet_fields[f].forEach((v: [string, number]) => {
+          ff.push({
+            name: v[0], type: 'string', value: v[1], operator: this.breadcrumbs.find(c => c.field === f && c.value === v[0])?.operator
+          })
+          //v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
         });
         this.facets.push({ field: f, values: ff });
       }
@@ -208,13 +217,20 @@ export class AppState {
     const fields = Object.keys(resp.facet_counts.facet_fields);
     fields.forEach(f => {
       if (!this.config.facets.includes(f)) {
-        const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
+        //const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
+        const ff: { name: string, type: string, value: number, operator: string }[] = [];
         if (f === 'entity') {
-          this.setEntityTotals(ff);
+          this.setEntityTotals(resp.facet_counts.facet_fields[f]);
         } else {
-          ff.forEach(v => {
-            v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
+          resp.facet_counts.facet_fields[f].forEach((v: [string, number]) => {
+            ff.push({
+              name: v[0], type: 'string', value: v[1], operator: this.breadcrumbs.find(c => c.field === f && c.value === v[0])?.operator
+            })
+            //v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
           });
+          // ff.forEach(v => {
+          //   v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
+          // });
           this.facets.push({ field: f, values: ff });
         }
       }

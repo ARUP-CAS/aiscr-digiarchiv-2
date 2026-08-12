@@ -1058,7 +1058,7 @@ public class SolrSearcher {
   public static void addInMuseion(SolrClient client, JSONObject doc) {
     String ident_cely = doc.getString("ident_cely");
     SolrQuery query = new SolrQuery("amcrId:\"" + ident_cely + "\"").setRows(1);
-    JSONObject jo = SearchUtils.json(query, client, "museion");
+    JSONObject jo = SearchUtils.json(query, client, "museion", false);
     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
       doc.put("inMuseion", true);
     }

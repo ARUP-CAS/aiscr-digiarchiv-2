@@ -54,7 +54,6 @@ public class DokumentSearcher implements EntitySearcher {
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-
             addProjekt(jo, client, request);
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             return jo;
