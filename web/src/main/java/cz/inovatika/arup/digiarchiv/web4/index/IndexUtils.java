@@ -196,7 +196,8 @@ public class IndexUtils {
                     .getJSONObject(0).getString("@value");
             idoc.setField("datestamp", d);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Can't get datestamp from fedora for {0}", id);
+            LOGGER.log(Level.SEVERE, "Can't get datestamp from fedora for " + id);
+            LOGGER.log(Level.SEVERE, "", ex);
             idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
         }
     }

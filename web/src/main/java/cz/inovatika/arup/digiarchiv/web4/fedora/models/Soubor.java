@@ -58,8 +58,6 @@ public class Soubor {
   public List<Distri> distribuce = new ArrayList();
 
   public void fillSolrFields(SolrInputDocument idoc) {
-    IndexUtils.setDateStamp(idoc, id);
-    IndexUtils.setDateStampFromHistory(idoc, historie);
 
     idoc.addField("soubor_id", id);
     idoc.addField("soubor_nazev", nazev);

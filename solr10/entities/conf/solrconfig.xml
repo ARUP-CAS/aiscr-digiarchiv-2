@@ -624,7 +624,7 @@
 	  <int name="rows">20</int>
 	   
 	  <str name="wt">json</str>
-	  <str name="json.nl">arrntv</str>
+	  <str name="json.nl">arrarr</str>
 	</lst>
   </requestHandler>
 

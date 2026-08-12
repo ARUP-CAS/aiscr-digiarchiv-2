@@ -105,6 +105,7 @@ public class SearchServlet extends HttpServlet {
           json.put("response", jo.getJSONObject("response"));
 
         } catch (Exception ex) {
+          LOGGER.log(Level.SEVERE, "", ex);
           json.put("error", ex);
         }
         return json.toString();

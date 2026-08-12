@@ -186,7 +186,8 @@ public class Projekt implements FedoraModel {
 
             if (!searchable && !projekt_archeologicky_zaznam.isEmpty()) {
                 SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
+                        //.addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
+                        .addFilterQuery("akce_projekt:\"" + ident_cely + "\"")
                         .setRows(1)
                         .setFields("ident_cely,entity");
                 try {
