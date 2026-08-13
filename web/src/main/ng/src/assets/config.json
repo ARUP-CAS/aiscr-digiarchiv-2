@@ -1149,5 +1149,6 @@
   ],
   "feedBackMaxLength": 4000,
 	"commonFacets": [],
-  "showMuseion": false
+  "showMuseion": false,
+  "canIndex": false
 }

@@ -149,6 +149,11 @@ import { isPlatformBrowser } from '@angular/common';
         return this.config.showMuseion;
     }
 
+    public get canIndex() {
+        return this.config.canIndex;
+        
+    }
+
     server = '';
 
     constructor(

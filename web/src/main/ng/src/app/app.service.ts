@@ -818,5 +818,16 @@ export class AppService {
     return s.substring(s.indexOf('(') + 1, s.indexOf(')')).trim();
   }
 
+  
+
+  /**
+   * Fired for index stats in stats page
+   * @param params the params
+   */
+  reindex(id: string): Observable<any> {
+    const params: HttpParams = new HttpParams().set('id', id);
+    return this.get(`/fedora/index_id`, params);
+  }
+
 }
 

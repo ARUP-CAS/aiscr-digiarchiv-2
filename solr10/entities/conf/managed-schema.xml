@@ -728,11 +728,7 @@
       </analyzer>
     </fieldType>
 
-    <!-- A general text field that has reasonable, generic
-         cross-language defaults: it tokenizes with StandardTokenizer,
-   removes stop words from case-insensitive "stopwords.txt"
-   (empty by default), and down cases.  At query time only, it
-   also applies synonyms. -->
+    <!-- DIGIARCHIV: changed tokenizer -->
     <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
       <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>

@@ -85,6 +85,14 @@ export class ResultActionsComponent {
     }
   }
 
+  reindex() {
+      this.service.reindex(this.result().ident_cely).subscribe(res => {
+        console.log(res);
+        document.location.reload();
+      });
+    
+  }
+
   openDocument() {
     this.state.dialogRef = this.dialog.open(DocumentDialogComponent, {
       width: '900px',

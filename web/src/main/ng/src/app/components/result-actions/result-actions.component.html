@@ -1,4 +1,11 @@
 <div class="app-fxLayout app-row app-gap-2">
+
+@if (config.canIndex) {
+  <a matIconButton [matTooltip]="'reindex' | translate" (click)="reindex()">
+    <mat-icon>data_object</mat-icon>
+  </a>
+}
+
   @if (!mapDetail() && (result().chranene_udaje || result().loc_rpt || result().loc)) {
     <button matIconButton (click)="service.showInMap(result(), false, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
       <mat-icon>map</mat-icon>
