@@ -22,6 +22,7 @@ public class Predmet {
  *   <complexContent>
  *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       <sequence>
+           <xs:element name="pristup" type="xs:string"/>
  *         <element name="aktivita" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         <element name="areal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         <element name="cislo" type="{http://www.w3.org/2001/XMLSchema}string"/>
@@ -65,6 +66,9 @@ public class Predmet {
  * 
  * 
  */
+  
+    @JacksonXmlProperty(localName = "pristup")
+    public String pristup;
     
     @JacksonXmlProperty(localName = "aktivita")
     public String aktivita;
