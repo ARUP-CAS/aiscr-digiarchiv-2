@@ -733,21 +733,23 @@
    removes stop words from case-insensitive "stopwords.txt"
    (empty by default), and down cases.  At query time only, it
    also applies synonyms. -->
-    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
       <analyzer type="index">
-        <tokenizer name="standard"/>
-        <filter name="stop" ignoreCase="true" words="stopwords.txt" />
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+		<filter class="solr.PatternReplaceFilterFactory" pattern="[\p{Punct}&amp;&amp;[^_-]]+" replacement=""/>
         <!-- in this example, we will only use synonyms at query time
-        <filter name="synonymGraph" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
-        <filter name="flattenGraph"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
         -->
-        <filter name="lowercase"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
       <analyzer type="query">
-        <tokenizer name="standard"/>
-        <filter name="stop" ignoreCase="true" words="stopwords.txt" />
-        <filter name="synonymGraph" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter name="lowercase"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+		<filter class="solr.PatternReplaceFilterFactory" pattern="[\p{Punct}&amp;&amp;[^_-]]+" replacement=""/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
 	  
