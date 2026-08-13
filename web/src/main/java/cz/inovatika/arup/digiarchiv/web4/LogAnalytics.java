@@ -71,7 +71,7 @@ public class LogAnalytics {
                     .addFacetField("{!ex=entityF}entity")
                     .addFacetField("ident_cely")
                     .setParam("stats.field", "{!countDistinct=true}ident_cely")
-                    .setParam("json.nl", "arrntv")
+                    .setParam("json.nl", "arrarr")
                     .setParam("facet.range", "indextime")
                     .setParam("f.indextime.facet.range.other", "before")
                     .setParam("f.indextime.facet.range.end", "NOW")
@@ -270,7 +270,7 @@ public class LogAnalytics {
                 .addFacetField("entity")
                 .setFacetSort("index asc");
 
-        query.set("json.nl", "arrntv");
+        query.set("json.nl", "arrarr");
         query.set("wt", "json");
         
         if (!Boolean.parseBoolean(request.getParameter("show_deleted"))) {
