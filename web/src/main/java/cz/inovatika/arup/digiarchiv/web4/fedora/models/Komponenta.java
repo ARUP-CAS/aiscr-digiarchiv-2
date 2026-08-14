@@ -108,10 +108,19 @@ public class Komponenta implements FedoraModel {
     kdoc.setField("entity", "komponenta");
     kdoc.setField("komponenta_zdroj", "samostatny_nalez");
     kdoc.setField("komponenta_zdroj_ident_cely", idoc.getFieldValue("ident_cely"));
+    kdoc.removeField("soubor");
+    kdoc.removeField("soubor_id");
+    kdoc.removeField("soubor_nazev");
+    kdoc.removeField("soubor_filepath");
+    kdoc.removeField("soubor_rozsah");
+    kdoc.removeField("soubor_size_mbytes");
+    kdoc.removeField("soubor_mimetype");
     Vocab v = new Vocab();
     v.setKey((String) idoc.getFieldValue("samostatny_nalez_obdobi"));
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", v);
     kdoc.setField("entity", "komponenta");
+    
+    
     setFullText(kdoc);
     try {
       IndexUtils.addAndCommit("entities", kdoc);

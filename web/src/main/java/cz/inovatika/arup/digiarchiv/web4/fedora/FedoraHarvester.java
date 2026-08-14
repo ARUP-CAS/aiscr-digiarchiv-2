@@ -426,6 +426,7 @@ public class FedoraHarvester {
         int indexed = 0;
         String url = Options.getInstance().getString("solrhost", "http://localhost:8983/solr/")
                 + "entities/export?q=*:*&wt=json&sort=ident_cely%20asc&fl=ident_cely&fq=" + URLEncoder.encode(fq, "UTF8");
+        System.out.println(url);
 //        InputStream inputStream = RESTHelper.inputStream(url);
 //        String solrResp = org.apache.commons.io.IOUtils.toString(inputStream, "UTF-8");
         String solrResp = IndexUtils.requestSolr(url);

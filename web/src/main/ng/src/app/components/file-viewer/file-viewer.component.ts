@@ -240,9 +240,7 @@ export class FileViewerComponent implements OnInit {
       this.files.set(files);
       this.fileid = new Date().getTime();
       this.selectFile(this.files()[0], 0);
-      console.log(this.selectedFile().distribuce)
       this.selectedDist = this.selectedFile().distribuce[0];
-      console.log(this.selectedDist)
       // this.selectedFile = this.files[0];
       // this.currentPage = 1;
       this.showing.set(true);

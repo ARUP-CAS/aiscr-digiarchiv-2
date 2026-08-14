@@ -498,7 +498,7 @@ public class SolrSearcher {
               .addFilterQuery("nazev_heslare:objekt_druh OR nazev_heslare:predmet_druh")
               .setRows(100000)
               .setFields("ident_cely,hierarchie_vyse,hierarchie_nize");
-      JSONObject jo = json(client, "heslar", query);
+      JSONObject jo = jsonSelect(client, "heslar", query);
       JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
       for (int i = 0; i < ja.length(); i++) {
         JSONObject doc = ja.getJSONObject(i);

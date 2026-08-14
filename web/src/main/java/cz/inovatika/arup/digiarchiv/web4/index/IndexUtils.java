@@ -44,7 +44,6 @@ public class IndexUtils {
     public static String requestSolr(String url) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(url))
-                .header("Authorization", Options.getInstance().getJSONObject("hiko").getString("bearer"))
                 .GET()
                 .build();
 
