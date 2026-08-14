@@ -32,7 +32,7 @@
     "@ngx-translate/http-loader": "17.0.0",
     "@turf/turf": "7.3.5",
     "axios": "1.18.1",
-    "echarts": "6.0.0",
+    "echarts": "6.1.0",
     "express": "5.2.1",
     "heatmap.js": "2.0.5",
     "leaflet": "1.9.4",
