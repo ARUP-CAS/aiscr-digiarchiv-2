@@ -25,6 +25,28 @@ updates:
     target-branch: dev
     assignees:
       - "albertoh"
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+      types:
+        patterns:
+          - "@types/*"
+      leaflet:
+        patterns:
+          - "leaflet*"
+          - "@bluehalo/ngx-leaflet*"
+      ngx-translate:
+        patterns:
+          - "@ngx-translate/*"
+      testing:
+        patterns:
+          - "karma*"
+          - "jasmine*"
+      echarts:
+        patterns:
+          - "echarts"
+          - "ngx-echarts"
   
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/" # Location of package manifests
