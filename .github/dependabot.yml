@@ -42,6 +42,10 @@ updates:
     target-branch: dev
     assignees:
       - "albertoh"
+    cooldown:
+      default-days: 3
+      exclude:
+        - "@angular/*"
     groups:
       angular:
         patterns:
