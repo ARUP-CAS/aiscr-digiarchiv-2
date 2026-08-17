@@ -147,7 +147,6 @@ export class FileViewerComponent implements OnInit {
           link.href = this.downloadUrl();
           link.download = this.selectedDist.filename;
           link.click();
-          console.log(this.downloadUrl())
           this.service.showInfoDialog(this.service.getTranslation('dialog.desc.download_started'), 2000);
         }
 

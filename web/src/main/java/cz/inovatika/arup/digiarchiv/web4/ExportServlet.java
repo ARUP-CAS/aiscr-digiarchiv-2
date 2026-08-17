@@ -111,7 +111,7 @@ public class ExportServlet extends HttpServlet {
       if (val == null) {
         val = jo.opt(name);
       }
-      if (val != null && f.has("heslar")) {
+      if (val != null && f.optBoolean("translated")) {
         val = I18n.translate((String) val, locale);
       }
       ret.put(field, val);
@@ -126,9 +126,16 @@ public class ExportServlet extends HttpServlet {
     JSONArray ja = new JSONArray();
     for (int i = 0; i < exFields.length(); i += 1) {
       JSONObject f = exFields.getJSONObject(i);
+      
+      
       String name = f.optString("name");
-      Object val = jo.opt(f.optString("label", name));
-      if (val != null && f.has("heslar")) {
+      String field = f.optString("label", name);
+      Object val = jo.opt(field);
+      if (val == null) {
+        val = jo.opt(name);
+      }
+      
+      if (val != null && f.optBoolean("translated")) {
         val = I18n.translate((String) val, locale);
       }
       ja.put(val);

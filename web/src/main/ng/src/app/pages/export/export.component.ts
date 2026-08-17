@@ -39,6 +39,9 @@ export class ExportComponent implements OnInit {
 
   docs: any[] = [];
   pageIndex: number = 0;
+  rows: number;
+  page = 0;
+  sort: Sort;
   numFound: number;
 
   constructor(
@@ -116,34 +119,49 @@ export class ExportComponent implements OnInit {
     params.rows = e.pageSize;
     params.page = e.pageIndex;
     this.pageIndex = e.pageIndex + 1;
-    this.state.pageChanged = true;
+    // this.state.pageChanged = true;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
   setPage() {
     const params: any = {};
     params.page = this.pageIndex - 1;
-    this.state.page = this.pageIndex - 1;
-    this.state.pageChanged = true;
+    this.page = this.pageIndex - 1;
     // document.getElementById('scroll-wrapper').scrollTop = 0;
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
   sortBy(sort: Sort) {
-      this.state.sort = sort;
-  
-      if (this.state.ui) {
-        this.state.ui.rows = this.state.rows;
-        this.state.ui.sort[this.state.entity] = sort.field;
-      }
-  
+      this.sort = sort;
       this.router.navigate([], { queryParams: { sort: sort.field, page: 0 }, queryParamsHandling: 'merge' });
     }
 
   search(params: Params) {
     this.state.loading.set(true);
     const p: any = Object.assign({}, params);
-    p.rows = this.config.exportRowsLimit;
+    this.page = params['page'] ? +params['page'] : 0;
+
+    if (params['sort']) {
+      this.sort = this.state.sorts_by_entity.find(s => (s.field) === params['sort']);
+    } else if (this.sort) {
+      // this.sort could be from another entity. Check validity
+      this.sort = this.state.sorts_by_entity.find(s => s.field === this.sort.field);
+    }
+    if (!this.sort) {
+      this.sort = this.state.sorts_by_entity[0];
+    }
+
+    p.sort = this.sort.field;
+    console.log(p.sort)
+
+
+    if (p['rows']) {
+      p.rows = p['rows'];
+    } else {
+      p.rows = this.config.exportRowsLimit;
+    }
+    this.rows = p.rows;
+    
     if (!p['entity']) {
       p['entity'] = 'dokument';
     }

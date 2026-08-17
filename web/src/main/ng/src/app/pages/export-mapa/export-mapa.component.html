@@ -102,22 +102,23 @@
     <a (click)="downloadFormat('json')" [download]="'export.json'">json</a>
     <span class="app-pipe"></span>
 
-  @if (numFound > docs.length) {
     <mat-paginator class="app-fxFlex"
       [hidePageSize]="false"
       [length]="numFound"
-      [pageSize]="state.rows"
-      [pageIndex]="state.page"
+      [pageSize]="rows"
+      [pageIndex]="page"
       [pageSizeOptions]="[10, 100, 1000]"
       (page)="pageChanged($event)">
     </mat-paginator>
 
+
+  @if (numFound > docs.length) {
   <mat-form-field class="app-num" appearance="outline"><!--fxHide_sm fxHide_xs-->
     <mat-label>{{ 'paginator.desc.Číslo stránky' | translate }}</mat-label>
     <input matInput type="text" [(ngModel)]="pageIndex" (keyup.enter)="setPage()" name="pageIndex">
     <mat-icon matSuffix [title]="'paginator.tooltip.Přejděte číslo stránky' | translate" (click)="setPage()" class="app-cursor-pointer">send</mat-icon>
   </mat-form-field>
-
+  }
   <mat-form-field class="app-sort" appearance="outline"><!--fxHide_md fxHide_sm fxHide_xs-->
     <mat-label>{{ 'paginator.desc.Řazení' | translate }}</mat-label>
     <mat-select [(ngModel)]="state.sort">
@@ -136,6 +137,5 @@
     </div>
     <!-- <mat-icon matSuffix (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [matTooltip]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon> -->
   </mat-form-field>
-  }
   </div>
 </ng-template>
