@@ -10,28 +10,28 @@ GET /search/query
 POST /search/query
 ```
 
-Servlet vraci JSON (`application/json;charset=UTF-8`). Nazev akce je bran z
+Servlet vrací JSON (`application/json;charset=UTF-8`). Název akce je brán z
 `pathInfo`; `/search/query` se mapuje na enum hodnotu `QUERY`.
 
-## Zpracovani pozadavku
+## Zpracování požadavku
 
-1. `SearchServlet.Actions.QUERY` nacte parametr `entity`.
-2. Podle `entity` vybere implementaci `EntitySearcher` pres
+1. `SearchServlet.Actions.QUERY` načte parametr `entity`.
+2. Podle `entity` vybere implementaci `EntitySearcher` přes
    `SearchUtils.getSearcher(entity)`.
-3. Neznamy typ entity vrati:
+3. Neznámý typ entity vrátí:
 
    ```json
    {"error":"unrecognized entity"}
    ```
 
-4. Konkretni searcher sestavi Solr dotaz, aplikuje spolecne parametry,
-   filtracni parametry a entitni konfiguraci.
-5. Vysledek se vraci jako Solr JSON response. Pri chybe se vraci JSON s
-   polozkou `error`.
+4. Konkrétní searcher sestaví Solr dotaz, aplikuje společné parametry,
+   filtrační parametry a entitní konfiguraci.
+5. Výsledek se vrací jako Solr JSON response. Při chybě se vrací JSON s
+   položkou `error`.
 
-## Podporovane hodnoty `entity`
+## Podporované hodnoty `entity`
 
-`QUERY` technicky podporuje entity registrovane v `SearchUtils.getSearcher`:
+`QUERY` technicky podporuje entity registrované v `SearchUtils.getSearcher`:
 
 | Hodnota `entity` | Searcher |
 | --- | --- |
@@ -50,102 +50,102 @@ Servlet vraci JSON (`application/json;charset=UTF-8`). Nazev akce je bran z
 | `komponenta` | `KomponentaSearcher` |
 | `vyskovy_bod` | `VyskovyBodSearcher` |
 
-Poznamka: `server_config.json` obsahuje konfiguraci `fields.archeologicky_zaznam`,
-ale tato hodnota neni v soucasne implementaci `SearchUtils.getSearcher` primo
-registrovana jako `entity` pro akci `QUERY`.
+Poznámka: `server_config.json` obsahuje konfiguraci `fields.archeologicky_zaznam`,
+ale tato hodnota není v současné implementaci `SearchUtils.getSearcher` přímo
+registrována jako `entity` pro akci `QUERY`.
 
-## Ridici URL parametry
+## Řídicí URL parametry
 
-| Parametr | Vychozi hodnota | Popis |
+| Parametr | Výchozí hodnota | Popis |
 | --- | --- | --- |
-| `entity` | povinny | Typ entity pro vyber searcheru. |
-| `q` | `*:*` | Hlavni fulltextovy Solr dotaz. Pro prihlasene uzivatele s vyssi pristupnosti se rozsiruje o hledani v `text_all_D` pro jejich organizaci. |
-| `rows` | `defaultRows` z klientske konfigurace | Pocet zaznamu na stranku. Ignoruje se pri `mapa=true`, kde se pouzije `mapOptions.docsForMarker`. |
-| `page` | `0` | Cislo stranky od nuly. Start se pocita jako `page * rows`. |
-| `sort` | prvni vhodny zaznam z `sorts` | Solr sort vyraz, napr. `datestamp desc`. |
-| `mapa` | `false` | Rezim mapy; meni pocet a pole vracenych dokumentu podle konkretniho searcheru. |
-| `vyber` | - | Prostorovy filtr ve formatu `minLat,minLon,maxLat,maxLon`. |
-| `loc_rpt` | - | Prostorovy filtr ve formatu `minLat,minLon,maxLat,maxLon`; pouziva se i pro heatmapu. |
-| `inFavorites` | - | Omezi vysledky na oblibene zaznamy aktualniho uzivatele. |
-| `inMuseion` | - | Omezi vysledky na zaznamy napojene na Museion. |
-| `noFacets` | `false` | Vypne facetovani. |
-| `onlyFacets` | `false` | Nastavi `rows=0`, vraci pouze facet/statisticke informace. |
+| `entity` | povinný | Typ entity pro výběr searcheru. |
+| `q` | `*:*` | Hlavní fulltextový Solr dotaz. Pro přihlášené uživatele s vyšší přístupností se rozšiřuje o hledání v `text_all_D` pro jejich organizaci. |
+| `rows` | `defaultRows` z klientské konfigurace | Počet záznamů na stránku. Ignoruje se při `mapa=true`, kde se použije `mapOptions.docsForMarker`. |
+| `page` | `0` | Číslo stránky od nuly. Start se počítá jako `page * rows`. |
+| `sort` | první vhodný záznam z `sorts` | Solr sort výraz, např. `datestamp desc`. |
+| `mapa` | `false` | Režim mapy; mění počet a pole vrácených dokumentů podle konkrétního searcheru. |
+| `vyber` | - | Prostorový filtr ve formátu `minLat,minLon,maxLat,maxLon`. |
+| `loc_rpt` | - | Prostorový filtr ve formátu `minLat,minLon,maxLat,maxLon`; používá se i pro heatmapu. |
+| `inFavorites` | - | Omezí výsledky na oblíbené záznamy aktuálního uživatele. |
+| `inMuseion` | - | Omezí výsledky na záznamy napojené na Museion. |
+| `noFacets` | `false` | Vypne facetování. |
+| `onlyFacets` | `false` | Nastaví `rows=0`, vrací pouze facet/statistické informace. |
 | `noStats` | `false` | Vypne Solr stats. |
-| `isExport` | `false` | Nektere searchery podle nej upravuji pole pro exportni rezim. |
+| `isExport` | `false` | Některé searchery podle něj upravují pole pro exportní režim. |
 
-Boolean parametry se vyhodnocuji pres `Boolean.parseBoolean`, tedy aktivni
-hodnota je retezec `true`.
+Boolean parametry se vyhodnocují přes `Boolean.parseBoolean`, tedy aktivní
+hodnota je řetězec `true`.
 
-## Filtrovaci parametry
+## Filtrovací parametry
 
-Filtrovani se aplikuje v `SolrSearcher.addFilters`.
+Filtrování se aplikuje v `SolrSearcher.addFilters`.
 
-Parametr je zpracovan jako filtr, pokud splni alespon jednu podminku:
+Parametr je zpracován jako filtr, pokud splní alespoň jednu podmínku:
 
-- nazev zacina na `f_`;
-- nazev je uveden v klientcke konfiguraci `urlFields`;
-- nazev je uveden v klientcke konfiguraci `filterFields`;
-- nazev je datumove, ciselne nebo rokove pole z `filterFields`.
+- název začíná na `f_`;
+- název je uveden v klientské konfiguraci `urlFields`;
+- název je uveden v klientské konfiguraci `filterFields`;
+- název je datumové, číselné nebo rokové pole z `filterFields`.
 
-Hodnoty je mozne zadat opakovanim parametru:
+Hodnoty je možné zadat opakováním parametru:
 
 ```text
 /search/query?entity=dokument&f_obdobi=HES-000001&f_obdobi=HES-000002
 ```
 
-U facetovych filtru se hodnota standardne cituje. Operatory lze pripojit za
-hodnotu pomoci dvojtecky:
+U facetových filtrů se hodnota standardně cituje. Operátory lze připojit za
+hodnotu pomocí dvojtečky:
 
-| Sufix | Vyklad |
+| Sufix | Výklad |
 | --- | --- |
-| `:or` | OR, vychozi chovani |
-| `:and` | povinna hodnota (`+`) |
+| `:or` | OR, výchozí chování |
+| `:and` | povinná hodnota (`+`) |
 | `:not` | negace (`-hodnota AND *`) |
 
-Priklad:
+Příklad:
 
 ```text
 /search/query?entity=dokument&f_obdobi=HES-000001:and&f_obdobi=HES-000002:not
 ```
 
-Textova pole z `filterFields` se skladaji bez lokalniho `{!tag=...}` a u
-polozek uvedenych v `server_config.json` v `securedFilters` se doplni suffix
-pristupnosti (`_A`, `_B`, `_C`, `_D`).
+Textová pole z `filterFields` se skládají bez lokálního `{!tag=...}` a u
+položek uvedených v `server_config.json` v `securedFilters` se doplní suffix
+přístupnosti (`_A`, `_B`, `_C`, `_D`).
 
-## Specialni typy filtru
+## Speciální typy filtrů
 
-| Typ | Format hodnoty | Priklad |
+| Typ | Formát hodnoty | Příklad |
 | --- | --- | --- |
-| Rok/cislo | `od,do`; prazdny zacatek znamena `*` | `dokument_rok_vzniku=1990,2000` |
-| Datum | `YYYY-MM-DD,YYYY-MM-DD`; `null` znamena otevreny interval | `projekt_datum_zahajeni=2020-01-01,null` |
+| Rok/číslo | `od,do`; prázdný začátek znamená `*` | `dokument_rok_vzniku=1990,2000` |
+| Datum | `YYYY-MM-DD,YYYY-MM-DD`; `null` znamená otevřený interval | `projekt_datum_zahajeni=2020-01-01,null` |
 | `obdobi_poradi` | `od,do` | `obdobi_poradi=100,200` |
 | Prostor | `minLat,minLon,maxLat,maxLon` | `loc_rpt=48.5,12.3,51.0,18.8` |
 
-## Parametry odvozene z konfigurace
+## Parametry odvozené z konfigurace
 
-### Serverova konfigurace
+### Serverová konfigurace
 
-Serverova konfigurace je v:
+Serverová konfigurace je v:
 
 ```text
 src/main/resources/cz/inovatika/arup/digiarchiv/web4/server_config.json
 ```
 
-Pro akci `QUERY` jsou dulezite hlavne:
+Pro akci `QUERY` jsou důležité hlavně:
 
-- `fields.common` - spolecna pole vracena u entit;
-- `fields.<entity>.header` a `fields.<entity>.detail` - pole vracena searchery;
-- `fields.<entity>.facets` - facetova pole a jejich mapovani;
-- `fields.<entity>.full_text` - pole vstupujici do fulltextoveho indexu;
-- `securedFacets` - facety se suffixem pristupnosti;
-- `securedFilters` - filtry se suffixem pristupnosti.
+- `fields.common` - společná pole vrácená u entit;
+- `fields.<entity>.header` a `fields.<entity>.detail` - pole vrácená searchery;
+- `fields.<entity>.facets` - facetová pole a jejich mapování;
+- `fields.<entity>.full_text` - pole vstupující do fulltextového indexu;
+- `securedFacets` - facety se suffixem přístupnosti;
+- `securedFilters` - filtry se suffixem přístupnosti.
 
-Facetovy alias je cast pred dvojteckou. Napriklad konfigurace
-`f_autor:dokument_autor` znamena URL parametr `f_autor`.
+Facetový alias je část před dvojtečkou. Například konfigurace
+`f_autor:dokument_autor` znamená URL parametr `f_autor`.
 
-Facetove parametry podle `server_config.json`:
+Facetové parametry podle `server_config.json`:
 
-| Konfiguracni entita | Parametry |
+| Konfigurační entita | Parametry |
 | --- | --- |
 | `dokument` | `f_pozorovatel`, `f_let_letiste_start`, `f_let_letiste_cil`, `f_let_pocasi`, `f_let_organizace`, `f_let_dohlednost`, `let_letiste_start`, `let_letiste_cil`, `let_pocasi`, `let_organizace`, `let_dohlednost`, `f_zachovalost`, `f_autor`, `f_organizace`, `f_typ_dokumentu_posudek`, `f_typ_dokumentu`, `f_jazyk_dokumentu`, `f_rada`, `f_ulozeni_originalu`, `f_material_dokumentu`, `f_obdobi`, `f_areal`, `f_aktivita`, `f_typ_nalezu`, `f_druh_nalezu`, `f_kategorie`, `f_specifikace`, `f_format`, `f_tvar`, `f_zeme`, `f_osoby`, `f_mimetype` |
 | `archeologicky_zaznam` | `f_dj_typ`, `f_obdobi`, `f_areal`, `f_aktivita`, `f_typ_nalezu`, `f_druh_nalezu`, `f_kategorie`, `f_specifikace`, `f_ez_typ`, `f_ez_autor`, `f_ez_casopis`, `f_adb_typ_sondy`, `f_adb_podnet`, `adb_vyskovy_bod_typ`, `f_pian_presnost`, `f_pian_typ`, `f_pian_zm10` |
@@ -155,13 +155,13 @@ Facetove parametry podle `server_config.json`:
 | `samostatny_nalez` | `f_organizace`, `f_okres`, `f_katastr`, `f_obdobi`, `f_druh_nalezu`, `f_kategorie`, `f_specifikace`, `f_nalezce`, `f_nalezove_okolnosti`, `f_mimetype` |
 | `komponenta` | `f_obdobi`, `f_areal`, `f_aktivita`, `f_typ_nalezu`, `f_druh_nalezu`, `f_kategorie`, `f_specifikace`, `f_kraj`, `f_okres`, `f_katastr`, `f_vedouci`, `f_organizace`, `f_typ_vyzkumu`, `f_typ_lokality`, `f_druh_lokality`, `dokument_kategorie_dokumentu`, `f_typ_dokumentu`, `f_rada`, `f_tvar`, `az_chranene_udaje`, `dokument_extra_data`, `f_dj_typ`, `f_adb_typ_sondy`, `f_adb_podnet`, `adb_vyskovy_bod_typ` |
 
-Zabezpecene facety:
+Zabezpečené facety:
 
 ```text
 f_katastr, adb_vyskovy_bod_typ, f_pian_zm10
 ```
 
-Zabezpecene filtry:
+Zabezpečené filtry:
 
 ```text
 projekt_chu_lokalizace, projekt_chranene_udaje.hlavni_katastr,
@@ -175,13 +175,13 @@ f_katastr, adb_vyskovy_bod_typ, akce_chranene_udaje_souhrn_upresneni,
 lokalita_popis, lokalita_poznamka, samostatny_nalez_lokalizace
 ```
 
-### Klientska konfigurace sloucena za behu
+### Klientská konfigurace sloučená za běhu
 
-`Options` nacita vychozi klientskou konfiguraci z `assets/config.json` a muze ji
-sloucit s externim `CONFIG_DIR/config.json`. Proto jsou pro URL filtry dulezite
-i polozky `urlFields` a `filterFields`.
+`Options` načítá výchozí klientskou konfiguraci z `assets/config.json` a může ji
+sloučit s externím `CONFIG_DIR/config.json`. Proto jsou pro URL filtry důležité
+i položky `urlFields` a `filterFields`.
 
-Vychozi `urlFields`:
+Výchozí `urlFields`:
 
 ```text
 f_organizace, dokument_rok_vzniku, f_okres, f_katastr, f_obdobi, f_areal,
@@ -197,37 +197,37 @@ f_typ_lokality, f_typ_projektu, inv_cislo,
 samostatny_nalez_predano_organizace, predmet_kategorie
 ```
 
-Vychozi `filterFields` jsou textova, boolean, datumova, ciselna a rokova pole
-pro rozsirene hledani. Aktualni uplny seznam je v
+Výchozí `filterFields` jsou textová, boolean, datumová, číselná a roková pole
+pro rozšířené hledání. Aktuální úplný seznam je v
 `src/main/ng/src/assets/config.json`.
 
-## Priklady
+## Příklady
 
-Zakladni fulltext v dokumentech:
+Základní fulltext v dokumentech:
 
 ```text
 /search/query?entity=dokument&q=keramika
 ```
 
-Dokumenty podle obdobi a okresu:
+Dokumenty podle období a okresu:
 
 ```text
 /search/query?entity=dokument&f_obdobi=HES-000001&f_okres=CZ0201
 ```
 
-Projekty podle roku zahajeni:
+Projekty podle roku zahájení:
 
 ```text
 /search/query?entity=projekt&projekt_datum_zahajeni=2020-01-01,2020-12-31
 ```
 
-Pouze facety pro samostatne nalezy:
+Pouze facety pro samostatné nálezy:
 
 ```text
 /search/query?entity=samostatny_nalez&onlyFacets=true
 ```
 
-Mapovy dotaz v rozsahu:
+Mapový dotaz v rozsahu:
 
 ```text
 /search/query?entity=akce&mapa=true&loc_rpt=48.5,12.3,51.0,18.8
