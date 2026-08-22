@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.json.JSONArray;
@@ -63,7 +63,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
 
                 // SolrSearcher.addChildField(client, doc, "dokument_cast_ident_cely", "dokument", dfs);
             } catch (SolrServerException | IOException ex) {
-                Logger.getLogger(DokumentCastSearcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DokumentCastSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
 
         }

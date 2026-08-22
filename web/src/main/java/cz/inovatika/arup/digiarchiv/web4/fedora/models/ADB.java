@@ -205,7 +205,7 @@ class ADBChraneneUdaje {
                     vb.geom_gml = FedoraModel.getAsXml(vb.geom_gml);
                     vbdoc.setField("vyskovy_bod_geom_gml", vb.geom_gml); 
                 } catch (JsonProcessingException ex) {
-                    Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
                 }
     
             }
@@ -213,7 +213,7 @@ class ADBChraneneUdaje {
                 IndexUtils.addAndCommit("entities", idocs);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
         }
         IndexUtils.setSecuredJSONField(idoc, "adb_chranene_udaje", this);
     }

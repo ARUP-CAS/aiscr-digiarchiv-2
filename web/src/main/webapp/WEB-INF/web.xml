@@ -28,6 +28,7 @@
     <servlet-mapping>
         <servlet-name>HandleServlet</servlet-name>
         <url-pattern>/id/*</url-pattern>
+        <url-pattern>/map/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>StaticServlet</servlet-name>
@@ -41,7 +42,8 @@
         <url-pattern>/id2/*</url-pattern>
         <url-pattern>/registrace</url-pattern>
         <url-pattern>/results/*</url-pattern>
-        <url-pattern>/map/*</url-pattern>
+        <url-pattern>/map2/*</url-pattern>
+        <url-pattern>/museion/*</url-pattern>
         <url-pattern>/print/*</url-pattern>
         <url-pattern>/stats</url-pattern>
         <url-pattern>/favorites</url-pattern>

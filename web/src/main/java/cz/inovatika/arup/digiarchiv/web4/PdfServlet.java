@@ -61,7 +61,7 @@ public class PdfServlet extends HttpServlet {
             }
           
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           emptyImg(response, out);
         }
       } else {

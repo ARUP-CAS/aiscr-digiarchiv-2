@@ -23,8 +23,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.request.SolrQuery;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -90,7 +90,7 @@ public class ImageServlet extends HttpServlet {
     }
 
     private static JSONObject getDocument(String id) throws Exception {
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*") 
                     .addSort("datestamp", SolrQuery.ORDER.desc)
                     .setFields("entity,soubor:[json]")
@@ -117,7 +117,7 @@ public class ImageServlet extends HttpServlet {
         return null;
     }
 
-    private static void writeImg(HttpServletResponse response, String id, String imgSize, ServletContext ctx) throws Exception {
+    private static void writeImg(HttpServletResponse response, String id, String imgSize, String dist, ServletContext ctx) throws Exception {
 
         SolrQuery query = new SolrQuery();
         query.setQuery("id:\"" + id + "\"");
@@ -135,6 +135,8 @@ public class ImageServlet extends HttpServlet {
         if (url.contains("record")) {
             url = url.substring(url.indexOf("record"));
         }
+        
+        
         
         InputStream is = FedoraUtils.requestInputStream(url); 
 
@@ -172,10 +174,10 @@ public class ImageServlet extends HttpServlet {
                 String id = request.getParameter("id");
                 if (id != null && !id.equals("")) {
                     try {
-                        writeImg(response, id, "thumb", ctx);
+                        writeImg(response, id, "thumb", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, "Error getting thumb from fedora"); 
-                        LOGGER.log(Level.SEVERE, null, ex);    
+                        LOGGER.log(Level.SEVERE, "", ex);    
                         emptyImg(response, ctx);
                     }
                 } else {
@@ -191,9 +193,9 @@ public class ImageServlet extends HttpServlet {
                 String id = request.getParameter("id"); 
                 if (id != null && !id.equals("")) {
                     try {
-                        writeImg(response, id, "thumb-large", ctx);
+                        writeImg(response, id, "thumb-large", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.SEVERE, "", ex);
                         emptyImg(response, ctx);
                     }
                 } else {
@@ -212,8 +214,9 @@ public class ImageServlet extends HttpServlet {
                     return;
                 }
                 String id = request.getParameter("id");
+                String dist = request.getParameter("dist");
                 if (id != null && !id.equals("")) {
-                        File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR ));
+                        File f = File.createTempFile("img-", "-"+dist.replace("/", ""), new File(InitServlet.TEMP_DIR ));
                     try {
 
                         JSONObject doc = getDocument(id);
@@ -222,17 +225,27 @@ public class ImageServlet extends HttpServlet {
                         }
 
                         String mime = doc.getString("mimetype");
+                        String filename = doc.getString("nazev");
+                        JSONArray distribuce = doc.getJSONArray("distribuce");
+                        for (int i =0 ; i< distribuce.length(); i++) {
+                          JSONObject d = distribuce.getJSONObject(i);
+                          if (dist.equals(d.optString("path"))) {
+                            mime = d.optString("mimetype");
+                            filename = d.optString("filename");
+                          }
+                        }
                         if (mime != null) {
                             response.setContentType(mime);
                         } else {
                             response.setContentType("image/jpeg");
                         }
-                        response.setHeader("Content-Disposition", "filename=" + doc.getString("nazev"));
+                        response.setHeader("Content-Disposition", "filename=" + filename);
                         
-                        String url = doc.getString("path") + "/orig";
+                        String url = doc.getString("path") + "/" + dist;
                         if ( url.contains("record")) {
                             url = url.substring(url.indexOf("record"));
                         }
+                        
                         InputStream is = FedoraUtils.requestInputStream(url);
                         FileUtils.copyInputStreamToFile(is, f);
                         LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
@@ -243,7 +256,7 @@ public class ImageServlet extends HttpServlet {
                         is.close();
 
                     } catch (Exception ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.SEVERE, "", ex);
                         emptyImg(response, ctx);
                     } finally {
                         f.delete(); 

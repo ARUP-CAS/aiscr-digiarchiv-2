@@ -65,6 +65,7 @@
    <field name="soubor_nazev" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_id" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_mimetype" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="soubor_distri" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <!-- Dokument fields -->
    <field name="dokument_let" type="string_big" indexed="false" stored="true" multiValued="false" />

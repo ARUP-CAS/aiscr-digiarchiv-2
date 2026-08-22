@@ -18,11 +18,11 @@ import java.io.InputStream;
 import java.util.Collection;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.InputStreamResponseParser;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -37,11 +37,11 @@ import org.json.JSONObject;
  * @author alberto
  */
 public class SolrSearcher {
-
+  
   public static final Logger LOGGER = Logger.getLogger(SolrSearcher.class.getName());
-
+  
   public static String[] prSufixAll = new String[]{"A", "B", "C", "D"};
-
+  
   public static List<String> getSufixesByLevel(String pr) {
     List<String> prSufix = new ArrayList<>();
     if ("A".compareToIgnoreCase(pr) >= 0) {
@@ -58,7 +58,7 @@ public class SolrSearcher {
     }
     return prSufix;
   }
-
+  
   public static void addLocationParams(HttpServletRequest request, SolrQuery query) {
     // query.setRows(200);
     String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -66,19 +66,19 @@ public class SolrSearcher {
       pristupnost = "D";
     }
     String locField = "loc_rpt_" + pristupnost;
-
+    
     if (request.getParameter("vyber") != null) {
       String[] coords = request.getParameter("vyber").split(",");
       String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
       String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
-
+      
       double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
       query.setParam("facet.heatmap.geom", geom)
               .setParam("facet.heatmap.distErr", dist + "")
               .addFilterQuery(fq);
     }
     if (request.getParameter("loc_rpt") != null) {
-
+      
       String[] coords = request.getParameter("loc_rpt").split(",");
       String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
 
@@ -88,7 +88,7 @@ public class SolrSearcher {
       double c3 = Math.min(18.80, Double.parseDouble(coords[3]));
       double c2 = Math.min(51.0, Double.parseDouble(coords[2]));
       String geom = "[" + c1 + " " + c0 + " TO " + c3 + " " + c2 + "]";
-
+      
       double dist = Math.max((c3 - c1) * .005, .02);
       query.setParam("facet.heatmap.geom", geom)
               .setParam("facet.heatmap.distErr", dist + "")
@@ -100,12 +100,12 @@ public class SolrSearcher {
       String[] coords = new String[]{"48.50", "12.30", "51.0", "18.80"};
       String geom = "[" + coords[1] + " " + coords[0] + " TO " + coords[3] + " " + coords[2] + "]";
       String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
-
+      
       double dist = Math.max((Float.parseFloat(coords[3]) - Float.parseFloat(coords[1])) * .005, .02);
       query.setParam("facet.heatmap.geom", geom)
               .setParam("facet.heatmap.distErr", dist + "")
               .addFilterQuery(fq);
-
+      
     }
 
     //query.setParam("facet.heatmap.distErr", "0.04");
@@ -130,22 +130,26 @@ public class SolrSearcher {
     JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     List<String> fs = new ArrayList();
     for (int i = 0; i < exFields.length(); i++) {
+      
       String f = exFields.getJSONObject(i).getString("name");
-      if (f.contains(".")) {
+      if (exFields.getJSONObject(i).has("field")) {
+        f = exFields.getJSONObject(i).getString("field");
+      } else if (f.contains(".")) {
         f = f.split("\\.")[0] + ":[json]";
       }
       fs.add(f);
     }
+    fs.add("pristupnost");
     query.setFields(fs.toArray(new String[0]));
     query.set("stats", false);
     query.set("facet", false);
     //query.addSort(query.getSorts().getFirst());
-    query.setParam("sort" , query.getSortField() + ",ident_cely asc");
-    query.set(CursorMarkParams.CURSOR_MARK_PARAM, CursorMarkParams.CURSOR_MARK_START); 
+    query.setParam("sort", query.getSortField() + ",ident_cely asc");
+    //query.set(CursorMarkParams.CURSOR_MARK_PARAM, CursorMarkParams.CURSOR_MARK_START); 
   }
-
+  
   public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {
-
+    
     query.addFilterQuery("{!tag=entityF}entity:" + entity);
     String q = "*:*";
     if (request.getParameter("q") != null) {
@@ -155,8 +159,7 @@ public class SolrSearcher {
 //        q = "\"" + q + "\"";
 //      }
     }
-    query.setRequestHandler("/search");
-
+    
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
       pristupnost = "D";
@@ -167,12 +170,12 @@ public class SolrSearcher {
       q += " OR (text_all_D:(" + q + ") AND organizace:\"" + organizace + "\")";
     }
     query.setQuery(q);
-
+    
     int rows = Options.getInstance().getClientConf().getInt("defaultRows");
     if (Boolean.parseBoolean(request.getParameter("mapa"))) {
       // rows = Math.max(Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200), Integer.parseInt(request.getParameter("rows")));   
       rows = Options.getInstance().getClientConf().getJSONObject("mapOptions").optInt("docsForMarker", 200);
-
+      
     } else if (request.getParameter("rows") != null) {
       rows = Integer.parseInt(request.getParameter("rows"));
     }
@@ -181,7 +184,7 @@ public class SolrSearcher {
       int start = (Integer.parseInt(request.getParameter("page"))) * rows;
       query.setStart(start);
     }
-
+    
     List<Object> facetFields = Options.getInstance().getJSONArray("securedFacets").toList();
     for (Object f : facetFields) {
       if (!((String) f).contains("okres") && !((String) f).equals("pristupnost")) {
@@ -189,16 +192,16 @@ public class SolrSearcher {
         query.addFacetField("{!key=" + f + "}" + f + "_" + pristupnost);
       }
     }
-
+    
     JSONArray commonFacets = Options.getInstance().getClientConf().getJSONArray("commonFacets");
     for (Object s : commonFacets) {
       JSONObject cf = (JSONObject) s;
       if (request.getParameter(cf.getString("name")) != null) {
         query.addFilterQuery(cf.getString("value"));
       }
-
+      
     }
-
+    
     if (request.getParameter("sort") != null) {
       query.setParam("sort", request.getParameter("sort"));
     } else {
@@ -213,11 +216,11 @@ public class SolrSearcher {
           query.setParam("sort", sort.getString("field"));
           break;
         }
-
+        
       }
-
+      
     }
-
+    
     if (request.getParameter("inFavorites") != null) {
       String username = LoginServlet.userId(request);
       SolrQuery favQ = new SolrQuery("username:" + username).setRows(100);
@@ -234,7 +237,7 @@ public class SolrSearcher {
         query.addFilterQuery("ident_cely:emtpyrecord");
       }
     }
-
+    
     if (request.getParameter("inMuseion") != null) {
       MuseionClient m = new MuseionClient();
       // String fq = m.predmetyStatistikaAsFilter();
@@ -242,28 +245,28 @@ public class SolrSearcher {
       query.addFilterQuery(fq);
     }
     query.set("facet", "true");
-
+    
     query.add("stats.field", "{!key=lat}lat_" + pristupnost);
     query.add("stats.field", "{!key=lng}lng_" + pristupnost);
     query.add("echoParams", "all");
-
+    
     if (Boolean.parseBoolean(request.getParameter("noFacets"))) {
       query.setFacet(false);
     }
-
+    
     if (Boolean.parseBoolean(request.getParameter("onlyFacets"))) {
       query.setRows(0);
     }
-
+    
     if (Boolean.parseBoolean(request.getParameter("noStats"))) {
       query.set("stats", "false");
     }
 
     //LOGGER.log(Level.INFO, "query: {0}", query );
   }
-
+  
   static Map<String, String> ops = Map.of("or", "", "and", "+", "not", "-");
-
+  
   private static void addFilterNoQuotes(SolrQuery query, String field, String[] values, String pristupnost) {
     String fq = field;
     if (Options.getInstance().getJSONArray("securedFilters").toList().contains(field)) {
@@ -298,7 +301,7 @@ public class SolrSearcher {
     query.addFilterQuery(fq);
     // query.addFilterQuery("{!tag=" + field + "F}" + field + ":(" + String.join(" OR ", values) + ")");
   }
-
+  
   private static void addFilter(SolrQuery query, String field, String[] values) {
     String fq = "{!tag=" + field + "F}" + field + ":(";
     for (int i = 0; i < values.length; i++) {
@@ -317,9 +320,9 @@ public class SolrSearcher {
     fq += ")";
     // query.addFilterQuery("{!tag=" + field + "F}" + field + ":(" + String.join(" OR ", values) + ")");
     query.addFilterQuery(fq);
-
+    
   }
-
+  
   private static String getSearchField(String field) throws IOException {
     List<Object> advFields = Options.getInstance().getClientConf().getJSONArray("advancedFields").toList();
     for (Object s : advFields) {
@@ -330,7 +333,7 @@ public class SolrSearcher {
     }
     return null;
   }
-
+  
   public static void addFilters(HttpServletRequest request, SolrQuery query, String pristupnost) throws IOException {
     List<Object> fields = Options.getInstance().getClientConf().getJSONArray("urlFields").toList();
     JSONArray filterFieldsObj = Options.getInstance().getClientConf().getJSONArray("filterFields");
@@ -349,14 +352,14 @@ public class SolrSearcher {
         dateFacets.add(field);
       }
     }
-
+    
     for (String field : request.getParameterMap().keySet()) {
       if ((field.startsWith("f_")
               || filterFields.contains(field)
               || fields.contains(field)
               || numberFacets.contains(field)
               || dateFacets.contains(field)) && request.getParameter(field) != null) {
-
+        
         if (field.equals("obdobi_poradi")) {
           String[] parts = request.getParameter(field).split(",");
           String fq = "obdobi_poradi:[" + parts[0] + " TO " + parts[1] + "]";
@@ -405,12 +408,12 @@ public class SolrSearcher {
         } else {
           addFilter(query, field, request.getParameterValues(field));
         }
-
+        
       }
     }
-
+    
     String locField = "loc_rpt_" + pristupnost;
-
+    
     if (request.getParameter("vyber") != null) {
       String[] coords = request.getParameter("vyber").split(",");
       String fq = locField + ":[\"" + coords[1] + " " + coords[0] + "\" TO \"" + coords[3] + " " + coords[2] + "\"]";
@@ -438,7 +441,7 @@ public class SolrSearcher {
         for (int j = lp.length() - 1; j > -1; j--) {
           if (lp.getString(j).compareTo(pristupnost) > 0) {
             removeVal(doc, "lokalita_ident_cely", j);
-
+            
             removeVal(doc, "lokalita_poznamka", j);
             removeVal(doc, "lokalita_katastr", j);
             removeVal(doc, "lokalita_typ_lokality", j);
@@ -448,11 +451,11 @@ public class SolrSearcher {
             removeVal(doc, "lokalita_okres", j);
             removeVal(doc, "lokalita_druh", j);
             removeVal(doc, "lokalita_popis", j);
-
+            
           }
         }
       }
-
+      
       if (doc.has("akce_pristupnost")) {
         JSONArray lp = doc.getJSONArray("akce_pristupnost");
         for (int j = lp.length() - 1; j > -1; j--) {
@@ -474,42 +477,42 @@ public class SolrSearcher {
             removeVal(doc, "akce_vedouci_akce_ostatni", j);
             removeVal(doc, "akce_organizace_ostatni", j);
             removeVal(doc, "akce_stav", j);
-
+            
           }
         }
       }
-
+      
     }
   }
-
+  
   public static void removeVal(JSONObject doc, String key, int j) {
     if (doc.optJSONArray(key) != null) {
       doc.getJSONArray(key).remove(j);
     }
   }
-
+  
   private static void initNalezKategorie() {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       nalezKategorie = new HashMap<>();
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("nazev_heslare:objekt_druh OR nazev_heslare:predmet_druh")
               .setRows(100000)
               .setFields("ident_cely,hierarchie_vyse,hierarchie_nize");
-      JSONObject jo = json(client, "heslar", query);
+      JSONObject jo = jsonSelect(client, "heslar", query);
       JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
       for (int i = 0; i < ja.length(); i++) {
         JSONObject doc = ja.getJSONObject(i);
         if (doc.has("hierarchie_vyse")) {
           nalezKategorie.put(doc.getString("ident_cely"), doc.getJSONArray("hierarchie_vyse").getString(0));
         }
-
+        
       }
-
+      
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
-
+  
   public static synchronized String getNalezKategorie(String id) {
     if (nalezKategorie == null) {
       initNalezKategorie();
@@ -518,7 +521,7 @@ public class SolrSearcher {
   }
 
 //    public static String getPristupnostBySoubor(String id, String field) {
-//        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+//        try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 //
 //            SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
 //            QueryResponse rsp = client.query("soubor", query);
@@ -539,7 +542,7 @@ public class SolrSearcher {
 //                }
 //            }
 //        } catch (IOException | SolrServerException ex) {
-//            LOGGER.log(Level.SEVERE, null, ex);
+//            LOGGER.log(Level.SEVERE, "", ex);
 //            return null;
 //        }
 //    }
@@ -547,9 +550,9 @@ public class SolrSearcher {
   private static Map<String, JSONObject> okresy = null;
   private static Map<String, JSONObject> katastry = null;
   private static Map<String, String> nalezKategorie = null;
-
-  private static void initKraje() {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+  
+  private static void initKraje() { 
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       kraje = new HashMap<>();
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("entity:ruian_kraj")
@@ -561,22 +564,22 @@ public class SolrSearcher {
         JSONObject doc = ja.getJSONObject(i);
         kraje.put(doc.getString("kod"), doc);
       }
-
+      
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
-
+  
   public static JSONObject getKrajRadaBykod(String kod) {
-
+    
     if (kraje == null) {
       initKraje();
     }
     return kraje.get(kod);
   }
-
+  
   private static void initOkresy() {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       okresy = new HashMap<>();
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("entity:ruian_okres")
@@ -588,15 +591,15 @@ public class SolrSearcher {
         JSONObject doc = ja.getJSONObject(i);
         okresy.put(doc.getString("kod"), doc);
       }
-
+      
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
-
+  
   public static String getOkresNazev(String ruian) {
-
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("kod:\"" + ruian + "\"")
               // .addFilterQuery("kod:\"" + ruian + "\"")
@@ -609,15 +612,15 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
-
+    
   }
-
+  
   public static JSONObject getKrajNazevBykod(String kod) {
-
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("kod:\"" + kod + "\"")
               .setRows(1).setFields("nazev,kod");
@@ -628,21 +631,21 @@ public class SolrSearcher {
         return null;
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
-
+  
   public static JSONObject getOkresByKod(String ruianOkresu) {
     if (okresy == null) {
       initOkresy();
     }
     return okresy.get(ruianOkresu);
   }
-
+  
   public static JSONObject getKrajByOkresSolr(String ruianOkresu) {
-
-    try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("kod:\"" + ruianOkresu + "\"")
               // .addFilterQuery("{!join fromIndex=ruian to=kod from=kraj}kod:\"" + ruianOkresu + "\"")
@@ -654,14 +657,14 @@ public class SolrSearcher {
         return null;
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
-
+    
   }
-
+  
   private static void initKatastry() {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       katastry = new HashMap<>();
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("entity:ruian_katastr")
@@ -673,21 +676,21 @@ public class SolrSearcher {
         JSONObject doc = ja.getJSONObject(i);
         katastry.put(doc.getString("kod"), doc);
       }
-
+      
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
   }
-
+  
   public static synchronized JSONObject getOkresNazevByKatastr(String ruian) {
     if (katastry == null) {
       initKatastry();
     }
     return katastry.get(ruian);
   }
-
+  
   public static String getOkresByKatastrOld(String ruian) {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("kod:\"" + ruian + "\"")
               // .addFilterQuery("kod:\"" + ruian + "\"")
@@ -700,13 +703,13 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
-
+  
   public static String getOkresByKatastr2(String ruian) {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("{!join fromIndex=ruian to=kod from=okres}kod:\"" + ruian + "\"")
               // .addFilterQuery("kod:\"" + ruian + "\"")
@@ -719,13 +722,13 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
-
+  
   public static String getOrganizaceUzivatele(String ident_cely) {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
               .setRows(1).setFields("organizace");
@@ -737,40 +740,40 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
-
+  
   public static JSONObject getUIUzivatele(String ident_cely) {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
               .setRows(1).setFields("ui:[json]");
-      JSONObject jo = json(client, "uzivatel_ui", query);
+      JSONObject jo = jsonSelect(client, "uzivatel_ui", query);
       if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
         return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getJSONObject("ui");
       } else {
         return null;
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
-
+  
   public static JSONObject getThesauri() {
     JSONObject ret = new JSONObject();
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .setFields("id,ident_cely,razeni,nazev_heslare")
               .setRows(5000);
-
+      
       QueryRequest req = new QueryRequest(query);
       req.setResponseParser(new InputStreamResponseParser("json"));
       NamedList<Object> resp = client.request(req, "heslar");
       InputStream is = (InputStream) resp.get("stream");
-
+      
       JSONArray docs = new JSONObject(IOUtils.toString(is, "UTF-8"))
               .getJSONObject("response").getJSONArray("docs");
       // return (String) resp.get("response");
@@ -785,14 +788,14 @@ public class SolrSearcher {
         ret.put(doc.getString("ident_cely"), razeni);
       }
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       ret.put("error", ex);
     }
     return ret;
   }
-
+  
   public static JSONObject getOrganizace(String ident_cely) {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery("*")
               .addFilterQuery("ident_cely:\"" + ident_cely + "\"")
               .setRows(1);
@@ -804,13 +807,13 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return new JSONObject();
     }
   }
-
+  
   public static JSONObject getDokBySoubor(String id) {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
 //            SolrQuery query = new SolrQuery("*").addFilterQuery("soubor_id:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
 //            QueryResponse rsp = client.query("soubor", query);
@@ -830,32 +833,32 @@ public class SolrSearcher {
       }
 //            }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return null;
     }
   }
-
+  
   public static JSONObject json(SolrClient client, String core, SolrQuery query) throws SolrServerException, IOException {
-    query.setRequestHandler("/search");
     QueryRequest req = new QueryRequest(query);
-
+    req.setPath("/search");
+    
     req.setResponseParser(new InputStreamResponseParser("json"));
     NamedList<Object> resp = client.request(req, core);
     InputStream is = (InputStream) resp.get("stream");
     return new JSONObject(IOUtils.toString(is, "UTF-8"));
-
+    
   }
-
+  
   public static JSONObject jsonSelect(SolrClient client, String core, SolrQuery query) throws SolrServerException, IOException {
-    query.setRequestHandler("/select");
     QueryRequest req = new QueryRequest(query);
-
+    req.setPath("/select");
+    
     req.setResponseParser(new InputStreamResponseParser("json"));
     NamedList<Object> resp = client.request(req, core);
     InputStream is = (InputStream) resp.get("stream");
     return new JSONObject(IOUtils.toString(is, "UTF-8"));
   }
-
+  
   public static JSONObject getById(SolrClient client, String id, String fields, String filter, boolean onlySearchable) {
     try {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");
@@ -863,34 +866,52 @@ public class SolrSearcher {
         query.addFilterQuery(filter);
       }
       query.setFields(fields);
-      if (onlySearchable) {
-        query.setRequestHandler("/search");
-      }
-      JSONObject jo = SearchUtils.json(query, client, "entities");
+      JSONObject jo = SearchUtils.json(query, client, "entities", onlySearchable);
+      
       if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
         return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
       }
-
+      
     } catch (Exception ex) {
       LOGGER.log(Level.WARNING, "Error {0}", ex);
     }
     return null;
   }
-
+  
   public static JSONObject getById(SolrClient client, String id, String fields, boolean onlySearchable) {
-    return SolrSearcher.getById(client, id, fields, onlySearchable);
+    return SolrSearcher.getById(client, id, fields, null, onlySearchable);
   }
-
+  
   public static JSONObject getById(SolrClient client, String id, String fields) {
     return SolrSearcher.getById(client, id, fields, true);
   }
-
+  
+  public static String getEntityById(String id) {
+    
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
+              .setFields("entity")
+              .setRows(1)
+              .setFacet(false);
+      JSONObject jo = json(client, "entities", query);
+      if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
+        return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
+      } else {
+        return null;
+      }
+    } catch (IOException | SolrServerException ex) {
+      LOGGER.log(Level.SEVERE, "", ex);
+      return null;
+    }
+    
+  }
+  
   public static JSONObject getFullId(HttpServletRequest request, SolrClient client, boolean inHandle) {
-
+    
     String entity = request.getParameter("entity");
     SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
             .setFacet(false);
-
+    
     if (entity == null) {
       query.setFields("entity");
       JSONObject jo = SearchUtils.json(query, client, "entities", false);
@@ -909,7 +930,7 @@ public class SolrSearcher {
     } else {
       query.setFields("*");
     }
-
+    
     query.add("stats", "true");
     query.add("stats.field", "datum_zverejneni");
     query.add("stats.field", "samostatny_nalez_datum_nalezu");
@@ -919,7 +940,7 @@ public class SolrSearcher {
     query.add("stats.field", "let_datum");
     query.add("stats.field", "dokument_rok_vzniku");
     query.add("stats.field", "rok_vydani");
-
+    
     JSONObject jo = SearchUtils.json(query, client, "entities", false);
     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
       if (searcher != null) {
@@ -947,11 +968,10 @@ public class SolrSearcher {
     SolrSearcher.addMuseionAll(jo, client);
     return jo;
   }
-
+  
   public static boolean existsById(SolrClient client, String id) {
     try {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"");
-      query.setRequestHandler("/search");
       JSONObject jo = SearchUtils.json(query, client, "entities");
       return jo.getJSONObject("response").optInt("numFound", 0) > 0;
     } catch (Exception ex) {
@@ -959,7 +979,7 @@ public class SolrSearcher {
       return false;
     }
   }
-
+  
   public static void addChildField(SolrClient client, JSONObject doc, String idField, String newField, String queryFields, String filter) {
     if (doc.has(idField)) {
       Object obj = doc.get(idField);
@@ -980,11 +1000,11 @@ public class SolrSearcher {
       }
     }
   }
-
+  
   public static void addChildField(SolrClient client, JSONObject doc, String idField, String newField, String queryFields) {
     SolrSearcher.addChildField(client, doc, idField, newField, queryFields, null);
   }
-
+  
   public static void addChildFieldByEntity(SolrClient client, JSONObject doc, String idField, String queryFields) {
     if (doc.has(idField)) {
       Object obj = doc.get(idField);
@@ -1005,7 +1025,7 @@ public class SolrSearcher {
       }
     }
   }
-
+  
   public static void addFavorites(JSONObject jo, SolrClient client, HttpServletRequest request) {
     if (!jo.has("response")) {
       return;
@@ -1023,7 +1043,7 @@ public class SolrSearcher {
 
     }
   }
-
+  
   public static void addMuseionAll(JSONObject jo, SolrClient client) {
     if (!jo.has("response")) {
       return;
@@ -1034,25 +1054,25 @@ public class SolrSearcher {
       addInMuseion(client, doc);
     }
   }
-
+  
   public static void addInMuseion(SolrClient client, JSONObject doc) {
     String ident_cely = doc.getString("ident_cely");
     SolrQuery query = new SolrQuery("amcrId:\"" + ident_cely + "\"").setRows(1);
-    JSONObject jo = SearchUtils.json(query, client, "museion");
+    JSONObject jo = SearchUtils.json(query, client, "museion", false);
     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
       doc.put("inMuseion", true);
     }
   }
-
+  
   public static void addIsFavorite(SolrClient client, JSONObject doc, String username) {
     String ident_cely = doc.getString("ident_cely");
     SolrQuery query = new SolrQuery("uniqueid:" + username + "_" + ident_cely).setRows(1);
-    JSONObject jo = SearchUtils.json(query, client, "favorites");
+    JSONObject jo = SearchUtils.json(query, client, "favorites", false);
     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
       doc.put("isFav", true);
     }
   }
-
+  
   public static void addSecuredFieldFacets(String field, SolrInputDocument idoc, List<String> prSufix) {
     if (field.equals("loc_rpt")) {
       for (String sufix : prSufix) {
@@ -1089,25 +1109,25 @@ public class SolrSearcher {
         idoc.addField("f_specifikace_" + sufix, idoc.getFieldValues(field));
       }
     }
-
+    
     if (field.equals("lokalizace")) {
       for (String sufix : prSufix) {
         idoc.addField("f_lokalizace_" + sufix, idoc.getFieldValues(field));
       }
     }
-
+    
     if (field.equals("nazev")) {
       for (String sufix : prSufix) {
         idoc.addField("f_nazev_" + sufix, idoc.getFieldValues(field));
       }
     }
-
+    
     if (field.equals("popis")) {
       for (String sufix : prSufix) {
         idoc.addField("f_popis_" + sufix, idoc.getFieldValues(field));
       }
     }
-
+    
     if (field.equals("okres")) {
       for (String sufix : prSufix) {
         idoc.addField("f_okres_" + sufix, idoc.getFieldValues(field));
@@ -1148,15 +1168,15 @@ public class SolrSearcher {
         idoc.addField("f_" + field + "_" + sufix, idoc.getFieldValues(field));
       }
     }
-
+    
     if (field.equals("dok_jednotka_typ")) {
       for (String sufix : prSufix) {
         idoc.addField("f_dok_jednotka_typ_" + sufix, idoc.getFieldValues(field));
       }
     }
-
+    
   }
-
+  
   public static void addJSONFields(JSONObject doc, String prefix, SolrInputDocument idoc) {
     for (String s : doc.keySet()) {
       switch (s) {
@@ -1169,13 +1189,13 @@ public class SolrSearcher {
       }
     }
   }
-
+  
   public static void addFieldNonRepeat(SolrInputDocument idoc, String field, Object value) {
     if (idoc.getFieldValues(field) == null || !idoc.getFieldValues(field).contains(value)) {
       idoc.addField(field, value);
     }
   }
-
+  
   public static void addSecuredFieldNonRepeat(SolrInputDocument idoc, String field, Object value, String level) {
     List<String> prSufix = getSufixesByLevel(level);
     for (String sufix : prSufix) {
@@ -1185,7 +1205,7 @@ public class SolrSearcher {
       }
     }
   }
-
+  
   public static void addSecuredFieldNonRepeat(SolrInputDocument idoc, String field, Object value, List<String> prSufix) {
     for (String sufix : prSufix) {
       String f = field + "_" + sufix;
@@ -1194,7 +1214,7 @@ public class SolrSearcher {
       }
     }
   }
-
+  
   public static boolean isInteger(String s) {
     try {
       Integer.parseInt(s);
@@ -1203,7 +1223,7 @@ public class SolrSearcher {
       return false;
     }
   }
-
+  
   public static boolean isFloat(String s) {
     try {
       Float.valueOf(s);
@@ -1212,10 +1232,10 @@ public class SolrSearcher {
       return false;
     }
   }
-
+  
   public static Date getLastDatestamp() {
-    try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-
+    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      
       SolrQuery query = new SolrQuery("*")
               .setRows(1)
               .setSort("datestamp", SolrQuery.ORDER.desc)
@@ -1229,13 +1249,13 @@ public class SolrSearcher {
         return (Date) rsp.getResults().get(0).getFirstValue("datestamp");
       }
     } catch (IOException | SolrServerException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       Date d = new Date();
       d.setTime(0);
       return d;
     }
   }
-
+  
   public static JSONObject getMuseion(SolrClient client) {
     try {
 
@@ -1267,32 +1287,40 @@ public class SolrSearcher {
         JSONObject f = exFields.getJSONObject(i);
         String name = f.getString("name");
         if (name.contains(".") && doc.has(name.split("\\.")[0])) {
-          String val = readValuesByPath(name, doc.getJSONObject(name.split("\\.")[0]));
-          doc.put(f.getString("label"), val);
-        } 
+          Object o = doc.get(name.split("\\.")[0]);
+//          String val = readValuesByPath(name, o);
+//          doc.put(f.getString("label"), val);
+            
+          if (o instanceof JSONObject) {
+            String val = readValuesByPath(name, (JSONObject)o);
+            doc.put(f.getString("label"), val);
+          } else if (o instanceof JSONArray) {
+            String val = readValuesByPath(f.getString("path"), o);
+            doc.put(f.getString("label"), val);
+          }  
+        }
         //fs.add(f);
       }
     }
     
   }
   
-  public static String readValuesByPath(String path, JSONObject json) {
+  public static String readValuesByPath(String path, Object json) {
     String[] parts = path.split("\\.", 2);
-        try {
-            Object jpReturns = JsonPath.read(json.toString(), "$." + parts[1]);
-            if (jpReturns instanceof List) {
-                List<String> svals = (List<String>) jpReturns;
-                return String.join(", ", (String[])svals.toArray(new String[0]));
-            } else {
-              return (String)jpReturns;
-            }
-        } catch (Exception pnfex) {
-            LOGGER.log(Level.FINE, "No value for ", json);
-        }
-
+    try {
+      Object jpReturns = JsonPath.read(json.toString(), "$." + parts[1]);  
+      if (jpReturns instanceof List) {
+        List<String> svals = (List<String>) jpReturns;
+        return String.join(", ", (String[]) svals.toArray(new String[0]));
+      } else {
+        return (String) jpReturns;
+      }
+    } catch (Exception pnfex) {
+      LOGGER.log(Level.FINE, "No value for ", json);
+    }
     
     return "";
-   }
+  }
 
 //  public static void cleanRepeated(SolrInputDocument idoc) {
 //    for (String field : idoc.getFieldNames()) {

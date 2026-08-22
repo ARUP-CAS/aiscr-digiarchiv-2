@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4.museion;
 
+import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-@WebServlet(name = "MuseionServlet", urlPatterns = {"/museion/*"})
+@WebServlet(name = "MuseionServlet", urlPatterns = {"/mus/*"})
 public class MuseionServlet extends HttpServlet {
 
     public static final Logger LOGGER = Logger.getLogger(MuseionServlet.class.getName());
@@ -79,7 +80,22 @@ public class MuseionServlet extends HttpServlet {
                 JSONObject json = new JSONObject();
                 try {
                     MuseionClient m = new MuseionClient();
-                    json.put("predmetyDleAmcrId", m.predmetyDleAmcrId(req.getParameter("id"), req.getParameter("typ"))); 
+                    String id = req.getParameter("id");
+                    String typ = req.getParameter("typ");
+                    if (typ == null) {
+                      String entity = SolrSearcher.getEntityById(id);
+//museionTypes: { [entity: string]: string } = {
+//    projekt: 'P',
+//    akce: 'A',
+//    samostatny_nalez: 'N'
+//}
+                      switch(entity){
+                        case "projekt": typ = "P"; break;
+                        case "akce": typ = "A"; break;
+                        case "samostatny_nalez": typ = "N"; break;
+                      }
+                    }
+                    json.put("predmetyDleAmcrId", m.predmetyDleAmcrId(id, typ)); 
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }
@@ -106,18 +122,6 @@ public class MuseionServlet extends HttpServlet {
                 try {
                     MuseionClient m = new MuseionClient();
                     json.put("statistika", m.indexStatistika());  
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        RESET {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    MuseionClient.resetIds(); 
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }

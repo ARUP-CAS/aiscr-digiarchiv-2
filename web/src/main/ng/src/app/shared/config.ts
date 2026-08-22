@@ -14,6 +14,8 @@ export class Configuration {
   defaultLang: string;
   facets: string[];
   noPoradiFacets: {[key: string]: boolean};
+  showMuseion: boolean;
+  canIndex: boolean;
   // dateFacets: string[];
   // numberFacets: string[];
 
@@ -70,7 +72,7 @@ export class Configuration {
   selRows: number[];
   defaultRows: number;
   exportRowsLimit: number;
-  exportFields: {[entity: string]: {name: string, label?: string, heslar?: string, secured?: boolean, byPath?: boolean, map?: boolean, type: string}[]};
+  exportFields: {[entity: string]: {name: string, label?: string, translated?: boolean, secured?: boolean, byPath?: boolean, hidden?: boolean, map?: boolean, type: string}[]};
   urlFields: string[];
   filterFields : {field: string, type: string}[];
   entityIcons: {[entity: string]: string};

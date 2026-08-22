@@ -27,8 +27,8 @@ public class PredmetyDleAmcr {
  * 
  */
     
-    @JacksonXmlProperty(localName = "pristup")
-    public String pristup;
+//    @JacksonXmlProperty(localName = "pristup")
+//    public String pristup;
     
     @JacksonXmlProperty(localName = "organizaceId") 
     public String organizaceId;

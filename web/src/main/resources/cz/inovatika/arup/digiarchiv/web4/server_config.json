@@ -688,8 +688,10 @@
         "komponenta_obdobi:[json]",
         "komponenta_nalez_objekt:[json]",
         "komponenta_nalez_predmet:[json]",
+        "samostatny_nalez_geom_system",
         "samostatny_nalez_chranene_udaje:[json]",
         "dokument_extra_data:[json]",
+        "pian_id",
         "pian_ident_cely"
       ],
       
@@ -704,19 +706,14 @@
             "f_druh_nalezu:komponenta_nalez_objekt[*].druh.id",
             "f_druh_nalezu:komponenta_nalez_predmet.druh.id",
             "f_druh_nalezu:komponenta_nalez_predmet[*].druh.id",
-
-            "f_kategorie:komponenta_kategorie_nalezu",
-            "f_kategorie:komponenta_kategorie_nalezu",
-
+            "f_kategorie:komponenta_nalez_objekt.komponenta_kategorie_nalezu",
+            "f_kategorie:komponenta_nalez_predmet.komponenta_kategorie_nalezu",
             "f_specifikace:komponenta_nalez_objekt.specifikace.id",
             "f_specifikace:komponenta_nalez_objekt[*].specifikace.id",
             "f_specifikace:komponenta_nalez_predmet.specifikace.id",
             "f_specifikace:komponenta_nalez_predmet[*].specifikace.id" 
         ],
         "root":[
-            "f_kraj",
-            "f_okres",
-            "f_katastr",
             "f_vedouci", 
             "f_organizace",
             "f_organizace:dokument_organizace",
@@ -729,9 +726,30 @@
             "f_tvar:dokument_tvar.tvar.id", 
             "f_tvar:dokument_tvar[0].tvar.id",
             "az_chranene_udaje",
-            "dokument_extra_data"
+            "dokument_extra_data",
+            "lokalita_jistota"
          ],
         "parent":[
+            "f_kraj",
+            "f_okres",
+            "f_katastr",
+            "lng", "lat", "loc", "loc_rpt", 
+            "pian_ident_cely", "pian_id","f_pian_typ","f_pian_presnost", "f_pian_zm10", 
+            "az_chranene_udaje",
+            "dokument_cast_archeologicky_zaznam",
+            "f_dj_typ:dj_typ",
+            "f_adb_typ_sondy:dj_adb.adb_typ_sondy.id",
+            "f_adb_podnet:dj_adb.adb_podnet.id",
+            "adb_vyskovy_bod_typ:dj_adb.adb_chranene_udaje.vyskovy_bod[*].typ.id"
+         ],
+        "az_chranene_udaje":[
+            "f_kraj",
+            "f_okres",
+            "f_katastr",
+            "lng", "lat", "loc", "loc_rpt", 
+            "pian_ident_cely", "pian_id","f_pian_typ","f_pian_presnost", "f_pian_zm10", 
+            "az_chranene_udaje",
+            "dokument_cast_archeologicky_zaznam",
             "f_dj_typ:dj_typ",
             "f_adb_typ_sondy:dj_adb.adb_typ_sondy.id",
             "f_adb_podnet:dj_adb.adb_podnet.id",
@@ -740,6 +758,7 @@
       }, 
       "full_text": [
         "komponenta_zdroj",
+        "komponenta_zdroj_ident_cely",
         "komponenta_presna_datace"
       ]
     }
@@ -758,7 +777,7 @@
     "entita": {
       "A": "akce",
       "P": "projekt",
-      "S": "samostatny_nalez"
+      "N": "samostatny_nalez"
     },
     "cacheExpirationHours": "2" 
   }

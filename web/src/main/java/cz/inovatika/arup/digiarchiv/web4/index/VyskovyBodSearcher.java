@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -55,7 +55,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -63,7 +63,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;

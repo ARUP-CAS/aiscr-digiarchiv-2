@@ -33,10 +33,10 @@ export class VyskovyBodComponent extends Entity {
   override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-     `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
+     `@misc{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely},
        author = {Archeologický informační systém České republiky}, 
-       title = {Záznam ${this._result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
+       title = {Záznam ${this._result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }

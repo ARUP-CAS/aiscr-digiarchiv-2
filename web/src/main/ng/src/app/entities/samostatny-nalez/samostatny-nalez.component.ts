@@ -36,12 +36,12 @@ export class SamostatnyNalezComponent extends Entity {
   override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex = 
-     `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
+     `@misc{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely},
        author = {Archeologický informační systém České republiky}, 
-       title = {Záznam ${this._result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
+       title = {Záznam ${this._result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]},
-       doi = {${this._result.samostatny_nalez_igsn}}
+       doi = {${this._result().samostatny_nalez_igsn}}
      }`;
   }
 
@@ -52,8 +52,8 @@ export class SamostatnyNalezComponent extends Entity {
     if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
-    this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
-      this._result.samostatny_nalez_projekt = res.samostatny_nalez_projekt;
+    this.service.checkRelations(this._result().ident_cely).subscribe((res: any) => {
+      this._result.update(r => ({...r, samostatny_nalez_projekt: res.samostatny_nalez_projekt}));
       this.relationsChecked = true;
       
       const related: { entity: string; ident_cely: string; }[] = [];
@@ -71,7 +71,7 @@ export class SamostatnyNalezComponent extends Entity {
         panelClass: 'app-file-viewer',
         width: '1000px',
         height: '900px',
-        data: this._result
+        data: this._result()
       });
     } else {
       const msg = this.service.getTranslation('alert.insuficient rights');

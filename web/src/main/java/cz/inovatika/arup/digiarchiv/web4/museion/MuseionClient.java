@@ -13,10 +13,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -67,31 +63,31 @@ public class MuseionClient {
       return xmlMapper.readValue(sr, clazz);
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, "Error parsing {0}", xml);
-      // Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, null, ex);
+      // Logger.getLogger(FedoraModel.class.getName()).log(Level.SEVERE, "", ex);
       throw new Exception(ex);
     }
   }
-  
+
   public PredmetyDleAmcr requestPredmetyDleAmcrId(String amcrId, String amcrTyp, String url, String clientId, String clientSecret) throws Exception {
     String body = String.format(
-                "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://iispp.npu.cz/ServiceAuth\" xmlns:nal=\"http://www.museion.cz/NalezyAmcrService\">\n"
-                + "    <soapenv:Header>\n"
-                + "        <ser:AuthToken>\n"
-                + "            <clientId>%s</clientId>\n"
-                + "            <clientSecret>%s</clientSecret>\n"
-                + "        </ser:AuthToken>\n"
-                + "    </soapenv:Header>\n"
-                + "    <soapenv:Body>\n"
-                + "        <nal:predmetyDleAmcrIdRequest>\n"
-                + "            <amcrId>%s</amcrId>\n"
-                + "            <amcrTyp>%s</amcrTyp>\n"
-                + "        </nal:predmetyDleAmcrIdRequest>\n"
-                + "    </soapenv:Body>\n"
-                + "</soapenv:Envelope>",
-                clientId, clientSecret, amcrId, amcrTyp);
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://iispp.npu.cz/ServiceAuth\" xmlns:nal=\"http://www.museion.cz/NalezyAmcrService\">\n"
+            + "    <soapenv:Header>\n"
+            + "        <ser:AuthToken>\n"
+            + "            <clientId>%s</clientId>\n"
+            + "            <clientSecret>%s</clientSecret>\n"
+            + "        </ser:AuthToken>\n"
+            + "    </soapenv:Header>\n"
+            + "    <soapenv:Body>\n"
+            + "        <nal:predmetyDleAmcrIdRequest>\n"
+            + "            <amcrId>%s</amcrId>\n"
+            + "            <amcrTyp>%s</amcrTyp>\n"
+            + "        </nal:predmetyDleAmcrIdRequest>\n"
+            + "    </soapenv:Body>\n"
+            + "</soapenv:Envelope>",
+            clientId, clientSecret, amcrId, amcrTyp);
 
-        String xml = request(body, url);
-        return (PredmetyDleAmcr) parseXml(xml, PredmetyDleAmcr.class, "predmetyDleAmcrIdResponse");
+    String xml = request(body, url);
+    return (PredmetyDleAmcr) parseXml(xml, PredmetyDleAmcr.class, "predmetyDleAmcrIdResponse");
   }
 
   public JSONObject predmetyDleAmcrId(String amcrId, String amcrTyp) {
@@ -164,53 +160,13 @@ public class MuseionClient {
     }
   }
 
-  private static List<String> _ids = null;
-  private static LocalDateTime statsTime = LocalDateTime.now(ZoneOffset.UTC);
-
-  public synchronized static List<String> getIds() {
-
-    int cacheExpirationTime = Options.getInstance().getJSONObject("museion").optInt("cacheExpirationHours", 3);
-    Instant deadline = Instant.now().minus(cacheExpirationTime, ChronoUnit.HOURS);
-    boolean expired = statsTime.toInstant(ZoneOffset.UTC).isBefore(deadline);
-    if (_ids == null || expired) {
-      MuseionClient m = new MuseionClient();
-      PredmetyStatistika stats = m.predmetyStatistika("", "", "");
-      if (stats != null) {
-//        _ids = stats.amcrIdPom;
-//        _ids.addAll(stats.amcrIdSys);
-      } else {
-        _ids = new ArrayList();
-      }
-      statsTime = LocalDateTime.now(ZoneOffset.UTC);
-    }
-    return _ids;
-  }
-
-  public synchronized static void resetIds() {
-    _ids = null;
-  }
-
-  public String predmetyStatistikaAsFilter() {
-
-    try {
-      List<String> ids = getIds();
-      if (ids != null) {
-        return "ident_cely:(\"" + String.join("\" OR \"", getIds()) + "\")";
-      } else {
-        return "";
-      }
-
-    } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsFilter: {0}", ex);
-      return ""; 
-    }
-  }
-
   public JSONObject indexStatistika() {
     JSONObject ret = new JSONObject();
     try {
+      LOGGER.log(Level.INFO, "Indexing Museion statistika...");
       JSONObject entitaMap = Options.getInstance().getJSONObject("museion").getJSONObject("entita");
       JSONArray end_points = Options.getInstance().getJSONObject("museion").getJSONArray("end_points");
+      int indexed = 0;
 
       for (int i = 0; i < end_points.length(); i++) {
         JSONObject js = end_points.getJSONObject(i);
@@ -223,7 +179,7 @@ public class MuseionClient {
             SolrInputDocument idoc = new SolrInputDocument();
             idoc.setField("id", stats.organizaceId + "_" + entita.id);
             idoc.setField("end_point", url);
-            idoc.setField("organizaceId", stats.organizaceId); 
+            idoc.setField("organizaceId", stats.organizaceId);
             idoc.setField("type", "amcrIdSys");
             idoc.setField("amcrId", entita.id);
             idoc.setField("entity", entitaMap.optString(entita.typ));
@@ -233,7 +189,7 @@ public class MuseionClient {
             SolrInputDocument idoc = new SolrInputDocument();
             idoc.setField("id", stats.organizaceId + "_" + entita.id);
             idoc.setField("end_point", url);
-            idoc.setField("organizaceId", stats.organizaceId); 
+            idoc.setField("organizaceId", stats.organizaceId);
             idoc.setField("type", "amcrIdSys");
             idoc.setField("amcrId", entita.id);
             idoc.setField("entity", entitaMap.optString(entita.typ));
@@ -241,9 +197,10 @@ public class MuseionClient {
           }
           if (!idocs.isEmpty()) {
             solr.add("museion", idocs);
+            indexed += idocs.size();
           }
-          solr.commit("museion"); 
-
+          solr.commit("museion");
+          ret.put("indexed", indexed);
         }
       }
 

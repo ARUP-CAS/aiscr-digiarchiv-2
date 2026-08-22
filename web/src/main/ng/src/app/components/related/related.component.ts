@@ -63,7 +63,7 @@ export class RelatedComponent implements OnInit {
       this.toProcess.set(JSON.parse(JSON.stringify(this.ids)));
       this.tp = JSON.parse(JSON.stringify(this.ids));
       if (this.state.printing() || this.router.isActive('print', false)) {
-        this.state.loading.set(true);;
+        this.state.loading.set(true);
         this.getRecords(true)
       } else {
         this.getRecords(false);

@@ -533,8 +533,12 @@ export class AppService {
   }
 
   museionPredmety(id: string, typ: string) {
-    const url = '/museion/predmety_by_id';
-    return this.get(url, new HttpParams().set('id', id).set('typ', typ));
+    const url = '/mus/predmety_by_id';
+    let params = new HttpParams().set('id', id)
+      if(typ) {
+        params = params.set('typ', typ);
+      }
+    return this.get(url, params);
   }
 
   setCrumbs(params: ParamMap) {
@@ -812,6 +816,17 @@ export class AppService {
    */
   getOkres(s: string) {
     return s.substring(s.indexOf('(') + 1, s.indexOf(')')).trim();
+  }
+
+  
+
+  /**
+   * Fired for index stats in stats page
+   * @param params the params
+   */
+  reindex(id: string): Observable<any> {
+    const params: HttpParams = new HttpParams().set('id', id);
+    return this.get(`/fedora/index_id`, params);
   }
 
 }

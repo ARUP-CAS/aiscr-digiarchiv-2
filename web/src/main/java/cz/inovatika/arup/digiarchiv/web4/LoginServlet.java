@@ -203,7 +203,7 @@ public class LoginServlet extends HttpServlet {
                     req.getSession().setAttribute("user", null);
                     req.getSession().setAttribute("userid", null);
                     jo.put("error", ex.toString());
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
                 return jo;
 

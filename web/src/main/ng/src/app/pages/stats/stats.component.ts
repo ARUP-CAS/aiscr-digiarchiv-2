@@ -64,11 +64,11 @@ export class StatsComponent implements OnInit {
   user: string;
   entity: string;
   interval: string;
-  ids: { name: string, type: string, value: number }[];
-  types: { name: string, type: string, value: number }[];
-  ips: { name: string, type: string, value: number }[];
-  users: { name: string, type: string, value: number }[];
-  entities: { name: string, type: string, value: number }[];
+  ids: [string, number][];
+  types: [string, number][];
+  ips: [string, number][];
+  users: [string, number][];
+  entities: [string, number][];
   index_entities = signal<{field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[]>([]);
   subs: any[] = [];
 

@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 export interface Predmet {
+  pristup: string;
   aktivita: string,
   areal: string,
   cislo: string,
@@ -54,7 +55,6 @@ export interface PredmetyDleAmcr {
     pocetSys: string;
     predmetSys: Predmet[];
     predmetPom: Predmet[];
-    pristup: string;
 }
 
 @Component({
@@ -113,7 +113,7 @@ export class MuseionPredmetyDialog {
 
   columnsBasic = ['cislo'];
 
-  pristup = 'FULL'; // FULL | BASIC
+  pristup = 'FULL';// FULL | BASIC
   columns = signal<string[]>([]);
 
   constructor(
@@ -144,7 +144,11 @@ export class MuseionPredmetyDialog {
       return;
     }
     this.predmetyDleAmcrId.set(this.predmetyDleAmcrIdAll()[this.selectedOrganizace]);
-    this.pristup = this.predmetyDleAmcrId().pristup;
+
+    this.pristup = (this.predmetyDleAmcrId().predmetPom.filter(pp => pp.pristup === 'FULL').length > 0 ||
+                   this.predmetyDleAmcrId().predmetSys.filter(pp => pp.pristup === 'FULL').length > 0) ?
+                    'FULL' : 'BASIC';
+
     this.columns.set([...(this.pristup === 'FULL' ? this.columnsFull : this.columnsBasic)])
     this.predmety.set([
       ...(this.predmetyDleAmcrId().predmetSys ? this.predmetyDleAmcrId().predmetSys : []), 

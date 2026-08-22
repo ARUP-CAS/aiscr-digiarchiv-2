@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -198,22 +198,10 @@ public class Dokument implements FedoraModel {
 //        List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
-//                SolrInputDocument djdoc = s.createSolrDoc();
-//                idocs.add(djdoc);
-                IndexUtils.addJSONField(idoc, "soubor", s);
-                idoc.addField("soubor_id", s.id);
-                idoc.addField("soubor_nazev", s.nazev);
-                idoc.addField("soubor_filepath", s.path);
-                idoc.addField("soubor_rozsah", s.rozsah);
-                idoc.addField("soubor_size_mbytes", s.size_mb);
-                idoc.addField("soubor_mimetype", s.mimetype);
-    
+              s.fillSolrFields(idoc);
             }
-//            if (!idocs.isEmpty()) {
-//                IndexUtils.getClientBin().add("soubor", idocs, 10);
-//            }
         } catch (Exception ex) {
-            Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, "", ex);
         }
 
         for (Tvar tv : dokument_tvar) {

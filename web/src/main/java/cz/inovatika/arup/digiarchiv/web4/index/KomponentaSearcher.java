@@ -7,13 +7,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.XML;
+import org.json.JSONObject; 
 
 public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
@@ -41,7 +40,9 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                 .addFilterQuery("komponenta_dokument_ident_cely:\"" + doc.getString("ident_cely") + "\"");
         query.setFields(dfs);
 
-        JSONObject r = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
+        JSONObject r = inHandle ? 
+                SolrSearcher.jsonSelect(client, "entities", query) : 
+                SolrSearcher.json(client, "entities", query);
         ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
         JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
         for (int j = 0; j < reldocs.length(); j++) {
@@ -51,26 +52,32 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         }
 
         String ident_cely = doc.getString("ident_cely");
-        query = new SolrQuery("*").addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"");
+        query = new SolrQuery("*")
+                //.addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"")
+                .addFilterQuery("ident_cely:\"" + doc.getString("komponenta_zdroj_ident_cely") + "\"");
         AkceSearcher as = new AkceSearcher();
         query.setFields(as.getChildSearchFields("A"));
         try {
           JSONObject sub = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
           JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
+          
           for (int j = 0; j < subs.length(); j++) {
             doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
-            doc.put("datestamp", subs.getJSONObject(i).getString("datestamp"));
+            if (subs.getJSONObject(i).has("datestamp")) {
+              doc.put("datestamp", subs.getJSONObject(i).optString("datestamp"));
+            }
+            
           }
           parentSearchable = true;
 
         } catch (SolrServerException | IOException ex) {
-          Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, "", ex);
         }
       } catch (SolrServerException ex) {
-        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, "", ex);
       } catch (IOException ex) {
-        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, "", ex);
       }
     }
   }
@@ -88,7 +95,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   @Override
   public JSONObject search(HttpServletRequest request) {
     JSONObject json = new JSONObject();
-    try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
       SolrQuery query = new SolrQuery()
               .setFacet(true);
       setQuery(request, query);
@@ -98,7 +105,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
       return jo;
 
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       json.put("error", ex);
     }
     return json;
@@ -116,12 +123,12 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
       SolrSearcher.addLocationParams(request, query);
     }
 
-    SolrSearcher.addFilters(request, query, pristupnost);
+    SolrSearcher.addFilters(request, query, pristupnost); 
   }
 
   @Override
   public JSONObject export(HttpServletRequest request) {
-    try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             SolrSearcher.addExportParams(query, ENTITY);
@@ -133,7 +140,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
             return jo;
             
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error",ex.toString());
         }
   }
@@ -153,7 +160,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
     fields.add("loc_rpt:loc_rpt_" + pristupnost);
     fields.add("loc:loc_rpt_" + pristupnost);
     fields.add("katastr:f_katastr_" + pristupnost);
-    fields.add("okres:f_okres");
+    fields.add("okres:f_okres"); 
 
     String[] ret = fields.toArray(new String[0]);
     return ret;

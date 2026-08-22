@@ -96,11 +96,16 @@
     [detailExpanded]="true"
     [inDocument]="true"
   ></app-dok-jednotka>
-  } @case('komponenta') {
+  } @case('komponenta') { 
   <app-komponenta
     [result]="result()"
-    [detailExpanded]="true"
+    [detailExpanded]="detailExpanded()"
     [inDocument]="inDocument()"
+    [isChild]="isChild()"
+    [mapDetail]="mapDetail()"
+    [isDocumentDialogOpen]="isDocumentDialogOpen()"
+
+
   ></app-komponenta>
   } @case('komponenta_dokument') {
   <app-komponenta-dokument

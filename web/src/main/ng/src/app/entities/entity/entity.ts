@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, effect, Inject, input, PLATFORM_ID, signal } from '@angular/core';
+import { Component, effect, Inject, input, PLATFORM_ID, signal, untracked } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,7 @@ export class Entity {
 
   viewType = input<any>();
 
-  protected _result: any;
+  protected _result = signal<any>(null);
   result = input<any>();
 
   inDocument = input<boolean>(false);
@@ -62,31 +62,31 @@ export class Entity {
     public service: AppService
   ) {
     effect(() => {
-      this._detailExpanded = this.detailExpanded();
-      this._result = this.result();
-      
-      if (this._result) {
-
-        if (this._result.loc_rpt) {
-          const coords = this._result.loc_rpt[0].split(',');
-          this._result.centroid_e = coords[0];
-          this._result.centroid_n = coords[1];
-        }
+      const _result = this.result();
+      if (_result) {
+        untracked(() => {
+          if (_result.loc_rpt) {
+            const coords = _result.loc_rpt[0].split(',');
+            _result.centroid_e = coords[0];
+            _result.centroid_n = coords[1];
+          }
+          this._result.set({...this.result()});
+          this.setImg();
+          this.hasDetail = false;
+          if (this.mapDetail() || (isPlatformBrowser(this.platformId) && this.inDocument())) {
+            this.getFullId();
+          }
         this.setBibTex();
-        this.setImg();
         this.checkRelations();
-        this.hasDetail = false;
-        this._detailExpanded = this.inDocument();// && !this.mapDetail;
-        if (this.mapDetail() || (isPlatformBrowser(this.platformId) && this.inDocument())) {
-          this.getFullId();
-        }
         this.okres();
+        });
       }
     });
   }
 
   ngOnInit(): void {
-    if (!this._result) {
+      this._detailExpanded = this.detailExpanded() || this.inDocument();// && !this.mapDetail;
+    if (!this._result()) {
       return;
     }
     this.service.currentLang.subscribe(l => {
@@ -106,7 +106,7 @@ export class Entity {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    if (!this._result.ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
+    if (!this._result().ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
 
@@ -129,18 +129,18 @@ export class Entity {
   }
 
   getFullId() {
-    this.service.getId(this._result.ident_cely).subscribe((res: any) => {
-      this.result = res.response.docs[0];
+    this.service.getId(this._result().ident_cely).subscribe((res: any) => {
+      this._result.set({...res.response.docs[0]});
       this.hasDetail = true;
     });
   }
 
   setImg() {
-    if (this._result.soubor_filepath?.length > 0) {
-      this._result.soubor.sort((a: any, b: any) => {
+    if (this._result()?.soubor_filepath?.length > 0) {
+      this._result().soubor.sort((a: any, b: any) => {
         return a.nazev.localeCompare(b.nazev);
       });
-      this.imgSrc = this.config.context + '/api/img/thumb?id=' + this._result.soubor[0].id;
+      this.imgSrc = this.config.context + '/api/img/thumb?id=' + this._result().soubor[0].id;
     }
 
   }
@@ -150,8 +150,8 @@ export class Entity {
   }
 
   okres() {
-    if (this._result.location_info) {
-      this._result.location_info.forEach((li: { okres: string; }) => {
+    if (this._result().location_info) {
+      this._result().location_info.forEach((li: { okres: string; }) => {
         if (!this.okresy.includes(li.okres)) {
           this.okresy.push(li.okres);
         }
@@ -160,18 +160,18 @@ export class Entity {
   }
 
   popisObsahu(): string {
-    const s: string = this._result.popis;
+    const s: string = this._result().popis;
     return s.replace(/\[new_line\]/gi, '<br/>');
   }
 
   toggleFav() {
-    if (this._result.isFav) {
-      this.service.removeFav(this._result.ident_cely).subscribe(res => {
-        this._result.isFav = false;
+    if (this._result().isFav) {
+      this.service.removeFav(this._result().ident_cely).subscribe(res => {
+        this._result.update(r => ({...r, isFav: false}));
       });
     } else {
-      this.service.addFav(this._result.ident_cely).subscribe(res => {
-        this._result.isFav = true;
+      this.service.addFav(this._result().ident_cely).subscribe(res => {
+        this._result.update(r => ({...r, isFav: true}));
       });
     }
   }
@@ -181,7 +181,7 @@ export class Entity {
     if (this.state.dialogRef) {
       this.state.dialogRef.close();
     }
-    this.router.navigate(['/id', this._result.ident_cely]);
+    this.router.navigate(['/id', this._result().ident_cely]);
   }
 
   print() {
@@ -189,7 +189,7 @@ export class Entity {
       this.service.print();
     } else {
       this.state.printing.set(true);
-      this.router.navigate(['/id', this._result.ident_cely]);
+      this.router.navigate(['/id', this._result().ident_cely]);
     }
   }
 
@@ -198,14 +198,14 @@ export class Entity {
       this.gotoDoc();
       return;
     }
-    const canView = this.state.hasRights(this._result.pristupnost, this._result.dokument_organizace);
+    const canView = this.state.hasRights(this._result().pristupnost, this._result().dokument_organizace);
     // const canView = true;
     if (canView) {
       this.state.dialogRef = this.dialog.open(FileViewerComponent, {
         panelClass: 'app-file-viewer',
         width: '1000px',
         height: '900px',
-        data: this._result
+        data: this._result()
       });
     } else {
       const msg = this.service.getTranslation('alert.insuficient rights');

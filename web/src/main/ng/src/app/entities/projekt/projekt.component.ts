@@ -35,10 +35,10 @@ export class ProjektComponent extends Entity {
 override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-      `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
+      `@misc{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely},
        author = {Archeologický informační systém České republiky},
-       title = {Záznam ${this._result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
+       title = {Záznam ${this._result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
@@ -50,10 +50,12 @@ override setBibTex() {
     if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
-    this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
-      this._result.projekt_archeologicky_zaznam = res.projekt_archeologicky_zaznam;
-      this._result.projekt_samostatny_nalez = res.projekt_samostatny_nalez;
-      this._result.projekt_dokument = res.projekt_dokument;
+    this.service.checkRelations(this._result().ident_cely).subscribe((res: any) => {
+      this._result.update(r => ({ ...r,
+        projekt_archeologicky_zaznam: res.projekt_archeologicky_zaznam,
+        projekt_samostatny_nalez: res.projekt_samostatny_nalez,
+        projekt_dokument: res.projekt_dokument
+      }))
       this.relationsChecked = true;
       
       const related: { entity: string; ident_cely: string; }[] = [];
@@ -75,8 +77,8 @@ override setBibTex() {
 
 
   override getFullId() {
-    this.service.getId(this._result.ident_cely).subscribe((res: any) => {
-      this.result = res.response.docs[0];
+    this.service.getId(this._result().ident_cely).subscribe((res: any) => {
+      this._result.set({...res.response.docs[0]});
       this.hasDetail = true;
     });
   }

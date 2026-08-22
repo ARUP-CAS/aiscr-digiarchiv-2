@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -190,23 +190,10 @@ public class SamostatnyNalez implements FedoraModel {
 //        List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
-//                SolrInputDocument djdoc = s.createSolrDoc();
-//                idocs.add(djdoc);
-                IndexUtils.addJSONField(idoc, "soubor", s);
-                
-                idoc.addField("soubor_id", s.id);
-                idoc.addField("soubor_nazev", s.nazev);
-                idoc.addField("soubor_filepath", s.path);
-                idoc.addField("soubor_rozsah", s.rozsah);
-                idoc.addField("soubor_size_bytes", s.size_mb);
-                idoc.addField("soubor_mimetype", s.mimetype);
-
+              s.fillSolrFields(idoc);
             }
-//            if (!idocs.isEmpty()) {
-//                IndexUtils.getClientBin().add("soubor", idocs, 10);
-//            }
         } catch (Exception ex) {
-            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, "", ex);
         }
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -369,7 +356,7 @@ class SnChraneneUdaje {
             geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml); 
             // System.out.println(xml);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
         }
 
         IndexUtils.setSecuredJSONField(idoc, "samostatny_nalez_chranene_udaje", this);

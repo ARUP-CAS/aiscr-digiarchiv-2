@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
@@ -108,10 +108,20 @@ public class Komponenta implements FedoraModel {
     kdoc.setField("entity", "komponenta");
     kdoc.setField("komponenta_zdroj", "samostatny_nalez");
     kdoc.setField("komponenta_zdroj_ident_cely", idoc.getFieldValue("ident_cely"));
+    kdoc.removeField("soubor");
+    kdoc.removeField("soubor_id");
+    kdoc.removeField("soubor_nazev");
+    kdoc.removeField("soubor_filepath");
+    kdoc.removeField("soubor_rozsah");
+    kdoc.removeField("soubor_size_mbytes");
+    kdoc.removeField("soubor_mimetype");
     Vocab v = new Vocab();
     v.setKey((String) idoc.getFieldValue("samostatny_nalez_obdobi"));
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", v);
     kdoc.setField("entity", "komponenta");
+    
+    
+    setFullText(kdoc);
     try {
       IndexUtils.addAndCommit("entities", kdoc);
     } catch (Exception ex) {
@@ -124,7 +134,9 @@ public class Komponenta implements FedoraModel {
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
     IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
-    kdoc.setField("searchable", rootDoc.getFieldValue("searchable"));
+    kdoc.setField("searchable", 
+            Boolean.parseBoolean(parentDoc.getFieldValue("searchable").toString()) && 
+            Boolean.parseBoolean(rootDoc.getFieldValue("searchable").toString()));
     kdoc.setField("is_deleted", rootDoc.getFieldValue("is_deleted"));
     kdoc.setField("datestamp", rootDoc.getFieldValue("datestamp"));
 
@@ -147,6 +159,7 @@ public class Komponenta implements FedoraModel {
     for (NalezObjekt no : komponenta_nalez_objekt) {
       no.setNalezKategorie();
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_objekt", no);
+      //kdoc.addField("f_kategorie", no.komponenta_kategorie_nalezu);
       rootDoc.addField("nalez_dokumentu_pocet", no.pocet);
       rootDoc.addField("nalez_dokumentu_poznamka", no.poznamka);
 
@@ -158,6 +171,7 @@ public class Komponenta implements FedoraModel {
     for (NalezPredmet np : komponenta_nalez_predmet) {
       np.setNalezKategorie();
       IndexUtils.addJSONField(kdoc, "komponenta_nalez_predmet", np);
+      //kdoc.addField("f_kategorie", np.komponenta_kategorie_nalezu);
       rootDoc.addField("nalez_dokumentu_pocet", np.pocet);
       rootDoc.addField("nalez_dokumentu_poznamka", np.poznamka);
     }
@@ -166,7 +180,6 @@ public class Komponenta implements FedoraModel {
     rootDoc.addField("komponenta_dokument_ident_cely", ident_cely);
     if (jistota != null) {
       komponenta_jistota = Boolean.parseBoolean(jistota);
-      kdoc.addField("komponenta_jistota", komponenta_jistota);
       rootDoc.addField("komponenta_dokument_jistota", komponenta_jistota);
       rootDoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
     } else {
@@ -185,6 +198,13 @@ public class Komponenta implements FedoraModel {
         Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error adding PIAN {0}", ex);
       }
     }
+    if (rootDoc.getFieldValue("pian_id") != null && "dokument".equals(rootDoc.getFieldValue("entity"))) {
+      try {
+        addPian(kdoc, (String) rootDoc.getFieldValue("pian_id"), pristupnost);
+      } catch (Exception ex) {
+        Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error adding PIAN {0}", ex);
+      }
+    }
     List<String> prSufix = new ArrayList<>();
     if ("A".compareTo(pristupnost) >= 0) {
       prSufix.add("A");
@@ -197,6 +217,10 @@ public class Komponenta implements FedoraModel {
     }
     if ("D".compareTo(pristupnost) >= 0) {
       prSufix.add("D");
+    }
+    if (rootDoc.getFieldValue("az_chranene_udaje") != null) {
+      List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONObject("facets").getJSONArray("az_chranene_udaje").toList();
+      setFieldsFromSuper(kdoc, rootDoc, prSufix, indexFields);
     }
     setFieldsFromSelf(kdoc, prSufix);
     setFieldsFromRoot(kdoc, rootDoc, prSufix);
@@ -292,16 +316,19 @@ public class Komponenta implements FedoraModel {
     }
   }
 
-  private void addPian(SolrInputDocument idoc, String pian, String pristupnost) throws Exception {
+  private void addPian(SolrInputDocument idoc, String pian, String pristupnostOrig) throws Exception {
     idoc.addField("pian_id", pian);
     idoc.addField("pian_ident_cely", pian);
     SolrQuery query = new SolrQuery("ident_cely:\"" + pian + "\"")
             .setFields("*,pian_chranene_udaje:[json]");
     JSONObject json = SearchUtils.searchOrIndex(query, "entities", pian);
-
+    String pristupnost = pristupnostOrig;
     if (json.getJSONObject("response").getInt("numFound") > 0) {
       for (int d = 0; d < json.getJSONObject("response").getJSONArray("docs").length(); d++) {
         JSONObject pianDoc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(d);
+        
+        pristupnost = pianDoc.getString("pristupnost");
+        idoc.setField("pristupnost", pristupnost);
 
         // IndexUtils.setSecuredJSONField(idoc, "pian", pianDoc, pristupnost);
         IndexUtils.addFieldNonRepeat(idoc, "f_pian_typ", pianDoc.getString("pian_typ"));
