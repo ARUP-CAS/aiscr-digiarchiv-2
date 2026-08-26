@@ -75,6 +75,9 @@ public class DokumentacniJednotka implements FedoraModel {
         }
 
         DocumentObjectBinder dob = new DocumentObjectBinder();
+        for (Komponenta k : dj_komponenta) {
+            k.setKategorie();
+        }
         SolrInputDocument djdoc = dob.toSolrInputDocument(this);
         //akceDoc.setField("entity", "akce");
         //akceDoc.setField("pristupnost", pristupnost);

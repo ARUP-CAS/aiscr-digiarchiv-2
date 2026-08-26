@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,6 +40,7 @@ public class MuseionClient {
 
   private String request(String body, String url) throws URISyntaxException, IOException, InterruptedException {
     HttpRequest request = HttpRequest.newBuilder()
+            .timeout(Duration.ofSeconds(5))
             .uri(new URI(url))
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
@@ -99,9 +101,15 @@ public class MuseionClient {
       for (int i = 0; i < end_points.length(); i++) {
         JSONObject js = end_points.getJSONObject(i);
         String url = js.getString("url");
-        PredmetyDleAmcr resp = requestPredmetyDleAmcrId(amcrId, amcrTyp, url, js.getString("clientId"), js.getString("clientSecret"));
-        ObjectMapper objectMapper = new ObjectMapper();
-        ret.put(resp.organizaceId, new JSONObject(objectMapper.writeValueAsString(resp)));
+        try {
+          PredmetyDleAmcr resp = requestPredmetyDleAmcrId(amcrId, amcrTyp, url, js.getString("clientId"), js.getString("clientSecret"));
+          ObjectMapper objectMapper = new ObjectMapper();
+          ret.put(resp.organizaceId, new JSONObject(objectMapper.writeValueAsString(resp)));
+        } catch (Exception rex) {
+          //ret.put(url, rex);
+          LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", url);
+        }
+        
       }
       return ret;
     } catch (Exception ex) {

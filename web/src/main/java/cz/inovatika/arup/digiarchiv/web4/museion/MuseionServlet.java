@@ -95,6 +95,12 @@ public class MuseionServlet extends HttpServlet {
                         case "samostatny_nalez": typ = "N"; break;
                       }
                     }
+                    
+                  LOGGER.log(Level.INFO, typ);
+                  if (typ == null) {
+                    return json;
+                            
+                  }
                     json.put("predmetyDleAmcrId", m.predmetyDleAmcrId(id, typ)); 
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());

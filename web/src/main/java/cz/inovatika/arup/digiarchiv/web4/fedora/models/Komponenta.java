@@ -128,6 +128,15 @@ public class Komponenta implements FedoraModel {
       Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
     } 
   }
+  
+  public void setKategorie() {
+    for (NalezObjekt no : komponenta_nalez_objekt) {
+      no.setNalezKategorie();
+    }
+    for (NalezPredmet np : komponenta_nalez_predmet) {
+      np.setNalezKategorie();
+    }
+  }
 
   public void fillSolrFields(SolrInputDocument rootDoc, SolrInputDocument parentDoc, String prefix) {
     DocumentObjectBinder dob = new DocumentObjectBinder();
