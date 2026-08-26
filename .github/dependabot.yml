@@ -15,6 +15,23 @@ updates:
     target-branch: dev
     assignees:
       - "albertoh"
+    groups:
+      jackson:
+        patterns:
+          - "com.fasterxml.jackson:*"
+          - "com.fasterxml.jackson.*:*"
+      apache-poi:
+        patterns:
+          - "org.apache.poi:*"
+      twelvemonkeys-imageio:
+        patterns:
+          - "com.twelvemonkeys.imageio:*"
+      shared-maven-dependencies:
+        patterns:
+          - "commons-io:commons-io"
+          - "org.json:json"
+          - "org.apache.solr:solr-solrj"
+        group-by: dependency-name
   
   - package-ecosystem: "npm" # See documentation for possible values
     directories:  # Location of package manifests
@@ -25,6 +42,32 @@ updates:
     target-branch: dev
     assignees:
       - "albertoh"
+    cooldown:
+      default-days: 3
+      exclude:
+        - "@angular/*"
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+      types:
+        patterns:
+          - "@types/*"
+      leaflet:
+        patterns:
+          - "leaflet*"
+          - "@bluehalo/ngx-leaflet*"
+      ngx-translate:
+        patterns:
+          - "@ngx-translate/*"
+      testing:
+        patterns:
+          - "karma*"
+          - "jasmine*"
+      echarts:
+        patterns:
+          - "echarts"
+          - "ngx-echarts"
   
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/" # Location of package manifests
