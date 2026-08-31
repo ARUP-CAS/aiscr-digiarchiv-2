@@ -100,6 +100,8 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
               .setFacet(true);
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
+      String pristupnost = LoginServlet.pristupnost(request.getSession());
+      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
       SolrSearcher.addFavorites(jo, client, request);
       addPians(jo, client, request);
       return jo;
@@ -146,8 +148,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   }
 
   @Override
-  public String[] getSearchFields(String pristupnost) {
-    //return new String[]{"*,komponenta_aktivita:[json],komponenta_areal:[json],komponenta_obdobi:[json],komponenta_nalez_objekt:[json],komponenta_nalez_predmet:[json]"};
+  public String[] getSearchFields(String pristupnost) { 
 
     List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
     List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONArray("header").toList();
@@ -180,6 +181,11 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         doc.remove("chranene_udaje");
         doc.remove("az_chranene_udaje");
         doc.remove("akce_chranene_udaje");
+        
+                doc.remove("samostatny_nalez_chranene_udaje");
+                doc.remove("katastr");
+                doc.remove("f_katastr");
+                doc.remove("samostatny_nalez_katastr_" + pristupnost);
       }
     }
   }
