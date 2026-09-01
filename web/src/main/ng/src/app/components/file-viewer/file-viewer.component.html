@@ -30,7 +30,7 @@
           </mat-select></div>
           @if(selectedDist) {
           <div class="app-metadata app-fxLayout app-row app-center-v">
-            <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedDist.size}}MB</strong></span><span class="app-pipe"></span><!--
+            <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedDist.size / 1024 / 1024}}&#160;MB</strong></span><span class="app-pipe"></span><!--
             --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{selectedDist.mimetype}}</strong></span><span class="app-pipe"></span>
             @if (selectedFile() !== null) {
               <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedDist.filename"><mat-icon class="app-va-center">get_app</mat-icon></a>
