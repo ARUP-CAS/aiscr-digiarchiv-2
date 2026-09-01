@@ -84,6 +84,11 @@ public class MuseionServlet extends HttpServlet {
                     String typ = req.getParameter("typ");
                     if (typ == null) {
                       String entity = SolrSearcher.getEntityById(id);
+                      
+                  if (entity == null) {
+                    LOGGER.log(Level.SEVERE, "Object {0} not found", id);
+                    return json;
+                  }
 //museionTypes: { [entity: string]: string } = {
 //    projekt: 'P',
 //    akce: 'A',
@@ -96,10 +101,8 @@ public class MuseionServlet extends HttpServlet {
                       }
                     }
                     
-                  LOGGER.log(Level.INFO, typ);
                   if (typ == null) {
                     return json;
-                            
                   }
                     json.put("predmetyDleAmcrId", m.predmetyDleAmcrId(id, typ)); 
                 } catch (JSONException ex) {

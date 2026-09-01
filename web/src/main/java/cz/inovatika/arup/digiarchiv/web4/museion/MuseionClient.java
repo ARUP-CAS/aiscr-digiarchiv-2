@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web4.Options;
+import static cz.inovatika.arup.digiarchiv.web4.index.SearchUtils.isSearchable;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import java.io.IOException;
 import java.io.StringReader;
@@ -14,6 +16,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,6 +24,8 @@ import java.util.logging.Logger;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +50,7 @@ public class MuseionClient {
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    System.out.println(response.body());
     return response.body();
   }
 
@@ -103,8 +109,20 @@ public class MuseionClient {
         String url = js.getString("url");
         try {
           PredmetyDleAmcr resp = requestPredmetyDleAmcrId(amcrId, amcrTyp, url, js.getString("clientId"), js.getString("clientSecret"));
-          ObjectMapper objectMapper = new ObjectMapper();
-          ret.put(resp.organizaceId, new JSONObject(objectMapper.writeValueAsString(resp)));
+          
+          if ((resp.predmetPom.size() + resp.predmetSys.size()) > 0) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JSONObject jo = new JSONObject(objectMapper.writeValueAsString(resp));
+            if (ret.has(resp.organizaceId)) {
+              JSONObject r = ret.getJSONObject(resp.organizaceId);
+              r.put("pocetPom", r.getInt("pocetPom") + resp.pocetPom);
+              r.put("pocetSys", r.getInt("pocetSys") + resp.pocetSys);
+              r.accumulate("predmetSys", jo.getJSONArray("predmetSys"));
+              r.accumulate("predmetPom", jo.getJSONArray("predmetPom"));
+            } else {
+              ret.put(resp.organizaceId, jo);
+            }
+          }
         } catch (Exception rex) {
           //ret.put(url, rex);
           LOGGER.log(Level.SEVERE, "Error getting predmetyDleAmcrId: {0}", url);
@@ -167,10 +185,27 @@ public class MuseionClient {
       return new JSONObject().put("error", ex);
     }
   }
+  
+  public static JSONObject clean(Instant date) {
+        JSONObject ret = new JSONObject();
+
+        String solrhost = Options.getInstance().getString("solrhost");
+
+        try (SolrClient solr = new HttpJettySolrClient.Builder(solrhost).build()) {
+            String query = "indextime:[* TO " + date.toString() + "]";
+            solr.deleteByQuery("museion", query, 1);
+            ret.put("resp", "success");
+        } catch (SolrServerException | IOException ex) {
+            LOGGER.log(Level.SEVERE, "", ex);
+            ret.put("error", ex.toString());
+        }
+        return ret;
+    }
 
   public JSONObject indexStatistika() {
     JSONObject ret = new JSONObject();
     try {
+      Instant start = Instant.now();
       LOGGER.log(Level.INFO, "Indexing Museion statistika...");
       JSONObject entitaMap = Options.getInstance().getJSONObject("museion").getJSONObject("entita");
       JSONArray end_points = Options.getInstance().getJSONObject("museion").getJSONArray("end_points");
@@ -208,6 +243,7 @@ public class MuseionClient {
             indexed += idocs.size();
           }
           solr.commit("museion");
+          clean(start);
           ret.put("indexed", indexed);
         }
       }
