@@ -680,8 +680,11 @@
         "komponenta_zdroj",
         "komponenta_zdroj_ident_cely",
         "komponenta_poznamka",
+        "komponenta_jistota",
         "okres",
-        "az_chranene_udaje:[json]"
+        "az_chranene_udaje:[json]",
+        "presna_datace:samostatny_nalez_presna_datace",
+        "presna_datace:komponenta_presna_datace"
       ],
       "detail": [
         "komponenta_areal:[json]",
@@ -689,7 +692,11 @@
         "komponenta_nalez_objekt:[json]",
         "komponenta_nalez_predmet:[json]",
         "samostatny_nalez_geom_system",
-        "samostatny_nalez_chranene_udaje:[json]",
+        "samostatny_nalez_chranene_udaje:[json]", 
+        "samostatny_nalez_druh_nalezu", 
+        "samostatny_nalez_specifikace",
+        "samostatny_nalez_pocet",
+        "samostatny_nalez_poznamka",
         "dokument_extra_data:[json]",
         "pian_id",
         "pian_ident_cely"
@@ -711,7 +718,7 @@
             "f_specifikace:komponenta_nalez_objekt.specifikace.id",
             "f_specifikace:komponenta_nalez_objekt[*].specifikace.id",
             "f_specifikace:komponenta_nalez_predmet.specifikace.id",
-            "f_specifikace:komponenta_nalez_predmet[*].specifikace.id" 
+            "f_specifikace:komponenta_nalez_predmet[*].specifikace.id"
         ],
         "root":[
             "f_vedouci", 
@@ -726,8 +733,7 @@
             "f_tvar:dokument_tvar.tvar.id", 
             "f_tvar:dokument_tvar[0].tvar.id",
             "az_chranene_udaje",
-            "dokument_extra_data",
-            "lokalita_jistota"
+            "dokument_extra_data"
          ],
         "parent":[
             "f_kraj",
@@ -757,6 +763,7 @@
          ]    
       }, 
       "full_text": [
+        "ident_cely",
         "komponenta_zdroj",
         "komponenta_zdroj_ident_cely",
         "komponenta_presna_datace"

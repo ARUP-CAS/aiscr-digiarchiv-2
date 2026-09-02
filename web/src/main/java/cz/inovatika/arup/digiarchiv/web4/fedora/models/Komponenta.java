@@ -128,6 +128,15 @@ public class Komponenta implements FedoraModel {
       Logger.getLogger(Komponenta.class.getName()).log(Level.SEVERE, "Error indexing komponenta {0}", ident_cely);
     } 
   }
+  
+  public void setKategorie() {
+    for (NalezObjekt no : komponenta_nalez_objekt) {
+      no.setNalezKategorie();
+    }
+    for (NalezPredmet np : komponenta_nalez_predmet) {
+      np.setNalezKategorie();
+    }
+  }
 
   public void fillSolrFields(SolrInputDocument rootDoc, SolrInputDocument parentDoc, String prefix) {
     DocumentObjectBinder dob = new DocumentObjectBinder();
@@ -182,6 +191,7 @@ public class Komponenta implements FedoraModel {
       komponenta_jistota = Boolean.parseBoolean(jistota);
       rootDoc.addField("komponenta_dokument_jistota", komponenta_jistota);
       rootDoc.addField("dokument_cast_komponenta_dokument_jistota", komponenta_jistota);
+      kdoc.addField("komponenta_jistota", komponenta_jistota);
     } else {
       komponenta_jistota = null;
       kdoc.removeField("komponenta_jistota");
@@ -313,6 +323,11 @@ public class Komponenta implements FedoraModel {
           }
         }
       }
+    }
+    System.out.println(idoc.getFieldValues("ident_cely"));
+    for (String sufix : SolrSearcher.prSufixAll) {
+          IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues("ident_cely"));
+          IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues("komponenta_zdroj_ident_cely"));
     }
   }
 
