@@ -58,7 +58,7 @@ public class ExportServlet extends HttpServlet {
       switch (format) {
         case "csv":
           List<String> labels = SolrSearcher.getExportField(entity, "label");
-          JSONArray ls = new JSONArray(labels);
+          //JSONArray ls = new JSONArray(labels);
           String csv = org.json.CDL.rowToString(new JSONArray(labels));
           csv += toString(entity, jo.getJSONObject("response").getJSONArray("docs"), ',', request.getParameter("lang"));
           response.setContentType("text/csv;charset=UTF-8");
@@ -70,12 +70,19 @@ public class ExportServlet extends HttpServlet {
           break;
         case "xml":
           response.setContentType("text/xml;charset=UTF-8");
-          String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><docs>" + XML.toString(jo.getJSONObject("response").getJSONArray("docs"), "doc") + "</docs>";
+          JSONArray exFields1 = SolrSearcher.getExportFieldsExt(entity);
+          JSONArray ret1 = new JSONArray();
+          JSONArray ja1 = jo.getJSONObject("response").getJSONArray("docs");
+          for (int i = 0; i < ja1.length(); i += 1) {
+            JSONObject doc = ja1.getJSONObject(i);
+            ret1.put(translateJSON(doc, exFields1, request.getParameter("lang")));
+          }
+          String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><docs>" + XML.toString(ret1, "doc") + "</docs>";
           response.getWriter().print(xml);
           break;
         case "json":
           response.setContentType("application/json;charset=UTF-8");
-          JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+          JSONArray exFields = SolrSearcher.getExportFieldsExt(entity);
           JSONArray ret = new JSONArray();
           JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
           for (int i = 0; i < ja.length(); i += 1) {
@@ -148,10 +155,8 @@ public class ExportServlet extends HttpServlet {
    * provided list of names. The list of names is not included in the output.
    */
   private static String toString(String entity, JSONArray ja, char delimiter, String locale) throws JSONException {
-    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
-    if (exFields == null || exFields.length() == 0) {
-      return null;
-    }
+    JSONArray exFields = SolrSearcher.getExportFieldsExt(entity);
+    
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < ja.length(); i += 1) {
       JSONObject jo = ja.optJSONObject(i);
@@ -225,10 +230,7 @@ public class ExportServlet extends HttpServlet {
    * not included in the output.
    */
   private static void toXLSX(String entity, JSONArray ja, char delimiter, String locale, XSSFSheet sheet) throws JSONException {
-    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
-    if (exFields == null || exFields.length() == 0) {
-      return;
-    }
+    JSONArray exFields = SolrSearcher.getExportFieldsExt(entity);
 
     int rowNum = 0;
     List<String> labels = SolrSearcher.getExportField(entity, "label");
