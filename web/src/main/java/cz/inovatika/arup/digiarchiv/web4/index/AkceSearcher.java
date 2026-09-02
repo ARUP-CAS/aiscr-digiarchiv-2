@@ -212,7 +212,8 @@ public class AkceSearcher implements EntitySearcher {
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
-            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            addPians(jo, client, request);
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY); 
             return jo;
             
         } catch (Exception ex) {

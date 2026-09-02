@@ -1,6 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
 import com.jayway.jsonpath.JsonPath;
+import cz.inovatika.arup.digiarchiv.web4.GPSconvertor;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.museion.MuseionClient;
@@ -113,14 +114,47 @@ public class SolrSearcher {
             .setParam("facet.heatmap.maxCells", "1000000");
   }
   
-  public static JSONArray getExportFieldsExt(String entity) {
+  public static JSONArray getExportFieldsExt(String entity, boolean isMap) {
     JSONArray exFields = new JSONArray();
-    exFields.put((new JSONObject().put("label", "handle").put("url", Options.getInstance().getClientConf().getString("serverUrl")+"id/")));
-    JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
-    for (int i = 0; i < choiceFields.length(); i++) {
-      exFields.put(choiceFields.getJSONObject(i));
+    boolean hasPian;
+    switch(entity) {
+      case "knihovna_3d": 
+        hasPian = false; 
+        break;
+      case "samostatny_nalez": 
+        hasPian = false; 
+        break;
+      case "pian": 
+        hasPian = true; 
+        break;
+      default:
+        hasPian = true;
     }
-    exFields.putAll(Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity));
+    if (isMap) {
+      if (hasPian) {
+        exFields.put((new JSONObject().put("label", "pian_ident_cely")));
+        exFields.put((new JSONObject().put("label", "pian_presnost").put("translated", true)));
+        exFields.put((new JSONObject().put("label", "pian_typ").put("translated", true)));
+        exFields.put((new JSONObject().put("label", "pian_zm10")));
+        exFields.put((new JSONObject().put("label", "pian_wgs84")));
+      }
+      exFields.put((new JSONObject().put("label", "geometrie")));
+      
+    } else {
+      exFields.put((new JSONObject().put("label", "handle").put("url", Options.getInstance().getClientConf().getString("serverUrl")+"id/")));
+      JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
+      for (int i = 0; i < choiceFields.length(); i++) {
+        exFields.put(choiceFields.getJSONObject(i));
+      }
+    }
+    JSONArray exportFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    for (int i = 0; i < exportFields.length(); i++) {
+      if (!exportFields.getJSONObject(i).optBoolean("hidden", false)) {
+        exFields.put(exportFields.getJSONObject(i));
+      }
+      
+    }
+    //exFields.putAll(Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity));
     return exFields;
   }
   

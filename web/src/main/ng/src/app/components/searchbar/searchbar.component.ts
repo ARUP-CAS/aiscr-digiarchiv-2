@@ -42,8 +42,8 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
 
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
-  formats = ['GML', 'WKT', 'GeoJSON'];
-  exportUrls = signal<{ url: string, format: string }[]>([]);
+  geometries = ['GML', 'WKT', 'GeoJSON'];
+  exportUrls = signal<{ url: string, geometrie: string }[]>([]);
   subs: any[] = [];
 
   constructor(
@@ -89,9 +89,9 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     if (str.indexOf('entity=') < 0 && !this.state.documentId()) {
       str += '&entity=' + this.state.entity;
     }
-    const urls: { url: string, format: string }[] = [];
-    this.formats.forEach(f => {
-      urls.push({ url: 'export-mapa?' + str + '&format=' + f, format: f });
+    const urls: { url: string, geometrie: string }[] = [];
+    this.geometries.forEach(f => {
+      urls.push({ url: 'export-mapa?' + str + '&geometrie=' + f, geometrie: f });
     })
     this.exportUrls.update(() => [...urls]);
   }

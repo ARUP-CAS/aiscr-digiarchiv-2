@@ -46,7 +46,7 @@ export class ExportMapaComponent implements OnInit {
   page = 0;
   sort: Sort;
   numFound: number;
-  format: string | undefined;
+  geometrie: string | undefined;
   hasPian = true;
 
   constructor(
@@ -72,7 +72,7 @@ export class ExportMapaComponent implements OnInit {
       this.ref.detectChanges();
     });
     this.route.queryParams.subscribe(val => {
-      this.format = val['format'];
+      this.geometrie = val['geometrie'];
       this.search(val);
     });
 
@@ -163,12 +163,12 @@ export class ExportMapaComponent implements OnInit {
       }
       if (this.state.entity === 'knihovna_3d') {
         docs.forEach(doc => {
-          if (this.format === 'GeoJSON') {
+          if (this.geometrie === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
             const wkt = new Wkt.Wkt();
             wkt.read(doc.dokument_extra_data.geom_wkt.value);
             doc.geometrie = JSON.stringify(wkt.toJson());
-          } else if (this.format === 'GML') {
+          } else if (this.geometrie === 'GML') {
             doc.geometrie = doc.dokument_extra_data.geom_gml;
           } else {
             doc.geometrie = doc.dokument_extra_data.geom_wkt.value;
@@ -178,12 +178,12 @@ export class ExportMapaComponent implements OnInit {
         this.docs.update(d => [...docs]);
       } else if (this.state.entity === 'samostatny_nalez') {
         docs.forEach(doc => {
-          if (this.format === 'GeoJSON') {
+          if (this.geometrie === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
             const wkt = new Wkt.Wkt();
             wkt.read(doc.samostatny_nalez_chranene_udaje.geom_wkt.value);
             doc.geometrie = JSON.stringify(wkt.toJson());
-          } else if (this.format === 'GML') {
+          } else if (this.geometrie === 'GML') {
             doc.geometrie = doc.samostatny_nalez_chranene_udaje.geom_gml;
           } else {
             doc.geometrie = doc.samostatny_nalez_chranene_udaje.geom_wkt.value;
@@ -195,12 +195,12 @@ export class ExportMapaComponent implements OnInit {
         this.state.entity = 'pian';
         docs.forEach(doc => {
           doc.pian = doc;
-          if (this.format === 'GeoJSON') {
+          if (this.geometrie === 'GeoJSON') {
             // console.log(ident_cely, resp.geom_wkt_c);
             const wkt = new Wkt.Wkt();
             wkt.read(doc.pian_chranene_udaje.geom_wkt.value);
             doc.geometrie = JSON.stringify(wkt.toJson());
-          } else if (this.format === 'GML') {
+          } else if (this.geometrie === 'GML') {
             doc.geometrie = doc.pian_chranene_udaje.geom_gml;
           } else {
             doc.geometrie = doc.pian_chranene_udaje.geom_wkt.value;
@@ -217,9 +217,9 @@ export class ExportMapaComponent implements OnInit {
             doc.pian.forEach(pian => {
               const d = JSON.parse(JSON.stringify(doc));
               d.pian = pian;
-              this.service.getGeometrie(pian.ident_cely, this.format, p['loc_rpt']).subscribe((resp: any) => {
+              this.service.getGeometrie(pian.ident_cely, this.geometrie, p['loc_rpt']).subscribe((resp: any) => {
                 if (resp.geometrie) {
-                  if (this.format === 'GeoJSON') {
+                  if (this.geometrie === 'GeoJSON') {
                     // console.log(ident_cely, resp.geom_wkt_c);
                     const wkt = new Wkt.Wkt();
                     wkt.read(resp.geometrie);

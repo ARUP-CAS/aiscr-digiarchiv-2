@@ -8,7 +8,7 @@
       <thead>
         <tr>
           <th>#</th>
-          @if (format) {
+          @if (geometrie) {
             @if (hasPian) {
               <th>{{'export.desc.Pian'| translate}}</th>
             }
@@ -24,10 +24,12 @@
             @if (hasPian) {
               <th>{{'export.desc.Definiční bod (WGS-84)' | translate}}</th>
             }
-            <th >{{'export.desc.' + format | translate}}</th>
+            <th >{{'export.desc.' + geometrie | translate}}</th>
           }
           @for (field of config.exportFields[state.entity]; track field) {
-            <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
+            @if (!field.hidden) {
+                <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
+              }
           }
         </tr>
       </thead>
@@ -35,7 +37,7 @@
         @for (r of docs(); track r; let idx = $index) {
           <tr>
             <td>{{idx + 1}}</td>
-            @if (format) {
+            @if (geometrie) {
               @if (hasPian) {
                 <td>{{r.pian.ident_cely}}</td>
               }
@@ -54,6 +56,7 @@
               <td >{{r.geometrie}}</td>
             }
             @for (field of config.exportFields[state.entity]; track field) {
+              @if (!field.hidden) {
               <td>
                 @if (field.byPath) {
                   @if (field.translated) {
@@ -82,6 +85,7 @@
                   }
                 }
               </td>
+            }
             }
           </tr>
         }

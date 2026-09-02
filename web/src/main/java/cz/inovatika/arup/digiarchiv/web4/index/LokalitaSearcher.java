@@ -225,6 +225,7 @@ import org.json.XML;
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+                addPians(jo, client, request);
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
             
             return jo;
