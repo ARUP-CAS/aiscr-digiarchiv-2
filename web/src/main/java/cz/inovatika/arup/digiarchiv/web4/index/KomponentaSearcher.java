@@ -133,7 +133,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
     try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            SolrSearcher.addExportParams(query, ENTITY);
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
