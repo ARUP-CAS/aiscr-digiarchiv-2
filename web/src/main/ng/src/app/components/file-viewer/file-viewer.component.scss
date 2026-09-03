@@ -1,18 +1,4 @@
 .mat-mdc-dialog-title {
-  // to delete after agreement -> https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/693
-  /* .app-list-files-wrapper {
-    a {
-      font-size: 16px !important;
-
-      &.active {
-        background-color: var(--app-color-primary);
-        color: var(--app-color-lightnes);
-        border-radius: var(--app-border-radius);
-        padding: var(--app-gap-icon) 8px;
-      }
-    }
-  } */
-
   .app-select-files-wrapper {
     .mat-mdc-form-field {
       min-width: 200px;
@@ -28,6 +14,7 @@
         ::ng-deep .mat-mdc-select-placeholder,
         ::ng-deep .mat-mdc-select-arrow {
           color: var(--app-color-lightnes);
+          font-weight: bold;
         }
 
         ::ng-deep .mat-mdc-select-arrow svg {

@@ -1,46 +1,37 @@
 
-<div class="app-center-v app-pl-4 app-pr-4 app-mb-4" >
-<h1>{{ 'museion.predmety' | translate }}
-    {{ id }}</h1>
-<div >
-    @if(loading()) {
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    }
-    @if(!loading()) {
-    <div class="app-fxLayout app-column app-gap-4">
-        <div class="app-fxLayout app-column app-gap-4">
-            <div>
-                <!-- {{ 'museion.organizaceId' | translate}}: {{ predmetyDleAmcrId().organizaceId | translate}} -->
-                    <mat-label>{{ 'museion.organizaceId' | translate}}: </mat-label>
-                <mat-form-field appearance="outline">
-                    <mat-select [(ngModel)]="selectedOrganizace" (selectionChange)="selectOrganizace()">
-                        @for (f of organizaceIds(); track $index;) {
-                        <mat-option [value]="f">{{ f | translate}}</mat-option>
-                        }
-                    </mat-select></mat-form-field>
-
-            </div>
-
-            <div>{{ 'museion.pocetPom' | translate}}: {{ predmetyDleAmcrId().pocetPom | translate}}</div>
-            <div>{{ 'museion.pocetSys' | translate}}: {{ predmetyDleAmcrId().pocetSys | translate}}</div>
-        </div>
-        <div>
-            <table mat-table [dataSource]="predmety()">
-                @for (f of columns(); track $index; let idx = $index) {
-
-                <ng-container [matColumnDef]="f">
-                    <th mat-header-cell *matHeaderCellDef [title]="'museion.desc.' + f | translate"> {{ 'museion.' + f |
-                        translate}} </th>
-                    <td mat-cell *matCellDef="let element"> {{element[f]}} </td>
-                </ng-container>
-                }
-
-                <tr mat-header-row *matHeaderRowDef="columns() sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: columns();"></tr>
-            </table>
-        </div>
-
-    </div>
-    }
-</div>
+<div class="app-fxLayout app-column app-fill app-p-4 app-mt-n4">
+	@if(loading()) {
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	}
+	<h1>{{ 'museion.predmety' | translate }} {{ id }}</h1>
+	@if(!loading()) {
+		<div class="app-fxFlex app-fxLayout app-column app-gap-4">
+			<div class="app-fxLayout app-row app-gap-4 app-center-v">
+				<mat-form-field appearance="outline">
+					<mat-label>{{ 'museion.organizaceId' | translate}}: </mat-label>
+					<mat-select [(ngModel)]="selectedOrganizace" (selectionChange)="selectOrganizace()">
+						@for (f of organizaceIds(); track $index;) {
+							<mat-option [value]="f">{{ f | translate}}</mat-option>
+						}
+					</mat-select>
+				</mat-form-field>
+				<div>{{ 'museion.pocetPom' | translate}}: <strong>{{ predmetyDleAmcrId().pocetPom | translate}}</strong></div>
+				<div>{{ 'museion.pocetSys' | translate}}: <strong>{{ predmetyDleAmcrId().pocetSys | translate}}</strong></div>
+			</div>
+			<div class="app-fxFlex app-oh">
+				<div class="app-border-wrapper app-maxh-100 app-oa-y">
+					<table mat-table [dataSource]="predmety()" class="app-striped app-hover">
+						@for (f of columns(); track $index; let idx = $index) {
+							<ng-container [matColumnDef]="f">
+								<th mat-header-cell *matHeaderCellDef [title]="'museion.desc.' + f | translate">{{ 'museion.' + f | translate}}</th>
+								<td mat-cell *matCellDef="let element">{{element[f]}}</td>
+							</ng-container>
+						}
+						<tr mat-header-row *matHeaderRowDef="columns() sticky: true"></tr>
+						<tr mat-row *matRowDef="let row; columns: columns();"></tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	}
 </div>
