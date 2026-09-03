@@ -270,7 +270,7 @@ public class HandleServlet extends HttpServlet {
     if (id != null && !id.equals("")) {
       File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR));
       try {
-        JSONObject doc = getDocument(id, user);
+        JSONObject doc = getDocument(id.replaceAll("paradata/", ""), user);
         if (doc == null) {
           response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           return false;
@@ -336,6 +336,10 @@ public class HandleServlet extends HttpServlet {
           url += "/thumb";
           response.setContentType("image/png");
           response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
+        } else if (id.contains("paradata")) {
+          url += "/paradata/" + distri;
+          response.setContentType("text/plain");
+          //response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".txt\"");
         } else {
           url += "/" + distri;
           response.setContentType(mime);

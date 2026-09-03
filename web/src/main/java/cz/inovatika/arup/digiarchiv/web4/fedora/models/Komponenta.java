@@ -112,6 +112,7 @@ public class Komponenta implements FedoraModel {
     kdoc.removeField("soubor_id");
     kdoc.removeField("soubor_nazev");
     kdoc.removeField("soubor_filepath");
+    kdoc.removeField("soubor_distri");
     kdoc.removeField("soubor_rozsah");
     kdoc.removeField("soubor_size_mbytes");
     kdoc.removeField("soubor_mimetype");
@@ -324,7 +325,7 @@ public class Komponenta implements FedoraModel {
         }
       }
     }
-    System.out.println(idoc.getFieldValues("ident_cely"));
+    //System.out.println(idoc.getFieldValues("ident_cely"));
     for (String sufix : SolrSearcher.prSufixAll) {
           IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues("ident_cely"));
           IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues("komponenta_zdroj_ident_cely"));
