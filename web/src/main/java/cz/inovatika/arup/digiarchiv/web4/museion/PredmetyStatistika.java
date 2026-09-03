@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web4.museion;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,10 +39,10 @@ public class PredmetyStatistika {
  */
     
     @JacksonXmlProperty(localName = "amcrIdPom")
-    public List<AmcrEntita> amcrIdPom;
+    public List<AmcrEntita> amcrIdPom = new ArrayList();
     
     @JacksonXmlProperty(localName = "amcrIdSys")
-    public List<AmcrEntita> amcrIdSys;
+    public List<AmcrEntita> amcrIdSys = new ArrayList();
     
     @JacksonXmlProperty(localName = "organizaceId") 
     public String organizaceId;

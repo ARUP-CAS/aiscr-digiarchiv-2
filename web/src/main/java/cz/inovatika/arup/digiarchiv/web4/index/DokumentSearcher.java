@@ -74,7 +74,7 @@ public class DokumentSearcher implements EntitySearcher {
               entity = ENTITY;
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            SolrSearcher.addExportParams(query, entity);
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), entity);

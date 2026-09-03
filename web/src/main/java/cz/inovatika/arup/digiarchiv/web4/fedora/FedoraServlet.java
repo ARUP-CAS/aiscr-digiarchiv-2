@@ -325,7 +325,6 @@ public class FedoraServlet extends HttpServlet {
                 if (req.getParameter("until") != null ) {   
                   baseQuery += "&condition=modified" + URLEncoder.encode("<" + req.getParameter("until"), "UTF8"); 
                 }  
-                    System.out.println(baseQuery);
                     json = new JSONObject(FedoraUtils.search(baseQuery));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
@@ -345,7 +344,7 @@ public class FedoraServlet extends HttpServlet {
                 if (req.getParameter("until") != null ) {   
                   baseQuery += "&condition=modified" + URLEncoder.encode("<" + req.getParameter("until"), "UTF8"); 
                 }  
-                    System.out.println(baseQuery);
+                    //System.out.println(baseQuery);
                     json = new JSONObject(FedoraUtils.search(baseQuery));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());

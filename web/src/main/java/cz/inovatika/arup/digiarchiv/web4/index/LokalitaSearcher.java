@@ -221,10 +221,11 @@ import org.json.XML;
         try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            SolrSearcher.addExportParams(query, ENTITY);
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+                addPians(jo, client, request);
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
             
             return jo;

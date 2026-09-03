@@ -273,6 +273,7 @@
       "f_druh_lokality": "Site - class",
       "f_lokalita_zachovalost": "Site - state of preservation",
       "f_jistota": "Site - level of confidence",
+      "komponenta_jistota": "Component - confidence",
       "f_nalezce": "Ind. find - finder",
       "f_nalezove_okolnosti": "Ind. find - context",
       "f_nahrada": "Document - substitution for original",

@@ -89,8 +89,8 @@ public class InitServlet extends HttpServlet {
         
         try {
             //Init locales
-            I18n.getInstance().getLocale("cs");
-            I18n.getInstance().getLocale("en");
+            I18n.getInstance().load("cs");
+            I18n.getInstance().load("en");
             LOGGER.log(Level.INFO, "Locales loaded"); 
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error loading locales {0}", ex);

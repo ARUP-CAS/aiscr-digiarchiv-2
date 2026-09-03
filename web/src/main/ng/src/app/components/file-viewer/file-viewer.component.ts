@@ -99,6 +99,7 @@ export class FileViewerComponent implements OnInit {
       this.currentPageDisplayed.set(this.currentPage);
       this.setPage();
       this.fileid = idx + new Date().getTime();
+      this.selectedDist = this.selectedFile().distribuce[0];
     //}, 10);
   }
 

@@ -1,6 +1,7 @@
 package cz.inovatika.arup.digiarchiv.web4.index;
 
 import com.jayway.jsonpath.JsonPath;
+import cz.inovatika.arup.digiarchiv.web4.GPSconvertor;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.museion.MuseionClient;
@@ -113,9 +114,59 @@ public class SolrSearcher {
             .setParam("facet.heatmap.maxCells", "1000000");
   }
   
+  public static JSONArray getExportFieldsExt(String entity, boolean isMap) {
+    JSONArray exFields = new JSONArray();
+    boolean hasPian;
+    switch(entity) {
+      case "knihovna_3d": 
+        hasPian = false; 
+        break;
+      case "samostatny_nalez": 
+        hasPian = false; 
+        break;
+      case "pian": 
+        hasPian = true; 
+        break;
+      default:
+        hasPian = true;
+    }
+    if (isMap) {
+      if (hasPian) {
+        exFields.put((new JSONObject().put("label", "pian_ident_cely")));
+        exFields.put((new JSONObject().put("label", "pian_presnost").put("translated", true)));
+        exFields.put((new JSONObject().put("label", "pian_typ").put("translated", true)));
+        exFields.put((new JSONObject().put("label", "pian_zm10")));
+        exFields.put((new JSONObject().put("label", "pian_wgs84")));
+      }
+      exFields.put((new JSONObject().put("label", "geometrie")));
+      
+    } else {
+      exFields.put((new JSONObject().put("label", "handle").put("url", Options.getInstance().getClientConf().getString("serverUrl")+"id/")));
+      JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
+      for (int i = 0; i < choiceFields.length(); i++) {
+        exFields.put(choiceFields.getJSONObject(i));
+      }
+    }
+    JSONArray exportFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    for (int i = 0; i < exportFields.length(); i++) {
+      if (!exportFields.getJSONObject(i).optBoolean("hidden", false)) {
+        exFields.put(exportFields.getJSONObject(i));
+      }
+      
+    }
+    //exFields.putAll(Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity));
+    return exFields;
+  }
+  
   public static List<String> getExportField(String entity, String field) {
-    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     List<String> fs = new ArrayList();
+    JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
+    fs.add("handle");
+    for (int i = 0; i < choiceFields.length(); i++) {
+      String f = choiceFields.getJSONObject(i).getString("label");
+      fs.add(f);
+    }
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     for (int i = 0; i < exFields.length(); i++) {
       String f = exFields.getJSONObject(i).getString("name");
       if (exFields.getJSONObject(i).has(field)) {
@@ -126,12 +177,20 @@ public class SolrSearcher {
     return fs;
   }
   
-  public static void addExportParams(SolrQuery query, String entity) {
-    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+  public static void addExportParams(SolrQuery query, String entity, String requestRows) {
     List<String> fs = new ArrayList();
+    JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
+    fs.add("handle:concat('"+Options.getInstance().getClientConf().getString("serverUrl")+"id/', ident_cely)");
+    for (int i = 0; i < choiceFields.length(); i++) {
+      String f = choiceFields.getJSONObject(i).getString("label") + ":concat('"
+      + choiceFields.getJSONObject(i).getString("url") + "', ident_cely)";
+      fs.add(f);
+    }
+    
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     for (int i = 0; i < exFields.length(); i++) {
       
-      String f = exFields.getJSONObject(i).getString("name");
+      String f = exFields.getJSONObject(i).optString("name");
       if (exFields.getJSONObject(i).has("field")) {
         f = exFields.getJSONObject(i).getString("field");
       } else if (f.contains(".")) {
@@ -145,6 +204,11 @@ public class SolrSearcher {
     query.set("facet", false);
     //query.addSort(query.getSorts().getFirst());
     query.setParam("sort", query.getSortField() + ",ident_cely asc");
+    int rows = Options.getInstance().getClientConf().getInt("defaultRows");
+    if (requestRows != null) {
+      rows = Integer.parseInt(requestRows);
+    }
+    query.setRows(Math.min(rows, 1000));
     //query.set(CursorMarkParams.CURSOR_MARK_PARAM, CursorMarkParams.CURSOR_MARK_START); 
   }
   

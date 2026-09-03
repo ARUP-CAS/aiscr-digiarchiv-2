@@ -62,11 +62,13 @@ public class Soubor {
     idoc.addField("soubor_id", id);
     idoc.addField("soubor_nazev", nazev);
     idoc.addField("soubor_filepath", path);
+    idoc.addField("soubor_filepath", path + "/orig");
     idoc.addField("soubor_rozsah", rozsah);
     idoc.addField("soubor_size_mbytes", size_mb);
     idoc.addField("soubor_mimetype", mimetype);
     List<String> d = new ArrayList();
     distribuce.add(new Distri("orig", nazev, (long) Math.floor(size_mb*1024*1024), mimetype));
+    idoc.addField("soubor_distri", "orig");
 
     for (Historie h : historie) {
       if ("DIST01".equals(h.typ_zmeny)) {
@@ -77,6 +79,7 @@ public class Soubor {
     }
     for (String di : d) {
       String url = path + "/" + di;
+      idoc.addField("soubor_filepath", url);
       url = url.substring(url.indexOf("record"));
       try {
         JSONObject json = FedoraUtils.getFileMetadataByPath(url);

@@ -208,12 +208,28 @@ public class ImageServlet extends HttpServlet {
         FULL {
             @Override
             void doPerform(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws Exception {
+              
+              String id = request.getParameter("id");
+              
+              //rate-limit
+              String ip = request.getRemoteAddr();
+              long retryTime = AppState.canGetFileInterval(ip, id);
+              if (retryTime > 0) {
+                response.setStatus(429); // 429 Too Many Requests
+                response.addHeader("Retry-After", retryTime + "");
+                response.getWriter().print("Try in " + retryTime + " seconds.");
+                return;
+              } else if (retryTime == -1) {
+                response.setStatus(429); // 429 Too Many Requests
+                response.getWriter().print("Downloading file still in progress. Try later.");
+                return;
+              }
+        
                 if (!ImageAccess.isAllowed(request, true)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().println("insuficient rights!!");
                     return;
                 }
-                String id = request.getParameter("id");
                 String dist = request.getParameter("dist");
                 if (id != null && !id.equals("")) {
                         File f = File.createTempFile("img-", "-"+dist.replace("/", ""), new File(InitServlet.TEMP_DIR ));

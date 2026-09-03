@@ -670,6 +670,7 @@
     "f_dj_typ",
     "f_areal",
     "f_aktivita",
+    "komponenta_jistota",
     "f_typ_nalezu",
     "f_kategorie",
     "f_druh_nalezu",
@@ -868,6 +869,10 @@
     ],
     "akce": [
       {
+        "name": "az_dj_pian",
+        "hidden": true
+      },
+      {
         "name": "ident_cely"
       },
       {
@@ -930,6 +935,10 @@
       }
     ],
     "lokalita": [
+      {
+        "name": "az_dj_pian",
+        "hidden": true
+      },
       {
         "name": "ident_cely"
       },
@@ -1120,7 +1129,7 @@
         "name": "komponenta_presna_datace"
       },
       {
-        "name": "lokalita_jistota"
+        "name": "komponenta_jistota"
       },
       {
         "name": "komponenta_areal.value",

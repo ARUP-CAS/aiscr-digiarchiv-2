@@ -80,11 +80,16 @@ public class DokumentCast implements FedoraModel {
             addProjekt(idoc, kdoc, pristupnost.toUpperCase());
         }
         // IndexUtils.addFieldNonRepeat(idoc, "location_info", location_info);
+        
+        for (Komponenta k : komponenta) {
+            k.setKategorie();
+        }
         IndexUtils.addJSONField(idoc, "dokument_cast", this);
 
         for (Komponenta k : komponenta) {
             k.fillSolrFields(idoc, kdoc, "dokument_cast");
             IndexUtils.addJSONField(kdoc, "dokument_cast_komponenta", k);
+            //IndexUtils.addJSONField(idoc, "dokument_cast_komponenta", k);
             idoc.addField("komponenta_ident_cely", k.ident_cely);
         }
 

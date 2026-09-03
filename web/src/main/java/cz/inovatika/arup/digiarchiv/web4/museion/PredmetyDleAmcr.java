@@ -2,6 +2,7 @@ package cz.inovatika.arup.digiarchiv.web4.museion;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "predmetyDleAmcrIdResponse")
@@ -34,15 +35,15 @@ public class PredmetyDleAmcr {
     public String organizaceId;
     
     @JacksonXmlProperty(localName = "pocetPom")
-    public String pocetPom;
+    public int pocetPom;
     
     @JacksonXmlProperty(localName = "pocetSys")
-    public String pocetSys;
+    public int pocetSys;
     
     @JacksonXmlProperty(localName = "predmetSys")
-    public List<Predmet> predmetSys;
+    public List<Predmet> predmetSys = new ArrayList();
     
     @JacksonXmlProperty(localName = "predmetPom")
-    public List<Predmet> predmetPom;
+    public List<Predmet> predmetPom = new ArrayList();
     
 }

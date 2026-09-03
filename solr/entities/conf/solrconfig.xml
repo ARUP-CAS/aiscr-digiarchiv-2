@@ -835,6 +835,7 @@
        <str name="facet.field">f_zeme</str>
        <str name="facet.field">f_zachovalost</str>
        <str name="facet.field">f_jistota</str>
+       <str name="facet.field">komponenta_jistota</str>
        <str name="facet.field">f_nahrada</str>
        <str name="facet.field">f_udalost_typ</str>
        <str name="facet.field">f_zachovalost</str>

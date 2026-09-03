@@ -146,10 +146,10 @@ export class Museion {
     if (!this.selectedOrganizace) {
       return;
     }
-    this.predmetyDleAmcrId.set(this.predmetyDleAmcrIdAll()[this.selectedOrganizace]);
+    this.predmetyDleAmcrId.set({...this.predmetyDleAmcrIdAll()[this.selectedOrganizace]});
     //this.pristup = this.predmetyDleAmcrId().pristup;
-    this.pristup = (this.predmetyDleAmcrId().predmetPom.filter(pp => pp.pristup === 'FULL').length > 0 ||
-                   this.predmetyDleAmcrId().predmetSys.filter(pp => pp.pristup === 'FULL').length > 0) ?
+    this.pristup = (this.predmetyDleAmcrId().predmetPom?.filter(pp => pp.pristup === 'FULL').length > 0 ||
+                   this.predmetyDleAmcrId().predmetSys?.filter(pp => pp.pristup === 'FULL').length > 0) ?
                     'FULL' : 'BASIC';
     this.columns.set([...(this.pristup === 'FULL' ? this.columnsFull : this.columnsBasic)])
     this.predmety.set([
