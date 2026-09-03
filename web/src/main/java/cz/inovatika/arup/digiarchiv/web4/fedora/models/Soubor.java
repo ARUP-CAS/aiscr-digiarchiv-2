@@ -77,6 +77,7 @@ public class Soubor {
     }
     for (String di : d) {
       String url = path + "/" + di;
+      idoc.addField("soubor_filepath", url);
       url = url.substring(url.indexOf("record"));
       try {
         JSONObject json = FedoraUtils.getFileMetadataByPath(url);

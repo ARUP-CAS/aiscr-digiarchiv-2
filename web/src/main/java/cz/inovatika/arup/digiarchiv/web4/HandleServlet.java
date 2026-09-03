@@ -86,10 +86,11 @@ public class HandleServlet extends HttpServlet {
           response.getWriter().print("Downloading file still in progress. Try later.");
           return;
         }
-        AppState.writeGetFileStarted(ip, InitServlet.asSafePath(id));
-        boolean success = getFile(InitServlet.asSafePath(id), request, response);
+        String safeId = InitServlet.asSafePath(id);
+        AppState.writeGetFileStarted(ip, safeId);
+        boolean success = getFile(safeId, request, response);
         // Logs IP ends time
-        AppState.writeGetFileFinished(ip, InitServlet.asSafePath(id), success);
+        AppState.writeGetFileFinished(ip, safeId, success);
         //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile end");
       } catch (Exception ex) {
         LOGGER.log(Level.SEVERE, "", ex);
@@ -305,11 +306,29 @@ public class HandleServlet extends HttpServlet {
             return false;
           }
         }
-
+        
         String filename = doc.getString("nazev");
-
         String url = doc.getString("path");
+        String distri = "orig";
+        String fullId = "rest/AMCR/record/" + id;
+        
+        if(!fullId.equals(url)) {
+          // Je to distri
+          JSONArray distribuce = doc.getJSONArray("distribuce");
+          for(int i = 0; i<distribuce.length(); i++) {
+            if (fullId.equals(url + "/" + distribuce.getJSONObject(i).getString("path"))) {
+              distri = distribuce.getJSONObject(i).getString("path");
+              mime = distribuce.getJSONObject(i).optString("mimetype", mime);
+              filename = distribuce.getJSONObject(i).optString("filename", filename);
+            }
+          }
+        }
+
         if (id.contains("page")) {
+          url += "/thumb-large";
+          response.setContentType("image/png");
+          response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
+        } else if (id.contains("thumb-large")) {
           url += "/thumb-large";
           response.setContentType("image/png");
           response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
@@ -318,7 +337,7 @@ public class HandleServlet extends HttpServlet {
           response.setContentType("image/png");
           response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + ".png\"");
         } else {
-          url += "/orig";
+          url += "/" + distri;
           response.setContentType(mime);
           response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
         }
@@ -530,7 +549,7 @@ public class HandleServlet extends HttpServlet {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2
       String soubor_filepath = "rest/AMCR/record/" + id;
 
-      if (id.contains("thumb") && !id.contains("page") && !id.endsWith("thumb")) {
+      if (id.contains("thumb") && !id.contains("page") && !(id.endsWith("thumb") || id.endsWith("thumb-large"))) {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/1            
         LOGGER.log(Level.WARNING, "{0} is invalid", id);
         return new JSONObject().put("invalid", true);
@@ -541,7 +560,6 @@ public class HandleServlet extends HttpServlet {
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2/thumb/page/1            
         soubor_filepath = soubor_filepath.substring(0, soubor_filepath.indexOf("/thumb"));
       }
-
       SolrClient client = getSolrClientSearch();
       SolrQuery query = new SolrQuery("*")
               .addSort("datestamp", SolrQuery.ORDER.desc)
@@ -563,7 +581,7 @@ public class HandleServlet extends HttpServlet {
       JSONArray soubor = doc.getJSONArray("soubor");
       for (int i = 0; i < soubor.length(); i++) {
         JSONObject sdoc = soubor.getJSONObject(i);
-        if (soubor_filepath.equals(sdoc.optString("path"))) {
+        if (soubor_filepath.contains(sdoc.optString("path"))) {
 //                doc.put("id", sdoc.optString("id"));
 //                doc.put("mimetype", sdoc.optString("mimetype"));
 //                doc.put("path", sdoc.optString("path"));
