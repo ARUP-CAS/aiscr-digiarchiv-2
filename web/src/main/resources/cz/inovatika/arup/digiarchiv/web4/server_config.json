@@ -785,7 +785,6 @@
       "A": "akce",
       "P": "projekt",
       "N": "samostatny_nalez"
-    },
-    "cacheExpirationHours": "2" 
+    }
   }
 }

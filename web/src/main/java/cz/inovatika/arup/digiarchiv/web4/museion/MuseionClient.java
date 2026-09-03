@@ -50,7 +50,7 @@ public class MuseionClient {
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    System.out.println(response.body());
+    //System.out.println(response.body());
     return response.body();
   }
 
