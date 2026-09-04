@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
@@ -141,9 +141,11 @@ public class Projekt implements FedoraModel {
 
     @Override
     public void fillSolrFields(SolrInputDocument idoc) throws Exception {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String pr = SearchUtils.getPristupnostMap().get(pristupnost.getId());
             idoc.setField("pristupnost", pr);
+            IndexUtils.setDateStamp(idoc, ident_cely);
+            IndexUtils.setDateStampFromHistory(idoc, historie);
             boolean searchable = false;
             if (!projekt_dokument.isEmpty()) {
                 // check if related are searchable
@@ -162,7 +164,7 @@ public class Projekt implements FedoraModel {
                         searchable = true;
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             if (!projekt_samostatny_nalez.isEmpty()) {
@@ -178,13 +180,14 @@ public class Projekt implements FedoraModel {
                         addLocFromSN(ja, idoc);
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
 
             if (!searchable && !projekt_archeologicky_zaznam.isEmpty()) {
                 SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
+                        //.addFilterQuery("{!join fromIndex=entities to=ident_cely from=projekt_archeologicky_zaznam}ident_cely:\"" + ident_cely + "\"")
+                        .addFilterQuery("akce_projekt:\"" + ident_cely + "\"")
                         .setRows(1)
                         .setFields("ident_cely,entity");
                 try {
@@ -193,17 +196,17 @@ public class Projekt implements FedoraModel {
                         searchable = true;
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             idoc.setField("searchable", searchable);
-            IndexUtils.setDateStamp(idoc, ident_cely);
-            IndexUtils.setDateStampFromHistory(idoc, historie);
 
             IndexUtils.addJSONField(idoc, "projekt_oznamovatel", projekt_oznamovatel);
 
             IndexUtils.addRefField(idoc, "projekt_okres", projekt_okres);
-            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(projekt_okres.getId()).getString("kraj"));
+            JSONObject okres = SolrSearcher.getOkresByKod(projekt_okres.getId());
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okres.getString("kraj"));
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okres.getString("rada_id"));
             IndexUtils.addVocabField(idoc, "projekt_typ_projektu", projekt_typ_projektu);
             IndexUtils.addRefField(idoc, "projekt_vedouci_projektu", projekt_vedouci_projektu);
             IndexUtils.addVocabField(idoc, "projekt_organizace", projekt_organizace);
@@ -239,22 +242,10 @@ public class Projekt implements FedoraModel {
 
             //List<SolrInputDocument> idocs = new ArrayList<>();
             for (Soubor s : soubor) {
-//                SolrInputDocument djdoc = s.createSolrDoc();
-//                idocs.add(djdoc);
-                IndexUtils.addJSONField(idoc, "soubor", s);
-
-                idoc.addField("soubor_id", s.id);
-                idoc.addField("soubor_nazev", s.nazev);
-                idoc.addField("soubor_filepath", s.path);
-                idoc.addField("soubor_rozsah", s.rozsah);
-                idoc.addField("soubor_size_bytes", s.size_mb);
-
+              s.fillSolrFields(idoc);
             }
-//            if (!idocs.isEmpty()) {
-//                IndexUtils.getClientBin().add("soubor", idocs, 10);
-//            }
 //        } catch (SolrServerException | IOException ex) {
-//            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, "", ex);
 //        }
 
             if (projekt_chranene_udaje != null) {
@@ -384,7 +375,7 @@ public class Projekt implements FedoraModel {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Projekt.class.getName()).log(Level.SEVERE, "", ex);
         }
     }
 
@@ -456,7 +447,7 @@ public class Projekt implements FedoraModel {
 //-- A-B: stav = 6
 //-- C: stav >= 1
 //-- D-E: bez omezení 
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("D") >= 0) {
             return true;
@@ -524,6 +515,7 @@ class ProjektChraneneUdaje {
                 kraje.add(kraj);
                 IndexUtils.addFieldNonRepeat(idoc, "f_kraj", kraj);
             }
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", k.optString("rada_id"));
         }
 
         IndexUtils.setSecuredJSONField(idoc, "projekt_chranene_udaje", this);

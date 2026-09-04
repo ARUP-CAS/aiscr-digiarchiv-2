@@ -9,6 +9,13 @@
   "to": "to",
   "negativní": "negative",
   "pozitivní": "positive",
+  "DOI": "DOI",
+  "IGSN": "IGSN",
+  "Email": "Email",
+  "Ex. pat@example.com": "E.g. example@example.com",
+  "IP": "IP address",
+  "loading": "Loading",
+  "loading images": "Loading images",
   "title": {
     "results": "Results",
     "map": "Map",
@@ -16,7 +23,6 @@
     "export-mapa": "Map Export",
     "record": "Record "
   },
-
   "navbar": {
     "desc": {
       "logo_desc": "AMCR Digital Archive",
@@ -28,8 +34,6 @@
       "Close": "Close menu"
     }
   },
-
-
   "searchbar": {
     "input": {
       "Zadejte vyhledávací dotaz": "Enter search query"
@@ -43,8 +47,6 @@
       "Zavřít mapu": "Close map"
     }
   },
-
-
   "toolbar": {
     "menu": {
       "row": "Line view (caption only)",
@@ -57,12 +59,9 @@
       "default": "Full view (caption, thumbnail, description)",
       "Export": "Export",
       "Favorites": "Favorites",
-      "Zobrazit časovou osu":  "Display time chart",
-      "Skrýt časovou osu": "Hide time chart"
+      "Museion": "Evidenced in Museion"
     }
   },
-
-
   "paginator": {
     "desc": {
       "Číslo stránky": "Page number",
@@ -98,8 +97,6 @@
       "desc": " descending"
     }
   },
-
-
   "facet": {
     "title": {
       "Typy záznamů": "Record types",
@@ -167,6 +164,7 @@
       "f_autor": "Document - author",
       "f_rada": "Document - series",
       "f_material_dokumentu": "Document - material",
+      "dokument_licence": "Document - licence",
       "f_typ_dokumentu_posudek": "Document - expert report type",
       "f_jazyk_dokumentu": "Document - language",
       "f_ulozeni_originalu": "Document - location of original",
@@ -176,7 +174,6 @@
       "f_pian_typ": "Spatial Unit - type",
       "f_pian_presnost": "Spatial Unit - accuracy",
       "f_pian_zm10": "Spatial Unit - Base Map 1:10 000",
-      "f_let_pilot": "Flight - pilot",
       "f_let_organizace": "Flight - organisation",
       "f_let_pocasi": "Flight - weather",
       "f_let_dohlednost": "Flight - visibility",
@@ -184,7 +181,6 @@
       "f_let_letiste_cil": "Flight - destination airport",
       "f_let_pozorovatel": "Flight - observer",
       "f_pozorovatel": "Flight - observer",
-      "f_rok_vzniku": "Document - year of creation",
       "ident_cely": "Identifier",
       "popis": "Description",
       "poznamka": "Note",
@@ -218,7 +214,6 @@
       "dokument_cast_lokalita": "Content part - related site",
       "komponenta_dokument_ident_cely": "Doc. component - identifier",
       "dokument_cast_komponenta_dokument_jistota": "Doc. component - uncertain dating",
-      "komponenta_dokument_jistota": "Doc. component - uncertain dating",
       "komponenta_dokument_jistota_false": "uncertain dating",
       "komponenta_dokument_presna_datace": "Doc. component - precise dating",
       "komponenta_dokument_poznamka": "Doc. component - note",
@@ -232,13 +227,12 @@
       "neident_akce_pian": "Unident. fieldwork - spatial unit",
       "soubor_rozsah": "File - number of pages",
       "soubor_size_mbytes": "File - size (MB)",
+      "soubor_distri": "File - distribution",
       "projekt_podnet": "Project - motivation",
       "projekt_chu_lokalizace": "Project - location",
       "projekt_chranene_udaje_parcelni_cislo": "Project - parcel number",
-      "projekt_planovane_zahajeni": "Project - scheduled launch",
       "projekt_kulturni_pamatka_cislo": "Project - monument registration number",
       "projekt_kulturni_pamatka_popis": "Project - monument name",
-      "projekt_datum_provedeni": "Project - date",
       "projekt_datum_zahajeni": "Project - start date",
       "projekt_datum_ukonceni": "Project - end date",
       "akce_datum_zahajeni": "Fieldwork - start date",
@@ -250,7 +244,6 @@
       "akce_ulozeni_nalezu": "Fieldwork - finds repository",
       "akce_lokalizace_okolnosti": "Fieldwork - location",
       "akce_je_nz": "Fieldwork - substitutes report",
-      "akce_odlozena_nz": "Fieldwork - report postponed",
       "akce_projekt": "Fieldwork - related project",
       "samostatny_nalez_evidencni_cislo": "Ind. find - reference no.",
       "samostatny_nalez_hloubka": "Ind. find - depth (cm)",
@@ -260,7 +253,6 @@
       "samostatny_nalez_projekt": "Ind. find - related project",
       "lokalita_nazev": "Site - name",
       "az_dj": "Doc. unit - identifier",
-      "dj_nazev": "Doc. unit - label",
       "az_dj_nazev": "Doc. unit - label",
       "az_dj_negativni_jednotka": "Doc. unit - type of evidence",
       "pian_ident_cely": "Doc. unit - related spatial unit",
@@ -271,79 +263,33 @@
       "adb_parcelni_cislo": "ADP - parcel number",
       "az_adb_rok_popisu": "ADP - year of description",
       "az_adb_rok_revize": "ADP - year of revision",
-      "adb_rok_revize": "ADP - year of revision",
       "adb_poznamka": "ADP - note",
       "vyskovy_bod_ident_cely": "Elevation point - identifier",
-      "vyskovy_bod_niveleta": "Elevation point - elevation",
-      "komponenta_ident_cely": "Component - identifier",
-      "komponenta_jistota": "Component - uncertain dating",
-      "komponenta_presna_datace": "Component - precise dating",
-      "komponenta_poznamka": "Component - note",
-      "nalez_pocet": "Find - count",
-      "nalez_poznamka": "Find - note",
       "f_typ_projektu": "Project - type",
-      "f_kulturni_pamatka": "Project - heritage protection",
       "f_adb_typ_sondy": "ADP – trench type",
       "f_adb_podnet": "ADP – motivation",
       "f_dj_typ": "Fieldwork/Site - documentation unit type",
       "f_typ_lokality": "Site - type",
       "f_druh_lokality": "Site - class",
-      "lokalita_zachovalost": "Site - state of preservation",
       "f_lokalita_zachovalost": "Site - state of preservation",
-      "lokalita_zachovalost_human": "Site - state of preservation",
       "f_jistota": "Site - level of confidence",
+      "komponenta_jistota": "Component - confidence",
       "f_nalezce": "Ind. find - finder",
       "f_nalezove_okolnosti": "Ind. find - context",
-      "loc_rpt": "Map selection",
-      "rada": "Document - series",
-      "samostatny_nalez_predano_organizace": "Handed over to organisation",
-      "predmet_kategorie": "Find - category",
-      "vyber": "Map selection",
       "f_nahrada": "Document - substitution for original",
-      "f_udalost_typ": "Document - type of event",
       "adb_vyskovy_bod_typ": "ADP - type of elevation point",
       "f_kraj": "Region",
+      "f_kraj_rada": "Territorial jurisdiction",
+      "f_ez_typ": "External source - type",
+      "f_ez_autor": "External source - author",
+      "f_ez_casopis": "External source - journal",
+      "f_licence": "Licence",
+      "f_mimetype": "File type (MIME)",
+      "f_osoby": "Persons",
       "commonFacets": "Common queries"
     }
   },
-
-
   "card": {
-    "field": {
-      "f_typ_dokumentu": "Type",
-      "f_rada": "Series",
-      "pristupnost": "Acessibility",
-      "f_organizace": "Organisation",
-      "f_popis": "Description",
-      "f_poznamka": "Note",
-      "f_ulozeni_originalu": "Location of original",
-      "datum_zverejneni": "Date of disclosure",
-      "f_format": "Format",
-      "f_zachovalost": "State of preservation",
-      "extra_data_datum_vzniku": "Date of creation",
-      "f_zeme": "Country",
-      "vedouci_akce": "Fieldwork manager",
-      "lokalizace": "Location",
-      "pian": "Spatial Unit",
-      "f_hlavni_typ": "Primary type",
-      "f_vedlejsi_typ": "Secondary type",
-      "datum_provedeni": "Date",
-      "f_areal": "Activity area",
-      "obdobi": "Period",
-      "druh": "Class",
-      "dalsi_katastry": "Additional cadastres",
-      "f_typ_projektu": "Type",
-      "podnet": "Intervention motivation",
-      "predano_organizace": "Handed over to organisation",
-      "inv_cislo": "Reference no.",
-      "f_okres": "District",
-      "pocet": "Count",
-      "nalezove_okolnosti": "Finding context",
-      "hloubka": "Depth (cm)",
-      "dok_jednotka_negativni_jednotka": "Type of evidence",
-      "f_pozorovatel": "Observer",
-      "f_pian_zm10": "Base Map 1:10 000"
-    },
     "tooltip": {
       "Zavřít": "Close",
       "Persistentní odkaz": "Persistent link",
@@ -410,7 +356,6 @@
       "Pian": "Spatial Unit",
       "Nahrazuje NZ": "Substitutes report",
       "odlozena_nz": "Report postponed",
-      "Lokalizace/okolnosti": "Location/circumstances",
       "Počet dokumentů": "Documents",
       "Počet projektů": "Projects",
       "Počet 3D dokumentů": "3D models",
@@ -467,12 +412,15 @@
       "přesnost": "accuracy",
       "PIAN - Základní mapa 1:10 000": "Base Map 1:10 000",
       "Favorites": "Favorites",
+      "Museion": "Evidenced in Museion",
       "Persistentní odkaz": "Persistent link",
       "záznamů": "records",
       "dalsi_katastry": "Additional cadastres",
       "lokalita_zachovalost": "State of preservation",
       "lokalita_jistota": "Level of confidence",
-      "geom_system": "Primary EPSG"
+      "geom_system": "Primary EPSG",
+      "Původ": "Origin",
+      "Aktivity": "Activities"
     },
     "button": {
       "Skrýt detail": "Hide detail",
@@ -491,7 +439,7 @@
       "Externí zdroje": "External sources",
       "Popis projektu": "Project description",
       "Popis nálezu": "Find description",
-      "Archeologický dokumentační bod": "Archaeological Documentation Point",
+      "Popis komponenty": "Component description",
       "Výškové body": "Elevation points",
       "Výškový bod": "Elevation point",
       "Dokumentační jednotka": "Documentation unit",
@@ -524,8 +472,6 @@
       "idnotfound": "The referenced record could not be found. The record may have been deleted, is temporarily unavailable, or has not yet been archived. If there are any remaining issues, please contact us."
     }
   },
-
-
   "sidenav": {
     "tab": {
       "Info": "The displayed results correspond to the current map window.",
@@ -536,8 +482,6 @@
       "Filtrace / Výsledky": "Filtration/Results"
     }
   },
-
-
   "map": {
     "desc": {
       "select area": "Filter area",
@@ -551,7 +495,8 @@
       "tooltipTextDelete": "Press SHIFT-key and click to <b>delete point</b>",
       "tooltipTextMove": "Click and drag to <b>move point</b><br>",
       "tooltipTextResume": "<br>Press CTRL-key and click to <b>resume line</b>",
-      "tooltipTextAdd": "Press CTRL-key and click to <b>add point</b>"
+      "tooltipTextAdd": "Press CTRL-key and click to <b>add point</b>",
+      "multipleLayers": "Multiple layers overlap."
     },
     "tooltip": {
       "Odstranit tento filtr": "Remove this filter",
@@ -568,11 +513,8 @@
     },
     "zoomToResults": "The number of results found is: {{numFound}}. To view the results, zoom in on the map or use filtering."
   },
-
-
   "footer": {
     "desc": {
-      "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
       "Kontakt": "Contact",
       "Verze": "Version",
       "Operační program Výzkum, vývoj a vzdělávání": "Operational Programme Research, Development and Education",
@@ -580,14 +522,12 @@
       "Archeologický informační systém České republiky": "Archaeological Information System of the Czech Republic",
       "Programy strategie AV21": "Strategy AV21: Top research in the public interest",
       "Digitální archiv archeologické mapy České republiky": "Digital archive of the archaeological map of the Czech Republic",
-      "Ariadne": "Ariadne"
+      "Velké výzkumné infrastruktury": "Large research infrastructures"
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
     }
   },
-
-
   "dialog": {
     "title": {
       "Přihlášení uživatele": "User login",
@@ -599,7 +539,7 @@
       "Přihlašovací jméno": "Username (email)",
       "Heslo": "Password",
       "Přihlášený uživatel": "Logged user",
-      "Uživatelská role role": "User role",
+      "Uživatelská role": "User role",
       "Organizace": "Organisation",
       "Správa dat, uživatelů a podpora pro oblast Čech": "Data management and user support for Bohemia",
       "Archeologický ústav AV ČR, Praha, v. v. i.": "Institute of Archaeology CAS, Prague",
@@ -613,6 +553,7 @@
       "Jméno": "Name",
       "Komentář": "Comment",
       "download_started": "Download started",
+      "export_started": "Export started",
       "viewerInfo": "The content is displayed in preview quality. Use the download icon to get the content in full quality."
     },
     "input": {
@@ -636,7 +577,11 @@
       "error": "Error",
       "search_error": "Error searching",
       "login_server_error": "Login not available. Try later.",
-      "invalid_page": "Invalid page"
+      "invalid_page": "Invalid page",
+      "document_404": "The record could not be found.",
+      "document_410": "The record has been deleted.",
+      "document_401": "The record exists but is not accessible without logging in.",
+      "document_403": "You do not have sufficient permissions to view the record."
     },
     "license": {
       "cc_by_nc": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
@@ -646,22 +591,18 @@
       "jejímž autorem je": "operated by",
       "podléhá licenci": "is licensed under",
       "Data podléhají licenci": "Data is licensed under",
-      "Citujte jako": "Cite as",
-      "Dokument": "Document",
-      "Dostupné z": "Available at",
-      "AMČR: Záznam": "Archaeological Information System of the Czech Republic: Record",
-      "Archeologická mapa České republiky": "Archaeological Map of the Czech Republic",
       "stránka z": "page from"
     },
     "tooltip": {
       "Stáhněte soubor": "Download file"
     }
   },
-
-
   "export": {
     "field": {
       "ident_cely": "Identifier",
+      "handle": "Stable URL - Digital Archive",
+      "api_prefix": "Stable URL - API",
+      "show_in_AMCR": "Stable URL - AMCR",      
       "okres": "District",
       "katastr": "Cadastre",
       "pristupnost": "Acessibility",
@@ -670,13 +611,11 @@
       "popis": "Description",
       "poznamka": "Note",
       "obdobi": "Period",
-
       "dokument_autor": "Document - author",
       "dokument_rok_vzniku": "Document - year of creation",
       "dokument_typ_dokumentu": "Document type",
       "dokument_material_originalu": "Original material",
       "dokument_oznaceni_originalu": "Document - original label",
-
       "projekt_typ_projektu": "Project - type",
       "akce_datum_zahajeni": "Start date",
       "akce_datum_ukonceni": "End date",
@@ -684,8 +623,7 @@
       "projekt_datum_ukonceni": "Project - end date",
       "projekt_podnet": "Project - motivation",
       "projekt_vedouci_projektu": "Project manager",
-      "organizace_prihlaseni": "Responsible organisation",
-      "f_kulturni_pamatka": "Project - heritage protection",
+      "projekt_organizace": "Responsible organisation",
       "akce_hlavni_vedouci": "Fieldwork manager",
       "akce_specifikace_data": "Execution date accuracy",
       "akce_hlavni_typ": "Primary type",
@@ -696,19 +634,22 @@
       "lokalita_druh": "Site - class",
       "samostatny_nalez_nalezce": "Ind. find - finder",
       "samostatny_nalez_datum_nalezu": "Ind. find - date of finding",
-      "samostatny_nalez_okolnosti": "Finding context",
+      "samostatny_nalez_okolnosti": "Ind. find - context",
       "samostatny_nalez_hloubka": "Ind. find - depth (cm)",
-      "samostatny_nalez_druh": "Site class",
-      "predmet_kategorie": "Subject of category",
-      "samostatny_nalez_specifikace": "Specifications",
-      "samostatny_nalez_pocet": "Ind. find - count",
-      "samostatny_nalez_predano_organizace": "Handed over to organisation",
+      "samostatny_nalez_druh_nalezu": "Find - class",
+      "samostatny_nalez_kategorie_nalezu": "Find - category",
+      "samostatny_nalez_specifikace": "Find - specification",
+      "samostatny_nalez_pocet": "Find - count",
+      "samostatny_nalez_predano_organizace": "Sam. find - repository",
       "samostatny_nalez_evidencni_cislo": "Ind. find - reference no.",
       "f_obdobi": "Component - period",
       "f_areal": "Component - activity area",
       "dokument_extra_data_odkaz": "Document - link",
       "akce_je_nz": "Fieldwork - substitutes report",
-      "akce_odlozena_nz": "Fieldwork - report postponed"
+      "komponenta_presna_datace": "Doc. component - precise dating",
+      "lokalita_jistota": "Level of confidence",
+      "komponenta_aktivita": "Component - activity",
+      "komponenta_areal": "Component - activity area"
     },
     "desc": {
       "Pian": "Spatial Unit",
@@ -721,8 +662,6 @@
       "WKT": "WKT"
     }
   },
-
-
   "entities": {
     "dokument": {
       "title": "Documents",
@@ -767,7 +706,8 @@
       "title": "Documentation Units"
     },
     "komponenta": {
-      "title": "Components"
+      "title": "Components",
+      "desc": "Overview of records for archaeological components and finds across all record categories."
     },
     "vyskovy_bod": {
       "title": "Elevation Points"
@@ -776,8 +716,6 @@
       "title": "Document Content Parts"
     }
   },
-
-
   "dokument_kategorie_dokumentu": {
     "texty": "Texts",
     "foto": "Photographs",
@@ -788,14 +726,14 @@
     "pas": "Individual finds",
     "ddata3d": "3D models"
   },
-
-
+  "f_kraj_rada": {
+    "C": "Bohemia",
+    "M": "Moravia and Silesia"
+  },
   "alert": {
     "insuficient rights": "You must logged-in with your username and password to view this document. The account can be easily registered using a web form available via the top menu -> User registration.\nIf you are logged into your AMCR account and the document is still not accessible, this indicates one of the following options:\n\n1) The document contains sensitive data and its publication is restricted.\n2) The copyright holder has not given its consent to the publication of the document.\n3) Embargo period of 3 years from the document's archiving was not met.\n\nIn that case, please contact the AMCR administrator or the relevant organisation with a request for access. Your application will be individually examined and processed.",
     "sessionTimeout": "You have been automatically logged off due to inactivity."
   },
-
-
   "f_aktivita_sidlistni": "residential",
   "f_aktivita_pohrebni": "burial",
   "f_aktivita_vyrobni": "production",
@@ -806,7 +744,6 @@
   "f_aktivita_boj": "fighting",
   "f_aktivita_jina": "other activity",
   "f_aktivita_intruze": "find intrusion",
-
   "stats": {
     "ident_cely": "Record ID",
     "type": "Event",
@@ -827,6 +764,7 @@
       "MONTH": "Accesses per month"
     },
     "graphName": "User access count",
+    "graphLegend": "Number of accesses",
     "interval": "Displayed interval",
     "interval_day": "Day",
     "interval_week": "Week",
@@ -837,5 +775,84 @@
   "commonFacets": {
     "noevidence": "Negative evidence",
     "posevidence": "Pozitive evidence"
+  },
+  "museion": {
+    "zobrazit_predmety": "Show registered items in connected Museion systems",
+    "predmety": "Items registered for the record",
+    "organizaceId": "Collection manager",
+    "pocetSys": "Number of inventory numbers in systematic records",
+    "pocetPom": "Number of registration numbers in auxiliary records",
+    "aktivita": "Activity",
+    "areal": "Area",
+    "cislo": "Registration number",
+    "cisloCes": "CES number",
+    "cisloEvidCES": "CES collection number",
+    "dataceUrceni": "Dating of identification",
+    "dataceVzniku": "Dating of origin",
+    "datumNabyti": "Date of acquisition",
+    "datumNalezu": "Date of find",
+    "datumStav": "Date of condition description",
+    "datumZapisu": "Date of registration",
+    "druhObjektu": "Object type",
+    "fond": "Fund",
+    "hloubka": "Find depth",
+    "kompletnost": "Completeness",
+    "komponenta": "Component",
+    "kontextObjekt": "Object",
+    "kontextPlocha": "Area",
+    "kontextStratigrafie": "Stratigraphic unit",
+    "material": "Material",
+    "mnozstviSlovy": "Quantity",
+    "okolnosti": "Circumstances",
+    "oznaceni": "Designation",
+    "pocetCasti": "Number of parts",
+    "pocetKusu": "Number of pieces",
+    "podsbirka": "Sub-collection",
+    "popis": "Description",
+    "popisCasti": "Description of parts",
+    "popisStav": "Condition description",
+    "poznamkaUrceni": "Note",
+    "prirustkoveCislo": "Accession number",
+    "rozmer": "Dimensions",
+    "sbirka": "Collection",
+    "stav": "Condition",
+    "technika": "Technique",
+    "desc": {
+      "aktivita": "Activity.",
+      "areal": "Area.",
+      "cislo": "Inventory number or auxiliary registration number, depending on the type.",
+      "cisloCes": "CES number.",
+      "cisloEvidCES": "CES collection registration number.",
+      "dataceUrceni": "Dating of the identification (expert description) of the item.",
+      "dataceVzniku": "Dating of origin (period) of the collection item.",
+      "datumNabyti": "Date of acquisition.",
+      "datumNalezu": "Date of find.",
+      "datumStav": "Date when the physical condition of the item was determined.",
+      "datumZapisu": "Date of entry into systematic records.",
+      "druhObjektu": "Object type.",
+      "fond": "Name of the fund.",
+      "hloubka": "Find depth.",
+      "kompletnost": "Completeness.",
+      "komponenta": "Component.",
+      "kontextObjekt": "Context - object.",
+      "kontextPlocha": "Context – area.",
+      "kontextStratigrafie": "Context – stratigraphy.",
+      "material": "Expert description – list of materials from which the collection item is made.",
+      "mnozstviSlovy": "Quantity in words.",
+      "okolnosti": "Find circumstances.",
+      "oznaceni": "Name (item name) of the collection item.",
+      "pocetCasti": "Number of item parts.",
+      "pocetKusu": "Number of pieces.",
+      "podsbirka": "Name of the sub-collection.",
+      "popis": "Expert description of the item that identifies it. Description of appearance, function, production, etc.",
+      "popisCasti": "Description of item parts.",
+      "popisStav": "Description of the current physical condition of the item.",
+      "poznamkaUrceni": "Note on the identification (expert description) of the item.",
+      "prirustkoveCislo": "Accession number.",
+      "rozmer": "Expert description – item dimensions.",
+      "sbirka": "Name of the collection.",
+      "stav": "Name of the current physical condition of the item.",
+      "technika": "Expert description – list of techniques used that are recognized on the item."
+    }
   }
 }

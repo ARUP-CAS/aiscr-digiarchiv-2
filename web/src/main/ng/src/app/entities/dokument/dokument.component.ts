@@ -47,12 +47,14 @@ export class DokumentComponent extends Entity {
     if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
-  // if (!this._result.ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
+  // if (!this._result().ident_cely || this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
   //   return;
   // }
-  this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
-    this._result.dokument_cast_archeologicky_zaznam = res.dokument_cast_archeologicky_zaznam;
-    this._result.dokument_cast_projekt = res.dokument_cast_projekt;
+  this.service.checkRelations(this._result().ident_cely).subscribe((res: any) => {
+    this._result.update(r => ({ ...r,
+        dokument_cast_archeologicky_zaznam: res.dokument_cast_archeologicky_zaznam,
+        dokument_cast_projekt: res.dokument_cast_projekt
+      }));
     this.relationsChecked = true;
     
     const related: { entity: string; ident_cely: string; }[] = [];
@@ -71,24 +73,24 @@ export class DokumentComponent extends Entity {
 
 
   override setBibTex() {
-    const organizace = this.service.getHeslarTranslation(this._result.dokument_organizace, 'organizace');
-    const autor = this._result.dokument_autor ? this._result.dokument_autor.join(' and ') : '';
-    this.bibTex = `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
+    const organizace = this.service.getHeslarTranslation(this._result().dokument_organizace, 'organizace');
+    const autor = this._result().dokument_autor ? this._result().dokument_autor.join(' and ') : '';
+    this.bibTex = `@misc{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely},
       author = {${autor}}, 
-      title = {Dokument ${this._result.ident_cely}},
-      howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
-      year = {${this._result.dokument_rok_vzniku}},
+      title = {Dokument ${this._result().ident_cely}},
+      howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely}},
+      year = {${this._result().dokument_rok_vzniku}},
       note = {${organizace}},
-      doi = {${this._result.dokument_doi}}
+      doi = {${this._result().dokument_doi}}
     }`;
   }
 
   override getFullId() {
-    this.service.getId(this._result.ident_cely).subscribe((res: any) => {
-      this._result = res.response.docs[0];
-      if (this._result.dokument_cast) {
-        this._result.dokument_cast.sort((dc1: { ident_cely: string; }, dc2: { ident_cely: any; }) => dc1.ident_cely.localeCompare(dc2.ident_cely) );
+    this.service.getId(this._result().ident_cely).subscribe((res: any) => {
+      if (res.response.docs[0].dokument_cast) {
+        res.response.docs[0].dokument_cast.sort((dc1: { ident_cely: string; }, dc2: { ident_cely: any; }) => dc1.ident_cely.localeCompare(dc2.ident_cely) );
       }
+      this._result.set(res.response.docs[0]);
       // this.setVsize();
       // this.getArchZaznam();
       // this.getProjekts();
@@ -97,17 +99,17 @@ export class DokumentComponent extends Entity {
   }
 
   override setImg() {
-    if (this._result.soubor_filepath?.length > 0) {
-      this._result.soubor.sort((a: any, b: any) => {
+    if (this._result().soubor_filepath?.length > 0) {
+      this._result().soubor.sort((a: any, b: any) => {
         return a.nazev.localeCompare(b.nazev);
       });
-      this.imgSrc = this.config.context + '/api/img/thumb?id=' + this._result.soubor[0].id;
+      this.imgSrc = this.config.context + '/api/img/thumb?id=' + this._result().soubor[0].id;
     }
 
   }
 
   override popisObsahu(): string {
-    const s: string = this._result.popis;
+    const s: string = this._result().popis;
     return s.replace(/\[new_line\]/gi, '<br/>');
   }
 
@@ -116,14 +118,14 @@ export class DokumentComponent extends Entity {
       this.gotoDoc();
       return;
     }
-    const canView = this.state.hasRights(this._result.pristupnost, this._result.dokument_organizace);
+    const canView = this.state.hasRights(this._result().pristupnost, this._result().dokument_organizace);
     // const canView = true;
     if (canView) {
       this.state.dialogRef = this.dialog.open(FileViewerComponent, {
         panelClass: 'app-file-viewer',
         width: '1000px',
         height: '900px',
-        data: this._result
+        data: this._result()
       });
     } else {
       const msg = this.service.getTranslation('alert.insuficient rights');

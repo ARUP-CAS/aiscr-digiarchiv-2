@@ -9,6 +9,13 @@
   "to": "do",
   "negativní": "negativní",
   "pozitivní": "pozitivní",
+  "DOI": "DOI",
+  "IGSN": "IGSN",
+  "Email": "E-mail",
+  "Ex. pat@example.com": "Např. example@example.com",
+  "IP": "IP adresa",
+  "loading": "Načítání",
+  "loading images": "Načítání obrázků",
   "title": {
     "results": "Výsledky",
     "map": "Mapa",
@@ -16,7 +23,6 @@
     "export-mapa": "Export mapy",
     "record": "Záznam "
   },
-
   "navbar": {
     "desc": {
       "logo_desc": "Digitální archiv AMČR",
@@ -28,8 +34,6 @@
       "Close": "Zavřít menu"
     }
   },
-
-
   "searchbar": {
     "input": {
       "Zadejte vyhledávací dotaz": "Zadejte vyhledávací dotaz"
@@ -43,8 +47,6 @@
       "Zavřít mapu": "Zavřít mapu"
     }
   },
-
-
   "toolbar": {
     "menu": {
       "row": "Řádkové zobrazení (pouze titulek)",
@@ -57,19 +59,16 @@
       "default": "Plné zobrazení (titulek, náhled, popis)",
       "Export": "Export",
       "Favorites": "Oblíbené",
-      "Zobrazit časovou osu": "Zobrazit časovou osu",
-      "Skrýt časovou osu": "Skrýt časovou osu"
+      "Museion": "Evidované v Museion"
     }
   },
-
-
   "paginator": {
     "desc": {
       "Číslo stránky": "Číslo stránky",
       "Řazení": "Řadit podle",
-      "itemsPerPageLabel" : "Počet záznamů na stránce",
-      "nextPageLabel" : "Následující stránka",
-      "previousPageLabel" : "Předchozí stránka",
+      "itemsPerPageLabel": "Počet záznamů na stránce",
+      "nextPageLabel": "Následující stránka",
+      "previousPageLabel": "Předchozí stránka",
       "firstPageLabel": "První stránka",
       "lastPageLabel": "Poslední stránka",
       "rangeLabel1": "0 z {{length}}",
@@ -98,8 +97,6 @@
       "desc": " sestupně"
     }
   },
-
-
   "facet": {
     "title": {
       "Typy záznamů": "Typy záznamů",
@@ -167,6 +164,7 @@
       "f_autor": "Dokument - autor",
       "f_rada": "Dokument - řada",
       "f_material_dokumentu": "Dokument - materiál",
+      "dokument_licence": "Dokument - licence",
       "f_typ_dokumentu_posudek": "Dokument - typ posudku",
       "f_jazyk_dokumentu": "Dokument - jazyky",
       "f_ulozeni_originalu": "Dokument - uložení originálu",
@@ -176,7 +174,6 @@
       "f_pian_typ": "PIAN - typ",
       "f_pian_presnost": "PIAN - přesnost",
       "f_pian_zm10": "PIAN - Základní mapa 1:10 000",
-      "f_let_pilot": "Let - pilot",
       "f_let_organizace": "Let - organizace",
       "f_let_pocasi": "Let - počasí",
       "f_let_dohlednost": "Let - dohlednost",
@@ -184,7 +181,6 @@
       "f_let_letiste_cil": "Let - letiště cíl",
       "f_let_pozorovatel": "Let - pozorovatel",
       "f_pozorovatel": "Let - pozorovatel",
-      "f_rok_vzniku": "Dokument - rok vzniku",
       "ident_cely": "Identifikátor",
       "popis": "Popis",
       "poznamka": "Poznámka",
@@ -217,7 +213,6 @@
       "dokument_cast_akce": "Obsahová část - související akce",
       "dokument_cast_lokalita": "Obsahová část - související lokalita",
       "komponenta_dokument_ident_cely": "Komponenta dok. - identifikátor",
-      "komponenta_dokument_jistota": "Komponenta dok. - nejistá datace",
       "dokument_cast_komponenta_dokument_jistota": "Komponenta dok. - nejistá datace",
       "komponenta_dokument_jistota_false": "nejistá datace",
       "komponenta_dokument_presna_datace": "Komponenta dok. - přesná datace",
@@ -232,13 +227,12 @@
       "neident_akce_pian": "Neident. akce - PIAN",
       "soubor_rozsah": "Soubor - počet stran",
       "soubor_size_mbytes": "Soubor - velikost (MB)",
+      "soubor_distri": "Soubor - distribuce",
       "projekt_podnet": "Projekt - podnět",
       "projekt_chu_lokalizace": "Projekt - lokalizace",
       "projekt_chranene_udaje_parcelni_cislo": "Projekt - parcelní číslo",
-      "projekt_planovane_zahajeni": "Projekt - plánované zahájení",
       "projekt_kulturni_pamatka_cislo": "Projekt - rejstříkové číslo památky",
       "projekt_kulturni_pamatka_popis": "Projekt - název památky",
-      "projekt_datum_provedeni": "Projekt - datum provedení",
       "projekt_datum_zahajeni": "Projekt - datum zahájení",
       "projekt_datum_ukonceni": "Projekt - datum ukončení",
       "akce_datum_zahajeni": "Akce - datum zahájení",
@@ -250,7 +244,6 @@
       "akce_ulozeni_nalezu": "Akce - uložení nálezů",
       "akce_lokalizace_okolnosti": "Akce - lokalizace",
       "akce_je_nz": "Akce - nahrazuje NZ",
-      "akce_odlozena_nz": "Akce - Odložená NZ",
       "akce_projekt": "Akce - související projekt",
       "samostatny_nalez_evidencni_cislo": "Sam. nález - evidenční č.",
       "samostatny_nalez_hloubka": "Sam. nález - hloubka (cm)",
@@ -260,7 +253,6 @@
       "samostatny_nalez_projekt": "Sam. nález - související projekt",
       "lokalita_nazev": "Lokalita - název",
       "az_dj": "Dok. jednotka - identifikátor",
-      "dj_nazev": "Dok. jednotka - název",
       "az_dj_nazev": "Dok. jednotka - název",
       "az_dj_negativni_jednotka": "Dok. jednotka - typ zjištění",
       "pian_ident_cely": "Dok. jednotka - související PIAN",
@@ -271,79 +263,33 @@
       "adb_parcelni_cislo": "ADB - parcelní číslo",
       "az_adb_rok_popisu": "ADB - rok popisu",
       "az_adb_rok_revize": "ADB - rok revize",
-      "adb_rok_revize": "ADB - rok revize",
       "adb_poznamka": "ADB - poznámka",
       "vyskovy_bod_ident_cely": "Výškový bod - identifikátor",
-      "vyskovy_bod_niveleta": "Výškový bod - niveleta",
-      "komponenta_ident_cely": "Komponenta - identifikátor",
-      "komponenta_jistota": "Komponenta - jistota",
-      "komponenta_presna_datace": "Komponenta - přesná datace",
-      "komponenta_poznamka": "Komponenta - poznámka",
-      "nalez_pocet": "Nález - počet",
-      "nalez_poznamka": "Nález - poznámka",
       "f_typ_projektu": "Projekt - typ",
-      "f_kulturni_pamatka": "Projekt - památková ochrana",
       "f_adb_typ_sondy": "ADB – typ sondy",
       "f_adb_podnet": "ADB – podnět",
       "f_dj_typ": "Akce/lokalita - typ dokumentační jednotky",
       "f_typ_lokality": "Lokalita - typ",
       "f_druh_lokality": "Lokalita - druh",
-      "lokalita_zachovalost": "Lokalita - stav dochování",
       "f_lokalita_zachovalost": "Lokalita - stav dochování",
-      "lokalita_zachovalost_human": "Lokalita - stav dochování",
       "f_jistota": "Lokalita - jistota určení",
+      "komponenta_jistota": "Komponenta - jistota",
       "f_nalezce": "Sam. nález - nálezce",
       "f_nalezove_okolnosti": "Sam. nález - okolnosti",
-      "loc_rpt": "Mapový výběr",
-      "rada": "Dokument - řada",
-      "samostatny_nalez_predano_organizace": "Předáno organizaci",
-      "predmet_kategorie": "Nález - kategorie",
-      "vyber": "Mapový výběr",
       "f_nahrada": "Dokument - náhradní kopie",
-      "f_udalost_typ": "Dokument - typ dokumentované události",
       "adb_vyskovy_bod_typ": "ADB - typ výškového bodu",
       "f_kraj": "Kraj",
+      "f_kraj_rada": "Územní příslušnost",
+      "f_ez_typ": "Externí zdroj - typ",
+      "f_ez_autor": "Externí zdroj - autor",
+      "f_ez_casopis": "Externí zdroj - časopis",
+      "f_licence": "Licence",
+      "f_mimetype": "Typ souboru (MIME)",
+      "f_osoby": "Osoby",
       "commonFacets": "Obvyklé dotazy"
     }
   },
-
-
   "card": {
-    "field": {
-      "f_typ_dokumentu": "Typ",
-      "f_rada": "Řada",
-      "pristupnost": "Přístupnost",
-      "f_organizace": "Organizace",
-      "f_popis": "Popis",
-      "f_poznamka": "Poznámka",
-      "f_ulozeni_originalu": "Uložení originálu",
-      "datum_zverejneni": "Datum zveřejnění",
-      "f_format": "Formát",
-      "f_zachovalost": "Zachovalost",
-      "extra_data_datum_vzniku": "Datum vzniku",
-      "f_zeme": "Země",
-      "vedouci_akce": "Vedoucí",
-      "lokalizace": "Lokalizace",
-      "pian": "PIAN",
-      "f_hlavni_typ": "Hlavní typ",
-      "f_vedlejsi_typ": "Vedlejší typ",
-      "datum_provedeni": "Datum",
-      "f_areal": "Areál",
-      "obdobi": "Období",
-      "druh": "Druh",
-      "dalsi_katastry": "Další katastry",
-      "f_typ_projektu": "Typ",
-      "podnet": "Podnět",
-      "predano_organizace": "Předáno organizaci",
-      "inv_cislo": "Evidenční č.",
-      "f_okres": "Okres",
-      "pocet": "Počet",
-      "nalezove_okolnosti": "Nálezové okolnosti",
-      "hloubka": "Hloubka (cm)",
-      "dok_jednotka_negativni_jednotka": "Typ zjištění",
-      "f_pozorovatel": "Pozorovatel",
-      "f_pian_zm10": "Základní mapa 1:10 000"
-    },
     "tooltip": {
       "Zavřít": "Zavřít",
       "Persistentní odkaz": "Persistentní odkaz",
@@ -360,7 +306,7 @@
     "menu": {
       "Persistentní odkaz": "Persistentní odkaz",
       "api_prefix": "OAI-PMH API",
-      "show_in_AMCR":"Zobrazit v AMČR",
+      "show_in_AMCR": "Zobrazit v AMČR",
       "Zobrazit citaci": "Zobrazit citaci"
     },
     "desc": {
@@ -410,7 +356,6 @@
       "Pian": "PIAN",
       "Nahrazuje NZ": "Nahrazuje NZ",
       "odlozena_nz": "Odložená NZ",
-      "Lokalizace/okolnosti": "Lokalizace/okolnosti",
       "Počet dokumentů": "Dokumentů",
       "Počet projektů": "Projektů",
       "Počet 3D dokumentů": "3D modelů",
@@ -467,12 +412,15 @@
       "přesnost": "přesnost",
       "PIAN - Základní mapa 1:10 000": "Základní mapa 1:10 000",
       "Favorites": "Oblíbené",
+      "Museion": "Evidované v Museion",
       "Persistentní odkaz": "Persistentní odkaz",
       "záznamů": "záznamů",
       "dalsi_katastry": "Další katastry",
       "lokalita_zachovalost": "Stav dochování",
       "lokalita_jistota": "Jistota určení",
-      "geom_system": "Primární EPSG"
+      "geom_system": "Primární EPSG",
+      "Původ": "Původ",
+      "Aktivity": "Aktivity"
     },
     "button": {
       "Skrýt detail": "Skrýt detail",
@@ -491,7 +439,7 @@
       "Externí zdroje": "Externí zdroje",
       "Popis projektu": "Popis projektu",
       "Popis nálezu": "Popis nálezu",
-      "Archeologický dokumentační bod": "Archeologický dokumentační bod",
+      "Popis komponenty": "Popis komponenty",
       "Výškové body": "Výškové body",
       "Výškový bod": "Výškový bod",
       "Dokumentační jednotka": "Dokumentační jednotka",
@@ -517,15 +465,13 @@
       "Citujte jako": "Citujte jako",
       "Dokument": "Dokument",
       "Dostupné z": "Dostupné z",
-      "AMČR: Záznam" : "Archeologický informační systém České republiky: Záznam",
+      "AMČR: Záznam": "Archeologický informační systém České republiky: Záznam",
       "Archeologická mapa České republiky": "Archeologická mapa České republiky"
     },
     "note": {
       "idnotfound": "Odkazovaný záznam se nepodařilo nalézt. Záznam mohl být odstraněn, je dočasně nedostupný, nebo dosud nebyl archivován. V případě přetrvávajících problémů nás kontaktujte."
     }
   },
-
-
   "sidenav": {
     "tab": {
       "Info": "Zobrazené výsledky odpovídají aktuálnímu výřezu mapy.",
@@ -536,8 +482,6 @@
       "Filtrace / Výsledky": "Filtrace/Výsledky"
     }
   },
-
-
   "map": {
     "desc": {
       "select area": "Filtrovat oblast",
@@ -546,12 +490,13 @@
       "zoom out": "Oddálit",
       "info": "Mapa zobrazuje záznamy s přístupností odpovídající vaší uživatelské roli. Skryté záznamy vidí pouze uživatelé s vyšším oprávněním.",
       "measureOn": "Měření vzdálenosti",
-      "measureOff": "Ukončit měření vzdálenosti", 
+      "measureOff": "Ukončit měření vzdálenosti",
       "tooltipTextFinish": "Klikněte pro <b>dokončení linie</b><br>",
       "tooltipTextDelete": "Stiskněte klávesu SHIFT a klikněte pro <b>vymazání bodu</b>",
       "tooltipTextMove": "Kliněte a potáhněte pro <b>posun bodu</b><br>",
       "tooltipTextResume": "<br>Stiskněte klávesu CTRL a kllikněte pro <b>obnovení měření</b>",
-      "tooltipTextAdd": "Stiskněte klávesu CTRL a kllikněte pro <b>přidání bodu</b>"
+      "tooltipTextAdd": "Stiskněte klávesu CTRL a kllikněte pro <b>přidání bodu</b>",
+      "multipleLayers": "Překryv více prvků."
     },
     "tooltip": {
       "Odstranit tento filtr": "Zrušit tento filtr",
@@ -568,11 +513,8 @@
     },
     "zoomToResults": "Počet nalezených výsledků je: {{numFound}}. Pro zobrazení výsledků přibližte mapu nebo použijte filtraci."
   },
-
-
   "footer": {
     "desc": {
-      "Archeologický ústav AV ČR, Praha, v. v. i.": "Archeologický ústav AV ČR, Praha, v. v. i.",
       "Kontakt": "Kontakt",
       "Verze": "Verze",
       "Operační program Výzkum, vývoj a vzdělávání": "Operační program Výzkum, vývoj a vzdělávání",
@@ -580,14 +522,12 @@
       "Archeologický informační systém České republiky": "Archeologický informační systém České republiky",
       "Programy strategie AV21": "Strategie AV21: Špičkový výzkum ve veřejném zájmu",
       "Digitální archiv archeologické mapy České republiky": "Digitální archiv archeologické mapy České republiky",
-      "Ariadne": "Ariadne"
+      "Velké výzkumné infrastruktury": "Velké výzkumné infrastruktury"
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)"
     }
   },
-
-
   "dialog": {
     "title": {
       "Přihlášení uživatele": "Přihlášení uživatele",
@@ -612,7 +552,8 @@
       "Typ souboru": "Typ souboru",
       "Jméno": "Jméno",
       "Komentář": "Komentář",
-      "download_started": "Stažení souboru spuštěno",
+      "download_started": "Stahování zahájeno",
+      "export_started": "Export zahájen",
       "viewerInfo": "Obsah je zobrazen v náhledové kvalitě. Pro získání obsahu v plné kvalitě použijte ikonu pro stažení souboru."
     },
     "input": {
@@ -636,7 +577,11 @@
       "error": "Chyba",
       "search_error": "Chyba při odeslání dotazu",
       "login_server_error": "Přihlášení není momentálně dostupné",
-      "invalid_page": "Neplatné číslo stránky"
+      "invalid_page": "Neplatné číslo stránky",
+      "document_404": "Záznam se nepodařilo najít.",
+      "document_410": "Záznam byl odstraněn.",
+      "document_401": "Záznam existuje, ale není dostupný bez přihlášení.",
+      "document_403": "Pro zobrazení záznamu nemáte dostatečná oprávnění."
     },
     "license": {
       "cc_by_nc": "Creative Commons Uveďte původ-Neužívejte komerčně 4.0 Mezinárodní (CC BY-NC 4.0)",
@@ -646,22 +591,18 @@
       "jejímž autorem je": "jejímž autorem je",
       "podléhá licenci": "podléhá licenci",
       "Data podléhají licenci": "Data podléhají licenci",
-      "Citujte jako": "Citujte jako",
-      "Dokument": "Dokument",
-      "Dostupné z": "Dostupné z",
-      "AMČR: Záznam" : "Archeologický informační systém České republiky: Záznam",
-      "Archeologická mapa České republiky": "Archeologická mapa České republiky",
       "stránka z": "stránka z"
     },
     "tooltip": {
       "Stáhněte soubor": "Stáhnout soubor"
     }
   },
-
-
   "export": {
     "field": {
       "ident_cely": "Identifikátor",
+      "handle": "Trvalý odkaz - Digitální archiv",
+      "api_prefix": "Trvalý odkaz - API",
+      "show_in_AMCR": "Trvalý odkaz - AMČR",
       "okres": "Okres",
       "katastr": "Katastr",
       "pristupnost": "Přístupnost",
@@ -670,13 +611,11 @@
       "popis": "Popis",
       "poznamka": "Poznámka",
       "obdobi": "Období",
-
       "dokument_autor": "Dokument - autor",
       "dokument_rok_vzniku": "Dokument - rok vzniku",
       "dokument_typ_dokumentu": "Typ dokumentu",
       "dokument_material_originalu": "Materiál originálu",
       "dokument_oznaceni_originalu": "Dokument - označení originálu",
-
       "projekt_typ_projektu": "Projekt - typ",
       "akce_datum_zahajeni": "Datum zahájeni",
       "akce_datum_ukonceni": "Datum ukončení",
@@ -685,7 +624,6 @@
       "projekt_podnet": "Projekt - podnět",
       "projekt_vedouci_projektu": "Vedoucí projektu",
       "projekt_organizace": "Odpovědná organizace",
-      "f_kulturni_pamatka": "Projekt - památková ochrana",
       "akce_hlavni_vedouci": "Vedoucí akce",
       "akce_specifikace_data": "Specifikace data",
       "akce_hlavni_typ": "Hlavní typ",
@@ -696,19 +634,22 @@
       "lokalita_druh": "Lokalita - druh",
       "samostatny_nalez_nalezce": "Sam. nález - nálezce",
       "samostatny_nalez_datum_nalezu": "Sam. nález - datum nálezu",
-      "samostatny_nalez_okolnosti": "Nálezové okolnosti",
+      "samostatny_nalez_okolnosti": "Sam. nález - okolnosti",
       "samostatny_nalez_hloubka": "Sam. nález - hloubka (cm)",
-      "samostatny_nalez_druh": "Druh lokality",
-      "predmet_kategorie": "Předmět kategorie",
-      "samostatny_nalez_specifikace": "Specifikace",
-      "samostatny_nalez_pocet": "Sam. nález - počet",
-      "samostatny_nalez_predano_organizace": "Předáno organizaci",
+      "samostatny_nalez_druh_nalezu": "Nález - druh",
+      "samostatny_nalez_kategorie_nalezu": "Nález - kategorie",
+      "samostatny_nalez_specifikace": "Nález - specifikace",
+      "samostatny_nalez_pocet": "Nález - počet",
+      "samostatny_nalez_predano_organizace": "Sam. nález - uložení",
       "samostatny_nalez_evidencni_cislo": "Sam. nález - evidenční č.",
       "f_obdobi": "Komponenta - období",
       "f_areal": "Komponenta - areál",
       "dokument_extra_data_odkaz": "Dokument - odkaz",
       "akce_je_nz": "Akce - nahrazuje NZ",
-      "akce_odlozena_nz": "Akce - Odložená NZ"
+      "komponenta_presna_datace": "Komponenta dok. - přesná datace",
+      "lokalita_jistota": "Jistota určení",
+      "komponenta_aktivita": "Komponenta - aktivita",
+      "komponenta_areal": "Komponenta - areál"
     },
     "desc": {
       "Pian": "PIAN",
@@ -721,8 +662,6 @@
       "WKT": "WKT"
     }
   },
-
-
   "entities": {
     "dokument": {
       "title": "Dokumenty",
@@ -767,7 +706,8 @@
       "title": "Dokumentační jednotky"
     },
     "komponenta": {
-      "title": "Komponenty"
+      "title": "Komponenty",
+      "desc": "Přehled záznamů o archeologických komponentách a nálezech napříč kategoriemi záznamů."
     },
     "vyskovy_bod": {
       "title": "Výškové body"
@@ -776,8 +716,6 @@
       "title": "Obsahové části dokumentů"
     }
   },
-
-
   "dokument_kategorie_dokumentu": {
     "texty": "Texty",
     "foto": "Fotografie",
@@ -788,14 +726,14 @@
     "pas": "Samostatné nálezy",
     "ddata3d": "3D modely"
   },
-
-
+  "f_kraj_rada": {
+    "C": "Čechy",
+    "M": "Morava a Slezsko"
+  },
   "alert": {
     "insuficient rights": "Zobrazení tohoto dokumentu je možné až po přihlášení uživatelským jménem a heslem. Účet lze snadno zaregistrovat pomocí webového formuláře dostupného přes horní menu -> Registrovat uživatele.\nPokud jste přihlášeni ke svému účtu AMČR a dokument přesto není přístupný, značí to jednu z těchto variant:\n\n1) Dokument obsahuje citlivé údaje a jeho zveřejnění je omezeno.\n2) Držitel autorských práv nedal souhlas se zveřejněním dokumentu.\n3) Neuplynula ochranná lhůta 3 let od archivace dokumentu.\n\nV takovém případě se prosím obraťte na správce AMČR nebo na příslušnou organizaci s žádostí o zpřístupnění. Vaše žádost bude individuálně posouzena a vyřízena.",
     "sessionTimeout": "Z důvodu nečinnosti jste byli automaticky odhlášeni."
   },
-
-
   "f_aktivita_sidlistni": "sídlištní",
   "f_aktivita_pohrebni": "pohřební",
   "f_aktivita_vyrobni": "výrobní",
@@ -806,7 +744,6 @@
   "f_aktivita_boj": "boj",
   "f_aktivita_jina": "jiný druh aktivity",
   "f_aktivita_intruze": "intruze",
-
   "stats": {
     "ident_cely": "ID záznamu",
     "type": "Událost",
@@ -827,6 +764,7 @@
       "MONTH": "Přístupů měsíčně"
     },
     "graphName": "Počet uživatelských přístupů",
+    "graphLegend": "Počet přístupů",
     "interval": "Zobrazený interval",
     "interval_day": "Den",
     "interval_week": "Týden",
@@ -837,5 +775,84 @@
   "commonFacets": {
     "noevidence": "Negativní zjištění",
     "posevidence": "Pozitivní zjištění"
+  },
+  "museion": {
+    "zobrazit_predmety": "Zobrazit evidované předměty v napojených systémech Museion",
+    "predmety": "Předměty evidované k záznamu",
+    "organizaceId": "Správce sbírky",
+    "pocetSys": "Počet inventárních čísel v systematické evidenci",
+    "pocetPom": "Počet evidenčních čísel v pomocné evidenci",
+    "aktivita": "Aktivita",
+    "areal": "Areál",
+    "cislo": "Evidenční číslo",
+    "cisloCes": "Číslo v CES",
+    "cisloEvidCES": "Číslo sbírky v CES",
+    "dataceUrceni": "Datace určení",
+    "dataceVzniku": "Datace vzniku",
+    "datumNabyti": "Datum nabytí",
+    "datumNalezu": "Datum nálezu",
+    "datumStav": "Datum popisu stavu",
+    "datumZapisu": "Datum zápisu",
+    "druhObjektu": "Druh objektu",
+    "fond": "Fond",
+    "hloubka": "Hloubka nálezu",
+    "kompletnost": "Kompletnost",
+    "komponenta": "Komponenta",
+    "kontextObjekt": "Objekt",
+    "kontextPlocha": "Plocha",
+    "kontextStratigrafie": "Stratigrafická jednotka",
+    "material": "Materiál",
+    "mnozstviSlovy": "Množství",
+    "okolnosti": "Okolnosti",
+    "oznaceni": "Označení",
+    "pocetCasti": "Počet částí",
+    "pocetKusu": "Počet kusů",
+    "podsbirka": "Podsbírka",
+    "popis": "Popis",
+    "popisCasti": "Popis částí",
+    "popisStav": "Popis stavu",
+    "poznamkaUrceni": "Poznámka",
+    "prirustkoveCislo": "Přírůstkové číslo",
+    "rozmer": "Rozměry",
+    "sbirka": "Sbírka",
+    "stav": "Stav",
+    "technika": "Technika",
+    "desc": {
+      "aktivita": "Aktivita.",
+      "areal": "Areál.",
+      "cislo": "Inventární číslo nebo číslo pomocné evidence v závislosti na typu.",
+      "cisloCes": "Číslo CES.",
+      "cisloEvidCES": "Evidenční číslo CES sbírky.",
+      "dataceUrceni": "Datace určení (odborného popisu) předmětu.",
+      "dataceVzniku": "Datace vzniku (období) sbírkového předmětu.",
+      "datumNabyti": "Datum nabytí.",
+      "datumNalezu": "Datum nálezu.",
+      "datumStav": "Datum zjištění fyzického stavu předmětu.",
+      "datumZapisu": "Datum zápisu do systematické evidence.",
+      "druhObjektu": "Druh objektu.",
+      "fond": "Název fondu.",
+      "hloubka": "Hloubka nálezu.",
+      "kompletnost": "Kompletnost.",
+      "komponenta": "Komponenta.",
+      "kontextObjekt": "Kontext - objekt.",
+      "kontextPlocha": "Kontext – plocha.",
+      "kontextStratigrafie": "Kontext – stratigrafie.",
+      "material": "Odborný popis – seznam materiálů, ze kterých je sbírkový předmět vyroben.",
+      "mnozstviSlovy": "Množství slovy.",
+      "okolnosti": "Nálezové okolnosti.",
+      "oznaceni": "Název (předmět-název) sbírkového předmětu.",
+      "pocetCasti": "Počet částí předmětu.",
+      "pocetKusu": "Počet kusů.",
+      "podsbirka": "Název podsbírky.",
+      "popis": "Odborný popis předmětu, který předmět identifikuje. Popis vzhledu, funkce, výroby apod.",
+      "popisCasti": "Popis částí předmětu.",
+      "popisStav": "Popis aktuálního fyzického stavu předmětu.",
+      "poznamkaUrceni": "Poznámka k určení (odbornému popisu) předmětu.",
+      "prirustkoveCislo": "Přírůstkové číslo.",
+      "rozmer": "Odborný popis – rozměry předmětu.",
+      "sbirka": "Název sbírky.",
+      "stav": "Název aktuálního fyzického stavu předmětu.",
+      "technika": "Odborný popis – seznam použitých technik, které jsou na předmětu rozpoznány."
+    }
   }
 }

@@ -128,7 +128,7 @@ public class ADB implements FedoraModel {
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
 //-- A: stav = 3
 //-- B-E: bez omezení 
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("B") >= 0) {
             return true;
@@ -188,7 +188,11 @@ class ADBChraneneUdaje {
             for (VyskovyBod vb : vyskovy_bod) {
                 SolrInputDocument vbdoc = new SolrInputDocument();
                 vbdoc.setField("entity", "vyskovy_bod");
-                vbdoc.setField("searchable", true);
+                
+                
+                vbdoc.setField("pristupnost", idoc.getFieldValue("pristupnost"));
+                vbdoc.setField("stav", idoc.getFieldValue("stav"));
+                vbdoc.setField("searchable", idoc.getFieldValue("searchable"));
                 vbdoc.setField("ident_cely", vb.ident_cely);
                 idoc.addField("vyskovy_bod_ident_cely", vb.ident_cely);
                 
@@ -205,7 +209,7 @@ class ADBChraneneUdaje {
                     vb.geom_gml = FedoraModel.getAsXml(vb.geom_gml);
                     vbdoc.setField("vyskovy_bod_geom_gml", vb.geom_gml); 
                 } catch (JsonProcessingException ex) {
-                    Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
                 }
     
             }
@@ -213,7 +217,7 @@ class ADBChraneneUdaje {
                 IndexUtils.addAndCommit("entities", idocs);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ADBChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
         }
         IndexUtils.setSecuredJSONField(idoc, "adb_chranene_udaje", this);
     }

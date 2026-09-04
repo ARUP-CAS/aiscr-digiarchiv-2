@@ -108,6 +108,7 @@ export class AppState {
 
   hideWithoutThumbs = false;
   inFavorites = signal<boolean>(false);
+  inMuseion = signal<boolean>(false);
   obdobi: any;
 
   breadcrumbs: Crumb[];
@@ -144,10 +145,17 @@ export class AppState {
     this.sort = cfg.sorts[0];
   }
 
-  setEntityTotals(facet: { name: string, type: string, value: number }[]) {
-    facet.forEach(f => {
-      this.totals[f.name] = f.value;
-    });
+  setEntityTotals(facet: [string, number][]) {
+
+
+    facet.forEach((v: [string, number]) => {
+      this.totals[v[0]] = v[1];
+          });
+
+
+    // facet.forEach(f => {
+    //   this.totals[f.name] = f.value;
+    // });
   }
 
   setSearchResponse(resp: SolrResponse, typ: string = 'results') {
@@ -196,10 +204,12 @@ export class AppState {
     }
     this.config.facets.forEach(f => {
       if (resp.facet_counts.facet_fields[f]) {
-        const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
-        ff.forEach(v => {
-          v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
-          // v.poradi = 
+        const ff: { name: string, type: string, value: number, operator: string }[] = [];
+        resp.facet_counts.facet_fields[f].forEach((v: [string, number]) => {
+          ff.push({
+            name: v[0], type: 'string', value: v[1], operator: this.breadcrumbs.find(c => c.field === f && c.value === v[0])?.operator
+          })
+          //v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
         });
         this.facets.push({ field: f, values: ff });
       }
@@ -207,13 +217,20 @@ export class AppState {
     const fields = Object.keys(resp.facet_counts.facet_fields);
     fields.forEach(f => {
       if (!this.config.facets.includes(f)) {
-        const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
+        //const ff: { name: string, type: string, value: number, operator: string }[] = resp.facet_counts.facet_fields[f];
+        const ff: { name: string, type: string, value: number, operator: string }[] = [];
         if (f === 'entity') {
-          this.setEntityTotals(ff);
+          this.setEntityTotals(resp.facet_counts.facet_fields[f]);
         } else {
-          ff.forEach(v => {
-            v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
+          resp.facet_counts.facet_fields[f].forEach((v: [string, number]) => {
+            ff.push({
+              name: v[0], type: 'string', value: v[1], operator: this.breadcrumbs.find(c => c.field === f && c.value === v[0])?.operator
+            })
+            //v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
           });
+          // ff.forEach(v => {
+          //   v.operator = this.breadcrumbs.find(c => c.field === f && c.value === v.name)?.operator;
+          // });
           this.facets.push({ field: f, values: ff });
         }
       }
@@ -287,6 +304,7 @@ export class AppState {
   processParams(params: ParamMap) {
     this.hideWithoutThumbs = params.has('hideWithoutThumbs') ? params.get('hideWithoutThumbs') === 'true' : false;
     this.inFavorites.set(params.has('inFavorites') ? params.get('inFavorites') === 'true' : false);
+    this.inMuseion.set(params.has('inMuseion') ? params.get('inMuseion') === 'true' : false);
     this.entity = params.has('entity') ? params.get('entity') : 'dokument';
     this.sorts_by_entity = this.config.sorts.filter(s => !s.entity || s.entity.includes(this.entity));
     this.page = params.has('page') ? +params.get('page') : 0;

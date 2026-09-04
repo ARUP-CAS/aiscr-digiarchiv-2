@@ -65,6 +65,7 @@
    <field name="soubor_nazev" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_id" type="string" indexed="false" stored="true" multiValued="true" /> 
    <field name="soubor_mimetype" type="string" indexed="false" stored="true" multiValued="true" /> 
+   <field name="soubor_distri" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <!-- Dokument fields -->
    <field name="dokument_let" type="string_big" indexed="false" stored="true" multiValued="false" />
@@ -346,6 +347,8 @@
 	
    
    <!-- komponenta fields -->
+   <field name="komponenta_zdroj" type="string" indexed="true" stored="true" multiValued="false" /> 
+   <field name="komponenta_zdroj_ident_cely" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="komponenta_obdobi" type="string" indexed="true" stored="true" multiValued="false" /> 
    <field name="komponenta_jistota" type="boolean" indexed="true" stored="true" multiValued="false" /> 
    <field name="komponenta_presna_datace" type="string" indexed="true" stored="true" multiValued="false" /> 
@@ -406,6 +409,7 @@
    <field name="f_organizace" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_okres" type="string" indexed="true" stored="true" multiValued="true" /> 
    <field name="f_kraj" type="string" indexed="true" stored="true" multiValued="true" /> 
+   <field name="f_kraj_rada" type="string" indexed="true" stored="true" multiValued="true" /> 
    
    <field name="f_katastr" type="string" indexed="false" stored="false" multiValued="true" />
    <field name="f_katastr_A" type="string" indexed="true" stored="true" multiValued="true" /> 

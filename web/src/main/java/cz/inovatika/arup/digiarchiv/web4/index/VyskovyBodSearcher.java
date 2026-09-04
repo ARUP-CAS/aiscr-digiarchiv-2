@@ -2,14 +2,13 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
-import static cz.inovatika.arup.digiarchiv.web4.index.ADBSearcher.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,16 +24,25 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
   private boolean parentSearchable;
 
   @Override
-  public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+  public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    if ("E".equals(pristupnost)) {
+        pristupnost = "D";
+    }
+    String org = LoginServlet.organizace(request.getSession());
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    String fields = "*";
+    //String fields = "*";
+    ADBSearcher as = new ADBSearcher();
+    String[] adbFields = as.getChildSearchFields(pristupnost);
+    String fields = String.join(",", adbFields);
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
       if (doc.has("vyskovy_bod_parent")) {
         String p = doc.getString("vyskovy_bod_parent");
-        JSONObject sub = SolrSearcher.getById(client, p, fields);
+        JSONObject sub = SolrSearcher.getById(client, p, fields, false);
         if (sub != null) {
+          as.filterOne(sub, pristupnost, org);
           doc.append(sub.getString("entity"), sub);
           doc.put("datestamp", sub.getString("datestamp"));
           parentSearchable = true;
@@ -56,7 +64,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -64,7 +72,7 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -82,8 +90,8 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public JSONObject export(HttpServletRequest request) {
+        return new JSONObject();
     }
 
     @Override

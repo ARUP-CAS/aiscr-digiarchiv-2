@@ -17,7 +17,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
-import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 
 import * as echarts from 'echarts/core';
@@ -27,58 +26,8 @@ import { LineChart } from 'echarts/charts';
 import { TooltipComponent, GridComponent, TitleComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LabelLayout } from "echarts/features";
-import { MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
-// import 'moment/locale/cs';
 import { MatCheckbox } from "@angular/material/checkbox";
-
-export class MultiDateFormat {
-  value = '';
-  constructor() { }
-  get display() {
-    switch (this.value) {
-      case 'mm.yyyy':
-        return {
-          dateInput: 'MM.YYYY',
-          monthYearLabel: 'MM YYYY',
-          dateA11yLabel: 'MM.YYYY',
-          monthYearA11yLabel: 'MM YYYY',
-        };
-      case 'yyyy':
-        return {
-          dateInput: 'YYYY',
-          monthYearLabel: 'MM YYYY',
-          dateA11yLabel: 'MM.YYYY',
-          monthYearA11yLabel: 'MM YYYY',
-        };
-      default:
-        return {
-          dateInput: 'DD.MM.YYYY',
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        }
-    }
-
-  }
-  get parse() {
-    switch (this.value) {
-      case 'mm.yyyy':
-        return {
-          dateInput: 'MM.YYYY'
-        };
-      case 'yyyy':
-        return {
-          dateInput: 'YYYY'
-        };
-      default:
-        return {
-          dateInput: 'DD.MM.YYYY'
-        }
-    }
-
-  }
-}
 
 @Component({
   imports: [
@@ -100,15 +49,6 @@ export class MultiDateFormat {
 ],
   providers: [
     provideEchartsCore({ echarts }),
-    provideMomentDateAdapter(), 
-    
-    { provide: MAT_DATE_LOCALE, useValue: 'cs-CZ' },
-    // {
-    //   provide: DateAdapter,
-    //   useClass: MomentDateAdapter,
-    //   deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    // },
-    { provide: MAT_DATE_FORMATS, useClass: MultiDateFormat }
   ],
   selector: 'app-stats',
   templateUrl: './stats.component.html',
@@ -124,11 +64,11 @@ export class StatsComponent implements OnInit {
   user: string;
   entity: string;
   interval: string;
-  ids: { name: string, type: string, value: number }[];
-  types: { name: string, type: string, value: number }[];
-  ips: { name: string, type: string, value: number }[];
-  users: { name: string, type: string, value: number }[];
-  entities: { name: string, type: string, value: number }[];
+  ids: [string, number][];
+  types: [string, number][];
+  ips: [string, number][];
+  users: [string, number][];
+  entities: [string, number][];
   index_entities = signal<{field: string, value: string, count: number, pivot?: {field: string, value: string, count: number}[] }[]>([]);
   subs: any[] = [];
 
@@ -139,10 +79,10 @@ export class StatsComponent implements OnInit {
 
   // insoType: string = 'O';
   // extType: string;
-  series: any = [];
+  series = signal<any[]>([]);
   legend: any = [];
 
-  chartOptions: EChartsOption = {
+  chartOptions = signal<EChartsOption>({
     tooltip: {},
     xAxis: {
     },
@@ -153,7 +93,7 @@ export class StatsComponent implements OnInit {
       bottom: 0,
     },
     color: ['rgb(0, 153, 168)', '#fac858'],
-  };
+  });
 
   show_deleted: boolean = false;
   only_visible: boolean = false;
@@ -170,7 +110,6 @@ export class StatsComponent implements OnInit {
   ruian = signal<{ name: string, type: string, value: number }[]>([]);
 
   constructor(
-    // @Inject(MAT_DATE_FORMATS) private dateFormatConfig: MultiDateFormat,
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private router: Router,
@@ -308,7 +247,7 @@ export class StatsComponent implements OnInit {
   }
 
   setGraphData(counts: { name: string, type: string, value: number }[]) {
-    this.series = [];
+    const series = [];
     const xAxisData: string[] = [];
     const values: any[] = [];
     let maxY = 0;
@@ -317,7 +256,7 @@ export class StatsComponent implements OnInit {
       xAxisData.push(this.datePipe.transform(element.name, 'dd.MM.yyyy'));
       maxY = Math.max(element.value, maxY);
     });
-    this.series.push({
+    series.push({
       // source: 'source.name',
       name: this.service.getTranslation('stats.graphName'),
       field: 'indextime',
@@ -337,21 +276,30 @@ export class StatsComponent implements OnInit {
     });
     this.legend.push(this.service.getTranslation('stats.graphLegend'));
 
-    this.chartOptions.xAxis = {
-      data: xAxisData,
-      silent: false,
-      splitLine: {
-        show: true,
-      },
-    };
-    this.chartOptions.series = this.series;
-    this.chartOptions.legend = { data: this.legend, bottom: 0 };
+    this.series.set([...series]);
+    const title = this.service.getTranslation('stats.graphTitle.' + (this.interval ? this.interval : 'WEEK'));
 
-    let title = this.service.getTranslation('stats.graphTitle.' + (this.interval ? this.interval : 'WEEK'));
-    this.chartOptions.title = {
-      text: title,
-      left: 'center'
-    };
+    // this.chartOptions().title = {
+    //   text: title,
+    //   left: 'center'
+    // };
+    // this.chartOptions().series = this.series();
+    // this.chartOptions().legend = { data: this.legend, bottom: 0 };
+    this.chartOptions.update(co => ({...co, 
+      xAxis: {
+        data: xAxisData,
+        silent: false,
+        splitLine: {
+          show: true,
+        },
+      },
+      legend: { data: this.legend, bottom: 0 },
+      title: {
+        text: title,
+        left: 'center'
+      },
+      series: this.series()
+    }));
 
   }
 

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -189,7 +189,7 @@ public class Dokument implements FedoraModel {
             IndexUtils.addVocabField(idoc, "dokument_jazyk_dokumentu", v);
         }
         IndexUtils.addVocabField(idoc, "dokument_ulozeni_originalu", dokument_ulozeni_originalu);
-        IndexUtils.addVocabField(idoc, "dokument_licence", dokument_licence);
+        IndexUtils.addVocabField(idoc, "dokument_licence", dokument_licence); 
         
         for (Vocab v : dokument_osoba) {
             IndexUtils.addRefField(idoc, "dokument_osoba", v);
@@ -198,22 +198,10 @@ public class Dokument implements FedoraModel {
 //        List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
-//                SolrInputDocument djdoc = s.createSolrDoc();
-//                idocs.add(djdoc);
-                IndexUtils.addJSONField(idoc, "soubor", s);
-                idoc.addField("soubor_id", s.id);
-                idoc.addField("soubor_nazev", s.nazev);
-                idoc.addField("soubor_filepath", s.path);
-                idoc.addField("soubor_rozsah", s.rozsah);
-                idoc.addField("soubor_size_mbytes", s.size_mb);
-                idoc.addField("soubor_mimetype", s.mimetype);
-    
+              s.fillSolrFields(idoc);
             }
-//            if (!idocs.isEmpty()) {
-//                IndexUtils.getClientBin().add("soubor", idocs, 10);
-//            }
         } catch (Exception ex) {
-            Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dokument.class.getName()).log(Level.SEVERE, "", ex);
         }
 
         for (Tvar tv : dokument_tvar) {
@@ -228,13 +216,15 @@ public class Dokument implements FedoraModel {
         }
 
         for (DokumentCast dc : dokument_cast) {
-            dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
-            // IndexUtils.addJSONField(idoc, "dokument_cast", dc);
-            if (idoc.containsKey("dokument_cast_akce")) {
-                for (Object val : idoc.getFieldValues("dokument_cast_akce")) {
-                    processAkce(idoc, (String) val);
-                }
+            //if (idoc.containsKey("dokument_cast_akce")) {
+//                for (Object val : idoc.getFieldValues("dokument_cast_akce")) {
+//                    processAkce(idoc, (String) val);
+//                }
+//            }
+            if (dc.archeologicky_zaznam != null) {
+                    processAkce(idoc, dc.archeologicky_zaznam.getId());
             }
+            dc.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
         }
 
         if (dokument_let != null) {
@@ -248,7 +238,7 @@ public class Dokument implements FedoraModel {
 
         SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
                 //.addFilterQuery("searchable:true")
-                .setFields("searchable,az_chranene_udaje,az_okres,pristupnost,f_typ_vyzkumu,f_kraj");
+                .setFields("searchable,az_chranene_udaje,az_okres,pristupnost,f_typ_vyzkumu,f_kraj,f_kraj_rada");
         JSONObject json = SearchUtils.searchOrIndex(query, "entities", id);
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
@@ -268,9 +258,15 @@ public class Dokument implements FedoraModel {
                         
                 }
                 if (doc.has("f_kraj")) {
-                JSONArray f_kraj = doc.getJSONArray("f_kraj");
+                    JSONArray f_kraj = doc.getJSONArray("f_kraj");
                     for (int j = 0; j < f_kraj.length(); j++) {
                         IndexUtils.addFieldNonRepeat(idoc, "f_kraj", f_kraj.getString(j)); 
+                    } 
+                }
+                if (doc.has("f_kraj_rada")) {
+                    JSONArray f_kraj = doc.getJSONArray("f_kraj_rada");
+                    for (int j = 0; j < f_kraj.length(); j++) {
+                        IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", f_kraj.getString(j)); 
                     } 
                 }
 //                String pr = doc.getString("pristupnost");
@@ -360,7 +356,7 @@ public class Dokument implements FedoraModel {
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
 //-- A: stav = 3
 //-- B-E: bez omezení 
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("B") >= 0) {
             return true;

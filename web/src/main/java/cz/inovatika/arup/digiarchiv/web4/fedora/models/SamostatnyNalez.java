@@ -9,15 +9,15 @@ import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.beans.Field;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
@@ -169,7 +169,9 @@ public class SamostatnyNalez implements FedoraModel {
 
         IndexUtils.addRefField(idoc, fieldPrefix + "okres", okres);
         if (okres != null) {
-        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(okres.getId()).getString("kraj")); 
+            JSONObject okresIndex = SolrSearcher.getOkresByKod(okres.getId());
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okresIndex.optString("kraj"));
+            IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okresIndex.getString("rada_id"));
         }
         IndexUtils.addVocabField(idoc, fieldPrefix + "projekt", projekt);
         IndexUtils.addVocabField(idoc, fieldPrefix + "okolnosti", okolnosti);
@@ -189,23 +191,10 @@ public class SamostatnyNalez implements FedoraModel {
 //        List<SolrInputDocument> idocs = new ArrayList<>();
         try {
             for (Soubor s : soubor) {
-//                SolrInputDocument djdoc = s.createSolrDoc();
-//                idocs.add(djdoc);
-                IndexUtils.addJSONField(idoc, "soubor", s);
-                
-                idoc.addField("soubor_id", s.id);
-                idoc.addField("soubor_nazev", s.nazev);
-                idoc.addField("soubor_filepath", s.path);
-                idoc.addField("soubor_rozsah", s.rozsah);
-                idoc.addField("soubor_size_bytes", s.size_mb);
-                idoc.addField("soubor_mimetype", s.mimetype);
-
+              s.fillSolrFields(idoc);
             }
-//            if (!idocs.isEmpty()) {
-//                IndexUtils.getClientBin().add("soubor", idocs, 10);
-//            }
         } catch (Exception ex) {
-            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SamostatnyNalez.class.getName()).log(Level.SEVERE, "", ex);
         }
         if (chranene_udaje != null) {
             chranene_udaje.fillSolrFields(idoc, (String) idoc.getFieldValue("pristupnost"));
@@ -229,7 +218,12 @@ public class SamostatnyNalez implements FedoraModel {
 
         setFacets(idoc, prSufix);
         setFullText(idoc, prSufix);
+        
+        Komponenta k = new Komponenta();
+        k.fromSamostatnyNalez(idoc); 
     }
+    
+    
 
     public void setFacets(SolrInputDocument idoc, List<String> prSufix) {
         List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("samostatny_nalez").getJSONArray("facets").toList();
@@ -250,7 +244,7 @@ public class SamostatnyNalez implements FedoraModel {
             if (s.contains(".")) {
                 IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
             } else {
-                for (String sufix : prSufix) {
+                for (String sufix : SolrSearcher.prSufixAll) {
                     if (idoc.containsKey(s)) {
                         IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
                     }
@@ -260,24 +254,7 @@ public class SamostatnyNalez implements FedoraModel {
                 }
 
             }
-        } 
-//        
-//        for (Object f : indexFields) {
-//            String s = (String) f;
-//            if (s.contains(".")) {
-//                IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
-//            } else {
-//                for (String sufix : SolrSearcher.prSufixAll) {
-//                    if (idoc.containsKey(s)) {
-//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
-//                    }
-//                    if (idoc.containsKey(s + "_" + sufix)) {
-//                        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s + "_" + sufix));
-//                    }
-//                }
-//                
-//            }
-//        }
+        }
 
         // Add value of vocab fields
         for (String sufix : SolrSearcher.prSufixAll) {
@@ -292,55 +269,131 @@ public class SamostatnyNalez implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-
-//-- A: stav = 4
-//-- B: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
-//-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)
+//
+////-- A: stav = 4
+////-- B: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
+////-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)
+////-- D-E: bez omezení
+//        long st = ((Number) doc.getFieldValue("stav")).longValue();
+//        String userPr = user.optString("pristupnost", "A");
+//        String userId = user.optString("ident_cely", "A");
+//        String userOrg = "none";
+//        if (user.has("organizace")) {
+//            userOrg = user.getJSONObject("organizace").optString("id", "");
+//        }
+//
+//        String projektId = (String) doc.getFieldValue("projekt");
+//        String sn_predano_organizace = (String) doc.getFirstValue("organizace");
+//
+//        SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
+//                .setFields("samostatny_nalez_projekt");
+//        JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
+//        if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
+//            projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("samostatny_nalez_projekt");
+//        }
+//
+//        String projektOrg = null;
+//        query = new SolrQuery("ident_cely:\"" + projektId + "\"")
+//                .setFields("projekt_organizace");
+//        JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
+//
+//        if (json.getJSONObject("response").getInt("numFound") > 0) {
+//            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("projekt_organizace", "nonexist");
+//        }
+//        if (userPr.compareToIgnoreCase("C") > 0) {
+//            return true;
+//        } else if (st == 4) {
+//            return true;
+//        } else if (userPr.equalsIgnoreCase("C")
+//                && (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
+//                && userId.equals((String) doc.getFieldValue("historie_uzivatel"))) 
+//                || (userOrg.equals(projektOrg))
+//                || (userOrg.equals(sn_predano_organizace)))) { 
+//            return true;
+//        } else if (userPr.equalsIgnoreCase("B")
+//                && "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
+//                && userId.equals((String) doc.getFieldValue("historie_uzivatel"))) {
+//            // historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
+//            return true;
+//        } else {
+//            return false;
+//        }
+        
+        
+        
+        
+        //-- A: samostatny_nalez/pristupnost = A AND samostatny_nalez/stav = 4
+//-- B: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user}
+//-- C: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) 
+//                OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} 
+//                OR projekt/organizace = {user}.organizace
+//                OR (samostatny_nalez_predano_organizace = {user}.organizace)
 //-- D-E: bez omezení
-        long st = (long) doc.getFieldValue("stav");
+
+
+        String docPr = (String) doc.getFieldValue("pristupnost");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         String userId = user.optString("ident_cely", "A");
         String userOrg = "none";
         if (user.has("organizace")) {
             userOrg = user.getJSONObject("organizace").optString("id", "");
         }
+          JSONArray h = new JSONArray(doc.getFieldValues("historie"));
 
-        String projektId = (String) doc.getFieldValue("projekt");
-        String sn_predano_organizace = (String) doc.getFirstValue("organizace");
+        if (userPr.equalsIgnoreCase("A") && stav == 4) {
+          return true;
+        } else if (userPr.equalsIgnoreCase("B")) {
+          if (docPr.compareToIgnoreCase("B") <= 0 && stav == 4) {
+            return true;
+          }
 
-        SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
-                .setFields("samostatny_nalez_projekt");
-        JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
-        if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
-            projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("samostatny_nalez_projekt");
-        }
+          String uzivatel = null;
+          for (int i = 0; i < h.length(); i++) {
+            JSONObject hi = h.getJSONObject(i);
+            if ("SN01".equals(hi.optString("typ_zmeny"))) {
+              uzivatel = hi.getJSONObject("uzivatel").getString("id");
+            }
+          }
+          return (userId.equals(uzivatel));
 
-        String projektOrg = null;
-        query = new SolrQuery("ident_cely:\"" + projektId + "\"")
-                .setFields("projekt_organizace");
-        JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
+        } else if (userPr.equalsIgnoreCase("C")) {
+          if (docPr.compareToIgnoreCase("C") <= 0 && stav == 4) {
+            return true;
+          }
 
-        if (json.getJSONObject("response").getInt("numFound") > 0) {
-            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("projekt_organizace", "nonexist");
-        }
-        if (userPr.compareToIgnoreCase("C") > 0) {
+          if (userOrg.equals(doc.getFieldValue("samostatny_nalez_predano_organizace"))) {
             return true;
-        } else if (st == 4) {
+          }
+
+          String uzivatel = "KKK";
+
+          for (int i = 0; i < h.length(); i++) {
+            JSONObject hi = h.getJSONObject(i);
+            if ("D01".equals(hi.optString("typ_zmeny"))) {
+              uzivatel = hi.getJSONObject("uzivatel").getString("id");
+            }
+          }
+          if (userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel))) {
             return true;
-        } else if (userPr.equalsIgnoreCase("C")
-                && (("SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
-                && userId.equals((String) doc.getFieldValue("historie_uzivatel"))) 
-                || (userOrg.equals(projektOrg))
-                || (userOrg.equals(sn_predano_organizace)))) { 
-            return true;
-        } else if (userPr.equalsIgnoreCase("B")
-                && "SN01".equals((String) doc.getFieldValue("historie_typ_zmeny"))
-                && userId.equals((String) doc.getFieldValue("historie_uzivatel"))) {
-            // historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
-            return true;
+          }
+
+          String projektId = (String) doc.getFieldValue("samostatny_nalez_projekt");
+          String projektOrg = null;
+          SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
+                  .setFields("projekt_organizace");
+          JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
+
+          if (json.getJSONObject("response").getInt("numFound") > 0) {
+            projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt_organizace");
+          }
+
+          return (userOrg.equals(projektOrg));
+
         } else {
-            return false;
+          return userPr.compareToIgnoreCase("D") >= 0;
         }
+        
     }
 
 }
@@ -380,7 +433,7 @@ class SnChraneneUdaje {
             geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml); 
             // System.out.println(xml);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
         }
 
         IndexUtils.setSecuredJSONField(idoc, "samostatny_nalez_chranene_udaje", this);
@@ -400,8 +453,8 @@ class SnChraneneUdaje {
             final WKTReader reader = new WKTReader();
             try {
                 Geometry geometry = reader.read(wktStr);
-        // Point p = geometry.getCentroid();
-        Point p = geometry.getInteriorPoint();
+                // Point p = geometry.getCentroid();
+                Point p = geometry.getInteriorPoint();
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lng", p.getX(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "lat", p.getY(), pristupnost);
                 IndexUtils.addSecuredFieldNonRepeat(idoc, "loc", p.getY() + "," + p.getX(), pristupnost);

@@ -10,7 +10,11 @@
         <mat-list-item [ngClass]="'app-facet-entity ' + entity" [class.app-active]="state.entity === entity" (click)="changeEntity(entity)" [matTooltip]="'entities.' + entity + '.desc' | translate" [matTooltipPosition]="'right'">
           <div class="app-fxLayout app-row app-fill app-cursor-pointer">
             <div class="app-fxLayout app-row app-left app-center-v">
-              <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
+              @if(entity === 'komponenta') {
+                <img src="assets/img/logo/logo-component.svg" />
+              } @else {
+                <mat-icon [ngClass]="'app-entity-' + entity">{{ config.entityIcons[entity] }}</mat-icon>
+              }
             </div>
             <div class="app-fxFlex app-fxLayout app-row app-right">
               <div class="app-as-center">
@@ -93,6 +97,7 @@
                     <a (click)="clickFacet(facetField.field, facet)" class="app-text">
                       @switch(facetField.field) {
                         @case ('dokument_kategorie_dokumentu') { {{ 'dokument_kategorie_dokumentu.' + facet.name | translate }} }
+                        @case ('f_kraj_rada') { {{ 'f_kraj_rada.' + facet.name | translate }} }
                           @default { {{ facet.name | translate }} }
                           }
                     </a>

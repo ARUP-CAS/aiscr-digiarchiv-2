@@ -243,6 +243,23 @@ a {
   overflow-y: auto;
 }
 
+.app-oa-x {
+  overflow-x: auto !important;
+}
+
+.app-h-100 {
+  height: 100%;
+}
+
+.app-w-100 {
+  width: 100%;
+}
+
+.app-maxh-100 {
+  max-height: 100%;
+}
+
+
 .app-count {
   color: var(--app-color-gray-6);
   font-size: 14px;
@@ -359,4 +376,13 @@ a {
   background-size: 12px 20px;
   left: -6px;
   top: -20px;
+}
+
+
+.app-resizable-dialog {
+  max-width: 100% !important;
+}
+
+.app-border-wrapper {
+  border: 1px solid var(--app-default-border-color);
 }

@@ -1,0 +1,10 @@
+@use "app-vars-entity-color" as *;
+
+// set entity color
+@mixin setEntityBgColor() {
+  @each $entity, $color in $entities {
+    &.#{$entity} {
+      background: $color !important;
+    }   
+  }
+}

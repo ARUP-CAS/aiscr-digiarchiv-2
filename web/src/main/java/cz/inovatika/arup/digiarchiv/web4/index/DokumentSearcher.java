@@ -3,18 +3,18 @@ package cz.inovatika.arup.digiarchiv.web4.index;
 import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.JSONObject; 
 
 /**
  *
@@ -38,7 +38,7 @@ public class DokumentSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -54,26 +54,36 @@ public class DokumentSearcher implements EntitySearcher {
             SolrSearcher.addFavorites(jo, client, request);
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-
             addProjekt(jo, client, request);
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             return jo;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    public JSONObject export(HttpServletRequest request) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            String entity = request.getParameter("entity");
+            if (entity == null) {
+              entity = ENTITY;
+            }
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"));
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), entity);
+            
+            return jo;
+            
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            LOGGER.log(Level.SEVERE, "", ex);
+            return new JSONObject().put("error",ex.toString());
         }
     }
 
@@ -108,7 +118,7 @@ public class DokumentSearcher implements EntitySearcher {
                         
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("dokument_cast_archeologicky_zaznam", dokument_cast_archeologicky_zaznam);
@@ -128,7 +138,7 @@ public class DokumentSearcher implements EntitySearcher {
                         dokument_cast_projekt.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("dokument_cast_projekt", dokument_cast_projekt);
@@ -283,7 +293,6 @@ public class DokumentSearcher implements EntitySearcher {
 ////              "okres","f_okres","location_info:[json]");
 //        }
         query.setFields(getSearchFields(pristupnost));
-
     }
 
     /**
@@ -378,7 +387,7 @@ public class DokumentSearcher implements EntitySearcher {
     }
 
     public String getPristupnostBySoubor(String id, String field) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
             SolrQuery query = new SolrQuery("*").addFilterQuery("filepath:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
             QueryResponse rsp = client.query("relations", query);
@@ -399,7 +408,7 @@ public class DokumentSearcher implements EntitySearcher {
                 }
             }
         } catch (IOException | SolrServerException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return null;
         }
     }

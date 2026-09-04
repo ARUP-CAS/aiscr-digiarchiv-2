@@ -30,7 +30,7 @@ public class Options {
         _sharedInstance = new Options();
       }
     } catch (IOException | JSONException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
     }
     return _sharedInstance;
   }
@@ -168,7 +168,7 @@ public class Options {
         return FileUtils.readFileToString(fdef, "UTF-8");
       }
     } catch (IOException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return ex.toString();
     }
   }
@@ -186,7 +186,7 @@ public class Options {
         return FileUtils.readFileToString(fdef, "UTF-8");
       }
     } catch (IOException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return ex.toString();
     }
   }
@@ -202,7 +202,7 @@ public class Options {
         return FileUtils.readFileToString(fdef, "UTF-8");
       }
     } catch (IOException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, "", ex);
       return ex.toString();
     }
   }

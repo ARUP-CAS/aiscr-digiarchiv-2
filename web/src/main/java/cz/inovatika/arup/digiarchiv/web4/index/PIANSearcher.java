@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -28,10 +28,14 @@ public class PIANSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
-                doc.remove("pian_chranene_udaje");
-            }
+            filterOne(doc, pristupnost, org);
         }
+    }
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
+      if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
+          doc.remove("pian_chranene_udaje");
+      }
     }
 
     @Override
@@ -65,7 +69,7 @@ public class PIANSearcher implements EntitySearcher {
                     }
                 }
             } catch (SolrServerException | IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
 
             doc.put("az_dj_pian", az_dj_pian);
@@ -120,7 +124,7 @@ public class PIANSearcher implements EntitySearcher {
 //                    doc.append("lokalita", cdj);
 //                }
             } catch (Exception ex) {
-                Logger.getLogger(PIANSearcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PIANSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -133,7 +137,7 @@ public class PIANSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery()
                     .setFacet(true);
             setQuery(request, query);
@@ -142,7 +146,7 @@ public class PIANSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -216,7 +220,7 @@ public class PIANSearcher implements EntitySearcher {
     public JSONObject getMapPians(HttpServletRequest request) {
         JSONObject json = new JSONObject();
         // Menime entity
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             String entity = "" + request.getParameter("entity");
             if (entity == null || "null".equals(entity)) {
@@ -232,7 +236,7 @@ public class PIANSearcher implements EntitySearcher {
                 SolrSearcher.addLocationParams(request, query);
             }
             SolrSearcher.addFilters(request, query, pristupnost);
-            query.setFacet(false).setRequestHandler("/select");
+            query.setFacet(false);
             query.set("defType", "edismax");
             query.setFields("pian:[json],pian_id,ident_cely,organizace,pristupnost", "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost);
 
@@ -246,21 +250,27 @@ public class PIANSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    public JSONObject export(HttpServletRequest request) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"));
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            return jo;
+            
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            LOGGER.log(Level.SEVERE, "", ex);
+            return new JSONObject().put("error",ex.toString());
         }
     }
 

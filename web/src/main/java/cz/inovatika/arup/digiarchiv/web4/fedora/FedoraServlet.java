@@ -65,6 +65,9 @@ public class FedoraServlet extends HttpServlet {
                         File targetFile = new File(path);
                         FileUtils.copyInputStreamToFile(is, targetFile);
                         return;
+                    } else if (actionToDo.equals(Actions.REQUEST)){
+                        out.print(FedoraUtils.request(StringEscapeUtils.escapeHtml4(request.getParameter("url"))));
+                        return;
                     }
                     response.setContentType("application/json;charset=UTF-8");
                     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
@@ -322,7 +325,6 @@ public class FedoraServlet extends HttpServlet {
                 if (req.getParameter("until") != null ) {   
                   baseQuery += "&condition=modified" + URLEncoder.encode("<" + req.getParameter("until"), "UTF8"); 
                 }  
-                    System.out.println(baseQuery);
                     json = new JSONObject(FedoraUtils.search(baseQuery));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
@@ -342,7 +344,7 @@ public class FedoraServlet extends HttpServlet {
                 if (req.getParameter("until") != null ) {   
                   baseQuery += "&condition=modified" + URLEncoder.encode("<" + req.getParameter("until"), "UTF8"); 
                 }  
-                    System.out.println(baseQuery);
+                    //System.out.println(baseQuery);
                     json = new JSONObject(FedoraUtils.search(baseQuery));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());

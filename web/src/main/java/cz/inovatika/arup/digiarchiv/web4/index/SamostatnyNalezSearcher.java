@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
 /**
  *
@@ -65,7 +66,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*");
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -75,21 +76,28 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    public JSONObject export(HttpServletRequest request) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"));
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            
+            return jo;
+            
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            LOGGER.log(Level.SEVERE, "", ex);
+            return new JSONObject().put("error",ex.toString());
         }
     }
 
@@ -107,17 +115,6 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         fields.add("loc:loc_rpt_" + pristupnost);
 
         String[] ret = fields.toArray(new String[0]);
-
-//        String[] ret = new String[]{"ident_cely, datestamp, entity, stav, pristupnost",
-//            "samostatny_nalez_evidencni_cislo, samostatny_nalez_projekt, samostatny_nalez_okres, samostatny_nalez_hloubka, samostatny_nalez_poznamka, samostatny_nalez_nalezove_okolnosti",
-//            "obdobi, presna_datace, druh_nalezu, specifikace, pocet, nalezce, datum_nalezu, predano, predano_organizace", "predmet_kategorie",
-//            "datum_vlozeni, odpovedny_pracovnik_archivace, datum_archivace, child_soubor, soubor_filepath",
-//            "soubor:[json]", "katastr:f_katastr_" + pristupnost,
-//            "chranene_udaje:[json]",
-//            "lokalizace:f_lokalizace_" + pristupnost,
-//            "f_katastr:f_katastr_" + pristupnost,
-//            "loc_rpt:loc_rpt_" + pristupnost, "loc:loc_rpt_" + pristupnost,
-//            "lat:lat_" + pristupnost, "lng:lng_" + pristupnost};
         return ret;
     }
 
@@ -142,6 +139,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
      * @param jo
      * @param pristupnost
      */
+    @Override
     public void filter(JSONObject jo, String pristupnost, String org) {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {

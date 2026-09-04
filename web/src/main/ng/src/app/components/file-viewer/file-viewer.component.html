@@ -1,11 +1,22 @@
 <div class="app-fxLayout app-column app-fill">
-  <h1 mat-dialog-title class="app-fxLayout app-row app-gap-2">
-    <div class="app-list-files-wrapper app-fxFlex">
-      @for (file of files(); track file; let idx = $index) {
-        <a (click)="selectFile(file, idx)" [class.active]="file.id === selectedFile()?.id">{{ file.nazev }}</a>&#160;
-      }
+  <h1 mat-dialog-title class="app-fxLayout app-row app-center-v app-gap-2">
+    <div class="app-select-files-wrapper app-fxFlex app-fxLayout app-row app-gap-2">
+      <mat-form-field appearance="outline" class="app-select-primary">
+        <mat-select [(ngModel)]="selectedFile">
+          @for (file of files(); track file; let idx = $index) {
+            <mat-option (click)="selectFile(file, idx)" [value]="file">{{ file.nazev  }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-select [(ngModel)]="selectedDist">
+          @for(d of selectedFile().distribuce; track d) {
+            <mat-option [value]="d">{{ d.path }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
-    <a mat-dialog-close class="app-close-icon"><mat-icon>close</mat-icon></a>
+    <a mat-dialog-close class="app-close-icon app-fxLayout"><mat-icon>close</mat-icon></a>
   </h1>
   <div mat-dialog-content class="app-fxFlex">
     @if (selectedFile()) {
@@ -22,13 +33,15 @@
           } -->
           <a [class.app-disabled-link]="currentPage >= selectedFile().rozsah" (click)="nextPage()"><mat-icon>navigate_next</mat-icon></a>
         </div>
-        <div class="app-metadata app-fxLayout app-row app-center-v">
-          <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedFile().size_mb}}MB</strong></span><span class="app-pipe"></span><!--
-          --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{mimetype()}}</strong></span><span class="app-pipe"></span>
-          @if (selectedFile() !== null) {
-            <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedFile().nazev"><mat-icon class="app-va-center">get_app</mat-icon></a>
-          }
-        </div>
+        @if(selectedDist) {
+          <div class="app-metadata app-fxLayout app-row app-center-v">
+            <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedDist.size / 1024 / 1024}}&#160;MB</strong></span><span class="app-pipe"></span><!--
+            --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{selectedDist.mimetype}}</strong></span><span class="app-pipe"></span>
+            @if (selectedFile() !== null) {
+              <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedDist.filename"><mat-icon class="app-va-center">get_app</mat-icon></a>
+            }
+          </div>
+        }
       </div>
     }
     <mat-card class="app-card-info app-row-gap-16">
@@ -37,11 +50,11 @@
       </mat-card-content>
     </mat-card>
     @if(showing()){
-    <ngu-carousel #carousel [inputs]="carouselConfig" (carouselLoad)="carouselItemsLoad($event)" [dataSource]="carouselItems" >
-      <div *nguCarouselDef="let item; let idx = index" class="item">
-        <img [title]="currentPageDisplayed()" [src]="imgPoint(selectedFile(), 'medium') + '?size=medium&id='+ selectedFile().id + '&nazev='+ selectedFile().nazev + '&page=' + idx" />
-      </div>
-    </ngu-carousel>
+      <ngu-carousel #carousel [inputs]="carouselConfig" (carouselLoad)="carouselItemsLoad($event)" [dataSource]="carouselItems" >
+        <div *nguCarouselDef="let item; let idx = index" class="item">
+          <img [title]="currentPageDisplayed()" [src]="imgPoint(selectedFile(), 'medium') + '?size=medium&id='+ selectedFile().id + '&nazev='+ selectedFile().nazev + '&page=' + idx" />
+        </div>
+      </ngu-carousel>
     }
   </div>
 </div>

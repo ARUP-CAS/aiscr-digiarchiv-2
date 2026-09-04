@@ -8,18 +8,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
-/**
- *
- * @author alberto
- */
-public class LokalitaSearcher implements EntitySearcher {
+ class LokalitaSearcher implements EntitySearcher {
 
     public static final Logger LOGGER = Logger.getLogger(LokalitaSearcher.class.getName());
 
@@ -33,6 +30,13 @@ public class LokalitaSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
+            filterOne(doc, pristupnost, org);
+        }
+        
+    }
+    
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
 //            doc.put("pian", doc.opt("pian_" + pristupnost));
 //            doc.remove("pian_" + pristupnost);
             if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
@@ -55,7 +59,6 @@ public class LokalitaSearcher implements EntitySearcher {
 
                 }
             }
-        }
         
     }
 
@@ -89,7 +92,7 @@ public class LokalitaSearcher implements EntitySearcher {
                         valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("az_dokument", valid_dokuments);
@@ -193,7 +196,7 @@ public class LokalitaSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -213,21 +216,29 @@ public class LokalitaSearcher implements EntitySearcher {
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    public JSONObject export(HttpServletRequest request) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"));
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+                addPians(jo, client, request);
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            
+            return jo;
+            
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            LOGGER.log(Level.SEVERE, "", ex);
+            return new JSONObject().put("error",ex.toString());
         }
     }
 

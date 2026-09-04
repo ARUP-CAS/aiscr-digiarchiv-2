@@ -38,6 +38,7 @@
     "shape": {
       "color": "#222",
       "fillColor": "#00f",
+      "fillColorOver": "#a5cf0c",
       "weight": 2,
       "fillOpacity": 0.3
     },
@@ -294,13 +295,16 @@
     "akce",
     "lokalita",
     "samostatny_nalez",
-    "knihovna_3d"
+    "knihovna_3d",
+    "komponenta"
   ],
   "entityIcons": {
+    "komponenta": "extension",
     "dokument": "description",
     "samostatny_nalez": "location_on",
     "pian": "location_on",
     "knihovna_3d": "3d_rotation",
+    "ddata3d": "3d_rotation",
     "projekt": "dynamic_feed",
     "akce": "brush",
     "lokalita": "tour",
@@ -312,7 +316,7 @@
     "mplany": "map",
     "ddata": "storage"
   },
-  "exportRowsLimit": 1000,
+  "exportRowsLimit": 100,
   "filterFields": [
     {
       "type": "text",
@@ -658,6 +662,7 @@
     "pristupnost",
     "f_organizace",
     "f_zeme",
+    "f_kraj_rada",
     "f_kraj",
     "f_okres",
     "f_katastr",
@@ -665,6 +670,7 @@
     "f_dj_typ",
     "f_areal",
     "f_aktivita",
+    "komponenta_jistota",
     "f_typ_nalezu",
     "f_kategorie",
     "f_druh_nalezu",
@@ -686,6 +692,7 @@
     "f_rada",
     "f_typ_dokumentu",
     "f_material_dokumentu",
+    "dokument_licence",
     "f_mimetype",
     "f_typ_dokumentu_posudek",
     "f_jazyk_dokumentu",
@@ -700,6 +707,7 @@
     "f_pian_presnost",
     "f_pian_zm10",
     "f_let_pozorovatel",
+    "f_pozorovatel",
     "f_let_organizace",
     "f_let_pocasi",
     "f_let_dohlednost",
@@ -707,7 +715,8 @@
     "f_let_letiste_cil",
     "f_ez_typ",
     "f_ez_autor",
-    "f_ez_casopis"
+    "f_ez_casopis",
+    "soubor_distri"
   ],
   "urlFields": [
     "f_organizace",
@@ -727,6 +736,7 @@
     "f_jazyk_dokumentu",
     "f_rada",
     "dokument_kategorie_dokumentu",
+    "dokument_licence",
     "pristupnost",
     "kategorie",
     "f_typ_dokumentu",
@@ -754,7 +764,9 @@
     "f_typ_projektu",
     "inv_cislo",
     "samostatny_nalez_predano_organizace",
-    "predmet_kategorie"
+    "predmet_kategorie",
+    "soubor_distri",
+    "f_pozorovatel"
   ],
   "uiVars": {
     "panelHeightInCard": "36px"
@@ -772,16 +784,16 @@
       },
       {
         "name": "dokument_organizace",
-        "heslar": "organizace",
+        "translated": true,
         "label": "organizace"
       },
       {
         "name": "dokument_typ_dokumentu",
-        "heslar": "typ_dokumentu"
+        "translated": true
       },
       {
         "name": "dokument_material_originalu",
-        "heslar": "material_originalu"
+        "translated": true
       },
       {
         "name": "dokument_popis",
@@ -796,17 +808,19 @@
       },
       {
         "name": "location_info[0].okres",
+        "field": "location_info:[json]",
         "byPath": true,
         "label": "okres"
       },
       {
         "name": "location_info[0].katastr",
+        "field": "location_info:[json]",
         "byPath": true,
         "label": "katastr"
       },
       {
         "name": "pristupnost",
-        "heslar": "pristupnost"
+        "translated": true
       }
     ],
     "knihovna_3d": [
@@ -821,12 +835,12 @@
       },
       {
         "name": "dokument_organizace",
-        "heslar": "organizace",
+        "translated": true,
         "label": "organizace"
       },
       {
         "name": "dokument_typ_dokumentu",
-        "heslar": "typ_dokumentu"
+        "translated": true
       },
       {
         "name": "dokument_popis",
@@ -841,18 +855,23 @@
       },
       {
         "name": "f_obdobi",
-        "heslar": "obdobi_druha"
+        "translated": true
       },
       {
         "name": "f_areal",
-        "heslar": "areal_druha"
+        "translated": true
       },
       {
-        "name": "dokument_extra_data_odkaz",
-        "heslar": "odkaz"
+        "name": "extra_data_odkaz",
+        "label": "dokument_extra_data_odkaz",
+        "translated": true
       }
     ],
     "akce": [
+      {
+        "name": "az_dj_pian",
+        "hidden": true
+      },
       {
         "name": "ident_cely"
       },
@@ -861,12 +880,13 @@
         "label": "okres"
       },
       {
-        "name": "az_chranene_udaje?.hlavni_katastr.value",
+        "name": "az_chranene_udaje.hlavni_katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "az_chranene_udaje?.dalsi_katastr[0] ? doc.az_chranene_udaje.dalsi_katastr.map(dk => dk.value).join(', ') : ''",
+        "name": "az_chranene_udaje.dalsi_katastr[*].value",
+        "map": true,
         "byPath": true,
         "label": "dalsi_katastry"
       },
@@ -875,12 +895,12 @@
       },
       {
         "name": "akce_organizace",
-        "heslar": "organizace",
+        "translated": true,
         "label": "organizace"
       },
       {
         "name": "akce_specifikace_data",
-        "heslar": "f_specifikace"
+        "translated": true
       },
       {
         "name": "akce_datum_zahajeni",
@@ -894,11 +914,11 @@
       },
       {
         "name": "akce_hlavni_typ",
-        "heslar": "typ_akce_druha"
+        "translated": true
       },
       {
         "name": "akce_vedlejsi_typ",
-        "heslar": "typ_akce_druha"
+        "translated": true
       },
       {
         "name": "akce_chranene_udaje.lokalizace_okolnosti",
@@ -911,10 +931,14 @@
       },
       {
         "name": "pristupnost",
-        "heslar": "pristupnost"
+        "translated": true
       }
     ],
     "lokalita": [
+      {
+        "name": "az_dj_pian",
+        "hidden": true
+      },
       {
         "name": "ident_cely"
       },
@@ -923,36 +947,37 @@
         "label": "okres"
       },
       {
-        "name": "az_chranene_udaje?.hlavni_katastr.value",
+        "name": "az_chranene_udaje.hlavni_katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "az_chranene_udaje?.dalsi_katastr[0] ? doc.az_chranene_udaje.dalsi_katastr.map(dk => dk.value).join(', ') : ''",
+        "name": "az_chranene_udaje.dalsi_katastr[*].value",
+        "map": true,
         "byPath": true,
         "label": "dalsi_katastry"
       },
       {
-        "name": "lokalita_chranene_udaje?.nazev",
+        "name": "lokalita_chranene_udaje.nazev",
         "byPath": true,
         "label": "lokalita_nazev"
       },
       {
         "name": "lokalita_typ_lokality",
-        "heslar": "typ_lokality"
+        "translated": true
       },
       {
         "name": "lokalita_druh",
-        "heslar": "druh_lokality_druha"
+        "translated": true
       },
       {
-        "name": "lokalita_chranene_udaje?.popis",
+        "name": "lokalita_chranene_udaje.popis",
         "byPath": true,
         "label": "popis"
       },
       {
         "name": "pristupnost",
-        "heslar": "pristupnost"
+        "translated": true
       }
     ],
     "projekt": [
@@ -964,18 +989,18 @@
         "label": "okres"
       },
       {
-        "name": "projekt_chranene_udaje?.hlavni_katastr.value",
+        "name": "projekt_chranene_udaje.hlavni_katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "projekt_chranene_udaje?.hlavni_katastr.dalsi_katastr.value",
+        "name": "projekt_chranene_udaje.hlavni_katastr.dalsi_katastr.value",
         "byPath": true,
         "label": "dalsi_katastry"
       },
       {
         "name": "projekt_typ_projektu",
-        "heslar": "typ_projektu"
+        "translated": true
       },
       {
         "name": "projekt_datum_zahajeni",
@@ -993,7 +1018,7 @@
       },
       {
         "name": "projekt_organizace",
-        "heslar": "organizace"
+        "translated": true
       }
     ],
     "samostatny_nalez": [
@@ -1012,38 +1037,38 @@
         "label": "okres"
       },
       {
-        "name": "samostatny_nalez_chranene_udaje?.katastr.value",
+        "name": "samostatny_nalez_chranene_udaje.katastr.value",
         "byPath": true,
         "label": "katastr"
       },
       {
-        "name": "samostatny_nalez_chranene_udaje?.lokalizace",
+        "name": "samostatny_nalez_chranene_udaje.lokalizace",
         "byPath": true,
         "label": "lokalizace"
       },
       {
         "name": "samostatny_nalez_okolnosti",
-        "heslar": "nalezove_okolnosti"
+        "translated": true
       },
       {
         "name": "samostatny_nalez_hloubka"
       },
       {
         "name": "samostatny_nalez_obdobi",
-        "heslar": "obdobi_druha",
+        "translated": true,
         "label": "obdobi"
       },
       {
-        "name": "samostatny_nalez_druh",
-        "heslar": "f_druh_nalezu"
+        "name": "samostatny_nalez_druh_nalezu",
+        "translated": true
       },
       {
-        "name": "predmet_kategorie",
-        "heslar": "predmet_kategorie"
+        "name": "samostatny_nalez_kategorie_nalezu",
+        "translated": true
       },
       {
         "name": "samostatny_nalez_specifikace",
-        "heslar": "specifikace_objektu_druha"
+        "translated": true
       },
       {
         "name": "samostatny_nalez_pocet"
@@ -1054,14 +1079,68 @@
       },
       {
         "name": "samostatny_nalez_predano_organizace",
-        "heslar": "organizace"
+        "translated": true
       },
       {
         "name": "samostatny_nalez_evidencni_cislo"
       },
       {
         "name": "pristupnost",
-        "heslar": "pristupnost"
+        "translated": true
+      }
+    ],
+    "komponenta":[
+      {
+        "name": "ident_cely"
+      },
+      {
+        "name": "f_okres",
+        "label": "okres"
+      },
+      {
+        "name": "f_katastr",
+        "byPath": true,
+        "label": "katastr"
+      },
+      {
+        "name": "samostatny_nalez_chranene_udaje.katastr.value",
+        "hidden": true,
+        "byPath": true,
+        "label": "katastr"
+      },
+      {
+        "name": "az_chranene_udaje.hlavni_katastr.value",
+        "hidden": true,
+        "byPath": true,
+        "label": "katastr"
+      },
+      {
+        "name": "az_chranene_udaje.dalsi_katastr[*].value",
+        "map": true,
+        "byPath": true,
+        "label": "dalsi_katastry"
+      },
+      {
+        "name": "samostatny_nalez_obdobi",
+        "translated": true,
+        "label": "obdobi"
+      },
+      {
+        "name": "komponenta_presna_datace"
+      },
+      {
+        "name": "komponenta_jistota"
+      },
+      {
+        "name": "komponenta_areal.value",
+        "byPath": true,
+        "label": "f_areal"
+      },
+      {
+        "name": "komponenta_aktivita.value",
+        "path": "a.[*].value", 
+        "label": "komponenta_aktivita",
+        "byPath": true
       }
     ]
   },
@@ -1078,5 +1157,7 @@
     }
   ],
   "feedBackMaxLength": 4000,
-		"commonFacets": []
+	"commonFacets": [],
+  "showMuseion": false,
+  "canIndex": false
 }

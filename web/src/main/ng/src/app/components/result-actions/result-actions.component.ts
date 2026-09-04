@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, input, signal } from '@angular/core';
+import { Component, EventEmitter, Output, Signal, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,10 +15,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BibtextDialogComponent } from '../bibtext-dialog/bibtext-dialog.component';
 import { DocumentDialogComponent } from '../document-dialog/document-dialog.component';
 import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.component';
+import { MuseionPredmetyDialog } from '../museion-predmety-dialog/museion-predmety-dialog';
 
 @Component({
   imports: [
-    TranslateModule, CommonModule, FormsModule, 
+    TranslateModule, CommonModule, FormsModule,
     RouterModule, MatDialogModule, MatButtonModule,
     MatIconModule, MatButtonModule, MatMenuModule, MatTooltipModule
   ],
@@ -30,17 +31,24 @@ export class ResultActionsComponent {
 
   readonly result = input<any>();
   readonly bibTex = input<string>();
-  readonly isDocumentDialogOpen = input<boolean>();
+  readonly isDocumentDialogOpen = input<boolean>(false);
   readonly detailExpanded = input<boolean>();
   readonly inDocument = input<boolean>();
   readonly mapDetail = input<boolean>();
   readonly ident_cely_api = input<any>();
 
   isFav = signal<boolean>(false);
+  withMuseion: Signal<boolean> = computed(() => this.result().inMuseion);
 
-  @Output() onToggleDetail  = new EventEmitter<string>();
+  @Output() onToggleDetail = new EventEmitter<string>();
 
-  useParentEntities = ['']
+  useParentEntities = [''];
+
+  museionTypes: { [entity: string]: string } = {
+    projekt: 'P',
+    akce: 'A',
+    samostatny_nalez: 'N'
+  }
 
   constructor(
     public service: AppService,
@@ -54,10 +62,10 @@ export class ResultActionsComponent {
     this.isFav.set(this.result().isFav)
   }
 
-  apiIdentCely(item:{label: string, metadataPrefix: string, url: string, useParent: boolean}) {
+  apiIdentCely(item: { label: string, metadataPrefix: string, url: string, useParent: boolean }) {
     const ident_cely_api = this.ident_cely_api();
     // console.log(item.useParent)
-    return (item.useParent && ident_cely_api) ? ident_cely_api : this.result().ident_cely;
+    return ((item.useParent || this.result().komponenta_zdroj === 'samostatny_nalez') && ident_cely_api) ? ident_cely_api : this.result().ident_cely;
   }
 
   toggleDetail() {
@@ -75,6 +83,14 @@ export class ResultActionsComponent {
         this.isFav.set(true);
       });
     }
+  }
+
+  reindex() {
+      this.service.reindex(this.result().ident_cely).subscribe(res => {
+        console.log(res);
+        document.location.reload();
+      });
+    
   }
 
   openDocument() {
@@ -96,10 +112,23 @@ export class ResultActionsComponent {
   showCitation() {
     this.state.dialogRef = this.dialog.open(BibtextDialogComponent, {
       width: '900px',
-      data: {result: this.result(), link: this.config.serverUrl + 'id/' + this.result().ident_cely},
+      data: { result: this.result(), link: this.config.serverUrl + 'id/' + this.result().ident_cely },
       panelClass: 'app-feedback-dialog'
     });
+
+  }
+
+  showMuseionPredmety() {
+
     
+    const typ = this.museionTypes[this.result().entity];
+    this.state.dialogRef = this.dialog.open(MuseionPredmetyDialog, {
+      width: '900px',
+      data: { id: this.result().ident_cely, typ: typ },
+      panelClass: 'app-resizable-dialog'
+    });
+
+
   }
 
 }
