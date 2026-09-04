@@ -1,0 +1,41 @@
+schema_version = 1
+
+[[scenario]]
+key = "export"
+kind = "feature"
+title = "Export"
+features = ["export"]
+entities = ["dokument", "akce", "lokalita", "projekt", "samostatny_nalez", "knihovna_3d", "komponenta"]
+surfaces = ["export page", "map export page", "table data API", "download endpoint"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#148"]
+last_verified = "2026-08-28"
+
+[[scenario]]
+key = "file-distributions"
+kind = "feature"
+title = "File distributions (ATRIUM)"
+features = ["file distributions", "paradata"]
+entities = ["dokument", "knihovna_3d", "samostatny_nalez"]
+surfaces = ["reader image surface", "File API", "OAI-PMH", "search facets"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#693"]
+last_verified = "2026-08-29"
+
+[[scenario]]
+key = "komponenta"
+kind = "entity"
+title = "Komponenta (cross-cutting record type)"
+features = ["komponenta record type"]
+entities = ["komponenta"]
+surfaces = ["record page", "entity search and facets", "map", "export", "handle API"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#127"]
+last_verified = "2026-08-28"
+
+[[scenario]]
+key = "permissions"
+kind = "feature"
+title = "Permission model"
+features = ["permissions"]
+entities = ["projekt", "archeologicky_zaznam", "dokument", "ext_zdroj", "adb", "pian", "samostatny_nalez", "uzivatel", "let"]
+surfaces = ["landing pages", "map variant", "child-record landing pages", "File API", "OAI-PMH", "search"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#370", "ARUP-CAS/aiscr-digiarchiv-2#237"]
+last_verified = "2026-08-28"
