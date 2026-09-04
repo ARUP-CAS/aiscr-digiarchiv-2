@@ -92,6 +92,7 @@ public class HandleServlet extends HttpServlet {
           return;
         } else if (retryTime == -1) {
           response.setStatus(429); // 429 Too Many Requests
+          response.addHeader("Retry-After", Options.getInstance().getInt("requestInterval", 5000) + "");
           response.getWriter().print("Downloading file still in progress. Try later.");
           return;
         }
@@ -520,7 +521,8 @@ public class HandleServlet extends HttpServlet {
 
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
               .setFacet(false);
-      query.setFields("entity,is_deleted,searchable,stav");
+      //query.setFields("entity,is_deleted,searchable,stav");
+      query.setFields("entity,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
 
       QueryResponse resp = client.query("entities", query);
 

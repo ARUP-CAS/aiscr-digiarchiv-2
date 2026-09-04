@@ -26,14 +26,23 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
   @Override
   public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    if ("E".equals(pristupnost)) {
+        pristupnost = "D";
+    }
+    String org = LoginServlet.organizace(request.getSession());
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-    String fields = "*";
+    //String fields = "*";
+    ADBSearcher as = new ADBSearcher();
+    String[] adbFields = as.getChildSearchFields(pristupnost);
+    String fields = String.join(",", adbFields);
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
       if (doc.has("vyskovy_bod_parent")) {
         String p = doc.getString("vyskovy_bod_parent");
         JSONObject sub = SolrSearcher.getById(client, p, fields, false);
         if (sub != null) {
+          as.filterOne(sub, pristupnost, org);
           doc.append(sub.getString("entity"), sub);
           doc.put("datestamp", sub.getString("datestamp"));
           parentSearchable = true;

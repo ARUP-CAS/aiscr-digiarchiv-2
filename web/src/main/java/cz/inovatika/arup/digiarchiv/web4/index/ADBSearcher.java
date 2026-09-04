@@ -38,6 +38,12 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
+            filterOne(doc, pristupnost, org);
+        }
+    }
+    
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
             if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
                 doc.remove("adb_chranene_udaje"); 
             }
@@ -56,8 +62,6 @@ public class ADBSearcher implements ComponentSearcher, EntitySearcher {
                 }
 
             }
-
-        }
     }
 
     @Override
