@@ -162,7 +162,7 @@ public class SearchServlet extends HttpServlet {
           return json.toString();
         } else {
           try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            json = SolrSearcher.getFullId(request, client, true);
+            json = SolrSearcher.getFullId(request, client, true, false);
           } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
@@ -218,7 +218,7 @@ public class SearchServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
         try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-          json = SolrSearcher.getFullId(request, client, false);
+          json = SolrSearcher.getFullId(request, client, false, true);
           if (Boolean.parseBoolean(request.getParameter("shouldLog"))) {
             String entity = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("entity");
             LogAnalytics.log(request, request.getParameter("id"), "id", entity);

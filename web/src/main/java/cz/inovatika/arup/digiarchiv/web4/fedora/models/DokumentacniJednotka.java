@@ -79,8 +79,8 @@ public class DokumentacniJednotka implements FedoraModel {
             k.setKategorie();
         }
         SolrInputDocument djdoc = dob.toSolrInputDocument(this);
-        //akceDoc.setField("entity", "akce");
-        //akceDoc.setField("pristupnost", pristupnost);
+        djdoc.setField("pristupnost", idoc.getFieldValue("pristupnost"));
+        djdoc.setField("stav", idoc.getFieldValue("stav"));
         IndexUtils.addVocabField(djdoc, "dj_pian", dj_pian);
         IndexUtils.addVocabField(djdoc, "dj_typ", dj_typ);
         IndexUtils.addJSONField(djdoc, "dj_adb", dj_adb);
@@ -114,6 +114,12 @@ public class DokumentacniJednotka implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        return true;
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
+        String userPr = user.optString("pristupnost", "A");
+        if (userPr.compareToIgnoreCase("A") > 0 || st == 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

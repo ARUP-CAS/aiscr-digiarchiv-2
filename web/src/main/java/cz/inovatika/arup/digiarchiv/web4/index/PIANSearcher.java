@@ -28,10 +28,14 @@ public class PIANSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
-                doc.remove("pian_chranene_udaje");
-            }
+            filterOne(doc, pristupnost, org);
         }
+    }
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
+      if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
+          doc.remove("pian_chranene_udaje");
+      }
     }
 
     @Override

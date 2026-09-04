@@ -672,6 +672,15 @@
                 
       ]
     },
+    "dokumentacni_jednotka": {
+      "header": [
+        "dj_typ",
+        "dj_nazev"
+      ],
+      "detail": [],
+      "facets": [],
+      "full_text": []
+    },
     "komponenta": {
       "header": [
         "komponenta_zdroj",

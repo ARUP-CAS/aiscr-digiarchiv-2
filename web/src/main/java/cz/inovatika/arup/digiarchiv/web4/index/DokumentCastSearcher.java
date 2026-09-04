@@ -25,8 +25,16 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     @Override
     public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        String org = LoginServlet.organizace(request.getSession());
+        
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         String fields = "*,ident_cely,entity,dokument_cast_archeologicky_zaznam,dokument_cast_neident_akce:[json]";
+        AkceSearcher as = new AkceSearcher();
+        LokalitaSearcher ls = new LokalitaSearcher();
         for (int i = 0; i < ja.length(); i++) {
 
             try {
@@ -40,7 +48,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                 query.setFields(dfs);
 
                 JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
-                ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
+                ds.filter(r, pristupnost, org);
                 JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
                 for (int j = 0; j < reldocs.length(); j++) {
                     JSONObject cdj = reldocs.getJSONObject(j);
@@ -54,8 +62,14 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                         String cdj = cdjs.getString(j);
                         JSONObject sub = SolrSearcher.getById(client, cdj, fields, false);
                         if (sub != null) {
-                            doc.put(sub.getString("entity"), sub);
-                            doc.put("datestamp", sub.getString("datestamp"));
+                          String entity = sub.getString("entity");
+                          if("akce".equals(entity)) {
+                            as.filterOne(sub, pristupnost, org);
+                          } else if("lokalita".equals(entity)) {
+                            ls.filterOne(sub, pristupnost, org);
+                          }
+                          doc.put(entity, sub);
+                          doc.put("datestamp", sub.getString("datestamp"));
                         }
 
                     }
