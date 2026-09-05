@@ -60,6 +60,10 @@ public class DokumentCast implements FedoraModel {
 
         DocumentObjectBinder dob = new DocumentObjectBinder();
         SolrInputDocument kdoc = dob.toSolrInputDocument(this);
+        
+        kdoc.setField("pristupnost", idoc.getFieldValue("pristupnost"));
+        kdoc.setField("stav", idoc.getFieldValue("stav"));
+        kdoc.setField("searchable", idoc.getFieldValue("searchable"));
 
         IndexUtils.addVocabField(kdoc, "dokument_cast_archeologicky_zaznam", archeologicky_zaznam);
         IndexUtils.addVocabField(kdoc, "dokument_cast_projekt", projekt);
@@ -335,6 +339,17 @@ public class DokumentCast implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        return true;
+      //Preneseno z Dokument
+//-- A: stav = 3
+//-- B-E: bez omezení 
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
+        String userPr = user.optString("pristupnost", "A");
+        if (userPr.compareToIgnoreCase("B") >= 0) {
+            return true;
+        } else if (userPr.compareToIgnoreCase("B") <= 0 && st == 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

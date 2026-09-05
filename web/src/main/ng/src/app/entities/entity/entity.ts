@@ -73,7 +73,7 @@ export class Entity {
           this._result.set({...this.result()});
           this.setImg();
           this.hasDetail = false;
-          if (this.mapDetail() || (isPlatformBrowser(this.platformId) && this.inDocument())) {
+          if (this.mapDetail() || (isPlatformBrowser(this.platformId) && !this.inDocument())) {
             this.getFullId();
           }
         this.setBibTex();

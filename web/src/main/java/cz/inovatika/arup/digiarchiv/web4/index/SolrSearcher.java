@@ -970,7 +970,7 @@ public class SolrSearcher {
     
   }
   
-  public static JSONObject getFullId(HttpServletRequest request, SolrClient client, boolean inHandle) {
+  public static JSONObject getFullId(HttpServletRequest request, SolrClient client, boolean inHandle, boolean onlySearchable) {
     
     String entity = request.getParameter("entity");
     SolrQuery query = new SolrQuery("ident_cely:\"" + request.getParameter("id") + "\"")
@@ -978,7 +978,7 @@ public class SolrSearcher {
     
     if (entity == null) {
       query.setFields("entity");
-      JSONObject jo = SearchUtils.json(query, client, "entities", false);
+      JSONObject jo = SearchUtils.json(query, client, "entities", onlySearchable);
       if (jo.getJSONObject("response").optInt("numFound", 0) == 0) {
         return jo;
       }
@@ -1005,7 +1005,7 @@ public class SolrSearcher {
     query.add("stats.field", "dokument_rok_vzniku");
     query.add("stats.field", "rok_vydani");
     
-    JSONObject jo = SearchUtils.json(query, client, "entities", false);
+    JSONObject jo = SearchUtils.json(query, client, "entities", onlySearchable);
     if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
       if (searcher != null) {
         //if ("pian".equals(entity) || "adb".equals(entity) || "ext_zdroj".equals(entity)) {

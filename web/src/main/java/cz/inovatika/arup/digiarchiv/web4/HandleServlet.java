@@ -48,7 +48,7 @@ import org.json.JSONObject;
  *
  * @author alberto
  */
-@WebServlet(name = "HandleServlet", urlPatterns = {"/id/*"})
+@WebServlet(name = "HandleServlet", urlPatterns = {"/id/*","/map/*"})
 public class HandleServlet extends HttpServlet {
 
   public static final Logger LOGGER = Logger.getLogger(HandleServlet.class.getName());
@@ -64,7 +64,16 @@ public class HandleServlet extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-
+    
+    if (request.getPathInfo() == null) {
+      if (request.getServletPath().contains("map")) { 
+        request.getRequestDispatcher("/map2").forward(request, response);
+      } else {
+        response.sendRedirect("/home");
+      }
+      return;
+    }
+    
     String id = request.getPathInfo().substring(1);
     if (id.contains("file")) {
       // response.getWriter().println(id);
@@ -83,6 +92,7 @@ public class HandleServlet extends HttpServlet {
           return;
         } else if (retryTime == -1) {
           response.setStatus(429); // 429 Too Many Requests
+          response.addHeader("Retry-After", Options.getInstance().getInt("requestInterval", 5000) + "");
           response.getWriter().print("Downloading file still in progress. Try later.");
           return;
         }
@@ -511,7 +521,8 @@ public class HandleServlet extends HttpServlet {
 
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
               .setFacet(false);
-      query.setFields("entity,is_deleted,searchable,stav");
+      //query.setFields("entity,is_deleted,searchable,stav");
+      query.setFields("entity,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
 
       QueryResponse resp = client.query("entities", query);
 

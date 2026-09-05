@@ -1,13 +1,6 @@
-<!-- @for (file of files(); track file; let idx = $index) {
-  <a (click)="selectFile(file, idx)" [class.active]="file.id === selectedFile()?.id">{{ file.nazev }}</a>&#160;
-} -->
 <div class="app-fxLayout app-column app-fill">
   <h1 mat-dialog-title class="app-fxLayout app-row app-center-v app-gap-2">
     <div class="app-select-files-wrapper app-fxFlex app-fxLayout app-row app-gap-2">
-     <!--  to delete after agreement -> https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/693
-      @for (file of files(); track file; let idx = $index) {
-        <a (click)="selectFile(file, idx)" [class.active]="file.id === selectedFile()?.id">{{ file.nazev }}</a>&#160;
-      } -->
       <mat-form-field appearance="outline" class="app-select-primary">
         <mat-select [(ngModel)]="selectedFile">
           @for (file of files(); track file; let idx = $index) {

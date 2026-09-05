@@ -45,7 +45,18 @@ public class VyskovyBod implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-        return true;
+        // preneseno z ADB
+//-- A: stav = 3
+//-- B-E: bez omezení 
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
+        String userPr = user.optString("pristupnost", "A");
+        if (userPr.compareToIgnoreCase("B") >= 0) {
+            return true;
+        } else if (userPr.compareToIgnoreCase("B") <= 0 && st == 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     

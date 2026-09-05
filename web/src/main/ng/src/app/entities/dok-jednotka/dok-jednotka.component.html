@@ -79,7 +79,7 @@
           [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge"
           [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }}
           <mat-icon>link</mat-icon></a>–&#160;
-          <app-inline-filter [field]="'f_dj_typ'" [value]="_result().dj_typ.id" [heslar]="'typ_dj'"></app-inline-filter>
+          <app-inline-filter [field]="'f_dj_typ'" [value]="_result().dj_typ.id ? _result().dj_typ.id : _result().dj_typ" [heslar]="'typ_dj'"></app-inline-filter>
           @if (_result().dj_nazev) {
             &#160;({{_result().dj_nazev}})
           }
@@ -95,6 +95,10 @@
       <mat-accordion multi="true">
         @if (_result().dj_pian) {
           <app-pian [result]="_result().dj_pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
+        } @else {
+          @for(pian of pians(); track pian) {
+            <app-pian [result]="pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
+          }
         }
         @if (_result().dj_adb) {
           <app-adb [result]="_result().dj_adb" [isChild]="true" [detailExpanded]="detailExpanded()"></app-adb>

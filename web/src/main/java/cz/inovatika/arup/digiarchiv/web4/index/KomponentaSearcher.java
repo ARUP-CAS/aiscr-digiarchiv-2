@@ -28,7 +28,13 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   
   public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request, boolean inHandle) {
 
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    AkceSearcher as = new AkceSearcher();
+    String[] akceFields = as.getChildSearchFields(pristupnost);
     for (int i = 0; i < ja.length(); i++) {
       try {
         JSONObject doc = ja.getJSONObject(i);
@@ -55,12 +61,11 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         query = new SolrQuery("*")
                 //.addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"")
                 .addFilterQuery("ident_cely:\"" + doc.getString("komponenta_zdroj_ident_cely") + "\"");
-        AkceSearcher as = new AkceSearcher();
-        query.setFields(as.getChildSearchFields("A"));
+        query.setFields(akceFields);
         try {
           JSONObject sub = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
+          filter(sub, pristupnost, LoginServlet.organizace(request.getSession()));
           JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
-
           
           for (int j = 0; j < subs.length(); j++) {
             doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));

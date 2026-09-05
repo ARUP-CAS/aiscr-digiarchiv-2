@@ -11,10 +11,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONException;
 
 /**
  *
@@ -93,7 +91,7 @@ public class InitServlet extends HttpServlet {
             I18n.getInstance().load("en");
             LOGGER.log(Level.INFO, "Locales loaded"); 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error loading locales {0}", ex);
+          LOGGER.log(Level.SEVERE, "Error loading locales {0}", ex);
         }
 
         LOGGER.log(Level.INFO, "CONFIG_DIR is -> {0}", CONFIG_DIR);

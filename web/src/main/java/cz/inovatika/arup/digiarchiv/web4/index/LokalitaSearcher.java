@@ -30,6 +30,13 @@ import org.json.XML;
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
+            filterOne(doc, pristupnost, org);
+        }
+        
+    }
+    
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
 //            doc.put("pian", doc.opt("pian_" + pristupnost));
 //            doc.remove("pian_" + pristupnost);
             if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
@@ -52,7 +59,6 @@ import org.json.XML;
 
                 }
             }
-        }
         
     }
 
