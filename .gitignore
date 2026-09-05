@@ -14,11 +14,17 @@ web/src/main/webapp/index.csr.html
 # vscode
 .vscode/
 
-# agents
-.codex/
-.claude/
-.cursor/
-
-#local environments
+# node (repo-root tooling, e.g. OpenSpec; lockfiles stay committed)
 node_modules/
+
+# agents — machine-local / runtime-only assistant files only.
+# Governed assistant bundles under .claude/.codex/.cursor/.gemini/.github are
+# committed (delivered from the aiscr-management hub); do not ignore them.
+.mcp.json
+.cursor/mcp.json
+.gemini/mcp.local.json
+.claude/mcp.local.json
+.claude/settings.local.json
+
+#venv
 .venv/
