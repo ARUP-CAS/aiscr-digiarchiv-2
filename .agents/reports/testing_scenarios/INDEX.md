@@ -4,7 +4,7 @@
 
 | Scenario | Kind | Features | Entities | Surfaces | Driving issues | Last verified |
 | --- | --- | --- | --- | --- | --- | --- |
-| [`export`](export.md) | feature | export | dokument, akce, lokalita, projekt, samostatny_nalez, knihovna_3d, komponenta | export page, map export page, table data API, download endpoint | ARUP-CAS/aiscr-digiarchiv-2#148 | 2026-08-28 |
+| [`export`](export.md) | feature | export | dokument, akce, lokalita, projekt, samostatny_nalez, knihovna_3d, komponenta | export page (/export), map export page (/export-mapa), export API (/api/exp), map search API (/api/search/query) | ARUP-CAS/aiscr-digiarchiv-2#148 | 2026-09-05 |
 | [`file-distributions`](file-distributions.md) | feature | file distributions, paradata | dokument, knihovna_3d, samostatny_nalez | reader image surface, File API, OAI-PMH, search facets | ARUP-CAS/aiscr-digiarchiv-2#693 | 2026-08-29 |
 | [`komponenta`](komponenta.md) | entity | komponenta record type | komponenta | record page, entity search and facets, map, export, handle API | ARUP-CAS/aiscr-digiarchiv-2#127 | 2026-08-28 |
 | [`permissions`](permissions.md) | feature | permissions | projekt, archeologicky_zaznam, dokument, ext_zdroj, adb, pian, samostatny_nalez, uzivatel, let | landing pages, map variant, child-record landing pages, File API, OAI-PMH, search | ARUP-CAS/aiscr-digiarchiv-2#370, ARUP-CAS/aiscr-digiarchiv-2#237 | 2026-08-28 |
