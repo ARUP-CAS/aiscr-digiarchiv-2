@@ -18,7 +18,7 @@ features = ["file distributions", "paradata"]
 entities = ["dokument", "knihovna_3d", "samostatny_nalez"]
 surfaces = ["reader image surface", "File API", "OAI-PMH", "search facets"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#693"]
-last_verified = "2026-08-29"
+last_verified = "2026-09-06"
 
 [[scenario]]
 key = "komponenta"
