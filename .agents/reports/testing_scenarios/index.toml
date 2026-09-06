@@ -39,3 +39,13 @@ entities = ["projekt", "archeologicky_zaznam", "dokument", "ext_zdroj", "adb", "
 surfaces = ["landing pages", "map variant", "child-record landing pages", "File API", "OAI-PMH", "search"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#370", "ARUP-CAS/aiscr-digiarchiv-2#237"]
 last_verified = "2026-08-28"
+
+[[scenario]]
+key = "museion"
+kind = "feature"
+title = "Museion finds integration"
+features = ["museion"]
+entities = ["projekt", "akce", "samostatny_nalez"]
+surfaces = ["museion results page (/museion/:id)", "Museion API (/api/mus/*)", "search filter (inMuseion)", "search API (/api/search/query)", "admin quick actions (user menu)", "client config (/api/config)"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#553"]
+last_verified = "2026-09-06"
