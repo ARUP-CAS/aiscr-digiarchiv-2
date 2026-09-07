@@ -231,6 +231,7 @@ public class ImageServlet extends HttpServlet {
                     return;
                 }
                 String dist = request.getParameter("dist");
+                boolean distExists = false;
                 if (id != null && !id.equals("")) {
                         File f = File.createTempFile("img-", "-"+dist.replace("/", ""), new File(InitServlet.TEMP_DIR ));
                     try {
@@ -248,7 +249,13 @@ public class ImageServlet extends HttpServlet {
                           if (dist.equals(d.optString("path"))) {
                             mime = d.optString("mimetype");
                             filename = d.optString("filename");
+                            distExists = true;
                           }
+                        }
+                        if (!distExists) {
+                            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                            response.getWriter().println("Distribuce not found");
+                            return;
                         }
                         if (mime != null) {
                             response.setContentType(mime);

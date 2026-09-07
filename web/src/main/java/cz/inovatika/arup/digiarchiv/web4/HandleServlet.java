@@ -280,7 +280,7 @@ public class HandleServlet extends HttpServlet {
     if (id != null && !id.equals("")) {
       File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR));
       try {
-        JSONObject doc = getDocument(id.replaceAll("paradata/", ""), user);
+        JSONObject doc = getDocument(id.replaceAll("/paradata", ""), user);
         if (doc == null) {
           response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           return false;
@@ -320,7 +320,7 @@ public class HandleServlet extends HttpServlet {
         String filename = doc.getString("nazev");
         String url = doc.getString("path");
         String distri = "orig";
-        String fullId = "rest/AMCR/record/" + id;
+        String fullId = "rest/AMCR/record/" + id.replaceAll("/paradata", "");
         
         if(!fullId.equals(url)) {
           // Je to distri
