@@ -246,15 +246,16 @@ export class StatsComponent implements OnInit {
     return id;
   }
 
-  setGraphData(counts: { name: string, type: string, value: number }[]) {
+  //setGraphData(counts: { name: string, type: string, value: number }[]) {
+  setGraphData(counts: [string, number][]) {
     const series = [];
     const xAxisData: string[] = [];
     const values: any[] = [];
     let maxY = 0;
     counts.forEach(element => {
-      values.push(element.value);
-      xAxisData.push(this.datePipe.transform(element.name, 'dd.MM.yyyy'));
-      maxY = Math.max(element.value, maxY);
+      values.push(element[1]);
+      xAxisData.push(this.datePipe.transform(element[0], 'dd.MM.yyyy'));
+      maxY = Math.max(element[1], maxY);
     });
     series.push({
       // source: 'source.name',

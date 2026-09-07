@@ -6,6 +6,7 @@
 	<h1>{{ 'museion.predmety' | translate }} {{ id }}</h1>
 	@if(!loading()) {
 		<div class="app-fxFlex app-fxLayout app-column app-gap-4">
+			@if(organizaceIds().length > 0){
 			<div class="app-fxLayout app-row app-gap-4 app-center-v">
 				<mat-form-field appearance="outline">
 					<mat-label>{{ 'museion.organizaceId' | translate}}: </mat-label>
@@ -15,8 +16,8 @@
 						}
 					</mat-select>
 				</mat-form-field>
-				<div>{{ 'museion.pocetPom' | translate}}: <strong>{{ predmetyDleAmcrId().pocetPom | translate}}</strong></div>
-				<div>{{ 'museion.pocetSys' | translate}}: <strong>{{ predmetyDleAmcrId().pocetSys | translate}}</strong></div>
+				<div>{{ 'museion.pocetPom' | translate}}: <strong>{{ predmetyDleAmcrId()?.pocetPom}}</strong></div>
+				<div>{{ 'museion.pocetSys' | translate}}: <strong>{{ predmetyDleAmcrId()?.pocetSys}}</strong></div>
 			</div>
 			<div class="app-fxFlex app-oh">
 				<div class="app-border-wrapper app-maxh-100 app-oa-y">
@@ -32,6 +33,9 @@
 					</table>
 				</div>
 			</div>
+			} @else {
+				{{ 'museion.not_found' | translate}}
+			}
 		</div>
 	}
 </div>

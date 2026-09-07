@@ -1320,27 +1320,6 @@ public class SolrSearcher {
     }
   }
   
-  public static JSONObject getMuseion(SolrClient client) {
-    try {
-
-//            MuseionClient m = new MuseionClient();
-//            PredmetyStatistika stats = m.predmetyStatistika(); 
-//            
-//            List<String> ids = stats.amcrIdPom;
-//            ids.addAll(stats.amcrIdSys);
-//            
-//            String filter = "ident_cely:(\""+ String.join("\" OR \"", ids) + "\")";
-//            
-//            SolrQuery query = new SolrQuery("*:*");
-//            
-//            query.addFilterQuery(filter);
-//            return SearchUtils.json(query, client, "entities");
-    } catch (Exception ex) {
-      LOGGER.log(Level.WARNING, "Error {0}", ex);
-    }
-    return null;
-  }
-  
   public static void processExportDocs(JSONArray docs, String entity) {
     JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     //List<String> fs = new ArrayList();

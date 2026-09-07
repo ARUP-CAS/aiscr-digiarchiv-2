@@ -849,10 +849,12 @@
       "popisStav": "Description of the current physical condition of the item.",
       "poznamkaUrceni": "Note on the identification (expert description) of the item.",
       "prirustkoveCislo": "Accession number.",
+      "pristup": "Access.",
       "rozmer": "Expert description – item dimensions.",
       "sbirka": "Name of the collection.",
       "stav": "Name of the current physical condition of the item.",
       "technika": "Expert description – list of techniques used that are recognized on the item."
-    }
+    },
+    "not_found": "The record could not be found"
   }
 }

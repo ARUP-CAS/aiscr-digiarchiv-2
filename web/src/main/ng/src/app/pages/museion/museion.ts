@@ -73,7 +73,9 @@ export class Museion {
   organizaceIds = signal<string[]>([]);
   selectedOrganizace: string;
 
-  columnsFull = ['cislo', 'prirustkoveCislo',
+  columnsFull = [
+    'pristup', 
+    'cislo', 'prirustkoveCislo',
     'cisloCes',
     'cisloEvidCES',
     'fond',
@@ -128,11 +130,13 @@ export class Museion {
       this.service.museionPredmety(this.id, this.typ).subscribe((res: any) => {
         if (res.hasError) {
           alert(this.service.getTranslation('dialog.alert.feedback_failed') + ": " + res.error);
-        } else {
+        } else if (Object.keys(res.predmetyDleAmcrId).length > 0) {
           this.organizaceIds.set(Object.keys(res.predmetyDleAmcrId));
           this.predmetyDleAmcrIdAll.set(res.predmetyDleAmcrId);
           this.selectedOrganizace = this.organizaceIds()[0];
           this.selectOrganizace();
+        } else {
+
         }
         this.loading.set(false);
       });

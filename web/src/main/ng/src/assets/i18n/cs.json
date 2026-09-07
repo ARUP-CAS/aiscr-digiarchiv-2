@@ -849,10 +849,12 @@
       "popisStav": "Popis aktuálního fyzického stavu předmětu.",
       "poznamkaUrceni": "Poznámka k určení (odbornému popisu) předmětu.",
       "prirustkoveCislo": "Přírůstkové číslo.",
+      "pristup": "Přístup.",
       "rozmer": "Odborný popis – rozměry předmětu.",
       "sbirka": "Název sbírky.",
       "stav": "Název aktuálního fyzického stavu předmětu.",
       "technika": "Odborný popis – seznam použitých technik, které jsou na předmětu rozpoznány."
-    }
+    },
+    "not_found": "Záznam se nepodařilo najít."
   }
 }
