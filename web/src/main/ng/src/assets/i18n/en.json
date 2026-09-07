@@ -90,7 +90,9 @@
       "vedouci_projektu": "Project manager",
       "rok_vzniku": "Year of creation",
       "nazev": "Name",
-      "organizace": "Organisation"
+      "organizace": "Organisation",
+      "obdobi": "Period",
+      "areal": "Area"
     },
     "dir": {
       "asc": " ascending",

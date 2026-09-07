@@ -146,7 +146,6 @@ public class ExportServlet extends HttpServlet {
     for (int i = 0; i < exFields.length(); i++) {
       JSONObject f = exFields.getJSONObject(i);
       
-      
       String name = f.optString("name");
       String field = f.optString("label", name);
       Object val = jo.opt(field);

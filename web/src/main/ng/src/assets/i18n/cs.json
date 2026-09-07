@@ -90,7 +90,9 @@
       "vedouci_projektu": "Vedoucí projektu",
       "rok_vzniku": "Rok vzniku",
       "nazev": "Název",
-      "organizace": "Organizace"
+      "organizace": "Organizace",
+      "obdobi": "Období",
+      "areal": "Areál"
     },
     "dir": {
       "asc": " vzestupně",

@@ -893,17 +893,26 @@
         "name": "dokument_oznaceni_originalu"
       },
       {
-        "name": "f_obdobi",
+        "name": "dokument_cast.komponenta[0].komponenta_obdobi.id",
+        "path": "f_obdobi.[0].komponenta[0].komponenta_obdobi.id",
+        "field": "dokument_cast:[json]",
+        "label": "f_obdobi",
+        "byPath": true,
         "translated": true
       },
       {
-        "name": "f_areal",
+        "name": "dokument_cast.komponenta[0].komponenta_areal.id",
+        "path": "f_areal.[0].komponenta[0].komponenta_areal.id", 
+        "field": "dokument_cast:[json]",
+        "label": "f_areal",
+        "byPath": true,
         "translated": true
       },
       {
-        "name": "extra_data_odkaz",
-        "label": "dokument_extra_data_odkaz",
-        "translated": true
+        "name": "dokument_extra_data.odkaz",
+        "field": "dokument_extra_data:[json]",
+        "byPath": true,
+        "label": "dokument_extra_data_odkaz"
       }
     ],
     "akce": [

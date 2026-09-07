@@ -121,9 +121,7 @@ public class Komponenta implements FedoraModel {
     v.setKey((String) idoc.getFieldValue("samostatny_nalez_obdobi"));
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", v);
     kdoc.setField("komponenta_obdobi_poradi", SolrSearcher.getThesauri().optInt(v.getId()));
-    System.out.println(v.getId());
-    System.out.println(SolrSearcher.getThesauri().optInt(v.getId()));
-    kdoc.setField("entity", "komponenta");
+    kdoc.setField("entity", "komponenta"); 
     
     setFullText(kdoc);
     try {
