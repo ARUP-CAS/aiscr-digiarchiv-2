@@ -143,7 +143,7 @@ public class Predmet {
     public String pocetCasti;
     
     @JacksonXmlProperty(localName = "pocetKusu")
-    public int pocetKusu;
+    public String pocetKusu;
     
     @JacksonXmlProperty(localName = "podsbirka")
     public String podsbirka;
