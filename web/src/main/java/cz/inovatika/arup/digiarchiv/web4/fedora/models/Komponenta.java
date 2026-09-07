@@ -3,6 +3,7 @@ package cz.inovatika.arup.digiarchiv.web4.fedora.models;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import cz.inovatika.arup.digiarchiv.web4.I18n;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 import cz.inovatika.arup.digiarchiv.web4.fedora.FedoraModel;
 import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
@@ -119,8 +120,10 @@ public class Komponenta implements FedoraModel {
     Vocab v = new Vocab();
     v.setKey((String) idoc.getFieldValue("samostatny_nalez_obdobi"));
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", v);
+    kdoc.setField("komponenta_obdobi_poradi", SolrSearcher.getThesauri().optInt(v.getId()));
+    System.out.println(v.getId());
+    System.out.println(SolrSearcher.getThesauri().optInt(v.getId()));
     kdoc.setField("entity", "komponenta");
-    
     
     setFullText(kdoc);
     try {
@@ -144,6 +147,8 @@ public class Komponenta implements FedoraModel {
     SolrInputDocument kdoc = dob.toSolrInputDocument(this);
     IndexUtils.addJSONField(kdoc, "komponenta_obdobi", komponenta_obdobi);
     IndexUtils.addJSONField(kdoc, "komponenta_areal", komponenta_areal);
+    kdoc.setField("komponenta_obdobi_poradi", SolrSearcher.getThesauri().optInt(komponenta_obdobi.getId()));
+    kdoc.setField("komponenta_areal_poradi", SolrSearcher.getThesauri().optInt(komponenta_areal.getId(), 0));
     kdoc.setField("searchable", 
             Boolean.parseBoolean(parentDoc.getFieldValue("searchable").toString()) && 
             Boolean.parseBoolean(rootDoc.getFieldValue("searchable").toString()));

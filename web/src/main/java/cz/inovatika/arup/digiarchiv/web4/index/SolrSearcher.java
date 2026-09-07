@@ -856,36 +856,39 @@ public class SolrSearcher {
     }
   }
   
+  public static JSONObject thesauri;
   public static JSONObject getThesauri() {
-    JSONObject ret = new JSONObject();
-    try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-      SolrQuery query = new SolrQuery("*")
-              .setFields("id,ident_cely,razeni,nazev_heslare")
-              .setRows(5000);
-      
-      QueryRequest req = new QueryRequest(query);
-      req.setResponseParser(new InputStreamResponseParser("json"));
-      NamedList<Object> resp = client.request(req, "heslar");
-      InputStream is = (InputStream) resp.get("stream");
-      
-      JSONArray docs = new JSONObject(IOUtils.toString(is, "UTF-8"))
-              .getJSONObject("response").getJSONArray("docs");
-      // return (String) resp.get("response");
+    if (thesauri == null) {
+      thesauri = new JSONObject();
+      try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        SolrQuery query = new SolrQuery("*")
+                .setFields("id,ident_cely,razeni,nazev_heslare")
+                .setRows(5000);
 
-      // JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
-      for (int i = 0; i < docs.length(); i++) {
-        JSONObject doc = docs.getJSONObject(i);
-        int razeni = doc.optInt("razeni", 0);
-        if ("objekt_druh".equals(doc.optString("nazev_heslare"))) {
-          razeni += 4000;
+        QueryRequest req = new QueryRequest(query);
+        req.setResponseParser(new InputStreamResponseParser("json"));
+        NamedList<Object> resp = client.request(req, "heslar");
+        InputStream is = (InputStream) resp.get("stream");
+
+        JSONArray docs = new JSONObject(IOUtils.toString(is, "UTF-8"))
+                .getJSONObject("response").getJSONArray("docs");
+        // return (String) resp.get("response");
+
+        // JSONObject heslarToPole = Options.getInstance().getClientConf().getJSONObject("heslarToPole");
+        for (int i = 0; i < docs.length(); i++) {
+          JSONObject doc = docs.getJSONObject(i);
+          int razeni = doc.optInt("razeni", 0);
+          if ("objekt_druh".equals(doc.optString("nazev_heslare"))) {
+            razeni += 4000;
+          }
+          thesauri.put(doc.getString("ident_cely"), razeni);
         }
-        ret.put(doc.getString("ident_cely"), razeni);
+      } catch (Exception ex) {
+        LOGGER.log(Level.SEVERE, "", ex);
+        //thesauri.put("error", ex);
       }
-    } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, "", ex);
-      ret.put("error", ex);
     }
-    return ret;
+    return thesauri;
   }
   
   public static JSONObject getOrganizace(String ident_cely) {
