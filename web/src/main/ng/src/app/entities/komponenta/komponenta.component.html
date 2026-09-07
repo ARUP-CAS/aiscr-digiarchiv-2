@@ -52,24 +52,24 @@
         }
       </div>
 
-      
+      @if (_result().okres) {
       <div>
         <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
-        @for(katastr of _result().katastr; track katastr; let last = $last) {
-          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="katastr"></app-inline-filter>
-          @if (!last) {
-            <span>,&#160;</span>
-            }
-        }
 
         @if (_result().az_chranene_udaje?.hlavni_katastr) {
           <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'"
             [value]="_result().az_chranene_udaje.hlavni_katastr.value"></app-inline-filter>
+        } 
+
+        @if (_result().samostatny_nalez_chranene_udaje) {
+          <label class="app-label">{{'card.desc.Katastr (okres)' | translate}}:</label>&#160;
+          <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result().samostatny_nalez_chranene_udaje.katastr.value"></app-inline-filter>
         }
 
         <span class="app-element-wrapper app-ml-1">(<app-inline-filter [isChild]="isChild()" [field]="'f_okres'"
             [value]="_result().okres"></app-inline-filter>)</span>
       </div>
+      }
 
 
       @if (_result().az_chranene_udaje?.dalsi_katastr.length > 0) {
@@ -141,6 +141,12 @@
                   {{ _result().samostatny_nalez_chranene_udaje?.geom_sjtsk_gml }}
                   }
                 </td>
+              </tr>
+              }
+              @if (_result().dokument_extra_data.geom_system) {
+              <tr>
+                <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                <td>{{ _result().dokument_extra_data.geom_system }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data?.geom_gml) {
