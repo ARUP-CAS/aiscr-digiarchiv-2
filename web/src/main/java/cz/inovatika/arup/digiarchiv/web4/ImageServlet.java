@@ -213,11 +213,11 @@ public class ImageServlet extends HttpServlet {
               
               //rate-limit
               String ip = request.getRemoteAddr();
-              long retryTime = AppState.canGetFileInterval(ip, id);
+              long retryTime = AppState.canGetFileInterval(ip, id); //miliseconds
               if (retryTime > 0) {
                 response.setStatus(429); // 429 Too Many Requests
-                response.addHeader("Retry-After", retryTime + "");
-                response.getWriter().print("Try in " + retryTime + " seconds.");
+                response.addHeader("Retry-After", retryTime*1000 + "");
+                response.getWriter().print("Try in " + retryTime*1000 + " seconds.");
                 return;
               } else if (retryTime == -1) {
                 response.setStatus(429); // 429 Too Many Requests
