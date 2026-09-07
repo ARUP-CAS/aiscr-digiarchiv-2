@@ -158,21 +158,51 @@ public class SolrSearcher {
     return exFields;
   }
   
-  public static List<String> getExportField(String entity, String field) {
+  public static List<String> getExportField(String entity, String field, boolean isMap) {
     List<String> fs = new ArrayList();
-    JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
-    fs.add("handle");
-    for (int i = 0; i < choiceFields.length(); i++) {
-      String f = choiceFields.getJSONObject(i).getString("label");
-      fs.add(f);
+    boolean hasPian;
+    switch(entity) {
+      case "knihovna_3d": 
+        hasPian = false; 
+        break;
+      case "samostatny_nalez": 
+        hasPian = false; 
+        break;
+      case "pian": 
+        hasPian = true; 
+        break;
+      default:
+        hasPian = true;
     }
+    if (isMap) {
+      if (hasPian) {
+        fs.add("pian_ident_cely");
+        fs.add("pian_presnost");
+        fs.add("pian_typ");
+        fs.add("pian_zm10");
+        fs.add("pian_wgs84");
+      }
+      fs.add("geometrie");
+      
+    } else {
+      fs.add("handle");
+      JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
+      for (int i = 0; i < choiceFields.length(); i++) {
+        String f = choiceFields.getJSONObject(i).getString("label");
+        fs.add(f);
+      }
+    }
+    
+    
     JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
     for (int i = 0; i < exFields.length(); i++) {
+      if (!exFields.getJSONObject(i).optBoolean("hidden", false)) {
       String f = exFields.getJSONObject(i).getString("name");
       if (exFields.getJSONObject(i).has(field)) {
         f = exFields.getJSONObject(i).getString(field);
       }
       fs.add(f);
+      }
     }
     return fs;
   }
@@ -1321,7 +1351,7 @@ public class SolrSearcher {
   }
   
   public static void processExportDocs(JSONArray docs, String entity) {
-    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);
+    JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity); 
     //List<String> fs = new ArrayList();
     
     for (int d = 0; d < docs.length(); d++) {

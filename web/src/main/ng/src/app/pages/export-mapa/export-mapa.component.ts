@@ -161,6 +161,7 @@ export class ExportMapaComponent implements OnInit {
       if (resp.error) {
         return;
       }
+      this.numFound = resp.response.numFound;
       if (this.state.entity === 'knihovna_3d') {
         docs.forEach(doc => {
           if (this.geometrie === 'GeoJSON') {
