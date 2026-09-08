@@ -165,8 +165,6 @@
     "projekt_chranene_udaje_kulturni_pamatka_cislo",
     "projekt_chranene_udaje_kulturni_pamatka_popis",
         
-        
-        
     "akce_lokalizace_okolnosti",
     "lokalita_nazev",
     "f_uzivatelske_oznaceni",
@@ -772,10 +770,16 @@
          ]    
       }, 
       "full_text": [
-        "ident_cely",
         "komponenta_zdroj",
-        "komponenta_zdroj_ident_cely",
-        "komponenta_presna_datace"
+        "komponenta_presna_datace",
+        "samostatny_nalez_obdobi",
+        "samostatny_nalez_presna_datace",
+        "samostatny_nalez_druh_nalezu",
+        "samostatny_nalez_specifikace",
+        "samostatny_nalez_chranene_udaje.katastr.value",
+        "samostatny_nalez_okres",
+        "samostatny_nalez_poznamka",
+        "samostatny_nalez_projekt"
       ]
     }
   },

@@ -123,7 +123,21 @@ public class Komponenta implements FedoraModel {
     kdoc.setField("komponenta_obdobi_poradi", SolrSearcher.getThesauri().optInt(v.getId()));
     kdoc.setField("entity", "komponenta"); 
     
-    setFullText(kdoc);
+    String pristupnost = (String) kdoc.getFieldValue("pristupnost");
+    List<String> prSufix = new ArrayList<>();
+    if ("A".compareTo(pristupnost) >= 0) {
+      prSufix.add("A");
+    }
+    if ("B".compareTo(pristupnost) >= 0) {
+      prSufix.add("B");
+    }
+    if ("C".compareTo(pristupnost) >= 0) {
+      prSufix.add("C");
+    }
+    if ("D".compareTo(pristupnost) >= 0) {
+      prSufix.add("D");
+    }
+    setFullText(kdoc, prSufix);
     try {
       IndexUtils.addAndCommit("entities", kdoc);
     } catch (Exception ex) {
@@ -239,7 +253,7 @@ public class Komponenta implements FedoraModel {
     setFieldsFromSelf(kdoc, prSufix);
     setFieldsFromRoot(kdoc, rootDoc, prSufix);
     setFieldsFromParent(kdoc, parentDoc, prSufix);
-    setFullText(kdoc);
+    setFullText(kdoc, prSufix);
 
     for (String sufix : SolrSearcher.prSufixAll) {
       kdoc.addField("text_all_" + sufix, ident_cely);
@@ -311,14 +325,21 @@ public class Komponenta implements FedoraModel {
     }
   }
 
-  private void setFullText(SolrInputDocument idoc) {
+  private void setFullText(SolrInputDocument idoc, List<String> prSufix) {
+    
+    String okresVal = idoc.containsKey("f_okres") ? I18n.translate((String)idoc.getFieldValues("f_okres").toArray()[0], "cs") : null;
+    String druhVal = idoc.containsKey("f_druh_nalezu") ? I18n.translate((String)idoc.getFieldValues("f_druh_nalezu").toArray()[0], "cs") : null;
+    String specVal = idoc.containsKey("f_specifikace") ? I18n.translate((String)idoc.getFieldValues("f_specifikace").toArray()[0], "cs") : null;
+    String obdVal = idoc.containsKey("f_obdobi") ? I18n.translate((String)idoc.getFieldValues("f_obdobi").toArray()[0], "cs") : null;
+    String katVal = idoc.containsKey("f_kategorie") ? I18n.translate((String)idoc.getFieldValues("f_kategorie").toArray()[0], "cs") : null;
+    
     List<Object> indexFields = Options.getInstance().getJSONObject("fields").getJSONObject("komponenta").getJSONArray("full_text").toList();
     for (Object f : indexFields) {
       String s = (String) f;
       if (s.contains(".")) {
-        IndexUtils.addByPath(idoc, s, "text_all", Arrays.asList(SolrSearcher.prSufixAll), true);
+        IndexUtils.addByPath(idoc, s, "text_all", prSufix, true);
       } else {
-        for (String sufix : SolrSearcher.prSufixAll) {
+        for (String sufix : prSufix) {
           if (idoc.containsKey(s)) {
             IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues(s));
           }
@@ -328,11 +349,29 @@ public class Komponenta implements FedoraModel {
         }
       }
     }
-    //System.out.println(idoc.getFieldValues("ident_cely"));
+    
+    for (String sufix : prSufix) {
+      if (druhVal != null) {
+        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, druhVal);
+      }
+      if (specVal != null) {
+        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, specVal);
+      }
+      if (obdVal != null) {
+        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, obdVal);
+      }
+      if (katVal != null) {
+        IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, katVal);
+      }
+    }
+    
     for (String sufix : SolrSearcher.prSufixAll) {
           IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues("ident_cely"));
           IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, idoc.getFieldValues("komponenta_zdroj_ident_cely"));
+          IndexUtils.addFieldNonRepeat(idoc, "text_all_" + sufix, okresVal);
     }
+
+        
   }
 
   private void addPian(SolrInputDocument idoc, String pian, String pristupnostOrig) throws Exception {

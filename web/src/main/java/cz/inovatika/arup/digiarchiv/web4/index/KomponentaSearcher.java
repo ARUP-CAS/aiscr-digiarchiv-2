@@ -27,7 +27,6 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   }
   
   public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request, boolean inHandle) {
-
         String pristupnost = LoginServlet.pristupnost(request.getSession());
         if ("E".equals(pristupnost)) {
             pristupnost = "D";
@@ -57,7 +56,6 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
           doc.put("datestamp", cdj.getString("datestamp"));
         }
 
-        String ident_cely = doc.getString("ident_cely");
         query = new SolrQuery("*")
                 //.addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"")
                 .addFilterQuery("ident_cely:\"" + doc.getString("komponenta_zdroj_ident_cely") + "\"");
@@ -66,7 +64,6 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
           JSONObject sub = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
           filter(sub, pristupnost, LoginServlet.organizace(request.getSession()));
           JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
-          
           for (int j = 0; j < subs.length(); j++) {
             doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
             if (subs.getJSONObject(i).has("datestamp")) {
@@ -213,7 +210,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
 
   @Override
   public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
-    getRelated(jo, client, request, false);
+    //getRelated(jo, client, request, false);
   }
   
   public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {

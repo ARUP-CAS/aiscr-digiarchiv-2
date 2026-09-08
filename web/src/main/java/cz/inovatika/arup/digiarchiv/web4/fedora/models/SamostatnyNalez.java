@@ -217,10 +217,10 @@ public class SamostatnyNalez implements FedoraModel {
         }
 
         setFacets(idoc, prSufix);
-        setFullText(idoc, prSufix);
-        
         Komponenta k = new Komponenta();
         k.fromSamostatnyNalez(idoc); 
+        
+        setFullText(idoc, prSufix);
     }
     
     
