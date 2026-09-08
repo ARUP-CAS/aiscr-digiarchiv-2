@@ -75,7 +75,7 @@ public class ImageServlet extends HttpServlet {
         }
     }
 
-    private static BufferedImage logoImg(HttpServletResponse response, OutputStream out, ServletContext ctx) throws IOException {
+    private static BufferedImage logoImg(OutputStream out, ServletContext ctx) throws IOException {
         String empty = ctx.getRealPath(File.separator) + "/assets/img/logo-watermark-white.png";
         return ImageIO.read(new File(empty));
 
@@ -149,7 +149,7 @@ public class ImageServlet extends HttpServlet {
             // BufferedImage bi = ImageIO.read(f);
             BufferedImage bi = ImageIO.read(is);
             if (bi != null) {
-                ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
+                ImageSupport.addWatermark(bi, logoImg(response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
                 ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
             } else {
                 LOGGER.log(Level.FINE, "Response is not image {0}. ", id);

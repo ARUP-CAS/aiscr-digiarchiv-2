@@ -1169,7 +1169,8 @@
         "label": "dalsi_katastry"
       },
       {
-        "name": "samostatny_nalez_obdobi",
+        "name": "komponenta_obdobi.id",
+        "byPath": true,
         "translated": true,
         "label": "obdobi"
       },

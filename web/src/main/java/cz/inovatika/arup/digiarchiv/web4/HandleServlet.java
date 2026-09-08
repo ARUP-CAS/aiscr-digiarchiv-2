@@ -7,7 +7,6 @@ import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import static cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory.getSolrClientSearch;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;

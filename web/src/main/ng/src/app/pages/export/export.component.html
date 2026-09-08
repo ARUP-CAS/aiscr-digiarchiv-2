@@ -42,8 +42,7 @@
                         {{r[field.label] ? r[field.label] : ''}}
                       }
                     }
-                  }
-                  @if (!field.byPath) {
+                  } @else {
                     @if (field.type === 'boolean') {
                       {{r[field.name] + '' | translate}}
                     }
@@ -54,7 +53,7 @@
                         {{r[field.name] | date : 'yyyy-MM-dd'}}
                       }
                       @if (field.type !== 'date' && field.type !== 'boolean') {
-                        {{r[field.name] ? r[field.name] : ''}}
+                        {{r[field.name] !== null ? r[field.name] : ''}}
                       }
                     }
                   }

@@ -650,6 +650,7 @@
       "akce_je_nz": "Fieldwork - substitutes report",
       "komponenta_presna_datace": "Doc. component - precise dating",
       "lokalita_jistota": "Level of confidence",
+      "komponenta_jistota": "Component - confidence",
       "komponenta_aktivita": "Component - activity",
       "komponenta_areal": "Component - activity area"
     },
