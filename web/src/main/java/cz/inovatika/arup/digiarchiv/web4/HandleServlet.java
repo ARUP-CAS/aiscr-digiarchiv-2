@@ -87,8 +87,8 @@ public class HandleServlet extends HttpServlet {
         long retryTime = AppState.canGetFileInterval(ip, id);
         if (retryTime > 0) {
           response.setStatus(429); // 429 Too Many Requests
-          response.addHeader("Retry-After", retryTime*1000 + "");
-          response.getWriter().print("Try in " + retryTime*1000 + " seconds.");
+          response.addHeader("Retry-After", retryTime/1000 + "");
+          response.getWriter().print("Try in " + retryTime/1000 + " seconds.");
           return;
         } else if (retryTime == -1) {
           response.setStatus(429); // 429 Too Many Requests
