@@ -522,7 +522,7 @@ public class HandleServlet extends HttpServlet {
               .setFacet(false);
       //query.setFields("entity,is_deleted,searchable,stav");
       query.setFields("entity,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
-
+      query.set("wt", "json");
       QueryResponse resp = client.query("entities", query);
 
       if (resp.getResults().getNumFound() == 0) {

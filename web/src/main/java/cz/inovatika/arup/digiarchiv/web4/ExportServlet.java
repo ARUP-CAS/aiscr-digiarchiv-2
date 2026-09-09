@@ -9,8 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.time.Instant;
 import java.util.List;
 import java.util.logging.Level;
@@ -195,6 +193,9 @@ public class ExportServlet extends HttpServlet {
       Object object = ja.opt(i);
       if (object != null) {
         String string = object.toString();
+        if (object instanceof JSONArray) {
+          string = ((JSONArray)object).join(", "); 
+        }
         if (!string.isEmpty() && (string.indexOf(delimiter) >= 0
                 || string.indexOf('\n') >= 0 || string.indexOf('\r') >= 0
                 || string.indexOf(0) >= 0 || string.charAt(0) == '"')) {
