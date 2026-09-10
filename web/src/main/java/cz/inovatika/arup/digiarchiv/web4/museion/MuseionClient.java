@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.inovatika.arup.digiarchiv.web4.Options;
-import static cz.inovatika.arup.digiarchiv.web4.index.SearchUtils.isSearchable;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import java.io.IOException;
 import java.io.StringReader;
@@ -243,11 +241,10 @@ public class MuseionClient {
             indexed += idocs.size();
           }
           solr.commit("museion");
-          clean(start);
           ret.put("indexed", indexed);
         }
       }
-
+      clean(start);
       LOGGER.log(Level.INFO, "Indexing Museion statistika FINISHED. {0} records", indexed);
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsFilter: {0}", ex);
