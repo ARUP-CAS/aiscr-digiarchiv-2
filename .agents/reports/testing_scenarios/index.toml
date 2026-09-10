@@ -49,3 +49,13 @@ entities = ["projekt", "akce", "samostatny_nalez"]
 surfaces = ["museion results page (/museion/:id)", "Museion API (/api/mus/*)", "search filter (inMuseion)", "search API (/api/search/query)", "admin quick actions (user menu)", "client config (/api/config)"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#553"]
 last_verified = "2026-09-06"
+
+[[scenario]]
+key = "version-footer"
+kind = "feature"
+title = "Footer version display"
+features = ["footer version display"]
+entities = []
+surfaces = ["footer (client-rendered)", "Angular main bundle", "npm/Maven build chain", "release workflow (new-version.yml)"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#1113"]
+last_verified = "2026-09-10"
