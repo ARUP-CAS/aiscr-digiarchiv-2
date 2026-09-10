@@ -136,7 +136,6 @@ export class ExportMapaComponent implements OnInit {
     }
 
     p.sort = this.sort.field;
-    console.log(p.sort)
 
 
     if (p['rows']) {
