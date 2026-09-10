@@ -813,6 +813,10 @@
   "exportFields": {
     "dokument": [
       {
+        "name": "pian_id",
+        "hidden": true
+      },
+      {
         "name": "ident_cely"
       },
       {
@@ -863,6 +867,10 @@
       }
     ],
     "knihovna_3d": [
+      {
+        "name": "pian_id",
+        "hidden": true
+      },
       {
         "name": "ident_cely"
       },

@@ -231,8 +231,13 @@ public class ExportServlet extends HttpServlet {
       cell.setCellType(CellType.STRING);
       StringBuilder sb = new StringBuilder();
       Object object = ja.opt(i);
+      
       if (object != null) {
-          cell.setCellValue(object.toString());
+        String string = object.toString();
+        if (object instanceof JSONArray) {
+          string = ((JSONArray)object).join(", "); 
+        }
+          cell.setCellValue(string);
       }
     }
   }
