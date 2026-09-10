@@ -55,7 +55,12 @@
         <span>
           <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v410" title="Version info" target="_blank">{{ 'footer.desc.Verze' | translate }} v4.1.0</a> 
           @if (clientInfo) {
-            &#160;<a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2" title="Version info" target="_blank">({{ clientInfo.hash}})</a> 
+            @let commitHash = clientInfo.hash.startsWith('g') ? clientInfo.hash.slice(1) : clientInfo.hash;
+            @if (commitHash === 'dev') {
+              &#160;<span>({{ commitHash }})</span>
+            } @else {
+              &#160;<a [href]="'https://github.com/ARUP-CAS/aiscr-digiarchiv-2/commit/' + commitHash"  target="_blank">({{ commitHash }})</a>
+            }
             
           }
         </span>
