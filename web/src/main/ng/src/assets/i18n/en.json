@@ -90,7 +90,9 @@
       "vedouci_projektu": "Project manager",
       "rok_vzniku": "Year of creation",
       "nazev": "Name",
-      "organizace": "Organisation"
+      "organizace": "Organisation",
+      "obdobi": "Period",
+      "areal": "Area"
     },
     "dir": {
       "asc": " ascending",
@@ -648,6 +650,7 @@
       "akce_je_nz": "Fieldwork - substitutes report",
       "komponenta_presna_datace": "Doc. component - precise dating",
       "lokalita_jistota": "Level of confidence",
+      "komponenta_jistota": "Component - confidence",
       "komponenta_aktivita": "Component - activity",
       "komponenta_areal": "Component - activity area"
     },
@@ -813,6 +816,7 @@
     "popisStav": "Condition description",
     "poznamkaUrceni": "Note",
     "prirustkoveCislo": "Accession number",
+    "pristup": "Access.",
     "rozmer": "Dimensions",
     "sbirka": "Collection",
     "stav": "Condition",
@@ -849,10 +853,12 @@
       "popisStav": "Description of the current physical condition of the item.",
       "poznamkaUrceni": "Note on the identification (expert description) of the item.",
       "prirustkoveCislo": "Accession number.",
+      "pristup": "Access level – BASIC/FULL.",
       "rozmer": "Expert description – item dimensions.",
       "sbirka": "Name of the collection.",
       "stav": "Name of the current physical condition of the item.",
       "technika": "Expert description – list of techniques used that are recognized on the item."
-    }
+    },
+    "not_found": "The record could not be found"
   }
 }

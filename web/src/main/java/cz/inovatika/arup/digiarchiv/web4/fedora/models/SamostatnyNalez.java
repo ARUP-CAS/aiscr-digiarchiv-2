@@ -217,10 +217,10 @@ public class SamostatnyNalez implements FedoraModel {
         }
 
         setFacets(idoc, prSufix);
-        setFullText(idoc, prSufix);
-        
         Komponenta k = new Komponenta();
         k.fromSamostatnyNalez(idoc); 
+        
+        setFullText(idoc, prSufix);
     }
     
     
@@ -339,8 +339,8 @@ public class SamostatnyNalez implements FedoraModel {
         if (user.has("organizace")) {
             userOrg = user.getJSONObject("organizace").optString("id", "");
         }
-          JSONArray h = new JSONArray(doc.getFieldValues("historie"));
-
+        JSONArray h = new JSONArray(doc.getFieldValues("historie"));
+      
         if (userPr.equalsIgnoreCase("A") && stav == 4) {
           return true;
         } else if (userPr.equalsIgnoreCase("B")) {
@@ -350,7 +350,8 @@ public class SamostatnyNalez implements FedoraModel {
 
           String uzivatel = null;
           for (int i = 0; i < h.length(); i++) {
-            JSONObject hi = h.getJSONObject(i);
+            JSONObject hi = new JSONObject(h.get(i).toString());
+            
             if ("SN01".equals(hi.optString("typ_zmeny"))) {
               uzivatel = hi.getJSONObject("uzivatel").getString("id");
             }
@@ -369,7 +370,7 @@ public class SamostatnyNalez implements FedoraModel {
           String uzivatel = "KKK";
 
           for (int i = 0; i < h.length(); i++) {
-            JSONObject hi = h.getJSONObject(i);
+            JSONObject hi = new JSONObject(h.get(i).toString());
             if ("D01".equals(hi.optString("typ_zmeny"))) {
               uzivatel = hi.getJSONObject("uzivatel").getString("id");
             }

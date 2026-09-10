@@ -81,5 +81,5 @@ export class Configuration {
   feedBackMaxLength: number;
   commonFacets: {name: string, value: string}[];
 
-  thesauri: { [key: string]: number };
+  thesauri: { [key: string]: number } = {};
 }

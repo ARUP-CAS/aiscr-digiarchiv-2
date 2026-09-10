@@ -90,7 +90,9 @@
       "vedouci_projektu": "Vedoucí projektu",
       "rok_vzniku": "Rok vzniku",
       "nazev": "Název",
-      "organizace": "Organizace"
+      "organizace": "Organizace",
+      "obdobi": "Období",
+      "areal": "Areál"
     },
     "dir": {
       "asc": " vzestupně",
@@ -648,6 +650,7 @@
       "akce_je_nz": "Akce - nahrazuje NZ",
       "komponenta_presna_datace": "Komponenta dok. - přesná datace",
       "lokalita_jistota": "Jistota určení",
+      "komponenta_jistota": "Komponenta - jistota",
       "komponenta_aktivita": "Komponenta - aktivita",
       "komponenta_areal": "Komponenta - areál"
     },
@@ -813,6 +816,7 @@
     "popisStav": "Popis stavu",
     "poznamkaUrceni": "Poznámka",
     "prirustkoveCislo": "Přírůstkové číslo",
+    "pristup": "Přístup",
     "rozmer": "Rozměry",
     "sbirka": "Sbírka",
     "stav": "Stav",
@@ -849,10 +853,12 @@
       "popisStav": "Popis aktuálního fyzického stavu předmětu.",
       "poznamkaUrceni": "Poznámka k určení (odbornému popisu) předmětu.",
       "prirustkoveCislo": "Přírůstkové číslo.",
+      "pristup": "Nastavená úroveň přístupu k záznamu – BASIC/FULL.",
       "rozmer": "Odborný popis – rozměry předmětu.",
       "sbirka": "Název sbírky.",
       "stav": "Název aktuálního fyzického stavu předmětu.",
       "technika": "Odborný popis – seznam použitých technik, které jsou na předmětu rozpoznány."
-    }
+    },
+    "not_found": "Záznam se nepodařilo najít."
   }
 }

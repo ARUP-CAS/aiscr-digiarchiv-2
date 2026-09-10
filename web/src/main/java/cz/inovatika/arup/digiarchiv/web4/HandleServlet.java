@@ -7,7 +7,6 @@ import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory;
 import static cz.inovatika.arup.digiarchiv.web4.index.SolrClientFactory.getSolrClientSearch;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -87,8 +86,8 @@ public class HandleServlet extends HttpServlet {
         long retryTime = AppState.canGetFileInterval(ip, id);
         if (retryTime > 0) {
           response.setStatus(429); // 429 Too Many Requests
-          response.addHeader("Retry-After", retryTime + "");
-          response.getWriter().print("Try in " + retryTime + " seconds.");
+          response.addHeader("Retry-After", retryTime/1000 + "");
+          response.getWriter().print("Try in " + retryTime/1000 + " seconds.");
           return;
         } else if (retryTime == -1) {
           response.setStatus(429); // 429 Too Many Requests
@@ -280,7 +279,7 @@ public class HandleServlet extends HttpServlet {
     if (id != null && !id.equals("")) {
       File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR));
       try {
-        JSONObject doc = getDocument(id.replaceAll("paradata/", ""), user);
+        JSONObject doc = getDocument(id.replaceAll("/paradata", ""), user);
         if (doc == null) {
           response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           return false;
@@ -320,7 +319,7 @@ public class HandleServlet extends HttpServlet {
         String filename = doc.getString("nazev");
         String url = doc.getString("path");
         String distri = "orig";
-        String fullId = "rest/AMCR/record/" + id;
+        String fullId = "rest/AMCR/record/" + id.replaceAll("/paradata", "");
         
         if(!fullId.equals(url)) {
           // Je to distri
@@ -523,7 +522,7 @@ public class HandleServlet extends HttpServlet {
               .setFacet(false);
       //query.setFields("entity,is_deleted,searchable,stav");
       query.setFields("entity,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
-
+      query.set("wt", "json");
       QueryResponse resp = client.query("entities", query);
 
       if (resp.getResults().getNumFound() == 0) {

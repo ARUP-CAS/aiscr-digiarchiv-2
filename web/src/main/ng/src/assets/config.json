@@ -57,7 +57,8 @@
         "akce",
         "lokalita",
         "samostatny_nalez",
-        "knihovna_3d"
+        "knihovna_3d",
+        "komponenta"
       ]
     },
     {
@@ -70,7 +71,8 @@
         "akce",
         "lokalita",
         "samostatny_nalez",
-        "knihovna_3d"
+        "knihovna_3d",
+        "komponenta"
       ]
     },
     {
@@ -115,7 +117,8 @@
         "projekt",
         "akce",
         "lokalita",
-        "samostatny_nalez"
+        "samostatny_nalez",
+        "komponenta"
       ]
     },
     {
@@ -126,7 +129,8 @@
         "projekt",
         "akce",
         "lokalita",
-        "samostatny_nalez"
+        "samostatny_nalez",
+        "komponenta"
       ]
     },
     {
@@ -147,7 +151,8 @@
         "projekt",
         "akce",
         "lokalita",
-        "samostatny_nalez"
+        "samostatny_nalez",
+        "komponenta"
       ]
     },
     {
@@ -158,7 +163,8 @@
         "projekt",
         "akce",
         "lokalita",
-        "samostatny_nalez"
+        "samostatny_nalez",
+        "komponenta"
       ]
     },
     {
@@ -279,6 +285,38 @@
         "projekt",
         "akce",
         "knihovna_3d"
+      ]
+    },
+    {
+      "label": "obdobi",
+      "field": "komponenta_obdobi_poradi asc",
+      "dir": "asc",
+      "entity": [
+        "komponenta"
+      ]
+    },
+    {
+      "label": "obdobi",
+      "field": "komponenta_obdobi_poradi desc",
+      "dir": "desc",
+      "entity": [
+        "komponenta"
+      ]
+    },
+    {
+      "label": "areal",
+      "field": "komponenta_areal_poradi asc",
+      "dir": "asc",
+      "entity": [
+        "komponenta"
+      ]
+    },
+    {
+      "label": "areal",
+      "field": "komponenta_areal_poradi desc",
+      "dir": "desc",
+      "entity": [
+        "komponenta"
       ]
     }
   ],
@@ -647,6 +685,7 @@
       "field": "vyskovy_bod_ident_cely"
     }
   ],
+  "thesauri": {},
   "noPoradiFacets": {
     "f_vedouci": true,
     "f_katastr": true,
@@ -854,17 +893,26 @@
         "name": "dokument_oznaceni_originalu"
       },
       {
-        "name": "f_obdobi",
+        "name": "dokument_cast.komponenta[0].komponenta_obdobi.id",
+        "path": "f_obdobi.[0].komponenta[0].komponenta_obdobi.id",
+        "field": "dokument_cast:[json]",
+        "label": "f_obdobi",
+        "byPath": true,
         "translated": true
       },
       {
-        "name": "f_areal",
+        "name": "dokument_cast.komponenta[0].komponenta_areal.id",
+        "path": "f_areal.[0].komponenta[0].komponenta_areal.id", 
+        "field": "dokument_cast:[json]",
+        "label": "f_areal",
+        "byPath": true,
         "translated": true
       },
       {
-        "name": "extra_data_odkaz",
-        "label": "dokument_extra_data_odkaz",
-        "translated": true
+        "name": "dokument_extra_data.odkaz",
+        "field": "dokument_extra_data:[json]",
+        "byPath": true,
+        "label": "dokument_extra_data_odkaz"
       }
     ],
     "akce": [
@@ -1121,7 +1169,8 @@
         "label": "dalsi_katastry"
       },
       {
-        "name": "samostatny_nalez_obdobi",
+        "name": "komponenta_obdobi.id",
+        "byPath": true,
         "translated": true,
         "label": "obdobi"
       },

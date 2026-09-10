@@ -75,7 +75,7 @@ public class ImageServlet extends HttpServlet {
         }
     }
 
-    private static BufferedImage logoImg(HttpServletResponse response, OutputStream out, ServletContext ctx) throws IOException {
+    private static BufferedImage logoImg(OutputStream out, ServletContext ctx) throws IOException {
         String empty = ctx.getRealPath(File.separator) + "/assets/img/logo-watermark-white.png";
         return ImageIO.read(new File(empty));
 
@@ -149,7 +149,7 @@ public class ImageServlet extends HttpServlet {
             // BufferedImage bi = ImageIO.read(f);
             BufferedImage bi = ImageIO.read(is);
             if (bi != null) {
-                ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
+                ImageSupport.addWatermark(bi, logoImg(response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
                 ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
             } else {
                 LOGGER.log(Level.FINE, "Response is not image {0}. ", id);
@@ -213,11 +213,11 @@ public class ImageServlet extends HttpServlet {
               
               //rate-limit
               String ip = request.getRemoteAddr();
-              long retryTime = AppState.canGetFileInterval(ip, id);
+              long retryTime = AppState.canGetFileInterval(ip, id); //miliseconds
               if (retryTime > 0) {
                 response.setStatus(429); // 429 Too Many Requests
-                response.addHeader("Retry-After", retryTime + "");
-                response.getWriter().print("Try in " + retryTime + " seconds.");
+                response.addHeader("Retry-After", retryTime/1000 + "");
+                response.getWriter().print("Try in " + retryTime/1000 + " seconds.");
                 return;
               } else if (retryTime == -1) {
                 response.setStatus(429); // 429 Too Many Requests
@@ -231,6 +231,7 @@ public class ImageServlet extends HttpServlet {
                     return;
                 }
                 String dist = request.getParameter("dist");
+                boolean distExists = false;
                 if (id != null && !id.equals("")) {
                         File f = File.createTempFile("img-", "-"+dist.replace("/", ""), new File(InitServlet.TEMP_DIR ));
                     try {
@@ -248,7 +249,13 @@ public class ImageServlet extends HttpServlet {
                           if (dist.equals(d.optString("path"))) {
                             mime = d.optString("mimetype");
                             filename = d.optString("filename");
+                            distExists = true;
                           }
+                        }
+                        if (!distExists) {
+                            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                            response.getWriter().println("Distribuce not found");
+                            return;
                         }
                         if (mime != null) {
                             response.setContentType(mime);

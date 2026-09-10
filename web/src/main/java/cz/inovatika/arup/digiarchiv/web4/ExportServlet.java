@@ -9,8 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.time.Instant;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,16 +51,23 @@ public class ExportServlet extends HttpServlet {
       }
       JSONObject jo = searcher.export(request);
       String format = request.getParameter("format");
+      if (format == null) {
+        format = "";
+      }
+      String geometrie = request.getParameter("geometrie");
+      if (geometrie == null) {
+        geometrie = "";
+      }
       Instant now = Instant.now();
       //response.setHeader("Content-Disposition", "filename=export_" + entity + "_" + now.toEpochMilli() + "." + format);
       boolean isMap = Boolean.parseBoolean(request.getParameter("mapa"));
       boolean hasPian = true;
       if (isMap) {
-        hasPian = processMap(jo.getJSONObject("response").getJSONArray("docs"), entity, request.getParameter("geometrie"));
+        hasPian = processMap(jo.getJSONObject("response").getJSONArray("docs"), entity, geometrie);
       }
       switch (format) {
         case "csv":
-          List<String> labels = SolrSearcher.getExportField(entity, "label");
+          List<String> labels = SolrSearcher.getExportField(entity, "label", isMap);
           //JSONArray ls = new JSONArray(labels);
           String csv = org.json.CDL.rowToString(new JSONArray(labels));
           csv += toString(entity, jo.getJSONObject("response").getJSONArray("docs"), ',', request.getParameter("lang"), isMap);
@@ -139,7 +144,6 @@ public class ExportServlet extends HttpServlet {
     for (int i = 0; i < exFields.length(); i++) {
       JSONObject f = exFields.getJSONObject(i);
       
-      
       String name = f.optString("name");
       String field = f.optString("label", name);
       Object val = jo.opt(field);
@@ -189,6 +193,9 @@ public class ExportServlet extends HttpServlet {
       Object object = ja.opt(i);
       if (object != null) {
         String string = object.toString();
+        if (object instanceof JSONArray) {
+          string = ((JSONArray)object).join(", "); 
+        }
         if (!string.isEmpty() && (string.indexOf(delimiter) >= 0
                 || string.indexOf('\n') >= 0 || string.indexOf('\r') >= 0
                 || string.indexOf(0) >= 0 || string.charAt(0) == '"')) {
@@ -238,7 +245,7 @@ public class ExportServlet extends HttpServlet {
     JSONArray exFields = SolrSearcher.getExportFieldsExt(entity, isMap);
 
     int rowNum = 0;
-    List<String> labels = SolrSearcher.getExportField(entity, "label");
+    List<String> labels = SolrSearcher.getExportField(entity, "label", isMap);
     JSONArray ls = new JSONArray(labels);
     XSSFRow currentRow = sheet.createRow(rowNum++);
     rowToXLSX(ls, delimiter, currentRow);
@@ -262,14 +269,14 @@ public class ExportServlet extends HttpServlet {
     }
   }
   
-  private static boolean processMap(JSONArray docs, String entity, String format) throws JSONException {
+  private static boolean processMap(JSONArray docs, String entity, String geometrie) throws JSONException {
     boolean hasPian = false;
     switch(entity) {
       case "knihovna_3d": 
         hasPian = false; 
         for (int i = 0; i < docs.length(); i++) {
           JSONObject doc = docs.getJSONObject(i);
-          switch(format) {
+          switch(geometrie) {
             case "GeoJSON":
               String wkt = doc.getJSONObject("dokument_extra_data").getJSONObject("geom_wkt").optString("value");
               doc.put("geometrie", GPSconvertor.convertGeojson(wkt));
@@ -287,7 +294,7 @@ public class ExportServlet extends HttpServlet {
         hasPian = false; 
         for (int i = 0; i < docs.length(); i++) {
           JSONObject doc = docs.getJSONObject(i);
-          switch(format) {
+          switch(geometrie) {
             case "GeoJSON":
               String wkt = doc.getJSONObject("samostatny_nalez_chranene_udaje").getJSONObject("geom_wkt").optString("value");
               doc.put("geometrie", GPSconvertor.convertGeojson(wkt));
@@ -305,7 +312,7 @@ public class ExportServlet extends HttpServlet {
         for (int i = 0; i < docs.length(); i++) {
           JSONObject doc = docs.getJSONObject(i);
           doc.put("pian", doc);
-          switch(format) {
+          switch(geometrie) {
             case "GeoJSON":
               String wkt = doc.getJSONObject("pian_chranene_udaje").getJSONObject("geom_wkt").optString("value");
               doc.put("geometrie", GPSconvertor.convertGeojson(wkt));
@@ -335,7 +342,7 @@ public class ExportServlet extends HttpServlet {
               newDoc.put("pian_zm10", pian.getJSONObject("pian_chranene_udaje").getString("zm10"));
               newDoc.put("pian_wgs84", pian.getJSONArray("loc").getString(0).replaceAll(",", " : "));
         
-              switch(format) {
+              switch(geometrie) {
                   case "GeoJSON":
                     String wkt = pian.getJSONObject("pian_chranene_udaje").getJSONObject("geom_wkt").optString("value");
                     newDoc.put("geometrie", GPSconvertor.convertGeojson(wkt));

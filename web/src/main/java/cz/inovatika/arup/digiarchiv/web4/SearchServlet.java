@@ -624,22 +624,6 @@ public class SearchServlet extends HttpServlet {
         }
         return json.toString();
       }
-    },
-    MUSEION {
-      @Override
-      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-          JSONObject jo = SolrSearcher.getMuseion(client);
-          return jo.toString();
-
-        } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, "", ex);
-          json.put("error", ex);
-        }
-        return json.toString();
-      }
     };
 
     abstract String doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception;

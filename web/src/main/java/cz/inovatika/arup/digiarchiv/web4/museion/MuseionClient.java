@@ -220,21 +220,21 @@ public class MuseionClient {
           List<SolrInputDocument> idocs = new ArrayList();
           for (AmcrEntita entita : stats.amcrIdSys) {
             SolrInputDocument idoc = new SolrInputDocument();
-            idoc.setField("id", stats.organizaceId + "_" + entita.id);
+            idoc.setField("id", stats.organizaceId + "_" + entita.id.trim());
             idoc.setField("end_point", url);
             idoc.setField("organizaceId", stats.organizaceId);
             idoc.setField("type", "amcrIdSys");
-            idoc.setField("amcrId", entita.id);
+            idoc.setField("amcrId", entita.id.trim());
             idoc.setField("entity", entitaMap.optString(entita.typ));
             idocs.add(idoc);
           }
           for (AmcrEntita entita : stats.amcrIdPom) {
             SolrInputDocument idoc = new SolrInputDocument();
-            idoc.setField("id", stats.organizaceId + "_" + entita.id);
+            idoc.setField("id", stats.organizaceId + "_" + entita.id.trim());
             idoc.setField("end_point", url);
             idoc.setField("organizaceId", stats.organizaceId);
             idoc.setField("type", "amcrIdSys");
-            idoc.setField("amcrId", entita.id);
+            idoc.setField("amcrId", entita.id.trim());
             idoc.setField("entity", entitaMap.optString(entita.typ));
             idocs.add(idoc);
           }
@@ -248,6 +248,7 @@ public class MuseionClient {
         }
       }
 
+      LOGGER.log(Level.INFO, "Indexing Museion statistika FINISHED. {0} records", indexed);
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, "Error getting predmetyStatistikaAsFilter: {0}", ex);
       ret.put("error", ex);

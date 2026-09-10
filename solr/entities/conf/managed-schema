@@ -512,6 +512,8 @@
    <field name="okres_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    <field name="katastr_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
    <field name="nazev_sort" type="icu_sort_cs" indexed="true" stored="true" docValues="true" multiValued="false" sortMissingLast="true" /> 
+   <field name="komponenta_areal_sort_cs" type="string" indexed="true" docValues="true" stored="true" multiValued="false" /> 
+   <field name="komponenta_areal_sort_en" type="string" indexed="true" docValues="true" stored="true" multiValued="false" /> 
    
    <!-- Field for free text filtering -->
    <field name="popis" type="text_general" indexed="true" stored="true" multiValued="true" />
