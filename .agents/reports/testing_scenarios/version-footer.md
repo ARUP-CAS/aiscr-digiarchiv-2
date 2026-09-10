@@ -13,15 +13,18 @@
 - Test instance: `https://digiarchiv-test.aiscr.cz/` — the footer is **client-rendered**: the served `index.html` is the CSR shell (the Maven build renames `index.csr.html` to `index.html`), so the footer markup is absent from the server HTML and present only in the compiled main bundle.
 - Production: `https://digiarchiv.aiscr.cz/` — not compared in verifications of unreleased milestone work; the comparison becomes meaningful once the feature is released there.
 - The main bundle name is content-hashed (`main-<hash>.js`) and changes per build: resolve the current name from the homepage `<script>` tags each run; never embed it in a durable expectation.
+- A rollout in flight can briefly serve a homepage whose referenced bundle returns 404 (observed 2026-09-10 between two builds minutes apart): re-read the homepage and retry the bundle fetch before concluding anything is broken.
 
 ### Architecture and implementation facts
 
 - Injection chain: `web/src/main/ng/package.json` `build` = `node git-version.js && ng build`. `git-version.js` runs `gitDescribeSync()` **first** (so the `dirty` flag reflects the tree before the file is rewritten), stamps `date`, and writes `git-version.json` in the ng root. `src/version-info.ts` `require`s it, falling back to `{ hash: 'dev', date: Date.now() }` when the file is absent (dev tree without a prior build). `FooterComponent.ngOnInit` assigns `clientInfo = versionInfo`.
-- Footer markup (`web/src/main/ng/src/app/components/footer/footer.component.html`): the version literal `v4.1.0` (hand-maintained, links to the wiki Changelog anchor `#v410`) followed by a non-breaking space and `({{ clientInfo.hash }})` linking to the repository root, guarded by `@if (clientInfo)`.
-- git-describe hash format: the `hash` field carries the `g` prefix (`g714e9423`), which is not a resolvable commit ref on GitHub — the commit short hash is the value without the `g`.
+- Footer markup (`web/src/main/ng/src/app/components/footer/footer.component.html`): the version literal `v4.1.0` (hand-maintained, links to the wiki Changelog anchor `#v410`) followed by a non-breaking space and the bracketed build hash, guarded by `@if (clientInfo)`. Inside the guard, the `g` prefix from git-describe is stripped (`@let commitHash = clientInfo.hash.startsWith('g') ? clientInfo.hash.slice(1) : clientInfo.hash`); a `dev` fallback renders as a plain span `(dev)`; every other value renders as a link to `https://github.com/ARUP-CAS/aiscr-digiarchiv-2/commit/<commitHash>`.
+- git-describe hash format: the `hash` field carries the `g` prefix (`g3c4ee627`), which is not a resolvable commit ref on GitHub — the footer strips it before displaying and linking; the commit short hash is the value without the `g`.
+- `web/src/main/ng/git-version.json` is a build artifact and is **untracked**: the repository root `.gitignore` carries `web/src/main/ng/git-version.json`, so a rebuild no longer dirties the tree and no stale copy is committed (fixed via commits `0992c92` and `54ab8b2` after version-footer-D03).
 - Maven wiring: `web/pom.xml` runs `npm run build` at `generate-sources` via exec-maven-plugin (skippable with `-DskipNg=true`), so a standard WAR build regenerates the hash. A direct `ng build`, `npm run watch`, or `-DskipNg` build does **not** regenerate it and ships whatever `git-version.json` is present.
-- Release workflow interaction (`.github/workflows/new-version.yml`): the release job rewrites exactly one `wiki/Changelog#` anchor and the visible `vX.Y.Z` in the footer (plus `CITATION.cff`), then commits and tags. The #1113 hash link does not match its `CHANGELOG_A` regex, so the release automation is unaffected by the new markup; the version literal remains maintained by the release workflow, not by `git-version`.
+- Release workflow interaction (`.github/workflows/new-version.yml`): the release job rewrites exactly one `wiki/Changelog#` anchor and the visible `vX.Y.Z` in the footer (plus `CITATION.cff`), then commits and tags. The hash link is an `[href]` binding, not a literal `wiki/Changelog#` anchor, so the workflow's `CHANGELOG_A` regex still finds exactly one match and the release automation is unaffected; the version literal remains maintained by the release workflow, not by `git-version`.
 - The deployed index page is produced from `index.csr.html`; SSR is a separate surface and does not render the footer.
+- Test deployments are routinely built from a local working tree (maintainer-confirmed 2026-09-10), so an embedded `dirty:true` is the expected build identity for the test instance, not an anomaly.
 
 ### Feature or entity model
 
@@ -30,9 +33,9 @@
 ### Discovery recipes
 
 1. Embedded version info of the deployed build: fetch the homepage, extract the `main-*.js` script src, fetch the bundle, and locate the `gitDescribe`-shaped object (search the body for `raw:"v` or `hash:"g`). Its `dirty`/`raw`/`hash`/`distance`/`tag`/`semverString`/`date` fields identify the exact build event.
-2. Compiled footer template: in the same bundle, search `wiki/Changelog#` (version-link attributes) and `clientInfo.hash` (the bracketed interpolation, `Q("(", t.clientInfo.hash, ")")` in the compiled template) to confirm the rendered structure and both hrefs without a browser.
-3. Build vs. history comparison: compare the embedded `raw` (tag-distance-hash-dirty) against the repository's dev commit list. A deployed distance/hash that predates recent commits — especially with `dirty:true` — means the deployment does not correspond to any single commit.
-4. Repository-side state: read `web/src/main/ng/git-version.json` in the working tree (regenerated by the last local build) and the commit history for the implementation commits.
+2. Compiled footer template: in the same bundle, search `wiki/Changelog#` (version-link attributes), `clientInfo.hash` (the bracketed interpolation and the `startsWith("g")` strip), and `commit/` (the link-target construction) to confirm the rendered structure and both hrefs without a browser.
+3. Build vs. history comparison: compare the embedded `raw` (tag-distance-hash-dirty) against the repository's dev commit list. The hash names the build's base commit; `dirty:true` means the build also carried uncommitted changes (expected local-build practice for this instance).
+4. Repository-side state: read `web/src/main/ng/git-version.json` in the working tree (untracked, regenerated by the last local build) and the commit history for the implementation commits.
 
 ### Verification commands
 
@@ -41,36 +44,39 @@ Identifier-free, re-runnable against the test instance (rate-limit gently; no cr
 ```text
 curl.exe -s "https://digiarchiv-test.aiscr.cz/"
 # extract the main-<hash>.js src from the <script> tags, then:
-curl.exe -s "https://digiarchiv-test.aiscr.cz/main-<hash>.js"
-# search the body for: wiki/Changelog#   clientInfo.hash   raw:"v...-g...-dirty
+curl.exe -s -o <scratch>/main.js "https://digiarchiv-test.aiscr.cz/main-<hash>.js"
+# search the body for: wiki/Changelog#   clientInfo.hash   commit/   raw:"v...-g...-dirty
+# when the bundle 404s, re-read the homepage — a rollout may be in flight
 ```
 
-## Current verification (2026-09-10, digiarchiv-test.aiscr.cz, main bundle main-CPJF64VQ.js, embedded build v4.0.3-205-g714e9423-dirty of 2026-09-09T07:46:34Z, anonymous session)
+## Current verification (2026-09-10, digiarchiv-test.aiscr.cz, main bundle main-O3EFC64P.js, embedded build v4.0.3-210-g3c4ee627-dirty of 2026-09-10T13:23:47Z, anonymous session + maintainer-confirmed browser check)
 
 ### Verified behaviour matrix
 
 | Capability | Result |
 | --- | --- |
-| Footer version literal `Verze v4.1.0` with Changelog wiki anchor link | verified (compiled template; maintainer-assisted browser check 2026-09-10) |
-| Bracketed short commit hash rendered after the version | verified — bundle embeds `hash:"g714e9423"`; rendered `(g714e9423)` confirmed in the maintainer-assisted browser check |
-| The bracketed hash is a live link | verified — href compiled in the bundle attrs and confirmed working in the browser; target is the repository root, not the commit (version-footer-D02) |
-| Hash injected automatically at build | verified — `npm run build` chain (`node git-version.js && ng build`) plus `web/pom.xml` exec wiring; the deployed bundle embeds build-time-generated content (byte-identical to the `git-version.json` produced by the 2026-09-09 build and committed in `15e2cea`) |
-| Release workflow compatibility (`new-version.yml` footer rewrite) | verified — the workflow's `CHANGELOG_A` regex still finds exactly one `wiki/Changelog` anchor; the new hash link does not match it |
-| Hash identifies the deployed code | **failed** — the deployed build is `dirty:true` at `714e9423`, which predates the #1113 implementation commits `15e2cea`/`c1f6f22` that are present in the deployed bundle (version-footer-D01) |
+| Footer version literal `Verze v4.1.0` with Changelog wiki anchor link | verified (compiled template attrs; maintainer-confirmed browser check 2026-09-10) |
+| Bracketed short commit hash rendered after the version | verified — bundle embeds `hash:"g3c4ee627"`; the footer strips the `g` prefix and renders `(3c4ee627)` (compiled template + maintainer-confirmed browser check) |
+| The bracketed hash is a live link to the commit | verified — compiled href is `https://github.com/ARUP-CAS/aiscr-digiarchiv-2/commit/` + hash; the displayed short hash resolves as a commit ref (HTTP 200) and the maintainer confirmed the rendered click-through |
+| Hash injected automatically at build | verified — `npm run build` chain (`node git-version.js && ng build`) plus `web/pom.xml` exec wiring; the deployed bundle embeds a build identity stamped after the fix commits landed (fresh injection, not a stale committed artifact) |
+| Release workflow compatibility (`new-version.yml` footer rewrite) | verified — `CHANGELOG_A` still finds exactly one `wiki/Changelog` anchor; the hash link is an `[href]` binding outside the match |
+| Hash identifies the deployed code | **changed** — the embedded hash names dev HEAD `3c4ee62` (the build's base commit), and the build is again `dirty:true`; the maintainer confirmed dirty builds are the expected local-build practice for test deployments, so the hash identifies the base commit of an accepted practice rather than misidentifying the deployment (version-footer-D01) |
 | Production footer | not examined — unreleased milestone work; the production comparison is not meaningful per corpus convention |
 
 ### Known defects
 
-- version-footer-D01: **The deployed test build was produced from a dirty working tree, and the footer does not surface the dirty state, so the displayed hash misidentifies the deployed code.** The deployed bundle embeds `{dirty:true, raw:"v4.0.3-205-g714e9423-dirty", date:"2026-09-09T07:46:34.652Z"}`: the hash points at commit `714e942` (the pre-implementation state, message `#148`), while the deployed bundle itself contains the #1113 footer feature introduced by commits `15e2cea` and `c1f6f22` — the deployment was built from the dirty tree in which #1113 was being implemented. A maintainer reading the footer cannot answer the issue's motivating question ("co je vlastně nasazené"); `versionInfo.dirty` is available but not rendered. Verified on 2026-09-10 from the deployed bundle embed, the dev commit history, and the committed `git-version.json`.
-- version-footer-D02: **The hash link targets the repository root, not the commit, and the displayed value is not a resolvable commit ref.** The footer's second link href is `https://github.com/ARUP-CAS/aiscr-digiarchiv-2` (verified in the compiled attrs and the maintainer-assisted browser check: working link, "pointing to repo, not the commit"), and the displayed `g714e9423` carries git-describe's `g` prefix, which GitHub does not resolve as a commit short hash. A maintainer cannot click through, nor paste the displayed value, to reach the deployed commit. Verified on 2026-09-10.
-- version-footer-D03: **`web/src/main/ng/git-version.json` is a generated build artifact committed to the repository** (added in `15e2cea` carrying the dirty build's output). Every rebuild rewrites it with a new `date`, so a working tree that has been built once reports `-dirty` for every subsequent build's describe pass, and the committed content is stale immediately after commit. It should be `.gitignore`d. Verified on 2026-09-10 from the repository state and the build chain.
+- version-footer-D01 (changed): **The deployed test build was produced from a dirty working tree and the footer does not surface the dirty state.** Originally verified 2026-09-10 (main-CPJF64VQ.js): the hash then named the pre-implementation commit `714e942` while the deployed bundle contained the #1113 feature, so the displayed hash misidentified the deployed code. This run (main-O3EFC64P.js): the embedded hash names dev HEAD `3c4ee62` — the build's base commit — and the maintainer confirmed that test deployments are routinely built from a local working tree, making `dirty:true` the expected build identity for the test instance; the unrendered dirty state is accepted practice, not an accidental misidentification. No open action item remains within the #1113 scope; rendering `versionInfo.dirty` stays an optional future refinement.
+- version-footer-D02 (fixed): **The hash link targeted the repository root, and the displayed value was not a resolvable commit ref.** Fixed in commit `54ab8b2`: the footer strips the `g` prefix, binds the href to `https://github.com/ARUP-CAS/aiscr-digiarchiv-2/commit/<hash>`, and renders `dev` as a plain span. Verified deployed — compiled template in main-O3EFC64P.js, the displayed short hash resolves (HTTP 200), maintainer-confirmed rendered click-through (2026-09-10).
+- version-footer-D03 (fixed): **`web/src/main/ng/git-version.json` was a generated build artifact committed to the repository.** Fixed in commits `0992c92` (root `.gitignore` entry) and `54ab8b2` (file deleted from tracking). Verified in the current tree: the file is absent and the ignore entry is present (2026-09-10).
 
 ### Corrections made during this run
 
-- The deployed embed's `dirty:true` content was first suspected to indicate a stale committed artifact (the hypothesis that the deployment did not run `git-version.js` and shipped the committed file unchanged). Corrected after comparing the embed's `date` and `distance` with the dev commit history: the deployment **was** built with live injection — the committed `git-version.json` is the output of that same build event, committed afterward — and the deployed hash names the pre-implementation commit because the build ran from the dirty working tree in which #1113 was being implemented.
+- The first bundle fetch this run (homepage-referenced `main-X6MYJ3G3.js`) returned 404 and initially read as a broken deployment. Corrected on re-probe minutes later: the homepage then referenced `main-O3EFC64P.js` — a rollout was in flight between two builds; the recipe's re-read-and-retry resolves it and the behaviour is now recorded under Environments.
+- The prior verification's D01 reading ("the displayed hash misidentifies the deployed code") was corrected by this run's evidence: the hash now names dev HEAD rather than predating the implementation commits, and the maintainer confirmed dirty builds are the expected local-build practice for the test instance.
 
 ## Verification log
 
 | Date | Instance / build verified | What changed |
 | --- | --- | --- |
 | 2026-09-10 | digiarchiv-test.aiscr.cz (main bundle main-CPJF64VQ.js; embedded build v4.0.3-205-g714e9423-dirty, 2026-09-09) | First verification of #1113: the footer hash feature verified as deployed and build-injected; three defects recorded (version-footer-D01 dirty-build misidentification, D02 link target and `g` prefix, D03 committed build artifact). |
+| 2026-09-10 | digiarchiv-test.aiscr.cz (main bundle main-O3EFC64P.js; embedded build v4.0.3-210-g3c4ee627-dirty, 2026-09-10T13:23:47Z) | Regression pass after fixes `0992c92`/`54ab8b2`: D02 fixed (commit link, `g` strip — deployed and click-confirmed), D03 fixed (artifact untracked and ignored), D01 changed (hash at dev HEAD; dirty accepted as expected local-build practice). Mid-rollout bundle 404 observed and documented. |
