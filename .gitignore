@@ -22,3 +22,4 @@ web/src/main/webapp/index.csr.html
 #local environments
 node_modules/
 .venv/
+web/src/main/ng/git-version.json
