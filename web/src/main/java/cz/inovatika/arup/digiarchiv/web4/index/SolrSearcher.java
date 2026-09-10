@@ -207,7 +207,7 @@ public class SolrSearcher {
     return fs;
   }
   
-  public static void addExportParams(SolrQuery query, String entity, String requestRows) {
+  public static void addExportParams(SolrQuery query, String entity, String requestRows, String requestStart) {
     List<String> fs = new ArrayList();
     JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
     fs.add("handle:concat('"+Options.getInstance().getClientConf().getString("serverUrl")+"id/', ident_cely)");
@@ -238,8 +238,12 @@ public class SolrSearcher {
     if (requestRows != null) {
       rows = Integer.parseInt(requestRows);
     }
-    query.setRows(Math.min(rows, 1000));
-    //query.set(CursorMarkParams.CURSOR_MARK_PARAM, CursorMarkParams.CURSOR_MARK_START); 
+    rows = Math.min(rows, 1000);
+    query.setRows(rows);
+    if (requestStart != null) {
+      int start = (Integer.parseInt(requestStart)) * rows;
+      query.setStart(start);
+    }
   }
   
   public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {

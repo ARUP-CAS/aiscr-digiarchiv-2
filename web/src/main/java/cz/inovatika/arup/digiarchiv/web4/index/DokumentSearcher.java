@@ -74,8 +74,9 @@ public class DokumentSearcher implements EntitySearcher {
               entity = ENTITY;
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            SolrSearcher.addExportParams(query, entity, request.getParameter("rows"));
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            addPians(jo, client, request);
             filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), entity);
             
@@ -180,7 +181,7 @@ public class DokumentSearcher implements EntitySearcher {
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            if (doc.has("pian_id")) {
+            if (doc.has("pian_id")) { 
                 JSONArray cdjs = doc.getJSONArray("pian_id");
                 for (int j = 0; j < cdjs.length(); j++) {
                     String cdj = cdjs.getString(j);
