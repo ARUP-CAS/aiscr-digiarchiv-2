@@ -193,5 +193,10 @@ export class ExportComponent implements OnInit {
     }
   }
 
+  apiIdentCely(doc: any, item: { label: string, metadataPrefix: string, url: string, useParent: boolean }) {
+    const ident_cely_api = doc.ident_cely.substr(0, doc.ident_cely.lastIndexOf('-'));
+    return ((item.useParent || doc.komponenta_zdroj === 'samostatny_nalez') && ident_cely_api) ? ident_cely_api : doc.ident_cely;
+  }
+
 
 }

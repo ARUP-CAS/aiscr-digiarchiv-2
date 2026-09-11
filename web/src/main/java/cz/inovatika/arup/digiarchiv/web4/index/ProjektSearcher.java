@@ -25,8 +25,8 @@ public class ProjektSearcher implements EntitySearcher {
     public static final Logger LOGGER = Logger.getLogger(ProjektSearcher.class.getName());
     final String ENTITY = "projekt";
 
-    private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
-        "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
+//    private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
+//        "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
 
     @Override
     public void filter(JSONObject jo, String pristupnost, String org) {
