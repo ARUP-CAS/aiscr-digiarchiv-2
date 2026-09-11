@@ -210,18 +210,18 @@ Pokud se informace o stejném tématu v těchto souborech liší, aktualizujte n
 Větve generované AI agenty (`agents/{agent_name}/<topic>`) se větvují od `dev`  
 a mergují do `dev` výhradně po lidském review.
 
-Podrobnosti viz `AGENTS.md` a `.agents/prompts/review_codebase.md`.
+Podrobnosti viz `AGENTS.md` a kanonické workflow `aiscr-codebase-review`.
 
 ### Jak spustit review session
 
 Otevřete nový kontext AI agenta a jako první zprávu vložte:
 
 ```
-Přečti .agents/prompts/review_codebase.md a pokračuj v review.
+Spusť workflow aiscr-codebase-review (režim full nebo update) a pokračuj v review.
 ```
 
 Agent si načte `AGENTS.md`, stav z `.agents/config/review_cache.json` a zahájí
-další čekající task dle registru v `.agents/prompts/review_codebase.md`.
+další čekající task podle kanonického workflow `aiscr-codebase-review` (dodaného přes skill surfaces `.cursor/` / `.claude/` / `.codex/` / `.gemini/`).
 
 ---
 

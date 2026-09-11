@@ -65,9 +65,9 @@ Commit format and allowed types: see `CONTRIBUTING.md` § Commit zprávy.
 
 ## AI Review System
 
-Incremental review managed via `.agents/prompts/review_codebase.md`.
+Review is managed by the canonical `aiscr-codebase-review` workflow (modes full / update), delivered via the `.cursor/`/`.claude/`/`.codex/`/`.gemini/` skill surfaces.
 
 - Tasks T01–T03: done | T04–T10: pending | T11: blocked (needs T01–T10)
 - State: `.agents/config/review_cache.json`
-- To continue review: read `.agents/prompts/review_codebase.md` and follow init sequence
-- All review outputs in Czech
+- To continue review: run the `aiscr-codebase-review` workflow (it reads `review_config.yaml` + `review_cache.json` and resumes the next pending task)
+- Review output language: English by default, preserving verbatim Czech quotations, source text, and AIS CR domain identifiers where exact wording matters

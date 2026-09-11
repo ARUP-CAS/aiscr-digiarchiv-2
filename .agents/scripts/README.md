@@ -13,7 +13,7 @@ Všechny skripty předpokládají standardní strukturu `.agents/` popsanou v
   - `coverage-gaps` — nedokumentované moduly/skripty/JS soubory
   - `id-inventory` — inventarizace a křížové reference ID (`BUG-*`, `SEC-*`, …)
   - `lint-artifacts` — validace struktury `.agents/`
-  - `prompt-evolution` — stav integrace návrhů z `prompt_evolution/`
+  - `prompt-evolution` — inventarizace starší evidence workflow-evolution
   - `repo-structure` — souhrn struktury repozitáře
   - `status` — dashboard stavu review systému
   - `all` — spuštění všech výše uvedených kontrol
