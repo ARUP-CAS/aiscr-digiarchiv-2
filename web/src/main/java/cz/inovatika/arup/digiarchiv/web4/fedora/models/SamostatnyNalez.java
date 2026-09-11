@@ -341,10 +341,10 @@ public class SamostatnyNalez implements FedoraModel {
         }
         JSONArray h = new JSONArray(doc.getFieldValues("historie"));
       
-        if (userPr.equalsIgnoreCase("A") && stav == 4) {
+        if (st == 4 && docPr.equalsIgnoreCase("A")) {
           return true;
         } else if (userPr.equalsIgnoreCase("B")) {
-          if (docPr.compareToIgnoreCase("B") <= 0 && stav == 4) {
+          if (docPr.compareToIgnoreCase("B") <= 0 && st == 4) {
             return true;
           }
 
@@ -359,7 +359,7 @@ public class SamostatnyNalez implements FedoraModel {
           return (userId.equals(uzivatel));
 
         } else if (userPr.equalsIgnoreCase("C")) {
-          if (docPr.compareToIgnoreCase("C") <= 0 && stav == 4) {
+          if (docPr.compareToIgnoreCase("C") <= 0 && st == 4) {
             return true;
           }
 

@@ -175,7 +175,6 @@ public class Options {
 
   public String getOAIListMetadataFormats(String version) {
       String path = InitServlet.CONFIG_DIR + File.separator + "oai_ListMetadataFormats_"+InitServlet.asSafePath(version)+".xml";
-      LOGGER.log(Level.INFO, "Path {0}", path); 
     try {
       
       File f = new File(path);

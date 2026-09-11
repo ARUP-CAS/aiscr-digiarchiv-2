@@ -68,6 +68,8 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
 
@@ -91,7 +93,20 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public JSONObject export(HttpServletRequest request) {
-        return new JSONObject();
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+            SolrQuery query = new SolrQuery();
+            setQuery(request, query);
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            return jo;
+            
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "", ex);
+            return new JSONObject().put("error",ex.toString());
+        }
     }
 
     @Override
@@ -101,7 +116,34 @@ public class VyskovyBodSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public void filter(JSONObject jo, String pristupnost, String org) {
-        
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            filterOne(doc, pristupnost, org);
+        }
+    }
+    
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
+            if (doc.getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
+                doc.remove("vyskovy_bod_geom_wkt"); 
+                doc.remove("vyskovy_bod_geom_gml"); 
+            }
+
+            Object[] keys = doc.keySet().toArray();
+            for (Object okey : keys) {
+                String key = (String) okey;
+                if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+                if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+                if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
+                    doc.remove((String) key);
+                }
+
+            }
     }
 
     @Override

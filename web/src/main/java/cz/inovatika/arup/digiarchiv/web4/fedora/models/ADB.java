@@ -188,8 +188,6 @@ class ADBChraneneUdaje {
             for (VyskovyBod vb : vyskovy_bod) {
                 SolrInputDocument vbdoc = new SolrInputDocument();
                 vbdoc.setField("entity", "vyskovy_bod");
-                
-                
                 vbdoc.setField("pristupnost", idoc.getFieldValue("pristupnost"));
                 vbdoc.setField("stav", idoc.getFieldValue("stav"));
                 vbdoc.setField("searchable", idoc.getFieldValue("searchable"));

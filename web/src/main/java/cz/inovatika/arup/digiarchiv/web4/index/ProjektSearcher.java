@@ -15,7 +15,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.XML;
 
 /**
  *
@@ -32,43 +31,42 @@ public class ProjektSearcher implements EntitySearcher {
     @Override
     public void filter(JSONObject jo, String pristupnost, String org) {
 
+      
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            String docPr = doc.getString("pristupnost");
-
-            if (docPr.compareToIgnoreCase(pristupnost) > 0) {
-                doc.remove("projekt_chranene_udaje");
-            }
-
-            Object[] keys = doc.keySet().toArray();
-            for (Object okey : keys) {
-                String key = (String) okey;
-                if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
-                    doc.remove((String) key);
-                }
-                if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
-                    doc.remove((String) key);
-                }
-                if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
-                    doc.remove((String) key);
-                }
-
-            }
-
-            if (doc.has("location_info")) {
-                JSONArray lp = doc.getJSONArray("location_info");
-                for (int j = lp.length() - 1; j > -1; j--) {
-                    if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
-                        lp.remove(j);// .getJSONObject(j).remove("location_info");
-                    }
-                }
-            }
-
+            filterOne(doc, pristupnost, org);
         }
         addOkresy(jo);
 
     }
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
+//-- A-B: stav = 6
+//-- C: stav >= 1
+//-- D-E: bez omezení 
+            String docPr = doc.getString("pristupnost");
+            boolean allowed = false;
+            int st = doc.getInt("stav");
+            if (pristupnost.compareToIgnoreCase("D") >= 0) {
+                allowed = true;
+            } else if (pristupnost.equalsIgnoreCase("C") && st >= 1) {
+                allowed = true;
+            } else if (pristupnost.compareToIgnoreCase("B") <= 0 && st == 6) {
+                allowed = true;
+            } else {
+                allowed = false;
+            }
+
+            if (!allowed) {
+                doc.remove("projekt_chranene_udaje");
+                doc.remove("projekt_hlavni_katastr");
+                doc.remove("loc_rpt");
+                doc.remove("loc");
+            }
+    }
+    
+    
 
     @Override
     public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {

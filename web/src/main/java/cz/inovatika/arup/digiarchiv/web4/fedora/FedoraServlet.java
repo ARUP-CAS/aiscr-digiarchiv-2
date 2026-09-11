@@ -58,30 +58,11 @@ public class FedoraServlet extends HttpServlet {
                         new Object[]{pristupnost, confLevel, isLocalhost, isAllowedIP, request.getRequestURL().toString()});
                 if (isAllowedIP || isLocalhost || pristupnost.compareTo(confLevel) >= 0) {
                     Actions actionToDo = Actions.valueOf(action.toUpperCase());
-                    if (actionToDo.equals(Actions.REQUEST_RAW)) {
-                        // FedoraUtils.requestFile(request.getParameter("file"), InitServlet.CONFIG_DIR + File.separator + request.getParameter("file"), "application/pdf");
-                        InputStream is = FedoraUtils.requestInputStream(StringEscapeUtils.escapeHtml4(request.getParameter("file")) + "/orig");
-                        String path = InitServlet.CONFIG_DIR + File.separator + "1.pdf";
-                        File targetFile = new File(path);
-                        FileUtils.copyInputStreamToFile(is, targetFile);
-                        return;
-                    } else if (actionToDo.equals(Actions.REQUEST)){
-                        out.print(FedoraUtils.request(StringEscapeUtils.escapeHtml4(request.getParameter("url"))));
-                        return;
-                    }
+                    
                     response.setContentType("application/json;charset=UTF-8");
                     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
                     JSONObject json = actionToDo.doPerform(request, response);
-                    if (actionToDo.equals(Actions.GET_ID)) {
-                        response.setContentType("application/xml;charset=UTF-8");
-                        out.println(json.getString("model"));
-
-//          } else if (actionToDo.equals(Actions.GET_ID_RAW)) {
-//              response.setContentType("plain/text;charset=UTF-8");
-//              out.println(json.getString("raw"));
-                    } else {
-                        out.println(json.toString(2));
-                    }
+                    out.println(json.toString(2));
 
                 } else {
                     out.print("Insuficient rights");
@@ -232,165 +213,7 @@ public class FedoraServlet extends HttpServlet {
         },
         
         
-        GET_ID {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    FedoraHarvester fh = new FedoraHarvester();
-                    json.put("model", fh.getId(req.getParameter("id")));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
         
-        
-        GET_ID_PARSED {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    FedoraHarvester fh = new FedoraHarvester();
-                    FedoraModel o = fh.getIdParsed(req.getParameter("id"));
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    return new JSONObject(objectMapper.writeValueAsString(o));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        GET_ID_RAW {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    String xml = FedoraUtils.requestXml("record/" + req.getParameter("id"));
-                    json.put("raw", xml);
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        GET_ID_METADATA {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    FedoraHarvester fh = new FedoraHarvester();
-                    json.put("model", fh.getIdMetadata(req.getParameter("id")));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        GET_ID_JSON {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    FedoraHarvester fh = new FedoraHarvester();
-                    json.put("model", fh.getIdJSON(req.getParameter("id")));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        REQUEST {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("resp", FedoraUtils.request(StringEscapeUtils.escapeHtml4(req.getParameter("url"))));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        SEARCH {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                resp.setContentType("application/json;charset=UTF-8");
-                JSONObject json = new JSONObject();
-                try {
-                    String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
-                    String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/metadata", "UTF8")
-                        + "&include_total_result_count=true&order_by=modified&condition=modified" + URLEncoder.encode(">" + req.getParameter("from"), "UTF8");
-                if (req.getParameter("until") != null ) {   
-                  baseQuery += "&condition=modified" + URLEncoder.encode("<" + req.getParameter("until"), "UTF8"); 
-                }  
-                    json = new JSONObject(FedoraUtils.search(baseQuery));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        SEARCH_DELETED {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                resp.setContentType("application/json;charset=UTF-8");
-                JSONObject json = new JSONObject();
-                try {
-                    String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
-                    String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/deleted/*", "UTF8")
-                        + "&include_total_result_count=true&order_by=modified&condition=modified" + URLEncoder.encode(">" + req.getParameter("from"), "UTF8");
-                if (req.getParameter("until") != null ) {   
-                  baseQuery += "&condition=modified" + URLEncoder.encode("<" + req.getParameter("until"), "UTF8"); 
-                }  
-                    //System.out.println(baseQuery);
-                    json = new JSONObject(FedoraUtils.search(baseQuery));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        SEARCH_MODEL {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                resp.setContentType("application/json;charset=UTF-8");
-                JSONObject json = new JSONObject();
-                try {
-                    String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
-                    String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/"+req.getParameter("model")+"/member/*", "UTF8")
-                + "&include_total_result_count=true"; 
-//                if (req.getParameter("model") != null ) {   
-//                  baseQuery += "&condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "model/" + req.getParameter("model") + "/member/*", "UTF8");
-//                }  
-                if (req.getParameter("order_by") != null ) {   
-                  baseQuery += "&order_by=" + req.getParameter("order_by") + "&order=" + req.getParameter("order") ;
-                }  
-                    json = new JSONObject(FedoraUtils.search(baseQuery));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        SEARCH_FILE {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    String search_fedora_id_prefix = Options.getInstance().getJSONObject("fedora").getString("search_fedora_id_prefix"); 
-                    String baseQuery = "condition=" + URLEncoder.encode("fedora_id=" + search_fedora_id_prefix + "record/*/file/*", "UTF8")
-                + "&order_by=modified&condition=" + URLEncoder.encode("modified>" + req.getParameter("from"), "UTF8");
-                    
-                    
-                    json.put("resp", FedoraUtils.search(baseQuery));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
         CHECK_DATESTAMP {
             @Override
             JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -401,18 +224,6 @@ public class FedoraServlet extends HttpServlet {
                         fh.setOffset(Integer.parseInt(req.getParameter("offset")));
                     }
                     json = fh.checkDatestamp(req.getParameterValues("model"), Boolean.parseBoolean(req.getParameter("reindex")));
-                } catch (JSONException ex) {
-                    json.put("error", ex.toString());
-                }
-                return json;
-            }
-        },
-        REQUEST_RAW {
-            @Override
-            JSONObject doPerform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("resp", FedoraUtils.request(req.getParameter("url")));
                 } catch (JSONException ex) {
                     json.put("error", ex.toString());
                 }
