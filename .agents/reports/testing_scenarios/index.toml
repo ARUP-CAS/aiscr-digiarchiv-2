@@ -38,7 +38,7 @@ features = ["permissions"]
 entities = ["projekt", "archeologicky_zaznam", "dokument", "ext_zdroj", "adb", "pian", "samostatny_nalez", "uzivatel", "let"]
 surfaces = ["landing pages", "map variant", "child-record landing pages", "File API", "OAI-PMH", "search"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#370", "ARUP-CAS/aiscr-digiarchiv-2#237"]
-last_verified = "2026-09-10"
+last_verified = "2026-09-11"
 
 [[scenario]]
 key = "museion"
