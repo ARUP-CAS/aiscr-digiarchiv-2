@@ -8,7 +8,7 @@ features = ["export"]
 entities = ["dokument", "akce", "lokalita", "projekt", "samostatny_nalez", "knihovna_3d", "komponenta"]
 surfaces = ["export page (/export)", "map export page (/export-mapa)", "export API (/api/exp)", "export listing API (/api/search/export)", "map export listing API (/api/search/export_mapa)", "map search API (/api/search/query)"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#148"]
-last_verified = "2026-09-10"
+last_verified = "2026-09-11"
 
 [[scenario]]
 key = "file-distributions"
