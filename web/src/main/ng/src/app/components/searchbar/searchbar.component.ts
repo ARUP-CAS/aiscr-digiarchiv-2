@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Component, OnInit, Inject, AfterViewInit, signal, effect } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -42,8 +42,9 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
 
   isAdvancedCollapsed = true;
   conditions: Condition[] = [];
-  formats = ['GML', 'WKT', 'GeoJSON'];
-  exportUrls = signal<{ url: string, format: string }[]>([]);
+  geometries = ['GML', 'WKT', 'GeoJSON'];
+  exportUrls = signal<{ url: string, geometrie: string }[]>([]);
+  subs: any[] = [];
 
   constructor(
     private windowRef: AppWindowRef,
@@ -61,9 +62,19 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.service.currentLang.subscribe(res => {
+    this.subs.push(this.service.currentLang.subscribe(res => {
       this.setExportUrl();
-    });
+    }));
+
+    this.subs.push(this.router.events.subscribe(val => {
+      if (val instanceof NavigationEnd) {
+        this.setExportUrl();
+      }
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach(s => s.unsubscribe());
   }
 
   setExportUrl() {
@@ -78,9 +89,9 @@ export class SearchbarComponent implements OnInit, AfterViewInit {
     if (str.indexOf('entity=') < 0 && !this.state.documentId()) {
       str += '&entity=' + this.state.entity;
     }
-    const urls: { url: string, format: string }[] = [];
-    this.formats.forEach(f => {
-      urls.push({ url: 'export-mapa?' + str + '&format=' + f, format: f });
+    const urls: { url: string, geometrie: string }[] = [];
+    this.geometries.forEach(f => {
+      urls.push({ url: 'export-mapa?' + str + '&geometrie=' + f, geometrie: f });
     })
     this.exportUrls.update(() => [...urls]);
   }

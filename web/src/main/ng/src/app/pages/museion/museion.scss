@@ -1,0 +1,33 @@
+table[mat-table] {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+}
+
+.mat-mdc-header-cell {
+  width: 1%;
+  min-width: max-content;
+  white-space: nowrap;
+
+  &.mat-column-sbirka,
+  &.mat-column-popis{
+    min-width: 220px;
+  }
+
+  &.mat-column-dataceVzniku,
+  &.mat-column-kontextPlocha {
+    min-width: 140px;
+  }
+}
+
+.mat-mdc-cell {
+  /* max-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; */
+}
+
+
+::ng-deep .mat-mdc-select-value {
+  margin-right: 8px;
+}

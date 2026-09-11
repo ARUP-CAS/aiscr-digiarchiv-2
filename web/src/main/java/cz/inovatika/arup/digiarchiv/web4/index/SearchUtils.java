@@ -12,10 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
+import org.apache.solr.client.solrj.response.InputStreamResponseParser;
 
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -45,7 +45,7 @@ public class SearchUtils {
     }
 
     private static void initObdobiPoradi() {
-        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             obdobi_poradi = new HashMap<>();
 
             SolrQuery query = new SolrQuery()
@@ -59,7 +59,7 @@ public class SearchUtils {
             }
             // LOGGER.log(Level.INFO, "obdobi: {0}", obdobi_poradi.size());
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 
@@ -71,7 +71,7 @@ public class SearchUtils {
     }
 
     private static void initPristupnostMap() {
-        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             pristupnostMap = new HashMap<>();
 
             SolrQuery query = new SolrQuery()
@@ -84,7 +84,7 @@ public class SearchUtils {
             }
             // LOGGER.log(Level.INFO, "obdobi: {0}", obdobi_poradi.size());
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             pristupnostMap = null;
         }
     }
@@ -93,16 +93,16 @@ public class SearchUtils {
 
     public static SolrDocumentList docs(SolrQuery query, String coreUrl) {
         query.set("wt", "json");
-        try (HttpJdkSolrClient client = new HttpJdkSolrClient.Builder(coreUrl).build()) {
+        try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(coreUrl).build()) {
             return client.query(query).getResults();
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return null;
         }
     }
 
     public static JSONObject searchOrIndex(SolrQuery query, String core, String id) throws Exception {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             JSONObject json = json(query, client, core, false);
             if (json.getJSONObject("response").getInt("numFound") > 0) {
                 return json;
@@ -113,7 +113,7 @@ public class SearchUtils {
             }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error retrieving {0}", id);
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             throw ex;
         }
     }
@@ -123,7 +123,7 @@ public class SearchUtils {
     }
 
     public static JSONObject searchById(SolrQuery query, String core, String id, boolean onlySearchable) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             JSONObject json = json(query, client, core, onlySearchable);
             return json;
         } catch (Exception ex) {
@@ -137,26 +137,26 @@ public class SearchUtils {
 
     public static JSONObject json(SolrQuery query, SolrClient client, String core, boolean onlySearchable) { 
         query.set("wt", "json");
+        // query.set("json.nl", "arrarr");
         query.addFilterQuery("-is_deleted:true");
+        String qt;
         if (onlySearchable) {
-            query.setRequestHandler("/search");
+            qt = "/search";
         } else {
-            query.setRequestHandler("/select");
+          qt = "/select";
         }
         //    System.out.println(query);
-        String qt = query.get("qt");
         String jsonResponse;
         try {
             QueryRequest qreq = new QueryRequest(query);
-            if (qt != null) {
-                qreq.setPath(qt);
-            }
+            qreq.setPath(qt);
             qreq.setResponseParser(new InputStreamResponseParser("json")); 
             NamedList<Object> resp = client.request(qreq, core);
             InputStream is = (InputStream) resp.get("stream");
-            return new JSONObject(IOUtils.toString(is, "UTF-8")); 
+            String s = IOUtils.toString(is, "UTF-8");
+            return new JSONObject(s); 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return new JSONObject().put("error", ex);
         }
     }
@@ -174,7 +174,7 @@ public class SearchUtils {
             InputStream is = (InputStream) resp.get("stream");
             return IOUtils.toString(is, "UTF-8"); 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return ex.toString();
         }
     }
@@ -189,7 +189,7 @@ public class SearchUtils {
             collection = "entities";
         }
 
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(solrhost).build()) {
+        try (SolrClient solr = new HttpJettySolrClient.Builder(solrhost).build()) {
             String query = "indextime:[* TO " + date.toString() + "]";
             if (searchable) {
                 query += " AND entity:" + entity;
@@ -197,7 +197,7 @@ public class SearchUtils {
             solr.deleteByQuery(collection, query, 1);
             ret.put("resp", "success");
         } catch (SolrServerException | IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             ret.put("error", ex.toString());
         }
         return ret;

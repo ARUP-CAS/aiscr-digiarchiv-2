@@ -3,11 +3,12 @@
 }
 @if (docs().length > 0) {
   <div>
+    <ng-container *ngTemplateOutlet="paginationTmpl"></ng-container>
     <table>
       <thead>
         <tr>
           <th>#</th>
-          @if (format) {
+          @if (geometrie) {
             @if (hasPian) {
               <th>{{'export.desc.Pian'| translate}}</th>
             }
@@ -23,10 +24,12 @@
             @if (hasPian) {
               <th>{{'export.desc.Definiční bod (WGS-84)' | translate}}</th>
             }
-            <th >{{'export.desc.' + format | translate}}</th>
+            <th >{{'export.desc.' + geometrie | translate}}</th>
           }
           @for (field of config.exportFields[state.entity]; track field) {
-            <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
+            @if (!field.hidden) {
+                <th>{{ 'export.field.' + (field.label ? field.label : field.name) | translate }}</th>
+              }
           }
         </tr>
       </thead>
@@ -34,7 +37,7 @@
         @for (r of docs(); track r; let idx = $index) {
           <tr>
             <td>{{idx + 1}}</td>
-            @if (format) {
+            @if (geometrie) {
               @if (hasPian) {
                 <td>{{r.pian.ident_cely}}</td>
               }
@@ -53,37 +56,90 @@
               <td >{{r.geometrie}}</td>
             }
             @for (field of config.exportFields[state.entity]; track field) {
+              @if (!field.hidden) {
               <td>
                 @if (field.byPath) {
-                  @if (field.heslar) {
+                  @if (field.translated) {
                     {{ getByPath(r, field.name) | translate}}
-                  }
-                  @if (!field.heslar && field.type === 'date') {
-                    {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
-                  }
-                  @if (!field.heslar && field.type !== 'date') {
-                    {{ getByPath(r, field.name) }}
+                  } @else {
+                    @if (field.type === 'date') {
+                      {{ getByPath(r, field.name) | date : 'yyyy-MM-dd'}}
+                    } @else {
+                      {{ getByPath(r, field.name) }}
+                    }
                   }
                 }
-                @if (!field.byPath) {
+                @else {
                   @if (field.type === 'boolean') {
                     {{r[field.name] + '' | translate}}
                   }
-                  @if (field.heslar) {
+                  @if (field.translated) {
                     {{r[field.name] | translate}}
-                  }
-                  @if (!field.heslar && field.type === 'date') {
-                    {{r[field.name] | date : 'yyyy-MM-dd'}}
-                  }
-                  @if (!field.heslar && field.type !== 'date' && field.type !== 'boolean') {
-                    {{r[field.name]}}
+                  } @else {
+                    @if (field.type === 'date') {
+                      {{r[field.name] | date : 'yyyy-MM-dd'}}
+                    }
+                    @if (field.type !== 'date' && field.type !== 'boolean') {
+                      {{r[field.name]}}
+                    }
                   }
                 }
               </td>
+            }
             }
           </tr>
         }
       </tbody>
     </table>
+    <ng-container *ngTemplateOutlet="paginationTmpl"></ng-container>
   </div>
 }
+<ng-template  #paginationTmpl>
+  <div class="app-fxLayout app-row app-baseline">
+    <span class="app-pipe"></span>
+    <a (click)="downloadFormat('csv')" [download]="'export.csv'">csv</a> 
+    <span class="app-pipe"></span>
+    <a (click)="downloadFormat('xlsx')" [download]="'export.xlsx'">xlsx</a> 
+    <span class="app-pipe"></span>
+    <a (click)="downloadFormat('xml')" [download]="'export.xml'">xml</a>
+    <span class="app-pipe"></span>
+    <a (click)="downloadFormat('json')" [download]="'export.json'">json</a>
+    <span class="app-pipe"></span>
+
+    <mat-paginator class="app-fxFlex"
+      [hidePageSize]="false"
+      [length]="numFound"
+      [pageSize]="rows"
+      [pageIndex]="page"
+      [pageSizeOptions]="[10, 100, 1000]"
+      (page)="pageChanged($event)">
+    </mat-paginator>
+
+
+  @if (numFound > docs.length) {
+  <mat-form-field class="app-num" appearance="outline"><!--fxHide_sm fxHide_xs-->
+    <mat-label>{{ 'paginator.desc.Číslo stránky' | translate }}</mat-label>
+    <input matInput type="text" [(ngModel)]="pageIndex" (keyup.enter)="setPage()" name="pageIndex">
+    <mat-icon matSuffix [title]="'paginator.tooltip.Přejděte číslo stránky' | translate" (click)="setPage()" class="app-cursor-pointer">send</mat-icon>
+  </mat-form-field>
+  }
+  <mat-form-field class="app-sort" appearance="outline"><!--fxHide_md fxHide_sm fxHide_xs-->
+    <mat-label>{{ 'paginator.desc.Řazení' | translate }}</mat-label>
+    <mat-select [(ngModel)]="state.sort">
+      <mat-select-trigger>
+        {{state.sort ? ('paginator.sortBy.' + state.sort.label | translate) : ('' | translate)  }} &#160;
+      </mat-select-trigger>
+      @for (sort of state.sorts_by_entity; track sort) {
+        <mat-option (click)="sortBy(sort)" [value]="sort">
+          {{ 'paginator.sortBy.' + sort.label | translate }} <mat-icon>{{ sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
+        </mat-option>
+      }
+    </mat-select>
+    <div matSuffix class="app-fxLayout app-row app-pr-2">
+      <mat-icon matSuffi (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [title]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon>
+      <mat-icon matSuffi>arrow_drop_down</mat-icon>
+    </div>
+    <!-- <mat-icon matSuffix (click)="$event.stopPropagation()" class="app-pl-0 app-color-primary" [matTooltip]="'paginator.dir.' + state.sort.dir | translate">{{ state.sort.dir === 'desc' ? 'expand_more' : 'expand_less' }}</mat-icon> -->
+  </mat-form-field>
+  </div>
+</ng-template>

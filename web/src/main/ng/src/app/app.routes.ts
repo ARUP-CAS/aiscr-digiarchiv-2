@@ -27,6 +27,10 @@ export const routes: Routes = [
         path: 'print/:id',
         loadComponent: () => import('./pages/document/document.component').then(m => m.DocumentComponent)
     },
+    {
+        path: 'museion/:id',
+        loadComponent: () => import('./pages/museion/museion').then(m => m.Museion)
+    },
     // { path: 'id/:id', component: DocumentComponent },
     // { path: 'print/:id', component: DocumentComponent },
     { path: 'export', component: ExportComponent },

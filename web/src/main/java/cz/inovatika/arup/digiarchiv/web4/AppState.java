@@ -34,7 +34,7 @@ public class AppState {
         }
         int interval = Options.getInstance().getInt("requestInterval", 5000);
         if (ipsTimes.containsKey(ip)) {
-            return Duration.between(Instant.now(), ipsTimes.get(ip).plus(interval, ChronoUnit.MILLIS)).toSeconds();
+            return Duration.between(Instant.now(), ipsTimes.get(ip).plus(interval, ChronoUnit.MILLIS)).toMillis();
         }
         return 0;
     }

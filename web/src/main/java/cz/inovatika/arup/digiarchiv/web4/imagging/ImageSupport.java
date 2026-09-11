@@ -57,7 +57,7 @@ public class ImageSupport {
             //new File(destDir + sb.toString()).mkdirs();
             return destDir + sb.toString();
         } catch (JSONException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             return null;
         }
     }

@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-//import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+//import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,7 +44,6 @@ public class IndexUtils {
     public static String requestSolr(String url) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(url))
-                .header("Authorization", Options.getInstance().getJSONObject("hiko").getString("bearer"))
                 .GET()
                 .build();
 
@@ -72,7 +71,7 @@ public class IndexUtils {
             solr.add(collection, idocs, 10);
             // client.commit(collection);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 
@@ -82,7 +81,7 @@ public class IndexUtils {
             solr.add(collection, idoc, 10);
             // client.commit(collection);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
         }
     }
 
@@ -162,7 +161,7 @@ public class IndexUtils {
                 ObjectMapper objectMapper = new ObjectMapper();
                 idoc.addField(field, objectMapper.writeValueAsString(o));
             } catch (JsonProcessingException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -173,7 +172,7 @@ public class IndexUtils {
                 ObjectMapper objectMapper = new ObjectMapper();
                 idoc.setField(field, objectMapper.writeValueAsString(o));
             } catch (JsonProcessingException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -184,7 +183,7 @@ public class IndexUtils {
                 ObjectMapper objectMapper = new ObjectMapper();
                 idoc.setField(prefix + "_chranene_udaje", objectMapper.writeValueAsString(o));
             } catch (JsonProcessingException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "", ex);
             }
         }
     }
@@ -196,7 +195,8 @@ public class IndexUtils {
                     .getJSONObject(0).getString("@value");
             idoc.setField("datestamp", d);
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Can't get datestamp from fedora for {0}", id);
+            LOGGER.log(Level.SEVERE, "Can't get datestamp from fedora for " + id);
+            LOGGER.log(Level.SEVERE, "", ex);
             idoc.setField("datestamp", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_INSTANT));
         }
     }
@@ -233,9 +233,20 @@ public class IndexUtils {
     }
 
     public static void addByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix, boolean isSecured) {
-        boolean secured = path.contains("chranene_udaje") || isSecured;
         String[] parts = path.split("\\.", 2);
         Collection<Object> vals = idoc.getFieldValues(parts[0]);
+        addValuesByPath(idoc, path, field, prSufix, isSecured, vals);
+    }
+
+    public static void addByPath(SolrInputDocument destDoc, SolrInputDocument origDoc, String path, String field, List<String> prSufix, boolean isSecured) {
+        String[] parts = path.split("\\.", 2);
+        Collection<Object> vals = origDoc.getFieldValues(parts[0]);
+        addValuesByPath(destDoc, path, field, prSufix, isSecured, vals);
+    }
+    
+    public static void addValuesByPath(SolrInputDocument idoc, String path, String field, List<String> prSufix, boolean isSecured, Collection<Object> vals) {
+        boolean secured = path.contains("chranene_udaje") || isSecured;
+        String[] parts = path.split("\\.", 2);
         if (vals == null) {
             return;
         }
@@ -288,7 +299,7 @@ public class IndexUtils {
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        idoc.addField("chranene_udaje", objectMapper.writeValueAsString(o));
 //      } catch (JsonProcessingException ex) {
-//        LOGGER.log(Level.SEVERE, null, ex);
+//        LOGGER.log(Level.SEVERE, "", ex);
 //      }
 //    }
 //  }

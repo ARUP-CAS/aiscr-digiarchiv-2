@@ -22,7 +22,6 @@ import { MatInputModule } from '@angular/material/input';
   imports: [
     TranslateModule,
     FormsModule,
-    
     MatIconModule,
     MatListModule,
     MatTooltipModule,

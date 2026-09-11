@@ -88,9 +88,9 @@ export class AppService {
       params[field].push(value + ':' + operator);
     }
     params.page = 0;
-    
+
     this.state.isFacetsCollapsed = true;
-    document.getElementById('content-scroller').scrollTo(0,0);
+    document.getElementById('content-scroller').scrollTo(0, 0);
     this.state.setFacetChanged();
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
@@ -240,8 +240,8 @@ export class AppService {
         .pipe(finalize(() => this.stopLoading()))
         .pipe(catchError(err => this.handleError(err, this)));
 
+    }
   }
-}
 
   private post(url: string, obj: any) {
     return this.http.post<any>(`api${url}`, obj);
@@ -254,6 +254,15 @@ export class AppService {
   search(params: HttpParams): Observable<any> {
     this.state.hasError = false;
     return this.get(`/search/query`, params);
+  }
+
+  /**
+   * Fired for main search in export page
+   * @param params the params
+   */
+  export(params: HttpParams): Observable<any> {
+    this.state.hasError = false;
+    return this.get(`/search/export`, params);
   }
 
   /**
@@ -313,6 +322,29 @@ export class AppService {
       .set('id', id)
       .set('shouldLog', shouldLog);
     return this.get(`/search/id`, params);
+  }
+
+  getHandle(id: string, shouldLog: boolean = true): Observable<any> {
+    const params: HttpParams = new HttpParams()
+      .set('id', id)
+      .set('shouldLog', shouldLog);
+
+    const server = isPlatformBrowser(this.platformId) ? '' : this.config.amcr;
+    const options = { params, withCredentials: true };
+    return this.http.get(`${server}api/search/handle`, options)
+      .pipe(map((r: any) => {
+        if (r.response?.status === -1) {
+          r.response.errors = { path: [{ errorMessage: r.response.errorMessage }] };
+        }
+        return r;
+
+      }))
+      .pipe(finalize(() => this.stopLoading()))
+      .pipe(catchError((err: any) => {
+        return of({...err, error: true})
+      }));
+
+    // return this.get(`/search/handle`, params);
   }
 
   logViewer(id: string, entity: string): Observable<any> {
@@ -469,7 +501,7 @@ export class AppService {
     const url = '/feedback?verify=true';
     return this.post(url, body);
   }
-  
+
   feedback(name: string, mail: string, text: string, ident_cely: string) {
     const url = '/feedback';
     return this.post(url, { name, mail, text, ident_cely });
@@ -500,6 +532,15 @@ export class AppService {
     return this.get(url);
   }
 
+  museionPredmety(id: string, typ: string) {
+    const url = '/mus/predmety_by_id';
+    let params = new HttpParams().set('id', id)
+      if(typ) {
+        params = params.set('typ', typ);
+      }
+    return this.get(url, params);
+  }
+
   setCrumbs(params: ParamMap) {
     this.state.breadcrumbs = [];
     this.state.conditions = [];
@@ -525,7 +566,7 @@ export class AppService {
       this.state.breadcrumbs.push(new Crumb('separator', '', ''));
 
       const loc_rpt: any = value.split(',');
-      
+
       const southWest = L.latLng(loc_rpt[0], loc_rpt[1]);
       const northEast = L.latLng(loc_rpt[2], loc_rpt[3]);
       this.state.locationFilterBounds = L.latLngBounds(southWest, northEast);
@@ -589,6 +630,15 @@ export class AppService {
               if (filterField && filterField.type === 'number') {
                 const oddo = parts[0].split(',');
                 display = this.getTranslation(oddo[0]) + ' - ' + this.getTranslation(oddo[1]);
+              } else if (filterField && filterField.type === 'date') {
+                const oddo = parts[0].split(',');
+                if (oddo[0] === 'null') {
+                  display = this.getTranslation('to') + ' ' + oddo[1];
+                } else if (oddo[1] === 'null') {
+                  display = this.getTranslation('from') + ' ' + oddo[0];
+                } else {
+                  display = null;
+                }
               } else {
                 // display = this.getHeslarTranslation(parts[0], field);
                 display = null;
@@ -692,11 +742,11 @@ export class AppService {
 
   }
 
-  
+
   setMapResult(result: any, mapDetail: any) {
     if (!result && mapDetail) {
       // zavirame kartu
-      const inResults = this.router.isActive('results', {fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored'});
+      const inResults = this.router.isActive('results', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' });
       this.state.closingMapResult = inResults;
       this.state.setMapResult(result, mapDetail);
       if (!this.state.documentId()) {
@@ -704,10 +754,10 @@ export class AppService {
         const p: any = {};
         p.mapId = null;
         p.loc_rpt = this.state.mapBounds.getSouthWest().lat + ',' + this.state.mapBounds.getSouthWest().lng +
-        ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
+          ',' + this.state.mapBounds.getNorthEast().lat + ',' + this.state.mapBounds.getNorthEast().lng;
         this.router.navigate([url], { queryParams: p, queryParamsHandling: 'merge' });
       } else {
-        
+
       }
     } else {
       this.state.setMapResult(result, mapDetail);
@@ -766,6 +816,17 @@ export class AppService {
    */
   getOkres(s: string) {
     return s.substring(s.indexOf('(') + 1, s.indexOf(')')).trim();
+  }
+
+  
+
+  /**
+   * Fired for index stats in stats page
+   * @param params the params
+   */
+  reindex(id: string): Observable<any> {
+    const params: HttpParams = new HttpParams().set('id', id);
+    return this.get(`/fedora/index_id`, params);
   }
 
 }

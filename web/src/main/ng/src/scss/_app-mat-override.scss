@@ -5,6 +5,7 @@
 @use "theme-colors" as my-theme;
 @use "app-mixins-icon" as *;
 @use "app-mixins-entity-color" as *;
+@use "app-mixins-entity-bg-color" as *;
 @use "app-mixins-entity-facet-color" as *;
 @use "app-mixins-entity-card-color" as *;
 
@@ -49,6 +50,50 @@
       list-item-label-text-weight: 400,
       list-item-label-text-font: 'Roboto Condensed, sans-serif'
     ));
+    
+    &.komponenta {
+      border: 1px solid var(--app-color-gray-4);
+
+      &.app-active {
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2); 
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+      }
+
+      .app-left {
+        border-right: 1px solid var(--app-color-gray-4);
+        padding: 0 11px;
+
+        img {
+          height: 24px;
+        }
+      }
+
+      .app-right {
+        span {
+          &:first-child {
+            background: linear-gradient(
+            90deg,
+            #5882c4 0%,
+            #F39225 20%,
+            #247e4b 40%,
+            #951E7A 60%,
+            #85140E 80%,
+            #778e98 100%
+            );
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+          }
+          &:last-child {
+            color: var(--app-color-gray-6);
+          }
+        }
+        
+      }
+    }
 
     padding: 0;
     margin-bottom: 8px;
@@ -429,6 +474,31 @@
   .app-card-result {
     @include setEntityCardColor();
 
+    &.app-entity-komponenta {
+      .mat-mdc-card-title {
+        .app-icon-component {
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+          margin-right: 4px;
+          display: inline-block;
+          background-color: var(--app-color-gray-6);
+
+          mask: url(../assets/img/logo/logo-component.svg) no-repeat center;
+          mask-size: contain;
+
+          -webkit-mask: url(../assets/img/logo/logo-component.svg) no-repeat center;
+          -webkit-mask-size: contain;
+
+          @include setEntityBgColor();
+
+         /*  &.dokument {
+            background-color: #F39225;
+          } */
+        }
+      }
+    }
+
     a {
       &:hover {
         text-decoration: underline;
@@ -564,6 +634,106 @@
 
     .mat-mdc-dialog-content {
       max-height: unset;
+    }
+  }
+
+
+   // --- table ---
+  @include mat.table-overrides((
+    background-color: rgb(var(--app-color-lightnes)),
+    header-container-height: 32px, 
+    header-headline-color: var(--app-color-gray-6),
+    row-item-container-height: 28px,
+    row-item-outline-color: var(--app-color-gray-3),
+    row-item-label-text-size: 13px,
+    footer-container-height: 28px
+  ));
+  .mat-mdc-table {
+    .mat-mdc-header-row {
+      background-color: rgb(var(--app-color-lightnes));
+    }
+
+    &.app-striped {
+      .mat-mdc-row {
+        &:nth-child(odd) {
+          &:not(.app-selected) {
+            background-color: var(--app-color-gray-2);
+          }
+        }
+      }
+    }
+    &.app-hover {
+      .mat-mdc-row {
+        &:hover {
+          &:not(.app-selected, .app-row-detail) {
+            background-color: var(--app-color-gray-3);
+          }
+        }
+      }
+    }
+    &.app-resize {
+      table-layout: fixed;
+      min-width: 1050px;
+      max-width: 100%;
+      width: fit-content;
+
+      &.app-resizing {
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .mat-mdc-header-cell {
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .mat-sort-header-content {
+          display: inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .app-resize-holder {
+          cursor: col-resize;
+          width: 10px;
+          height: 100%;
+          position: absolute;
+          right: 0;
+          top: 0;
+          z-index: 1;
+
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            border-right: 1px solid var(--app-color-gray-3);
+          }
+        }
+      }
+
+      .mat-mdc-cell {
+        &:not(.app-col-detail) {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .mdc-data-table__cell, 
+    .mdc-data-table__header-cell {
+      padding: 0 8px;
+    }
+
+    .mat-column-action {
+      // max-width: 110px;
+      // padding: 0;
+      // text-align: center;
     }
   }
 

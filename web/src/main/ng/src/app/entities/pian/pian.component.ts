@@ -43,10 +43,10 @@ export class PianComponent extends Entity {
   override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-     `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
+     `@misc{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely},
        author = {Archeologický informační systém České republiky}, 
-       title = {Záznam ${this._result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
+       title = {Záznam ${this._result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
@@ -58,8 +58,8 @@ export class PianComponent extends Entity {
     if (this.isChild()) {
       return;
     }
-    this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
-      this._result.az_dj_pian = res.az_dj_pian;
+    this.service.checkRelations(this._result().ident_cely).subscribe((res: any) => {
+      this._result.update(r => ({...r, az_dj_pian: res.az_dj_pian}));
       this.relationsChecked = true;
       
       const related: { entity: string; ident_cely: string; }[] = [];

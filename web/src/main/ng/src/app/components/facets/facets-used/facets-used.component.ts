@@ -47,6 +47,13 @@ export class FacetsUsedComponent implements OnInit {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 
+  removeInMuseion() {
+    
+    const params: any = {};
+    params['inMuseion'] = null;
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
   removeCommonFacet(name: string) {
     const params: any = {};
     params[name] = null;

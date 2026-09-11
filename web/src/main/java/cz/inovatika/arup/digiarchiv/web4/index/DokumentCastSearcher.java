@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.json.JSONArray;
@@ -23,10 +23,18 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     private boolean parentSearchable = true;
 
     @Override
-    public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        String org = LoginServlet.organizace(request.getSession());
+        
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         String fields = "*,ident_cely,entity,dokument_cast_archeologicky_zaznam,dokument_cast_neident_akce:[json]";
+        AkceSearcher as = new AkceSearcher();
+        LokalitaSearcher ls = new LokalitaSearcher();
         for (int i = 0; i < ja.length(); i++) {
 
             try {
@@ -39,8 +47,8 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                         .addFilterQuery("dokument_cast_ident_cely:\"" + doc.getString("ident_cely") + "\"");
                 query.setFields(dfs);
 
-                JSONObject r = SolrSearcher.json(client, "entities", query);
-                ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
+                JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
+                ds.filter(r, pristupnost, org);
                 JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
                 for (int j = 0; j < reldocs.length(); j++) {
                     JSONObject cdj = reldocs.getJSONObject(j);
@@ -52,10 +60,16 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                     JSONArray cdjs = doc.getJSONArray("dokument_cast_archeologicky_zaznam");
                     for (int j = 0; j < cdjs.length(); j++) {
                         String cdj = cdjs.getString(j);
-                        JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+                        JSONObject sub = SolrSearcher.getById(client, cdj, fields, false);
                         if (sub != null) {
-                            doc.put(sub.getString("entity"), sub);
-                            doc.put("datestamp", sub.getString("datestamp"));
+                          String entity = sub.getString("entity");
+                          if("akce".equals(entity)) {
+                            as.filterOne(sub, pristupnost, org);
+                          } else if("lokalita".equals(entity)) {
+                            ls.filterOne(sub, pristupnost, org);
+                          }
+                          doc.put(entity, sub);
+                          doc.put("datestamp", sub.getString("datestamp"));
                         }
 
                     }
@@ -63,7 +77,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
 
                 // SolrSearcher.addChildField(client, doc, "dokument_cast_ident_cely", "dokument", dfs);
             } catch (SolrServerException | IOException ex) {
-                Logger.getLogger(DokumentCastSearcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DokumentCastSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
 
         }
@@ -86,8 +100,8 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        return "";
+    public JSONObject export(HttpServletRequest request) {
+        return new JSONObject();
     }
 
     @Override

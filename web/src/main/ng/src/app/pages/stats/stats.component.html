@@ -46,8 +46,8 @@
           </mat-list>
         </div>
         <div class="app-right app-fxFlex">
-          @if (!loading() && series.length > 0) {
-            <div class="app-graph" echarts [options]="chartOptions"></div>
+          @if (!loading() && series().length > 0) {
+            <div class="app-graph" echarts [options]="chartOptions()"></div>
           }
         </div>
       </mat-card-content>
@@ -74,7 +74,7 @@
           </mat-form-field>
           @for (f of types; track f) {
             <div class="app-item">
-              <a (click)="filter('type', f.name)">{{ 'stats.typ.' + f.name | translate }}</a><span class="app-count">({{ f.value }})</span>
+              <a (click)="filter('type', f[0])">{{ 'stats.typ.' + f[0] | translate }}</a><span class="app-count">({{ f[1] }})</span>
             </div>
           }
         </mat-card-content>
@@ -89,7 +89,7 @@
             <mat-label>{{ 'stats.entity' | translate }}</mat-label>
             <mat-select [(ngModel)]="entity" (selectionChange)="filter('entity', entity)">
               @for (e of entities; track $index) {
-                <mat-option [value]="e.name">{{ 'entities.' + e.name + '.title' | translate }}</mat-option>
+                <mat-option [value]="e[0]">{{ 'entities.' + e[0] + '.title' | translate }}</mat-option>
               }
             </mat-select>
             @if (entity) {
@@ -100,7 +100,7 @@
           </mat-form-field>
           @for (f of entities; track $index) {
             <div class="app-item">
-              <a (click)="filter('entity', f.name)">{{ 'entities.' + f.name + '.title' | translate }}</a><span class="app-count">({{ f.value }})</span>
+              <a (click)="filter('entity', f[0])">{{ 'entities.' + f[0] + '.title' | translate }}</a><span class="app-count">({{ f[1] }})</span>
             </div>
           }
         </mat-card-content>
@@ -125,7 +125,7 @@
           <div class="app-fxFlex app-oa-y">
             @for (f of ids; track $index) {
               <div class="app-item">
-                <a (click)="filter('ident_cely', f.name)">{{ formatId(f.name) }}</a><span class="app-count">({{ f.value }})</span>
+                <a (click)="filter('ident_cely', f[0])">{{ formatId(f[0]) }}</a><span class="app-count">({{ f[1] }})</span>
               </div>
             }
           </div>
@@ -149,7 +149,7 @@
             </mat-form-field>
             @for (f of ips; track $index) {
               <div class="app-item">
-                <a (click)="filter('ip', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
+                <a (click)="filter('ip', f[0])">{{ f[0] }}</a><span class="app-count">({{ f[1] }})</span>
               </div>
             }
           </mat-card-content>
@@ -171,7 +171,7 @@
             </mat-form-field>
             @for (f of users; track $index) {
               <div class="app-item">
-                <a (click)="filter('user', f.name)">{{ f.name }}</a><span class="app-count">({{ f.value }})</span>
+                <a (click)="filter('user', f[0])">{{ f[0] }}</a><span class="app-count">({{ f[1] }})</span>
               </div>
             }
           </mat-card-content>
@@ -190,7 +190,7 @@
                 <a (click)="exportStats(f.value, null, null)">
                   <mat-icon class="app-small-icon ">open_in_new</mat-icon>
                 </a>
-                @if (f.pivot) {
+                @if (f.pivot && f.value !== 'komponenta') {
                   @for (p of f.pivot; track $index) {
                     <div class="app-item app-va-center">
                       &#160;&#160;<span>{{ 'stats.stav' | translate }}: {{ p.value }}</span><span class="app-count">({{ p.count }})</span>

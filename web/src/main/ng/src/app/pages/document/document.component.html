@@ -40,7 +40,7 @@
         }
       </mat-card-content>
     </mat-card>
-    @if (!isResultEmpty(result())) {
+    @if (result()) {
     <app-entity-container [result]="result()" [detailExpanded]="true" [inDocument]="true"
       [isChild]="false"></app-entity-container>
     }

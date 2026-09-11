@@ -4,16 +4,15 @@ import cz.inovatika.arup.digiarchiv.web4.LoginServlet;
 import cz.inovatika.arup.digiarchiv.web4.Options;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,49 +25,48 @@ public class ProjektSearcher implements EntitySearcher {
     public static final Logger LOGGER = Logger.getLogger(ProjektSearcher.class.getName());
     final String ENTITY = "projekt";
 
-    private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
-        "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
+//    private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
+//        "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
 
     @Override
     public void filter(JSONObject jo, String pristupnost, String org) {
 
+      
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
-            String docPr = doc.getString("pristupnost");
-
-            if (docPr.compareToIgnoreCase(pristupnost) > 0) {
-                doc.remove("projekt_chranene_udaje");
-            }
-
-            Object[] keys = doc.keySet().toArray();
-            for (Object okey : keys) {
-                String key = (String) okey;
-                if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
-                    doc.remove((String) key);
-                }
-                if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
-                    doc.remove((String) key);
-                }
-                if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
-                    doc.remove((String) key);
-                }
-
-            }
-
-            if (doc.has("location_info")) {
-                JSONArray lp = doc.getJSONArray("location_info");
-                for (int j = lp.length() - 1; j > -1; j--) {
-                    if (lp.getJSONObject(j).has("pristupnost") && lp.getJSONObject(j).getString("pristupnost").compareToIgnoreCase(pristupnost) > 0) {
-                        lp.remove(j);// .getJSONObject(j).remove("location_info");
-                    }
-                }
-            }
-
+            filterOne(doc, pristupnost, org);
         }
         addOkresy(jo);
 
     }
+    
+    public void filterOne(JSONObject doc, String pristupnost, String org) {
+//-- A-B: stav = 6
+//-- C: stav >= 1
+//-- D-E: bez omezení 
+            String docPr = doc.getString("pristupnost");
+            boolean allowed = false;
+            int st = doc.getInt("stav");
+            if (pristupnost.compareToIgnoreCase("D") >= 0) {
+                allowed = true;
+            } else if (pristupnost.equalsIgnoreCase("C") && st >= 1) {
+                allowed = true;
+            } else if (pristupnost.compareToIgnoreCase("B") <= 0 && st == 6) {
+                allowed = true;
+            } else {
+                allowed = false;
+            }
+
+            if (!allowed) {
+                doc.remove("projekt_chranene_udaje");
+                doc.remove("projekt_hlavni_katastr");
+                doc.remove("loc_rpt");
+                doc.remove("loc");
+            }
+    }
+    
+    
 
     @Override
     public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
@@ -91,7 +89,7 @@ public class ProjektSearcher implements EntitySearcher {
                         valid_dokuments.put(jad.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_dokument", valid_dokuments);
@@ -110,7 +108,7 @@ public class ProjektSearcher implements EntitySearcher {
                         samostatny_nalez.put(ja.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_samostatny_nalez", samostatny_nalez);
@@ -136,7 +134,7 @@ public class ProjektSearcher implements EntitySearcher {
                         }
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_archeologicky_zaznam", projekt_archeologicky_zaznam);
@@ -245,7 +243,7 @@ public class ProjektSearcher implements EntitySearcher {
     @Override
     public JSONObject search(HttpServletRequest request) {
         JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
             JSONObject jo = SearchUtils.json(query, client, "entities");
@@ -264,7 +262,7 @@ public class ProjektSearcher implements EntitySearcher {
             return jo;
 
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "", ex);
             json.put("error", ex);
         }
         return json;
@@ -313,7 +311,7 @@ public class ProjektSearcher implements EntitySearcher {
                         valid_dokuments.put(jad.getJSONObject(a).getString("ident_cely"));
                     }
                 } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
             }
             doc.put("projekt_dokument", valid_dokuments);
@@ -321,14 +319,21 @@ public class ProjektSearcher implements EntitySearcher {
     }
 
     @Override
-    public String export(HttpServletRequest request) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+    public JSONObject export(HttpServletRequest request) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery();
             setQuery(request, query);
-            return SearchUtils.csv(query, client, "entities");
+            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
+            JSONObject jo = SearchUtils.json(query, client, "entities");
+            String pristupnost = LoginServlet.pristupnost(request.getSession());
+            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+            
+            return jo;
+            
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return ex.toString();
+            LOGGER.log(Level.SEVERE, "", ex);
+            return new JSONObject().put("error",ex.toString());
         }
     }
 

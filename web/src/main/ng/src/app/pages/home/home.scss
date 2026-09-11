@@ -6,10 +6,52 @@
 @mixin setHomeCardEntityColor() {
   @each $entity, $color in $entities {
     &.app-entity-#{$entity} {
-      background-color: $color !important;
+      background-color: $color;
     } 
   }
 }
+// special colored component card
+.app-entity-komponenta {
+  .mat-mdc-card-title {
+    a {
+      &::before {
+        content: "";
+        margin-right: 8px;
+        display: inline-block;
+        width: 34px;
+        height: 34px;
+        background-image: url("../../../assets/img/logo/logo-component.svg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+
+      span {
+        padding-top: 2px;
+        background: linear-gradient(
+          90deg,
+          #5882c4 0%,
+          #F39225 20%,
+          #247e4b 40%,
+          #951E7A 60%,
+          #85140E 80%,
+          #778e98 100%
+        );
+        background-clip: text;
+        color: transparent;
+        display: inline-block;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+
+  .mat-mdc-card-actions {
+    color: var(--app-color-gray-6);
+    background-color: var(--app-color-gray-2);
+  }
+}
+
 
 .app-entities-wrapper {
   &.app-doctype-expanded {
@@ -52,7 +94,7 @@
       }
     }
 
-    @media only screen and (min-width: 600px) and (max-width: 959px) {
+    @media only screen and (min-width: 600px) and (max-width: 1229px) {
       .mat-mdc-card {
         &.app-card-entity {
           &.app-1 {
@@ -100,7 +142,7 @@
   .mat-mdc-card {
     min-height: 116px;
     @extend .app-row-gap-32, .app-font-family-rc !optional;
-    margin-bottom: 32px;
+    margin-bottom: 16px;
 
     &.app-doctype-0,
     &.app-doctype-1,
@@ -113,10 +155,10 @@
       flex: 1 1 100%;
       min-width: 100%;
       box-sizing: border-box;
-      margin-right: 32px;
+      margin-right: 16px;
       color: var(--app-color-lightnes);
 
-      &.app-5 {
+      &.app-6 {
         margin-right: 0;
       }
 
@@ -127,25 +169,28 @@
         min-width: calc(#{$flex-width} - 32px);
 
         &.app-1,
-        &.app-3 {
+        &.app-3,
+        &.app-5 {
           margin-right: 0 !important;
         }
       }
 
-      @media only screen and (min-width: 600px) and (max-width: 959px) {
+      @media only screen and (min-width: 600px) and (max-width: 1229px) {
         $flex-width: 33.3333%;
         flex: 1 1 calc(#{$flex-width} - 32px);
         min-width: calc(#{$flex-width} - 32px);
 
-        &.app-2 {
+        &.app-2,
+        &.app-5 {
           margin-right: 0;
         }
       }
 
-      @media only screen and (min-width: 960px) {
-        $flex-width: 16.6666%;
-        flex: 1 1 calc(#{$flex-width} - 32px);
-        min-width: calc(#{$flex-width} - 32px);
+      @media only screen and (min-width: 1230px) {
+        //$flex-width: 16.6666%;
+        $flex-width: 14.2222%;
+        flex: 1 1 calc(#{$flex-width} - 16px);
+        min-width: calc(#{$flex-width} - 16px);
       }
 
       a {
@@ -285,7 +330,7 @@
     $flex-width: 100%;
     flex: 1 1 $flex-width !important;
     min-width: $flex-width;
-    margin-right: 32px;
+    margin-right: 16px;
 
     &:last-child {
       margin-right: 0;

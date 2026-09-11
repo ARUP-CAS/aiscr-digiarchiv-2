@@ -1,13 +1,31 @@
 .mat-mdc-dialog-title {
-  .app-list-files-wrapper {
-    a {
-      font-size: 16px !important;
+  .app-select-files-wrapper {
+    .mat-mdc-form-field {
+      min-width: 200px;
 
-      &.active {
-        background-color: var(--app-color-primary);
-        color: var(--app-color-lightnes);
-        border-radius: var(--app-border-radius);
-        padding: var(--app-gap-icon) 8px;
+      &.app-select-primary {
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          background-color: var(--app-primary-color, var(--app-color-primary));
+          border-radius: var(--app-border-radius);
+          overflow: hidden;
+        }
+
+        ::ng-deep .mat-mdc-select-value,
+        ::ng-deep .mat-mdc-select-placeholder,
+        ::ng-deep .mat-mdc-select-arrow {
+          color: var(--app-color-lightnes);
+          font-weight: bold;
+        }
+
+        ::ng-deep .mat-mdc-select-arrow svg {
+          fill: currentColor;
+        }
+
+        ::ng-deep .mdc-notched-outline__leading,
+        ::ng-deep .mdc-notched-outline__notch,
+        ::ng-deep .mdc-notched-outline__trailing {
+          border-color: transparent;
+        }
       }
     }
   }

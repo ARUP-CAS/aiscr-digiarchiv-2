@@ -52,7 +52,7 @@ public class PausedFilter implements Filter {
             HttpServletRequest req =(HttpServletRequest) request;
             
             String path = req.getPathInfo();
-            if (req.getRequestURI().contains("config")) {
+            if (req.getRequestURI().contains("config") && (request.getParameter("reset") != null)) {
                 Options.resetInstance();
             }
             
@@ -75,6 +75,7 @@ public class PausedFilter implements Filter {
                 LOGGER.log(Level.INFO, "System is paused. {0}", req.getRequestURI()); 
             } else {
                 chain.doFilter(request, response);
+                return;
             }
             
         } catch (Throwable t) {

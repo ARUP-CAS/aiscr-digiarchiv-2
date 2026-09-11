@@ -42,10 +42,10 @@ export class AkceComponent extends Entity {
   override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.bibTex =
-      `@misc{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely},
+      `@misc{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely},
        author = {Archeologický informační systém České republiky},
-       title = {Záznam ${this._result.ident_cely}},
-       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result.ident_cely}},
+       title = {Záznam ${this._result().ident_cely}},
+       howpublished = url{https://digiarchiv.aiscr.cz/id/${this._result().ident_cely}},
        note = {Archeologická mapa České republiky [cit. ${now}]}
      }`;
   }
@@ -57,9 +57,14 @@ export class AkceComponent extends Entity {
     if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
-    this.service.checkRelations(this._result.ident_cely).subscribe((res: any) => {
-      this._result.az_dokument = res.az_dokument;
-      this._result.akce_projekt = res.akce_projekt;
+    this.service.checkRelations(this._result().ident_cely).subscribe((res: any) => {
+      this._result.update(r => ({
+        ...r,
+        az_dokument: res.az_dokument,
+        akce_projekt: res.akce_projekt
+      }));
+      // this._result.az_dokument = res.az_dokument;
+      // this._result.akce_projekt = res.akce_projekt;
       this.relationsChecked = true;
       const related: { entity: string; ident_cely: string; }[] = [];
       res.az_dokument.forEach((ident_cely: string) => {
@@ -75,15 +80,15 @@ export class AkceComponent extends Entity {
   }
 
   getExtZdroj() {
-    if (this._result.az_ext_zdroj) {
-      const orig = JSON.parse(JSON.stringify(this._result.az_ext_zdroj));
+    if (this._result().az_ext_zdroj) {
+      const orig = JSON.parse(JSON.stringify(this._result().az_ext_zdroj));
       let az_ext_zdroj: any[] = [];
       // this.az_ext_zdroj.set([]);
       for (let i = 0; i < orig.length; i = i + 20) {
         const ids = orig.slice(i, i + 20);
         this.service.getIdAsChild(ids, "ext_zdroj").subscribe((res: any) => {
-          if(this._result.az_ext_odkaz) {
-            this._result.az_ext_odkaz.forEach((eo:any) => {
+          if(this._result().az_ext_odkaz) {
+            this._result().az_ext_odkaz.forEach((eo:any) => {
               const ez = res.response.docs.find((ez: any) => eo.ext_zdroj.id === ez.ident_cely);
               if (ez){
                 ez.ext_odkaz_paginace = eo.paginace;
@@ -110,12 +115,12 @@ export class AkceComponent extends Entity {
   }
 
   override getFullId() {
-    this.service.getId(this._result.ident_cely).subscribe((res: any) => {
-      this._result = res.response.docs[0];
+    this.service.getId(this._result().ident_cely).subscribe((res: any) => {
+      this._result.set(res.response.docs[0]);
       this.getExtZdroj();
-      this._result.az_dokumentacni_jednotka.forEach((dj: any) => {
+      this._result().az_dokumentacni_jednotka.forEach((dj: any) => {
         if (dj.dj_pian) {
-          const p = this._result.pian.find((p: any) => p.ident_cely === dj.dj_pian.id);
+          const p = this._result().pian.find((p: any) => p.ident_cely === dj.dj_pian.id);
           if (p) {
             dj.dj_pian = p;
           }
@@ -134,10 +139,10 @@ export class AkceComponent extends Entity {
   }
 
   pian(id: string) {
-    return this._result.pian.filter((p: any) => p.ident_cely === id);
+    return this._result().pian.filter((p: any) => p.ident_cely === id);
   }
 
   adb(id: string) {
-    return this._result.adb.filter((p: any) => p.ident_cely === id);
+    return this._result().adb.filter((p: any) => p.ident_cely === id);
   }
 }

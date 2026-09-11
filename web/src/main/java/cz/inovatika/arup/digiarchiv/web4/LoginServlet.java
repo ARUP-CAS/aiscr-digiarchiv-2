@@ -115,6 +115,10 @@ public class LoginServlet extends HttpServlet {
         return session.getAttribute("user") != null;
     }
 
+    public static boolean isLogged(HttpServletRequest req) {
+        return req.getSession(false) != null && req.getSession(false).getAttribute("user") != null;
+    }
+
     enum Actions {
 
         TOKEN {
@@ -199,7 +203,7 @@ public class LoginServlet extends HttpServlet {
                     req.getSession().setAttribute("user", null);
                     req.getSession().setAttribute("userid", null);
                     jo.put("error", ex.toString());
-                    LOGGER.log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.SEVERE, "", ex);
                 }
                 return jo;
 

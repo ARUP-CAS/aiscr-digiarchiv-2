@@ -36,7 +36,7 @@ export class DocumentDialogComponent implements OnInit {
   }
 
   getFullId() {
-    this.service.getId(this.result.ident_cely).subscribe((res: any) => {
+    this.service.getHandle(this.result.ident_cely).subscribe((res: any) => {
       this.result = res.response.docs[0];
     });
   }

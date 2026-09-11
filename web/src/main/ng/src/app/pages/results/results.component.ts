@@ -155,6 +155,18 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.router.navigate([], { queryParams: p, queryParamsHandling: 'merge' });
   }
 
+  toggleInMuseion() {
+    this.state.inMuseion.update(v => !v);
+    const params: Params = this.route.snapshot.queryParams;
+    const p: any = Object.assign({}, params);
+    if (this.state.inMuseion()) {
+      p.inMuseion = this.state.inMuseion();
+    } else {
+      p.inMuseion = null;
+    }
+    this.router.navigate([], { queryParams: p, queryParamsHandling: 'merge' });
+  }
+
   search(params: Params) {
     if (params['mapa']) {
       // Zpracuje mapa

@@ -45,10 +45,8 @@ public class ConfigServlet extends HttpServlet {
       JSONObject js = Options.getInstance().getClientConf();
       js.put("thesauri", SolrSearcher.getThesauri());
       out.print(js.toString());
-    } catch (IOException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
-    } catch (JSONException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+    } catch (IOException | JSONException ex) {
+      LOGGER.log(Level.SEVERE, "", ex);
     } 
   }
 

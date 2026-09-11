@@ -34,7 +34,7 @@ public class AuthService {
             String r = response.body();
             return r;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE,"", ex);
             return ex.toString();
         }
     }
@@ -71,7 +71,7 @@ public class AuthService {
                     return tokenJSON;
                 }
             } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, "Error on login", ex);
                 return new JSONObject().put("error", "dialog.alert.login_server_error");
             }
         } else {
