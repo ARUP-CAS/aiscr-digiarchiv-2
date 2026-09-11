@@ -28,7 +28,7 @@ features = ["komponenta record type"]
 entities = ["komponenta"]
 surfaces = ["record page", "entity search and facets", "map", "export", "handle API"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#127"]
-last_verified = "2026-08-28"
+last_verified = "2026-09-11"
 
 [[scenario]]
 key = "permissions"
