@@ -16,20 +16,21 @@
 - `/api/mus/predmety_by_id` response shapes: a record with data → `{"predmetyDleAmcrId": {"<organizaceId>": {...predmetSys/predmetPom...}}}`; a known record with no Museion data → `{"predmetyDleAmcrId": {}}`; an unknown id → bare `{}`. BASIC records serialize their non-identifier fields as `null` (an earlier build serialized numeric defaults such as `0` — museion-D03).
 - `/api/search/museion`: the action name is absent from the search dispatch enum, so the request fails with HTTP 500 (`No enum constant ...Actions.MUSEION`); the frontend never calls it (the filter goes through `/api/search/query` with `inMuseion`). Resolved museion-D05.
 - Search filter: the `inMuseion` query parameter on `/api/search/query` (the frontend sets it as a URL query parameter and drops it when the filter is off).
-- Client config: `/api/config` — `showMuseion` flag drives the toolbar filter icon, but it is an independent client-config key (default config merged with the custom `client` section; returned as-is by `Options.getClientConf()`): it is never derived from the `museion` server section, so removing all configured instances does not flip it and the icon stays (verified live 2026-09-10 — museion-D07). Hiding the icon requires setting `showMuseion: false` explicitly.
+- Client config: `/api/config` — the toolbar filter icon follows the `showMuseion` client-config key. The bundled default client config (`/assets/config.json` in the webapp) ships `"showMuseion": false`; a deployment enables the flag in the custom `.amcr/config.json` `client` section together with the Museion instance setup (the `museion` server section). The key is an independent client-config flag — `Options.getClientConf()` returns the merged client config as-is, with no runtime derivation from the configured instances — so removing only the server-section endpoints while leaving the flag `true` keeps the icon visible, while removing the Museion configuration as a unit (flag included) lets the value fall back to the default `false` and the icon hides (maintainer-confirmed live 2026-09-11 — museion-D07 resolved). Any config change requires a config reset (`/api/config?reset` or the admin quick action).
 - Results page: `/museion/<ident>` — lazy Angular route, opened in a new tab from the result row's Museion button.
 
 ### Architecture and implementation facts
 
 - `MuseionServlet` dispatches the `/mus/*` actions; `MuseionClient` calls each configured `end_point` per query and unions the results by `organizaceId`. The same endpoint may be configured more than once under different accounts (each account = one organization) and several endpoints may serve the same organization; the union handles both. Per-endpoint failures are swallowed: an unreachable instance contributes nothing rather than failing the whole request (the SOAP client uses a short timeout per endpoint).
-- Helper index: a Solr core (`museion`) holding `amcrId` + entity `type`, rebuilt by `/api/mus/index` from `predmetyStatistika`. Refresh is cron-driven; request-scoped cache expiration options were removed from the config in favour of the periodic job. The rebuild's cleanup (`clean(start)`, a `deleteByQuery` on `indextime` older than the run start) runs only per processed endpoint: with zero configured endpoints the loop body never executes, no cleanup runs, and the core keeps stale entries (museion-D08). Ids from Museion are expected trimmed: whitespace-suffixed shapes were observed on the 2026-09-06 deployment and were gone by 2026-09-10 after the provider and the integration both added trimming (per the issue thread); an unprefixed id shape may still occur (data-state observation below).
-- Filter mechanics: `inMuseion=true` adds an fq join from the helper index onto `ident_cely`; matching docs additionally carry an `inMuseion` flag, and the per-row Museion button in the results list is gated on that per-doc flag (an anchor to `museion/<ident>` with `target="_blank"` and tooltip `museion.zobrazit_predmety`). The toolbar facet itself is gated on `config.showMuseion`.
+- `predmety_by_id` entity-type resolution: the frontend route carries no type parameter, so the page component passes an unset `typ` and the request omits it; `MuseionServlet.PREDMETY_BY_ID` then resolves the type server-side through `SolrSearcher.getEntityById(id)` (projekt → `P`, akce → `A`, samostatny_nalez → `N`) and returns the bare `{}` shape when the id resolves to no entity (fixed museion-D04's API side; the client guard handles the shape).
+- Helper index: a Solr core (`museion`) holding `amcrId` + entity `type`, rebuilt by `/api/mus/index` from `predmetyStatistika`. Refresh is cron-driven; request-scoped cache expiration options were removed from the config in favour of the periodic job. The rebuild's cleanup (`clean(start)`, a `deleteByQuery` on `indextime` older than the run start) runs after the endpoint loop completes — including the zero-endpoint case, so a rebuild with no configured instances clears the core (fixed museion-D08; confirmed live 2026-09-11: after a zero-endpoint rebuild the `inMuseion` filter returned 0 results). Ids from Museion are expected trimmed: whitespace-suffixed shapes were observed on the 2026-09-06 deployment and were gone by 2026-09-10 after the provider and the integration both added trimming (per the issue thread); an unprefixed id shape may still occur (data-state observation below).
+- Filter mechanics: `inMuseion=true` adds an fq join from the helper index onto `ident_cely` (`{!join fromIndex=museion to=ident_cely from=amcrId}type:*`); matching docs additionally carry an `inMuseion` flag, and the per-row Museion button in the results list (`result-actions`) is gated on that per-doc flag through `withMuseion()` (an anchor `museion/<ident>` with `target="_blank"` and tooltip `museion.zobrazit_predmety`). The toolbar facet itself is gated on `config.showMuseion`.
 - Entity type mapping: `P` = projekt, `A` = akce, `N` = samostatny_nalez (the samostatny_nalez letter changed from legacy `S` to `N`; the statistika payload carries the type per id element).
 - Results page model: `pristup` (`FULL`/`BASIC`) is per record. Table mode = FULL when any `predmetSys` or `predmetPom` record has `pristup === "FULL"`, else BASIC. Full table renders the merged `predmetSys` + `predmetPom` rows against one shared column list of 36 columns with `pristup` first; the BASIC table renders the simplified single-column list. Cell values render raw (no date or number pipes) — API strings reach the DOM unchanged, which is what keeps dates in their API form; `null` renders as an empty cell.
-- Results page response handling: the fetch carries the entity type alongside the id (`museionPredmety(id, typ)`); the subscribe is guarded (`e.predmetyDleAmcrId && Object.keys(...).length > 0` gates the model population), `loading` clears on every path, and an error response triggers an alert dialog. With no data the organisation list stays empty and the template renders the `museion.not_found` message ("Záznam se nepodařilo najít.") instead of the table; the counters render through null-safe access.
+- Results page response handling: the page calls `museionPredmety(id, typ)` with the type unset (see the entity-type resolution above); the subscribe is guarded (`e.predmetyDleAmcrId && Object.keys(...).length > 0` gates the model population), `loading` clears on every path, and an error response triggers an alert dialog. With no data the organisation list stays empty and the template renders the `museion.not_found` message ("Záznam se nepodařilo najít.") instead of the table; the counters render through null-safe access.
 - Selector: organizations are the keys of `predmetyDleAmcrId` (only instances that returned data for the record are present); the label is the i18n key `museion.organizaceId` ("Správce sbírky"), rendered before the field. Counts shown from `pocetPom` / `pocetSys`.
 - Column headers render from i18n keys `museion.<column>` with tooltips from `museion.desc.<column>`; the leading `pristup` column labels from `museion.pristup` ("Přístup").
-- Table CSS: `table[mat-table]` uses `width: max-content; min-width: 100%; table-layout: auto`; header cells `min-width: max-content; white-space: nowrap`; `sbirka`/`popis` 220 px; `dataceVzniku`/`kontextPlocha` 140 px.
+- Table CSS: `table[mat-table]` uses `width: max-content; min-width: 100%; table-layout: auto`; header cells `min-width: max-content; white-space: nowrap`; `sbirka`/`popis` 220 px; `dataceVzniku`/`kontextPlocha` 140 px. The component styles carry no media queries — the page has no responsive handling (museion-D06).
 - Admin quick actions (config reload `config?reset=true`, Fedora index update `/api/fedora/index_update`, Museion index update `/api/mus/index`) live in the user menu, gated on `pristupnost === 'E'`.
 
 ### Feature or entity model
@@ -46,6 +47,7 @@
 4. No-data record (empty case): any entity id present in search but absent from the statistika lists — e.g. take the first result of `/api/search/query?entity=akce&rows=1&sort=ident_cely+asc` and confirm it is not in the lists.
 5. Unknown-id response shape: request `/api/mus/predmety_by_id?id=<syntactically valid nonexistent id>`.
 6. Filter effect check: run the same `/api/search/query?entity=<entity>&rows=0` request with and without `inMuseion=true` and compare `numFound`; with the filter on, matching docs carry the `inMuseion` flag.
+7. Deployed frontend chunks (client-side verification without a browser): fetch the page shell HTML for the script tag naming the current `main-*.js`, fetch that bundle, and extract the lazy chunk name from the text following the `museion/:id` route literal — the museion page chunk carries `columnsFull`, the guarded subscribe, the component CSS, and the template branches; the per-row Museion button lives in `result-actions` (in the eagerly loaded bundle tree). Chunk hashes change per build; the recipe survives them.
 
 ### Verification commands
 
@@ -55,70 +57,74 @@ Identifier-free, re-runnable against the test instance (rate-limit gently; anony
 curl.exe -s "https://digiarchiv-test.aiscr.cz/api/config"
 curl.exe -s "https://digiarchiv-test.aiscr.cz/api/mus/statistika"
 curl.exe -s "https://digiarchiv-test.aiscr.cz/api/mus/predmety_by_id?id=<AMCR_ID>"
-curl.exe -s "https://digiarchiv-test.aiscr.cz/api/search/museion"
+curl.exe -s -o NUL -w "%{http_code}" "https://digiarchiv-test.aiscr.cz/api/search/museion"
 curl.exe -s "https://digiarchiv-test.aiscr.cz/api/search/query?entity=akce&rows=0&inMuseion=true"
 curl.exe -s "https://digiarchiv-test.aiscr.cz/api/search/query?entity=akce&rows=0"
 ```
 
-`/api/mus/index` and `/api/fedora/index_update` are mutating and never probed by this scenario.
+`/api/mus/index` and `/api/fedora/index_update` are mutating and never probed by this scenario (the maintainer runs them during assisted checks).
 
-## Current verification (2026-09-10, digiarchiv-test.aiscr.cz, dev branch, anonymous session plus maintainer-performed checks)
+## Current verification (2026-09-11, digiarchiv-test.aiscr.cz, dev branch, anonymous session plus maintainer-performed checks)
+
+Regression pass after the 2026-09-10 verification and the subsequent fixes discussed in the issue thread (museion-D08 cleanup fix; museion-D07 resolution).
 
 ### Verified behaviour matrix
 
 | Capability | Result |
 | --- | --- |
-| Multi-instance configuration (three client accounts; statistics answer two organizations) | verified — both organizations answer through the app-mediated API |
-| Query fans out to all configured instances for both `predmetyDleAmcrId` and `predmetyStatistika` | verified (statistika covers both organizations; predmety responses can carry both) |
+| Multi-instance configuration (three client accounts; statistics answer two organizations) | verified — both organizations answer through the app-mediated API (fresh statistika) |
+| Query fans out to all configured instances for both `predmetyDleAmcrId` and `predmetyStatistika` | verified — a multi-organization record returns both blocks; statistika covers both organizations |
 | Union by `organizaceId` (same endpoint under multiple accounts) | verified — a multi-organization record returns both blocks |
-| Only instances that returned data for the record are offered in the selector | verified — a record held by one organization returns exactly that one |
-| Selector labeled "Správce sbírky", rendered before the field | verified (deployed i18n `museion.organizaceId` + template); maintainer browser check, 2026-09-10 |
-| Switching between instances loads that instance's data | verified (maintainer-assisted browser check, 2026-09-10) |
-| Information message when no instance returns data | verified — `museion.not_found` ("Záznam se nepodařilo najít.") renders for the empty case; maintainer browser check, 2026-09-10 |
-| Filter icon hidden when no Museion instance is configured | **failed** — live-tested by the maintainer 2026-09-10 (all endpoints removed from the config): `showMuseion` stays `true` in `/api/config` because the flag is an independent client-config key never derived from the configured instances — museion-D07 |
-| Helper index cleared when no instance is configured | **failed** — with zero endpoints `/api/mus/index` runs no cleanup (the delete runs only per processed endpoint); `/api/mus/statistika` correctly returns `{"statistika": {}}` but the filter still narrows akce to 6 from stale helper-index entries — museion-D08 |
-| Museion button on projekt, akce, samostatny_nalez result rows (docs with the `inMuseion` flag) | verified — filtered docs carry the flag; deployed results chunk gates the anchor on it |
-| Results open on a separate page in a new tab | verified — deployed results chunk anchor (`museion/<ident>`, `target="_blank"`); maintainer opened the pages during the checks |
-| Entity types P/A/N respected | verified — statistika ids carry `P`/`A`/`N`, including `N` for samostatny_nalez |
-| BASIC-only response → simplified table; any FULL → full table | verified — deployed mode logic (any `predmetSys`/`predmetPom` `pristup === "FULL"`); maintainer visual check |
-| Column order of the full table | verified — 36 columns with `pristup` first (`columnsFull` in the deployed chunk; i18n `museion.pristup`); maintainer visual check |
-| `predmetSys` / `predmetPom` share columns, no duplication | verified — one merged row list against one column list |
-| Dates rendered in API format (no unix timestamps) | verified — live responses carry ISO date strings; deployed cell rendering is raw interpolation with no date pipe |
-| Minimum column widths | verified — deployed component CSS (220 px / 140 px / header `max-content`); maintainer visual check |
-| Horizontal scrolling correctness incl. header/footer background | verified (maintainer-assisted browser check, 2026-09-10) |
-| `inMuseion` filter (helper index + join) | verified — the filter narrows akce from 172231 to 6 and matching docs carry the flag |
-| False zeros on BASIC records in mixed tables | verified fixed — the API serializes BASIC numeric fields as `null` and the cells render empty; maintainer visual check |
-| `/api/search/museion` endpoint | verified fixed — HTTP 500 (`No enum constant ...Actions.MUSEION`): the dead action is removed from the dispatch enum; not called by the frontend |
-| Empty-response robustness of the page | verified — guarded subscribe, `not_found` message, null-guarded counters |
-| Responsive layout of the results page | **failed** — selector and counts still squeeze on narrow viewports (museion-D06) |
-| Index refreshed by periodic job, not request cache | not verified — cron not confirmed (maintainer-assisted); `/api/mus/index` mutating, not probed |
-| Admin quick actions (level E user menu) | verified (maintainer-performed check, 2026-09-10) — actions present and working |
+| Only instances that returned data for the record are offered in the selector | verified — the response keys carry exactly the organizations with data; the no-data case returns an empty map |
+| Selector labeled "Správce sbírky", rendered before the field | verified — deployed i18n `museion.organizaceId` (fresh cs.json fetch); browser rendering checked by the maintainer 2026-09-10 |
+| Switching between instances loads that instance's data | not re-examined this run (browser check; maintainer-verified 2026-09-10) |
+| Information message when no instance returns data | verified — the no-data record returns `{"predmetyDleAmcrId": {}}` and the deployed page chunk carries the `not_found` branch; maintainer browser check 2026-09-10 |
+| Filter icon hidden when no Museion instance is configured | verified — maintainer config test 2026-09-11: with the Museion configuration removed the icon hides (the bundled default `showMuseion: false` was confirmed in the deployed default config; with the instances configured, `/api/config` serves `showMuseion: true`) — museion-D07 resolved |
+| Helper index cleared when no instance is configured | verified — maintainer zero-endpoint reindex re-test 2026-09-11: after the rebuild the `inMuseion` filter returned 0 results; the fix (`clean(start)` after the endpoint loop) confirmed in source; the endpoints were then restored and fresh probes confirm statistika answering both organizations and the filter back to its normal narrowing — museion-D08 resolved |
+| Museion button on projekt, akce, samostatny_nalez result rows (docs with the `inMuseion` flag) | verified — a freshly filtered doc carries `"inMuseion": true` and the join fq is present in the response params; the `result-actions` template gates the anchor on `withMuseion()` (source unchanged since the 2026-09-10 deployed-chunk verification) |
+| Results open on a separate page in a new tab | verified — the `result-actions` anchor (`museion/<ident>`, `target="_blank"`, tooltip `museion.zobrazit_predmety`); deployed-chunk verification 2026-09-10 |
+| Entity types P/A/N respected | verified — statistika ids carry `P`/`A`/`N`; the samostatny_nalez filter narrows to joinable docs |
+| BASIC-only response → simplified table; any FULL → full table | verified — deployed page chunk mode logic (any `predmetSys`/`predmetPom` `pristup === "FULL"`); maintainer visual check 2026-09-10 |
+| Column order of the full table | verified — `columnsFull` in the deployed page chunk starts with `pristup` (36 columns); deployed i18n `museion.pristup` ("Přístup") |
+| `predmetSys` / `predmetPom` share columns, no duplication | verified — one merged row list against one column list (deployed chunk) |
+| Dates rendered in API format (no unix timestamps) | verified — live responses carry ISO date strings; source template renders raw interpolation with no date pipe |
+| Minimum column widths | verified — deployed page chunk CSS (220 px / 140 px / header `max-content`) |
+| Horizontal scrolling correctness incl. header/footer background | not re-examined this run (browser check; maintainer-verified 2026-09-10) |
+| `inMuseion` filter (helper index + join) | verified — the filter narrows akce from 172231 to 13; matching docs carry the flag |
+| False zeros on BASIC records in mixed tables | verified — the live API serializes BASIC numeric fields as `null` (two-organization record with 2 BASIC + FULL rows) |
+| `/api/search/museion` endpoint | verified — HTTP 500 (`No enum constant ...Actions.MUSEION`); not called by the frontend |
+| Empty-response robustness of the page | verified — unknown id returns bare `{}`; the deployed subscribe is guarded and `loading` clears on every path |
+| Responsive layout of the results page | **failed** — no responsive handling exists in the source styles or the deployed page chunk (no media queries); maintainer-observed 2026-09-06 and 2026-09-10 (museion-D06) |
+| Index refreshed by periodic job, not request cache | not verified — cron still unconfirmed (maintainer-assisted); `/api/mus/index` mutating, run only by the maintainer during the re-test |
+| Admin quick actions (level E user menu) | verified — the maintainer used the Museion index update quick action for the D08 re-test (2026-09-11); full set maintainer-verified 2026-09-10 |
 
-### Defect outcomes since the 2026-09-06 verification
+### Defect outcomes since the 2026-09-10 verification
 
-- museion-D01: **fixed** — `columnsFull` in the deployed lazy chunk starts with `pristup` (36 columns) and the deployed Czech i18n carries `museion.pristup` ("Přístup") with its `desc` tooltip; maintainer visual check confirmed the rendered column.
-- museion-D02: **fixed** — the deployed template renders the `museion.not_found` branch when `organizaceIds` is empty, counters render null-guarded, and the maintainer browser check confirmed the message for a known record with no Museion data.
-- museion-D03: **fixed** — the live API serializes BASIC numeric fields as `null` (verified on a two-organization record with 2 BASIC + FULL rows); the maintainer visual check confirmed empty cells instead of zeros.
-- museion-D04: **fixed** — the unknown-id response is still bare `{}`, but the deployed subscribe is guarded and `loading` clears on every path, so the page renders the `not_found` message instead of spinning.
-- museion-D05: **fixed** — `/api/search/museion` now fails with HTTP 500 (`No enum constant ...Actions.MUSEION`); the dead action was removed from the dispatch enum and the misleading 200-with-NPE body is gone.
-- museion-D06: **still present** — maintainer browser check 2026-09-10: the selector and the pocetPom/pocetSys counts still squeeze on narrow viewports.
-- museion-D07: **new (minted in the same-day extension of this run)** — the maintainer removed all endpoints from the config and reindexed: the filter icon stays because `showMuseion` is never derived from `museion.end_points`.
-- museion-D08: **new (minted in the same-day extension of this run)** — the same zero-endpoint rebuild left the helper index stale (no cleanup executed); the `inMuseion` filter kept narrowing akce to 6 against an empty statistika.
+- museion-D01: **fixed (holds)** — `columnsFull` in the deployed page chunk starts with `pristup`; deployed i18n `museion.pristup` present.
+- museion-D02: **fixed (holds)** — the no-data API shape and the deployed `not_found` branch re-verified.
+- museion-D03: **fixed (holds)** — BASIC numeric fields serialize as `null` in the live response.
+- museion-D04: **fixed (holds)** — unknown id returns bare `{}`; the deployed guarded subscribe re-verified; the server-side type resolution (client omits `typ`) documented in durable knowledge.
+- museion-D05: **fixed (holds)** — `/api/search/museion` fails with HTTP 500.
+- museion-D06: **still present** — no responsive CSS in the source styles or the deployed page chunk; maintainer-observed 2026-09-06 and 2026-09-10.
+- museion-D07: **fixed (resolved)** — the maintainer's 2026-09-11 config test confirmed the icon hides when the Museion configuration is removed: the bundled default client config ships `showMuseion: false`, and the flag is enabled together with the Museion setup in the deployment's custom config, so removing the configuration hides the icon (config reset still required — the flag is not derived at runtime). The mechanism is documented in the issue thread; no code change was needed.
+- museion-D08: **fixed** — `clean(start)` now runs after the endpoint loop in `MuseionClient.indexStatistika()` (confirmed in source), and the maintainer's 2026-09-11 zero-endpoint reindex re-test confirmed the deployed build clears the helper core (the `inMuseion` filter returned 0 results after the rebuild; the normal state was restored afterwards and re-verified by fresh probes).
 
 ### Known defects
 
-- museion-D06 (cosmetic): **responsive view not optimised — the selector and the pocetPom/pocetSys counts squeeze on narrow viewports.** Maintainer-observed on 2026-09-06 and re-observed 2026-09-10; desktop rendering works as expected.
-- museion-D07 (functional): **the filter icon is not hidden when no Museion instance is configured.** `showMuseion` is an independent client-config key (`Options.getClientConf()` returns the merged client config as-is); it is never derived from the `museion` server section, so removing all configured endpoints leaves `showMuseion: true` and the icon visible. Verified live 2026-09-10 by the maintainer (all endpoints removed, `/api/config` still `"showMuseion": true`) and from source (`ConfigServlet`, `Options`). Hiding the icon currently requires manually setting `showMuseion: false`; consider deriving the flag from the configured instances (or documenting the manual switch).
-- museion-D08 (functional): **the helper index is not cleared when a rebuild runs with zero configured instances.** `MuseionClient.indexStatistika()` iterates the configured `end_points` and its stale-entry cleanup (`clean(start)`, `deleteByQuery` on `indextime`) executes only per processed endpoint; with an empty `end_points` array nothing is deleted, so the core keeps the previous entries. Verified live 2026-09-10: after the maintainer's reindex with zero endpoints, `/api/mus/statistika` returns `{"statistika": {}}` while `inMuseion=true` still narrows akce to 6.
+- museion-D06 (cosmetic): **responsive view not optimised — the selector and the pocetPom/pocetSys counts squeeze on narrow viewports.** Maintainer-observed on 2026-09-06 and re-observed 2026-09-10; the source styles and the deployed page chunk carry no media queries, so no fix has been attempted; desktop rendering works as expected.
 
 ### Data-state observations (not defects of this repository)
 
-- Museion-side id hygiene: the whitespace-suffixed shapes observed on 2026-09-06 (trailing space on `M-202500178`, trailing tab on `M-202601584-N00048`) are gone from the statistika payload — the provider (Axiell) and the integration both trim now (per the issue thread). The unprefixed id (`202609962`, typ P, in ORG-000071 `amcrIdPom`, alongside the prefixed `C-202609962`) remains and cannot join onto `ident_cely`.
-- On the test data, the `N`-type ids present in the Museion helper index still have no counterpart in the entities index (queries for `C-202609962-N00001`, `M-202601584-N00048`, `M-202500178-N00009` return `numFound: 0`), so the samostatny_nalez Museion filter still returns 0 — a test-data state, not a filter defect. Re-verify with fresh statistika before relying on it.
+- Museion-side id hygiene: the unprefixed id (`202609962`, typ P, in ORG-000071 `amcrIdPom`, alongside the prefixed `C-202609962`) is still present and cannot join onto `ident_cely`. The whitespace-suffixed shapes remain gone (trimmed on both sides since 2026-09-10).
+- The `N`-type join state observed on 2026-09-10 (N ids with no counterpart in the entities index → the samostatny_nalez filter returned 0) no longer holds: the test entities index now has counterparts and the samostatny_nalez Museion filter returns 3. Re-verify with fresh statistika before relying on it.
+- Current filter coverage on the test data: akce 13 (was 6 on 2026-09-10), projekt 7, samostatny_nalez 3; statistika per-organization counts: ORG-000071 pocetSysCelkem 3 / pocetPomCelkem 9, ORG-000077 pocetSysCelkem 22 / pocetPomCelkem 0.
 
 ### Corrections made during this run
 
-- One durable-knowledge correction: this scenario earlier claimed the `museion` config section drives `showMuseion` (no configured instance → icon hidden). The same-day extension of this run disproved it live — the maintainer removed all endpoints and the icon stayed, and the source (`ConfigServlet`, `Options`) shows `showMuseion` is an independent client-config key never derived from `end_points`. The durable knowledge above now states the corrected mechanism; the corresponding issue-comment check "Ověřit skrytí ikony filtru" is resolved as failed (museion-D07, museion-D08).
+- Two durable-knowledge corrections, each superseding a 2026-09-10 statement:
+  - The `showMuseion` claim ("removing all configured instances does not flip it and the icon stays… hiding requires setting `showMuseion: false` explicitly") was imprecise: the bundled default is `false`, so removing the whole Museion configuration (the flag enabled with it) also hides the icon — maintainer-confirmed live 2026-09-11 (museion-D07 resolved). The 2026-09-10 observation remains true for the narrower operation it tested (server-section endpoints removed, flag left `true`).
+  - The helper-index cleanup claim ("runs only per processed endpoint… with zero configured endpoints no cleanup runs") described the pre-fix code; the cleanup now runs after the endpoint loop, and the maintainer's live re-test confirmed the zero-endpoint rebuild clears the core (museion-D08 fixed).
+- One durable-knowledge refinement: the page fetch no longer "carries the entity type alongside the id" — the route has no type parameter, the request omits `typ`, and the servlet resolves the type server-side (documented under *Architecture and implementation facts*).
 
 ## Verification log
 
@@ -126,3 +132,4 @@ curl.exe -s "https://digiarchiv-test.aiscr.cz/api/search/query?entity=akce&rows=
 | --- | --- | --- |
 | 2026-09-06 | digiarchiv-test.aiscr.cz (dev branch) | First verification of the Museion integration (#553): multi-instance fan-out, union, selector, BASIC/FULL table logic, filter join, admin actions verified (admin and browser checks maintainer-performed); six defects minted (museion-D01 … museion-D06, with D03 re-opening an issue-marked-fixed item); Museion-side id-hygiene and missing-entity data states recorded as observations. |
 | 2026-09-10 | digiarchiv-test.aiscr.cz (dev branch) | Regression pass (#553) after the 2026-09-07 fixes: museion-D01–D04 verified fixed on the deployed build and live API, museion-D05 resolved by action removal (HTTP 500), museion-D06 still present; id whitespace trimmed on both sides, the unprefixed id remains; maintainer browser/admin checks re-confirmed selector switching, admin quick actions, and the visual table states. Same-day extension: the maintainer live-tested the zero-endpoint configuration (icon stays, helper index stale after reindex) — museion-D07 and museion-D08 minted and the `showMuseion` durable claim corrected; the test config was left with zero configured endpoints by the maintainer's test. |
+| 2026-09-11 | digiarchiv-test.aiscr.cz (dev branch) | Regression pass (#553) after the D08 fix and the D07 resolution: museion-D08 verified fixed in source and live (maintainer zero-endpoint reindex re-test — filter returns 0, then restored and re-verified), museion-D07 verified resolved by the maintainer's config test (icon hides when the Museion configuration is removed; default `showMuseion: false` confirmed in the deployed default config), museion-D01–D05 hold on the deployed build and live API, museion-D06 still present; N-type join state superseded (samostatny_nalez filter now returns 3), unprefixed id persists; durable knowledge corrected for the icon mechanism, the cleanup placement, and the server-side `typ` resolution; fresh frontend-chunk discovery recipe added. |
