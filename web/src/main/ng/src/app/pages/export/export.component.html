@@ -27,7 +27,7 @@
               <td>{{idx + 1}}</td>
               <td>{{ config.serverUrl + 'id/' + r['ident_cely']}}</td>
               @for (item of config.choiceApi; track item) {
-                <td>{{ item.url + r['ident_cely']}}</td>
+                <td>{{ item.url +  apiIdentCely(r, item) }}</td>
               }
               @for (field of config.exportFields[state.entity]; track field) {
                 @if (!field.hidden) {

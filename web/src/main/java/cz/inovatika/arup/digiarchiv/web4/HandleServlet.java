@@ -375,7 +375,7 @@ public class HandleServlet extends HttpServlet {
   }
 
   private static boolean isAllowed(String id, JSONObject doc, JSONObject user) {
-    if (id.contains("thumb") && !id.contains("page")) {
+    if (id.contains("thumb") && !id.contains("page") && !id.contains("thumb-large")) {
       return true;
     }
 
@@ -395,16 +395,17 @@ public class HandleServlet extends HttpServlet {
 
     switch (entity) {
       case "projekt":
-//-- A-B: nikdy
-//-- C: projekt/stav = 1 OR (projekt/stav >= 2 AND projekt/stav <= 6 AND projekt/organizace = {user}.organizace)
+//-- A-B: stav = 6
+//-- C: stav > 0
 //-- D-E: bez omezení
-        String docOrg = doc.optString("projekt_organizace");
-        boolean sameOrg = userOrg.toLowerCase().equals(docOrg.toLowerCase());
-        if (userPr.equalsIgnoreCase("C")
-                && ((stav == 1) || (sameOrg && stav <= 6))) {
-          return true;
+        if (userPr.compareToIgnoreCase("D") >= 0) {
+            return true;
+        } else if (userPr.equalsIgnoreCase("C") && stav >= 1) {
+            return true;
+        } else if (userPr.compareToIgnoreCase("B") <= 0 && stav == 6) {
+            return true;
         } else {
-          return userPr.compareToIgnoreCase("D") >= 0;
+            return false;
         }
       case "dokument":
       case "knihovna_3d":
@@ -521,7 +522,7 @@ public class HandleServlet extends HttpServlet {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
               .setFacet(false);
       //query.setFields("entity,is_deleted,searchable,stav");
-      query.setFields("entity,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
+      query.setFields("entity,komponenta_zdroj,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
       query.set("wt", "json");
       QueryResponse resp = client.query("entities", query);
 

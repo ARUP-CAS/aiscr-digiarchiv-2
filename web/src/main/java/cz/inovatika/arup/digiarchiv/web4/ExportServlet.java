@@ -194,8 +194,15 @@ public class ExportServlet extends HttpServlet {
       if (object != null) {
         String string = object.toString();
         if (object instanceof JSONArray) {
-          string = ((JSONArray)object).join(", "); 
+          string = "";
+          for (Object o: ((JSONArray)object).toList()) {
+            string += "; " + o.toString();
+          }
+          if (!string.isBlank()) {
+            string = string.substring(2);
+          }
         }
+          //string = (.join("; "); 
         if (!string.isEmpty() && (string.indexOf(delimiter) >= 0
                 || string.indexOf('\n') >= 0 || string.indexOf('\r') >= 0
                 || string.indexOf(0) >= 0 || string.charAt(0) == '"')) {
@@ -235,9 +242,15 @@ public class ExportServlet extends HttpServlet {
       if (object != null) {
         String string = object.toString();
         if (object instanceof JSONArray) {
-          string = ((JSONArray)object).join(", "); 
+          string = "";
+          for (Object o: ((JSONArray)object).toList()) {
+            string += "; " + o.toString();
+          }
+          if (!string.isBlank()) {
+            string = string.substring(2);
+          }
         }
-          cell.setCellValue(string);
+        cell.setCellValue(string);
       }
     }
   }

@@ -210,11 +210,22 @@ public class SolrSearcher {
   public static void addExportParams(SolrQuery query, String entity, String requestRows, String requestStart) {
     List<String> fs = new ArrayList();
     JSONArray choiceFields = Options.getInstance().getClientConf().getJSONArray("choiceApi");
+
+    
     fs.add("handle:concat('"+Options.getInstance().getClientConf().getString("serverUrl")+"id/', ident_cely)");
     for (int i = 0; i < choiceFields.length(); i++) {
-      String f = choiceFields.getJSONObject(i).getString("label") + ":concat('"
-      + choiceFields.getJSONObject(i).getString("url") + "', ident_cely)";
-      fs.add(f);
+      boolean useParent = choiceFields.getJSONObject(i).optBoolean("useParent");
+      if ("komponenta".equals(entity)) {
+        String f = choiceFields.getJSONObject(i).getString("label") + ":if(eq(komponenta_zdroj,'samostatny_nalez'),concat('"
+                  + choiceFields.getJSONObject(i).getString("url") + "', komponenta_zdroj_ident_cely),concat('"
+                  + choiceFields.getJSONObject(i).getString("url") + "', ident_cely))";
+        fs.add(f);
+      } else {
+        String f = choiceFields.getJSONObject(i).getString("label") + ":concat('"
+                  + choiceFields.getJSONObject(i).getString("url") + "', ident_cely)";
+        fs.add(f);
+      }
+      
     }
     
     JSONArray exFields = Options.getInstance().getClientConf().getJSONObject("exportFields").getJSONArray(entity);

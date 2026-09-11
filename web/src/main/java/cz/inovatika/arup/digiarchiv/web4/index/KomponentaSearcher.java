@@ -57,7 +57,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         }
 
         query = new SolrQuery("*")
-                //.addFilterQuery("komponenta_ident_cely:\"" + ident_cely + "\"")
+                .addFilterQuery("-entity:dokument")
                 .addFilterQuery("ident_cely:\"" + doc.getString("komponenta_zdroj_ident_cely") + "\"");
         query.setFields(akceFields);
         try {
@@ -76,9 +76,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         } catch (SolrServerException | IOException ex) {
           Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, "", ex);
         }
-      } catch (SolrServerException ex) {
-        Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, "", ex);
-      } catch (IOException ex) {
+      } catch (Exception ex) {
         Logger.getLogger(KomponentaSearcher.class.getName()).log(Level.SEVERE, "", ex);
       }
     }
@@ -175,26 +173,24 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
-      String organizace = doc.optString("akce_organizace");
-      String docPr = doc.getString("pristupnost");
 
-      boolean sameOrg = org.toLowerCase().equals(organizace.toLowerCase()) && "C".compareTo(pristupnost) >= 0;
-      if (docPr.compareToIgnoreCase(pristupnost) > 0 && !sameOrg) {
+      String docPr = doc.getString("pristupnost");
+      
+      if (docPr.compareToIgnoreCase(pristupnost) > 0) {
         doc.remove("chranene_udaje");
         doc.remove("az_chranene_udaje");
         doc.remove("akce_chranene_udaje");
-        
-                doc.remove("samostatny_nalez_chranene_udaje");
-                doc.remove("katastr");
-                doc.remove("f_katastr");
-                doc.remove("samostatny_nalez_katastr_" + pristupnost);
+        doc.remove("samostatny_nalez_chranene_udaje");
+        doc.remove("katastr");
+        doc.remove("f_katastr");
+        doc.remove("samostatny_nalez_katastr_" + pristupnost);
       }
     }
   }
 
   @Override
   public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
-    getRelated(jo, client, request, false);
+//    getRelated(jo, client, request, false);
     addPians(jo, client, request);
   }
 
@@ -237,6 +233,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                     .setParam("stats", false)
                     .setFacet(false);
                 JSONObject joPians = SearchUtils.json(query, client, "entities");
+                ps.filter(joPians, pristupnost, "");
                 doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs"));
             }
         }

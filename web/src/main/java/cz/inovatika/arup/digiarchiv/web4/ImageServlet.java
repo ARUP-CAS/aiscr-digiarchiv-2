@@ -19,6 +19,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -190,6 +191,23 @@ public class ImageServlet extends HttpServlet {
         MEDIUM {
             @Override
             void doPerform(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws Exception {
+                if (!ImageAccess.isAllowed(request, true)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    int code = HttpServletResponse.SC_FORBIDDEN;
+                    
+                    String msg = Options.getInstance().getJSONObject("Handle").optString("msg", "not_found");
+                    String cs = I18n.getInstance().getLocale("cs").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+                    String en = I18n.getInstance().getLocale("en").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+                    msg = msg.replaceAll("###code###", code + "").replaceAll("###code_txt_cs###", cs).replaceAll("###code_txt_en###", en);
+                    response.setContentType("text/html;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
+                    writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
+                    writer.print(msg);
+                    writer.print("</body></html>");
+          
+                    //response.getWriter().println("insuficient rights!!");
+                    return;
+                }
                 String id = request.getParameter("id"); 
                 if (id != null && !id.equals("")) {
                     try {
