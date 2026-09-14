@@ -279,7 +279,7 @@ public class HandleServlet extends HttpServlet {
     if (id != null && !id.equals("")) {
       File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR));
       try {
-        JSONObject doc = getDocument(id.replaceAll("/paradata", ""), user);
+        JSONObject doc = getDocumentFromFile(id.replaceAll("/paradata", ""), user);
         if (doc == null) {
           response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           return false;
@@ -374,7 +374,7 @@ public class HandleServlet extends HttpServlet {
     return true;
   }
 
-  private static boolean isAllowed(String id, JSONObject doc, JSONObject user) {
+  private static boolean isFileAllowed(String id, JSONObject doc, JSONObject user) {
     if (id.contains("thumb") && !id.contains("page") && !id.contains("thumb-large")) {
       return true;
     }
@@ -392,7 +392,6 @@ public class HandleServlet extends HttpServlet {
     if (user.has("organizace")) {
       userOrg = user.getJSONObject("organizace").optString("id", "");
     }
-
     switch (entity) {
       case "projekt":
 //-- A-B: stav = 6
@@ -487,7 +486,7 @@ public class HandleServlet extends HttpServlet {
 
           for (int i = 0; i < h.length(); i++) {
             JSONObject hi = h.getJSONObject(i);
-            if ("D01".equals(hi.optString("typ_zmeny"))) {
+            if ("SN01".equals(hi.optString("typ_zmeny"))) {
               uzivatel = hi.getJSONObject("uzivatel").getString("id");
             }
           }
@@ -558,7 +557,7 @@ public class HandleServlet extends HttpServlet {
     return code;
   }
 
-  private static JSONObject getDocument(String id, JSONObject user) {
+  private static JSONObject getDocumentFromFile(String id, JSONObject user) {
     try {
 
 //-- C-202300529/file/3a1a5793-535a-4352-884f-69756d51d9b2
@@ -587,7 +586,7 @@ public class HandleServlet extends HttpServlet {
       }
       JSONObject doc = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0);
 
-      if (!isAllowed(id, doc, user)) {
+      if (!isFileAllowed(id, doc, user)) {
 
         LOGGER.log(Level.WARNING, "{0} not allowed", id);
         return new JSONObject().put("not_allowed", true);

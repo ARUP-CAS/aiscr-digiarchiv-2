@@ -338,14 +338,13 @@ public class SamostatnyNalez implements FedoraModel {
         String userOrg = "none";
         if (user.has("organizace")) {
             userOrg = user.getJSONObject("organizace").optString("id", "");
-        }
+        } 
         JSONArray h = new JSONArray(doc.getFieldValues("historie"));
-      
-        if (st == 4 && docPr.equalsIgnoreCase("A")) {
+        if (st == 4 && userPr.equalsIgnoreCase("A")) {
           return true;
         } else if (userPr.equalsIgnoreCase("B")) {
-          if (docPr.compareToIgnoreCase("B") <= 0 && st == 4) {
-            return true;
+          if (st == 4) {
+            return true; 
           }
 
           String uzivatel = null;
@@ -359,7 +358,7 @@ public class SamostatnyNalez implements FedoraModel {
           return (userId.equals(uzivatel));
 
         } else if (userPr.equalsIgnoreCase("C")) {
-          if (docPr.compareToIgnoreCase("C") <= 0 && st == 4) {
+          if (st == 4) {
             return true;
           }
 
@@ -371,7 +370,7 @@ public class SamostatnyNalez implements FedoraModel {
 
           for (int i = 0; i < h.length(); i++) {
             JSONObject hi = new JSONObject(h.get(i).toString());
-            if ("D01".equals(hi.optString("typ_zmeny"))) {
+            if ("SN01".equals(hi.optString("typ_zmeny"))) {
               uzivatel = hi.getJSONObject("uzivatel").getString("id");
             }
           }
