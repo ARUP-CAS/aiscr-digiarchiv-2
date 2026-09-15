@@ -186,7 +186,7 @@
           </table>
 
           @if (_result().pian) {
-          <app-pian [result]="_result().pian[0]" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
+          <app-pian [result]="_result().pian[0]" [isChild]="true" [detailExpanded]="detailExpanded()" [inKomponenta]="true"></app-pian>
           }
 
           @if (_result().komponenta_nalez_objekt?.length > 0 || _result().komponenta_nalez_predmet?.length > 0) {
@@ -389,7 +389,7 @@
           </table>
 
           @if (_result().pian) {
-          <app-pian [result]="_result().pian[0]" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
+          <app-pian [result]="_result().pian[0]" [isChild]="true" [detailExpanded]="detailExpanded()" [inKomponenta]="true"></app-pian>
           }
         </mat-expansion-panel>
         <!-- <app-related [related]="related()" [mapDetail]="mapDetail()"></app-related> -->

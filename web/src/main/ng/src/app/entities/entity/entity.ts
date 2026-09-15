@@ -86,7 +86,7 @@ export class Entity {
   }
 
   ngOnInit(): void {
-      this._detailExpanded = this.detailExpanded() || this.inDocument();// && !this.mapDetail;
+      this._detailExpanded = this.detailExpanded() || this.inDocument() || this.isChild();// && !this.mapDetail;
     if (!this._result()) {
       return;
     }
