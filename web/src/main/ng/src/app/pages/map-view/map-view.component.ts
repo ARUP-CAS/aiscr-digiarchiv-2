@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 //import * as L from 'leaflet'
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { geoJSON, LatLng, LatLngBounds, Marker, tileLayer } from 'leaflet';
+import { geoJSON, LatLng, LatLngBounds, Marker, tileLayer, GeoJSON } from 'leaflet';
 
 import 'leaflet.markercluster';
 // import { locationFilter } from './location';
@@ -946,7 +946,7 @@ export class MapViewComponent {
       });
 
       // this.markersList.push(mrk);
-      mrk.addTo(this.markers)
+      mrk.addTo(this.markers);
       this.addShapeLayer(pian.ident_cely, pian.pian_presnost, pian.pian_chranene_udaje?.geom_wkt.value, docIds);
     });
   }
@@ -1076,9 +1076,12 @@ export class MapViewComponent {
             }
           }
         });
-        // Je to pian
+        // Je to pian 
         if (doc.pian_chranene_udaje) {
           this.addShapeLayer(doc.ident_cely, doc.pian_presnost, doc.pian_chranene_udaje?.geom_wkt.value, [doc.ident_cely]);
+        } else if (doc.entity === 'komponenta' && doc.pian[0].pian_chranene_udaje) {
+          // komponenta
+          this.addShapeLayer(doc.pian[0].ident_cely, doc.pian[0].pian_presnost, doc.pian[0].pian_chranene_udaje?.geom_wkt.value, [doc.ident_cely]);
         }
 
     });
@@ -1211,12 +1214,16 @@ export class MapViewComponent {
     return id + ' (' + this.service.getTranslation(presnost) + ') (' + t + ': ' + p + ')';
   }
 
-  shapes: any[] = [];
+  shapes: {id: string, layer: GeoJSON<any, any>}[] = [];
   activeLayer: string;
   addShapeLayer(ident_cely: string, presnost: string, geom_wkt_c: string, docIds: string[]) {
     if (this.config.mapOptions.skipShapePrecisionIds.includes(presnost)) {
       return;
     }
+    if (this.shapes.find((sh: {id: string, layer: GeoJSON<any, any>}) => sh.id === ident_cely)) {
+      return;
+    }
+    
     if (!geom_wkt_c) {
       return;
     }
@@ -1228,7 +1235,7 @@ export class MapViewComponent {
       wJson.docIds = docIds;
       wJson.presnost = presnost;
       if (wJson.type !== 'Point') {
-        const layer = geoJSON((wJson as any), {
+        const layer: GeoJSON<any, any> = geoJSON((wJson as any), {
           style: () => ({
             color: this.config.mapOptions.shape.color,
             weight: this.config.mapOptions.shape.weight,
@@ -1322,7 +1329,7 @@ export class MapViewComponent {
           // }
         });
 
-        this.shapes.push(layer);
+        this.shapes.push({id: ident_cely, layer});
         layer.addTo(this.markers);
         if (this.mapIdChanged && this.currentMapId && this.currentPianId === ident_cely) {
           this.fitBounds(layer.getBounds(), { paddingTopLeft: [21, 21], paddingBottomRight: [21, 21] });
@@ -1339,15 +1346,15 @@ export class MapViewComponent {
 
     const clickedPoint = turf.point([latlng.lng, latlng.lat]);
     const layers: any[] = [];
-    this.shapes.forEach(layer => {
-      const sh = layer.getLayers()[0];
+    this.shapes.forEach((s:{id: String, layer: any}) => {
+      const sh = s.layer.getLayers()[0];
       if (sh.feature.geometry.type === 'Polygon') {
         if (turf.booleanPointInPolygon(clickedPoint, sh.feature as any)) {
-          layers.push(layer);
+          layers.push(s.layer);
         }
       } else if (sh.feature.geometry.type === 'LineString') {
         if (turf.booleanPointOnLine(clickedPoint, sh.feature as any, { epsilon: 0.0000000001 })) {
-          layers.push(layer);
+          layers.push(s.layer);
         }
       }
 
