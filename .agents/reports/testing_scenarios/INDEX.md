@@ -4,6 +4,7 @@
 
 | Scenario | Kind | Features | Entities | Surfaces | Driving issues | Last verified |
 | --- | --- | --- | --- | --- | --- | --- |
+| [`date-filters`](date-filters.md) | feature | search date filters, search year filters, datepicker localization | akce, dokument | results facet panel (client-rendered), stats page datepickers (client-rendered), search API (/api/search/query), client config (/api/config), Angular bundles (main + facets chunk) | ARUP-CAS/aiscr-digiarchiv-2#893 | 2026-09-15 |
 | [`export`](export.md) | feature | export | dokument, akce, lokalita, projekt, samostatny_nalez, knihovna_3d, komponenta | export page (/export), map export page (/export-mapa), export API (/api/exp), export listing API (/api/search/export), map export listing API (/api/search/export_mapa), map search API (/api/search/query) | ARUP-CAS/aiscr-digiarchiv-2#148 | 2026-09-11 |
 | [`file-distributions`](file-distributions.md) | feature | file distributions, paradata | dokument, knihovna_3d, samostatny_nalez | reader image surface, File API, OAI-PMH, search facets | ARUP-CAS/aiscr-digiarchiv-2#693 | 2026-09-10 |
 | [`komponenta`](komponenta.md) | entity | komponenta record type | komponenta | record page, entity search and facets, map, export, handle API | ARUP-CAS/aiscr-digiarchiv-2#127 | 2026-09-15 |

@@ -59,3 +59,13 @@ entities = []
 surfaces = ["footer (client-rendered)", "Angular main bundle", "npm/Maven build chain", "release workflow (new-version.yml)"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#1113"]
 last_verified = "2026-09-10"
+
+[[scenario]]
+key = "date-filters"
+kind = "feature"
+title = "Search date and year filters"
+features = ["search date filters", "search year filters", "datepicker localization"]
+entities = ["akce", "dokument"]
+surfaces = ["results facet panel (client-rendered)", "stats page datepickers (client-rendered)", "search API (/api/search/query)", "client config (/api/config)", "Angular bundles (main + facets chunk)"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#893"]
+last_verified = "2026-09-15"
