@@ -7,7 +7,7 @@
   }
   <mat-card-header>
     <mat-card-title class="app-fxLayout app-row app-center-v app-gap-4">
-      <div class="app-fxFlex" (click)="service.showInMap(_result, false, false, isChild())">
+      <div class="app-fxFlex" (click)="service.showInMap(_result(), false, false, isChild())">
         @if (!state.isMapaCollapsed && !isChild() && !mapDetail()) {
         <a class="app-icon-info"><mat-icon>info</mat-icon></a>
         }
@@ -120,7 +120,7 @@
           }<span class="app-pipe"></span>
         </div>
         }
-        @if (_result().dokument_extra_data.odkaz) {
+        @if (_result().dokument_extra_data?.odkaz) {
         <div>
           <label class="app-label">{{'card.desc.Odkaz' | translate}}:</label>&#160;
           <a [href]="_result().dokument_extra_data.odkaz" target="_blank">{{ _result().dokument_extra_data.odkaz }}</a>
@@ -350,7 +350,7 @@
                 <td>{{ _result().dokument_extra_data.pocet_variant_originalu }}</td>
               </tr>
               }
-              @if (_result().dokument_extra_data.odkaz && _result().entity !== 'knihovna_3d') {
+              @if (_result().dokument_extra_data?.odkaz && _result().entity !== 'knihovna_3d') {
               <tr>
                 <th class="app-label">{{ 'card.desc.Odkaz' | translate }}:</th>
                 <td><a [href]="_result().dokument_extra_data.odkaz"

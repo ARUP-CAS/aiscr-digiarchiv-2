@@ -740,10 +740,11 @@
             "f_tvar:dokument_tvar.tvar.id", 
             "f_tvar:dokument_tvar[0].tvar.id",
             "az_chranene_udaje",
+            "lng", "lat", "loc", "loc_rpt", 
             "dokument_extra_data"
          ],
         "parent":[
-            "f_kraj",
+            "f_kraj", "f_kraj_rada",
             "f_okres",
             "f_katastr",
             "lng", "lat", "loc", "loc_rpt", 
