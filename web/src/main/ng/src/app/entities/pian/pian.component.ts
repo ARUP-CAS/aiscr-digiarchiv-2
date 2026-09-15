@@ -1,5 +1,5 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -39,6 +39,8 @@ import { Entity } from '../entity/entity';
   styleUrls: ['./pian.component.scss']
 })
 export class PianComponent extends Entity {
+
+  inKomponenta = input<boolean>(false);
 
   override setBibTex() {
     const now = this.datePipe.transform(new Date(), 'yyyy-MM-dd');

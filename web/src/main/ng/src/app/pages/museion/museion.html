@@ -7,7 +7,7 @@
 	@if(!loading()) {
 		<div class="app-fxFlex app-fxLayout app-column app-gap-4">
 			@if(organizaceIds().length > 0){
-			<div class="app-fxLayout app-row app-gap-4 app-center-v">
+			<div class="app-fxLayout app-row app-gap-4 app-center-v app-controlbar">
 				<mat-form-field appearance="outline">
 					<mat-label>{{ 'museion.organizaceId' | translate}}: </mat-label>
 					<mat-select [(ngModel)]="selectedOrganizace" (selectionChange)="selectOrganizace()">

@@ -22,10 +22,36 @@
           <app-inline-filter [field]="'f_pian_zm10'" [value]="_result().pian_chranene_udaje.zm10"></app-inline-filter>
         </div>
       }
+
       @if (_result().lat) {
         <div>
           <label class="app-label">{{ 'card.desc.Definiční bod (WGS-84)' | translate }}:</label>&#160;{{ _result().lat[0] }} : {{ _result().lng[0] }}
         </div>
+      }
+      
+      @if(inKomponenta()) {
+        @if (_result().pian_geom_system) {
+          <div>
+            <label class="app-label">{{ 'card.desc.geom_system' | translate }}:</label>&#160;{{ _result().pian_geom_system }}
+          </div>
+        }
+        @if (_result().pian_chranene_udaje?.geom_gml) {
+          <div>
+            <label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>&#160;{{ _result().pian_chranene_udaje.geom_gml }}
+                          @if (_result().pian_chranene_udaje?.geom_sjtsk_gml) {
+                            <br/> {{ _result().pian_chranene_udaje.geom_sjtsk_gml }}
+                          } 
+          </div>
+        }
+        @if (_result().pian_chranene_udaje?.geom_wkt) {
+          <div>
+          <label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>&#160;EPSG:{{ _result().pian_chranene_udaje.geom_wkt.epsg }}, {{ _result().pian_chranene_udaje.geom_wkt.valulue }}
+          @if (_result().pian_chranene_udaje?.geom_sjtsk_wkt) {
+            <div>EPSG:{{ _result().pian_chranene_udaje.geom_sjtsk_wkt.epsg }},
+            {{ _result().pian_chranene_udaje.geom_sjtsk_wkt.value }}</div>
+          }
+          </div>
+        }
       }
     </mat-expansion-panel>
   }

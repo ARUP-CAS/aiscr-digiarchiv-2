@@ -744,6 +744,7 @@ export class AppService {
 
 
   setMapResult(result: any, mapDetail: any) {
+    console.log(result)
     if (!result && mapDetail) {
       // zavirame kartu
       const inResults = this.router.isActive('results', { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' });
@@ -765,6 +766,7 @@ export class AppService {
   }
 
   showInMap(result: any, isMapDetail = true, force = false, isChild = false) {
+    console.log(result, isMapDetail, force, isChild)
     if ((!force && this.state.isMapaCollapsed) || isMapDetail || isChild) {
       return;
     }
