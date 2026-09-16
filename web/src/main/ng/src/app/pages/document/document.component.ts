@@ -80,7 +80,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.state.imagesLoading = this.state.imagesLoaded < this.state.numImages;
         this.tryPrint();
       } else {
-        this.state.loading.set(true);
+        this.state.printing.set(true);
         this.service.print();
       }
     }, 2000);
