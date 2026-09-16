@@ -107,7 +107,7 @@ export class StatsComponent implements OnInit {
     
   cores_info = signal<any>(null); 
   
-  ruian = signal<{ name: string, type: string, value: number }[]>([]);
+  ruian = signal<[string, number][]>([]);
 
   constructor(
     private datePipe: DatePipe,

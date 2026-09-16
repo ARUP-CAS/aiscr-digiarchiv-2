@@ -206,8 +206,8 @@
               <div class="app-item"> --- </div>
               @for (c of ruian(); track $index) {
                   <div class="app-item">
-                    <span><strong>{{ c.name | translate }}</strong></span><span class="app-count">({{ c.value }})</span>
-                      <a [title]="'stats.export' | translate" (click)="exportStats('ruian', c.name, c.name)" class="app-small-icon">
+                    <span><strong>{{ c[0] | translate }}</strong></span><span class="app-count">({{ c[1] }})</span>
+                      <a [title]="'stats.export' | translate" (click)="exportStats('ruian', c[0], c[0])" class="app-small-icon">
                         <mat-icon class="app-small-icon">open_in_new</mat-icon>
                       </a>
                   </div>
