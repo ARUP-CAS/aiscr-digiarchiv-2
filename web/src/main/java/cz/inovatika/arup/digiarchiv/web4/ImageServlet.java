@@ -19,12 +19,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.request.SolrQuery;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -75,7 +76,7 @@ public class ImageServlet extends HttpServlet {
         }
     }
 
-    private static BufferedImage logoImg(HttpServletResponse response, OutputStream out, ServletContext ctx) throws IOException {
+    private static BufferedImage logoImg(OutputStream out, ServletContext ctx) throws IOException {
         String empty = ctx.getRealPath(File.separator) + "/assets/img/logo-watermark-white.png";
         return ImageIO.read(new File(empty));
 
@@ -90,7 +91,7 @@ public class ImageServlet extends HttpServlet {
     }
 
     private static JSONObject getDocument(String id) throws Exception {
-        try (SolrClient solr = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient solr = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("*") 
                     .addSort("datestamp", SolrQuery.ORDER.desc)
                     .setFields("entity,soubor:[json]")
@@ -117,7 +118,7 @@ public class ImageServlet extends HttpServlet {
         return null;
     }
 
-    private static void writeImg(HttpServletResponse response, String id, String imgSize, ServletContext ctx) throws Exception {
+    private static void writeImg(HttpServletResponse response, String id, String imgSize, String dist, ServletContext ctx) throws Exception {
 
         SolrQuery query = new SolrQuery();
         query.setQuery("id:\"" + id + "\"");
@@ -136,6 +137,8 @@ public class ImageServlet extends HttpServlet {
             url = url.substring(url.indexOf("record"));
         }
         
+        
+        
         InputStream is = FedoraUtils.requestInputStream(url); 
 
         if (is != null) {
@@ -147,7 +150,7 @@ public class ImageServlet extends HttpServlet {
             // BufferedImage bi = ImageIO.read(f);
             BufferedImage bi = ImageIO.read(is);
             if (bi != null) {
-                ImageSupport.addWatermark(bi, logoImg(response, response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
+                ImageSupport.addWatermark(bi, logoImg(response.getOutputStream(), ctx), (float) Options.getInstance().getDouble("watermark.alpha", 0.2f));
                 ImageIO.write(bi, mime.split("/")[1], response.getOutputStream());
             } else {
                 LOGGER.log(Level.FINE, "Response is not image {0}. ", id);
@@ -172,10 +175,10 @@ public class ImageServlet extends HttpServlet {
                 String id = request.getParameter("id");
                 if (id != null && !id.equals("")) {
                     try {
-                        writeImg(response, id, "thumb", ctx);
+                        writeImg(response, id, "thumb", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
                         LOGGER.log(Level.SEVERE, "Error getting thumb from fedora"); 
-                        LOGGER.log(Level.SEVERE, null, ex);    
+                        LOGGER.log(Level.SEVERE, "", ex);    
                         emptyImg(response, ctx);
                     }
                 } else {
@@ -188,12 +191,29 @@ public class ImageServlet extends HttpServlet {
         MEDIUM {
             @Override
             void doPerform(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws Exception {
+                if (!ImageAccess.isAllowed(request, true)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    int code = HttpServletResponse.SC_FORBIDDEN;
+                    
+                    String msg = Options.getInstance().getJSONObject("Handle").optString("msg", "not_found");
+                    String cs = I18n.getInstance().getLocale("cs").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+                    String en = I18n.getInstance().getLocale("en").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+                    msg = msg.replaceAll("###code###", code + "").replaceAll("###code_txt_cs###", cs).replaceAll("###code_txt_en###", en);
+                    response.setContentType("text/html;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
+                    writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
+                    writer.print(msg);
+                    writer.print("</body></html>");
+          
+                    //response.getWriter().println("insuficient rights!!");
+                    return;
+                }
                 String id = request.getParameter("id"); 
                 if (id != null && !id.equals("")) {
                     try {
-                        writeImg(response, id, "thumb-large", ctx);
+                        writeImg(response, id, "thumb-large", request.getParameter("dist"), ctx);
                     } catch (Exception ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.SEVERE, "", ex);
                         emptyImg(response, ctx);
                     }
                 } else {
@@ -206,14 +226,32 @@ public class ImageServlet extends HttpServlet {
         FULL {
             @Override
             void doPerform(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws Exception {
+              
+              String id = request.getParameter("id");
+              
+              //rate-limit
+              String ip = request.getRemoteAddr();
+              long retryTime = AppState.canGetFileInterval(ip, id); //miliseconds
+              if (retryTime > 0) {
+                response.setStatus(429); // 429 Too Many Requests
+                response.addHeader("Retry-After", retryTime/1000 + "");
+                response.getWriter().print("Try in " + retryTime/1000 + " seconds.");
+                return;
+              } else if (retryTime == -1) {
+                response.setStatus(429); // 429 Too Many Requests
+                response.getWriter().print("Downloading file still in progress. Try later.");
+                return;
+              }
+        
                 if (!ImageAccess.isAllowed(request, true)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().println("insuficient rights!!");
                     return;
                 }
-                String id = request.getParameter("id");
+                String dist = request.getParameter("dist");
+                boolean distExists = false;
                 if (id != null && !id.equals("")) {
-                        File f = File.createTempFile("img-", "-orig", new File(InitServlet.TEMP_DIR ));
+                        File f = File.createTempFile("img-", "-"+dist.replace("/", ""), new File(InitServlet.TEMP_DIR ));
                     try {
 
                         JSONObject doc = getDocument(id);
@@ -222,17 +260,33 @@ public class ImageServlet extends HttpServlet {
                         }
 
                         String mime = doc.getString("mimetype");
+                        String filename = doc.getString("nazev");
+                        JSONArray distribuce = doc.getJSONArray("distribuce");
+                        for (int i =0 ; i< distribuce.length(); i++) {
+                          JSONObject d = distribuce.getJSONObject(i);
+                          if (dist.equals(d.optString("path"))) {
+                            mime = d.optString("mimetype");
+                            filename = d.optString("filename");
+                            distExists = true;
+                          }
+                        }
+                        if (!distExists) {
+                            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                            response.getWriter().println("Distribuce not found");
+                            return;
+                        }
                         if (mime != null) {
                             response.setContentType(mime);
                         } else {
                             response.setContentType("image/jpeg");
                         }
-                        response.setHeader("Content-Disposition", "filename=" + doc.getString("nazev"));
+                        response.setHeader("Content-Disposition", "filename=" + filename);
                         
-                        String url = doc.getString("path") + "/orig";
+                        String url = doc.getString("path") + "/" + dist;
                         if ( url.contains("record")) {
                             url = url.substring(url.indexOf("record"));
                         }
+                        
                         InputStream is = FedoraUtils.requestInputStream(url);
                         FileUtils.copyInputStreamToFile(is, f);
                         LOGGER.log(Level.FINE, "bytes received: {0}", f.length());
@@ -243,7 +297,7 @@ public class ImageServlet extends HttpServlet {
                         is.close();
 
                     } catch (Exception ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.SEVERE, "", ex);
                         emptyImg(response, ctx);
                     } finally {
                         f.delete(); 

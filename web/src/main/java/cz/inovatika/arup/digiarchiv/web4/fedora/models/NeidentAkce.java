@@ -60,18 +60,27 @@ public class NeidentAkce {
     @Field
     public String pian; 
 
-    public void fillSolrFields(SolrInputDocument idoc, String pristupnost) {
+    public void fillSolrFields(SolrInputDocument idoc, SolrInputDocument dcdoc, String pristupnost) {
         DocumentObjectBinder dob = new DocumentObjectBinder();
         SolrInputDocument kdoc = dob.toSolrInputDocument(this);
         IndexUtils.addRefField(kdoc, "okres", okres);
         IndexUtils.addRefField(kdoc, "katastr", katastr);
         IndexUtils.addFieldNonRepeat(idoc, "f_okres", okres.getValue());
-        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", SolrSearcher.getKrajByOkres(okres.getId()).getString("kraj")); 
+        IndexUtils.addFieldNonRepeat(dcdoc, "f_okres", okres.getValue());
+        
+        JSONObject okresIndex = SolrSearcher.getOkresByKod(okres.getId());
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj", okresIndex.optString("kraj"));
+        IndexUtils.addFieldNonRepeat(idoc, "f_kraj_rada", okresIndex.getString("rada_id"));
+        IndexUtils.addFieldNonRepeat(dcdoc, "f_kraj", okresIndex.optString("kraj"));
+        IndexUtils.addFieldNonRepeat(dcdoc, "f_kraj_rada", okresIndex.getString("rada_id"));
+            
         IndexUtils.addSecuredFieldNonRepeat(idoc, "f_katastr", katastr.getValue(), "A");
+        IndexUtils.addSecuredFieldNonRepeat(dcdoc, "f_katastr", katastr.getValue(), "A");
 
         for (Vocab v : vedouci) {
             IndexUtils.addRefField(kdoc, "vedouci", v);
             IndexUtils.addRefField(idoc, "f_vedouci", v);
+            IndexUtils.addRefField(dcdoc, "f_vedouci", v);
         }
         
         JSONObject li = new JSONObject()
@@ -80,6 +89,7 @@ public class NeidentAkce {
                 .put("okres", kdoc.getFieldValue("okres"));
         
         SolrSearcher.addFieldNonRepeat(idoc, "location_info", li.toString());
+        SolrSearcher.addFieldNonRepeat(dcdoc, "location_info", li.toString());
         
         idoc.addField("neident_akce_rok_zahajeni", rok_zahajeni);
         idoc.addField("neident_akce_rok_ukonceni", rok_ukonceni);

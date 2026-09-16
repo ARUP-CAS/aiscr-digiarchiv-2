@@ -18,7 +18,7 @@ public class JednotkaDokumentuSearcher implements ComponentSearcher {
   private boolean parentSearchable;
 
   @Override
-  public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request) {
+  public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request) {
 
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
@@ -29,7 +29,7 @@ public class JednotkaDokumentuSearcher implements ComponentSearcher {
         JSONArray cdjs = doc.getJSONArray("dokument");
         for (int j = 0; j < cdjs.length(); j++) {
           String cdj = cdjs.getString(j);
-          JSONObject sub = SolrSearcher.getById(client, cdj, fields);
+          JSONObject sub = SolrSearcher.getById(client, cdj, fields, false);
           if (sub != null) {
             doc.append("dokumenty", sub);
           parentSearchable = true;

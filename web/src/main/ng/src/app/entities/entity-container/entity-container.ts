@@ -36,12 +36,12 @@ import { KomponentaDokumentComponent } from "../komponenta-dokument/komponenta-d
     forwardRef(() => ProjektComponent),
     forwardRef(() => AkceComponent),
     forwardRef(() => LokalitaComponent),
+    forwardRef(() => KomponentaComponent),
     MatCardModule, MatButtonModule, MatIconModule,
     PianComponent,
     ExterniZdrojComponent,
     AdbComponent,
     DokJednotkaComponent,
-    KomponentaComponent,
     DokumentCastComponent,
     LetComponent,
     VyskovyBodComponent,
@@ -51,7 +51,6 @@ import { KomponentaDokumentComponent } from "../komponenta-dokument/komponenta-d
   styleUrl: './entity-container.scss'
 })
 export class EntityContainer  {
-  // entity = input<string>();
   result = input<any>();
 
   inDocument = input<boolean>(false);

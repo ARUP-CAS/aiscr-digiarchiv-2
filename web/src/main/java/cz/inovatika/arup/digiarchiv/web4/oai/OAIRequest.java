@@ -31,9 +31,9 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -68,7 +68,7 @@ public class OAIRequest {
                 dcTransformer.setParameter("base_url", Options.getInstance().getJSONObject("OAI").getString("baseUrl"));
                 dcTransformers.put(xmlns_amcr, dcTransformer);
             } catch (IOException ex) {
-                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             }
         }
         return dcTransformers.get(xmlns_amcr);
@@ -149,7 +149,7 @@ public class OAIRequest {
     }
 
     public static String metadataFormats(HttpServletRequest req, String version) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             String identifier = req.getParameter("identifier");
             if (identifier != null) {
@@ -174,13 +174,13 @@ public class OAIRequest {
                     .append("</OAI-PMH>");
             return ret.toString();
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return ex.toString();
         }
     }
 
     private static void storeResumptionToken(String token, JSONObject data) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrInputDocument idoc = new SolrInputDocument();
             idoc.setField("id", token);
             idoc.setField("type", "resumptionToken");
@@ -196,13 +196,13 @@ public class OAIRequest {
             client.add("work", idoc);
             client.commit("work");
         } catch (Exception ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
         }
 
     }
 
     private static JSONObject retrieveResumptionToken(String resumptionToken) {
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             SolrQuery query = new SolrQuery("id:" + resumptionToken)
                     .setFields("data:[json]")
                     .addFilterQuery("type:resumptionToken")
@@ -215,7 +215,7 @@ public class OAIRequest {
             SolrDocument doc = docs.get(0);
             return new JSONObject((String) doc.getFirstValue("data"));
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return null;
         }
     }
@@ -322,7 +322,7 @@ public class OAIRequest {
             ret.append("<ListRecords>");
         }
 
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String model = req.getParameter("set");
             String from = req.getParameter("from");
             String until = req.getParameter("until");
@@ -439,13 +439,13 @@ public class OAIRequest {
             }
 
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         } catch (Exception ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         }
         if (onlyIdentifiers) {
@@ -493,7 +493,7 @@ public class OAIRequest {
                 .append(requestTag(req, version));
 
         ret.append("<GetRecord>\n");
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
             String prefix = Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/id/";
             if (req.getParameter("identifier").length() < prefix.length()) {
                 return idDoesNotExist(req, version);
@@ -510,10 +510,10 @@ public class OAIRequest {
 
             appendRecord(ret, doc, req, false, metadataPrefix, version);
         } catch (SolrServerException | IOException ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         } catch (Exception ex) {
-            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
             return badArgument(req, version);
         }
         ret.append("</GetRecord>\n</OAI-PMH>");
@@ -574,7 +574,7 @@ public class OAIRequest {
                         xmlns_amcr = "https://api.aiscr.cz/schema/amcr/2.2/";
                     }                    
                 } catch (TransformerException ex) {
-                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
                 }
             }
 
@@ -582,7 +582,7 @@ public class OAIRequest {
                 try {
                     xml = transformToDC(xml, xmlns_amcr);
                 } catch (TransformerException ex) {
-                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
                 }
             }
             ret.append(xml);
@@ -609,7 +609,7 @@ public class OAIRequest {
         if (fm.filterOAI(LoginServlet.user(req), doc)) {
             long stav = 0;
             if (doc.containsKey("stav")) {
-                stav = (long) doc.getFieldValue("stav");
+                stav = ((Number) doc.getFieldValue("stav")).longValue();
             }
             String ret = xml;
             if (ret.contains("<amcr:oznamovatel>")
@@ -649,7 +649,7 @@ public class OAIRequest {
             try {
                 return transformToForbidden(xml);
             } catch (TransformerException ex) {
-                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
                 return ERROR_404_MSG;
             }
         }

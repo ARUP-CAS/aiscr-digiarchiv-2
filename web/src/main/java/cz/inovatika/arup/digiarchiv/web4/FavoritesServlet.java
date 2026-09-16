@@ -9,12 +9,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
-import org.apache.solr.client.solrj.impl.NoOpResponseParser; 
+import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.InputStreamResponseParser;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
 import org.json.JSONObject;
@@ -76,7 +77,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
 
@@ -116,7 +117,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
           if (ses == null) {
@@ -149,7 +150,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
           if (ses == null) {
@@ -163,13 +164,11 @@ public class FavoritesServlet extends HttpServlet {
             SolrQuery query = new SolrQuery("uniqueid:" + username + "_" + docid).setRows(1);
 
             QueryRequest qreq = new QueryRequest(query);
-
-            NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
-            rawJsonResponseParser.setWriterType("json");
-            qreq.setResponseParser(rawJsonResponseParser);
-
+            
+            qreq.setResponseParser(new InputStreamResponseParser("json"));
             NamedList<Object> sresp = client.request(qreq, "favorites");
-            return new JSONObject((String) sresp.get("response"));
+            InputStream is = (InputStream) sresp.get("stream");
+            return new JSONObject(IOUtils.toString(is, "UTF-8"));
 
           }
         } catch (Exception ex) {
@@ -185,7 +184,7 @@ public class FavoritesServlet extends HttpServlet {
 
         JSONObject json = new JSONObject();
 
-        try (SolrClient client = new HttpJdkSolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
 
           JSONObject ses = (JSONObject) req.getSession().getAttribute("user");
           if (ses == null) {
@@ -198,13 +197,11 @@ public class FavoritesServlet extends HttpServlet {
             SolrQuery query = new SolrQuery("username:" + username).setRows(100);
 
             QueryRequest qreq = new QueryRequest(query);
-
-            NoOpResponseParser rawJsonResponseParser = new NoOpResponseParser();
-            rawJsonResponseParser.setWriterType("json");
-            qreq.setResponseParser(rawJsonResponseParser);
-
+            
+            qreq.setResponseParser(new InputStreamResponseParser("json"));
             NamedList<Object> sresp = client.request(qreq, "favorites");
-            return new JSONObject((String) sresp.get("response"));
+            InputStream is = (InputStream) sresp.get("stream");
+            return new JSONObject(IOUtils.toString(is, "UTF-8"));
 
           }
         } catch (Exception ex) {

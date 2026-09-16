@@ -106,7 +106,7 @@ public class PIAN implements FedoraModel {
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
 //-- A: stav = 2
 //-- B-E: bez omezení
-        long st = (long) doc.getFieldValue("stav");
+        long st = ((Number) doc.getFieldValue("stav")).longValue();
         String userPr = user.optString("pristupnost", "A");
         if (userPr.compareToIgnoreCase("B") >= 0) {
             return true;
@@ -150,7 +150,7 @@ class PIANChraneneUdaje {
             geom_sjtsk_gml = FedoraModel.getAsXml(geom_sjtsk_gml); 
             // System.out.println(xml);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PIANChraneneUdaje.class.getName()).log(Level.SEVERE, "", ex);
         }
         
     IndexUtils.addSecuredFieldNonRepeat(idoc, "f_pian_zm10", zm10, pristupnost);
