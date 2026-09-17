@@ -728,7 +728,7 @@
             "f_specifikace:komponenta_nalez_predmet[*].specifikace.id"
         ],
         "root":[
-            "f_vedouci", "f_kraj_rada",
+            "f_vedouci", "f_kraj_rada", "stav", 
             "f_organizace",
             "f_organizace:dokument_organizace",
             "f_typ_vyzkumu",

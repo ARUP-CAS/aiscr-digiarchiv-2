@@ -13,9 +13,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { InlineFilterComponent } from '../../components/inline-filter/inline-filter.component';
 import { ResultActionsComponent } from '../../components/result-actions/result-actions.component';
-import { AkceComponent } from '../akce/akce.component';
-import { DokumentComponent } from "../dokument/dokument.component";
-import { LokalitaComponent } from "../lokalita/lokalita.component";
 import { NalezComponent } from "../nalez/nalez.component";
 import { Entity } from '../entity/entity';
 import { DokJednotkaComponent } from "../dok-jednotka/dok-jednotka.component";
@@ -30,9 +27,6 @@ import { RelatedComponent } from '../../components/related/related.component';
     InlineFilterComponent, MatButtonModule,
     ResultActionsComponent,
     forwardRef(() => RelatedComponent),
-    // forwardRef(() => AkceComponent),
-    // forwardRef(() => DokumentComponent),
-    // forwardRef(() => LokalitaComponent),
     forwardRef(() => NalezComponent),
     DokJednotkaComponent,
     PianComponent

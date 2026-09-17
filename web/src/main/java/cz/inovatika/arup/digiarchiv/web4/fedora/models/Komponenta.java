@@ -10,7 +10,6 @@ import cz.inovatika.arup.digiarchiv.web4.index.IndexUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SearchUtils;
 import cz.inovatika.arup.digiarchiv.web4.index.SolrSearcher;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
