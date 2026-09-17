@@ -69,3 +69,13 @@ entities = ["akce", "dokument"]
 surfaces = ["results facet panel (client-rendered)", "stats page datepickers (client-rendered)", "search API (/api/search/query)", "client config (/api/config)", "Angular bundles (main + facets chunk)"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#893"]
 last_verified = "2026-09-15"
+
+[[scenario]]
+key = "stats"
+kind = "feature"
+title = "Admin statistics page"
+features = ["admin statistics page", "log aggregates", "index aggregates"]
+entities = []
+surfaces = ["stats page (/stats)", "search stats API (/api/search/stats)", "index stats API (/api/search/stats_index)", "index stats export (/api/search/export_stats_index)", "Angular main bundle"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#892"]
+last_verified = "2026-09-17"
