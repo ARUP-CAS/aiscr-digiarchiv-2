@@ -28,6 +28,8 @@ Digitální archiv AMČR je součástí Archeologického informačního systému
 - **Uživatelská nápověda:** https://amcr-help.aiscr.cz/
 - **AIS CR:** https://www.aiscr.cz/
 
+**Externí API:** Tato aplikace poskytuje File API a backend pro OAI-PMH; spotřebovává data a uživatele z AMČR (amcr.aiscr.cz). Kanonická dokumentace všech AMČR API (OAI-PMH, File API, Auth API) je v repozitáři [aiscr-api-home](https://github.com/ARUP-CAS/aiscr-api-home) a na https://api.aiscr.cz/ — nepřepisujte definice endpointů zde.
+
 ---
 
 ## Technologický stack

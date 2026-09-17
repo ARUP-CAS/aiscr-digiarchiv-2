@@ -1,0 +1,277 @@
+schema_version = "1"
+preamble = """
+# Refactoring backlog — Digitální archiv AMČR (aiscr-digiarchiv-2)
+
+> Review prose follows the canonical English-default rule; verbatim Czech is preserved where field names or AIS CR domain identifiers matter.
+> Structural improvements discovered during the audit.
+>
+> **Note on priority vs. severity:** The priority sections (High / Medium / Low)
+> reflect the **refactoring priority** (impact on architecture and business logic) and
+> may differ from the **bug severity** in `bugs.md`, which reflects the technical risk
+> of the defect itself. Both values are intentional and use a different evaluation frame.
+
+---"""
+
+[section_notes]
+High = "<!-- Architectural problems, security debt, Solr performance -->"
+Medium = "<!-- Optimizations, XSLT refactoring, Docker build -->"
+Low = "<!-- Cosmetic changes, documentation, minor code quality -->"
+
+[[item]]
+id = "SOLR-003"
+title = "BoolField without docValues — slower filtering on is_deleted, searchable, akce_je_nz"
+priority = "High"
+task = "T03"
+description = "The `BoolField` type in the entities, uzivatel, and organizations managed-schema has no `docValues=true`. Boolean filters (`-is_deleted:true`, `searchable:true`) are invoked in every query (SearchUtils.java, LogAnalytics.java, ImageServlet.java). Without docValues, Solr uses the slower FieldCache."
+impact = "Increased filtering latency; especially noticeable on collections with millions of records."
+recommendation = "Add `docValues=\"true\"` to `<fieldType name=\"boolean\">` in all affected managed-schema files. Requires a schema reload, not a full reindex (docValues will be updated incrementally)."
+
+[[item]]
+id = "SOLR-004"
+title = "FedoraHarvester.indexModels() without cursor pagination — OOM risk"
+priority = "High"
+task = "T03"
+description = "`max_results=10000000` without pagination loads the entire repository into memory. `checkDatestamp()` in the same class correctly uses CursorMark."
+impact = "A full reindex may cause an OOM and crash the application server."
+recommendation = "Refactor `indexModels()` to cursor-based iteration (the pattern from `checkDatestamp()`)."
+
+[[item]]
+id = "SOLR-001"
+title = "Typo multiValued=\"fslse\" in the entities schema"
+priority = "High"
+task = "T03"
+description = "`solr/entities/conf/managed-schema:157` — the field `samostatny_nalez_projekt` has a typo in a boolean attribute."
+impact = "Undefined behavior when indexing a samostatný nález record."
+recommendation = "Fix to `multiValued=\"false\"` and reindex."
+
+[[item]]
+id = "SOLR-002"
+title = "luceneMatchVersion=9.4 vs. solr-solrj 9.10.1 — configuration mismatch"
+priority = "High"
+task = "T03"
+description = "All 14 `solrconfig.xml` files have `luceneMatchVersion=9.4`, the client is 9.10.1."
+impact = "Older Lucene behavior; the 9.5–9.10 version optimizations are missing."
+recommendation = "Synchronize `luceneMatchVersion` with the Solr server version; full reindex."
+
+[[item]]
+id = "ARCH-02"
+title = "Saxon 8.7 — critically outdated XSLT processor"
+priority = "High"
+task = "T02"
+description = "`net.sf.saxon:saxon:8.7` (released 2006) — the current version is Saxon-HE 12.x. About 18 years of security patches are missing."
+impact = "Security risk; Saxon 8.7 does not support XSLT 3.0 (conflict with AGENTS.md)."
+recommendation = "Upgrade to `net.sf.saxon:Saxon-HE:12.5`; verify compatibility of the existing XSLT."
+
+[[item]]
+id = "ARCH-01"
+title = "God classes: SolrSearcher (1,048 lines) and FedoraHarvester (1,024 lines)"
+priority = "High"
+task = "T02"
+description = "Both classes have excessive responsibilities (query building, access control, HTTP communication, data transformation all together)."
+impact = "Low testability, high change complexity, regression risk."
+recommendation = "Extract responsibilities into specialized classes (Strategy/Command pattern)."
+
+[[item]]
+id = "ARCH-10"
+title = "Absence of automated tests"
+priority = "High"
+task = "T02"
+description = "The `web/src/test` directory does not exist. The project has no automated Java tests."
+impact = "Regressions cannot be detected automatically; the CI pipeline cannot verify code correctness."
+recommendation = "Add unit tests for SearchUtils, IndexUtils, FormatUtils, FedoraUtils. Consider integration tests for Solr queries."
+
+[[item]]
+id = "SOLR-009"
+title = "setRows(10000) without pagination in the Searcher classes"
+priority = "Medium"
+task = "T03"
+description = "DokumentSearcher (2×), AkceSearcher, ProjektSearcher (5×), PIANSearcher, LokalitaSearcher — all call `setRows(10000)` without an overflow check."
+impact = "Memory problems; silent truncation of results with a larger database."
+recommendation = "Cursor-based iteration or explicit pagination."
+
+[[item]]
+id = "SOLR-006"
+title = "rdate (DateRangeField) without docValues on project dates"
+priority = "Medium"
+task = "T03"
+description = "projekt_datum_zahajeni, projekt_datum_ukonceni, projekt_datum_provedeni are `rdate`. DateRangeField does not support docValues."
+impact = "Cannot sort or facet by these dates."
+recommendation = "Add duplicate pdate fields for sort/facet; keep rdate for range queries."
+
+[[item]]
+id = "SOLR-008"
+title = "oai/conf/managed-schema.xml — non-standard file extension"
+priority = "Medium"
+task = "T03"
+description = "The other collections have `managed-schema` without an extension, oai has `managed-schema.xml`."
+impact = "Potential problem with the managed schema API."
+recommendation = "Rename to `managed-schema`."
+supersedes = [
+    "Missing managed-schema for the Solr collection `oai`",
+]
+
+[[item]]
+id = "SOLR-010"
+title = "copyField source=\"*\" in the heslar and soubor collections"
+priority = "Medium"
+task = "T03"
+description = "The wildcard copyField copies numeric fields and dates into the fulltext field as well."
+impact = "Unnecessary data duplication in the index; higher memory usage."
+recommendation = "Explicit list of source fields."
+
+[[item]]
+id = "ARCH-03"
+title = "javax.mail in a Jakarta EE 11 project"
+priority = "Medium"
+task = "T02"
+description = "`javax.mail:mail:1.4.7` uses the old `javax` namespace; Jakarta EE 11 expects `jakarta.mail`."
+impact = "Possible classloading conflict on a modern application server (Tomcat 11+, WildFly 27+)."
+recommendation = "Replace with `jakarta.mail:jakarta.mail-api` + the Angus Mail implementation."
+
+[[item]]
+id = "ARCH-04"
+title = "EOL dependency: Apache XML-RPC"
+priority = "Medium"
+task = "T02"
+description = "`org.apache.xmlrpc:xmlrpc-client:3.1.3` — end-of-life since 2016."
+impact = "No security updates; unnecessary dependency."
+recommendation = "Identify usages in the code and replace with `java.net.http`."
+
+[[item]]
+id = "ARCH-09"
+title = "No parent POM or BOM"
+priority = "Medium"
+task = "T02"
+description = "The versions of shared dependencies (`pdfbox`, `commons-io`, `org.json`, `solr-solrj`) are managed separately in both `web/pom.xml` and `ThumbnailsGenerator/pom.xml`."
+impact = "Manual version synchronization; risk of inconsistent versions during upgrades."
+recommendation = "Add a root parent POM with a `dependencyManagement` section."
+
+[[item]]
+id = "ARCH-05"
+title = "ThumbnailsGenerator targets Java 1.8"
+priority = "Medium"
+task = "T02"
+description = "`maven.compiler.source/target = 1.8`, the main application targets Java 17."
+impact = "Inconsistent runtime; Java 1.8 is EOL (no security patches from Oracle)."
+recommendation = "Upgrade to Java 17."
+
+[[item]]
+id = "ARCH-11"
+title = "Duplicate HTTP clients in the main application"
+priority = "Medium"
+task = "T02"
+description = "`org.apache.httpcomponents:httpclient:4.5.14` in Maven + `java.net.http` in the code."
+impact = "Unnecessary dependency inflates the WAR; two different HTTP communication paradigms."
+recommendation = "Standardize on `java.net.http`."
+
+[[item]]
+id = "SOLR-012"
+title = "Duplicated solrconfig.xml in 10 collections"
+priority = "Medium"
+task = "T01"
+description = "10 of the 14 Solr collections share an identical `solrconfig.xml` (SHA-256: `5ce00b28...`)."
+impact = "Every change must be propagated to 10 files manually."
+recommendation = "Consider Solr configset inheritance or generating the configuration in CI."
+
+[[item]]
+id = "DOCKER-01"
+title = "Missing Docker/infrastructure configuration in the repository"
+priority = "Medium"
+task = "T01"
+description = "No Dockerfile or docker-compose files in the repository."
+impact = "Running the application locally is not possible without external resources; complicates onboarding."
+recommendation = "Add a development `docker-compose.yml` or document a link to the infrastructure repository."
+
+[[item]]
+id = "ARCH-06"
+title = "Axios redundant alongside Angular HttpClient"
+priority = "Low"
+task = "T02"
+description = "`axios:^1.11.0` in the npm dependencies — duplicates Angular HttpClient."
+recommendation = "Verify usage; migrate to Angular HttpClient and remove axios."
+
+[[item]]
+id = "ARCH-07"
+title = "Moment.js in maintenance mode"
+priority = "Low"
+task = "T02"
+description = "`moment:^2.30.1` — Moment.js has been in maintenance mode since 2020."
+recommendation = "Migrate to `date-fns` or the native Angular `DatePipe`."
+
+[[item]]
+id = "ARCH-08"
+title = "Version range for thumbnailator"
+priority = "Low"
+task = "T02"
+description = "`net.coobird:thumbnailator:[0.4,0.5)` — non-deterministic build."
+recommendation = "Pin a specific version (e.g. `0.4.20`)."
+
+[[item]]
+id = "ARCH-12"
+title = "@ngu/carousel version for Angular 20 in an Angular 21 application"
+priority = "Low"
+task = "T02"
+description = "`@ngu/carousel:^20.0.1` — carousel for Angular 20, the application is Angular 21."
+recommendation = "Upgrade to a version compatible with Angular 21 or replace it."
+
+[[item]]
+id = "ARCH-13"
+title = "Duplicate path validation in ApiServlet and InitServlet"
+priority = "Low"
+task = "T02"
+description = "Both classes implement their own path normalization."
+recommendation = "Extract into a shared utility class `PathUtils`."
+
+[[item]]
+id = "ARCH-14"
+title = "Typo in a Java package name: `imagging`"
+priority = "Low"
+task = "T01"
+description = "The package `cz.inovatika.arup.digiarchiv.web4.imagging` contains a typo."
+impact = "Confusing for developers, visible in imports and documentation."
+recommendation = "Rename the package to `imaging` (IDE refactor → rename package)."
+
+[[item]]
+id = "ARCH-15"
+title = "Inconsistent base package in ThumbnailsGenerator"
+priority = "Low"
+task = "T01"
+description = "ThumbnailsGenerator uses `cz.incad.arup`, the main application uses `cz.inovatika.arup`."
+impact = "Makes it harder to navigate the codebase; suggests the module has a historically different origin."
+recommendation = "Unify the base package (on the occasion of a larger refactoring of the module)."
+
+[[item]]
+id = "SOLR-005"
+title = "SolrSearcher.getAllKatastry() — setRows(100000) without overflow verification"
+priority = "High"
+task = "T03"
+description = "Silent truncation with >100000 cadastres. The entire HashMap in memory without TTL."
+recommendation = "Verify numFound <= rows; add a cursor or explicit limit with logging"
+severity = "High"
+files = [
+    "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/index/SolrSearcher.java:566",
+]
+
+[[item]]
+id = "SOLR-007"
+title = "az_dj_nazev: commented out in the schema (type=string) vs. active field (type=text_general)"
+priority = "Medium"
+task = "T03"
+description = "Suggests incomplete refactoring — a commented-out string field and an active text_general field."
+recommendation = "Remove the commented-out fragment; document the type change"
+severity = "Medium"
+files = [
+    "solr/entities/conf/managed-schema:116 vs. :342",
+]
+
+[[item]]
+id = "SOLR-011"
+title = "Sensitive fields email and telefon stored as plaintext in the uzivatel collection"
+priority = "Low"
+task = "T03"
+description = "The email and telefon fields are indexed=true, stored=true. Access to the Solr admin interface allows extraction of all contacts."
+recommendation = "Restrict access to the uzivatel collection; consider field-level security"
+severity = "Low"
+files = [
+    "solr/uzivatel/conf/managed-schema:125-126",
+]
