@@ -24,9 +24,9 @@ Servlet vrací JSON (`application/json;charset=UTF-8`). Název akce je brán z
    {"error":"unrecognized entity"}
    ```
 
-4. Konkrétní searcher sestaví Solr dotaz, aplikuje společné parametry,
+4. Konkrétní vyhledávač sestaví dotaz pro Solr, aplikuje společné parametry,
    filtrační parametry a entitní konfiguraci.
-5. Výsledek se vrací jako Solr JSON response. Při chybě se vrací JSON s
+5. Výsledek se vrací jako odpověď služby Solr ve formátu JSON. Při chybě se vrací JSON s
    položkou `error`.
 
 ## Podporované hodnoty `entity`
@@ -58,23 +58,25 @@ registrována jako `entity` pro akci `QUERY`.
 
 | Parametr | Výchozí hodnota | Popis |
 | --- | --- | --- |
-| `entity` | povinný | Typ entity pro výběr searcheru. |
+| `entity` | povinný | Typ entity pro výběr vyhledávače. |
 | `q` | `*:*` | Hlavní fulltextový Solr dotaz. Pro přihlášené uživatele s vyšší přístupností se rozšiřuje o hledání v `text_all_D` pro jejich organizaci. |
 | `rows` | `defaultRows` z klientské konfigurace | Počet záznamů na stránku. Ignoruje se při `mapa=true`, kde se použije `mapOptions.docsForMarker`. |
 | `page` | `0` | Číslo stránky od nuly. Start se počítá jako `page * rows`. |
 | `sort` | první vhodný záznam z `sorts` | Solr sort výraz, např. `datestamp desc`. |
-| `mapa` | `false` | Režim mapy; mění počet a pole vrácených dokumentů podle konkrétního searcheru. |
+| `mapa` | `false` | Režim mapy; mění počet a pole vrácených dokumentů podle konkrétního vyhledávače. |
 | `vyber` | - | Prostorový filtr ve formátu `minLat,minLon,maxLat,maxLon`. |
 | `loc_rpt` | - | Prostorový filtr ve formátu `minLat,minLon,maxLat,maxLon`; používá se i pro heatmapu. |
-| `inFavorites` | - | Omezí výsledky na oblíbené záznamy aktuálního uživatele. |
-| `inMuseion` | - | Omezí výsledky na záznamy napojené na Museion. |
+| `inFavorites` | nepřítomen | Pokud je parametr přítomen, omezí výsledky na nejvýše 100 oblíbených záznamů aktuálního uživatele. Hodnota parametru se nevyhodnocuje. |
+| `inMuseion` | nepřítomen | Pokud je parametr přítomen, omezí výsledky na záznamy napojené na Museion. Hodnota parametru se nevyhodnocuje. |
 | `noFacets` | `false` | Vypne facetování. |
-| `onlyFacets` | `false` | Nastaví `rows=0`, vrací pouze facet/statistické informace. |
-| `noStats` | `false` | Vypne Solr stats. |
-| `isExport` | `false` | Některé searchery podle něj upravují pole pro exportní režim. |
+| `onlyFacets` | `false` | Nastaví `rows=0`, vrací pouze facety a statistické informace. |
+| `noStats` | `false` | Vypne statistiky služby Solr. |
+| `isExport` | `false` | Některé vyhledávače podle něj upravují pole pro exportní režim. |
 
-Boolean parametry se vyhodnocují přes `Boolean.parseBoolean`, tedy aktivní
-hodnota je řetězec `true`.
+Parametry `mapa`, `noFacets`, `onlyFacets`, `noStats` a `isExport` se
+vyhodnocují pomocí `Boolean.parseBoolean`, takže je aktivuje hodnota `true`.
+Parametry `inFavorites` a `inMuseion` se naproti tomu aktivují samotnou
+přítomností v požadavku; například `inFavorites=false` tedy filtr také zapne.
 
 ## Filtrovací parametry
 
@@ -109,7 +111,7 @@ Příklad:
 ```
 
 Textová pole z `filterFields` se skládají bez lokálního `{!tag=...}` a u
-položek uvedených v `server_config.json` v `securedFilters` se doplní suffix
+položek uvedených v `server_config.json` v `securedFilters` se doplní přípona
 přístupnosti (`_A`, `_B`, `_C`, `_D`).
 
 ## Speciální typy filtrů
@@ -131,16 +133,19 @@ Serverová konfigurace je v:
 src/main/resources/cz/inovatika/arup/digiarchiv/web4/server_config.json
 ```
 
+Za běhu ji může přepsat nebo doplnit sekce `server` z externího souboru
+`CONFIG_DIR/config.json`.
+
 Pro akci `QUERY` jsou důležité hlavně:
 
 - `fields.common` - společná pole vrácená u entit;
-- `fields.<entity>.header` a `fields.<entity>.detail` - pole vrácená searchery;
+- `fields.<entity>.header` a `fields.<entity>.detail` - pole vrácená vyhledávači;
 - `fields.<entity>.facets` - facetová pole a jejich mapování;
 - `fields.<entity>.full_text` - pole vstupující do fulltextového indexu;
-- `securedFacets` - facety se suffixem přístupnosti;
-- `securedFilters` - filtry se suffixem přístupnosti.
+- `securedFacets` - facety s příponou přístupnosti;
+- `securedFilters` - filtry s příponou přístupnosti.
 
-Facetový alias je část před dvojtečkou. Například konfigurace
+Alias facety je část před dvojtečkou. Například konfigurace
 `f_autor:dokument_autor` znamená URL parametr `f_autor`.
 
 Facetové parametry podle `server_config.json`:
@@ -153,7 +158,7 @@ Facetové parametry podle `server_config.json`:
 | `lokalita` | `f_okres`, `f_typ_lokality`, `f_druh_lokality`, `f_jistota`, `f_lokalita_zachovalost` |
 | `projekt` | `f_organizace`, `f_kraj`, `f_okres`, `f_katastr`, `f_vedouci`, `f_typ_vyzkumu`, `f_typ_projektu` |
 | `samostatny_nalez` | `f_organizace`, `f_okres`, `f_katastr`, `f_obdobi`, `f_druh_nalezu`, `f_kategorie`, `f_specifikace`, `f_nalezce`, `f_nalezove_okolnosti`, `f_mimetype` |
-| `komponenta` | `f_obdobi`, `f_areal`, `f_aktivita`, `f_typ_nalezu`, `f_druh_nalezu`, `f_kategorie`, `f_specifikace`, `f_kraj`, `f_okres`, `f_katastr`, `f_vedouci`, `f_organizace`, `f_typ_vyzkumu`, `f_typ_lokality`, `f_druh_lokality`, `dokument_kategorie_dokumentu`, `f_typ_dokumentu`, `f_rada`, `f_tvar`, `az_chranene_udaje`, `dokument_extra_data`, `f_dj_typ`, `f_adb_typ_sondy`, `f_adb_podnet`, `adb_vyskovy_bod_typ` |
+| `komponenta` | `f_obdobi`, `f_areal`, `f_aktivita`, `f_typ_nalezu`, `f_druh_nalezu`, `f_kategorie`, `f_specifikace`, `f_kraj`, `f_kraj_rada`, `f_okres`, `f_katastr`, `f_vedouci`, `f_organizace`, `f_typ_vyzkumu`, `f_typ_lokality`, `f_druh_lokality`, `dokument_kategorie_dokumentu`, `f_typ_dokumentu`, `f_rada`, `f_tvar`, `stav`, `az_chranene_udaje`, `dokument_extra_data`, `dokument_cast_archeologicky_zaznam`, `f_dj_typ`, `f_adb_typ_sondy`, `f_adb_podnet`, `adb_vyskovy_bod_typ`, `f_pian_typ`, `f_pian_presnost`, `f_pian_zm10`, `pian_id`, `pian_ident_cely`, `lat`, `lng`, `loc`, `loc_rpt` |
 
 Zabezpečené facety:
 
@@ -194,11 +199,12 @@ komponenta_dokument_obdobi, adb_vyskovy_bod_typ, let_letiste_start,
 let_letiste_cil, extra_data_format, let_organizace, let_pocasi,
 let_dohlednost, tvar_tvar, typ, f_zachovalost, f_nahrada, f_zeme,
 f_typ_lokality, f_typ_projektu, inv_cislo,
-samostatny_nalez_predano_organizace, predmet_kategorie
+samostatny_nalez_predano_organizace, predmet_kategorie, soubor_distri,
+f_pozorovatel
 ```
 
-Výchozí `filterFields` jsou textová, boolean, datumová, číselná a roková pole
-pro rozšířené hledání. Aktuální úplný seznam je v
+Výchozí seznam `filterFields` obsahuje textová, logická, datumová, číselná
+a roční pole pro rozšířené hledání. Aktuální úplný seznam je v
 `src/main/ng/src/assets/config.json`.
 
 ## Příklady
