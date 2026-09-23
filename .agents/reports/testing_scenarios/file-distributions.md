@@ -1,7 +1,7 @@
 # File distributions (ATRIUM) — testing scenario
 
 **Key:** file-distributions (feature)
-**Scope:** alternative file distributions and paradata — indexing, reader UI download, File API serving, facets, paradata; issue [ARUP-CAS/aiscr-digiarchiv-2#693](https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/693) (upstream: aiscr-webamcr#3527) drove it.
+**Scope:** alternative file distributions and paradata — indexing, reader UI download, File API serving, facets, paradata, and the File API rate limiter's `Retry-After` contract; issues [ARUP-CAS/aiscr-digiarchiv-2#693](https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/693) (upstream: aiscr-webamcr#3527) and [ARUP-CAS/aiscr-digiarchiv-2#1117](https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/1117) drove it.
 **Principle:** concrete record/file ids are deliberately not embedded — record states drift, and the maintainers create purpose-built test data (linked in the issue thread). Use the discovery recipes below to find fresh candidates; a verification command may carry an identifier placeholder the recipe fills.
 
 ## Durable knowledge
@@ -17,7 +17,7 @@
 
 - **Distribution serving on the File API** (`HandleServlet.getFile`): the requested path is matched against the indexed `soubor_filepath` values — the file's own path, `path + "/orig"`, and `path + "/" + <dist>` for every live distribution (see the indexing facts below). A miss yields 404. On a hit, the response's `Content-Type` and `Content-Disposition` come from the matching `distribuce` entry (filename, mimetype).
 - **Paradata branch:** the id's `paradata` segment is stripped (`id.replaceAll("/paradata", "")`) before both the Solr lookup and the `distribuce` match, so `{file_id}/paradata/{dist}` resolves `distri` from the requested distribution and serves the Fedora path `{file path}/paradata/{dist}`; the bare `{file_id}/paradata` matches the file's own path, leaves `distri = "orig"`, and serves `{file path}/paradata/orig` — equivalent to `paradata/orig`. Paradata is always served as `text/plain`.
-- **Rate limiter** (`AppState.canGetFileInterval`): keyed by IP only (the id parameter only exempts `thumb`). Two branches: a concurrent request gets 429 "Downloading file still in progress", and a request inside the `requestInterval` window after the previous **successful** download gets 429 "Try in N seconds." — the interval remainder is computed in milliseconds, so sub-second windows block. The `Retry-After` header and the message seconds are still truncated (`retryTime/1000`), so a sub-second remainder reports `Retry-After: 0`. With `requestInterval` = 500 ms the enforced window is 500 ms (the documented "≥ 1 s between requests" is the API doc's contract; the enforced value follows the deployment's config). The reader's `full` action applies the same limiter. Applies identically to original files, distributions, and paradata.
+- **Rate limiter** (`AppState.canGetFileInterval`): keyed by IP only (the id parameter only exempts `thumb`). Two branches: a concurrent request gets 429 "Downloading file still in progress", and a request inside the `requestInterval` window after the previous **successful** download gets 429 "Try in N seconds." — the interval remainder is computed in milliseconds, so sub-second windows block. Since the #1117 fix (commit `d944b598`) both branches convert milliseconds to seconds with `Math.ceil(ms*.001)`, so the value is never `0` and the in-progress branch no longer writes the raw millisecond value (`500` became `1`); `Math.ceil` returns a `double`, however, so the header and the message render as a **decimal string** (`Retry-After: 1.0`, "Try in 1.0 seconds.") — file-distributions-D08, because RFC 9110 `delay-seconds` is `1*DIGIT`. With `requestInterval` = 500 ms the enforced window is 500 ms (the documented "≥ 1 s between requests" is the API doc's contract; the enforced value follows the deployment's config) and both branches report `1.0`. The reader's `full` action applies the same limiter but **only reads** its state — it never calls `writeGetFileStarted`/`writeGetFileFinished`, so its interval branch fires only when a File API download succeeded within the window, and its in-progress branch returns 429 **without** a `Retry-After` header by design (`web/docs/image-servlet.md`). Applies identically to original files, distributions, and paradata.
 - **Indexing** (`Soubor.fillSolrFields`): `soubor_filepath` gets the file path, `path + "/orig"`, and `path + "/" + <dist>` per live distribution; `soubor_distri` gets `orig` plus the live distribution paths (DIST01 insert, DIST10 remove, in historie order); the `distribuce` array in the `soubor` JSON carries `{path, filename, size, mimetype}` per distribution (filename/size/mimetype from Fedora `fcr:metadata` ebucore/premis), with `orig` always first.
 
 ### Feature or entity model
@@ -29,75 +29,83 @@
 ### Discovery recipes
 
 1. **Find files with distributions:** the `soubor_distri` facet on `entity=dokument` search (anonymous sees the values; the non-`orig` values identify records with real distributions); or OAI `GetRecord` for a dokument → `soubor/historie` `DIST01` entries (the note is the distribution path); or the record's `soubor` JSON `distribuce` array via the search API.
-2. **Test distribution serving:** `…/id/<ident_cely>/file/<uuid>/<dist>` — check status, `Content-Type`, `Content-Disposition` against the `distribuce` entry; a nonexistent distribution must 404; compare the same file's `orig`.
-3. **Test paradata:** `{file_id}/paradata/orig`, `{file_id}/paradata/{dist}`, and the bare `{file_id}/paradata` — compare response bodies (hashes) across the forms; permissions follow the parent. Pace the requests (one per command): the interval limiter blocks rapid sequential requests, and a 429 body read as a file body produces false byte-identity (see the 2026-09-10 correction).
-4. **Permission comparisons:** pick files from records of different restriction (per the [`permissions`](permissions.md) scenario's discovery recipes) and compare `/id/…/file/…` codes for `orig`, a distribution, and paradata — they must match; `thumb` stays public. The credentialed positive case needs a maintainer.
-5. **Rate limiting:** fire concurrent requests (parallel) — the second gets 429; rapid sequential requests within `requestInterval` also get 429 (both branches now block; see the limiter facts).
-6. **Facet coverage:** query `entity=dokument`, `entity=knihovna_3d`, `entity=samostatny_nalez` with `rows=0` and check `facet_fields.soubor_distri`.
+2. **Find a large public file** (to hold the in-progress window open): search `entity=knihovna_3d` and read `soubor[].size_mb` per record, picking a `pristupnost: A`/`stav: 3` record — anonymous may download it and the multi-megabyte fetch keeps the server-side download in progress for seconds.
+3. **Test distribution serving:** `…/id/<ident_cely>/file/<uuid>/<dist>` — check status, `Content-Type`, `Content-Disposition` against the `distribuce` entry; a nonexistent distribution must 404; compare the same file's `orig`.
+4. **Test paradata:** `{file_id}/paradata/orig`, `{file_id}/paradata/{dist}`, and the bare `{file_id}/paradata` — compare response bodies (hashes) across the forms; permissions follow the parent. Pace the requests (one per command): the interval limiter blocks rapid sequential requests, and a 429 body read as a file body produces false byte-identity (see the 2026-09-10 correction).
+5. **Trigger the interval branch:** fire a second request within the 500 ms window after a successful download — a shell compound of two `curl` invocations lands the second inside the window after the first process spawn; a burst of three reliably yields the 429 (the first spawn is slower than the following ones). Expected post-#1117: 429, `Retry-After` ≥ 1 in seconds, message seconds equal to the header.
+6. **Trigger the in-progress branch:** run one command with `curl --parallel --parallel-immediate <large public file URL> <any other file URL>` — the URLs must be **distinct** (identical URLs serialize in one connection); the large file's Fedora fetch holds the in-progress marker (per IP, shared with every file request), so the other request gets 429. A rate-limited client read (`--limit-rate`) does **not** extend the window — responses are buffered upstream, so the server-side download finishes on its own. For `/img/full`'s interval branch, a File API success must precede it within the window (the reader only reads limiter state).
+7. **Permission comparisons:** pick files from records of different restriction (per the [`permissions`](permissions.md) scenario's discovery recipes) and compare `/id/…/file/…` codes for `orig`, a distribution, and paradata — they must match; `thumb` stays public. The credentialed positive case needs a maintainer.
+8. **Facet coverage:** query `entity=dokument`, `entity=knihovna_3d`, `entity=samostatny_nalez` with `rows=0` and check `facet_fields.soubor_distri`.
 
 ### Verification commands
 
 ```bash
-# distribution download via the documented File API
-curl -s -D - -o /dev/null "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/<dist>"
+# distribution download via the documented File API (headers to stdout, body discarded)
+curl.exe -s -D - -o NUL "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/<dist>"
 # nonexistent distribution (expect 404)
-curl -s -o /dev/null -w "%{http_code}\n" "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/atr/nonexistent"
+curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/atr/nonexistent"
 # paradata forms — compare bodies, not just headers; pace the requests or the limiter answers
-curl -s -o pd_orig "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/paradata/orig"
-curl -s -o pd_dist "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/paradata/<dist>"
+curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/paradata/orig"
+curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/paradata/<dist>"
+# interval branch: burst of three, the limiter answers the later ones
+curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/<dist>"; curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/<dist>"; curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/<dist>"
+# in-progress branch: distinct URLs, large file first
+curl.exe -s -D - -o NUL --parallel --parallel-immediate "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<large uuid>" "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/<dist>"
+# /img/full interval branch: a File API success within the window precedes the reader request
+curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/id/<ident_cely>/file/<uuid>/<dist>"; curl.exe -s -D - "https://digiarchiv-test.aiscr.cz/api/img/full?id=<soubor_id>&dist=<dist>"
 # facet coverage
-curl -s "https://digiarchiv-test.aiscr.cz/api/search/query?entity=knihovna_3d&rows=0"   # check facet_fields.soubor_distri
+curl.exe -s "https://digiarchiv-test.aiscr.cz/api/search/query?entity=knihovna_3d&rows=0"   # check facet_fields.soubor_distri
 ```
 
-## Current verification (2026-09-10, `digiarchiv-test`, build `v4.0.3-205-g714e9423-dirty` of 2026-09-09 per the same-day `version-footer` verification, anonymous session)
+## Current verification (2026-09-23, `digiarchiv-test`, build `v4.0.3-230-g1669e29c-dirty` of 2026-09-23 — base commit `1669e29c` (15:36 +0200) contains the #1117 fix `d944b598` (13:55 +0200); dirty per the local-build practice, anonymous session)
 
-Regression pass over the 2026-09-06 verification after the D06/D07 fix wave. Candidates resolved by the discovery recipes: the `soubor_distri` facet on `entity=dokument` yields exactly one record with non-`orig` values — [C-TX-192700656](https://digiarchiv-test.aiscr.cz/id/C-TX-192700656) (its distribution-bearing file `CTX192700656.pdf` now carries real ALTO content in `atr/alto-xml` and a `distribution_2.txt` in `atr/stats-csv`, plus a second file `CTX192700656B.pdf` with no distributions), and the issue-thread example [C-TX-202600010](https://digiarchiv-test.aiscr.cz/id/C-TX-202600010) (restricted, no distributions).
+Acceptance pass for #1117 (the `Retry-After` unit fix). Pre-fix values were live-observed the same morning by the `permissions` run (interval branch "Try in 0 seconds." with `Retry-After: 0`; concurrent branch `Retry-After: 500`). Candidates resolved by the discovery recipes: recipe 1 (`soubor_distri` facet on `entity=dokument`) yields exactly one record with non-`orig` values — [C-TX-192700656](https://digiarchiv-test.aiscr.cz/id/C-TX-192700656) (distribution-bearing file `CTX192700656.pdf`, uuid `f70b5648-be52-451d-81cc-16803031144c`, soubor id `soub-649332`; distributions `orig`, `atr/alto-xml` 965187 B `application/xml`, `atr/stats-csv` 3 B `text/plain`) — and recipe 2 (`entity=knihovna_3d`, `size_mb`) yields [C-3D-202500002](https://digiarchiv-test.aiscr.cz/id/C-3D-202500002) (pristupnost A, stav 3) with a 4.25 MB public file `C3D202500002.jpg` (uuid `b1ebe502-951a-4cc4-8d0a-8c455fe71f75`), used to hold the in-progress window open.
 
 ### Verified behaviour matrix
 
 | Capability | Result |
 | --- | --- |
-| Distribution download via File API `/id/…/file/{uuid}/{dist}` | works — 200 with `Content-Type`/`Content-Disposition` from the `distribuce` entry: `atr/alto-xml` → `application/xml` with filename `CTX192700656.alto`, byte-exact size (965187 B); `atr/stats-csv` → `text/plain; charset=UTF-8` with filename `distribution_2.txt`, Content-Length 3 |
-| Explicit `/orig` suffix on the File API | works — 200, `application/pdf`, `CTX192700656.pdf` |
+| Interval branch, File API | 429 with `Retry-After: 1.0` and body "Try in 1.0 seconds." — the value is now in **seconds** and never `0` (sub-second remainders report 1), and the message seconds equal the header; the header renders as a decimal string, which is not a valid RFC 9110 `delay-seconds` integer (file-distributions-D08) |
+| In-progress branch, File API | 429 with `Retry-After: 1.0` and body "Downloading file still in progress. Try later." — the raw millisecond value (`500`) is gone; same decimal-rendering defect (D08) |
+| Interval branch, reader `/api/img/full` | 429 with `Retry-After: 1.0` and body "Try in 1.0 seconds." — fired by a File API success within the window (the reader only reads limiter state); same D08 rendering |
+| In-progress branch, reader `/api/img/full` | 429 "Downloading file still in progress. Try later." **without** a `Retry-After` header — unchanged, documented design (`web/docs/image-servlet.md`), not part of #1117's three fix sites |
+| Distribution download via File API `/id/…/file/{uuid}/{dist}` | works — 200 with `Content-Type`/`Content-Disposition` from the `distribuce` entry: `atr/stats-csv` → `text/plain; charset=UTF-8`, `distribution_2.txt`, 3 B; `atr/alto-xml` → `application/xml`, `CTX192700656.alto`; `C3D202500002.jpg` → `image/jpeg`, served chunked |
+| Reader `/api/img/full` serving | works — 200 for `id=soub-649332&dist=atr/stats-csv` with `Content-Type: text/plain; charset=UTF-8`, `Content-Disposition: filename=distribution_2.txt`, body identical to the File API form |
 | Nonexistent distribution | **404** (empty body) — `atr/nonexistent` |
 | Paradata `paradata/orig` | works — 200, `text/plain; charset=UTF-8`, body `para orig` |
-| Paradata `paradata/{dist}` | works — `paradata/atr/alto-xml` serves `para alto`, `paradata/atr/stats-csv` serves `para csv` (SHA-256 distinct per form; see file-distributions-D06 resolved) |
-| Bare `{file_id}/paradata` | works — 200, `text/plain; charset=UTF-8`, body byte-identical to `paradata/orig` (same SHA-256; see file-distributions-D07 resolved) |
-| Rate limiting on distribution downloads | both branches block: rapid sequential requests within the 500 ms `requestInterval` get 429 ("Try in 0 seconds.", `Retry-After: 0`); the concurrent branch is verified by code and the 2026-09-06 run (this session's three parallel-overlap attempts did not overlap — a probe-environment limitation, not evidence of change) |
-| Facet `soubor_distri` | present on dokument (`orig` 195586, `atr/alto-xml` 1, `atr/stats-csv` 1), knihovna_3d (`orig` 696), and samostatny_nalez (`orig` 3411) |
-| Access rules on distributions/paradata | restricted record (anonymous): `orig` 403, `paradata/orig` 403, bare `paradata` 403 — same rule as the parent; `thumb` 200 (public exception preserved). Credentialed positive case: maintainer-verified 2026-09-06; the D06/D07 fixes do not touch the permission model |
-| Reserved suffixes | `thumb`/`thumb-large` → 200 `image/png` (public); `thumb/page/1` → 404 on the probed PDFs — see observations |
-| Reader surface `/api/img/full` | nonexistent `dist` → **404** "Distribuce not found" (previously 200 + the original's headers + a Fedora error body) |
-| Reader UI (file select, dist select, `orig` default, size display) | maintainer-assisted — browser-only; verified by the maintainer in the issue thread (2026-08-13), not re-verified anonymously |
+| Paradata `paradata/{dist}` | works — `paradata/atr/alto-xml` serves `para alto` (distinct from `para orig`) |
+| Bare `{file_id}/paradata` | works — 200, `text/plain; charset=UTF-8`, body byte-identical to `paradata/orig` |
+| Facet `soubor_distri` | present on dokument (`orig` 195587, `atr/alto-xml` 1, `atr/stats-csv` 1) |
+| Production comparison | not examined — the fix is part of the unreleased milestone v4.1.0, so the production comparison is not meaningful per corpus convention |
 
-### Defect walk (from the 2026-09-06 verification)
+### Defect walk (from the 2026-09-10 verification)
 
-- file-distributions-D01 — **fixed** (2026-09-06): distributions and paradata are served on the documented File API under its access rules and rate limiter.
-- file-distributions-D02 — **fixed** (2026-09-06): the File API rate limiter covers distribution downloads.
-- file-distributions-D03 — **fixed** (2026-09-06): a nonexistent distribution returns 404 on the File API. The reader surface's equivalent 200-behaviour is also resolved this run (404, verified above).
-- file-distributions-D04 — **fixed** (2026-09-06): paradata is served as `text/plain` with no original-file headers.
-- file-distributions-D05 — **fixed** (2026-09-06): `soubor_distri` facet present for dokument, knihovna_3d, and samostatny_nalez.
-- file-distributions-D06 — **fixed** (this run): `/id/{ident_cely}/file/{file_id}/paradata/{dist}` serves the paradata of the requested distribution. Evidence (2026-09-10): the three paradata forms return byte-distinct bodies (distinct SHA-256: `para orig` / `para alto` / `para csv`), matching the distinct-content sources re-uploaded by the maintainer on 2026-09-06; the implementation strips the `paradata` segment before the `distribuce` match, so `distri` resolves per form.
-- file-distributions-D07 — **fixed** (this run): the bare `/id/{ident_cely}/file/{file_id}/paradata` serves the paradata of `orig`. Evidence (2026-09-10): byte-identical body and SHA-256 with `paradata/orig`; the implementation resolves the bare form to `distri = "orig"`.
+- file-distributions-D01 — **still fixed** (this run): distributions are served on the documented File API under its access rules and rate limiter (three distributions verified 200 with correct type/disposition; the 429s below fired on distribution downloads).
+- file-distributions-D02 — **still fixed** (this run): the File API rate limiter covers distribution downloads (both 429 branches observed on distribution paths).
+- file-distributions-D03 — **still fixed** (this run): a nonexistent distribution returns 404 on the File API.
+- file-distributions-D04 — **still fixed** (this run): paradata is served as `text/plain` with no original-file headers.
+- file-distributions-D05 — **still fixed** (this run): `soubor_distri` facet present for dokument (knihovna_3d and samostatny_nalez not re-queried this run; unchanged since 2026-09-10).
+- file-distributions-D06 — **still fixed** (this run): `paradata/{dist}` serves the paradata of the requested distribution (`para alto` vs `para orig`, distinct).
+- file-distributions-D07 — **still fixed** (this run): the bare `paradata` serves the paradata of `orig` (body identical to `paradata/orig`).
 
 ### Known defects
 
-- None identified. No admissible findings remain open on this scenario.
+- file-distributions-D08 (Medium, open): **`Retry-After` renders as a decimal string, not an integer.** All three #1117 fix sites compute the value with `Math.ceil(ms*.001)`, which returns a Java `double`, and concatenate it directly: the header and the message read `1.0` instead of `1`. RFC 9110 §10.2.3 defines `delay-seconds = 1*DIGIT`, so `1.0` is not a valid value — a spec-conformant client must treat the header as malformed and ignore it, which restores the immediate-retry loop the issue reported for those clients (lenient integer parsers read it as 1). Introduced by the fix commit `d944b598`; the issue's proposed `String.valueOf(Math.max(1, (ms + 999) / 1000))` renders an integer. Verified live on all three sites (both File API branches and `/api/img/full`'s interval branch) on the 2026-09-23 build.
 
-### Observations (not #693 acceptance defects)
+### Observations (not #1117 acceptance defects)
 
-- `thumb/page/N` returns 404 on the probed test PDFs while the reader's page source (`/api/img/medium?page=N`) serves — page thumbnails appear not to be generated on the test deployment. Unchanged from the 2026-09-06 run; not a #693 regression per code reading.
-- The interval-branch 429 reports `Retry-After: 0` for sub-second remainders (the header and message seconds are truncated), so a client honouring the header retries immediately and hits 429 again; the enforced window equals `requestInterval` (500 ms in the deployment config), not the documented "≥ 1 s". The 2026-09-06 note that the interval branch never blocked is resolved — it now blocks; this remainder is the residual truncation.
-- Production comparison not performed — the feature is part of the unreleased milestone v4.1.0.
+- The `permissions` scenario's durable limiter note records the pre-#1117 values (`Retry-After: 0` interval, `500` concurrent) with their live-verified dates; its next run should repoint it at this scenario's limiter facts rather than restating them.
+- The enforced window equals `requestInterval` (500 ms in the deployment config), not the documented "≥ 1 s" — unchanged, pre-existing.
+- The deployed build is `dirty` (local-build practice, maintainer-confirmed 2026-09-10); its base commit `1669e29c` contains the fix, and the observed header values match the fixed code exactly.
+- The subject working tree carries uncommitted line-ending churn on the limiter servlets (working tree matches the committed fix content).
 
 ### Corrections made during this run
 
-- The first rapid batch of paradata requests returned byte-identical bodies for the three distribution forms — initially indistinguishable from file-distributions-D06 still present. The header check revealed these were 429 rate-limiter bodies ("Try in 0 seconds."), not file content: the interval limiter now blocks rapid sequential requests. Re-probed individually with spacing, all three forms returned distinct bodies. Recorded so future runs pace their paradata probes (the discovery recipe now says so).
+- None — no earlier conclusion of this scenario moved; the new D08 finding is recorded directly.
 
 ### Maintainer-assisted checks
 
-- Credentialed positive case (authorized user, restricted record): completed 2026-09-06 — 200 on `orig` and `paradata/orig`. Not re-performed this run; the D06/D07 fixes do not touch the permission model, and the changed paradata paths were verified anonymously on the public distribution-bearing record.
-- Reader UI items (file/dist select, `orig` default, size display, file switching) — browser-only; maintainer-verified 2026-08-13; not re-verified this run.
+- None — the #1117 acceptance surface is fully anonymous-probeable; no check required a role, credentials, or a browser.
 
 ## Verification log
 
@@ -106,3 +114,4 @@ Regression pass over the 2026-09-06 verification after the D06/D07 fix wave. Can
 | 2026-08-29 | `digiarchiv-test` (partial implementation of #693, milestone v4.1.0) | Initial verification; the point-in-time report was consolidated into this scenario when the corpus moved to this repository. |
 | 2026-09-06 | `digiarchiv-test` (dev build of the #693 fix wave, milestone v4.1.0) | Regression pass: D01–D05 resolved; D06 (paradata/{dist} serves orig's paradata) and D07 (bare /paradata 404) minted; access-rule equality and facet coverage verified anonymously; D06 behaviorally confirmed with maintainer-re-uploaded distinct paradata sources; credentialed positive case maintainer-verified. |
 | 2026-09-10 | `digiarchiv-test` (build `v4.0.3-205-g714e9423-dirty` of 2026-09-09) | Regression pass: D06 and D07 resolved (per-form paradata bodies distinct; bare form identical to `paradata/orig`); the interval rate-limiter branch now blocks (durable limiter facts rewritten) and the reader `full` surface now 404s unknown distributions; no open defects remain on this scenario. |
+| 2026-09-23 | `digiarchiv-test` (build `v4.0.3-230-g1669e29c-dirty`, base commit of 15:36 +0200, contains fix `d944b598` of 13:55 +0200) | #1117 acceptance pass: both File API limiter branches and the reader's interval branch now report `Retry-After` in seconds with a ceiling (never `0`, no raw `500`); both branches live-verified with a working concurrency recipe; D01–D07 hold; **D08 minted** (decimal rendering `1.0`, invalid `delay-seconds`); durable limiter facts and recipes rewritten. |
