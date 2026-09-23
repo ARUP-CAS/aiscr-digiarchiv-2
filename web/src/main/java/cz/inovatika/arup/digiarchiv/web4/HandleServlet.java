@@ -397,17 +397,17 @@ public class HandleServlet extends HttpServlet {
     }
     switch (entity) {
       case "projekt":
-//-- A-B: stav = 6
-//-- C: stav > 0
+        
+//-- A-B: nikdy
+//-- C: projekt/stav = 1 OR (projekt/stav >= 2 AND projekt/stav <= 6 AND projekt/organizace = {user}.organizace)
 //-- D-E: bez omezení
-        if (userPr.compareToIgnoreCase("D") >= 0) {
-            return true;
-        } else if (userPr.equalsIgnoreCase("C") && stav >= 1) {
-            return true;
-        } else if (userPr.compareToIgnoreCase("B") <= 0 && stav == 6) {
-            return true;
+        String docOrg = doc.optString("projekt_organizace");
+        boolean sameOrg = userOrg.toLowerCase().equals(docOrg.toLowerCase());
+        if (userPr.equalsIgnoreCase("C")
+                && ((stav == 1) || (sameOrg && stav <= 6))) {
+          return true;
         } else {
-            return false;
+          return userPr.compareToIgnoreCase("D") >= 0;
         }
       case "dokument":
       case "knihovna_3d":

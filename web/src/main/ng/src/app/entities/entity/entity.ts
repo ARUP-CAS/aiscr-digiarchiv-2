@@ -95,7 +95,9 @@ export class Entity {
     });
     if (this.inDocument()) {
       this.state.documentProgress = 0;
-      this.state.loading.set(false);;
+      if (!this.state.printing()) {
+        this.state.loading.set(false);
+      }
     }
   }
 
@@ -133,6 +135,7 @@ export class Entity {
     this.service.getId(this._result().ident_cely).subscribe((res: any) => {
       this._result.set({...res.response.docs[0]});
       this.hasDetail = true;
+      this.state.loading.set(false);
     });
   }
 
