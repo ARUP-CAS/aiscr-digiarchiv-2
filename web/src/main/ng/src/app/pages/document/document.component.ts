@@ -84,10 +84,10 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.state.loading.set(false);
         this.loading.set(false);
         setTimeout(() => {
-        this.service.print();
+        window.print();
         }, 2000);
       }
-    }, 2000);
+    }, 4000);
   }
 
   setTitle() {

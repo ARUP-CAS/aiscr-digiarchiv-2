@@ -94,6 +94,7 @@ public interface FedoraModel {
 
     /**
      * Filter oai record based on security
+     * Odpovida https://arup-cas.github.io/aiscr-api-home/oai-pmh/
      *
      * @param user
      * @param doc

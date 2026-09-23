@@ -376,7 +376,8 @@ public class HandleServlet extends HttpServlet {
 
   private static boolean isFileAllowed(String id, JSONObject doc, JSONObject user) {
     
-    //https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/256
+    //https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/256 OUTDATED
+    //https://arup-cas.github.io/aiscr-api-home/file-api/ 
     
     if (id.contains("thumb") && !id.contains("page") && !id.contains("thumb-large")) {
       return true;
@@ -418,7 +419,7 @@ public class HandleServlet extends HttpServlet {
         if (userPr.equalsIgnoreCase("A") && docPr.equalsIgnoreCase("A") && stav == 3) {
           return true;
         } else if (userPr.equalsIgnoreCase("B")) {
-          if (docPr.compareToIgnoreCase("B") <= 0 && stav == 3) {
+          if (stav == 3) {
             return true;
           }
 
@@ -433,7 +434,7 @@ public class HandleServlet extends HttpServlet {
           return (userId.equals(uzivatel));
 
         } else if (userPr.equalsIgnoreCase("C")) {
-          if (docPr.compareToIgnoreCase("C") <= 0 && stav == 3) {
+          if (stav == 3) {
             return true;
           }
 
@@ -459,11 +460,11 @@ public class HandleServlet extends HttpServlet {
 //                OR (samostatny_nalez_predano_organizace = {user}.organizace)
 //-- D-E: bez omezení
         if (userPr.equalsIgnoreCase("A")) {
-          return stav == 4 && docPr.equalsIgnoreCase("A");
+          return stav == 4;
         }
         
         if (userPr.equalsIgnoreCase("B")) {
-          if (docPr.compareToIgnoreCase("B") <= 0 && stav == 4) {
+          if (stav == 4) {
             return true;
           }
 
@@ -480,7 +481,7 @@ public class HandleServlet extends HttpServlet {
         }
         
         if (userPr.equalsIgnoreCase("C")) {
-          if (docPr.compareToIgnoreCase("C") <= 0 && stav == 4) {
+          if (stav == 4) {
             return true;
           }
 
