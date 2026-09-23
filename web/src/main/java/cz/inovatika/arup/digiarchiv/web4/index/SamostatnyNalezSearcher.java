@@ -13,7 +13,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.XML;
 
 /**
  *
@@ -134,7 +133,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
     }
 
     /**
-     * Filter katastr podle pristupnosti
+     * Filter podle pristupnosti
      *
      * @param jo
      * @param pristupnost

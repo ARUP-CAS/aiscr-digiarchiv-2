@@ -528,7 +528,7 @@ public class HandleServlet extends HttpServlet {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
               .setFacet(false);
       //query.setFields("entity,is_deleted,searchable,stav");
-      query.setFields("entity,komponenta_zdroj,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
+      query.setFields("entity,komponenta_zdroj,is_deleted,searchable,pristupnost,stav,projekt:samostatny_nalez_projekt,projekt_organizace,organizace:samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
       query.set("wt", "json");
       QueryResponse resp = client.query("entities", query);
 
