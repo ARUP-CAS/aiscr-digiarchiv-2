@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID, forwardRef, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, isActive, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppConfiguration } from '../../app-configuration';
@@ -61,7 +61,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.service.currentLang.subscribe(res => {
       this.setTitle();
     });
-    this.state.printing.set(this.state.printing() || this.router.isActive('print', false));
+    this.state.printing.set(this.state.printing() || isActive('print', this.router, { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })());
     this.route.queryParams.subscribe(val => {
       this.search(this.route.snapshot.params['id']);
       this.state.documentId.set(this.route.snapshot.params['id']);
@@ -69,7 +69,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.isBrowser && (this.state.printing() || this.router.isActive('print', false))) {
+    if (this.isBrowser && (this.state.printing() || isActive('print', this.router, { fragment: 'ignored', matrixParams: 'ignored', paths: 'subset', queryParams: 'ignored' })())) {
       this.tryPrint();
     }
   }
@@ -81,9 +81,13 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.tryPrint();
       } else {
         this.state.printing.set(true);
-        this.service.print();
+        this.state.loading.set(false);
+        this.loading.set(false);
+        setTimeout(() => {
+        window.print();
+        }, 2000);
       }
-    }, 2000);
+    }, 4000);
   }
 
   setTitle() {
@@ -98,8 +102,6 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.state.hasError = false;
     this.result.set(null);
     this.service.getHandle(id, true).subscribe((resp: any) => {
-      this.state.loading.set(false);
-      this.loading.set(false);
       if (resp.error) {
         this.state.hasError = true;
         this.service.showErrorDialog('dialog.alert.error', 'dialog.alert.document_' + resp.status);
@@ -126,6 +128,8 @@ export class DocumentComponent implements OnInit, AfterViewInit {
 
         this.result.set(doc);
         this.setTitle();
+        this.state.loading.set(this.state.printing());
+        this.loading.set(false);
       }
     });
   }

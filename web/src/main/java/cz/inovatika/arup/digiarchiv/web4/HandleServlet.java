@@ -86,12 +86,12 @@ public class HandleServlet extends HttpServlet {
         long retryTime = AppState.canGetFileInterval(ip, id);
         if (retryTime > 0) {
           response.setStatus(429); // 429 Too Many Requests
-          response.addHeader("Retry-After", retryTime/1000 + "");
-          response.getWriter().print("Try in " + retryTime/1000 + " seconds.");
+          response.addHeader("Retry-After", Math.ceil(retryTime*.001) + "");
+          response.getWriter().print("Try in " + Math.ceil(retryTime*.001) + " seconds.");
           return;
         } else if (retryTime == -1) {
           response.setStatus(429); // 429 Too Many Requests
-          response.addHeader("Retry-After", Options.getInstance().getInt("requestInterval", 5000) + "");
+          response.addHeader("Retry-After", Math.ceil(Options.getInstance().getInt("requestInterval", 5000)*.001) + "");
           response.getWriter().print("Downloading file still in progress. Try later.");
           return;
         }
@@ -376,7 +376,8 @@ public class HandleServlet extends HttpServlet {
 
   private static boolean isFileAllowed(String id, JSONObject doc, JSONObject user) {
     
-    //https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/256
+    //https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/256 OUTDATED
+    //https://arup-cas.github.io/aiscr-api-home/file-api/ 
     
     if (id.contains("thumb") && !id.contains("page") && !id.contains("thumb-large")) {
       return true;
@@ -397,17 +398,17 @@ public class HandleServlet extends HttpServlet {
     }
     switch (entity) {
       case "projekt":
-//-- A-B: stav = 6
-//-- C: stav > 0
+        
+//-- A-B: nikdy
+//-- C: projekt/stav = 1 OR (projekt/stav >= 2 AND projekt/stav <= 6 AND projekt/organizace = {user}.organizace)
 //-- D-E: bez omezení
-        if (userPr.compareToIgnoreCase("D") >= 0) {
-            return true;
-        } else if (userPr.equalsIgnoreCase("C") && stav >= 1) {
-            return true;
-        } else if (userPr.compareToIgnoreCase("B") <= 0 && stav == 6) {
-            return true;
+        String docOrg = doc.optString("projekt_organizace");
+        boolean sameOrg = userOrg.toLowerCase().equals(docOrg.toLowerCase());
+        if (userPr.equalsIgnoreCase("C")
+                && ((stav == 1) || (sameOrg && stav <= 6))) {
+          return true;
         } else {
-            return false;
+          return userPr.compareToIgnoreCase("D") >= 0;
         }
       case "dokument":
       case "knihovna_3d":
@@ -418,7 +419,7 @@ public class HandleServlet extends HttpServlet {
         if (userPr.equalsIgnoreCase("A") && docPr.equalsIgnoreCase("A") && stav == 3) {
           return true;
         } else if (userPr.equalsIgnoreCase("B")) {
-          if (docPr.compareToIgnoreCase("B") <= 0 && stav == 3) {
+          if (stav == 3) {
             return true;
           }
 
@@ -433,7 +434,7 @@ public class HandleServlet extends HttpServlet {
           return (userId.equals(uzivatel));
 
         } else if (userPr.equalsIgnoreCase("C")) {
-          if (docPr.compareToIgnoreCase("C") <= 0 && stav == 3) {
+          if (stav == 3) {
             return true;
           }
 
@@ -459,11 +460,11 @@ public class HandleServlet extends HttpServlet {
 //                OR (samostatny_nalez_predano_organizace = {user}.organizace)
 //-- D-E: bez omezení
         if (userPr.equalsIgnoreCase("A")) {
-          return stav == 4 && docPr.equalsIgnoreCase("A");
+          return stav == 4;
         }
         
         if (userPr.equalsIgnoreCase("B")) {
-          if (docPr.compareToIgnoreCase("B") <= 0 && stav == 4) {
+          if (stav == 4) {
             return true;
           }
 
@@ -480,7 +481,7 @@ public class HandleServlet extends HttpServlet {
         }
         
         if (userPr.equalsIgnoreCase("C")) {
-          if (docPr.compareToIgnoreCase("C") <= 0 && stav == 4) {
+          if (stav == 4) {
             return true;
           }
 
@@ -528,7 +529,7 @@ public class HandleServlet extends HttpServlet {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
               .setFacet(false);
       //query.setFields("entity,is_deleted,searchable,stav");
-      query.setFields("entity,komponenta_zdroj,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
+      query.setFields("entity,komponenta_zdroj,is_deleted,searchable,pristupnost,stav,projekt:samostatny_nalez_projekt,projekt_organizace,organizace:samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
       query.set("wt", "json");
       QueryResponse resp = client.query("entities", query);
 

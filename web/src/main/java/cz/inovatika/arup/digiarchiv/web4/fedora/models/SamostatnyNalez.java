@@ -269,7 +269,6 @@ public class SamostatnyNalez implements FedoraModel {
 
     @Override
     public boolean filterOAI(JSONObject user, SolrDocument doc) {
-//https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/237
 //-- A: stav = 4
 //-- B: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely
 //-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)

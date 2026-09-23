@@ -55,7 +55,7 @@ export class EntityContainer  {
 
   inDocument = input<boolean>(false);
   detailExpanded = input<boolean>(false);
-  _detailExpanded: boolean;
+  //_detailExpanded: boolean;
   isChild = input<boolean>(false);
   mapDetail = input<boolean>(false);
   isDocumentDialogOpen = input<boolean>(false);

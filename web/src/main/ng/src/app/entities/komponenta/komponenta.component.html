@@ -18,7 +18,7 @@
   </mat-card-header>
   <ng-container *ngTemplateOutlet="headerTmpl"></ng-container>
   <ng-container *ngTemplateOutlet="actionsTmpl"></ng-container>
-  @if (_detailExpanded) {
+  @if (_detailExpanded()) {
     <ng-container *ngTemplateOutlet="detailsTmpl"></ng-container>
   }
 </mat-card>
@@ -257,7 +257,7 @@
     <div class="app-fxFlex app-metadata">
     </div>
     @if(_result()) {
-    <app-result-actions [inDocument]="inDocument()" [result]="_result()" [detailExpanded]="_detailExpanded"
+    <app-result-actions [inDocument]="inDocument()" [result]="_result()" [detailExpanded]="_detailExpanded()"
       [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()" [bibTex]="bibTex"
       [ident_cely_api]="_result().ident_cely.substr(0, _result().ident_cely.lastIndexOf('-'))"></app-result-actions>
     }
