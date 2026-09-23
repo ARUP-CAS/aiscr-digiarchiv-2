@@ -81,7 +81,11 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.tryPrint();
       } else {
         this.state.printing.set(true);
+        this.state.loading.set(false);
+        this.loading.set(false);
+        setTimeout(() => {
         this.service.print();
+        }, 2000);
       }
     }, 2000);
   }
@@ -125,7 +129,7 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.result.set(doc);
         this.setTitle();
         this.state.loading.set(this.state.printing());
-        this.loading.set(this.state.printing());
+        this.loading.set(false);
       }
     });
   }

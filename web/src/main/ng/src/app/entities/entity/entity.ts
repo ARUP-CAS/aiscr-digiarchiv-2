@@ -35,7 +35,7 @@ export class Entity {
 
   inDocument = input<boolean>(false);
   detailExpanded = input<boolean>(false);
-  _detailExpanded: boolean;
+  _detailExpanded = signal<boolean>(false);
   isChild = input<boolean>(false);
   mapDetail = input<boolean>(false);
   isDocumentDialogOpen = input<boolean>(false);
@@ -86,7 +86,7 @@ export class Entity {
   }
 
   ngOnInit(): void {
-      this._detailExpanded = this.detailExpanded() || this.inDocument() || this.isChild();// && !this.mapDetail;
+      this._detailExpanded.set(this.detailExpanded() || this.inDocument() || this.isChild());// && !this.mapDetail;
     if (!this._result()) {
       return;
     }
@@ -125,7 +125,7 @@ export class Entity {
   }
 
   toggleDetail() {
-    this._detailExpanded = !this._detailExpanded;
+    this._detailExpanded.set(!this._detailExpanded());
     if (!this.hasDetail && !this.inDocument()) {
       this.getFullId();
     }

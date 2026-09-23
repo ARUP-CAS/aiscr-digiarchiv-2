@@ -33,7 +33,7 @@
     </mat-card-title>
   </mat-card-header>
 
-  <mat-card-content [class.app-detail-closed]="!_detailExpanded">
+  <mat-card-content [class.app-detail-closed]="!_detailExpanded()">
     @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
       <div class="app-thumb app-fxLayout app-row app-fill app-center-v app-center-h" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
         <mat-icon>image_not_supported</mat-icon>
@@ -106,11 +106,11 @@
         }
       </div>
       <app-result-actions [inDocument]="inDocument()" [result]="_result()" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"
-      [detailExpanded]="_detailExpanded" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
+      [detailExpanded]="_detailExpanded()" [mapDetail]="mapDetail()" (onToggleDetail)="toggleDetail()"></app-result-actions>
     </mat-card-actions>
   }
 
-  @if (_detailExpanded && !isChild()) {
+  @if (_detailExpanded() && !isChild()) {
     <mat-card-content >
       <div class="app-card-detail">
         <mat-accordion multi="true">

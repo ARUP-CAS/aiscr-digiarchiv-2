@@ -22,7 +22,7 @@
           }
       </mat-card-title>
     </mat-card-header>
-    @if (_detailExpanded) {
+    @if (_detailExpanded()) {
       <mat-card-content class="app-persistent-link-wrapper">
         <ng-container *ngTemplateOutlet="contentTmpl"></ng-container>
       </mat-card-content>
@@ -40,12 +40,12 @@
           }
         </div>
         @if(_result()) {
-        <app-result-actions [inDocument]="inDocument()" [result]="_result()" [detailExpanded]="_detailExpanded" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
+        <app-result-actions [inDocument]="inDocument()" [result]="_result()" [detailExpanded]="_detailExpanded()" [mapDetail]="false" (onToggleDetail)="toggleDetail()"
           [bibTex]="bibTex" [ident_cely_api]="_result().ident_cely.substr(0, _result().ident_cely.lastIndexOf('-'))"></app-result-actions>
         }
       </mat-card-actions>
     }
-    @if (_detailExpanded) {
+    @if (_detailExpanded()) {
       <mat-card-content class="app-persistent-link-wrapper">
         @if (_result().akce || _result().lokalita) {
           <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
@@ -86,12 +86,12 @@
         </mat-panel-title>
       }
     </mat-expansion-panel-header>
-    @if (_detailExpanded || !inDocument()) { 
+    @if (_detailExpanded() || !inDocument()) { 
       <!--*ngIf="result.dj_negativni_jednotka"-->
       <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
       {{ _result().dj_negativni_jednotka ? ('negativní' | translate) : ('pozitivní' | translate) }}
     }
-    @if (_detailExpanded || !inDocument()) {
+    @if (_detailExpanded() || !inDocument()) {
       <mat-accordion multi="true">
         @if (_result().dj_pian) {
           <app-pian [result]="_result().dj_pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
