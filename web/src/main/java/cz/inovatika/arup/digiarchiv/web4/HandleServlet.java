@@ -454,10 +454,6 @@ public class HandleServlet extends HttpServlet {
       case "samostatny_nalez":
 //-- A: samostatny_nalez/stav = 4
 //-- B: (samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user}
-//-- C: (samostatny_nalez/stav = 4) 
-//                OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} 
-//                OR projekt/organizace = {user}.organizace
-//                OR (samostatny_nalez_predano_organizace = {user}.organizace)
 //-- D-E: bez omezení
         if (userPr.equalsIgnoreCase("A")) {
           return stav == 4;
@@ -481,24 +477,34 @@ public class HandleServlet extends HttpServlet {
         }
         
         if (userPr.equalsIgnoreCase("C")) {
+//-- C: (samostatny_nalez/stav = 4) 
+//                OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} 
+//                OR projekt/organizace = {user}.organizace
+//                OR (samostatny_nalez_predano_organizace = {user}.organizace)
+
+
+//-- C: (samostatny_nalez/stav = 4) 
           if (stav == 4) {
             return true;
           }
-
-          if (userOrg.equals(doc.optString("samostatny_nalez_predano_organizace"))) {
-            return true;
-          }
-
+          
           JSONArray h = doc.getJSONArray("historie");
-          String uzivatel = "KKK";
+          String uzivatelSN01 = "KKK";
 
           for (int i = 0; i < h.length(); i++) {
             JSONObject hi = h.getJSONObject(i);
             if ("SN01".equals(hi.optString("typ_zmeny"))) {
-              uzivatel = hi.getJSONObject("uzivatel").getString("id");
+              uzivatelSN01 = hi.getJSONObject("uzivatel").getString("id");
             }
           }
-          if (userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel))) {
+          
+//        OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} 
+          if (userId.equals(uzivatelSN01)) {
+            return true;
+          }
+
+//        OR (samostatny_nalez_predano_organizace = {user}.organizace)
+          if (userOrg.equals(doc.optString("samostatny_nalez_predano_organizace"))) {
             return true;
           }
 
@@ -507,7 +513,8 @@ public class HandleServlet extends HttpServlet {
           SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
                   .setFields("projekt_organizace");
           JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
-
+          
+//        OR projekt/organizace = {user}.organizace
           if (json.getJSONObject("response").getInt("numFound") > 0) {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("projekt_organizace");
           }

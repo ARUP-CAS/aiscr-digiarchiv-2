@@ -324,11 +324,6 @@ public class SamostatnyNalez implements FedoraModel {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("projekt_organizace", "nonexist");
         }
         
-        
-        System.out.println(userPr);
-        System.out.println(uzivatelSN01);
-        System.out.println(userId);
-        
         if (userPr.equalsIgnoreCase("C")) { 
 //-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)
             return (userId.equals(uzivatelSN01) || (userOrg.equals(projektOrg)) || (userOrg.equals(sn_predano_organizace)));

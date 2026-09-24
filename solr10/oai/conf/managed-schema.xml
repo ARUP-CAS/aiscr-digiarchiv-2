@@ -54,6 +54,7 @@
    <!-- doc values are enabled by default for primitive types such as long so we don't index the version field  -->
    <field name="_version_" type="plong" indexed="false" stored="false"/>
 	  <field name="datestamp" type="pdate" multiValued="false" indexed="true" required="true" stored="true"/>
+    <field name="historie" type="string" indexed="false" stored="true" multiValued="true" />
 	  <field name="historie_typ_zmeny" type="string" multiValued="false" indexed="true" stored="true"/>
 	  <field name="historie_uzivatel" type="string" multiValued="false" indexed="true" stored="true"/>
 	  <field name="ident_cely" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
