@@ -95,7 +95,7 @@ The deployed `SamostatnyNalez.filterOAI` follows the table on all rows; the C-br
 | --- | --- | --- | --- |
 | `//projekt/soubor` | never | never | stav=1 OR (stav 2-6 AND own org) |
 | `//dokument/soubor` | pr=A AND stav=3 | (pr<=B AND stav=3) OR own (D01) | (pr<=C AND stav=3) OR own org (D01 creator's org) |
-| `//samostatny_nalez/soubor` | stav=4 | stav=4 OR own (SN01) | stav=4 OR own (SN01) OR own org (predano/projekt) |
+| `//samostatny_nalez/soubor` | stav=4 | stav=4 OR own (SN01) | stav=4 OR own (SN01) OR own org (predano; projekt/organizace) |
 
 Deployed divergences (source `HandleServlet.isFileAllowed`, current test build):
 
