@@ -81,13 +81,13 @@ export class DocumentComponent implements OnInit, AfterViewInit {
         this.tryPrint();
       } else {
         this.state.printing.set(true);
-        this.state.loading.set(false);
+        // this.state.loading.set(false);
         this.loading.set(false);
         setTimeout(() => {
-        window.print();
-        }, 2000);
+          this.service.print();
+        }, 1000);
       }
-    }, 4000);
+    }, 1000);
   }
 
   setTitle() {

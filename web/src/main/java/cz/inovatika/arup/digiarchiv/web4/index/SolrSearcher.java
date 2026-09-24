@@ -239,6 +239,7 @@ public class SolrSearcher {
       }
       fs.add(f);
     }
+    fs.add("stav");
     fs.add("pristupnost");
     query.setFields(fs.toArray(new String[0]));
     query.set("stats", false);

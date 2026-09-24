@@ -288,8 +288,9 @@ public class SamostatnyNalez implements FedoraModel {
             userOrg = user.getJSONObject("organizace").optString("id", "");
         }
 
-        String projektId = (String) doc.getFieldValue("projekt");
-        String sn_predano_organizace = (String) doc.getFirstValue("organizace");
+        String projektId = doc.containsKey("projekt") ? (String) doc.getFieldValue("projekt") : (String)doc.getFirstValue("samostatny_nalez_projekt");
+        String sn_predano_organizace = doc.containsKey("organizace") ? (String)doc.getFirstValue("organizace") : (String)doc.getFirstValue("samostatny_nalez_predano_organizace");
+        
         JSONArray h = new JSONArray(doc.getFieldValues("historie"));
         String uzivatelSN01 = null;
         String organizaceUzivatele = null;
@@ -306,21 +307,27 @@ public class SamostatnyNalez implements FedoraModel {
         
 
 
-        SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
-                .setFields("samostatny_nalez_projekt");
-        JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
-        if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
-            projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("samostatny_nalez_projekt");
+        if (projektId == null) {
+          SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
+                  .setFields("samostatny_nalez_projekt");
+          JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
+          if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
+              projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("samostatny_nalez_projekt");
+          }
         }
 
         String projektOrg = null;
-        query = new SolrQuery("ident_cely:\"" + projektId + "\"")
+        SolrQuery query = new SolrQuery("ident_cely:\"" + projektId + "\"")
                 .setFields("projekt_organizace");
         JSONObject json = SearchUtils.searchById(query, "entities", projektId, false);
-
         if (json.getJSONObject("response").getInt("numFound") > 0) {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("projekt_organizace", "nonexist");
         }
+        
+        
+        System.out.println(userPr);
+        System.out.println(uzivatelSN01);
+        System.out.println(userId);
         
         if (userPr.equalsIgnoreCase("C")) { 
 //-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)

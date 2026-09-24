@@ -234,8 +234,8 @@ public class ImageServlet extends HttpServlet {
               long retryTime = AppState.canGetFileInterval(ip, id); //miliseconds
               if (retryTime > 0) {
                 response.setStatus(429); // 429 Too Many Requests
-                response.addHeader("Retry-After", Math.ceil(retryTime*.001) + "");
-                response.getWriter().print("Try in " + Math.ceil(retryTime*.001) + " seconds.");
+                response.addHeader("Retry-After", (int)Math.ceil(retryTime*.001) + "");
+                response.getWriter().print("Try in " + (int)Math.ceil(retryTime*.001) + " seconds.");
                 return;
               } else if (retryTime == -1) {
                 response.setStatus(429); // 429 Too Many Requests
