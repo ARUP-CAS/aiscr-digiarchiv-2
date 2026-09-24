@@ -3,10 +3,13 @@
 @use "app-mixins-icon";
 
 @media print {
+  @page {
+    margin: 0; 
+  }
   body, 
   main {
     height: auto !important;
-    zoom: 85%;
+    zoom: 95%;
   }
 
   header,
