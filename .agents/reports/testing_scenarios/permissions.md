@@ -14,7 +14,7 @@
 
 | Environment | Landing page | OAI-PMH | Build |
 | --- | --- | --- | --- |
-| Test | `https://digiarchiv-test.aiscr.cz/id/<ident_cely>` | `https://api-test.aiscr.cz/2.2/oai` | carries #370 plus the fix wave in `749f7ec0`..`1669e29c` (legacy `/api/search/id` removed; `/pdf` gated via `ImageAccess`; SN record rules per #237; SN organisation clauses on the entities path; projekt file gate per the published row; SN file gate without pristupnost conditions). Open divergences from the published rules: D08 (OAI SN owner clause), D16 (SN file-gate author-organisation arm), D18 (dokument file-gate B/C rows lost the pristupnost condition), D19 (projekt export entity broken). Build identity: the served bundle embeds `v4.0.3-230-g1669e29c-dirty` while the footer hash alone does not identify the backend deploy — establish the backend by behaviour |
+| Test | `https://digiarchiv-test.aiscr.cz/id/<ident_cely>` | `https://api-test.aiscr.cz/2.2/oai` | carries #370 plus the fix waves through `544d7851` (legacy `/api/search/id` removed; `/pdf` gated via `ImageAccess`; SN record rules per #237; SN organisation clauses on the entities path; projekt file gate per the published row; SN file gate without pristupnost conditions; OAI SN owner clause; dokument file-gate pristupnost conditions; projekt export entity). Open divergence from the published rules: D16 (SN file-gate author-organisation arm). Build identity: the served bundle embeds `v4.0.3-235-g544d7851-dirty` while the footer hash alone does not identify the backend deploy — establish the backend by behaviour |
 | Production | `https://digiarchiv.aiscr.cz/id/<ident_cely>` | `https://api.aiscr.cz/2.2/oai` | pre-fix-wave build: D07 (restricted-children VB geometry) and D14 (`/pdf` page images) remain open there; both are resolved by the upcoming production release of the fix wave. The partial hotfix removed the FedoraServlet read actions (`GET_ID`/`REQUEST`), closing the D13 raw-read path. The SN and projekt file gates follow the published rule table (D09, D15 absent), with no D12 stav=6 exposure; D17 and the test-only file-gate divergences (D16, D18) are not examinable anonymously. `/thumb-large` absent (404) |
 
 OAI quirks: on the test instance, OAI identifiers use the **`https://api-test.aiscr.cz/id/…`** prefix (GetRecord with the production prefix silently fails with `idDoesNotExist`); set names containing a colon must be percent-encoded (`set=dokument%3A3d`). Versioned OAI endpoints (`/2.1/oai`, `/2.2/oai`) serve the same filtered core and differ only by XSLT. The **version-less** endpoint `https://api-test.aiscr.cz/oai` 302-redirects to the current version — a convenient Basic-auth role-probe shape.
@@ -95,13 +95,13 @@ The deployed `SamostatnyNalez.filterOAI` follows the table on all rows; the C-br
 | --- | --- | --- | --- |
 | `//projekt/soubor` | never | never | stav=1 OR (stav 2-6 AND own org) |
 | `//dokument/soubor` | pr=A AND stav=3 | (pr<=B AND stav=3) OR own (D01) | (pr<=C AND stav=3) OR own org (D01 creator's org) |
-| `//samostatny_nalez/soubor` | stav=4 | stav=4 OR own (SN01) | stav=4 OR own (SN01) OR own org (predano; projekt/organizace) |
+| `//samostatny_nalez/soubor` | stav=4 | stav=4 OR own (SN01) | stav=4 OR own (SN01) OR own org (predano/projekt) |
 
-Deployed divergences (source `HandleServlet.isFileAllowed`, current test build):
+Deployed state (source `HandleServlet.isFileAllowed`, current test build):
 
 - **projekt** — implements the published row exactly (permissions-D15 fixed).
-- **dokument** (and `knihovna_3d`) — the A row implements the published row; the B and C rows return `true` on `stav=3` alone, without the `pristupnost<=B`/`<=C` condition (permissions-D18 — unintended collateral of the D09 fix: the pristupnost conditions were to be dropped only for the SN rows, where the published table governs by `stav=4` alone, while the dokument rows keep them): B and C download archived dokument files with pristupnost above their role. The owner arm (B, D01 creator) and the creator-organisation arm (C) are present for `stav≠3` and work. Fix direction: a separate decision branch for SN files so an SN fix cannot reach the dokument rows, and the dokument B/C pristupnost conditions restored.
-- **samostatny_nalez** — the A/B/C rows implement the published `stav=4` and owner clauses without pristupnost conditions (permissions-D09 fixed). The C row additionally carries an **SN01 author's-organisation arm** — a stale implementation predating #370; the published table is authoritative and the arm is to be **removed** (permissions-D16, operator decision). The `predano_organizace` and projekt-organisation arms match the published row.
+- **dokument** (and `knihovna_3d`) — implements the published rows: A `pr=A AND stav=3`; B `(pr<=B AND stav=3) OR D01 owner`; C `(pr<=C AND stav=3) OR D01 creator's organisation`. The owner and creator-organisation arms work for `stav≠3`.
+- **samostatny_nalez** — the A/B/C rows implement the published `stav=4` and owner clauses without pristupnost conditions. The C row carries an **SN01 author's-organisation arm** (permissions-D16, removal decided): where the code's own rule comment and the published table state `SN01/uzivatel = {user}` — the author's identity — the code compares the reader's organisation with the SN01 author's organisation (`userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel))`), granting the file to every colleague of the author regardless of stav, pristupnost, projekt organisation and receiving organisation. The same expression in the dokument C row (D01 creator's organisation) is published behaviour and must stay. Fix direction: `userId.equals(uzivatel)`, mirroring the B row's owner clause.
 
 Small thumbnails (`/thumb`) are **always public**; large thumbnails (`/thumb/page/N`, `/thumb-large`) and `/paradata` follow the original-file rules. **File distributions and paradata are additional File API surfaces (#693):** `/id/<ident>/file/<uuid>/{dist}` (any non-reserved suffix resolves as a distribution, `orig` included) and `/id/<ident>/file/<uuid>/paradata[/{dist}]` (the bare form serves the paradata of `orig`, always `text/plain`). They resolve through the same `getDocumentFromFile` lookup and the **same `isFileAllowed` gate** as the original file, so the rule table above governs them identically: a gate change on the original (the D09 fix, the D18 collateral) propagates to distributions and paradata **by design** — it is #693's contract working, not a separate divergence. An unknown distribution returns 404; the rate limiter covers all forms; the `soubor_distri` search facet exposes the live distribution paths. The full surface contract — including the internal reader `/api/img/*` surface, which is deliberately undocumented and must not be "fixed" to match — and the limiter facts live in the [`file-distributions`](file-distributions.md) scenario. **Image endpoints** (`/img`) apply their own `ImageAccess` rules (see surface inventory) — SN always allowed at full size, dokument by pristupnost. **`/pdf`** shares those rules on the test build (gated); the production build still serves it ungated (D14 — open there until the upcoming production release).
 
@@ -141,7 +141,7 @@ Anchors verified on the current test build. **Drift rule:** records change state
 | `M-202301371-N00006` | samostatny_nalez | pr=D, stav=4; projekt, `predano_organizace` and SN01 author all ORG-000066 (foreign) — D09 probe | file API |
 | `C-202009779-N00022` | samostatny_nalez | pr=D, stav=1 — creator-org clause probe, both arms match: `predano_organizace` ORG-000091, projekt `C-202009779` org ORG-000091; created SN01 by U-001975 | landing, handle, OAI |
 | `C-202211308-N00230` | samostatny_nalez | pr=D, stav=1 — creator-org clause probe, projekt arm only: `predano_organizace` ORG-000099 (mismatch), projekt `C-202211308` org ORG-000091 (match); created SN01 by U-004219 | landing, handle, OAI |
-| `C-202009779-N00031` | samostatny_nalez | stav=3, pr above C, projekt `C-202009779` org ORG-000015, `predano_organizace` ORG-000084, SN01 author in ORG-000091 — **D16 probe**: every published C-row arm dead, only the author-organisation arm can grant; file `f3ba25a8-9c79-46cd-924d-803b56e46e92` | file API, landing, handle |
+| `C-202009779-N00031` | samostatny_nalez | pr=C, stav=3, projekt `C-202009779` org ORG-000015, `predano_organizace` ORG-000084, SN01 author U-004219 (ORG-000091) — **D16 probe**: every published C-row arm dead, only the author-organisation arm can grant; file `f3ba25a8-9c79-46cd-924d-803b56e46e92` | file API, landing, handle |
 | `U-004495` | uzivatel | the B test account — own-record clause | OAI |
 | `U-004496` | uzivatel | the C test account (org ORG-000091) — counterpart for the creator-org clause probes | session/islogged, landing, OAI |
 | `M-202500301` | projekt | production stav=6 projekt with a file — D15 production control | production file API |
@@ -199,17 +199,18 @@ curl "https://digiarchiv-test.aiscr.cz/id/<IDENT>/file/<UUID>/thumb/page/1"
 curl "https://digiarchiv-test.aiscr.cz/id/<IDENT>/file/<UUID>/thumb-large"
 ```
 
-## Current verification (2026-09-23 full pass on the test deploy, build v4.0.3-230-g1669e29c-dirty; fresh B/C/D sessions with operator-provided credentials; production compared anonymously with operator approval)
+## Current verification (2026-09-24 regression round on the test deploy, build v4.0.3-235-g544d7851-dirty; fresh B/C/D sessions with operator-provided credentials; production compared anonymously with operator approval)
 
-Grid legend: `✓` observed and matches the documented rule · `✗` + finding id = deviation · `·` = no surface for that type by design · `—` = untested on this build (worklist). Codes are the observed HTTP status; element state in parentheses. Every cell in the grids below was re-probed in this pass on the current build.
+Grid legend: `✓` observed and matches the documented rule · `✗` + finding id = deviation · `·` = no surface for that type by design · `—` = untested on this build (worklist). Codes are the observed HTTP status; element state in parentheses. The grids carry the state verified by the 2026-09-23 full pass with the 2026-09-24 regression round applied to every defect-affected cell (build `v4.0.3-230` → `v4.0.3-235` outcomes); holdout cells were re-probed where the fix wave could have moved them.
 
 ### Defect outcomes
 
 | Defect | Outcome on test | Production posture |
 | --- | --- | --- |
-| D08 | **open** — B-owner 403 body on OAI (`C-202600009-N00014`), landing and handle 200 | not examined (needs a B session there) |
-| D16 | **open — confirmed, removal decided** — C downloads the file of `C-202009779-N00031` (stav=3, projekt org ORG-000015, predano org ORG-000084 — every published arm dead; only the SN01 author's-organisation arm can grant); stale arm, to be removed with the other SN arms kept intact | not examined |
-| D18 | **open — regression, unintended collateral of the D09 fix** — B and C download stav=3 dokument files with pristupnost above their role; the pristupnost conditions were to be dropped only for SN files | not examined (pre-fix-wave build follows the published rows) |
+| D08 | **fixed** — the B-owner receives the own SN on OAI (`C-202600009-N00014`, chranene masked per pristupnost) | not examined (needs a B session there) |
+| D16 | **open — removal decided** — C downloads the file of `C-202009779-N00031` (stav=3, projekt org ORG-000015, predano org ORG-000084, SN01 author U-004219 of ORG-000091 — every published arm dead; only the author-organisation arm can grant) | not examined |
+| D18 | **fixed** — the dokument B/C rows carry the pristupnost conditions again; the D01 owner and creator-organisation arms preserved | not examined (production follows the published rows) |
+| D19 | **fixed** — `entity=projekt` export serves records; restricted projekts export without the chranene block | not examined |
 | D19 | **open — new** — `entity=projekt` export errors for all projekts | not examined |
 | D07 | fixed on test — restricted VBs carry no geometry fields anonymously | **open — resolved by the upcoming production release** (11,533 restricted-children VB docs, geometry served) |
 | D14 | fixed on test — `/pdf` 401 on a restricted dokument | **open — live leak, resolved by the upcoming production release** (real page content of a restricted dokument) |
@@ -218,7 +219,7 @@ Grid legend: `✓` observed and matches the documented rule · `✗` + finding i
 ### Issue #370 checklist mapping
 
 1. *Non-archived records visible after login (landing only)* — ✓ `C-202204147A` and `C-TX-193001369`: anon 401, B 200.
-2. *Same conditions as the API (#237)* — ✓ at record level with open deviations: D08 (OAI B-owner clause), D16 and D18 (file gate), D19 (projekt export availability).
+2. *Same conditions as the API (#237)* — ✓ at record level and element level; the file gate deviates only in D16 (SN author-organisation arm).
 3. *404/410/401/403 distinction* — ✓ anonymous: fabricated ident 404; deleted projekt `C-202402033` 410 (also for C on landing/handle and D on handle); unarchived akce/dokument 401; DJ of an unarchived akce and VB of a restricted ADB 403.
 4. *Correct return codes* — ✓ on the test build across the probed surfaces; production residuals D07 and D14 remain until the fix wave is deployed there.
 5. *Own-organisation finds (C)* — ✓ `C-202009779-N00022` and `C-202211308-N00230`: C 200 on landing and handle (D17 fixed).
@@ -277,7 +278,7 @@ Notes: `/map/<ident>` shares the gate with `/id/<ident>`; bare `/map` 200 (D01 f
 | let (`C-LET-00001`) | 200 ✓ | 200 ✓ | 200 ✓ | 200 ✓ |
 | heslo (`HES-000865`), organizace (`ORG-000091`) | 200 ✓ | 200 ✓ | 200 ✓ | 200 ✓ |
 | uzivatel other's record (`U-004495` as anon/C) | 403 body ✓ | 200 ✓ full own record | 403 body ✓ other's record | 200 ✓ (full) |
-| SN pr=C stav=1 B-owned (`C-202600009-N00014`) | 403 body ✓ | 403 body ✗D08 (owner clause dead on OAI) | 200 ✓ (projekt org matches — rule-conformant) | 200 ✓ |
+| SN pr=C stav=1 B-owned (`C-202600009-N00014`) | 403 body ✓ | 200 ✓ (SN01 owner clause) | 200 ✓ (projekt org matches — rule-conformant) | 200 ✓ |
 | SN pr=C stav=4 (`C-202600010-N00085`) | 200 ✓ (masked) | 200 ✓ (masked) | 200 ✓ (full) | 200 ✓ (full) |
 | SN pr=D stav=4 (`M-202301371-N00006`) | 200 ✓ (masked) | 200 ✓ (masked) | 200 ✓ (masked) | 200 ✓ (full) |
 | SN pr=D stav=1 org-match (`C-202009779-N00022`) | 403 body ✓ | — | 200 ✓ (chranene masked per pr=D — org clause works) | 200 ✓ (full) |
@@ -332,9 +333,9 @@ Notes: legacy `/api/search/id` action removed (500 no-enum, no data served); `en
 | projekt stav=6 own-org (`C-202007460`) — orig | 403 ✓ | — | 200 ✓ | — |
 | projekt stav=1 (`C-202111855`) — orig | 403 ✓ | 403 ✓ | 200 ✓ | — |
 | dokument pr=A stav=3 (`C-TX-192700656`) — orig | 200 ✓ | 200 ✓ | — | — |
-| dokument pr=C stav=3 (`M-TX-202100125`) — orig | 403 ✓ | 200 ✗D18 (pr>C, stav=3 shortcut) | 200 ✓ | — |
-| dokument pr=D stav=3 own-org (`C-TX-202400188`) — orig | 403 ✓ | 200 ✗D18 | 200 ✓ (also via org arm) | — |
-| dokument pr=D stav=3 other-org (`M-TX-202100123`) — orig | 403 ✓ | 200 ✗D18 | 200 ✗D18 (pr>D, other org) | — |
+| dokument pr=C stav=3 (`M-TX-202100125`) — orig | 403 ✓ | 403 ✓ | 200 ✓ | — |
+| dokument pr=D stav=3 own-org (`C-TX-202400188`) — orig | 403 ✓ | 403 ✓ | 200 ✓ (D01 creator-org arm) | — |
+| dokument pr=D stav=3 other-org (`M-TX-202100123`) — orig | 403 ✓ | 403 ✓ | 403 ✓ | — |
 | dokument pr=D stav=1 B-created (`X-C-TX-000001130`) — orig | 403 ✓ | 200 ✓ (D01 owner clause) | 200 ✓ (D01 creator-org arm) | — |
 | └ `/thumb` on `M-TX-202100125` | 200 ✓ (documented ungated) | — | — | — |
 | └ `/thumb/page/1` on `M-TX-202100125` | 403 ✓ (follows orig) | — | — | — |
@@ -345,7 +346,7 @@ Notes: legacy `/api/search/id` action removed (500 no-enum, no data served); `en
 | SN pr=D stav=4, all organisation arms other (`M-202301371-N00006`) — orig | 200 ✓ (stav=4) | 200 ✓ | 200 ✓ | 200 ✓ |
 | SN pr=C stav=1 B-owned (`C-202600009-N00014`) — orig | 403 ✓ | 200 ✓ (SN01 owner) | 200 ✓ (projekt org) | 200 ✓ |
 | SN stav=3, projekt+predano foreign, SN01 author own-org (`C-202009779-N00031`) — orig | 403 ✓ | — | 200 ✗D16 (only the author-org arm can grant; published row denies) | 200 ✓ |
-| distributions & paradata follow the original's verdict (#693; `M-TX-202100125` `/paradata`, `C-TX-192700656` `atr/stats-csv` and `paradata/orig`, `…-N00085` `/paradata`) | ✓ 403 with orig on the restricted dokument; 200 on public and stav=4 forms | ✓ 200 with orig (shared gate incl. D18) | ✓ 200 with orig | — |
+| distributions & paradata follow the original's verdict (#693; `M-TX-202100125` `/paradata`, `C-TX-192700656` `atr/stats-csv` and `paradata/orig`, `…-N00085` `/paradata`) | ✓ 403 with orig on the restricted dokument; 200 on public and stav=4 forms | ✓ matches the original's verdict (403 with orig) | ✓ 200 with orig | — |
 | cross-record uuid binding | 404 ✓ | — | — | — |
 | rate limiter | 429 on bursts (also across distinct files — documented ≥ 1 s spacing; `Retry-After` observed `0` interval / `500` concurrent) | — | — | — |
 
@@ -368,7 +369,7 @@ Notes: `/img` and `/pdf` gate on the **soubor id** (`soub-XXXXXX`), not the Fedo
 
 | Surface / probe | anon | B | C | D |
 | --- | --- | --- | --- | --- |
-| `/exp?entity=projekt&q=<ident>` (public and restricted) | ✗D19 error body `JSONObject["stav"] not found` (no data served; `format=json` → 500 page) | — | — | — |
+| `/exp?entity=projekt&q=<ident>` (public and restricted) | ✓ export serves records; restricted projekts carry no chranene block in the export field set | — | — | — |
 | `/exp?entity=akce&q=<restricted ident>&format=json` | ✓ served, no chranene in the export field set | — | — | — |
 | `/exp?entity=samostatny_nalez&mapa=true&geometrie=GeoJSON` (restricted SN) | ✓ `numFound=0` — record filtered out entirely for anonymous; no chranene, no error | — | — | — |
 | `/exp?entity=komponenta&q=<restricted komponenta>&format=csv` | ✓ no katastr column value (masked) | ✓ row served, katastr masked | ✓ row served with katastr — pr-legitimate | — |
@@ -400,7 +401,7 @@ Notes: `/img` and `/pdf` gate on the **soubor id** (`soub-XXXXXX`), not the Fedo
 | D05 | Low | child-record landing | **fixed** | DJ/dokument_cast/VB inherit parent rules again; search residual = D07 |
 | D06 | High | SN record level | **fixed** | the A/B branches' `pristupnost <= userPr` conditions contradicted #237's `stav=4` rule — the public stav=4 SN serves anon/B masked |
 | D07 | High | search API (vyskovy_bod) | **fixed on test; open on production — resolved by the upcoming production release** | restricted VB geometry anonymously searchable (prod: 11,533 restricted-children docs) |
-| D08 | High | OAI-PMH (SN) | **open — owner clause** | SN OAI owner clause reads fields the oai doc does not resolve; B-owner gets the 403 body on OAI while landing/handle serve the record |
+| D08 | High | OAI-PMH (SN) | **fixed** | the OAI-side SN owner clause resolves — the B-owner receives the own SN with chranene masked per pristupnost |
 | D09 | Medium | file API | **fixed** | file-gate SN rows over-blocked: the A/B/C rows carry `stav=4` without pristupnost conditions, matching the published table |
 | D10 | High | file API `/thumb-large` | **fixed** | undocumented endpoint bypassed all permission checks; the variant matrix now follows the original's rules |
 | D11 | High | backend surfaces (komponenta) | **fixed** | komponenta docs served the SN chranene block unmasked; now masked below the matching role |
@@ -408,15 +409,12 @@ Notes: `/img` and `/pdf` gate on the **soubor id** (`soub-XXXXXX`), not the Fedo
 | D13 | High | `/fedora/*` | **closed — solved in current state** (operator accepted the network-trusting posture and the mutating actions as-is) | unauthenticated raw-Fedora access from the local network/VPN; read actions removed on both deployments |
 | D14 | High | `/pdf` | **fixed on test; open on production — live leak, resolved by the upcoming production release** | PDF page JPEGs served with no permission gate on the production build |
 | D15 | High | file API (projekt) | **fixed** | projekt file gate applied the record-level rule instead of the published `//projekt/soubor` row |
-| D16 | Medium | file API (SN) | **open — removal decided** | stale SN01 author's-organisation arm predating #370, not stated by the published table; C downloads the file of `C-202009779-N00031` where every published arm denies |
+| D16 | Medium | file API (SN) | **open — removal decided** | the SN file-gate C row compares the SN01 author's organisation with the reader's, where its own rule comment and the published table state the author's identity; C downloads the file of `C-202009779-N00031` with every published arm dead |
 | D17 | High | landing pages + handle API (SN) | **fixed** | the SN organisation clauses resolve on the entities path (checkId projects projekt/predano organisations) |
-| D18 | High | file API (dokument) | **open — regression, collateral of the D09 fix** | the dokument file-gate B and C rows return `stav=3` without the `pristupnost` condition: B and C download archived dokument files above their role |
-| D19 | Medium | export (`/exp`) | **open — new** | `entity=projekt` export errors for all projekts (`JSONObject["stav"] not found`; 500 with `format=json`) |
+| D18 | High | file API (dokument) | **fixed** | the dokument file-gate B and C rows carry the pristupnost conditions again; the D01 owner and creator-organisation arms preserved |
+| D19 | Medium | export (`/exp`) | **fixed** | `entity=projekt` export serves records; restricted projekts export without the chranene block |
 
-- **D08 (High, open):** the SN owner arm on OAI reads fields the oai document does not resolve — the B-owner of `C-202600009-N00014` gets the 403 body on OAI GetRecord while the landing page and handle API serve the record (200). Fix direction: make the OAI-side owner clause read the doc-resolvable fields, as the entities path does.
-- **D16 (Medium, open — removal decided):** `HandleServlet.isFileAllowed`'s SN C row includes an SN01 author's-organisation clause (`userOrg.equals(getOrganizaceUzivatele(uzivatel))`) the published File API table does not state — a stale implementation predating #370. Confirmed live on `C-202009779-N00031` (maintainer-provided): stav=3, pristupnost above C, projekt organisation ORG-000015, `predano_organizace` ORG-000084 — every published C-row arm denies — yet C (ORG-000091) downloads the file, granted only by the author's organisation. The operator decided the published documentation is authoritative and the arm is to be removed; the removal must be scoped to the author-organisation clause alone so the SN01 owner, `predano_organizace` and projekt-organisation arms keep working (the D09 fix's collateral on the dokument rows is the cautionary precedent).
-- **D18 (High, open — regression, unintended collateral of the D09 fix on the `1669e29c` build):** the dokument case of `isFileAllowed` (also covering `knihovna_3d`) returns `true` for B and C on `stav=3` alone, without the published `pristupnost<=B` / `<=C` conditions. The D09 fix intended to drop the pristupnost conditions only for the SN rows — where the published table governs by `stav=4` alone — but the change also reached the dokument case, whose published rows keep the conditions. Live: B downloads the pr=C file of `M-TX-202100125` and the pr=D files of `C-TX-202400188` and `M-TX-202100123`; C downloads the pr=D other-organisation file of `M-TX-202100123` — the published table requires 403 for each. The A row and the owner/creator-org arms (stav≠3) conform. Fix direction: introduce a separate decision branch for SN files so an SN fix cannot reach the dokument rows, and restore the pristupnost conditions in the dokument B and C branches.
-- **D19 (Medium, open — new):** `/exp?entity=projekt` fails for every projekt (public and restricted) with `{"error":"org.json.JSONException: JSONObject[\"stav\"] not found."}`; `format=json` surfaces as an HTTP 500 error page. No data is served — an availability regression of the projekt export, introduced by the current build. Fix direction: repair the projekt searcher's export field projection.
+- **D16 (Medium, open — removal decided):** the SN case of `HandleServlet.isFileAllowed` grants the C row through the SN01 author's **organisation** — `userOrg.equals(SolrSearcher.getOrganizaceUzivatele(uzivatel))` — where the code's own rule comment and the published File API table state the author's **identity** (`SN01/uzivatel = {user}`, "my record"). Every published arm of the probe `C-202009779-N00031` is dead — stav=3, pristupnost C, projekt organisation ORG-000015, `predano_organizace` ORG-000084, SN01 author U-004219 of ORG-000091 = the C test account's organisation — yet C downloads the file (anonymous 403, D 200 as controls). Fix direction: replace the organisation comparison with `userId.equals(uzivatel)`, mirroring the B row's owner clause; keep the `stav=4`, `predano_organizace` and projekt-organisation arms; do **not** touch the same expression in the dokument C row (D01 creator's organisation), which is published behaviour.
 
 ### Pre-existing observations
 
@@ -437,3 +435,4 @@ Notes: `/img` and `/pdf` gate on the **soubor id** (`soub-XXXXXX`), not the Fedo
 | 2026-09-17 | 11 | D08 narrowed to the owner clause; D09 confirmed defect (SN A/B pristupnost conditions); D13 closed; holdouts re-verified; #370 items 1–4 re-verified; registry extended |
 | 2026-09-23 | 12 | regression pass: D15 found (projekt file gate), D12 reopened (stav=6 population), D09 extended to C, D16 narrowed, D17 found (SN org clauses on entities path), concurrent 429 live-verified; production compared anonymously |
 | 2026-09-23 | 13 — full pass | all permissions re-verified against the published OAI-PMH and File API tables on build `v4.0.3-230-g1669e29c-dirty`, all surfaces, roles A/B/C/D with fresh sessions; **D12, D15, D17, D09 fixed** by the new build; **D18 found** (dokument B/C rows lost pristupnost — unintended collateral of the D09 fix), **D19 found** (projekt export broken), **D16 confirmed** with the maintainer-provided `C-202009779-N00031`; D08 still open; production compared anonymously (file gates follow the published rows; D07/D14 deferred to the production follow-up); document cleaned to current state per operator instruction. **Operator decisions:** D18 is unintended collateral of the D09 fix — the fix needs a separate decision branch for SN files; D16's author-organisation arm is stale and to be removed (documentation authoritative), scoped so the other SN arms keep working; D07/D14 listed as a production later-check, not findings |
+| 2026-09-24 | 14 — regression round | build `v4.0.3-235-g544d7851-dirty`: **D08, D18, D19 fixed** (B-owner receives the own SN on OAI with chranene masked; dokument B/C pristupnost conditions restored with the D01 owner/creator-organisation arms and the pr=A/stav=3 positive preserved — paradata follows the fixed gate identically; projekt export serves records, restricted projekts without the chranene block); **D16 still open — root cause established:** the SN C row implements the SN01 author's *organisation* where the code's own rule comment and the published table state the author's *identity* (probe re-validated: all published arms dead, SN01 author U-004219 of ORG-000091, file binding and served file confirmed); D09/D12/D15/D17 hold (spot cells re-probed); production D07/D14 re-probed anonymously — still open (fix wave not released there) |
