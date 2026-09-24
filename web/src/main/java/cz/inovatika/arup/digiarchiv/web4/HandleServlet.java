@@ -86,12 +86,12 @@ public class HandleServlet extends HttpServlet {
         long retryTime = AppState.canGetFileInterval(ip, id);
         if (retryTime > 0) {
           response.setStatus(429); // 429 Too Many Requests
-          response.addHeader("Retry-After", Math.ceil(retryTime*.001) + "");
-          response.getWriter().print("Try in " + Math.ceil(retryTime*.001) + " seconds.");
+          response.addHeader("Retry-After", (int)Math.ceil(retryTime*.001) + "");
+          response.getWriter().print("Try in " + (int)Math.ceil(retryTime*.001) + " seconds.");
           return;
         } else if (retryTime == -1) {
           response.setStatus(429); // 429 Too Many Requests
-          response.addHeader("Retry-After", Math.ceil(Options.getInstance().getInt("requestInterval", 5000)*.001) + "");
+          response.addHeader("Retry-After", (int)Math.ceil(Options.getInstance().getInt("requestInterval", 5000)*.001) + "");
           response.getWriter().print("Downloading file still in progress. Try later.");
           return;
         }
@@ -419,7 +419,7 @@ public class HandleServlet extends HttpServlet {
         if (userPr.equalsIgnoreCase("A") && docPr.equalsIgnoreCase("A") && stav == 3) {
           return true;
         } else if (userPr.equalsIgnoreCase("B")) {
-          if (stav == 3) {
+          if (docPr.compareToIgnoreCase("B") <= 0 && stav == 3) {
             return true;
           }
 
@@ -434,12 +434,12 @@ public class HandleServlet extends HttpServlet {
           return (userId.equals(uzivatel));
 
         } else if (userPr.equalsIgnoreCase("C")) {
-          if (stav == 3) {
+          if (docPr.compareToIgnoreCase("C") <= 0 && stav == 3) {
             return true;
           }
 
           JSONArray h = doc.getJSONArray("historie");
-          String uzivatel = "KKK";
+          String uzivatel = "NEEXESTUJICI";
           for (int i = 0; i < h.length(); i++) {
             JSONObject hi = h.getJSONObject(i);
             if ("D01".equals(hi.optString("typ_zmeny"))) {
@@ -452,9 +452,9 @@ public class HandleServlet extends HttpServlet {
           return userPr.compareToIgnoreCase("D") >= 0;
         }
       case "samostatny_nalez":
-//-- A: samostatny_nalez/pristupnost = A AND samostatny_nalez/stav = 4
-//-- B: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user}
-//-- C: (samostatny_nalez/pristupnost <= B AND samostatny_nalez/stav = 4) 
+//-- A: samostatny_nalez/stav = 4
+//-- B: (samostatny_nalez/stav = 4) OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user}
+//-- C: (samostatny_nalez/stav = 4) 
 //                OR samostatny_nalez/historie[typ_zmeny='SN01']/uzivatel = {user} 
 //                OR projekt/organizace = {user}.organizace
 //                OR (samostatny_nalez_predano_organizace = {user}.organizace)
@@ -529,7 +529,7 @@ public class HandleServlet extends HttpServlet {
       SolrQuery query = new SolrQuery("ident_cely:\"" + id + "\"")
               .setFacet(false);
       //query.setFields("entity,is_deleted,searchable,stav");
-      query.setFields("entity,komponenta_zdroj,is_deleted,searchable,pristupnost,stav,projekt:samostatny_nalez_projekt,projekt_organizace,organizace:samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
+      query.setFields("entity,komponenta_zdroj,is_deleted,searchable,pristupnost,stav,samostatny_nalez_projekt,projekt_organizace,samostatny_nalez_predano_organizace,soubor:[json],historie:[json]");
       query.set("wt", "json");
       QueryResponse resp = client.query("entities", query);
 

@@ -893,8 +893,9 @@ public class FedoraHarvester {
         idoc.setField("stav", edoc.getFieldValue("stav"));
         idoc.setField("pristupnost", edoc.getFieldValue("pristupnost"));
         idoc.setField("datestamp", edoc.getFieldValue("datestamp"));
-        idoc.setField("historie_typ_zmeny", edoc.getFieldValue("historie_typ_zmeny"));
-        idoc.setField("historie_uzivatel", edoc.getFieldValue("historie_uzivatel"));
+//        idoc.setField("historie_typ_zmeny", edoc.getFieldValue("historie_typ_zmeny"));
+//        idoc.setField("historie_uzivatel", edoc.getFieldValue("historie_uzivatel"));
+        idoc.setField("historie", edoc.getFieldValues("historie"));
         String xmlData = xml.substring(xml.indexOf("<amcr"));
         idoc.setField("xml", xmlData);
         return idoc;
