@@ -82,6 +82,11 @@ public class FedoraUtils {
     return new JSONArray(request("record/" + id + "/metadata/fcr:metadata")).getJSONObject(0);
   }
   
+  public static JSONObject getFileMetadataByPath(String path) throws URISyntaxException, IOException, InterruptedException, Exception {
+    String r = request(path + "/fcr:metadata");
+    return new JSONArray(r).getJSONObject(0); 
+  }
+  
   public static String getDateStamp(String id) {
         try {
             JSONObject json = FedoraUtils.getJsonMetadataById(id);

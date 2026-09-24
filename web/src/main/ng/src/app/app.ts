@@ -46,7 +46,7 @@ export class App {
     };
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
-        this.isExport = this.router.isActive('export', p) || this.router.isActive('export-mapa', p);
+        this.isExport = this.router.isActive('export', p) || this.router.isActive('export-mapa', p) || this.router.isActive('museion', p);
         this.isResults = this.router.isActive('results', p);
         this.isStats = this.router.isActive('stats', p);
         const params = this.route.snapshot.queryParamMap;

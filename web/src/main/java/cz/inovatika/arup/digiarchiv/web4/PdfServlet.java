@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
+import cz.inovatika.arup.digiarchiv.web4.imagging.ImageAccess;
 import cz.inovatika.arup.digiarchiv.web4.imagging.ImageSupport;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -36,6 +38,28 @@ public class PdfServlet extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
       
+    if (!ImageAccess.isAllowed(request, true)) {
+      try {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        int code = HttpServletResponse.SC_FORBIDDEN;
+
+        String msg = Options.getInstance().getJSONObject("Handle").optString("msg", "not_found");
+        String cs = I18n.getInstance().getLocale("cs").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+        String en = I18n.getInstance().getLocale("en").getJSONObject("dialog").getJSONObject("alert").optString("document_" + code);
+        msg = msg.replaceAll("###code###", code + "").replaceAll("###code_txt_cs###", cs).replaceAll("###code_txt_en###", en);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter writer = response.getWriter();
+        writer.print("<html><head><meta charset=\"utf-8\"></head><body>");
+        writer.print(msg);
+        writer.print("</body></html>");
+
+        //response.getWriter().println("insuficient rights!!");
+        return;
+      } catch (Exception ex) {
+        LOGGER.log(Level.SEVERE, "Error", ex); 
+      }
+    }
+    
     //String id = request.getParameter("nazev");
     String id = request.getParameter("id");
     
@@ -61,7 +85,7 @@ public class PdfServlet extends HttpServlet {
             }
           
         } catch (Exception ex) {
-          LOGGER.log(Level.SEVERE, null, ex);
+          LOGGER.log(Level.SEVERE, "", ex);
           emptyImg(response, out);
         }
       } else {

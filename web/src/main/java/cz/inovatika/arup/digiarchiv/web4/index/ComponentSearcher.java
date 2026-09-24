@@ -14,6 +14,6 @@ import org.json.JSONObject;
  * @author alberto
  */
 public interface ComponentSearcher {
-  public void getRelated(JSONObject jo, SolrClient client, HttpServletRequest request);
+  public void getRelatedInHandle(JSONObject jo, SolrClient client, HttpServletRequest request);
   public boolean isRelatedSearchable();
 }

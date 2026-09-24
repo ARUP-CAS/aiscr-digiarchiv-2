@@ -18,3 +18,8 @@ web/src/main/webapp/index.csr.html
 .codex/
 .claude/
 .cursor/
+
+#local environments
+node_modules/
+.venv/
+web/src/main/ng/git-version.json

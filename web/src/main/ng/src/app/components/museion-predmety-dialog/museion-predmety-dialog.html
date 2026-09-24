@@ -1,0 +1,46 @@
+<h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>{{ 'museion.predmety' | translate }}
+  {{ data.id }} - {{ data.typ }}</h1>
+<div mat-dialog-content class="app-pt-1">
+  @if(loading()) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+  @if(!loading()) {
+  <div class="app-fxLayout app-column app-gap-4">
+    <div class="app-fxLayout app-column app-gap-4">
+      <div>
+        <!-- {{ 'museion.organizaceId' | translate}}: {{ predmetyDleAmcrId().organizaceId | translate}} -->
+          <mat-form-field appearance="outline">
+          <mat-label>{{ 'museion.organizaceId' | translate}}</mat-label>
+        <mat-select [(ngModel)]="selectedOrganizace" (selectionChange)="selectOrganizace()">
+          @for (f of organizaceIds(); track $index;) {
+          <mat-option [value]="f">{{ f | translate}}</mat-option>
+          }
+        </mat-select></mat-form-field>
+
+      </div>
+
+      <div>{{ 'museion.pocetPom' | translate}}: {{ predmetyDleAmcrId().pocetPom | translate}}</div>
+      <div>{{ 'museion.pocetSys' | translate}}: {{ predmetyDleAmcrId().pocetSys | translate}}</div>
+    </div>
+    <div>
+      <table mat-table [dataSource]="predmety()">
+        @for (f of columns(); track $index; let idx = $index) {
+
+        <ng-container [matColumnDef]="f">
+          <th mat-header-cell *matHeaderCellDef [title]="'museion.desc.' + f | translate"> {{ 'museion.' + f |
+            translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element[f]}} </td>
+        </ng-container>
+        }
+
+        <tr mat-header-row *matHeaderRowDef="columns() sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns();"></tr>
+      </table>
+    </div>
+
+  </div>
+  }
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>
+</div>

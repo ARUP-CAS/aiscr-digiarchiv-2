@@ -65,6 +65,7 @@ public class RUIANOkres implements FedoraModel {
         IndexUtils.addVocabField(idoc, "kraj", kraj);
         // JSONObject kraj = SolrSearcher.getKrajNazevBykod(kraj.getId);
         idoc.setField("kraj_nazev", kraj.getValue()); 
+        idoc.setField("rada_id", SolrSearcher.getKrajRadaBykod(kraj.getId()).optString("rada_id")); 
         IndexUtils.setDateStamp(idoc, kod);
     }
     

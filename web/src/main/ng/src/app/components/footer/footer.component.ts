@@ -9,6 +9,7 @@ import { AppState } from '../../app.state';
 import { MatIconModule } from '@angular/material/icon';
 
 import { MatButton, MatIconButton } from '@angular/material/button';
+import { versionInfo } from '../../../version-info';
 
 @Component({
   imports: [
@@ -23,6 +24,7 @@ export class FooterComponent implements OnInit {
   platformId;
   mustConsent = true;
   public currentYear = new Date().getFullYear();
+  clientInfo: any; 
 
   constructor(
     public state: AppState,
@@ -33,6 +35,7 @@ export class FooterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.clientInfo = versionInfo;
     let expired = false;
     if (!isPlatformBrowser(this.platformId)) {
       return

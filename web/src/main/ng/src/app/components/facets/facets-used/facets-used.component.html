@@ -19,6 +19,17 @@
     </mat-list-item>
   }
   
+  @if(state.inMuseion()) {
+    <mat-list-item role="listitem" class="app-facet-used">
+      <div>
+          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeInMuseion()">
+            <mat-icon>close</mat-icon>{{ 'card.desc.Museion' |
+                translate }}
+          </a>
+        </div> 
+    </mat-list-item>
+  }
+  
   @for (facet of state.breadcrumbs; track facet) {
     <mat-list-item role="listitem" class="app-facet-used">
       @if (facet.field === 'separator') {
@@ -61,7 +72,10 @@
                 {{ facet.value === '1' ? ('Ano' | translate) : ('Ne' | translate) }}
               </span>
             }
-            @if (!facet.display && facet.field !== 'az_dj_negativni_jednotka' && facet.field !== 'dokument_cast_komponenta_dokument_jistota') {
+            @if (facet.field === 'f_kraj_rada') {
+              <span class="app-font-bold">{{ 'f_kraj_rada.' + facet.value | translate}}</span>
+            }
+            @if (!facet.display && facet.field !== 'f_kraj_rada' && facet.field !== 'az_dj_negativni_jednotka' && facet.field !== 'dokument_cast_komponenta_dokument_jistota') {
               <span class="app-font-bold">{{ facet.value | translate}}</span>
             }
           </span>
