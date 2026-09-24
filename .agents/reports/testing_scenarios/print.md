@@ -23,9 +23,9 @@
 - Print gating: `tryPrint()` polls every 1 s until `state.loading()` and `state.imagesLoading` clear, then waits another 1 s and calls `AppService.print()` → `window.print()`. `RelatedComponent` sets `state.loading` true early in print mode and fetches related records via `getRecords(true)`; `Entity.getFullId()` clears loading after the detail fetch. This gating is the core of the #953 fix: the original defect was `window.print()` firing before related records and images finished, producing empty or partial print output in Chrome.
 - Detail expansion: `_detailExpanded` is an Angular signal (commit `68493cdc`); document children (dokumentacni jednotka, komponenta, dokument, pian) render expanded in the print view through `inDocument`/`isChild`.
 - Print stylesheet (`web/src/main/ng/src/scss/_app-print.scss`, compiled into the styles bundle): `@media print` sets `@page { margin: 0 }`, `body, main { height: auto !important; zoom: 95% }`, hides `header`, `footer`, and card actions, drops entity-card left borders and card padding, and unsets the related-items panels' max-height/overflow. The `zoom` plus `@page` margin is the Chrome pagination half of the fix (final values after `544d7851`; an intermediate `zoom: 85%` shipped in `fd7c9c12`).
-- Post-print state: `AppService.print()` no longer resets `state.printing`/`state.loading` (the resets are commented out since `fd7c9c12`); `state.printing` is cleared only by `AppState.resetState(true)`.
+- Post-print state: `AppService.print()` resets `state.printing` and `state.loading` to false immediately after `window.print()` (commit `96deec70` un-commented the resets); `AppState` also clears `printing` in `resetState(true)`.
 - SSR guard: `ngAfterViewInit` checks `isBrowser` before triggering print (`c04b7128`), so the server render does not attempt `window.print()`.
-- Fix history under the #953 label: `c04b7128` (2026-06-08, isBrowser guard), `2bc56b54` (2026-09-16, related-records loading hold), `199acd37` (2026-09-23, loading hold in entity/getFullId, standalone `isActive`; the same commit also carries permission-model changes for projekt owned by the permissions scenario), `68493cdc` (2026-09-23, `_detailExpanded` signal, print delay), `fd7c9c12` (2026-09-24, `zoom: 85%`, state resets commented out), `544d7851` (2026-09-24, `@page { margin: 0 }`, `zoom: 95%` — the final state the maintainer calls the durable solution).
+- Fix history under the #953 label: `c04b7128` (2026-06-08, isBrowser guard), `2bc56b54` (2026-09-16, related-records loading hold), `199acd37` (2026-09-23, loading hold in entity/getFullId, standalone `isActive`; the same commit also carries permission-model changes for projekt owned by the permissions scenario), `68493cdc` (2026-09-23, `_detailExpanded` signal, print delay), `fd7c9c12` (2026-09-24, `zoom: 85%`, state resets commented out), `544d7851` (2026-09-24, `@page { margin: 0 }`, `zoom: 95%` — the final state the maintainer calls the durable solution), `96deec70` (2026-09-24, print-D01 fix — the `printing`/`loading` signal resets restored).
 
 ### Feature or entity model
 
@@ -57,31 +57,39 @@ curl.exe -s -o <scratch>/main.js "https://digiarchiv-test.aiscr.cz/main-<hash>.j
 # main.js must contain: raw:"v…-g<hash>-dirty"  (embedded build identity)
 ```
 
-## Current verification (2026-09-24, digiarchiv-test.aiscr.cz, styles-KBEEYJB3.css + main-SZUGF3W7.js, embedded build v4.0.3-235-g544d7851-dirty, anonymous session + operator-performed Chrome browser check)
+## Current verification (2026-09-24, digiarchiv-test.aiscr.cz, regression pass, main-Q5FOPDUF.js + unchanged styles-KBEEYJB3.css, embedded build v4.0.3-237-g96deec70, anonymous session)
+
+> Regression pass after the print-D01 fix (`96deec70`); the prior verification of the same day (styles-KBEEYJB3.css, main-SZUGF3W7.js, build v4.0.3-235-g544d7851-dirty, operator-performed Chrome browser check) is superseded and recorded in the verification log.
 
 ### Verified behaviour matrix
 
 | Capability | Result |
 | --- | --- |
-| Print route serves the print view for a recipe-found record | verified — `GET /print/C-200810832A?lang=cs` returns HTTP 200, the CSR shell referencing the current bundles (2026-09-24) |
-| Print data path returns the record with children | verified — `GET /api/search/handle?id=C-200810832A` returns the akce with its dokumentacni jednotka `C-200810832A-D01` and pian `P-1223-100397` (2026-09-24) |
-| Deployed styles carry the #953 print rules | verified — styles-KBEEYJB3.css contains `@media print{@page{margin:0}body,main{height:auto!important;zoom:95%}…}` matching `_app-print.scss` at commit `544d7851` |
-| Deployed build's base commit is the final #953 fix commit | verified — main-SZUGF3W7.js embeds `raw:"v4.0.3-235-g544d7851-dirty"`; `544d7851` is the `@page`/`zoom:95%` commit; `dirty` is the expected local-build practice |
-| Print gating waits for related content before `window.print()` | verified in code on the deployed base — `tryPrint()` polling plus the `RelatedComponent`/`Entity` loading holds; the build identity ties the deployed bundle to that code |
-| Chrome print output complete and correctly paginated | verified by operator-performed browser check — `C-200810832A` (recipe-found) and `C-201016878A` (issue-thread record) both print complete: header with persistent link and citation, full record content, correct pagination, no blank content pages (2026-09-24) |
-| Firefox print on the fixed build | not examined — the browser check covered Chrome only |
+| The print-D01 fix is deployed | verified — main-Q5FOPDUF.js embeds build identity `v4.0.3-237-g96deec70` (base commit `96deec70`, clean build), and the deployed compiled code resets the signals after printing: `window.print(),this.state.printing.set(!1),this.state.loading.set(!1)` in chunk-XUIHYJEX.js |
+| The print button still enters the print flow only on demand | verified in compiled code — chunk-N23ABHEU.js result-actions `print()` sets `printing` true only on the explicit print action before navigating to `/id/:id` |
+| Print stylesheet still carries the #953 print rules | verified — the styles bundle hash is unchanged (styles-KBEEYJB3.css, the same content verified earlier this day: `@media print{@page{margin:0}…zoom:95%}`) |
+| Print data path returns the record with children | verified — `GET /api/search/handle?id=C-200810832A` returns HTTP 200 with the akce and its children; `GET /print/C-200810832A?lang=cs` returns HTTP 200 (2026-09-24, new build) |
+| Print output complete and correctly paginated in Chrome | not examined this run — requires a browser; recorded as maintainer-assisted below |
+| Print dialog no longer auto-opens when navigating from `/print/:id` to another record page (print-D01 behavioural confirmation) | not examined this run — requires a browser; recorded as maintainer-assisted below |
+| Firefox print on the fixed build | not examined — no browser check performed this run |
 | Production print state | not examined — unreleased milestone work; the production comparison becomes meaningful once the fix is released |
+
+### Maintainer-assisted checks
+
+- Chrome browser check: print `https://digiarchiv-test.aiscr.cz/print/<IDENT>?lang=cs` to PDF on the new build and confirm the output is still complete and correctly paginated (recipe 1 fills `<IDENT>`).
+- Chrome browser check: from a print page, navigate in the same tab to another record page and confirm the print dialog does not auto-open — the behavioural confirmation of print-D01's fix.
 
 ### Known defects
 
-- print-D01 (open): **The `printing` signal is never reset after a print, so a later in-app navigation can auto-trigger the print dialog again.** `AppService.print()` no longer resets `state.printing`/`state.loading` (resets commented out in `fd7c9c12`), and `AppState` clears `printing` only in `resetState(true)`. A user who navigates within the SPA from `/print/:id` to another record page keeps `printing=true`, so `DocumentComponent.ngAfterViewInit` auto-invokes `tryPrint()` and `window.print()` fires on a non-print page. Demonstrated from code (`app.service.ts` print(), `document.component.ts` ngOnInit/ngAfterViewInit, `app.state.ts` resetState); browser reproduction not performed this run. Low severity — edge flow after a completed print.
+- print-D01 (**fixed**): **The `printing` signal was never reset after a print, so a later in-app navigation could auto-trigger the print dialog again.** Fixed in commit `96deec70` (2026-09-24): `AppService.print()` resets `printing` and `loading` immediately after `window.print()`. Verified deployed — the compiled code in chunk-XUIHYJEX.js carries the resets and the embedded build identity names `96deec70` as the base; the browser-level confirmation remains a maintainer-assisted check this run. Originally recorded 2026-09-24 (resets commented out in `fd7c9c12`, cleared only by `resetState(true)`).
 
 ### Corrections made during this run
 
-- print-D02 (**the permission-model changes bundled in commit `199acd37` under the #953 label**) was initially recorded as a second defect and removed after maintainer review — the maintainer's disposition is that it is not a finding; the fact stays only as the fix-history note above, and permission behaviour itself is owned by the permissions scenario.
+- None — the regression pass found no claim of the prior verification to correct.
 
 ## Verification log
 
 | Date | Instance / build verified | What changed |
 | --- | --- | --- |
 | 2026-09-24 | digiarchiv-test.aiscr.cz (styles-KBEEYJB3.css, main-SZUGF3W7.js; embedded build v4.0.3-235-g544d7851-dirty) | First verification of #953: the complete fix chain verified as deployed on the test instance (print rules in the styles bundle, build base at the final #953 commit); Chrome print confirmed complete by an operator-performed browser check on two records; one defect recorded (print-D01 stale printing signal) and one candidate finding withdrawn on maintainer review (permission changes in `199acd37` — not a finding). Firefox and production not examined. |
+| 2026-09-24 | digiarchiv-test.aiscr.cz (styles-KBEEYJB3.css unchanged, main-Q5FOPDUF.js; embedded build v4.0.3-237-g96deec70) | Regression pass after the print-D01 fix `96deec70`: new build deployed with the signal resets restored in the compiled code; print stylesheet unchanged; data path re-verified; print-D01 walked to fixed (code- and bundle-demonstrated; browser confirmation marked maintainer-assisted — no browser check this run). |
