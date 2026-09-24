@@ -79,3 +79,13 @@ entities = []
 surfaces = ["stats page (/stats)", "search stats API (/api/search/stats)", "index stats API (/api/search/stats_index)", "index stats export (/api/search/export_stats_index)", "Angular main bundle"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#892"]
 last_verified = "2026-09-17"
+
+[[scenario]]
+key = "print"
+kind = "feature"
+title = "Record printing (print view)"
+features = ["record printing"]
+entities = ["akce", "dokument", "lokalita", "projekt", "samostatny_nalez", "knihovna_3d"]
+surfaces = ["print page (/print/:id)", "record page (/id/:id)", "handle API (/api/search/handle)", "search API (/api/search/query)", "Angular bundles (main + styles)", "print stylesheet (_app-print.scss)"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#953"]
+last_verified = "2026-09-24"
