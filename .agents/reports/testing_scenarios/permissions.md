@@ -4,7 +4,7 @@
 
 **Scope:** the permission behaviour of every backend surface that serves record data — landing pages, OAI-PMH, search/handle/legacy APIs, geometry and export endpoints, the File API, the image and PDF endpoints, and the admin/integration servlets — at record level and element level, for all roles. Issues [ARUP-CAS/aiscr-digiarchiv-2#370](https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/370) and [#237](https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/237) (rules definition) drove it.
 
-**How to use this record:** the *Durable knowledge* half states the rules and the complete surface inventory; the *Current verification* half is a set of **coverage grids** (record type × role per surface). A grid cell records the observed result for that combination: `✓` = matches the documented rule, `✗` + finding id = deviation, `·` = no surface for that type by design, `—` = **untested on this build — the worklist for the next pass**. Fill or annotate cells only with fresh evidence; never mark a cell from assumption.
+**How to use this record:** the *Durable knowledge* half states the rules and the complete surface inventory; the verification half carries one dated block per verified instance, newest first. Each block is a set of **coverage grids** (record type × role per surface): a grid cell records the observed result for that combination — `✓` = matches the documented rule, `✗` + finding id = deviation, `·` = no surface for that type by design, `—` = **not examined in that run**. Blocks are retained so a later run has the earlier confirmed cells as its worklist; fill or annotate cells only with fresh evidence, never from assumption.
 
 ## Durable knowledge
 
@@ -14,10 +14,10 @@
 
 | Environment | Landing page | OAI-PMH | Build |
 | --- | --- | --- | --- |
-| Test | `https://digiarchiv-test.aiscr.cz/id/<ident_cely>` | `https://api-test.aiscr.cz/2.2/oai` | carries #370 plus the fix waves through `41592838` (legacy `/api/search/id` removed; `/pdf` gated via `ImageAccess`; SN record rules per #237; SN organisation clauses on the entities path; projekt file gate per the published row; SN file gate without pristupnost conditions; OAI SN owner clause; dokument file-gate pristupnost conditions; projekt export entity; SN C-row owner arm on the SN01 author's identity). No open divergence from the published rules on the test build. Build identity: the served bundle embeds `v4.0.3-236-g41592838` while the footer hash alone does not identify the backend deploy — establish the backend by behaviour |
-| Production | `https://digiarchiv.aiscr.cz/id/<ident_cely>` | `https://api.aiscr.cz/2.2/oai` | pre-fix-wave build: D07 (restricted-children VB geometry) and D14 (`/pdf` page images) remain open there; both are resolved by the upcoming production release of the fix wave. The partial hotfix removed the FedoraServlet read actions (`GET_ID`/`REQUEST`), closing the D13 raw-read path. The SN and projekt file gates follow the published rule table (D09, D15 absent), with no D12 stav=6 exposure; D17 and the test-only file-gate divergences (D16, D18) are not examinable anonymously. `/thumb-large` absent (404) |
+| Test | `https://digiarchiv-test.aiscr.cz/id/<ident_cely>` | `https://api-test.aiscr.cz/2.2/oai` | `v4.0.3-236-g41592838` (2026-09-24): carries #370 plus the fix waves (legacy search id lookup filtered; `/pdf` gated via `ImageAccess`; SN record rules per #237; SN organisation clauses on the entities path; projekt file gate per the published row; SN file gate without pristupnost conditions; OAI SN owner clause; dokument file-gate pristupnost conditions; projekt export entity; SN C-row owner arm on the SN01 author's identity). Build identity: the served bundle embeds `v4.0.3-236-g41592838` while the footer literal alone does not identify the backend deploy — establish the backend by behaviour |
+| Production | `https://digiarchiv.aiscr.cz/id/<ident_cely>` | `https://api.aiscr.cz/2.2/oai` | `v4.0.3-237-g96deec70-dirty` (commit `96deec70`, dev HEAD merged by the release PR #1109; release tag `v4.1.0` peels to `d1f084bf`). The release adds no permission code over the test build — the tree diff `41592838..v4.1.0` touches only `CITATION.cff` and two Angular footer files — so the deployed permission behaviour equals the fully fixed test build; D07, D14 and D19 are closed there as of 2026-09-29. The earlier hotfix removed the FedoraServlet read actions (`GET_ID`/`REQUEST`), closing the D13 raw-read path. `/thumb-large` absent (404) |
 
-OAI quirks: on the test instance, OAI identifiers use the **`https://api-test.aiscr.cz/id/…`** prefix (GetRecord with the production prefix silently fails with `idDoesNotExist`); set names containing a colon must be percent-encoded (`set=dokument%3A3d`). Versioned OAI endpoints (`/2.1/oai`, `/2.2/oai`) serve the same filtered core and differ only by XSLT. The **version-less** endpoint `https://api-test.aiscr.cz/oai` 302-redirects to the current version — a convenient Basic-auth role-probe shape.
+OAI quirks: OAI identifiers use the **environment's own domain prefix** (`https://api-test.aiscr.cz/id/…`, `https://api.aiscr.cz/id/…`); GetRecord with the other environment's prefix silently fails with `idDoesNotExist`. Set names containing a colon must be percent-encoded (`set=dokument%3A3d`). Versioned OAI endpoints (`/2.1/oai`, `/2.2/oai`) serve the same filtered core and differ only by XSLT. The **version-less** endpoint `https://api.aiscr.cz/oai` 302-redirects to the current version — a convenient Basic-auth role-probe shape.
 
 ### Surface inventory (routes and gates)
 
@@ -28,17 +28,17 @@ Complete enumeration from `web.xml` + `@WebServlet` annotations (2026-09-10 sour
 | `GET /id/<ident>`, `GET /map/<ident>` | `HandleServlet` `checkId` | 404 (no doc in `entities`) → 410 (`is_deleted`) → 401 (`!searchable` + anonymous) → 403 (per-model `filterOAI`) → 200 | landing / map gating; the query projects `pristupnost`, `stav`, and for SN also `projekt`/`projekt_organizace`/`predano_organizace`, so the SN organisation clauses resolve on this path; rendered page is a shell, data comes from the handle API |
 | `GET /id/<ident>/file/<uuid>` (+ `/thumb`, `/thumb/page/N`, `/thumb-large`, `/paradata`, `/paradata/<distribution>`, distribution suffixes per #693) | `HandleServlet` file path | `HandleServlet.isFileAllowed` per XPath rule row; #693 rule: distributions and paradata follow the original's rules; Basic auth and session cookie both accepted here (not on `checkId` — Basic-auth landing requests are treated as anonymous); rate limiter per IP (≥ 1 s between requests, also across distinct files) | File API; `/thumb` documented ungated; `/thumb-large`, `/thumb/page/N`, `/paradata` follow the original's rules; #693 distributions and paradata follow the original's rules (see the [`file-distributions`](file-distributions.md) scenario) |
 | `GET /oai/*` (verbs GetRecord/ListRecords/ListIdentifiers; oai_amcr, oai_dc) | `OAIServlet` → `OAIRequest.filter` | per-model `filterOAI` (record level) + element string surgery (chranene/oznamovatel) | OAI-PMH; Basic auth logs in; oai_dc derived after filtering |
-| `GET /api/search/query` | `SearchServlet` QUERY → per-entity `EntitySearcher` | pristupnost-suffixed projected fields + `searcher.filter(jo, pristupnost, org)` post-filter | search visibility + element masking; E downgraded to D |
+| `GET /api/search/query` | `SearchServlet` QUERY → per-entity `EntitySearcher` | pristupnost-suffixed projected fields + `searcher.filter(jo, pristupnost, org)` post-filter | search visibility + element masking; E downgraded to D; restricted records' public fields are served anonymously by design |
 | `GET /api/search/handle?id=` | `SearchServlet` HANDLE | per-model `filterOAI` on the entities doc | record JSON for landing pages |
-| `GET /api/search/id` | `SearchServlet` ID | action **removed** (500 no-enum error, no data served) | legacy id lookup — gone; do not use for probing |
+| `GET /api/search/id` | `SearchServlet` ID | searcher field projection + element masking; **no** `filterOAI` record-level gate (same posture as `/api/search/query`) | legacy id lookup — reachable on both deployments; serves searcher-filtered, element-masked docs (`?id=<non-searchable ident>` returns `numFound: 0`). It is not a removal-guarded route; do not treat it as absent |
 | `GET /api/search/id_as_child` | `SearchServlet` ID_AS_CHILD | child-doc fetch | child record JSON (verify per parent state) |
 | `GET /api/search/gml`, `/wkt`, `/geometrie` | `SearchServlet` GML/WKT/GEOMETRIE | GEOMETRIE takes `id` (pian ident) plus `loc_rpt` as a **4-value bbox** (`lat1,lng1,lat2,lng2`) and a required `format` (`GML`/`GeoJSON`/other=WKT); it queries the role-suffixed `loc_rpt_<pr>` field (masks restricted pians for anonymous); its pristupnost check is commented out in source (latent if the suffixing is ever dropped); reads `pian_chranene_udaje` blocks | geometry extracts |
 | `GET /api/search/pians` | `SearchServlet` PIANS → `PIANSearcher.getMapPians` | requires a `rows` parameter (missing rows → NumberFormatException error body); projects `pian:[json]`, `pian_id`, `ident_cely`, `organizace`, `pristupnost` and role-suffixed `loc_rpt`/`loc` | map pian points — idents without coordinates below the role |
-| `GET /api/search/mapa`, `/export`, `/export_mapa` | `SearchServlet` MAPA/EXPORT/EXPORT_MAPA | per-searcher filter (same as query) | map search + export variants; `entity=projekt` export is broken on the current test build (D19) |
-| `GET /api/search/stats`, `/stats_index`, `/export_stats_index`, `/obdobi`, `/thesauri`, `/log`, `/check_relations`, `/home` | `SearchServlet` auxiliary actions | aggregate/heslar/analytics | statistics and vocabularies — low sensitivity, spot-check |
-| `GET /exp` | `ExportServlet` → `searcher.export(request)` | **no servlet-level gate**; protection only inside `EntitySearcher.export` (per-searcher `filter()`); map path reads `*_chranene_udaje` geometry | csv/xlsx/xml/json export; `mapa=true` serves geometry (GeoJSON/GML); the **projekt** entity errors for all records on the current test build (D19) — other entities export |
-| `GET /pdf?id=<soubor_id>&page=N` | `PdfServlet` | `ImageAccess.isAllowed(request, true)` — the gate resolves the dokument by the **soubor id** (`getDokBySoubor`); a record-ident `id` resolves to nothing and returns **401 as a not-found**; SN always allowed (issue #85), dokument by `pristupnost` | PDF page images from the `thumbsDir` cache; production build has **no gate** (permissions-D14, open there until the upcoming production release) |
-| `GET /img/thumb?id=<soubor_id>`, `/img/full?id=` | `ImageServlet` actions (only `thumb` and `full` exist — `thumb-large` is not a valid action and 500s) | `thumb` ungated (`ImageAccess.isAllowed(…, false)` = true); `full` gated by `ImageAccess.isAllowed(…, true)` + rate limiter | image variants by soubor id; `ImageAccess` full gate: SN → **always allowed** (issue #85), dokument → imgPr=A or userPr ≥ imgPr or same-org (same-org restricted to users ≤ C) |
+| `GET /api/search/mapa`, `/export`, `/export_mapa` | `SearchServlet` MAPA/EXPORT/EXPORT_MAPA | per-searcher filter (same as query) | map search + export variants |
+| `GET /api/search/stats`, `/stats_index`, `/export_stats_index`, `/období`, `/thesauri`, `/log`, `/check_relations`, `/home` | `SearchServlet` auxiliary actions | aggregate/heslar/analytics | statistics and vocabularies — low sensitivity, spot-check |
+| `GET /exp` | `ExportServlet` → `searcher.export(request)` | **no servlet-level gate**; protection only inside `EntitySearcher.export` (per-searcher `filter()`); map path reads `*_chranene_udaje` geometry | csv/xlsx/xml/json export; `mapa=true` serves geometry (GeoJSON/GML); `entity=projekt` serves records and restricted projekts export without the chranene block |
+| `GET /pdf?id=<soubor_id>&page=N` | `PdfServlet` | `ImageAccess.isAllowed(request, true)` — the gate resolves the dokument by the **soubor id** (`getDokBySoubor`); a record-ident `id` resolves to nothing and returns **401 as a not-found**; SN always allowed (issue #85), dokument by `pristupnost` | PDF page images from the `thumbsDir` cache (or an empty placeholder when absent); gated on both deployments |
+| `GET /img/thumb?id=<soubor_id>`, `/img/full?id=` | `ImageServlet` actions (only `thumb` and `full` exist — `thumb-large` is not a valid action and 500s) | `thumb` ungated (`ImageAccess.isAllowed(…, false)` = true); `full` gated by `ImageAccess.isAllowed(…, true)` + rate limiter | image variants by soubor id; `ImageAccess` full gate: SN → **always allowed** (issue #85), dokument → imgPr=A or userPr ≥ imgPr or same-org (same-org restricted to users ≤ C); a dokument PDF on `/img/full` may return 500 from the backend path (see pre-existing observations) |
 | `GET /fedora/*` | `FedoraServlet` (actions: INDEX_FULL, STOP_INDEX, INDEX_UPDATE, STOP_UPDATE, INDEX_ENTITIES, INDEX_MODEL, INDEX_ID, REINDEX_FILTER, CHECK_DATESTAMP — **GET_ID/REQUEST removed** on both deployments) | allowedIP list OR localhost OR `pristupnost >= indexSecLevel` (config, default E) — **the gate trusts the network position: unauthenticated local-network/VPN clients pass the gate** (the 500 no-enum error for an invalid action is raised inside the gate-passed branch); public-internet anonymous denied | raw Fedora object access + reindex — admin surface; the raw record XML read paths are closed on both deployments (read actions removed, permissions-D13 closed — the network-trusting posture and mutating actions accepted as-is by operator decision) |
 | `GET /mus/*` | `MuseionServlet` | pristupnost read (default A when anonymous); FORBIDDEN paths present — gate shape unclear from source | museion predmety integration — reachable, empty test data, no demonstrable leak |
 | `GET /fav/*` | `FavoritesServlet` | session `userid` scoping | per-user favourites only |
@@ -53,12 +53,13 @@ Complete enumeration from `web.xml` + `@WebServlet` annotations (2026-09-10 sour
 - **Solr core routing decides landing-page existence.** `HandleServlet.checkId` queries the **`entities`** core. Top-level types there: `projekt`, `archeologicky_zaznam` (akce/lokalita), `dokument` (incl. 3D), `adb`, `pian`, `samostatny_nalez`, `ext_zdroj`, `let`. Child entities there: `dokumentacni_jednotka`, `komponenta`, `komponenta_dokument`, `dokument_cast`, `vyskovy_bod`, `neident_akce`. Types `uzivatel`, `heslo`, `ruian_*`, `organizace`, `osoba` index into their own cores → **always 404 on landing pages** (intended feature). The **`oai`** core serves OAI-PMH for all types, so OAI-PMH can serve records the landing page cannot.
 - **filterOAI call sites use fresh model instances.** Both `HandleServlet.checkId` and `OAIRequest.filter` obtain the model via `FedoraModel.getFedoraModel(entity)`, which returns a **new, unpopulated instance**. A `filterOAI` implementation must read record state from the `SolrDocument` argument; model instance fields (e.g. `stav`) are default-valued on these paths. `SamostatnyNalez.filterOAI` reads the doc's `stav`/`pristupnost`/`historie` plus the projected `projekt`/`projekt_organizace`/`predano_organizace` fields, so its A/B rows follow #237's `stav=4` rule and its C organisation clauses resolve on both the entities path and OAI.
 - **Where the rules live:** record-level rules in `FedoraModel.filterOAI` implementations (`web4/fedora/models/*.java`); file rules in `HandleServlet.isFileAllowed`; image rules in `ImageAccess`; element-level hiding in `OAIRequest.filter` (OAI) and via pristupnost-suffixed secured fields plus per-searcher `filter()` post-removal (search/handle/export).
-- **The suffix mechanism has two halves and both must hold:** the query must project role-suffixed variants (`loc_rpt_<pr>`, `lat_<pr>`, suffixed secured JSON fields) **and** the post-filter must remove the unsuffixed block when `doc.pristupnost > userPr`. A searcher whose projected fields omit `pristupnost`, or whose `filter()` throws on a missing field, silently serves the unsuffixed block (permissions-D12 shape on projekt; D11 on komponenta — both fixed).
+- **The suffix mechanism has two halves and both must hold:** the query must project role-suffixed variants (`loc_rpt_<pr>`, `lat_<pr>`, suffixed secured JSON fields) **and** the post-filter must remove the unsuffixed block when `doc.pristupnost > userPr`. A searcher whose projected fields omit `pristupnost`, or whose `filter()` throws on a missing field, silently serves the unsuffixed block (permissions-D12 shape on projekt; D11 on komponenta — both fixed). `SolrSearcher.getSufixesByLevel(pr)` returns the suffixes at or below the session role; `prSufixAll = {A,B,C,D}`.
+- **The legacy `/api/search/id` action runs the same searcher field projection and element masking as `/api/search/query`** (verified 2026-09-29 on both deployments), and returns `numFound: 0` for a non-searchable ident. It does not run the record-level `filterOAI` gate, so it serves a restricted record's public fields anonymously — the same by-design posture as the search API, not a record-level bypass. The earlier recorded "action removed" state no longer holds; the route is live.
 - **Restricted `stav=6` projekts are a distinct masking population.** A stav=6 projekt is anonymously visible at record level, so its search and handle documents reach anonymous clients and rely entirely on the post-filter to drop `projekt_chranene_udaje`. A D12 sweep must include `stav:6` explicitly (recipe 9) — the non-stav-6 restricted population alone does not cover it.
 - **`/map/<ident>`** applies the identical gating before forwarding to `/map2`. Bare `/map` forwards to `/map2` (permissions-D01 fixed).
 - **Rate limiting:** the File API and `/img/full` limiter throttles **per IP**, including bursts across distinct files — keep **≥ 1 s between requests** and at most ~3 per burst; a violation returns **429** (`Retry-After` observed `0` on the interval branch and `500` on the concurrent branch — the latter reads as milliseconds in a header defined in seconds). The limiter keys on client IP, so proxy buffering or egress-IP rotation can defeat observation from outside.
-- **Page cache:** on test (`isTestEnv=true`) the landing-page cache is skipped entirely; on production a 1-day anonymous cache exists but only affects the rendered shell (record data is always fetched live per user), so it has no permission impact.
-- **Child-entity indexing:** `dokumentacni_jednotka` docs stay `searchable=true` and are gated in `filterOAI` by the parent-propagated `stav` (anonymous gets 403, not 401, for a non-archived parent); `dokument_cast` inherits the parent dokument's `searchable` (401 shape); `vyskovy_bod` inherits `stav`/`pristupnost`/`searchable` from the ADB at index time. VB geometry fields (`vyskovy_bod_geom_wkt`, `vyskovy_bod_geom_gml`) remain indexed **without pristupnost suffixes**: the test build no longer serves them anonymously (D07 fixed there), production still does (D07 open there).
+- **Page cache:** on test (`isTestEnv=true`) the landing-page cache is skipped entirely; on production a 1-day anonymous cache exists but only affects the rendered shell (record data is always fetched live per user), so it has no permission impact. The `/pdf` page-image cache is consulted only after the `ImageAccess` gate, so a warm cache cannot turn a gate refusal into a served page.
+- **Child-entity indexing:** `dokumentacni_jednotka` docs stay `searchable=true` and are gated in `filterOAI` by the parent-propagated `stav` (anonymous gets 403, not 401, for a non-archived parent); `dokument_cast` inherits the parent dokument's `searchable` (401 shape); `vyskovy_bod` inherits `stav`/`pristupnost`/`searchable` from the ADB at index time. VB geometry fields (`vyskovy_bod_geom_wkt`, `vyskovy_bod_geom_gml`) are indexed **without pristupnost suffixes**, so `VyskovyBodSearcher.filterOne` must remove them when `doc.pristupnost` exceeds the session role; with that filter in place no deployment serves them to anonymous clients restricted above A (D07 closed).
 - **Entity-search stubs (pre-existing):** `/api/search/query?entity=dokumentacni_jednotka` and `entity=dokument_cast` return error bodies (searcher stubs). Neither is a data exposure; the UI does not surface them as top-level entity tabs.
 - **The handle API never serves `projekt_oznamovatel`** — the oznamovatel element is not in the projekt searcher's field list; the OAI XML side applies the oznamovatel rules in `OAIRequest.filter`.
 
@@ -78,7 +79,7 @@ Complete enumeration from `web.xml` + `@WebServlet` annotations (2026-09-10 sour
 | uzivatel | never | self only | self only | any |
 | let, heslo, ruian_*, organizace, osoba | any | any | any | any |
 
-The deployed `SamostatnyNalez.filterOAI` follows the table on all rows; the C-branch organisation clauses (project organisation and receiving organisation, `predano_organizace`) resolve on OAI and on the entities path. The B-owner clause is dead on OAI (permissions-D08): the SN owner arm reads fields the oai document does not resolve; the landing/handle path serves the owner. Source: the `filterOAI` C branch is SN01 owner OR project organisation OR `predano_organizace`; the SN01 creator's organisation (`organizaceUzivatele`) is not used, so OAI has no creator-organisation arm.
+The deployed `SamostatnyNalez.filterOAI` follows the table on all rows; the C-branch organisation clauses (project organisation and receiving organisation, `predano_organizace`) resolve on OAI and on the entities path, and the B/C owner arms compare the **SN01 author's identity** (`userId.equals(uzivatelSN01)`) on both the file gate and the record filter (permissions-D08, D16 fixed). The rules are identical on both deployments.
 
 **`searchable` flag (drives anonymous 401 vs 403):** AZ = stav 3; dokument = stav 3; samostatny_nalez = stav 4; pian = ident does not start with `N`; projekt = has related dokument/samostatny_nalez/akce; adb, let, ext_zdroj = always searchable; uzivatel = field not set (moot, 404 anyway); **child entities** — komponenta and dokument_cast inherit the parent's state; dokumentacni_jednotka and vyskovy_bod are `searchable=true` at index time and rely on `filterOAI` for gating (DJ reads the parent-propagated `stav`; VB inherits the ADB's full state triple).
 
@@ -97,44 +98,48 @@ The deployed `SamostatnyNalez.filterOAI` follows the table on all rows; the C-br
 | `//dokument/soubor` | pr=A AND stav=3 | (pr<=B AND stav=3) OR own (D01) | (pr<=C AND stav=3) OR own org (D01 creator's org) |
 | `//samostatny_nalez/soubor` | stav=4 | stav=4 OR own (SN01) | stav=4 OR own (SN01) OR own org (predano/projekt) |
 
-Deployed state (source `HandleServlet.isFileAllowed`, current test build):
+Deployed state (source `HandleServlet.isFileAllowed`, both deployments — the release adds no permission code over the test build):
 
 - **projekt** — implements the published row exactly (permissions-D15 fixed).
 - **dokument** (and `knihovna_3d`) — implements the published rows: A `pr=A AND stav=3`; B `(pr<=B AND stav=3) OR D01 owner`; C `(pr<=C AND stav=3) OR D01 creator's organisation`. The owner and creator-organisation arms work for `stav≠3`.
 - **samostatny_nalez** — implements the published rows: A/B/C `stav=4` without pristupnost conditions; B and C owner arms on the **SN01 author's identity** (`userId.equals(uzivatelSN01)`); C organisation arms on `samostatny_nalez_predano_organizace` and the projekt organisation. The dokument C row's D01 creator-organisation arm is published behaviour and distinct from the SN owner arms.
 
-Small thumbnails (`/thumb`) are **always public**; large thumbnails (`/thumb/page/N`, `/thumb-large`) and `/paradata` follow the original-file rules. **File distributions and paradata are additional File API surfaces (#693):** `/id/<ident>/file/<uuid>/{dist}` (any non-reserved suffix resolves as a distribution, `orig` included) and `/id/<ident>/file/<uuid>/paradata[/{dist}]` (the bare form serves the paradata of `orig`, always `text/plain`). They resolve through the same `getDocumentFromFile` lookup and the **same `isFileAllowed` gate** as the original file, so the rule table above governs them identically: a gate change on the original (the D09 fix, the D18 collateral) propagates to distributions and paradata **by design** — it is #693's contract working, not a separate divergence. An unknown distribution returns 404; the rate limiter covers all forms; the `soubor_distri` search facet exposes the live distribution paths. The full surface contract — including the internal reader `/api/img/*` surface, which is deliberately undocumented and must not be "fixed" to match — and the limiter facts live in the [`file-distributions`](file-distributions.md) scenario. **Image endpoints** (`/img`) apply their own `ImageAccess` rules (see surface inventory) — SN always allowed at full size, dokument by pristupnost. **`/pdf`** shares those rules on the test build (gated); the production build still serves it ungated (D14 — open there until the upcoming production release).
+Small thumbnails (`/thumb`) are **always public**; large thumbnails (`/thumb/page/N`, `/thumb-large`) and `/paradata` follow the original-file rules. **File distributions and paradata are additional File API surfaces (#693):** `/id/<ident>/file/<uuid>/{dist}` (any non-reserved suffix resolves as a distribution, `orig` included) and `/id/<ident>/file/<uuid>/paradata[/{dist}]` (the bare form serves the paradata of `orig`, always `text/plain`). They resolve through the same `getDocumentFromFile` lookup and the **same `isFileAllowed` gate** as the original file, so the rule table above governs them identically: a gate change on the original (the D09 fix, the D18 collateral) propagates to distributions and paradata **by design** — it is #693's contract working, not a separate divergence. An unknown distribution returns 404; the rate limiter covers all forms; the `soubor_distri` search facet exposes the live distribution paths. The full surface contract — including the internal reader `/api/img/*` surface, which is deliberately undocumented and must not be "fixed" to match — and the limiter facts live in the [`file-distributions`](file-distributions.md) scenario. **Image endpoints** (`/img`) apply their own `ImageAccess` rules (see surface inventory) — SN always allowed at full size, dokument by pristupnost. **`/pdf`** shares those rules and is gated on both deployments (D14 closed).
 
 **Child records:** child entities live in the entities core with their own idents derived from the parent: `dokumentacni_jednotka` = `<AZ>-D01…`; `komponenta` (under AZ or SN) = `<parent>-K001…`; `dokument_cast` = `<dokument>-D001…`; `vyskovy_bod` = `<ADB>-V0001…`.
 
 ### Probe-record registry
 
-Anchors verified on the current test build. **Drift rule:** records change state; re-verify each record's current state (OAI or search) before using it as a probe, and re-derive replacements via the recipes when it has drifted. File UUIDs come from the record's `soubor` elements and are **environment-specific** (the same record can bind different file UUIDs on test and production — re-read the soubor path per environment).
+Anchors verified on the deployed builds. **Drift rule:** records change state; re-verify each record's current state (OAI or search) before using it as a probe, and re-derive replacements via the recipes when it has drifted. The same ident can hold **different states in the two environments** — never assume parity. File UUIDs come from the record's `soubor` elements and are **environment-specific** (the same record can bind different file UUIDs on test and production — re-read the soubor path per environment).
 
 | Ident | Type | Properties that make it a probe | Surfaces |
 | --- | --- | --- | --- |
 | `C-202009490A` | akce | pristupnost C, archived (stav=3), restricted element case; carries DJ `-D01` and komponenta `-K001` | landing, OAI, search, handle, file (children), element ladder |
 | `M-200500013A` | archeologicky_zaznam | pristupnost B — element ladder one step up | landing, element ladder |
-| `C-202204147A` | akce | unarchived → anonymous 401 case | landing |
-| `C-TX-193001369` | dokument | unarchived → anonymous 401; carries dokument_cast `-D001` | landing, children |
+| `C-202204147A` | akce | test: unarchived → anonymous 401 case (production: 200, archived) | landing |
+| `C-TX-193001369` | dokument | test: unarchived → anonymous 401 (production: 200, archived); carries dokument_cast `-D001` | landing, children |
 | `M-TX-202100125` | dokument | pr=C, stav=3 — restricted file sample; test file `3a0f7078-e26f-404d-aaa9-2b5abbb5e3d2`, production file `fe377f16-1da6-4912-b8d4-6f3095324879` (soub-340129 — the soubor id is the same in both environments) | file API, `/pdf`, `/thumb-large` |
 | `C-TX-192700656` | dokument | pr=A, stav=3 — file-gate A-row positive; file `2c5db7d7-95fd-46a2-9859-819cadf72fb2` | file API |
 | `C-TX-202400188` | dokument | pr=D, stav=3, organizace ORG-000091 — D18 B-row probe and C organisation-arm sample; file `e74e2652-cd97-4dda-9918-80a78d139e38` | file API |
 | `M-TX-202100123` | dokument | pr=D, stav=3, organizace ORG-000077 (foreign) — D18 B/C-row probe; file `08c40264-40c0-4582-892d-66c00aff747c` | file API |
 | `X-C-TX-000001130` | dokument | pr=D, stav=1, created by the B test account (D01 owner; creator org ORG-000091) — B my-record arm and C organisation arm; file `1a33a96a-3264-4949-aaba-25c5b4a2937b` | file API |
-| `ADB-PRAH71-000861` | adb | restricted (stav≠3), pr=C; carries VB `-V0001` | landing, OAI, search, handle, children |
+| `ADB-PRAH71-000861` | adb | test: pr=C, stav=2; production: pr=A, stav=1 — restricted-state case (record refused at record level by stav; the chranene block is pr-legitimate where pr=A); carries VB children | landing, OAI, search, handle, children |
 | `P-0134-000003` | pian | stav=2, state-matching — public baseline | landing, OAI |
-| `P-2213-100119` | pian | pr=C — restricted chranene geometry probe (coordinates `49.4673196,13.4238193`) | search, geometrie, `/exp` mapa |
+| `P-2213-100119` | pian | pr=C on test; production pr=A — restricted chranene geometry probe | search, geometrie, `/exp` mapa |
 | `C-LET-00001` | let | open type sample | landing, OAI |
-| `C-202402033` | projekt | **deleted** — tombstone (410) case: landing and handle 410 for all roles, OAI `status="deleted"` | search, handle |
+| `C-202402033` | projekt | **test** deleted tombstone (410 on landing and handle, OAI `status="deleted"`); production: 401 (not deleted — re-derive there) | search, handle |
 | `C-201122587` | projekt | stav=6 with oznamovatel (PII masking case) | OAI oznamovatel |
-| `M-201300453` | projekt | stav=6, pr=A — public stav=6 landing sample | landing, search |
-| `C-202600010` | projekt | stav=3, organizace ORG-000210 (other than the test accounts'); file `342b7b35-fdc2-4fc7-b2df-bb3c0eecc524` | file API (D15 C negative) |
+| `M-201300453` | projekt | stav=6, pr=A — public stav=6 landing sample (200 on both environments) | landing, search |
+| `M-200500013` | projekt | production: pr=A, stav=6 — anonymously visible stav=6 projekt whose chranene block is pr-legitimate; test: used as a stav=6 probe | search, handle |
+| `C-202600010` | projekt | production: exists, not searchable → anonymous landing **401** and `/api/search/id` `numFound: 0`; test: restricted stav=3 → 403 | landing, OAI, `/api/search/id` |
 | `C-202101848` | projekt | stav=6, organizace ORG-000030; PDF file `06fbe1a2-62cc-4d5b-9674-abbd8c9754a4` | file API (D15 A/B/C negative) |
 | `C-202500044` | projekt | stav=4, organizace ORG-000091 (own); file `0c06098a-a0a1-42fb-ab92-7bc9dd61dacc` | file API (C own-org positive) |
 | `C-202007460` | projekt | stav=6, organizace ORG-000091 (own); file `ed5eaf7b-4087-4a89-936b-34c568fc1886` | file API (C own-org positive; A/B negative) |
 | `C-202111855` | projekt | stav=1; file `9cc29a95-c95e-4f92-a4e1-db3d74489c4a` | file API (C stav=1 arm) |
-| `M-200500013` | projekt | pr=B, stav=6 — D12 stav=6 masking sample | search, handle |
+| `X-C-000025454` | projekt | **production deleted tombstone** (fresh; OAI `set=projekt` `status="deleted"`, datestamp 2026-09-29) — 410 on landing and `/map/` | landing, map, OAI |
+| `C-202508186` | projekt | production stav=6, pr=B — restricted stav=6 masking sample (appears in the D12 sweep) | search, handle |
+| `M-202600319-N00030` | samostatny_nalez | production pr=C, stav=4 — anonymous landing 200 (public-archived SN) | landing, search |
+| `C-TX-202600554` | dokument | production pr=A, stav=3 — public dokument with a PDF file; `soub-826403` — `/pdf` positive control | `/pdf`, `/img/full` |
 | `C-202600009-N00014` | samostatny_nalez | pr=C, stav=1, created by the B test account (owner clause; projekt organisation ORG-000091); file `c74d3136-3cab-468a-8405-3f79b89ab555`; carries komponenta `-K001` | landing, OAI, file, children, backend |
 | `C-202600010-N00085` | samostatny_nalez | pr=C, stav=4 (public-archived SN); files `cafc9a90-3b8b-40f8-ace6-5791b0b6ffd2` (soub-653685), `e5115f1a-72ce-4eaa-a2d9-f52544aaa370` (soub-653686); carries komponenta `-K001` | landing, OAI, handle, file, backend |
 | `C-202500044-N00001` | samostatny_nalez | pr=A, stav=4 — file-gate A-row positive; file `04d822bb-2706-430e-9ef2-720f8dcb5b8a` | file API |
@@ -142,6 +147,7 @@ Anchors verified on the current test build. **Drift rule:** records change state
 | `C-202009779-N00022` | samostatny_nalez | pr=D, stav=1 — creator-org clause probe, both arms match: `predano_organizace` ORG-000091, projekt `C-202009779` org ORG-000091; created SN01 by U-001975 | landing, handle, OAI |
 | `C-202211308-N00230` | samostatny_nalez | pr=D, stav=1 — creator-org clause probe, projekt arm only: `predano_organizace` ORG-000099 (mismatch), projekt `C-202211308` org ORG-000091 (match); created SN01 by U-004219 | landing, handle, OAI |
 | `C-202009779-N00031` | samostatny_nalez | pr=C, stav=3, projekt `C-202009779` org ORG-000015, `predano_organizace` ORG-000084, SN01 author U-004219 (ORG-000091) — **D16 probe**: every published C-row arm dead; file `f3ba25a8-9c79-46cd-924d-803b56e46e92` | file API, landing, handle |
+| `ADB-PRAH71-008099` | adb | production restricted ADB (produces the `-V0001…-V0006` VB children checked in the D07 sweep) | landing (children), search |
 | `U-004495` | uzivatel | the B test account — own-record clause | OAI |
 | `U-004496` | uzivatel | the C test account (org ORG-000091) — counterpart for the creator-org clause probes | session/islogged, landing, OAI |
 | `M-202500301` | projekt | production stav=6 projekt with a file — D15 production control | production file API |
@@ -158,26 +164,29 @@ Do not rely on registry anchors without re-verification; re-discover per session
 2. **Predict 401 vs 403:** `GET /api/search/query?entity=<e>&q=ident_cely:"<ident>"` — `numFound: 0` while the record exists in OAI ⇒ not searchable ⇒ anonymous landing returns **401**; `numFound > 0` while OAI shows the record restricted ⇒ **403**.
 3. **Visible baselines / element ladder:** from the same OAI scan, take records with the target `stav` and desired pristupnost level (A = open baseline; B/C/D = element hidden up to that role). Direct: `GET /api/search/query?entity=akce&q=pristupnost:<A-E>&rows=5`.
 4. **404 candidates:** fabricate idents with valid prefixes but nonexistent numbers (e.g. bump an existing ident's numeric tail far out of range). Expect 404 for all roles.
-5. **410 candidates:** scan sets for `status="deleted"` headers — a fresh deletion tops the set listing (tombstone datestamp = deletion time). Deleted **core-type** docs stay in the entities index with `is_deleted=true` and return **410** on landing and handle for every role; deleted `uzivatel`/`osoba` ids 404 (never served on landing by design). Fastest route: maintainer-controlled deletion of a test record, then re-query the set listing.
-6. **File-API candidates:** file UUIDs come from the OAI `soubor` elements of **visible** records (`<amcr:url>`, `<amcr:path>`; some records have `soubor` without a Fedora path — skip those). The legacy `/api/search/id` endpoint is removed — do not use it; read file elements from OAI or the search response. Coverage per rule row: dokument and SN files plentiful; projekt files findable via `entity=projekt&q=soubor_filepath:rest*` (the response projects `stav` and `projekt_organizace` — pick per arm: own/other organisation, stav 1–6; stav=1 projekts can be absent from the test data — ask the maintainer); restricted pr=D dokumenty with a chosen organisation via `entity=dokument&q=pristupnost:D AND stav:3 AND soubor_filepath:rest*` and the `<amcr:organizace>` element of the OAI record. For `/img` and `/pdf` probes, the soubor id drives the endpoint.
+5. **410 candidates:** scan a set for `status="deleted"` headers — `GET …/2.2/oai?verb=ListRecords&metadataPrefix=oai_amcr&set=<set>` returns recent tombstones in the same page as live records (a fresh deletion carries its deletion datestamp), so a single page frequently yields a usable tombstone with no maintainer action; slice with `from`/`until` when the tombstone is not on the first page. Deleted **core-type** docs stay in the entities index with `is_deleted=true` and return **410** on landing, `/map/` and handle for every role; deleted `uzivatel`/`osoba` ids 404 (never served on landing by design). A maintainer-controlled deletion remains the fallback when no tombstone is present.
+6. **File-API candidates:** file UUIDs come from the OAI `soubor` elements of **visible** records (`<amcr:url>`, `<amcr:path>`; some records have `soubor` without a Fedora path — skip those). The legacy `/api/search/id` endpoint returns the record's stored fields including the `soubor_filepath` values (and the `soub-XXXXXX` id) for a visible record — use it or the search response to read file elements. Coverage per rule row: dokument and SN files plentiful; projekt files findable via `entity=projekt&q=soubor_filepath:rest*` (the response projects `stav` and `projekt_organizace` — pick per arm: own/other organisation, stav 1–6; stav=1 projekts can be absent from the test data — ask the maintainer); restricted pr=D dokumenty with a chosen organisation via `entity=dokument&q=pristupnost:D AND stav:3 AND soubor_filepath:rest*` and the `<amcr:organizace>` element of the OAI record. For `/img` and `/pdf` probes, the soubor id drives the endpoint; a public dokument found via `entity=dokument&q=pristupnost:A AND stav:3 AND soubor_filepath:rest*` gives the `/pdf` positive control (`200`).
 7. **Child-record candidates:** derive from parent metadata — OAI `archeologicky_zaznam` records list `dokumentacni_jednotka` idents; `adb` records list `vyskovy_bod` idents; cast/komponenta idents follow the fixed suffix patterns. `/api/search/query?entity=komponenta|vyskovy_bod` (with an ident filter) confirms existence (DJ and dokument_cast entity queries are stubs).
 8. **Cross-environment comparison:** run the same probes against production; data drifts — never assume the same ident has the same state in both environments. Production probing needs explicit operator approval.
-9. **Restricted-children search sweep:** `GET /api/search/query?entity=vyskovy_bod&q=-stav:3&rows=0` (add `AND -pristupnost:A` for elevated children) — a non-zero `numFound` counts children of restricted parents that remain anonymously searchable with unsuffixed fields. Same shape for other child entities where `searchable` is not parent-derived; for komponenta/projekt add `q=...` restricted variants and inspect the chranene blocks — for projekt, sweep `-pristupnost:A AND stav:6` separately (the anonymously visible population, see architecture facts).
+9. **Restricted-children search sweep:** `GET /api/search/query?entity=vyskovy_bod&q=-stav:3&rows=0` (add `AND -pristupnost:A` for elevated children) — a non-zero `numFound` counts children of restricted parents that remain anonymously searchable; the geometry verdict needs `rows>0` because the fields are projected per record, and the **positive control** `q=stav:3` proves the same field is served for a public child. Same shape for other child entities where `searchable` is not parent-derived; for komponenta/projekt add restricted variants and inspect the chranene blocks — for projekt, sweep `-pristupnost:A AND stav:6` separately (the anonymously visible population, see architecture facts). To test element masking, request the record and check the **unsuffixed block key**: on the search API the block is projected as a JSON **string** (`"field":"{…}"`), on a searcher that projects it as `[json]` (the legacy id action) it is an **object** — both forms matter when reading a raw response.
 10. **Role sessions:** `curl -s -D - "https://digiarchiv-test.aiscr.cz/user/login?user=<email>&pwd=<pwd>" -o NUL` captures `Set-Cookie: JSESSIONID=…`; verify with `/user/islogged?wantsUser=true` replaying the cookie; replay on any surface for role views — the file path accepts the session cookie as well as Basic auth, the landing `checkId` path treats Basic auth as anonymous. OAI accepts Basic auth directly. On a Windows allowlisted shell, put the URL first and the flags after (`curl.exe "https://…/id/<IDENT>" -H "Cookie: JSESSIONID=<SID>" -o NUL -w "%{http_code}\n"`) — flag-first variants may not match the permitted shapes.
-11. **Element masking comparison (backend):** for a restricted record, compare the search/handle/export response for anonymous vs B vs C — the suffixed-field mechanism must show the chranene block only from the matching role up; an unsuffixed block present for anonymous is a leak (D11/D12 shape).
+11. **Element masking comparison (backend):** for a restricted record, compare the search/handle/export/legacy-id response for anonymous vs B vs C — the suffixed-field mechanism must show the chranene block only from the matching role up; an unsuffixed block present for anonymous is a leak (D11/D12 shape).
+12. **Deployed build identity:** fetch the instance's `/`, resolve the `main-<hash>.js` reference, download it and read the embedded git-describe object (`raw:"v…"`, `hash:"g…"`, `distance:…`, `tag:"v…"`) — a milestone build describes from the last tag, so compare the commit hash, not the literal. Recipe and the footer-literal caveat live in the [`version-footer`](version-footer.md) scenario.
 
 ### Verification commands
 
 ```bash
-# landing-page / map status code
+# landing-page / map status code (swap the host for production: digiarchiv.aiscr.cz)
 curl -s -o /dev/null -w "%{http_code}\n" https://digiarchiv-test.aiscr.cz/id/<IDENT>
 curl -s -o /dev/null -w "%{http_code}\n" https://digiarchiv-test.aiscr.cz/map/<IDENT>
-# OAI-PMH record (anonymous = restricted view; add -u user:pwd for role view)
+# OAI-PMH record (anonymous = restricted view; add -u user:pwd for role view; use the environment's own domain prefix)
 curl "https://api-test.aiscr.cz/2.2/oai?verb=GetRecord&identifier=https%3A%2F%2Fapi-test.aiscr.cz%2Fid%2F<IDENT>&metadataPrefix=oai_amcr"
 # searchability / search behaviour
 curl "https://digiarchiv-test.aiscr.cz/api/search/query?entity=<ENTITY>&q=ident_cely%3A%22<IDENT>%22&rows=1"
 # data served to the landing page (element-level / child-leak checks)
 curl "https://digiarchiv-test.aiscr.cz/api/search/handle?id=<IDENT>"
+# legacy id lookup (searcher projection + element masking; numFound 0 for non-searchable)
+curl "https://digiarchiv-test.aiscr.cz/api/search/id?id=<IDENT>"
 # geometry actions (geometrie needs id + 4-value loc_rpt bbox + format; pians needs rows)
 curl "https://digiarchiv-test.aiscr.cz/api/search/pians?entity=pian&q=pristupnost:C&rows=200"
 curl "https://digiarchiv-test.aiscr.cz/api/search/geometrie?id=<PIAN_IDENT>&loc_rpt=<lat1,lng1,lat2,lng2>&format=GeoJSON"
@@ -199,7 +208,122 @@ curl "https://digiarchiv-test.aiscr.cz/id/<IDENT>/file/<UUID>/thumb/page/1"
 curl "https://digiarchiv-test.aiscr.cz/id/<IDENT>/file/<UUID>/thumb-large"
 ```
 
-## Current verification (2026-09-24 regression rounds on the test deploy, build v4.0.3-236-g41592838; fresh B/C/D sessions with operator-provided credentials; production compared anonymously with operator approval)
+## Verification — production (2026-09-29, `digiarchiv.aiscr.cz` / `api.aiscr.cz`, build `v4.0.3-237-g96deec70-dirty`; anonymous session only)
+
+**Release basis.** The production bundle `main-RKS77PNP.js` embeds the git-describe object `raw:"v4.0.3-237-g96deec70-dirty"`, `hash:"g96deec70"`, `distance:237`, `tag:"v4.0.3"` (a milestone build describes from the last tag, so the literal is not the release version). Commit `96deec70` is dev HEAD, merged by the release PR #1109 (`bd792bc1`); the annotated tag `v4.1.0` peels to `d1f084bf` ("Update citation and footer for release v4.1.0"). The deployed commit is an ancestor of the tag and a descendant of the test build `v4.0.3-236-g41592838`, and the whole tree diff `41592838..v4.1.0` touches only `CITATION.cff` and two Angular footer files — so the release carries the complete #370 fix wave and no new permission code.
+
+**Scope and limitations.** This run probed production anonymously (operator-approved) to close the fix-wave release check for issue #370. No role credentials were available, so every role-gated arm is recorded as **maintainer-assisted** (see below); no credentialed outcome is inferred from an anonymous one. Production was not compared against the test instance cell-by-cell — the release carries the identical permission code, and the test grid below stands as the role-level verification. The `/pdf` cache state is not observable; the gate refuses before the cache is consulted, so the observed `401` is a gate outcome and a warm cache cannot have produced it.
+
+Grid legend: `✓` observed and matches the documented rule · `✗` + finding id = deviation · `·` = no surface for that type by design · `—` = not examined in this run.
+
+### Defect outcomes (production)
+
+| Defect | Outcome on production (2026-09-29) |
+| --- | --- |
+| D01 | fixed — bare `/map` 200 |
+| D03 | **changed** — the legacy `/api/search/id` endpoint is live (not removed) and returns searcher-filtered, element-masked results; a non-searchable ident returns `numFound: 0`, so the original non-searchable-record exposure is not reproducible. See the durable half and *Corrections* |
+| D04 | closed (operator decision) — limiter unchanged, spot-checked only |
+| D05 | fixed — child records follow the parent rules anonymously (VB of a restricted adb `403`, DJ of a restricted akce `200`) |
+| D06 | fixed — a public stav=4 SN (`M-202600319-N00030`) is anonymously visible; restricted SN search responses carry no populated chranene block |
+| D07 | **fixed** — the anonymous restricted-children VB sweep (`entity=vyskovy_bod&q=-stav:3 AND -pristupnost:A`, `numFound 9`) returns no `vyskovy_bod_geom_wkt`/`_gml`; the public control (`q=stav:3`, `numFound 10898`) does serve the geometry |
+| D08 | — role B arm not examined (needs a B session); the release Java equals the fully fixed test build |
+| D09 | — B/C arms not examined; the anonymous arm is consistent (a restricted dokument file is `403`) |
+| D10 | fixed — the variant matrix follows the original's verdict on production (`orig` 403, `/thumb` 200, `/thumb/page/1` 403, `/paradata` 403) |
+| D11 | — komponenta entity queries error on production (pre-existing); the test-side verification stands |
+| D12 | fixed — the production stav=6 restricted-projekt sweep (`numFound 69`) serves no populated `projekt_chranene_udaje` object anonymously |
+| D13 | closed — production `/fedora/request` 500 (action removed, no data served) |
+| D14 | **fixed** — `/pdf?id=soub-340129&page=1` (restricted dokument file) returns `401`, with the positive control `/pdf?id=soub-826403&page=1` (public dokument file) returning `200` |
+| D15 | — C arm not examined; the anonymous arm is consistent (a restricted projekt file is `403`) |
+| D16 | — role C arm not examined; the release Java equals the fully fixed test build |
+| D17 | — role C arm not examined |
+| D18 | — roles B/C not examined; the anonymous arm is consistent |
+| D19 | **fixed** — `/exp?entity=projekt&format=json` returns `200` with records |
+
+No open production defect was found by this run. No new defect was recorded.
+
+### Issue #370 checklist mapping (production)
+
+1. *Non-archived records visible after login (landing only)* — anonymous counterpart `✓`: a record that exists but is not searchable returns `401` (`C-202600010`). The login (B/C/D 200) arm is maintainer-assisted.
+2. *Same conditions as the API (#237)* — `✓` on every anonymously observable surface: record-level codes, element masking on search/handle, and the file gate follow the published tables; no anonymous divergence found. Role-level parity is covered by the test verification.
+3. *404/410/401/403 distinction* — `✓` anonymously: fabricated `C-999999999` 404; fresh tombstone `X-C-000025454` 410 (landing and `/map/`); `C-202600010` 401; restricted adb `ADB-PRAH71-000861` 403.
+4. *Correct return codes* — `✓` on the probed (anonymous) surfaces.
+5. *Own-organisation finds (C)* — maintainer-assisted (needs a C session).
+
+### Behaviour matrix (production, anonymous)
+
+**Landing pages (`/id/`, incl. `/map/`)**
+
+| Probe | Observed |
+| --- | --- |
+| fabricated ident (`C-999999999`) | 404 ✓ |
+| deleted tombstone (`X-C-000025454`) | 410 ✓ on `/id/` and `/map/` |
+| exists, not searchable (`C-202600010`) | 401 ✓ |
+| restricted adb (`ADB-PRAH71-000861`, pr=A stav=1) | 403 ✓ |
+| restricted akce (`C-202009490A`, pr=C stav=3) | 200 ✓ |
+| restricted dokument (`M-TX-202100125`, pr=C stav=3) | 200 ✓ |
+| public-archived SN (`M-202600319-N00030`, pr=C stav=4) | 200 ✓ |
+| public stav=6 projekt (`M-201300453`) | 200 ✓ |
+| child VB of a restricted adb (`ADB-PRAH71-008099-V0001`) | 403 ✓ |
+| child DJ of a restricted akce (`C-202009490A-D01`) | 200 ✓ |
+| bare `/map` | 200 ✓ |
+
+**Search, handle and legacy-id APIs**
+
+| Probe | Observed |
+| --- | --- |
+| `entity=projekt&q=-pristupnost:A AND stav:6&rows=3` | `numFound 69`; no populated `projekt_chranene_udaje` object anonymously (D12 holds) |
+| `entity=samostatny_nalez&q=stav:4 AND pristupnost:C&rows=2` | `numFound > 0`; no populated chranene object (masked) |
+| `entity=vyskovy_bod&q=-stav:3 AND -pristupnost:A&rows=9` | `numFound 9`; no `vyskovy_bod_geom_*` fields (D07 fixed) |
+| `entity=vyskovy_bod&q=stav:3&rows=2` (control) | `numFound 10898`; public VBs serve `geom_wkt`/`geom_gml` |
+| `api/search/handle?id=M-TX-202100125` | 200 (dokument record visible; no protected element by spec) |
+| `api/search/id?id=ADB-PRAH71-000861` | 200, searcher-projected; chranene block present because the production record is pr=A (pr-legitimate) |
+| `api/search/id?id=C-202600010` | 200, `numFound: 0` (non-searchable not served) |
+
+**File API, images and PDF**
+
+| Probe | Observed |
+| --- | --- |
+| `…/M-TX-202100125/file/fe377f16-…/thumb` | 200 ✓ (documented ungated) |
+| `…/M-TX-202100125/file/fe377f16-…` (orig) | 403 ✓ |
+| `…/M-TX-202100125/file/fe377f16-…/thumb/page/1` | 403 ✓ |
+| `…/M-TX-202100125/file/fe377f16-…/paradata` | 403 ✓ |
+| `/img/thumb?id=soub-340129` | 200 ✓ |
+| `/img/full?id=soub-340129` | 401 ✓ (ImageAccess gate) |
+| `/pdf?id=soub-340129&page=1` | 401 ✓ (D14 fixed) |
+| `/pdf?id=soub-826403&page=1` (public dokument file) | 200 ✓ (positive control) |
+
+**Export and admin surfaces**
+
+| Probe | Observed |
+| --- | --- |
+| `/exp?entity=projekt&format=json&rows=1` | 200 ✓ (D19 fixed) |
+| `/fedora/request` | 500 ✓ (action removed; D13 closed) |
+
+### Corrections made during this run
+
+- **Legacy `/api/search/id` is not absent.** The durable half recorded the action as removed (`500 no-enum`, no data served). Both deployments answer `/api/search/id?id=<ident>` with `200` and the searcher's field projection plus element masking (`?id=ADB-PRAH71-000861` returns the record's public fields with the chranene block masked on test (record pr=C) and present on production (record pr=A); `?id=C-202600010` returns `numFound: 0`). The original exposure (non-searchable records served) is not reproducible. The durable surface-inventory row and the architecture facts are corrected accordingly; D03 is recorded as **changed**, not fixed-by-removal.
+- **`pristupnost` in a returned document is the record's value, not the session role.** An initial reading of the production `ADB-PRAH71-000861` response treated its `pristupnost: "A"` as the anonymous session role and the served chranene block as a leak. The production D12 sweep shows the same field carrying `"B"`, proving it is the record's pristupnost: those records are genuinely pr=A, so their chranene blocks are pr-legitimate. No leak; no finding recorded.
+- **Restricted-candidate drift.** `C-202402033` (the test 410 anchor) reads `401` on production and `C-202204147A`/`C-TX-193001369` (test unarchived) read `200` there; `ADB-PRAH71-000861` is `pr=A, stav=1` on production against `pr=C, stav=2` on test. Fresh production anchors were derived by recipe: tombstone `X-C-000025454` (OAI `set=projekt`), 401 sample `C-202600010`, public-archived SN `M-202600319-N00030`, and public dokument file `soub-826403`. The registry now carries the environment-specific states.
+
+### Maintainer-assisted and unverified on production
+
+Maintainer-assisted — each needs a role session (operator-provided credentials) against production; none was performed anonymously, and no outcome is inferred:
+
+- **D08** — the OAI SN owner clause for role B (a B session; Basic auth or session cookie on `/oai/GetRecord`).
+- **D09** — the B/C arms of the SN file gate (a B or C session; a stav=4 SN file).
+- **D15** — the C arm of the projekt file gate (a C session; a projekt file in the own or a foreign organisation).
+- **D16** — the C-row owner arm of the SN file gate (a C session; `C-202009779-N00031`).
+- **D17** — the SN organisation clauses on the landing and handle paths for role C.
+- **D18** — the dokument B/C pristupnost conditions (a B and a C session).
+- **Issue #370 item 1** — non-archived records visible **after login** (a B/C/D session).
+- **Issue #370 item 5** — own-organisation finds for role C.
+
+Unverified/inconclusive:
+
+- The `/pdf` cache state is not observable; the 401 is a gate outcome (see *Scope and limitations*).
+- Production was not compared against the test instance cell-by-cell.
+
+## Verification — test (2026-09-24, build `v4.0.3-236-g41592838`; fresh B/C/D sessions with operator-provided credentials; production compared anonymously with operator approval)
 
 Grid legend: `✓` observed and matches the documented rule · `✗` + finding id = deviation · `·` = no surface for that type by design · `—` = untested on this build (worklist). Codes are the observed HTTP status; element state in parentheses. The grids carry the state verified by the 2026-09-23 full pass with the 2026-09-24 regression rounds applied to every defect-affected cell (build `v4.0.3-230` → `v4.0.3-236` outcomes); holdout cells were re-probed where the fix waves could have moved them.
 
@@ -207,20 +331,20 @@ Grid legend: `✓` observed and matches the documented rule · `✗` + finding i
 
 | Defect | Outcome on test | Production posture |
 | --- | --- | --- |
-| D08 | **fixed** — the B-owner receives the own SN on OAI (`C-202600009-N00014`, chranene masked per pristupnost) | not examined (needs a B session there) |
-| D16 | **fixed** — C 403 on `C-202009779-N00031` (every published arm dead, arms re-verified unchanged); D 200 control | not examined |
-| D18 | **fixed** — the dokument B/C rows carry the pristupnost conditions again; the D01 owner and creator-organisation arms preserved | not examined (production follows the published rows) |
-| D19 | **fixed** — `entity=projekt` export serves records; restricted projekts export without the chranene block | not examined |
-| D07 | fixed on test — restricted VBs carry no geometry fields anonymously | **open — resolved by the upcoming production release** (11,533 restricted-children VB docs, geometry served) |
-| D14 | fixed on test — `/pdf` 401 on a restricted dokument | **open — live leak, resolved by the upcoming production release** (real page content of a restricted dokument) |
+| D08 | **fixed** — the B-owner receives the own SN on OAI (`C-202600009-N00014`, chranene masked per pristupnost) | maintainer-assisted (needs a B session there) |
+| D16 | **fixed** — C 403 on `C-202009779-N00031` (every published arm dead, arms re-verified unchanged); D 200 control | maintainer-assisted (needs a C session there) |
+| D18 | **fixed** — the dokument B/C rows carry the pristupnost conditions again; the D01 owner and creator-organisation arms preserved | maintainer-assisted (needs B/C sessions there) |
+| D19 | **fixed** — `entity=projekt` export serves records; restricted projekts export without the chranene block | closed on production 2026-09-29 (export serves records) |
+| D07 | fixed on test — restricted VBs carry no geometry fields anonymously | **closed on production 2026-09-29** (no geometry anonymously) |
+| D14 | fixed on test — `/pdf` 401 on a restricted dokument | **closed on production 2026-09-29** (`/pdf` 401 on a restricted dokument) |
 | D01, D03–D06, D09–D13, D15, D17 | fixed / closed — see the findings registry | D09/D15 absent (published rows hold); D10 absent (endpoint 404); D13 closed by hotfix |
 
 ### Issue #370 checklist mapping
 
 1. *Non-archived records visible after login (landing only)* — ✓ `C-202204147A` and `C-TX-193001369`: anon 401, B 200.
-2. *Same conditions as the API (#237)* — ✓ at record level, element level and the file gate; no open deviation on the test build (production: D07 and D14 pending the fix-wave release).
+2. *Same conditions as the API (#237)* — ✓ at record level, element level and the file gate; no open deviation on the test build (production D07/D14 closed 2026-09-29 — see the production block).
 3. *404/410/401/403 distinction* — ✓ anonymous: fabricated ident 404; deleted projekt `C-202402033` 410 (also for C on landing/handle and D on handle); unarchived akce/dokument 401; DJ of an unarchived akce and VB of a restricted ADB 403.
-4. *Correct return codes* — ✓ on the test build across the probed surfaces; production residuals D07 and D14 remain until the fix wave is deployed there.
+4. *Correct return codes* — ✓ on the test build across the probed surfaces; the production residuals D07 and D14 were closed on 2026-09-29 (see the production block).
 5. *Own-organisation finds (C)* — ✓ `C-202009779-N00022` and `C-202211308-N00230`: C 200 on landing and handle (D17 fixed).
 
 ### Landing pages (`/id/`, incl. `/map/` variants)
@@ -305,7 +429,7 @@ Visibility of restricted records in anonymous results is by design (public field
 | oznamovatel (any type) | ✓ not served by any backend surface | ✓ | ✓ | ✓ |
 | uzivatel/heslo/ruian/organizace/osoba | · (search queries the entities core only) | · | · | · |
 
-Notes: legacy `/api/search/id` action removed (500 no-enum, no data served); `entity=dokumentacni_jednotka`/`dokument_cast` are pre-existing stubs; D07 on test — anonymous `entity=vyskovy_bod&q=-stav:3 AND -pristupnost:A` returns 8 restricted-children docs with **no geometry fields**; the restricted-projekt sweep's `lat_A` stats field is aggregate-only (coarse min/max, no coordinates served).
+Notes: legacy `/api/search/id` was recorded as removed on this build (500 no-enum); the 2026-09-29 run corrected that — the route is live and searcher-filtered (D03); `entity=dokumentacni_jednotka`/`dokument_cast` are pre-existing stubs; D07 on test — anonymous `entity=vyskovy_bod&q=-stav:3 AND -pristupnost:A` returns 8 restricted-children docs with **no geometry fields**; the restricted-projekt sweep's `lat_A` stats field is aggregate-only (coarse min/max, no coordinates served).
 
 ### Handle API (`/api/search/handle?id=`)
 
@@ -360,7 +484,7 @@ Notes: the file path accepts the session cookie as well as Basic auth; the landi
 | `/img/full?id=<restricted SN soubor>` | ✓ gate passes anonymous — no 401, SN always allowed (issue #85); serve 500s on this test file (backend path defect, not a gate) | — | — | — |
 | `/pdf?id=<restricted dokument soubor id>&page=1` | ✓ 401 (ImageAccess gate) | — | — | — |
 | `/pdf?id=<SN soubor id>&page=1` | ✓ gate passes per #85; cold cache serves the 7,525 B placeholder only — no content leak | — | — | — |
-| production `/pdf?id=<restricted dokument>&page=1` | ✗D14 200 — real page content of a restricted dokument (live leak; resolved by the upcoming production release) | — | — | — |
+| production `/pdf?id=<restricted dokument>&page=1` | ✓ 401 on the 2026-09-29 production build (D14 closed there) | — | — | — |
 
 Notes: `/img` and `/pdf` gate on the **soubor id** (`soub-XXXXXX`), not the Fedora uuid — a uuid `id` returns 401 as a not-found, which is indistinguishable from a gate refusal on status alone; verify with the soubor id. `/img/thumb-large` is not a valid ImageServlet action (500 no-enum); the large-size variant lives in the File API `/thumb-large` path.
 
@@ -389,39 +513,41 @@ Notes: `/img` and `/pdf` gate on the **soubor id** (`soub-XXXXXX`), not the Fedo
 | `/api/search/stats_index` | ✓ 200 anonymous (index aggregates) | — | — | — |
 | `/fav/*` | ✗ 500 anonymous (ungated servlet but errors without a user; no data served) | — | — | — |
 
-### Findings registry
+## Findings registry
 
 | ID | Severity | Surface | Status | One-line summary |
 | --- | --- | --- | --- | --- |
 | D01 | Low | bare `/map` | **fixed** | `/map` forwards to `/map2` (200) |
 | D02 | — | SN record rules | **changed** | fix-wave rewrite superseded by D06/D09 |
-| D03 | High | legacy `/api/search/id` | **fixed — action removed** | anonymous leak of non-searchable records → action removed |
+| D03 | High | legacy `/api/search/id` | **changed — route live and filtered** | the route is reachable on both deployments and returns searcher-filtered, element-masked results (non-searchable → `numFound: 0`); the earlier "action removed" state does not hold, and the original non-searchable-record exposure is not reproducible |
 | D04 | Low | file API rate limiter | **closed** (operator decision: reactive handling) | both limiter branches live-verified (interval `Retry-After: 0`; concurrent `Retry-After: 500` — reads as milliseconds in a seconds-defined header) |
-| D05 | Low | child-record landing | **fixed** | DJ/dokument_cast/VB inherit parent rules again; search residual = D07 |
+| D05 | Low | child-record landing | **fixed** | DJ/dokument_cast/VB inherit parent rules again; search residual was D07 |
 | D06 | High | SN record level | **fixed** | the A/B branches' `pristupnost <= userPr` conditions contradicted #237's `stav=4` rule — the public stav=4 SN serves anon/B masked |
-| D07 | High | search API (vyskovy_bod) | **fixed on test; open on production — resolved by the upcoming production release** | restricted VB geometry anonymously searchable (prod: 11,533 restricted-children docs) |
+| D07 | High | search API (vyskovy_bod) | **fixed** | restricted VB geometry withheld from anonymous clients on both deployments (production verified 2026-09-29) |
 | D08 | High | OAI-PMH (SN) | **fixed** | the OAI-side SN owner clause resolves — the B-owner receives the own SN with chranene masked per pristupnost |
 | D09 | Medium | file API | **fixed** | file-gate SN rows over-blocked: the A/B/C rows carry `stav=4` without pristupnost conditions, matching the published table |
 | D10 | High | file API `/thumb-large` | **fixed** | undocumented endpoint bypassed all permission checks; the variant matrix now follows the original's rules |
 | D11 | High | backend surfaces (komponenta) | **fixed** | komponenta docs served the SN chranene block unmasked; now masked below the matching role |
 | D12 | High | search + handle API (projekt) | **fixed** | anonymous search/handle served `projekt_chranene_udaje` for restricted stav=6 projekts; the post-filter drops the block whenever pristupnost exceeds the user's role |
 | D13 | High | `/fedora/*` | **closed — solved in current state** (operator accepted the network-trusting posture and the mutating actions as-is) | unauthenticated raw-Fedora access from the local network/VPN; read actions removed on both deployments |
-| D14 | High | `/pdf` | **fixed on test; open on production — live leak, resolved by the upcoming production release** | PDF page JPEGs served with no permission gate on the production build |
+| D14 | High | `/pdf` | **fixed** | `/pdf` page images are gated via `ImageAccess` on both deployments (production verified 2026-09-29) |
 | D15 | High | file API (projekt) | **fixed** | projekt file gate applied the record-level rule instead of the published `//projekt/soubor` row |
 | D16 | Medium | file API (SN) | **fixed** | the SN file-gate C-row owner arm compares the SN01 author's identity (`userId.equals(uzivatelSN01)`), matching the published table and the code's rule comment; the organisation-of-author grant is gone |
 | D17 | High | landing pages + handle API (SN) | **fixed** | the SN organisation clauses resolve on the entities path (checkId projects projekt/predano organisations) |
 | D18 | High | file API (dokument) | **fixed** | the dokument file-gate B and C rows carry the pristupnost conditions again; the D01 owner and creator-organisation arms preserved |
-| D19 | Medium | export (`/exp`) | **fixed** | `entity=projekt` export serves records; restricted projekts export without the chranene block |
+| D19 | Medium | export (`/exp`) | **fixed** | `entity=projekt` export serves records; restricted projekts export without the chranene block (production verified 2026-09-29) |
 
-No open findings on the test build. The production posture (D07, D14) resolves with the fix-wave release there; the production later-check task is recorded on the driving issue.
+No open finding was observed on either deployment. The role-gated production arms (D08, D09, D15, D16, D17, D18) stand on the test verification; their production re-check is recorded as maintainer-assisted on the driving issue.
 
-### Pre-existing observations
+## Pre-existing observations
 
 - The `dokumentacni_jednotka` and `dokument_cast` entity-search endpoints are stubs and return error bodies — pre-existing, unrelated to permissions, no data exposure.
 - Quoted-phrase Solr interpolation (code-verified, low): `HandleServlet.getDocument`'s `soubor_filepath:"<url-path>"` filter and OAIRequest's `ident_cely:"<id>"` interpolate the request path/identifier without escaping query metacharacters (`InitServlet.asSafePath` blocks traversal and backslashes only). No privilege bypass found — the permission gate still runs on whatever document the query returns — but the construction is injection-shaped; escaped terms would remove the class.
 - Test-data quality: several records carry placeholder file paths (`"neni"`) and omit `soubor/path`+`soubor/url` elements in OAI output; well-formed records (verified via the D view) do serve both. Probes use well-formed records — do not read the omission as build behaviour.
 - Environment-specific file bindings: `M-TX-202100125` binds test file `3a0f7078-…` but production file `fe377f16-…`; always re-read the soubor path from the environment being probed.
 - Production index: the production entities core reports komponenta docs in its count surface, but `entity=komponenta` queries error there — komponenta fix verification stays test-side and is not inferred from the count.
+- `/img/full` on a dokument PDF (`soub-826403`, public; production 2026-09-29) returns `500` — the same backend-path class already recorded for an SN file, not a gate outcome (the gate passes a public file). Inconclusive for permissions; not a finding.
+- The subject repository's `review_config.toml` carries no `deployed_verify` allowlist, so the production probe targets are declared by this corpus and the maintainer's explicit direction rather than by repository configuration. Recorded as a configuration observation, not a defect.
 
 ## Verification log
 
@@ -436,3 +562,4 @@ No open findings on the test build. The production posture (D07, D14) resolves w
 | 2026-09-23 | 13 — full pass | all permissions re-verified against the published OAI-PMH and File API tables on build `v4.0.3-230-g1669e29c-dirty`, all surfaces, roles A/B/C/D with fresh sessions; **D12, D15, D17, D09 fixed** by the new build; **D18 found** (dokument B/C rows lost pristupnost — unintended collateral of the D09 fix), **D19 found** (projekt export broken), **D16 confirmed** with the maintainer-provided `C-202009779-N00031`; D08 still open; production compared anonymously (file gates follow the published rows; D07/D14 deferred to the production follow-up); document cleaned to current state per operator instruction. **Operator decisions:** D18 is unintended collateral of the D09 fix — the fix needs a separate decision branch for SN files; D16's author-organisation arm is stale and to be removed (documentation authoritative), scoped so the other SN arms keep working; D07/D14 listed as a production later-check, not findings |
 | 2026-09-24 | 14 — regression round | build `v4.0.3-235-g544d7851-dirty`: **D08, D18, D19 fixed** (B-owner receives the own SN on OAI with chranene masked; dokument B/C pristupnost conditions restored with the D01 owner/creator-organisation arms and the pr=A/stav=3 positive preserved — paradata follows the fixed gate identically; projekt export serves records, restricted projekts without the chranene block); **D16 still open — root cause established:** the SN C row implements the SN01 author's *organisation* where the code's own rule comment and the published table state the author's *identity* (probe re-validated: all published arms dead, SN01 author U-004219 of ORG-000091, file binding and served file confirmed); D09/D12/D15/D17 hold (spot cells re-probed); production D07/D14 re-probed anonymously — still open (fix wave not released there) |
 | 2026-09-24 | 15 — regression round | build `v4.0.3-236-g41592838`: **D16 fixed** — C 403 on `C-202009779-N00031` (arms re-verified unchanged: pr=C, stav=3, projekt ORG-000015, predano ORG-000084), D 200 control; the SN C-row owner arm now compares the SN01 author's identity (`userId.equals(uzivatelSN01)`); **zero collateral** — the full verification table conforms: C 200 via the projekt-organisation arm (`C-202600009-N00014`), B 200 SN01 owner, anon/C 200 on the stav=4 find, B/C 403 on the pr>D other-organisation dokument file (D18 holds), C 200 via the dokument D01 creator-organisation arm; no open findings on the test build; production D07/D14 pending the fix-wave release |
+| 2026-09-29 | 16 — production release regression | production build `v4.0.3-237-g96deec70-dirty` (dev HEAD `96deec70`, merged by release PR #1109; tag `v4.1.0` = `d1f084bf`; permission tree diff over the test build touches only `CITATION.cff` and two Angular footer files), anonymous probes only: **D07, D14, D19 confirmed fixed on production**; D12, D10, D01, D05, D06, D13 hold; the #370 checklist codes 404/410/401/403 verified anonymously (fresh tombstone `X-C-000025454`); **D03 changed** — the legacy `/api/search/id` route is live and applies searcher filtering plus element masking, so the earlier "action removed" state does not hold and the non-searchable exposure is not reproducible; the release code equals the fully fixed test build, so role-gated arms (D08/D09/D15/D16/D17/D18, #370 items 1 and 5) remain maintainer-assisted on production for want of credentials and are not inferred from anonymous results; no new finding. The 2026-09-24 test block is retained above for the role matrix |
