@@ -103,7 +103,7 @@ jobs:
               new_inner, vis_n = VISIBLE_VER.subn(version, inner, count=1)
               if vis_n != 1:
                   raise SystemExit("visible vX.Y.Z not found inside the Changelog <a>")
-              return text[: match.start()] + new_open + new_inner + close + text[match.end()]
+              return text[: match.start()] + new_open + new_inner + close + text[match.end():]
 
 
           def verify_footer(text: str, version: str, anchor: str) -> None:
@@ -119,6 +119,38 @@ jobs:
                   raise SystemExit(
                       f"footer verification: Changelog <a> inner text does not contain {version}"
                   )
+
+
+          def verify_footer_preserved(original: str, updated: str, version: str, anchor: str) -> None:
+              before = list(CHANGELOG_A.finditer(original))
+              after = list(CHANGELOG_A.finditer(updated))
+              if len(before) != 1 or len(after) != 1:
+                  raise SystemExit("footer preservation: expected exactly one Changelog <a>")
+              old, new = before[0], after[0]
+              if original[:old.start()].encode("utf-8") != updated[:new.start()].encode("utf-8"):
+                  raise SystemExit("footer preservation: content before Changelog <a> changed")
+              if original[old.end():].encode("utf-8") != updated[new.end():].encode("utf-8"):
+                  raise SystemExit("footer preservation: content after Changelog <a> changed")
+              for text in (original, updated):
+                  if not text.endswith(("</footer>\n", "</footer>\r\n")):
+                      raise SystemExit("footer preservation: missing closing </footer> and newline")
+                  if "@if (clientInfo)" not in text or "commitHash" not in text:
+                      raise SystemExit("footer preservation: missing dynamic commit-hash block")
+              old_hrefs = list(HREF_FRAG.finditer(old.group(1)))
+              old_versions = list(VISIBLE_VER.finditer(old.group(2)))
+              if len(old_hrefs) != 1 or len(old_versions) != 1:
+                  raise SystemExit("footer preservation: expected one href fragment and visible version")
+              href, visible = old_hrefs[0], old_versions[0]
+              expected_open = (
+                  old.group(1)[:href.start()] + href.group(1) + anchor + old.group(1)[href.end():]
+              )
+              expected_inner = old.group(2)[:visible.start()] + version + old.group(2)[visible.end():]
+              if new.group(0) != expected_open + expected_inner + old.group(3):
+                  raise SystemExit("footer preservation: unexpected change inside Changelog <a>")
+              expected_delta = len(anchor) - (len(href.group(0)) - len(href.group(1)))
+              expected_delta += len(version) - len(visible.group(0))
+              if len(updated.encode("utf-8")) - len(original.encode("utf-8")) != expected_delta:
+                  raise SystemExit("footer preservation: unexpected file length change")
 
 
           def update_citation(text: str, version: str, date: str) -> str:
@@ -152,14 +184,17 @@ jobs:
               if not citation_path.is_file():
                   raise SystemExit("CITATION.cff not found")
 
-              footer = footer_path.read_text(encoding="utf-8")
-              footer = update_footer(footer, version, anchor)
+              # Decode bytes directly so CRLF and all untouched bytes survive unchanged.
+              original_footer = footer_path.read_bytes().decode("utf-8")
+              footer = update_footer(original_footer, version, anchor)
               verify_footer(footer, version, anchor)
-              footer_path.write_bytes(footer.encode("utf-8"))
+              verify_footer_preserved(original_footer, footer, version, anchor)
 
               citation = citation_path.read_text(encoding="utf-8")
               citation = update_citation(citation, version, date)
               verify_citation(citation, version, date)
+              # Validate both files before writing either one.
+              footer_path.write_bytes(footer.encode("utf-8"))
               citation_path.write_bytes(citation.encode("utf-8"))
 
               print(f"Footer Changelog <a> is {version} (#{anchor})")
