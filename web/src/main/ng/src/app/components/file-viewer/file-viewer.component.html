@@ -24,10 +24,10 @@
         <div class="app-fxFlex app-controls app-fxLayout app-row app-center-v app-gap-2">
           <a [class.app-disabled-link]="currentPage === 1" (click)="prevPage()"><mat-icon>navigate_before</mat-icon></a>
           <mat-form-field appearance="outline">
-            <input [title]="'dialog.desc.Přejděte číslo stránky' | translate" matInput
+            <input [title]="'dialog.desc.goToPage' | translate" matInput
              [(ngModel)]="currentPage" [value]="currentPageDisplayed()" (keyup.enter)="setPage()"  />
           </mat-form-field>
-          <span>{{ 'dialog.citation.stránka z' | translate }}</span><strong>{{ selectedFile()?.rozsah }}</strong>
+          <span>{{ 'dialog.citation.pageFrom' | translate }}</span><strong>{{ selectedFile()?.rozsah }}</strong>
           <!-- @if (currentPage < selectedFile().rozsah) {
             <span class="app-pipe"></span>
           } -->
@@ -35,10 +35,10 @@
         </div>
         @if(selectedDist) {
           <div class="app-metadata app-fxLayout app-row app-center-v">
-            <span>{{ 'dialog.desc.Velikost souboru' | translate }}: <strong>{{selectedDist.size / 1024 / 1024}}&#160;MB</strong></span><span class="app-pipe"></span><!--
-            --><span>{{ 'dialog.desc.Typ souboru' | translate }}: <strong>{{selectedDist.mimetype}}</strong></span><span class="app-pipe"></span>
+            <span>{{ 'dialog.desc.fileSize' | translate }}: <strong>{{selectedDist.size / 1024 / 1024}}&#160;MB</strong></span><span class="app-pipe"></span><!--
+            --><span>{{ 'dialog.desc.fileType' | translate }}: <strong>{{selectedDist.mimetype}}</strong></span><span class="app-pipe"></span>
             @if (selectedFile() !== null) {
-              <a [matTooltip]="'dialog.tooltip.Stáhněte soubor' | translate" (click)="confirmDownload()" [download]="selectedDist.filename"><mat-icon class="app-va-center">get_app</mat-icon></a>
+              <a [matTooltip]="'dialog.tooltip.download' | translate" (click)="confirmDownload()" [download]="selectedDist.filename"><mat-icon class="app-va-center">get_app</mat-icon></a>
             }
           </div>
         }

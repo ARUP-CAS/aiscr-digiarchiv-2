@@ -3,9 +3,9 @@
   <mat-card-header>
     <mat-card-title class="app-fxLayout app-row app-gap-4">
       <div class="app-fxFlex">
-        {{ 'card.panelTitle.Výškový bod' | translate }}:&#160;
+        {{ 'card.panelTitle.vyskovy_bod' | translate }}:&#160;
         @if (isChild()) {
-          <a [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().ident_cely }} <mat-icon>link</mat-icon></a>
         }
         @if (!isChild()) {
           <span class="app-ident-format">{{ _result().ident_cely }}</span>
@@ -13,7 +13,7 @@
         (<app-inline-filter [field]="'typ'" [value]="_result().vyskovy_bod_typ" [heslar]="'adb_vyskovy_bod_typ'"></app-inline-filter>)
       </div>
       @if (_result().datestamp && state.isMapaCollapsed && !isChild() || mapDetail()) {
-        <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
+        <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.datestamp' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
       }
     </mat-card-title>
   </mat-card-header>
@@ -21,12 +21,12 @@
     <mat-card-content>
       @if (_result().vyskovy_bod_geom_gml) {
         <div>
-          <label class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</label>{{ _result().vyskovy_bod_geom_gml.value ? _result().vyskovy_bod_geom_gml.value : _result().vyskovy_bod_geom_gml }}
+          <label class="app-label">{{ 'card.desc.vyskovy_bod_geom_gml' | translate }}:</label>{{ _result().vyskovy_bod_geom_gml.value ? _result().vyskovy_bod_geom_gml.value : _result().vyskovy_bod_geom_gml }}
         </div>
       }
       @if (_result().vyskovy_bod_geom_wkt.value ? _result().vyskovy_bod_geom_wkt.value : _result().vyskovy_bod_geom_wkt) {
         <div>
-          <label class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</label>
+          <label class="app-label">{{ 'card.desc.vyskovy_bod_geom_wkt' | translate }}:</label>
           EPSG:{{ _result().vyskovy_bod_geom_wkt.epsg }}, {{ _result().vyskovy_bod_geom_wkt.value }}
         </div>
       }
@@ -48,7 +48,7 @@
         <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
           <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
             <mat-panel-title>
-              {{ 'card.panelTitle.Související záznamy' | translate }}:
+              {{ 'card.panelTitle.relatedRecords' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           @for (result of _result().adb; track result) {

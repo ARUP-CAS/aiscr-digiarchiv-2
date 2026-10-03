@@ -1,7 +1,7 @@
 <mat-card class="app-card-result" [class.app-card-child]="isChild()"
   [class.app-entity-dokument]="!isChild() && !isDocumentDialogOpen()">
   @if (mapDetail() && !isChild()) {
-  <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+  <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.close' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   }
@@ -15,7 +15,7 @@
           config.entityIcons[_result().dokument_kategorie_dokumentu] }}</mat-icon> 
         @if (isChild()) {
         <a [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank"
-          class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }}
+          class="app-ident-badge" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().ident_cely }}
           <mat-icon>link</mat-icon></a>
         }
         @if (!isChild()) {
@@ -40,7 +40,7 @@
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
       <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
-        'card.desc.Poslední změna' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
+        'card.desc.datestamp' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
       }
     </mat-card-title>
   </mat-card-header>
@@ -63,7 +63,7 @@
       }
       @if (!imgSrc && state.itemView === 'col' && !isDocumentDialogOpen()) {C
       <div class="app-fxFlex app-thumb app-thumb-missing"
-        [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+        [matTooltip]="'card.tooltip.thumbnailUnavailable' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
       }
@@ -73,25 +73,25 @@
         _result().pristupnost) {
         <div>
           @if (_result().dokument_typ_dokumentu) {
-          <label class="app-label">{{ 'card.desc.Dokument - typ' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.dokument_typ_dokumentu' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild()" [field]="'f_typ_dokumentu'" [value]="_result().dokument_typ_dokumentu"
             [heslar]="'typ_dokumentu'"></app-inline-filter>
           <span class="app-pipe"></span>
           }
           @if (_result().dokument_material_originalu) {
-          <label class="app-label">{{ 'card.desc.Materiál' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.dokument_material_originalu' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild()" [field]="'f_material_dokumentu'"
             [value]="_result().dokument_material_originalu" [heslar]="'material_dokumentu'"></app-inline-filter>
           <span class="app-pipe"></span>
           }
           @if (_result().dokument_rada) {
-          <label class="app-label">{{ 'card.desc.Dokument - řada' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.dokument_rada' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild()" [field]="'f_rada'" [value]="_result().dokument_rada"
             [heslar]="'f_rada'"></app-inline-filter>
           <span class="app-pipe"></span>
           }
           @if (_result().pristupnost) {
-          <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.pristupnost' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild()" [field]="'pristupnost'" [value]="_result().pristupnost"
             [heslar]="'pristupnost'"></app-inline-filter>
           }
@@ -104,7 +104,7 @@
         <div>
           @if (_result().dokument_cast?.[0].komponenta?.[0].komponenta_obdobi ||
           _result().dokument_cast?.[0].komponenta?.[0].komponenta_presna_datace) {
-          <label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.komponenta_obdobi' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild()" [field]="'f_obdobi'"
             [value]="_result().dokument_cast?.[0].komponenta?.[0].komponenta_obdobi.id"
             [heslar]="'obdobi_druha'"></app-inline-filter>
@@ -113,7 +113,7 @@
           }
           }<span class="app-pipe"></span>
           @if (_result().dokument_cast?.[0].komponenta?.[0].komponenta_areal) {
-          <label class="app-label">{{ 'card.desc.Komponenta - areál' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.komponenta_areal' | translate }}:</label>&#160;
           <app-inline-filter [isChild]="isChild()" [field]="'f_areal'"
             [value]="_result().dokument_cast?.[0].komponenta?.[0].komponenta_areal.id"
             [heslar]="'areal_druha'"></app-inline-filter>
@@ -122,7 +122,7 @@
         }
         @if (_result().dokument_extra_data?.odkaz) {
         <div>
-          <label class="app-label">{{'card.desc.Odkaz' | translate}}:</label>&#160;
+          <label class="app-label">{{'card.desc.dokument_extra_data.odkaz' | translate}}:</label>&#160;
           <a [href]="_result().dokument_extra_data.odkaz" target="_blank">{{ _result().dokument_extra_data.odkaz }}</a>
         </div>
         }
@@ -137,7 +137,7 @@
         @if (_result().dokument_organizace) {
         <div>
           <ng-container>
-            <label class="app-label">{{ 'card.desc.Organizace' | translate }}:</label>&#160;
+            <label class="app-label">{{ 'card.desc.dokument_organizace' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild()" [field]="'f_organizace'" [value]="_result().dokument_organizace"
               [heslar]="'organizace'"></app-inline-filter>
           </ng-container>
@@ -145,7 +145,7 @@
         }
         @if (_result().location_info && _result().location_info.length > 0) {
         <div>
-          <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
+          <label class="app-label">{{ 'card.desc.location_info.katastr' | translate }}:</label>&#160;
           @for (item of _result().location_info; track item; let last = $last) {
             @if (item.katastr) {
               <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="item.katastr"></app-inline-filter>
@@ -164,7 +164,7 @@
         @if (_result().dokument_popis) {
         <div class="app-truncate-text">
           <ng-container>
-            <label class="app-label">{{ 'card.desc.Popis' | translate }}:</label>&#160;{{ _result().dokument_popis }}
+            <label class="app-label">{{ 'card.desc.dokument_popis' | translate }}:</label>&#160;{{ _result().dokument_popis }}
           </ng-container>
         </div>
         }
@@ -177,16 +177,16 @@
   <mat-card-actions class="app-fxLayout app-row app-end-v">
     <div class="app-fxFlex app-metadata">
       @if (_result().dokument_cast_archeologicky_zaznam?.length > 0) {
-      {{ 'card.desc.Počet archeologickych zaznamu' | translate }}:
+      {{ 'card.desc.dokument_cast_archeologicky_zaznam' | translate }}:
       <strong>{{_result().dokument_cast_archeologicky_zaznam?.length}}</strong>
       <span class="app-pipe"></span>
       }
       @if (_result().dokument_cast_projekt?.length > 0) {
-      {{'card.desc.Počet projektů' | translate}}: <strong>{{_result().dokument_cast_projekt?.length}}</strong>
+      {{'card.desc.dokument_cast_projekt' | translate}}: <strong>{{_result().dokument_cast_projekt?.length}}</strong>
       <span class="app-pipe"></span>
       }
       @if (_result().soubor_filepath?.length > 0) {
-      {{'card.desc.Počet souborů' | translate}}: <strong>{{_result().soubor_filepath.length}}</strong>
+      {{'card.desc.soubor_filepath' | translate}}: <strong>{{_result().soubor_filepath.length}}</strong>
       }
     </div>
     <app-result-actions [inDocument]="inDocument()" [result]="_result()" [bibTex]="bibTex"
@@ -203,14 +203,14 @@
           <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
             [collapsedHeight]="config.uiVars['panelHeightInCard']">
             <mat-panel-title>
-              {{ 'card.panelTitle.Popis dokumentu' | translate }}:
+              {{ 'card.panelTitle.documentDescription' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           <table class="app-mb-4">
             <tbody>
               @if (_result().dokument_jazyk_dokumentu?.length > 0 && _result().entity !== 'knihovna_3d') {
               <tr>
-                <th class="app-label">{{ 'card.desc.Jazyk' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_jazyk_dokumentu' | translate }}:</th>
                 <td>
                   @for (jazyk of _result().dokument_jazyk_dokumentu; track jazyk; let last = $last) {
                   <app-inline-filter [isChild]="isChild()" [field]="'f_jazyk_dokumentu'" [value]="jazyk"
@@ -224,19 +224,19 @@
               }
               @if (_result().dokument_popis) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Popis obsahu' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.contentDescription' | translate }}:</th>
                 <td>{{ _result().dokument_popis }}</td>
               </tr>
               }
               @if (_result().dokument_poznamka) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_poznamka' | translate }}:</th>
                 <td>{{ _result().dokument_poznamka }}</td>
               </tr>
               }
               @if (_result().dokument_posudek) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Zahrnuje posudky' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_posudek' | translate }}:</th>
                 <td>@for (p of _result().dokument_posudek; track p; let last = $last) {
                   <app-inline-filter [isChild]="isChild()" [field]="'f_typ_dokumentu_posudek'" [value]="p"
                     [heslar]="'posudek'"></app-inline-filter>
@@ -249,7 +249,7 @@
               }
               @if (_result().dokument_ulozeni_originalu) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Dokument - uložení originálu' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_ulozeni_originalu' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild()" [field]="'f_ulozeni_originalu'"
                     [value]="_result().dokument_ulozeni_originalu" [heslar]="'ulozeni_originalu'"></app-inline-filter>
                 </td>
@@ -257,33 +257,33 @@
               }
               @if (_result().dokument_oznaceni_originalu) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Původní označení' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_oznaceni_originalu' | translate }}:</th>
                 <td>{{ _result().dokument_oznaceni_originalu }}</td>
               </tr>
               }
               @if (_result().dokument_datum_zverejneni && _result().entity !== 'knihovna_3d') {
               <tr>
-                <th class="app-label">{{ 'card.desc.Dokument - datum zveřejnění' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_datum_zverejneni' | translate }}:</th>
                 <td>{{ _result().dokument_datum_zverejneni | date : 'yyyy-MM-dd' }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data) {
               @if (_result().dokument_extra_data.cislo_objektu) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Objekt/kontext' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.cislo_objektu' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.cislo_objektu }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.geom_system && (_result().dokument_extra_data.geom_gml ||
               _result().dokument_extra_data.geom_wkt)) {
               <tr>
-                <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_system' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.geom_system }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.geom_gml) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_gml' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.geom_gml }}<br />
                   @if (_result().dokument_extra_data.geom_sjtsk_gml) {
                   {{ _result().dokument_extra_data.geom_sjtsk_gml }}
@@ -293,7 +293,7 @@
               }
               @if (_result().dokument_extra_data.geom_wkt) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_wkt' | translate }}:</th>
                 <td>
                   EPSG:{{ _result().dokument_extra_data.geom_wkt.epsg }}, {{ _result().dokument_extra_data.geom_wkt.value
                   }}<br />
@@ -306,32 +306,32 @@
               }
               @if (_result().dokument_extra_data.format) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Dokument - formát' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.format' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild()" [field]="'f_format'"
                     [value]="_result().dokument_extra_data.format.id" [heslar]="'format'"></app-inline-filter></td>
               </tr>
               }
               @if (_result().dokument_extra_data.vyska) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Výška (cm)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.vyska' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.vyska }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.sirka) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Šířka (cm)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.sirka' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.sirka }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.meritko) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Měřítko' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.meritko' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.meritko }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.zachovalost) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Dokument - zachovalost' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.zachovalost' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild()" [field]="'f_zachovalost'"
                     [value]="_result().dokument_extra_data.zachovalost.id" [heslar]="'zachovalost'"></app-inline-filter>
                 </td>
@@ -339,47 +339,47 @@
               }
               @if (_result().dokument_extra_data.nahrada) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Náhrada' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.nahrada' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild()" [field]="'f_nahrada'"
                     [value]="_result().dokument_extra_data.nahrada.id" [heslar]="'nahrada'"></app-inline-filter></td>
               </tr>
               }
               @if (_result().dokument_extra_data.pocet_variant_originalu) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Počet variant' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.pocet_variant_originalu' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.pocet_variant_originalu }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data?.odkaz && _result().entity !== 'knihovna_3d') {
               <tr>
-                <th class="app-label">{{ 'card.desc.Odkaz' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.odkaz' | translate }}:</th>
                 <td><a [href]="_result().dokument_extra_data.odkaz"
                     target="_blank">{{_result().dokument_extra_data.odkaz}}</a></td>
               </tr>
               }
               @if (_result().dokument_extra_data.datum_vzniku) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Dokument - datum vzniku' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.datum_vzniku' | translate }}:</th>
                 <td>
                   {{ _result().dokument_extra_data.datum_vzniku | date : 'yyyy-MM-dd' }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.zeme) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Země' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.zeme' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild()" [field]="'f_zeme'"
                     [value]="_result().dokument_extra_data.zeme.id" [heslar]="'zeme'"></app-inline-filter></td>
               </tr>
               }
               @if (_result().dokument_extra_data.region) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Region' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.region' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.region }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.udalost_typ) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Typ události' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.udalost_typ' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild()" [field]="'f_udalost_typ'"
                     [value]="_result().dokument_extra_data.udalost_typ.id" [heslar]="'udalost_typ'"></app-inline-filter>
                 </td>
@@ -387,32 +387,32 @@
               }
               @if (_result().dokument_extra_data.udalost) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Událost' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.udalost' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.udalost}}</td>
               </tr>
               }
               @if (_result().dokument_extra_data.rok_od || _result().dokument_extra_data.rok_do) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.documentedEventYears' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.rok_od }}-{{ _result().dokument_extra_data.rok_do }}</td>
               </tr>
               }
               }
               @if (_result().dokument_osoba) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Osoby' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_osoba' | translate }}:</th>
                 <td>{{ _result().dokument_osoba }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data && _result().dokument_extra_data.duveryhodnost) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Důvěryhodnost' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.duveryhodnost' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.duveryhodnost }}</td>
               </tr>
               }
               @if (_result().dokument_licence) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Licence' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_licence' | translate }}:</th>
                 <td><app-inline-filter [isChild]="isChild()" [field]="'dokument_licence'"
                     [value]="_result().dokument_licence" [heslar]="'dokument_licence'"></app-inline-filter></td>
               </tr>
@@ -428,7 +428,7 @@
               <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                 <mat-panel-title>
                   <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                  {{ 'card.panelTitle.Dokumentované tvary' | translate }}
+                  {{ 'card.panelTitle.documentedShapes' | translate }}
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="app-list-inside">
@@ -450,25 +450,25 @@
                 (click)="panelHeader._toggle()">
                 <mat-panel-title>
                   <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                  {{ 'card.panelTitle.Část dokumentu' | translate }}&#160;<a
+                  {{ 'card.panelTitle.dokument_cast' | translate }}&#160;<a
                     [routerLink]="'/id/' + dokument_cast.ident_cely" [queryParams]="{lang: state.currentLang}"
                     target="_blank" class="app-ident-badge"
-                    [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.ident_cely }}
+                    [matTooltip]="'card.tooltip.permalink' | translate">{{ dokument_cast.ident_cely }}
                     <mat-icon>link</mat-icon></a>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               @if (dokument_cast.archeologicky_zaznam || dokument_cast.projekt) {
-              <label class="app-label">{{ 'card.desc.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
+              <label class="app-label">{{ 'card.desc.documentedFieldworkOrSite' | translate }}:</label>&#160;
               @if (dokument_cast.archeologicky_zaznam) {
               <a [routerLink]="'/id/' + dokument_cast.archeologicky_zaznam.id" [queryParams]="{lang: state.currentLang}"
                 target="_blank" class="app-ident-badge app-inbody"
-                [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.archeologicky_zaznam.id }}
+                [matTooltip]="'card.tooltip.permalink' | translate">{{ dokument_cast.archeologicky_zaznam.id }}
                 <mat-icon>link</mat-icon></a>
               }
               @if (dokument_cast.projekt) {
               <a [routerLink]="'/id/' + dokument_cast.projekt.id" [queryParams]="{lang: state.currentLang}"
                 target="_blank" class="app-ident-badge app-inbody"
-                [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ dokument_cast.projekt.id }}
+                [matTooltip]="'card.tooltip.permalink' | translate">{{ dokument_cast.projekt.id }}
                 <mat-icon>link</mat-icon></a>
               }
               }
@@ -482,13 +482,13 @@
                   <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
                     <mat-panel-title>
                       <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                      {{ 'card.panelTitle.Neidentifikovaná akce' | translate }}:
+                      {{ 'card.panelTitle.dokument_cast_neident_akce' | translate }}:
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <table>
                     @if (dokument_cast.neident_akce.katastr || dokument_cast.neident_akce.okres) {
                     <tr>
-                      <th class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</th>
+                      <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.katastr' | translate }}:</th>
                       <td>
                         @if (dokument_cast.neident_akce.katastr) {
                         <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'"
@@ -503,14 +503,14 @@
                     }
                     @for (v of dokument_cast.neident_akce.vedouci; track v) {
                     <tr>
-                      <th class="app-label">{{ 'card.desc.Vedoucí akce' | translate }}:</th>
+                      <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.vedouci' | translate }}:</th>
                       <td><app-inline-filter [isChild]="isChild()" [field]="'f_vedouci'"
                           [value]="v.value"></app-inline-filter></td>
                     </tr>
                     }
                     @if (dokument_cast.neident_akce.rok_zahajeni || dokument_cast.neident_akce.rok_ukonceni) {
                     <tr>
-                      <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
+                      <th class="app-label">{{ 'card.desc.documentedEventYears' | translate }}:</th>
                       <td>{{ dokument_cast.neident_akce.rok_zahajeni }}@if (dokument_cast.neident_akce.rok_ukonceni) {
                         -{{ dokument_cast.neident_akce.rok_ukonceni }}
                         }</td>
@@ -518,25 +518,25 @@
                     }
                     @if (dokument_cast.neident_akce.lokalizace) {
                     <tr>
-                      <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
+                      <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.lokalizace' | translate }}:</th>
                       <td>{{ dokument_cast.neident_akce.lokalizace }}</td>
                     </tr>
                     }
                     @if (dokument_cast.neident_akce.popis) {
                     <tr>
-                      <th class="app-label">{{ 'card.desc.Popis' | translate }}:</th>
+                      <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.popis' | translate }}:</th>
                       <td>{{ dokument_cast.neident_akce.popis }}</td>
                     </tr>
                     }
                     @if (dokument_cast.neident_akce.poznamka) {
                     <tr>
-                      <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
+                      <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.poznamka' | translate }}:</th>
                       <td>{{ dokument_cast.neident_akce.poznamka }}</td>
                     </tr>
                     }
                     @if (dokument_cast.neident_akce.pian) {
                     <tr>
-                      <th class="app-label">{{ 'card.desc.Pian' | translate }}:</th>
+                      <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.pian' | translate }}:</th>
                       <td>{{ dokument_cast.neident_akce.pian }}</td>
                     </tr>
                     }

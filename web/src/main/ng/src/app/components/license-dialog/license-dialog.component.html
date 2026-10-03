@@ -1,6 +1,6 @@
 <div mat-dialog-content>
   <p>
-    {{ 'dialog.citation.Data podléhají licenci' | translate }}
+    {{ 'dialog.citation.dataLicensedUnder' | translate }}
     <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">
       {{ 'dialog.license.cc_by_nc' | translate }}
     </a>
@@ -10,6 +10,6 @@
   </p>
 </div>
 <div mat-dialog-actions>
-    <button mat-button cdkFocusInitial (click)="ok()">{{'dialog.button.Souhlasím' | translate}}</button>
-  <button mat-button [mat-dialog-close]="false">{{ 'dialog.button.Zavřít' | translate }}</button>
+    <button mat-button cdkFocusInitial (click)="ok()">{{'dialog.button.agree' | translate}}</button>
+  <button mat-button [mat-dialog-close]="false">{{ 'dialog.button.close' | translate }}</button>
 </div>

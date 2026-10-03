@@ -5,7 +5,7 @@
   </a>
   <a mat-list-item [href]="config.helpUrl" (click)="onSidenavClose($event)" target="_blank">
     <mat-icon>help_outline</mat-icon>
-    {{ 'navbar.desc.Nápověda' | translate }}
+    {{ 'navbar.desc.help' | translate }}
   </a>
   <a mat-list-item routerLink="stats" (click)="onSidenavClose($event)" routerLinkActive="app-active">
     <mat-icon>query_stats</mat-icon>
@@ -15,13 +15,13 @@
   @if (!state.logged) {
     <a mat-list-item (click)="showLogin(); onSidenavClose($event)">
       <mat-icon>login</mat-icon>
-      {{ 'navbar.desc.Přihlásit uživatele' | translate }}
+      {{ 'navbar.desc.login' | translate }}
     </a>
   }
   @if (!state.logged) {
     <a mat-list-item [href]="config.registrationUrl" target="_blank">
       <mat-icon>how_to_reg</mat-icon>
-      {{ 'navbar.desc.Registrovat uživatele' | translate }}
+      {{ 'navbar.desc.register' | translate }}
     </a>
   }
   <mat-divider></mat-divider>
@@ -39,6 +39,6 @@
   }
   <a mat-list-item (click)="onSidenavClose($event)">
     <mat-icon>close</mat-icon>
-    {{ 'navbar.desc.Close' | translate }}
+    {{ 'navbar.desc.closeMenu' | translate }}
   </a>
 </mat-nav-list>

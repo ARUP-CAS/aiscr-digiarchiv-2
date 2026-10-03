@@ -16,11 +16,11 @@
         Collected data helps us understand how you interact with the site, helps us improve the way it works and ensures 
         that it is as user-friendly and useful as possible. It is also important for reporting on the use of AIS CR to funders.
         </p>
-      <p>We kindly please you to allow us to collect this important data.</p>
+      <p>Please allow us to collect this data.</p>
     </div>
   }
   <div class="app-fxLayout app-row app-gap-2">
-    <button matButton="filled" color="primary" (click)="consent($event)">Přijmout</button>
-    <button mat-button (click)="reject($event)">Odmitnout</button> 
+    <button matButton="filled" color="primary" (click)="consent($event)">{{ 'dialog.button.accept' | translate }}</button>
+    <button mat-button (click)="reject($event)">{{ 'dialog.button.decline' | translate }}</button> 
   </div>
 </div>

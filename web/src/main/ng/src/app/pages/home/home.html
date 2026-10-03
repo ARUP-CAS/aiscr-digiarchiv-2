@@ -22,7 +22,7 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-actions>
-            <span class="app-mr-1">{{ totals()[entity] }}</span> {{'card.desc.záznamů' | translate}}
+            <span class="app-mr-1">{{ totals()[entity] }}</span> {{'card.desc.recordsSuffix' | translate}}
             @if(entity === 'dokument') {
               <a (click)="showingCat = !showingCat" [class]="'app-icon-inside app-entity-' + entity" [ngClass]="showingCat ? 'app-rotate-up' : 'app-rotate-down'" [matTooltip]="showingCat ? 'Sbalit kategorie' : 'Rozbalit kategorie'">
                 <mat-icon>
@@ -44,7 +44,7 @@
                       </a>
                     </mat-card-title>
                     <mat-card-subtitle>
-                      <span>{{ totals().kategorie[doctype] }}</span> {{ 'card.desc.záznamů' | translate }}
+                      <span>{{ totals().kategorie[doctype] }}</span> {{ 'card.desc.recordsSuffix' | translate }}
                     </mat-card-subtitle>
                   </mat-card-header>
                 </mat-card>
@@ -65,7 +65,7 @@
                     </a>
                   </mat-card-title>
                   <mat-card-subtitle>
-                    <span>{{ totals().kategorie[doctype] }}</span> {{ 'card.desc.záznamů' | translate }}
+                    <span>{{ totals().kategorie[doctype] }}</span> {{ 'card.desc.recordsSuffix' | translate }}
                   </mat-card-subtitle>
                 </mat-card-header>
               </mat-card>
@@ -78,7 +78,7 @@
     <div class="app-fxLayout app-row app-fill app-desc-wrapper">
       <mat-card class="app-fxFlex app-left">
         <mat-card-header>
-          <mat-card-title>{{ 'card.title.O projektu' | translate }}</mat-card-title>
+          <mat-card-title>{{ 'card.title.welcome' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <app-free-text [id]="'about'" ></app-free-text>
@@ -87,7 +87,7 @@
       <div class="app-fxFlex app-right">
         <mat-card class="app-h-100">
           <mat-card-header>
-            <mat-card-title>{{ 'card.title.Aktuality' | translate }}</mat-card-title>
+            <mat-card-title>{{ 'card.title.news' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <app-free-text [id]="'news'" ></app-free-text>

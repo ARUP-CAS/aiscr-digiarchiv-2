@@ -1,8 +1,8 @@
 <mat-list role="list">
   <h3 mat-subheader class="app-fxLayout app-row app-center-v app-color-primary">
-    <div class="app-fxFlex">{{ 'facet.title.Aktivní filtry' | translate }}</div>
+    <div class="app-fxFlex">{{ 'facet.title.activeFilters' | translate }}</div>
     <div>
-      <a class="app-fxLayout app-row app-center-v app-color-warn" [matTooltip]="'facet.tooltip.Odstranit všechny filtry' | translate" matTooltipPosition="above" (click)="clean()">
+      <a class="app-fxLayout app-row app-center-v app-color-warn" [matTooltip]="'facet.tooltip.removeAllFilters' | translate" matTooltipPosition="above" (click)="clean()">
         <mat-icon>close</mat-icon>
       </a>
     </div>
@@ -11,8 +11,8 @@
   @if(state.inFavorites()) {
     <mat-list-item role="listitem" class="app-facet-used">
       <div>
-          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeInfavorites()">
-            <mat-icon>close</mat-icon>{{ 'card.desc.Favorites' |
+          <a [matTooltip]="'facet.tooltip.removeFilter' | translate" matTooltipPosition="above" (click)="removeInfavorites()">
+            <mat-icon>close</mat-icon>{{ 'card.desc.favorites' |
                 translate }}
           </a>
         </div> 
@@ -22,8 +22,8 @@
   @if(state.inMuseion()) {
     <mat-list-item role="listitem" class="app-facet-used">
       <div>
-          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeInMuseion()">
-            <mat-icon>close</mat-icon>{{ 'card.desc.Museion' |
+          <a [matTooltip]="'facet.tooltip.removeFilter' | translate" matTooltipPosition="above" (click)="removeInMuseion()">
+            <mat-icon>close</mat-icon>{{ 'card.desc.museion' |
                 translate }}
           </a>
         </div> 
@@ -40,14 +40,14 @@
       }
       @if (facet.field === 'cf') {
         <div>
-          <a [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeCommonFacet(facet.display)">
+          <a [matTooltip]="'facet.tooltip.removeFilter' | translate" matTooltipPosition="above" (click)="removeCommonFacet(facet.display)">
             <mat-icon>close</mat-icon>{{ 'commonFacets.' + facet.display | translate}}
           </a>
         </div> 
       }
       @if (facet.field !== 'separator' && facet.field !== 'cf') {
         <div class="app-fxLayout app-row app-start-v app-gap-1 app-item-wrapper">
-          <a class="app-fxLayout app-row app-center-v" [matTooltip]="'facet.tooltip.Odstranit tento filtr' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
+          <a class="app-fxLayout app-row app-center-v" [matTooltip]="'facet.tooltip.removeFilter' | translate" matTooltipPosition="above" (click)="removeFacet(facet)">
             <mat-icon>close</mat-icon>
           </a>
           <span>
@@ -64,7 +64,7 @@
             }
             @if (facet.field === 'az_dj_negativni_jednotka') {
               <span class="app-font-bold">
-                {{ facet.value === '1' ? ('negativní' | translate) : ('pozitivní' | translate) }}
+                {{ facet.value === '1' ? ('negative' | translate) : ('positive' | translate) }}
               </span>
             }
             @if (facet.field === 'dokument_cast_komponenta_dokument_jistota') {

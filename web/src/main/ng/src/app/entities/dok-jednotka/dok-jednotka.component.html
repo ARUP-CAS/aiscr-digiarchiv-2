@@ -18,7 +18,7 @@
         </div>
         @if (_result().datestamp && state.isMapaCollapsed && !isChild() || mapDetail()) {
           <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
-            'card.desc.Poslední změna' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
+            'card.desc.datestamp' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
           }
       </mat-card-title>
     </mat-card-header>
@@ -31,11 +31,11 @@
       <mat-card-actions class="app-fxLayout app-row app-end-v">
         <div class="app-fxFlex app-metadata">
           @if (_result().akce?.length > 0) {
-            {{ 'card.desc.Počet akcí' | translate }}: <strong>{{_result().akce?.length}}</strong>
+            {{ 'card.desc.akce' | translate }}: <strong>{{_result().akce?.length}}</strong>
             <span class="app-pipe"></span>
           }
           @if (_result().lokalita?.length > 0) {
-            {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{_result().lokalita.length}}</strong>
+            {{ 'card.desc.lokalita' | translate }}: <strong>{{_result().lokalita.length}}</strong>
             <span class="app-pipe"></span>
           }
         </div>
@@ -52,7 +52,7 @@
             <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
               [collapsedHeight]="config.uiVars['panelHeightInCard']">
               <mat-panel-title>
-                {{ 'card.panelTitle.Související záznamy' | translate }}:
+                {{ 'card.panelTitle.relatedRecords' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
             @for (akce of _result().akce; track akce.ident_cely) {
@@ -75,9 +75,9 @@
       @if (!inDocument()) {
         <mat-panel-title>
           <mat-icon (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-          {{ 'card.panelTitle.Dokumentační jednotka' | translate }}&#160;<a [routerLink]="'/id/' + _result().ident_cely"
+          {{ 'card.panelTitle.dokumentacni_jednotka' | translate }}&#160;<a [routerLink]="'/id/' + _result().ident_cely"
           [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge"
-          [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }}
+          [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().ident_cely }}
           <mat-icon>link</mat-icon></a>–&#160;
           <app-inline-filter [field]="'f_dj_typ'" [value]="_result().dj_typ.id ? _result().dj_typ.id : _result().dj_typ" [heslar]="'typ_dj'"></app-inline-filter>
           @if (_result().dj_nazev) {
@@ -88,8 +88,8 @@
     </mat-expansion-panel-header>
     @if (_detailExpanded() || !inDocument()) { 
       <!--*ngIf="result.dj_negativni_jednotka"-->
-      <label class="app-label">{{ 'card.desc.Dok. jednotka - negativní zjištění' | translate }}:</label>&#160;
-      {{ _result().dj_negativni_jednotka ? ('negativní' | translate) : ('pozitivní' | translate) }}
+      <label class="app-label">{{ 'card.desc.dj_negativni_jednotka' | translate }}:</label>&#160;
+      {{ _result().dj_negativni_jednotka ? ('negative' | translate) : ('positive' | translate) }}
     }
     @if (_detailExpanded() || !inDocument()) {
       <mat-accordion multi="true">
