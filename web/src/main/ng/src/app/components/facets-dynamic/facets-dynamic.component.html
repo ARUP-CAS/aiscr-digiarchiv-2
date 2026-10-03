@@ -6,7 +6,7 @@
   </mat-expansion-panel-header>
   <div class="app-fxLayout app-row" [class.app-mb-4]="filterField">
     <mat-form-field class="app-fxFlex" appearance="outline">
-      <mat-select [placeholder]="'facet.input.Vyberte pole' | translate" name="filterField"
+      <mat-select [placeholder]="'facet.input.selectField' | translate" name="filterField"
         [(ngModel)]="filterField">
         @for (f of config.filterFields; track f) {
           <mat-option [value]="f">
@@ -18,7 +18,7 @@
   </div>
   @if (filterField) {
     <div class="app-fxLayout app-row app-center-v app-gap-2">
-      <a [matMenuTriggerFor]="menu" class="app-fxLayout app-row app-center-v app-color-accent" [matTooltip]="filterOperator ? ('facet.tooltip.Operátor ' + filterOperator | translate) : ('facet.tooltip.Zvolit operátor pro filtrování' | translate)">
+      <a [matMenuTriggerFor]="menu" class="app-fxLayout app-row app-center-v app-color-accent" [matTooltip]="filterOperator ? ('facet.tooltip.operator.' + filterOperator | translate) : ('facet.tooltip.selectOperator' | translate)">
         @if (!filterOperator) {
           <mat-icon>more_vert</mat-icon>
         }
@@ -32,67 +32,67 @@
         <button mat-menu-item (click)="filterOperator = 'or'">
           <div class="app-fxLayout app-row app-center-v app-gap-2">
             <span class="app-badge-op or"><mat-icon>{{ 'facet.icon.or' | translate }}</mat-icon></span>
-            <span>{{ 'facet.menu.Operátor OR' | translate }}</span>
+            <span>{{ 'facet.menu.operatorOr' | translate }}</span>
           </div>
         </button>
         <button mat-menu-item (click)="filterOperator = 'and'">
           <div class="app-fxLayout app-row app-center-v app-gap-2">
              <span class="app-badge-op and"><mat-icon>{{ 'facet.icon.and' | translate }}</mat-icon></span>
-            <span>{{ 'facet.menu.Operátor AND' | translate }}</span>
+            <span>{{ 'facet.menu.operatorAnd' | translate }}</span>
           </div>
         </button>
         <button mat-menu-item (click)="filterOperator = 'not'">
            <div class="app-fxLayout app-row app-center-v app-gap-2">
             <span class="app-badge-op not"><mat-icon>{{ 'facet.icon.not' | translate }}</mat-icon></span>
-            <span>{{ 'facet.menu.Operátor NOT' | translate }}</span>
+            <span>{{ 'facet.menu.operatorNot' | translate }}</span>
            </div>
         </button>
       </mat-menu>
       @switch(filterField.type) {
         @case ('date') {
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="('facet.input.Datum od' | translate)"
+            <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="('facet.input.dateFrom' | translate)"
              (click)="datum_od.open()">
             <mat-datepicker-toggle matSuffix [for]="datum_od"></mat-datepicker-toggle>
             <mat-datepicker #datum_od startView="multi-year"></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'facet.input.Datum do' | translate" (click)="datum_do.open()">
+            <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'facet.input.dateTo' | translate" (click)="datum_do.open()">
             <mat-datepicker-toggle matSuffix [for]="datum_do"></mat-datepicker-toggle>
             <mat-datepicker #datum_do startView="multi-year"></mat-datepicker>
           </mat-form-field>
         }
         @case ('rok') {
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput [matDatepicker]="rok_od" [value]="rokoddate.value" [placeholder]="'facet.input.Rok od' | translate" hidden="true" style="display: none;" [readonly]="true">
-            <input matInput [(ngModel)]="rokod" [placeholder]="'facet.input.Rok od' | translate" (click)="rok_od.open()" name="aa">
+            <input matInput [matDatepicker]="rok_od" [value]="rokoddate.value" [placeholder]="'facet.input.yearFrom' | translate" hidden="true" style="display: none;" [readonly]="true">
+            <input matInput [(ngModel)]="rokod" [placeholder]="'facet.input.yearFrom' | translate" (click)="rok_od.open()" name="aa">
             <mat-datepicker-toggle matSuffix [for]="rok_od"></mat-datepicker-toggle>
             <mat-datepicker #rok_od startView="multi-year" (yearSelected)="chosenYearHandler($event, rok_od, 'from')"></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput [matDatepicker]="rok_do" [value]="rokdodate.value" [placeholder]="'facet.input.Rok do' | translate" hidden="true" style="display: none;" [readonly]="true">
-            <input matInput [(ngModel)]="rokdo" [placeholder]="'facet.input.Rok do' | translate" (click)="rok_do.open()" name="bb">
+            <input matInput [matDatepicker]="rok_do" [value]="rokdodate.value" [placeholder]="'facet.input.yearTo' | translate" hidden="true" style="display: none;" [readonly]="true">
+            <input matInput [(ngModel)]="rokdo" [placeholder]="'facet.input.yearTo' | translate" (click)="rok_do.open()" name="bb">
             <mat-datepicker-toggle matSuffix [for]="rok_do"></mat-datepicker-toggle>
             <mat-datepicker #rok_do startView="multi-year" (yearSelected)="chosenYearHandler($event, rok_do, 'until')"></mat-datepicker>
           </mat-form-field>
         }
         @case ('number') {
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput type="number" [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue" [(ngModel)]="numberod" step="0.01" (keyup.enter)="addFilter()" />
+            <input matInput type="number" [placeholder]="'facet.input.value' | translate" name="filterFieldValue" [(ngModel)]="numberod" step="0.01" (keyup.enter)="addFilter()" />
           </mat-form-field>
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput type="number" [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue" [(ngModel)]="numberdo" step="0.01" (keyup.enter)="addFilter()" />
+            <input matInput type="number" [placeholder]="'facet.input.value' | translate" name="filterFieldValue" [(ngModel)]="numberdo" step="0.01" (keyup.enter)="addFilter()" />
           </mat-form-field>
         }
         @case ('boolean') {
-          <mat-radio-group aria-label="Select an option" [(ngModel)]="boolValue">
-            <mat-radio-button value="1">{{ (filterField.field === 'az_dj_negativni_jednotka' ? 'facet.button.negativní' : 'facet.button.Ano') | translate}}</mat-radio-button>&#160;
-            <mat-radio-button value="0">{{ (filterField.field === 'az_dj_negativni_jednotka' ? 'facet.button.pozitivní' : 'facet.button.Ne') | translate}}</mat-radio-button>
+          <mat-radio-group [attr.aria-label]="'facet.input.selectOption' | translate" [(ngModel)]="boolValue">
+            <mat-radio-button value="1">{{ (filterField.field === 'az_dj_negativni_jednotka' ? 'facet.button.negative' : 'facet.button.yes') | translate}}</mat-radio-button>&#160;
+            <mat-radio-button value="0">{{ (filterField.field === 'az_dj_negativni_jednotka' ? 'facet.button.positive' : 'facet.button.no') | translate}}</mat-radio-button>
           </mat-radio-group>
         }
         @default {
           <mat-form-field class="app-fxFlex" appearance="outline">
-            <input matInput [placeholder]="'facet.input.Hodnota' | translate" name="filterFieldValue" [(ngModel)]="filterFieldValue" (keyup.enter)="addFilter()" />
+            <input matInput [placeholder]="'facet.input.value' | translate" name="filterFieldValue" [(ngModel)]="filterFieldValue" (keyup.enter)="addFilter()" />
           </mat-form-field>
         }
       }
@@ -100,6 +100,6 @@
   }
   <button matButton="filled" [disabled]="!canFilter()" (click)="addFilter()" class="app-btn-accent app-btn-facet app-mt-4">
     <mat-icon mat-flat-button>filter_alt</mat-icon>
-    {{ 'facet.button.Aplikovat filtr' | translate }}
+    {{ 'facet.button.applyFilter' | translate }}
   </button>
 </mat-expansion-panel>

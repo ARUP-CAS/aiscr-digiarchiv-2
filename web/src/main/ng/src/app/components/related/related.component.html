@@ -2,7 +2,7 @@
   <mat-expansion-panel [expanded]="true" class="app-panel-related-items virtual">
     <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
       <mat-panel-title>
-        {{ 'card.panelTitle.Související záznamy' | translate }}: {{ related().length }}
+        {{ 'card.panelTitle.relatedRecords' | translate }}: {{ related().length }}
       </mat-panel-title>
     </mat-expansion-panel-header>
     @if (!state.printing()) {
@@ -14,7 +14,7 @@
         }
         @if (toProcess()?.length > 0) {
           <div class="app-fxLayout app-row app-center-h">
-            <button mat-button  (click)="loadAll()" class="app-mb-4">{{ 'card.button.Zobrazit vsechny' | translate}}</button>
+            <button mat-button  (click)="loadAll()" class="app-mb-4">{{ 'card.button.loadAllRecords' | translate}}</button>
           </div>
         }
       </cdk-virtual-scroll-viewport>

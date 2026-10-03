@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="app-fxLayout app-row app-center-v app-search-form">
       <mat-form-field class="app-fxFlex app-left" appearance="outline">
-        <input matInput [placeholder]="'searchbar.input.Zadejte vyhledávací dotaz' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above">
+        <input matInput [placeholder]="'searchbar.input.query' | translate" name="q" id="q" (keyup.enter)="search()" [(ngModel)]="state.q" [matTooltip]="'searchbar.tooltip.q' | translate" matTooltipPosition="above">
         <mat-icon matSuffix (click)="toggleMapa()" class="app-mobile-controls fxHide_gt-xs app-cursor-pointer app-btn-map">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
         <mat-icon matSuffix (click)="search()" class="app-cursor-pointer">search</mat-icon>
       </mat-form-field>
@@ -11,7 +11,7 @@
           <button mat-flat-button color="primary" [matMenuTriggerFor]="exports" class="app-ml-2">
             <mat-icon class="fxHide_sm fxHide_xs app-gap-icon-right">get_app</mat-icon>
             <mat-icon class="fxHide_gt-sm">get_app</mat-icon>
-            <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.Exportovat seznam' | translate }}</span>
+            <span class="fxHide_sm fxHide_xs">{{ 'searchbar.button.exportList' | translate }}</span>
           </button>
         }
         <mat-menu #exports="matMenu">
@@ -28,7 +28,7 @@
           @if (!state.isMapaCollapsed) {
             <mat-icon class="fxHide_sm fxHide_xs">clear</mat-icon>
           }
-          <span class="fxHide_sm fxHide_xs">@if (!state.isMapaCollapsed) {&#160;} {{ state.isMapaCollapsed ? ('searchbar.button.Otevřít mapu' | translate) : ('searchbar.button.Zavřít mapu' | translate) }}</span>
+          <span class="fxHide_sm fxHide_xs">@if (!state.isMapaCollapsed) {&#160;} {{ state.isMapaCollapsed ? ('searchbar.button.openMap' | translate) : ('searchbar.button.closeMap' | translate) }}</span>
           <mat-icon class="fxHide_gt-sm">{{ !state.isMapaCollapsed ? 'location_off' : 'location_on' }}</mat-icon>
         </button>
       </div>

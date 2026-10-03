@@ -74,7 +74,7 @@ export class SamostatnyNalezComponent extends Entity {
         data: this._result()
       });
     } else {
-      const msg = this.service.getTranslation('alert.insuficient rights');
+      const msg = this.service.getTranslation('alert.insufficientRights');
       alert(msg);
     }
   }

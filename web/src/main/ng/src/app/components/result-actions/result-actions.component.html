@@ -7,7 +7,7 @@
 }
 
   @if (!mapDetail() && (result().chranene_udaje || result().loc_rpt || result().loc)) {
-    <button matIconButton (click)="service.showInMap(result(), false, true)" [matTooltip]="'card.tooltip.Zobrazit na mapě' | translate">
+    <button matIconButton (click)="service.showInMap(result(), false, true)" [matTooltip]="'card.tooltip.showOnMap' | translate">
       <mat-icon>map</mat-icon>
     </button>
   }
@@ -18,12 +18,12 @@
   </a>
 }
 
-  <button matIconButton [matTooltip]="'card.tooltip.Odkazy' | translate" [matMenuTriggerFor]="links">
+  <button matIconButton [matTooltip]="'card.tooltip.links' | translate" [matMenuTriggerFor]="links">
     <mat-icon>link</mat-icon>
   </button>
   <mat-menu #links="matMenu">
     <a mat-menu-item [routerLink]="'/id/' + result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
-      {{ 'card.menu.Persistentní odkaz' | translate }}
+      {{ 'card.menu.permalink' | translate }}
     </a>
     @for (item of config.choiceApi; track item) {
       <a mat-menu-item [href]="item.url + apiIdentCely(item)" target="_blank">
@@ -36,8 +36,8 @@
     <mat-icon>menu_book</mat-icon>
   </button>
   <mat-menu #mCitace="matMenu">
-    <a mat-menu-item  (click)="showCitation()" [matTooltip]="'Zobrazit citaci'">
-      {{ 'card.menu.Zobrazit citaci' | translate }}
+    <a mat-menu-item  (click)="showCitation()" [matTooltip]="'card.menu.showCitation' | translate">
+      {{ 'card.menu.showCitation' | translate }}
     </a>
     @if (bibTex()) {
       <a mat-menu-item   (click)="service.showBiBText(result().ident_cely, bibTex())" [matTooltip]="'BibTeX'">
@@ -46,17 +46,17 @@
     }
   </mat-menu>
 
-  <a matIconButton target="_blank" [href]="'print/'+result().ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.Vytisknout' | translate">
+  <a matIconButton target="_blank" [href]="'print/'+result().ident_cely+'?lang='+state.currentLang" [matTooltip]="'card.tooltip.print' | translate">
     <mat-icon>print</mat-icon>
   </a>
 
   @if (state.logged) {
-    <button matIconButton (click)="toggleFav()" [class.app-color-fav]="isFav()" [matTooltip]="isFav() ? ('card.tooltip.Odebrat z oblíbených' | translate)  : ('card.tooltip.Uložit do oblíbených' | translate)">
+    <button matIconButton (click)="toggleFav()" [class.app-color-fav]="isFav()" [matTooltip]="isFav() ? ('card.tooltip.removeFromFavorites' | translate)  : ('card.tooltip.addToFavorites' | translate)">
       <mat-icon>grade</mat-icon>
     </button>
   }
 
-  <button matIconButton (click)="openFeedback()" [matTooltip]="'card.tooltip.Odeslat komentář' | translate">
+  <button matIconButton (click)="openFeedback()" [matTooltip]="'card.tooltip.sendFeedback' | translate">
     <mat-icon>feedback</mat-icon>
   </button>
 
@@ -66,17 +66,17 @@
   
   @if (!isDocumentDialogOpen() && !inDocument()) {
     <button matButton="tonal" (click)="toggleDetail()" [ngClass]="detailExpanded() ? 'app-rotate-up' : 'app-rotate-down'">
-      {{(detailExpanded() ? 'card.button.Skrýt detail' : 'card.button.Zobrazit detail') | translate }}<mat-icon>expand_more</mat-icon>
+      {{(detailExpanded() ? 'card.button.hideDetail' : 'card.button.showDetail') | translate }}<mat-icon>expand_more</mat-icon>
     </button>
   }
   @if (state.itemView === 'col' && !isDocumentDialogOpen() && !inDocument()) {
     <button matButton="tonal" class="app-col-detail" (click)="openDocument()">
-      {{ 'card.button.Zobrazit detail' | translate }}
+      {{ 'card.button.showDetail' | translate }}
     </button>
   }
   @if (state.itemView === 'col' && isDocumentDialogOpen() && !inDocument()) {
     <button matButton="tonal" class="app-col-detail" [mat-dialog-close]="false">
-      {{ 'card.button.Skrýt detail' | translate }}
+      {{ 'card.button.hideDetail' | translate }}
     </button>
   }
 </div>

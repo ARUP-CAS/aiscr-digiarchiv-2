@@ -1,7 +1,7 @@
 @if (!isChild()) {
 <mat-card class="app-card-result " [class.app-card-child]="isChild()" [class.app-entity-komponenta]="!isChild()">
   @if (mapDetail()) {
-  <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+  <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.close' | translate">
     <mat-icon>clear</mat-icon>
   </a>
   }
@@ -12,7 +12,7 @@
       </div>
       @if (_result().datestamp && state.isMapaCollapsed || mapDetail()) {
       <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
-        'card.desc.Poslední změna' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
+        'card.desc.datestamp' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
       }
     </mat-card-title>
   </mat-card-header>
@@ -39,14 +39,14 @@
 <mat-card-content class="app-persistent-link-wrapper">
     <div class="app-metadata app-mb-4">
       <div>
-        <label class="app-label">{{ 'card.desc.Původ' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.komponenta_zdroj' | translate }}:</label>&#160;
         {{ 'entities.' + _result().komponenta_zdroj + '.title' | translate}} 
         <a [routerLink]="'/id/' + result().komponenta_zdroj_ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank">
           ({{ _result().komponenta_zdroj_ident_cely }})
         </a>
         <span class="app-pipe"></span>
         @if (_result().pristupnost) {
-        <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.pristupnost' | translate }}:</label>&#160;
         <app-inline-filter [isChild]="isChild()" [field]="'pristupnost'" [value]="_result().pristupnost"
           [heslar]="'pristupnost'"></app-inline-filter>
         }
@@ -54,7 +54,7 @@
 
       @if (_result().okres) {
       <div>
-        <label class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.az_chranene_udaje.hlavni_katastr' | translate }}:</label>&#160;
 
         @if (_result().az_chranene_udaje?.hlavni_katastr) {
           <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'"
@@ -73,7 +73,7 @@
 
       @if (_result().az_chranene_udaje?.dalsi_katastr.length > 0) {
           <div>
-            <label class="app-label">{{ 'card.desc.dalsi_katastry' | translate }}:</label>&#160;
+            <label class="app-label">{{ 'card.desc.az_chranene_udaje.dalsi_katastr' | translate }}:</label>&#160;
             @for (k of _result().az_chranene_udaje.dalsi_katastr; track k; let last = $last) {
               <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="k.value"></app-inline-filter>
               @if (!last) {
@@ -91,7 +91,7 @@
       
       @if(_result().komponenta_aktivita?.length > 0) {
       <div>
-        <label class="app-label">{{ 'card.desc.Aktivity' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.komponenta_aktivita' | translate }}:</label>&#160;
         @for (aktivita of _result().komponenta_aktivita; track
         aktivita.id; let last = $last)
         {<app-inline-filter [field]="'f_aktivita'" [value]="aktivita.id" [heslar]="'f_aktivita'"></app-inline-filter>@if
@@ -102,7 +102,7 @@
       }
       @if(_result().komponenta_poznamka) {
       <div>
-        <label class="app-label">{{ 'card.desc.Poznámka' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.komponenta_poznamka' | translate }}:</label>&#160;
         {{ _result().komponenta_poznamka }}
       </div>
       }
@@ -121,20 +121,20 @@
           <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
             [collapsedHeight]="config.uiVars['panelHeightInCard']">
             <mat-panel-title>
-              {{ 'card.panelTitle.Popis komponenty' | translate }}:
+              {{ 'card.panelTitle.componentDescription' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           <table>
             <tbody>
               @if (_result().samostatny_nalez_geom_system) {
               <tr>
-                <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.samostatny_nalez_geom_system' | translate }}:</th>
                 <td>{{ _result().samostatny_nalez_geom_system }}</td>
               </tr>
               }
               @if (_result().samostatny_nalez_chranene_udaje?.geom_gml) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.samostatny_nalez_chranene_udaje.geom_gml' | translate }}:</th>
                 <td>{{ _result().samostatny_nalez_chranene_udaje?.geom_gml }}<br />
                   @if (_result().samostatny_nalez_chranene_udaje?.geom_sjtsk_gml) {
                   {{ _result().samostatny_nalez_chranene_udaje?.geom_sjtsk_gml }}
@@ -144,13 +144,13 @@
               }
               @if (_result().dokument_extra_data?.geom_system) {
               <tr>
-                <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_system' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data.geom_system }}</td>
               </tr>
               }
               @if (_result().dokument_extra_data?.geom_gml) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_gml' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data?.geom_gml }}<br />
                   @if (_result().dokument_extra_data?.geom_sjtsk_gml) {
                   {{ _result().dokument_extra_data?.geom_sjtsk_gml }}
@@ -160,7 +160,7 @@
               }
               @if (_result().samostatny_nalez_chranene_udaje?.geom_wkt) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.samostatny_nalez_chranene_udaje.geom_wkt' | translate }}:</th>
                 <td>EPSG:{{ _result().samostatny_nalez_chranene_udaje.geom_wkt.epsg }}, {{
                   _result().samostatny_nalez_chranene_udaje?.geom_wkt.value }}<br />
                   @if (_result().samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt) {
@@ -172,7 +172,7 @@
               }
               @if (_result().dokument_extra_data?.geom_wkt) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_wkt' | translate }}:</th>
                 <td>EPSG:{{ _result().dokument_extra_data.geom_wkt.epsg }}, {{ _result().dokument_extra_data?.geom_wkt.value
                   }}<br />
                   @if (_result().dokument_extra_data?.geom_sjtsk_wkt) {
@@ -211,7 +211,7 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
       <mat-panel-title>
         <mat-icon>{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>
-        {{ 'card.panelTitle.Nálezy' | translate }}:
+        {{ 'card.panelTitle.finds' | translate }}:
       </mat-panel-title>
     </mat-expansion-panel-header>
     <ul class="app-list-inside">
@@ -236,7 +236,7 @@
     <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
       <mat-panel-title>
         <mat-icon>{{ panel1.expanded ? 'remove' : 'add' }}</mat-icon>
-        {{ 'card.desc.Nález' | translate }}:
+        {{ 'card.desc.find' | translate }}:
       </mat-panel-title>
     </mat-expansion-panel-header>
       <app-inline-filter [isChild]="isChild()" [field]="'f_druh_nalezu'" [value]="_result().samostatny_nalez_druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
@@ -271,7 +271,7 @@
       <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
         [collapsedHeight]="config.uiVars['panelHeightInCard']">
         <mat-panel-title>
-          {{ 'card.panelTitle.Související záznamy' | translate }}:
+          {{ 'card.panelTitle.relatedRecords' | translate }}:
         </mat-panel-title>
       </mat-expansion-panel-header>
       @for (dok_jednotka of _result().dok_jednotka; track dok_jednotka.ident_cely) {
@@ -290,11 +290,11 @@
     <div class="app-icon-component dokument" [ngClass]="'app-facet-entity ' + _result().komponenta_zdroj"></div>
     <span class="app-ident-format">{{ _result().ident_cely }}</span>
   } @else {
-    {{ 'card.panelTitle.Komponenta' | translate }}&#160;
+    {{ 'card.panelTitle.komponenta' | translate }}&#160;
     <a
     [routerLink]="'/id/' + (_result().komponenta_zdroj === 'samostatny_nalez' ? _result().komponenta_zdroj_ident_cely : _result().ident_cely)"
     [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge"
-    [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().komponenta_zdroj === 'samostatny_nalez' ?
+    [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().komponenta_zdroj === 'samostatny_nalez' ?
     _result().komponenta_zdroj_ident_cely : _result().ident_cely }}
     <mat-icon>link</mat-icon></a>
   }
@@ -328,7 +328,7 @@
           <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
             [collapsedHeight]="config.uiVars['panelHeightInCard']">
             <mat-panel-title>
-              {{ 'card.panelTitle.Popis komponenty' | translate }}:
+              {{ 'card.panelTitle.componentDescription' | translate }}:
             </mat-panel-title>
           </mat-expansion-panel-header>
           <table>
@@ -337,13 +337,13 @@
 
               @if (_result().samostatny_nalez_geom_system) {
               <tr>
-                <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.samostatny_nalez_geom_system' | translate }}:</th>
                 <td>{{ _result().samostatny_nalez_geom_system }}</td>
               </tr>
               }
               @if (_result().samostatny_nalez_chranene_udaje?.geom_gml) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.samostatny_nalez_chranene_udaje.geom_gml' | translate }}:</th>
                 <td>{{ _result().samostatny_nalez_chranene_udaje?.geom_gml }}<br />
                   @if (_result().samostatny_nalez_chranene_udaje?.geom_sjtsk_gml) {
                   {{ _result().samostatny_nalez_chranene_udaje?.geom_sjtsk_gml }}
@@ -353,7 +353,7 @@
               }
               @if (_result().dokument_extra_data?.geom_gml) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_gml' | translate }}:</th>
                 <td>{{ _result().dokument_extra_data?.geom_gml }}<br />
                   @if (_result().dokument_extra_data?.geom_sjtsk_gml) {
                   {{ _result().dokument_extra_data?.geom_sjtsk_gml }}
@@ -363,7 +363,7 @@
               }
               @if (_result().samostatny_nalez_chranene_udaje?.geom_wkt) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.samostatny_nalez_chranene_udaje.geom_wkt' | translate }}:</th>
                 <td>EPSG:{{ _result().samostatny_nalez_chranene_udaje.geom_wkt.epsg }}, {{
                   _result().samostatny_nalez_chranene_udaje?.geom_wkt.value }}<br />
                   @if (_result().samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt) {
@@ -375,7 +375,7 @@
               }
               @if (_result().dokument_extra_data?.geom_wkt) {
               <tr>
-                <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                <th class="app-label">{{ 'card.desc.dokument_extra_data.geom_wkt' | translate }}:</th>
                 <td>EPSG:{{ _result().dokument_extra_data.geom_wkt.epsg }}, {{ _result().dokument_extra_data?.geom_wkt.value
                   }}<br />
                   @if (_result().dokument_extra_data?.geom_sjtsk_wkt) {

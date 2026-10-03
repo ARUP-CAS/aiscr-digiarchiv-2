@@ -1,6 +1,6 @@
 <mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-samostatny_nalez]="!isChild() && !isDocumentDialogOpen()">
   @if (mapDetail() && !isChild()) {
-    <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+    <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.close' | translate">
       <mat-icon>clear</mat-icon>
     </a>
   }
@@ -12,7 +12,7 @@
         }
         <mat-icon class="app-entity-samostatny_nalez" [matTooltip]="'entities.samostatny_nalez.title' | translate">{{ config.entityIcons["samostatny_nalez"] }}</mat-icon>
         @if (isChild()) {
-          <a [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().ident_cely }} <mat-icon>link</mat-icon></a>
         }
         @if (!isChild()) {
           <span class="app-ident-format">{{ _result().ident_cely }}</span>
@@ -25,7 +25,7 @@
       }  
       </div>
       @if (state.isMapaCollapsed && !isChild() || mapDetail()) {
-        <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.Poslední změna' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
+        <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{ 'card.desc.datestamp' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
       }
     </mat-card-title>
   </mat-card-header>
@@ -47,7 +47,7 @@
         </div>
       }
       @if (!imgSrc && state.itemView === 'col' && !isDocumentDialogOpen()) {
-        <div class="app-fxFlex app-thumb app-thumb-missing" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+        <div class="app-fxFlex app-thumb app-thumb-missing" [matTooltip]="'card.tooltip.thumbnailUnavailable' | translate">
           <mat-icon>image_not_supported</mat-icon>
         </div>
       }
@@ -56,16 +56,16 @@
         @if (_result().samostatny_nalez_predano_organizace || _result().samostatny_nalez_evidencni_cislo || _result().pristupnost) {
           <div>
             @if (_result().samostatny_nalez_predano_organizace) {
-              <label class="app-label">{{ 'card.desc.Předáno organizaci' | translate }}:</label>&#160;
+              <label class="app-label">{{ 'card.desc.samostatny_nalez_predano_organizace' | translate }}:</label>&#160;
               <app-inline-filter [isChild]="isChild()" [field]="'samostatny_nalez_predano_organizace'" [value]="_result().samostatny_nalez_predano_organizace" [heslar]="'organizace'"></app-inline-filter>
               <span class="app-pipe"></span>
             }
             @if (_result().samostatny_nalez_evidencni_cislo) {
-              <label class="app-label">{{ 'card.desc.Sam. nález - evidenční č.' | translate }}:</label>&#160;{{_result().samostatny_nalez_evidencni_cislo}}
+              <label class="app-label">{{ 'card.desc.samostatny_nalez_evidencni_cislo' | translate }}:</label>&#160;{{_result().samostatny_nalez_evidencni_cislo}}
               <span class="app-pipe"></span>
             }
             @if (_result().pristupnost) {
-              <label class="app-label">{{ 'card.desc.Přístupnost' | translate }}:</label>&#160;
+              <label class="app-label">{{ 'card.desc.pristupnost' | translate }}:</label>&#160;
               <app-inline-filter [isChild]="isChild()" [field]="'pristupnost'" [value]="_result().pristupnost" [heslar]="'pristupnost'"></app-inline-filter>
             }
           </div>
@@ -77,7 +77,7 @@
         }
         <div>
           @if (_result().samostatny_nalez_obdobi) {
-            <label class="app-label">{{ 'card.desc.Období' | translate }}:</label>&#160;
+            <label class="app-label">{{ 'card.desc.samostatny_nalez_obdobi' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild()" [field]="'f_obdobi'" [value]="_result().samostatny_nalez_obdobi" [heslar]="'f_obdobi'"></app-inline-filter>
           }
           @if (_result().samostatny_nalez_presna_datace && _result().samostatny_nalez_presna_datace !== '') {
@@ -85,7 +85,7 @@
           }
           <ng-container>
             <span class="app-pipe"></span>
-            <label class="app-label">{{ 'card.desc.Nález' | translate }}:</label>&#160;
+            <label class="app-label">{{ 'card.desc.samostatny_nalez_druh_nalezu' | translate }}:</label>&#160;
             <app-inline-filter [isChild]="isChild()" [field]="'f_druh_nalezu'" [value]="_result().samostatny_nalez_druh_nalezu" [heslar]="'f_druh_nalezu'" ></app-inline-filter>
             @if (_result().samostatny_nalez_specifikace) {
                 (<app-inline-filter [isChild]="isChild()" [field]="'f_specifikace'"
@@ -95,12 +95,12 @@
         </div>
         <div>
           @if (_result().samostatny_nalez_chranene_udaje) {
-            <label class="app-label">{{'card.desc.Katastr (okres)' | translate}}:</label>&#160;
+            <label class="app-label">{{'card.desc.samostatny_nalez_chranene_udaje.katastr' | translate}}:</label>&#160;
             <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result().samostatny_nalez_chranene_udaje.katastr.value"></app-inline-filter>&#160;
             (<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result().samostatny_nalez_okres"></app-inline-filter>)
           }
           @if (!_result().samostatny_nalez_chranene_udaje) {
-            <label class="app-label">{{'card.desc.Okres' | translate}}:</label>&#160;
+            <label class="app-label">{{'card.desc.samostatny_nalez_okres' | translate}}:</label>&#160;
             (<app-inline-filter [isChild]="isChild()" [field]="'f_okres'" [value]="_result().samostatny_nalez_okres"></app-inline-filter>)
           }
         </div>
@@ -112,11 +112,11 @@
     <mat-card-actions class="app-fxLayout app-row app-end-v">
       <div class="app-fxFlex app-metadata">
         @if (_result().samostatny_nalez_projekt) {
-          {{'card.desc.Počet projektů' | translate}}: <strong>1</strong>
+          {{'card.desc.samostatny_nalez_projekt' | translate}}: <strong>1</strong>
           <span class="app-pipe"></span>
         }
         @if (_result().soubor_filepath?.length > 0) {
-          {{'card.desc.Počet souborů' | translate}}: <strong>{{_result().soubor_filepath.length}}</strong>
+          {{'card.desc.soubor_filepath' | translate}}: <strong>{{_result().soubor_filepath.length}}</strong>
         }
       </div>
       <app-result-actions [inDocument]="inDocument()" [result]="_result()" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"
@@ -130,50 +130,50 @@
           <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
               <mat-panel-title>
-                {{ 'card.panelTitle.Popis nálezu' | translate }}:
+                {{ 'card.panelTitle.findDescription' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
             <table>
               <tbody>
                 @if (_result().samostatny_nalez_pocet) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Sam. nález - počet' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_pocet' | translate }}:</th>
                     <td>{{ _result().samostatny_nalez_pocet }}</td>
                   </tr>
                 }
                 @if (_result().samostatny_nalez_lokalizace) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_lokalizace' | translate }}:</th>
                     <td>{{ _result().samostatny_nalez_lokalizace }}</td>
                   </tr>
                 }
                 @if (_result().samostatny_nalez_okolnosti) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Nálezové okolnosti' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_okolnosti' | translate }}:</th>
                     <td><app-inline-filter [isChild]="isChild()" [field]="'f_nalezove_okolnosti'" [value]="_result().samostatny_nalez_okolnosti" [heslar]="'nalezove_okolnosti'"></app-inline-filter></td>
                   </tr>
                 }
                 @if (_result().hasOwnProperty('samostatny_nalez_hloubka')) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Sam. nález - hloubka (cm)' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_hloubka' | translate }}:</th>
                     <td>{{ _result().samostatny_nalez_hloubka }} cm</td>
                   </tr>
                 }
                 @if (_result().samostatny_nalez_poznamka) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_poznamka' | translate }}:</th>
                     <td>{{ _result().samostatny_nalez_poznamka }}</td>
                   </tr>
                 }
                 @if (_result().samostatny_nalez_geom_system) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.geom_system' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_geom_system' | translate }}:</th>
                     <td>{{ _result().samostatny_nalez_geom_system }}</td>
                   </tr>
                 }
                 @if (_result().samostatny_nalez_chranene_udaje?.geom_gml) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Poloha (GML)' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_chranene_udaje.geom_gml' | translate }}:</th>
                     <td>{{ _result().samostatny_nalez_chranene_udaje?.geom_gml }}<br/>
                       @if (_result().samostatny_nalez_chranene_udaje?.geom_sjtsk_gml) {
                         {{ _result().samostatny_nalez_chranene_udaje?.geom_sjtsk_gml }}
@@ -183,7 +183,7 @@
                 }
                 @if (_result().samostatny_nalez_chranene_udaje?.geom_wkt) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Poloha (WKT)' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.samostatny_nalez_chranene_udaje.geom_wkt' | translate }}:</th>
                     <td>EPSG:{{ _result().samostatny_nalez_chranene_udaje.geom_wkt.epsg }}, {{ _result().samostatny_nalez_chranene_udaje?.geom_wkt.value }}<br/>
                       @if (_result().samostatny_nalez_chranene_udaje?.geom_sjtsk_wkt) {
                         EPSG:{{ _result().samostatny_nalez_chranene_udaje.geom_sjtsk_wkt.epsg }},

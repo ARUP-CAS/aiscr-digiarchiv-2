@@ -10,7 +10,7 @@
   <div class="app-container">
     <div class="app-search-form app-fxLayout app-row app-gap-2 app-center-v">
       <mat-form-field appearance="outline">
-        <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="'facet.input.Datum od' | translate" (click)="datum_od.open()">
+        <input matInput [matDatepicker]="datum_od" [(ngModel)]="datumod" [placeholder]="'facet.input.dateFrom' | translate" (click)="datum_od.open()">
         <mat-datepicker-toggle matIconSuffix  [for]="datum_od"></mat-datepicker-toggle>
         @if (!datumod) {
           <button matIconSuffix mat-icon-button class="app-btn-warn"><mat-icon (click)="datumod = null">close</mat-icon></button>
@@ -18,7 +18,7 @@
         <mat-datepicker #datum_od startView="multi-year"></mat-datepicker>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'facet.input.Datum do' | translate" (click)="datum_do.open()">
+        <input matInput [matDatepicker]="datum_do" [(ngModel)]="datumdo" [placeholder]="'facet.input.dateTo' | translate" (click)="datum_do.open()">
         <mat-datepicker-toggle matIconSuffix [for]="datum_do"></mat-datepicker-toggle>
         @if (datumdo) {
           <button matIconSuffix mat-icon-button class="app-btn-warn"><mat-icon (click)="datumdo = null">close</mat-icon></button>
@@ -27,7 +27,7 @@
       </mat-form-field>
       <button matButton="filled" (click)="addDateFilter()">
         <mat-icon>filter_alt</mat-icon>
-        <span class="app-text">{{ 'facet.button.Aplikovat filtr' | translate }}</span>
+        <span class="app-text">{{ 'facet.button.applyFilter' | translate }}</span>
       </button>
     </div>
   </div>
