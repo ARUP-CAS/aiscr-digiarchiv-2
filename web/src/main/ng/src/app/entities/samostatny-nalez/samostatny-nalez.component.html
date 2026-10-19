@@ -115,8 +115,8 @@
           {{'card.desc.Počet projektů' | translate}}: <strong>1</strong>
           <span class="app-pipe"></span>
         }
-        @if (_result().soubor_filepath?.length > 0) {
-          {{'card.desc.Počet souborů' | translate}}: <strong>{{_result().soubor_filepath.length}}</strong>
+        @if (_result().soubor?.length > 0) {
+          {{'card.desc.Počet souborů' | translate}}: <strong>{{_result().soubor.length}}</strong>
         }
       </div>
       <app-result-actions [inDocument]="inDocument()" [result]="_result()" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"

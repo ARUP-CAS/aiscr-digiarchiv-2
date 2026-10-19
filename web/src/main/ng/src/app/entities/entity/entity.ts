@@ -140,7 +140,7 @@ export class Entity {
   }
 
   setImg() {
-    if (this._result()?.soubor_filepath?.length > 0) {
+    if (this._result()?.soubor?.length > 0) {
       this._result().soubor.sort((a: any, b: any) => {
         return a.nazev.localeCompare(b.nazev);
       });
