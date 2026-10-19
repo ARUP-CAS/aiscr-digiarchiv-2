@@ -52,6 +52,6 @@ export class DokJednotkaComponent extends Entity {
   }
 
   readonly pians = input<any[]>();
-  readonly adbs = input<any[]>();
+  readonly adbs = input<any[]>(); 
 
 }

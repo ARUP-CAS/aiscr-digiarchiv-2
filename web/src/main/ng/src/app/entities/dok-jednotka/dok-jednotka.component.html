@@ -93,9 +93,11 @@
     }
     @if (_detailExpanded() || !inDocument()) {
       <mat-accordion multi="true">
-        @if (_result().dj_pian) {
-          <app-pian [result]="_result().dj_pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
-        } @else {
+        @if (_result().pian) {
+          <app-pian [result]="_result().pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
+        } @else if (_result().dj_pian) {
+          <app-pian [result]="_result().dj_pian.id" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
+        } @else {C
           @for(pian of pians(); track pian) {
             <app-pian [result]="pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
           }
