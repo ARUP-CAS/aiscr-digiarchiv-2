@@ -1318,7 +1318,7 @@ export class MapViewComponent {
           });
           
           layer.unbindPopup();
-          const popup = L.popup({className: '.app-leaflet-popup-content'}).setContent(popupContent).setLatLng(e.latlng);
+          const popup = L.popup({className: '.app-leaflet-popup-content', autoPan: false}).setContent(popupContent).setLatLng(e.latlng);
           if (layers.length > 0) {
             this.map.openPopup(popup);
           }
