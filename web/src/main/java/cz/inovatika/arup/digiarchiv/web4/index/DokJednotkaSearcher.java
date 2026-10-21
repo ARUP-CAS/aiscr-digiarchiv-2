@@ -59,13 +59,31 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             } catch (SolrServerException | IOException ex) {
                 Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
+        }
+    }
+    
+    public void addPian(JSONObject jo, SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
 
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
             if (doc.has("dj_pian")) {
-                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields, true);
-                if (sub != null) {
-                    ps.filterOne(sub, pristupnost, org);
-                    doc.append("pian", sub);
-                }
+                SolrQuery query = new SolrQuery("ident_cely:(\"" + doc.getString("dj_pian") + "\")")
+                    .addFilterQuery("entity:pian")
+                    .setSort("ident_cely", SolrQuery.ORDER.asc)
+                        .setFields(fields)
+                    .setParam("stats", false)
+                    .setFacet(false);
+                JSONObject joPians = SearchUtils.json(query, client, "entities");
+                ps.filter(joPians, pristupnost, fields);
+                doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs").getJSONObject(0));
             }
         }
     }
@@ -138,7 +156,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
-        
+        addPian(jo, client, request);
     }
 
     @Override

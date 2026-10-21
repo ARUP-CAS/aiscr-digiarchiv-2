@@ -551,6 +551,19 @@ public class SearchServlet extends HttpServlet {
         return json.toString();
       }
     },
+//    LOG_FIX {
+//
+//      @Override
+//      String doPerform(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        JSONObject json = new JSONObject();
+//        try {
+//          json = LogAnalytics.fixEntity(request.getParameter("fq"));
+//        } catch (Exception ex) {
+//          json.put("error", ex);
+//        }
+//        return json.toString();
+//      }
+//    },
     STATS {
 
       @Override

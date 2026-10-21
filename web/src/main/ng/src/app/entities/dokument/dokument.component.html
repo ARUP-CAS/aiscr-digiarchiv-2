@@ -1,5 +1,5 @@
 <mat-card class="app-card-result" [class.app-card-child]="isChild()"
-  [class.app-entity-dokument]="!isChild() && !isDocumentDialogOpen()">
+  [class.app-entity-dokument]="!isDocumentDialogOpen()">
   @if (mapDetail() && !isChild()) {
   <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
@@ -185,8 +185,8 @@
       {{'card.desc.Počet projektů' | translate}}: <strong>{{_result().dokument_cast_projekt?.length}}</strong>
       <span class="app-pipe"></span>
       }
-      @if (_result().soubor_filepath?.length > 0) {
-      {{'card.desc.Počet souborů' | translate}}: <strong>{{_result().soubor_filepath.length}}</strong>
+      @if (_result().soubor?.length > 0) {
+      {{'card.desc.Počet souborů' | translate}}: <strong>{{_result().soubor.length}}</strong>
       }
     </div>
     <app-result-actions [inDocument]="inDocument()" [result]="_result()" [bibTex]="bibTex"

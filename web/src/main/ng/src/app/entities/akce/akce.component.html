@@ -1,5 +1,5 @@
 @if(result()){
-<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-akce]="!isChild() && !isDocumentDialogOpen()">
+<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-akce]="!isDocumentDialogOpen()">
   @if (mapDetail() && !isChild()) {
     <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
       <mat-icon>clear</mat-icon>
@@ -210,7 +210,7 @@
             <mat-accordion multi="true">
               @if(_result().az_dokumentacni_jednotka) {
                 @for (dok_jednotka of _result().az_dokumentacni_jednotka; track dok_jednotka) {
-                  <app-dok-jednotka [result]="dok_jednotka" [pians]="_result().pian" [adbs]="_result().adb" [detailExpanded]="detailExpanded()"></app-dok-jednotka>
+                  <app-dok-jednotka [result]="dok_jednotka" [adbs]="_result().adb" [detailExpanded]="detailExpanded()"></app-dok-jednotka>
                 }
               }
             </mat-accordion>

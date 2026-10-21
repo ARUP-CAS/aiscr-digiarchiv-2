@@ -673,9 +673,11 @@
     "dokumentacni_jednotka": {
       "header": [
         "dj_typ",
+        "dj_negativni_jednotka", 
         "dj_nazev"
       ],
-      "detail": [],
+      "detail": [
+      "dj_pian"],
       "facets": [],
       "full_text": []
     },
