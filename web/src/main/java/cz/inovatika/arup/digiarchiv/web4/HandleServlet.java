@@ -140,8 +140,14 @@ public class HandleServlet extends HttpServlet {
       String url = "http://localhost:4000/id/" + InitServlet.asSafePath(id);
       try (PrintWriter out = response.getWriter()) {
 
+        Instant fileTime = (new Date(cacheFile.lastModified())).toInstant();
+        // Cache is valid if created after app started, and one day max
         Instant deadline = Instant.now().minus(1, ChronoUnit.DAYS);
-        if (!Options.getInstance().getBoolean("isTestEnv", false) && cacheFile.exists() && (new Date(cacheFile.lastModified())).toInstant().isAfter(deadline)) {
+        
+        if (!Options.getInstance().getBoolean("isTestEnv", false) && 
+                cacheFile.exists() && 
+                fileTime.isAfter(InitServlet.STARTED_AT) &&
+                fileTime.isAfter(deadline)) {
           out.println(org.apache.commons.io.FileUtils.readFileToString(cacheFile, "UTF-8"));
         } else {
           HttpRequest hrequest = HttpRequest.newBuilder()
