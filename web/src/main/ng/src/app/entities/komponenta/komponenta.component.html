@@ -1,5 +1,5 @@
 @if (!isChild()) {
-<mat-card class="app-card-result " [class.app-card-child]="isChild()" [class.app-entity-komponenta]="!isChild()">
+<mat-card class="app-card-result " [class.app-card-child]="isChild()" [class.app-entity-komponenta]="!isDocumentDialogOpen()">
   @if (mapDetail()) {
   <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
     <mat-icon>clear</mat-icon>
