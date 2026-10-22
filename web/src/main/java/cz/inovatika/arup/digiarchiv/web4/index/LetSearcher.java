@@ -23,7 +23,9 @@ public class LetSearcher implements EntitySearcher {
     final String ENTITY = "let";
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
 
     }
 

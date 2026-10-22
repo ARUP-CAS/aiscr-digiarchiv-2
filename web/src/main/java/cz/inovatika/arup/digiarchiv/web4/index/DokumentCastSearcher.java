@@ -48,7 +48,7 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
                 query.setFields(dfs);
 
                 JSONObject r = SolrSearcher.jsonSelect(client, "entities", query);
-                ds.filter(r, pristupnost, org);
+                ds.filter(r, request);
                 JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
                 for (int j = 0; j < reldocs.length(); j++) {
                     JSONObject cdj = reldocs.getJSONObject(j);
@@ -110,7 +110,9 @@ public class DokumentCastSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
 
     }
 

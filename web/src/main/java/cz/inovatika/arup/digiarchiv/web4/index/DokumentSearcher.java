@@ -55,7 +55,7 @@ public class DokumentSearcher implements EntitySearcher {
             // getChilds(jo, client, request);
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             addProjekt(jo, client, request);
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
             return jo;
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "", ex);
@@ -77,7 +77,7 @@ public class DokumentSearcher implements EntitySearcher {
             SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             addPians(jo, client, request);
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), entity);
             
             return jo;
@@ -305,7 +305,9 @@ public class DokumentSearcher implements EntitySearcher {
      * @param org
      */
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);

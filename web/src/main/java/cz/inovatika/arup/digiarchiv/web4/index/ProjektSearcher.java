@@ -28,7 +28,9 @@ public class ProjektSearcher implements EntitySearcher {
 //    private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "vedouci_projektu", "okres", "organizace_prihlaseni", "datestamp",
 //        "typ_projektu", "datum_zahajeni", "datum_ukonceni", "podnet", "child_akce", "child_samostatny_nalez"});
   @Override
-  public void filter(JSONObject jo, String pristupnost, String org) {
+  public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
 
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
@@ -253,7 +255,7 @@ public class ProjektSearcher implements EntitySearcher {
         addPians(jo, client, request);
       }
       String pristupnost = LoginServlet.pristupnost(request.getSession());
-      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+      filter(jo, request);
       SolrSearcher.addFavorites(jo, client, request);
       return jo;
 
@@ -322,7 +324,7 @@ public class ProjektSearcher implements EntitySearcher {
       SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
       JSONObject jo = SearchUtils.json(query, client, "entities");
       String pristupnost = LoginServlet.pristupnost(request.getSession());
-      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+      filter(jo, request);
       SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
 
       return jo;

@@ -22,7 +22,9 @@ public class ExtZdrojSearcher implements EntitySearcher {
     final String ENTITY = "ext_zdroj";
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
 
     }
 
@@ -100,7 +102,7 @@ public class ExtZdrojSearcher implements EntitySearcher {
             SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
             return jo;
             
