@@ -25,7 +25,9 @@ import org.json.JSONObject;
         "druh", "datum_zahajeni", "datum_ukonceni", "child_dokument", "organizace", "datestamp"});
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
@@ -210,7 +212,7 @@ import org.json.JSONObject;
             if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
 //                checkRelations(jo, client, request);
             }
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
 
             SolrSearcher.addFavorites(jo, client, request);
             return jo;
@@ -229,7 +231,7 @@ import org.json.JSONObject;
             SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
                 addPians(jo, client, request);
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
             

@@ -122,7 +122,7 @@ export class StatsComponent implements OnInit {
 
     // Init this.datumod NOW/YEAR - 1YEAR
     // this.datumod = new Date(new Date().getFullYear() - 1, 0, 1);
-    this.datumod = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+    this.datumod = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
 
     this.service.currentLang.subscribe(res => {
       this.search(this.route.snapshot.queryParams);
@@ -208,6 +208,7 @@ export class StatsComponent implements OnInit {
     this.user = params['user'];
     this.interval = params['interval'] ? params['interval'] : 'WEEK';
     this.entity = params['entity'];
+    const p: any = Object.assign({}, params);
 
     if (params['date']) {
       const dates = params['date'].split(',');
@@ -217,9 +218,10 @@ export class StatsComponent implements OnInit {
       if ('null' !== dates[1]) {
         this.datumdo = dates[1];
       }
+    } else {
+      p['date'] = this.datePipe.transform(this.datumod, 'yyyy-MM-dd') + ',' + this.datePipe.transform(this.datumdo, 'yyyy-MM-dd');
     }
 
-    const p: any = Object.assign({}, params);
     p.page = 0;
     this.service.searchStats(p as HttpParams).subscribe((resp: any) => {
       this.types = resp.facet_counts.facet_fields.type;

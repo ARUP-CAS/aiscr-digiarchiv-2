@@ -364,19 +364,22 @@ public class LogAnalytics {
         }
     }
 
-    public static JSONObject fixEntity() {
+    public static JSONObject fixEntity(String fq) {
         LOGGER.log(Level.INFO, "Fix logs entity started");
         Instant start = Instant.now();
         // Date start = new Date();
         int totalDocs = 0;
-        int rows = 100;
+        int rows = 500;
         JSONObject jo = new JSONObject();
-        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-
+        try (SolrClient client = new HttpJettySolrClient.Builder("http://localhost:8983/solr").build()) {
+            SolrClient clientDest = new HttpJettySolrClient.Builder("http://localhost:8982/solr").build();
             SolrQuery query = new SolrQuery("*")
                     //.addFilterQuery("-entity:*") 
                     .setRows(rows)
                     .setSort("id", SolrQuery.ORDER.asc);
+            if (fq != null) {
+              query.addFilterQuery(fq);
+            }
             boolean done = false;
             QueryResponse rsp = null;
             SolrDocumentList docs;
@@ -384,8 +387,9 @@ public class LogAnalytics {
             while (!done) {
                 query.set(CursorMarkParams.CURSOR_MARK_PARAM, cursorMark);
                 try {
-                    rsp = client.query("logs_old", query);
+                    rsp = client.query("logs", query);
                     docs = rsp.getResults();
+                    long total = docs.getNumFound();
                     for (SolrDocument doc : docs) {
                         String ident_cely = (String) doc.getFirstValue("ident_cely");
                         String typ = (String) doc.getFirstValue("type");
@@ -413,12 +417,12 @@ public class LogAnalytics {
                             idoc.addField("type", doc.getFirstValue("type"));
                             idoc.addField("entity", docs2.get(0).getFirstValue("entity"));
                             // client.add("logs", idoc);
-                            client.add("logs", idoc);
+                            clientDest.add("logs", idoc);
                         }
                         totalDocs++;
                     }
-                    client.commit("logs");
-                    LOGGER.log(Level.INFO, "Currently {0} files processed", totalDocs);
+                    clientDest.commit("logs");
+                    LOGGER.log(Level.INFO, "Currently {0} logs processed of {1}", new Object[]{totalDocs, total});
 
                     String nextCursorMark = rsp.getNextCursorMark();
                     if (cursorMark.equals(nextCursorMark) || rsp.getResults().size() < rows) {
@@ -434,7 +438,7 @@ public class LogAnalytics {
                     LOGGER.log(Level.SEVERE, "", e);
 
                     Date end = new Date();
-                    String msg = String.format("fixEntity finished with error. Thumbs :%1$d", totalDocs);
+                    String msg = String.format("fixEntity finished with error. Logs :%1$d", totalDocs);
                     LOGGER.log(Level.INFO, msg);
                     jo.put("result", "error");
                     jo.put("error", e.toString());

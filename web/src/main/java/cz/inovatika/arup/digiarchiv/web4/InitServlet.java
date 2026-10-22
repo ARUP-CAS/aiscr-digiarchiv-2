@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.nio.file.Path;
+import java.time.Instant;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -36,6 +37,9 @@ public class InitServlet extends HttpServlet {
 
     //Directory where cant override configuration  
     public static String TEMP_DIR = ".amcr/tmp";
+
+    //Time app started. Used to check cache validity 
+    public static Instant STARTED_AT = Instant.now();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

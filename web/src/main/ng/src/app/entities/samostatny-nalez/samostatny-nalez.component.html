@@ -1,4 +1,4 @@
-<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-samostatny_nalez]="!isChild() && !isDocumentDialogOpen()">
+<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-samostatny_nalez]="!isDocumentDialogOpen()">
   @if (mapDetail() && !isChild()) {
     <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.close' | translate">
       <mat-icon>clear</mat-icon>
@@ -115,8 +115,8 @@
           {{'card.desc.samostatny_nalez_projekt' | translate}}: <strong>1</strong>
           <span class="app-pipe"></span>
         }
-        @if (_result().soubor_filepath?.length > 0) {
-          {{'card.desc.soubor_filepath' | translate}}: <strong>{{_result().soubor_filepath.length}}</strong>
+        @if (_result().soubor?.length > 0) {
+          {{'card.desc.soubor_filepath' | translate}}: <strong>{{_result().soubor.length}}</strong>
         }
       </div>
       <app-result-actions [inDocument]="inDocument()" [result]="_result()" [bibTex]="bibTex" [isDocumentDialogOpen]="isDocumentDialogOpen()"

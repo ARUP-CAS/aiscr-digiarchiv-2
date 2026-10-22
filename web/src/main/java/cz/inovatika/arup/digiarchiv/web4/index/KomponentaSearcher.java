@@ -48,7 +48,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         JSONObject r = inHandle ? 
                 SolrSearcher.jsonSelect(client, "entities", query) : 
                 SolrSearcher.json(client, "entities", query);
-        ds.filter(r, LoginServlet.pristupnost(request.getSession()), LoginServlet.organizace(request.getSession()));
+        ds.filter(r, request);
         JSONArray reldocs = r.getJSONObject("response").getJSONArray("docs");
         for (int j = 0; j < reldocs.length(); j++) {
           JSONObject cdj = reldocs.getJSONObject(j);
@@ -62,7 +62,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
         query.setFields(akceFields);
         try {
           JSONObject sub = inHandle ? SolrSearcher.jsonSelect(client, "entities", query) : SolrSearcher.json(client, "entities", query);
-          filter(sub, pristupnost, LoginServlet.organizace(request.getSession()));
+          filter(sub, request);
           JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
           for (int j = 0; j < subs.length(); j++) {
             doc.append(subs.getJSONObject(i).getString("entity"), subs.getJSONObject(i));
@@ -101,7 +101,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
       String pristupnost = LoginServlet.pristupnost(request.getSession());
-      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+      filter(jo, request);
       SolrSearcher.addFavorites(jo, client, request);
       addPians(jo, client, request);
       return jo;
@@ -136,7 +136,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
             SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
             
             return jo;
@@ -169,7 +169,9 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
   }
 
   @Override
-  public void filter(JSONObject jo, String pristupnost, String org) {
+  public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);
@@ -233,7 +235,7 @@ public class KomponentaSearcher implements ComponentSearcher, EntitySearcher {
                     .setParam("stats", false)
                     .setFacet(false);
                 JSONObject joPians = SearchUtils.json(query, client, "entities");
-                ps.filter(joPians, pristupnost, "");
+                ps.filter(joPians, request);
                 doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs"));
             }
         }

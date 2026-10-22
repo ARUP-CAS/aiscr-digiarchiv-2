@@ -1,4 +1,4 @@
-<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-projekt]="!isChild() && !isDocumentDialogOpen()">
+<mat-card class="app-card-result" [class.app-card-child]="isChild()" [class.app-entity-projekt]="!isDocumentDialogOpen()">
   @if (mapDetail() && !isChild()) {
     <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.close' | translate">
       <mat-icon>clear</mat-icon>
