@@ -148,8 +148,10 @@
               </tbody>
             </table>
             <mat-accordion multi="true">
-              @for (dok_jednotka of az_dokumentacni_jednotka(); track dok_jednotka) {
-                <app-dok-jednotka [result]="dok_jednotka" [pians]="_result().az_dj_pian" [adbs]="_result().az_dj_adb"></app-dok-jednotka>
+              @if(_result().az_dokumentacni_jednotka) {
+                @for (dok_jednotka of _result().az_dokumentacni_jednotka; track dok_jednotka) {
+                  <app-dok-jednotka [result]="dok_jednotka" [adbs]="_result().az_dj_adb" [detailExpanded]="detailExpanded()"></app-dok-jednotka>
+                }
               }
             </mat-accordion>
           </mat-expansion-panel>
