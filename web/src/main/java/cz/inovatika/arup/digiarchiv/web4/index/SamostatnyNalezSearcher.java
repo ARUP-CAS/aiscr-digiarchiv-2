@@ -113,6 +113,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         fields.add("samostatny_nalez_lokalizace:samostatny_nalez_lokalizace_" + pristupnost);
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("historie:[json]");
 
         String[] ret = fields.toArray(new String[0]);
         return ret;
@@ -166,13 +167,13 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         int stav = doc.optInt("stav");
         String userPr = user.optString("pristupnost", "A");
         
+        // pristupnost uzivatele vetsi nez zaznamu
         if (doc.getString("pristupnost").compareTo(userPr) <= 0) {
           return true;
         }
         
+        // uzivatel D/E
         if (userPr.compareToIgnoreCase("C") > 0) {
-            return true;
-        } else if (stav == 4) {
             return true;
         }
         
