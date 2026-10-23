@@ -89,3 +89,13 @@ entities = ["akce", "dokument", "lokalita", "projekt", "samostatny_nalez", "knih
 surfaces = ["print page (/print/:id)", "record page (/id/:id)", "handle API (/api/search/handle)", "search API (/api/search/query)", "Angular bundles (main + styles)", "print stylesheet (_app-print.scss)"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#953"]
 last_verified = "2026-09-24"
+
+[[scenario]]
+key = "persistent-landing-pages"
+kind = "feature"
+title = "Persistent landing pages"
+features = ["persistent landing pages"]
+entities = ["dokument", "projekt", "samostatny_nalez", "archeologicky_zaznam", "adb", "pian", "let"]
+surfaces = ["landing page (/id/:id)", "Angular SSR renderer (web/src/main/ng/src/server.ts, localhost:4000)", "landing-page cache (.amcr/cache)", "hashed frontend bundles (main/styles/scripts/chunk)", "search API (/api/search/query)", "handle API (/api/search/handle)"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#915"]
+last_verified = "2026-10-23"
