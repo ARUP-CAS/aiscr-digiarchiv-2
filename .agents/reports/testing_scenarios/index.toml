@@ -99,3 +99,13 @@ entities = ["dokument", "projekt", "samostatny_nalez", "archeologicky_zaznam", "
 surfaces = ["landing page (/id/:id)", "Angular SSR renderer (web/src/main/ng/src/server.ts, localhost:4000)", "landing-page cache (.amcr/cache)", "hashed frontend bundles (main/styles/scripts/chunk)", "search API (/api/search/query)", "handle API (/api/search/handle)"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#915"]
 last_verified = "2026-10-23"
+
+[[scenario]]
+key = "dokumentacni-jednotky"
+kind = "feature"
+title = "Documentation units (dokumentační jednotky)"
+features = ["documentation units", "DJ type of evidence", "DJ PIAN display"]
+entities = ["dokumentacni_jednotka", "pian", "akce", "lokalita"]
+surfaces = ["akce record page (/id/:id)", "lokalita record page (/id/:id)", "DJ landing page (/id/:id)", "handle API (/api/search/handle)", "search API (/api/search/query)", "Angular DJ chunk"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#1146"]
+last_verified = "2026-10-23"
