@@ -166,13 +166,13 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         int stav = doc.optInt("stav");
         String userPr = user.optString("pristupnost", "A");
         
+        // pristupnost uzivatele vetsi nez zaznamu
         if (doc.getString("pristupnost").compareTo(userPr) <= 0) {
           return true;
         }
         
+        // uzivatel D/E
         if (userPr.compareToIgnoreCase("C") > 0) {
-            return true;
-        } else if (stav == 4) {
             return true;
         }
         
