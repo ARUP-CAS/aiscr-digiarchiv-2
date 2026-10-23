@@ -25,7 +25,9 @@ public class AkceSearcher implements EntitySearcher {
     final String ENTITY = "akce";
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) { 
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject doc = ja.getJSONObject(i);
@@ -107,7 +109,7 @@ public class AkceSearcher implements EntitySearcher {
                     .setParam("stats", false)
                     .setFacet(false);
                 JSONObject joPians = SearchUtils.json(query, client, "entities");
-                ps.filter(joPians, pristupnost, fields);
+                ps.filter(joPians, request);
                 doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs"));
             }
         }
@@ -174,7 +176,7 @@ public class AkceSearcher implements EntitySearcher {
             }
             String pristupnost = LoginServlet.pristupnost(request.getSession());
             //LOGGER.log(Level.INFO, "filter");
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
 
 //            if (Boolean.parseBoolean(request.getParameter("mapa"))
 //                    && jo.getJSONObject("response").getInt("numFound") <= Options.getInstance().getClientConf().getJSONObject("mapOptions").getInt("docsForMarker")) {
@@ -205,7 +207,7 @@ public class AkceSearcher implements EntitySearcher {
             SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
             JSONObject jo = SearchUtils.json(query, client, "entities");
             String pristupnost = LoginServlet.pristupnost(request.getSession());
-            filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+            filter(jo, request);
             addPians(jo, client, request);
             SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY); 
             return jo;

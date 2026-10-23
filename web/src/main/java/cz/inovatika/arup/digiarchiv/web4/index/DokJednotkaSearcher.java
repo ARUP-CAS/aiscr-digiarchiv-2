@@ -47,7 +47,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             query.setFields(akceFields);
             try {
                 JSONObject sub = SolrSearcher.json(client, "entities", query);
-                filter(sub, pristupnost, org);
+                filter(sub, request);
                 JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < subs.length(); j++) {
@@ -82,7 +82,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
                     .setParam("stats", false)
                     .setFacet(false);
                 JSONObject joPians = SearchUtils.json(query, client, "entities");
-                ps.filter(joPians, pristupnost, fields);
+                ps.filter(joPians, request);
                 doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs").getJSONObject(0));
             }
         }
@@ -133,11 +133,13 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
         AkceSearcher a = new AkceSearcher();
-        a.filter(jo, pristupnost, org);
+        a.filter(jo, request);
         LokalitaSearcher l = new LokalitaSearcher();
-        l.filter(jo, pristupnost, org);
+        l.filter(jo, request);
         
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
