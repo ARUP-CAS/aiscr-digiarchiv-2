@@ -102,8 +102,9 @@
             <app-pian [result]="pian" [isChild]="true" [detailExpanded]="detailExpanded()"></app-pian>
           }
         }
-        @if (_result().dj_adb) {
-          <app-adb [result]="_result().dj_adb" [isChild]="true" [detailExpanded]="detailExpanded()"></app-adb>
+        
+        @if (_result().adb) {
+          <app-adb [result]="_result().adb" [isChild]="true" [detailExpanded]="detailExpanded()"></app-adb>
         }
         @for (komponenta of _result().dj_komponenta; track komponenta) {
           <app-komponenta [result]="komponenta" [isChild]="true"></app-komponenta>
