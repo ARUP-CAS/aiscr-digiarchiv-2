@@ -1,7 +1,6 @@
 <div class="app-fxLayout app-column app-fill">
   <h1 mat-dialog-title class="app-fxLayout app-row app-center-v app-gap-2">
     <div class="app-select-files-wrapper app-fxFlex app-fxLayout app-row app-gap-2">
-      <!-- todo-->
       <mat-form-field appearance="outline" class="app-select-primary"
         [matTooltip]="selectedFile()?.nazev ?? ''" [matTooltipDisabled]="files().length > 1">
         <mat-select [(ngModel)]="selectedFile" [disabled]="files().length <= 1">
@@ -18,7 +17,6 @@
           }
         </mat-select>
       </mat-form-field>
-      <!-- todo end -->
     </div>
     <a mat-dialog-close class="app-close-icon app-fxLayout"><mat-icon>close</mat-icon></a>
   </h1>
