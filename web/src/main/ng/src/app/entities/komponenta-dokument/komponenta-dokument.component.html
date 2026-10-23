@@ -13,13 +13,13 @@
         <div class="app-fxFlex app-metadata">
           @if(_result().dokument?.length > 0){
             <ng-container>
-              {{ 'card.desc.Počet dokumentů' | translate }}: <strong>{{_result().dokument?.length}}</strong>
+              {{ 'card.desc.dokument' | translate }}: <strong>{{_result().dokument?.length}}</strong>
               <span class="app-pipe"></span>
             </ng-container>
           }
           @if(_result().knihovna_3d?.length > 0){
             <ng-container>
-              {{ 'card.desc.Počet 3D dokumentů' | translate }}: <strong>{{_result().knihovna_3d.length}}</strong>
+              {{ 'card.desc.knihovna_3d' | translate }}: <strong>{{_result().knihovna_3d.length}}</strong>
               <span class="app-pipe"></span>
             </ng-container>
           }
@@ -39,11 +39,11 @@
   @if(panel){
     <mat-icon  (click)="panelHeader._toggle()">{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
   }
-  {{ 'card.panelTitle.Komponenta' | translate }}&#160;
+  {{ 'card.panelTitle.komponenta' | translate }}&#160;
   @if (_result().ident_cely) {
     <a
       [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank"
-      class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }}
+      class="app-ident-badge" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().ident_cely }}
       <mat-icon>link</mat-icon></a>&#160;–&#160;
     }
     @if (_result().obdobi) {
@@ -90,7 +90,7 @@
         <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
           <mat-panel-title>
             <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-            {{ 'card.panelTitle.Nálezy' | translate }}:
+            {{ 'card.panelTitle.finds' | translate }}:
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul class="app-list-inside">
@@ -117,7 +117,7 @@
       <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']"
         [collapsedHeight]="config.uiVars['panelHeightInCard']">
         <mat-panel-title>
-          {{ 'card.panelTitle.Související záznamy' | translate }}:
+          {{ 'card.panelTitle.relatedRecords' | translate }}:
         </mat-panel-title>
       </mat-expansion-panel-header>
       @if (_result().dokument) {

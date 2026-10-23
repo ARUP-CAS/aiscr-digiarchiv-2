@@ -124,10 +124,7 @@ export class MapViewComponent {
 
   cuzkWMS = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'KN', maxZoom: 25, maxNativeZoom: 20, minZoom: 17, opacity: 0.5 });
   cuzkWMS2 = L.tileLayer.wms('http://services.cuzk.cz/wms/wms.asp?', { layers: 'prehledka_kat_uz', maxZoom: 25, maxNativeZoom: 20, minZoom: 12, opacity: 0.5 });
-  overlays: any = {
-    "ČÚZK - Katastrální mapa": this.cuzkWMS,
-    "ČÚZK - Katastrální území": this.cuzkWMS2,
-  };
+  overlays: any = {}; // filled with translated layer names in initLayers()
   dataLayerName: string = 'data';
 
   lfAttribution = '<span aria-hidden="true"> | </span><a href="https://leafletjs.com" title="A JavaScript library for interactive maps"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"></path><path fill="#FFD500" d="M0 4h12v3H0z"></path><path fill="#E0BC00" d="M0 7h12v1H0z"></path></svg> Leaflet</a>';
@@ -201,12 +198,7 @@ export class MapViewComponent {
     this.markers = L.featureGroup();
     this.shapes = [];
 
-    this.baseLayers = {
-      "ČÚZK - Základní mapy ČR": this.cuzkZM,
-      "ČÚZK - Ortofotomapa": this.cuzkOrt,
-      "ČÚZK - Stínovaný reliéf 5G": this.cuzkEL,
-      "OpenStreetMap": this.osm,
-    };
+    this.baseLayers = {}; // filled with translated layer names in initLayers()
   }
 
   ngOnInit(): void {
@@ -397,8 +389,8 @@ export class MapViewComponent {
       adjustButton: false,
       buttonPosition: 'topright',
       enableButton: {
-        enableText: this.service.getTranslation('map.desc.select area'),
-        disableText: this.service.getTranslation('map.desc.remove selection')
+        enableText: this.service.getTranslation('map.desc.filterArea'),
+        disableText: this.service.getTranslation('map.desc.removeAreaFilter')
       }
     });
 
@@ -432,8 +424,8 @@ export class MapViewComponent {
     });
 
     this.zoomOptions = {
-      zoomInTitle: this.service.getTranslation('map.desc.zoom in'),
-      zoomOutTitle: this.service.getTranslation('map.desc.zoom out'),
+      zoomInTitle: this.service.getTranslation('map.desc.zoomIn'),
+      zoomOutTitle: this.service.getTranslation('map.desc.zoomOut'),
       position: 'topright'
     }
 
@@ -634,8 +626,8 @@ export class MapViewComponent {
   translateControls() {
     L.setOptions(this.locationFilter, {
       enableButton: {
-        enableText: this.service.getTranslation('map.desc.select area'),
-        disableText: this.service.getTranslation('map.desc.remove selection')
+        enableText: this.service.getTranslation('map.desc.filterArea'),
+        disableText: this.service.getTranslation('map.desc.removeAreaFilter')
       }
     });
     this.locationFilter.updateText();

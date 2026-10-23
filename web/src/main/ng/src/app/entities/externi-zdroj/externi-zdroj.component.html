@@ -18,7 +18,7 @@
             
             @if (_result.datestamp && state.isMapaCollapsed && !isChild() ) {
               <div class="app-last-change" [matTooltip]="_result.datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
-                'card.desc.Poslední změna' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
+                'card.desc.datestamp' | translate }}: {{ _result.datestamp | date : 'yyyy-MM-dd' }}</div>
               }
           </mat-card-title>
         </mat-card-header>
@@ -31,7 +31,7 @@
           </ul>
           @if (inDocument() && _result.ext_zdroj_poznamka) {
             <div>
-              <strong>{{ 'card.desc.Poznámka' | translate }}: </strong> {{ _result.ext_zdroj_poznamka }}
+              <strong>{{ 'card.desc.ext_zdroj_poznamka' | translate }}: </strong> {{ _result.ext_zdroj_poznamka }}
             </div>
           }
         </mat-card-content>
@@ -39,11 +39,11 @@
           <mat-card-actions class="app-fxLayout app-row app-end-v">
             <div class="app-fxFlex app-metadata">
               @if (_result.akce?.length > 0) {
-                {{ 'card.desc.Počet akcí' | translate }}: <strong>{{_result.akce?.length}}</strong>
+                {{ 'card.desc.akce' | translate }}: <strong>{{_result.akce?.length}}</strong>
                 <span class="app-pipe"></span>
               }
               @if (_result.lokalita?.length > 0) {
-                {{ 'card.desc.Počet lokalit' | translate }}: <strong>{{_result.lokalita.length}}</strong>
+                {{ 'card.desc.lokalita' | translate }}: <strong>{{_result.lokalita.length}}</strong>
                 <span class="app-pipe"></span>
               }
             </div>
@@ -60,7 +60,7 @@
                   <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
                     <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
                       <mat-panel-title>
-                        {{ 'card.panelTitle.Související záznamy' | translate }}:
+                        {{ 'card.panelTitle.relatedRecords' | translate }}:
                       </mat-panel-title>
                     </mat-expansion-panel-header>
                     @if (vsSize > 0 && !state.printing()) {
@@ -104,12 +104,12 @@
 @if (!_result.ext_odkaz_paginace && !_result.ext_zdroj_link) {.&#160;}
 @if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {,&#160;}
 @if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
-@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link " target="_blank">{{ _result.ext_zdroj_link }}</a>.}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.ext_zdroj_link' | translate }}: <a [href]="_result.ext_zdroj_link " target="_blank">{{ _result.ext_zdroj_link }}</a>.}
 @if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
 @if (!inDocument()) {
 <a [routerLink]="'/id/' + _result.ident_cely" [queryParams]="{lang: state.currentLang}"
 target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+[matTooltip]="'card.tooltip.permalink' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
 }
     }
     <!-- část knihy -->
@@ -126,12 +126,12 @@ target="_blank" class="app-ident-badge app-inbody app-clean-mg"
 @if (_result.ext_odkaz_paginace || _result.ext_zdroj_link || (inDocument() && _result.ext_zdroj_paginace_titulu)) {,&#160;}
 @if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
 @if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
-@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.ext_zdroj_link' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}
 @if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
 @if (!inDocument()) {
 <a [routerLink]="'/id/' + _result.ident_cely"
 [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+[matTooltip]="'card.tooltip.permalink' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
 }
       }
       <!--  článek v časopise -->
@@ -146,11 +146,11 @@ target="_blank" class="app-ident-badge app-inbody app-clean-mg"
 @if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
 @if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
 @if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
-@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
+@if (_result.ext_zdroj_link) {{{ 'card.desc.ext_zdroj_link' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.}@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
 @if (!inDocument()) {
   <a [routerLink]="'/id/' + _result.ident_cely"
     [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-    [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon>
+    [matTooltip]="'card.tooltip.permalink' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon>
   </a>
 }
       }
@@ -165,12 +165,12 @@ target="_blank" class="app-ident-badge app-inbody app-clean-mg"
 @if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
 @if (!_result.ext_odkaz_paginace && _result.ext_zdroj_paginace_titulu && !inDocument()) {,&#160;{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
 @if (inDocument() && _result.ext_zdroj_paginace_titulu) {{{ _result.ext_zdroj_paginace_titulu }}.&#160;}
-@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
+@if (_result.ext_zdroj_link) {{{ 'card.desc.ext_zdroj_link' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
 }@if (_result.ext_zdroj_doi) {
 doi:{{ _result.ext_zdroj_doi }}&#160;}
 @if (!inDocument()) {<a [routerLink]="'/id/' + _result.ident_cely"
 [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+[matTooltip]="'card.tooltip.permalink' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
 }
         }
         <!-- nepublikovaná zpráva  jiný zdroj -->
@@ -183,11 +183,11 @@ doi:{{ _result.ext_zdroj_doi }}&#160;}
 @if (_result.ext_zdroj_organizace) {{{ _result.ext_zdroj_organizace }}.&#160;}
 @if (!inDocument()) {@if (_result.ext_odkaz_paginace || _result.ext_zdroj_link) {,&#160;}}
 @if (_result.ext_odkaz_paginace) {{{ _result.ext_odkaz_paginace }}.&#160;}
-@if (_result.ext_zdroj_link) {{{ 'card.desc.Dostupné z' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
+@if (_result.ext_zdroj_link) {{{ 'card.desc.ext_zdroj_link' | translate }}: <a [href]="_result.ext_zdroj_link" target="_blank">{{ _result.ext_zdroj_link }}</a>.
 }@if (_result.ext_zdroj_doi) {doi:{{ _result.ext_zdroj_doi }}&#160;}
 @if (!inDocument()) {<a [routerLink]="'/id/' + _result.ident_cely"
 [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody app-clean-mg"
-[matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
+[matTooltip]="'card.tooltip.permalink' | translate">{{ _result.ident_cely }} <mat-icon>link</mat-icon></a>
 }
           }
         </ng-template>

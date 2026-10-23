@@ -66,7 +66,7 @@ public class AuthService {
                     u.put("ui", uz.getUI());
                     return u;
                 } else if (tokenJSON.has("non_field_errors")) {
-                    return new JSONObject().put("error", "dialog.alert.Špatné přihlašovací údaje");
+                    return new JSONObject().put("error", "dialog.alert.invalidCredentials");
                 } else {
                     return tokenJSON;
                 }
