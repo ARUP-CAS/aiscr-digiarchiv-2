@@ -304,15 +304,13 @@ public class SamostatnyNalez implements FedoraModel {
         if (uzivatelSN01 != null) {
           organizaceUzivatele = SolrSearcher.getOrganizaceUzivatele(uzivatelSN01);
         }
-        
-
 
         if (projektId == null) {
           SolrQuery query = new SolrQuery("ident_cely:\"" + (String) doc.getFieldValue("ident_cely") + "\"")
                   .setFields("samostatny_nalez_projekt");
           JSONObject jsonS = SearchUtils.searchById(query, "entities", (String) doc.getFieldValue("ident_cely"), false);
           if (jsonS.getJSONObject("response").getInt("numFound") > 0) {
-              projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).getString("samostatny_nalez_projekt");
+              projektId = jsonS.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("samostatny_nalez_projekt");
           }
         }
 
@@ -324,7 +322,7 @@ public class SamostatnyNalez implements FedoraModel {
             projektOrg = json.getJSONObject("response").getJSONArray("docs").getJSONObject(0).optString("projekt_organizace", "nonexist");
         }
         
-        if (userPr.equalsIgnoreCase("C")) { 
+        if (userPr.equalsIgnoreCase("C")) {
 //-- C: stav = 4 OR historie[typ_zmeny='SN01']/uzivatel = {user}.ident_cely OR (projekt/organizace = {user}.organizace) OR (predano_organizace = {user}.organizace)
             return (userId.equals(uzivatelSN01) || (userOrg.equals(projektOrg)) || (userOrg.equals(sn_predano_organizace)));
         } else if (userPr.equalsIgnoreCase("B")) {

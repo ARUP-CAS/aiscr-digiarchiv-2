@@ -1061,7 +1061,7 @@ public class SolrSearcher {
         searcher.getChilds(jo, client, request);
         //}
         searcher.checkRelations(jo, client, request);
-        searcher.filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+        searcher.filter(jo, request);
       }
       if (inHandle) {
         ComponentSearcher cs = SearchUtils.getComponentSearcher(entity);

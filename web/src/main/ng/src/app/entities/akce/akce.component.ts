@@ -118,17 +118,25 @@ export class AkceComponent extends Entity {
     this.service.getId(this._result().ident_cely).subscribe((res: any) => {
       this._result.set(res.response.docs[0]);
       this.getExtZdroj();
+
+      const djs: any = [];
       this._result().az_dokumentacni_jednotka.forEach((dj: any) => {
         if (dj.dj_pian) {
           const p = this._result().pian.find((p: any) => p.ident_cely === dj.dj_pian.id);
           if (p) {
-            dj.dj_pian = p;
+            dj.pian = p;
           }
         }
+        djs.push(dj);
       });
       this.hasDetail = true;
+      this._result.update(r => ({
+        ...r,
+        az_dokumentacni_jednotka: djs
+      }));
     });
   }
+
 
   cropped(s: string) {
     if (s.length > 100) {

@@ -81,7 +81,7 @@ public class Library3DSearcher implements EntitySearcher {
       setQuery(request, query);
       JSONObject jo = SearchUtils.json(query, client, "entities");
       String pristupnost = LoginServlet.pristupnost(request.getSession());
-      filter(jo, pristupnost, LoginServlet.organizace(request.getSession()));
+      filter(jo, request);
       SolrSearcher.addFavorites(jo, client, request);
       return jo;
     } catch (Exception ex) {
@@ -145,7 +145,9 @@ public class Library3DSearcher implements EntitySearcher {
    * @param jo
    * @param pristupnost
    */
-  public void filter(JSONObject jo, String pristupnost, String org) {
+  public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
     JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
     for (int i = 0; i < ja.length(); i++) {
       JSONObject doc = ja.getJSONObject(i);

@@ -47,7 +47,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             query.setFields(akceFields);
             try {
                 JSONObject sub = SolrSearcher.json(client, "entities", query);
-                filter(sub, pristupnost, org);
+                filter(sub, request);
                 JSONArray subs = sub.getJSONObject("response").getJSONArray("docs");
 
                 for (int j = 0; j < subs.length(); j++) {
@@ -59,16 +59,61 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             } catch (SolrServerException | IOException ex) {
                 Logger.getLogger(DokJednotkaSearcher.class.getName()).log(Level.SEVERE, "", ex);
             }
+        }
+    }
+    
+    public void addPian(JSONObject jo, SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        PIANSearcher ps = new PIANSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
 
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
             if (doc.has("dj_pian")) {
-                JSONObject sub = SolrSearcher.getById(client, doc.getString("dj_pian"), pfields, true);
-                if (sub != null) {
-                    ps.filterOne(sub, pristupnost, org);
-                    doc.append("pian", sub);
-                }
+                SolrQuery query = new SolrQuery("ident_cely:(\"" + doc.getString("dj_pian") + "\")")
+                    .addFilterQuery("entity:pian")
+                    .setSort("ident_cely", SolrQuery.ORDER.asc)
+                        .setFields(fields)
+                    .setParam("stats", false)
+                    .setFacet(false);
+                JSONObject joPians = SearchUtils.json(query, client, "entities");
+                ps.filter(joPians, request);
+                doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs").getJSONObject(0));
             }
         }
     }
+    
+    public void addADB(JSONObject jo, SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        ADBSearcher ps = new ADBSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("dj_adb")) {
+                SolrQuery query = new SolrQuery("ident_cely:(\"" + doc.getString("dj_adb") + "\")")
+                    .addFilterQuery("entity:adb")
+                    .setSort("ident_cely", SolrQuery.ORDER.asc)
+                        .setFields(fields)
+                    .setParam("stats", false)
+                    .setFacet(false);
+                JSONObject joPians = SearchUtils.json(query, client, "entities");
+                ps.filter(joPians, request);
+                doc.put("adb", joPians.getJSONObject("response").getJSONArray("docs").getJSONObject(0));
+            }
+        }
+    }
+
 
     @Override
     public boolean isRelatedSearchable() {
@@ -115,11 +160,13 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     }
 
     @Override
-    public void filter(JSONObject jo, String pristupnost, String org) {
+    public void filter(JSONObject jo, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    String org = LoginServlet.organizace(request.getSession());
         AkceSearcher a = new AkceSearcher();
-        a.filter(jo, pristupnost, org);
+        a.filter(jo, request);
         LokalitaSearcher l = new LokalitaSearcher();
-        l.filter(jo, pristupnost, org);
+        l.filter(jo, request);
         
         JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
         for (int i = 0; i < ja.length(); i++) {
@@ -138,7 +185,8 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
 
     @Override
     public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
-        
+        addPian(jo, client, request);
+        addADB(jo, client, request);
     }
 
     @Override

@@ -2,29 +2,29 @@
   <div class="app-container">
     <div class="app-fxLayout app-column">
       <div class="app-fxLayout app-row app-center-v app-gap-4 app-logos-wrapper app-wrap">
-        <a href="https://www.re3data.org/repository/r3d100013576" [title]="'footer.desc.Digitální archiv archeologické mapy České republiky' | translate" target="_blank">
-          <img src="assets/img/logo/logo-re3.png" [alt]="'footer.desc.Digitální archiv archeologické mapy České republiky' | translate" class="app-logo-re3" />
+        <a href="https://www.re3data.org/repository/r3d100013576" [title]="'footer.desc.digitalArchive' | translate" target="_blank">
+          <img src="assets/img/logo/logo-re3.png" [alt]="'footer.desc.digitalArchive' | translate" class="app-logo-re3" />
         </a>
-        <a href="https://opjak.cz/" [title]="'footer.desc.Operační program Výzkum, vývoj a vzdělávání' | translate" target="_blank">
-          <img src="assets/img/logo/logo-eu.png" [alt]="'footer.desc.Operační program Výzkum, vývoj a vzdělávání' | translate" class="app-logo-eu" />
+        <a href="https://opjak.cz/" [title]="'footer.desc.opRde' | translate" target="_blank">
+          <img src="assets/img/logo/logo-eu.png" [alt]="'footer.desc.opRde' | translate" class="app-logo-eu" />
         </a>
-        <a href="https://msmt.gov.cz/" [title]="'footer.desc.Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate" target="_blank">
-          <img src="assets/img/logo/logo-msmt.png" [alt]="'footer.desc.Ministerstvo školství, mládeže a tělovýchovy České republiky' | translate" class="app-logo-msmt" />
+        <a href="https://msmt.gov.cz/" [title]="'footer.desc.msmt' | translate" target="_blank">
+          <img src="assets/img/logo/logo-msmt.png" [alt]="'footer.desc.msmt' | translate" class="app-logo-msmt" />
         </a>
-        <a href="https://www.avcr.cz/" [title]="'footer.desc.Programy strategie AV21' | translate" target="_blank">
-          <img src="assets/img/logo/logo-avcr.png" [alt]="'footer.desc.Programy strategie AV21' | translate" class="app-logo-avcr" />
+        <a href="https://www.avcr.cz/" [title]="'footer.desc.av21' | translate" target="_blank">
+          <img src="assets/img/logo/logo-avcr.png" [alt]="'footer.desc.av21' | translate" class="app-logo-avcr" />
         </a>
-        <a href="https://www.arub.cz/" [title]="'footer.desc.Programy strategie AV21' | translate" target="_blank">
-          <img src="assets/img/logo/logo-arub.png" [alt]="'footer.desc.Programy strategie AV21' | translate" class="app-logo-arub" />
+        <a href="https://www.arub.cz/" [title]="'footer.desc.av21' | translate" target="_blank">
+          <img src="assets/img/logo/logo-arub.png" [alt]="'footer.desc.av21' | translate" class="app-logo-arub" />
         </a>
-        <a href="https://www.arup.cas.cz/" [title]="'footer.desc.Programy strategie AV21' | translate" target="_blank">
-          <img src="assets/img/logo/logo-aru.png" [alt]="'footer.desc.Programy strategie AV21' | translate" class="app-logo-aru" />
+        <a href="https://www.arup.cas.cz/" [title]="'footer.desc.av21' | translate" target="_blank">
+          <img src="assets/img/logo/logo-aru.png" [alt]="'footer.desc.av21' | translate" class="app-logo-aru" />
         </a>
-        <a href="https://www.aiscr.cz/" [title]="'footer.desc.Archeologický informační systém České republiky' | translate" target="_blank">
-          <img src="assets/img/logo/logo-ais.png" [alt]="'footer.desc.Archeologický informační systém České republiky' | translate" class="app-logo-ais" />
+        <a href="https://www.aiscr.cz/" [title]="'footer.desc.aiscr' | translate" target="_blank">
+          <img src="assets/img/logo/logo-ais.png" [alt]="'footer.desc.aiscr' | translate" class="app-logo-ais" />
         </a>
-        <a href="https://www.vyzkumne-infrastruktury.cz/" [title]="'footer.desc.Velké výzkumné infrastruktury' | translate" target="_blank">
-          <img src="assets/img/logo/logo-vvi.png" [alt]="'footer.desc.Velké výzkumné infrastruktury' | translate" class="app-logo-vvi" />
+        <a href="https://www.vyzkumne-infrastruktury.cz/" [title]="'footer.desc.researchInfrastructures' | translate" target="_blank">
+          <img src="assets/img/logo/logo-vvi.png" [alt]="'footer.desc.researchInfrastructures' | translate" class="app-logo-vvi" />
         </a>
       </div>
 
@@ -34,7 +34,7 @@
         </span>
         <span class="app-pipe app-mr-4"></span>
         <span class="app-fxLayout app-row app-center-v app-gap-2">
-          <span>{{'footer.desc.Kontakt' | translate}}</span>
+          <span>{{'footer.desc.contact' | translate}}</span>
           <a (click)="showKontakt()"><mat-icon>info</mat-icon></a>
         </span>
         <span class="app-pipe app-mr-4"></span>
@@ -53,7 +53,7 @@
         </span>
         <span class="app-pipe app-mr-4"></span>
         <span>
-          <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v410" title="Version info" target="_blank">{{ 'footer.desc.Verze' | translate }} v4.1.0</a> 
+          <a href="https://github.com/ARUP-CAS/aiscr-digiarchiv-2/wiki/Changelog#v410" [title]="'footer.desc.versionInfo' | translate" target="_blank">{{ 'footer.desc.version' | translate }} v4.1.0</a> 
           @if (clientInfo) {
             @let commitHash = clientInfo.hash.startsWith('g') ? clientInfo.hash.slice(1) : clientInfo.hash;
             @if (commitHash === 'dev') {
