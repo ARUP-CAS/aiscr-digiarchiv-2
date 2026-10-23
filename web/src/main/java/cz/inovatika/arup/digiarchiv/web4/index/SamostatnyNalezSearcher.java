@@ -113,6 +113,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         fields.add("samostatny_nalez_lokalizace:samostatny_nalez_lokalizace_" + pristupnost);
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
+        fields.add("historie:[json]");
 
         String[] ret = fields.toArray(new String[0]);
         return ret;
