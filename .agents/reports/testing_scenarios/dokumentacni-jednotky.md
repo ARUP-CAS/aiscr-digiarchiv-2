@@ -12,7 +12,7 @@
 
 | Environment | Base URL | Frontend build observed on 2026-10-23 |
 | --- | --- | --- |
-| Test | `https://digiarchiv-test.aiscr.cz` | `v4.1.0-7-geafb47ea` |
+| Test | `https://digiarchiv-test.aiscr.cz` | `v4.1.0-11-g880f1c3e` |
 | Production | `https://digiarchiv.aiscr.cz` | `v4.0.3-237-g96deec70-dirty` |
 
 - Record pages: `/id/<ident_cely>`. They are client-rendered; the served HTML is only the application shell (see [`persistent-landing-pages`](persistent-landing-pages.md)), so the DJ block is not present in the fetched HTML.
@@ -26,8 +26,8 @@
 - **DJ search field list.** `DokJednotkaSearcher.getSearchFields` combines `fields.common` with `fields.dokumentacni_jednotka.header` and `.detail` from `server_config.json`, then adds `pian_id:az_dj_pian`, the role-suffixed `loc_rpt`/`loc`, `katastr`, and `dj_komponenta:[json]`. A field absent from both configuration lists is not returned by the DJ handle. Commit `dbf148fb` (#1146) added `dj_negativni_jednotka` to `header` and `dj_pian` to `detail`; before it, the DJ handle omitted the flag, the template ternary read `undefined`, and every DJ displayed "pozitivní".
 - **PIAN enrichment.** `DokJednotkaSearcher.addPian`, called from `getChilds`, attaches the full `pian` document to each DJ whose `dj_pian` reference resolves, using the role-filtered PIAN search fields. On the test build the DJ handle carries both `pian` (object) and `dj_pian` (reference).
 - **Akce page data flow.** The akce handle returns DJs inside `az_dokumentacni_jednotka` (embedded JSON, without a `pian` member). `akce.component.ts` matches each `dj.dj_pian.id` against the akce's top-level `pian` array, sets `dj.pian` to the matched object, and updates the result signal to trigger rendering. The akce template no longer passes `[pians]` to `<app-dok-jednotka>`.
-- **Lokalita page data flow.** `lokalita.component.ts` performs the same match but assigns the full object to `dj.dj_pian` (not `dj.pian`); the lokalita template still passes `[pians]="_result().az_dj_pian"`. On the handle path the sampled lokalita carried an empty `az_dj_pian` while its top-level `pian` array held the DJ's PIAN.
-- **DJ template branch model (test build).** `@if (_result().pian)` renders the PIAN object; `@else if (_result().dj_pian)` renders `<app-pian [result]="_result().dj_pian.id">`; `@else` emits a literal `C ` followed by `@for (pian of pians())`. The literal is present in the deployed chunk as `r(0,"C ")`.
+- **Lokalita page data flow.** `lokalita.component.ts` matches each `dj.dj_pian.id` against the lokalita's top-level `pian` array and assigns the matched object to `dj.pian` (not `dj.dj_pian`), then updates the result signal and the `az_dokumentacni_jednotka` signal. The lokalita template iterates `_result().az_dokumentacni_jednotka` and no longer passes `[pians]` to `<app-dok-jednotka>`; commit `880f1c3e` (#1146) made this change. On the handle path the sampled lokalita carried the DJ's PIAN in the top-level `pian` array.
+- **DJ template branch model (test build).** `@if (_result().pian)` renders the PIAN object; `@else if (_result().dj_pian)` passes `_result().dj_pian.id` (a bare ident string, which renders nothing because `app-pian` needs a payload object); `@else` loops `pians()` and emits no literal text. Commit `880f1c3e` removed the stray `C ` literal from the fallback branch. The `dj_pian.id` branch is reached only when the enriched `pian` object is absent.
 - **Payload contract.** `Entity` treats the `result` input as the payload object; `app-pian` renders only when `_result()?.ident_cely` is truthy. A bare ident string passed as `result` therefore renders nothing.
 
 ### Feature or entity model
@@ -43,7 +43,7 @@
 2. **Positive DJs:** the same query with `az_dj_negativni_jednotka:false`; confirm that the DJ's `dj_komponenta` is non-empty.
 3. **DJ landing page:** derive a DJ ident (`<akce>-D<nn>`) from recipe 1 and fetch `GET /api/search/handle?id=<DJ_IDENT>`; compare its field set between the environments.
 4. **Lokalita with a DJ and a PIAN:** `GET /api/search/query?entity=lokalita&q=*:*&rows=20&fl=ident_cely,az_dokumentacni_jednotka,az_dj_pian`, then `GET /api/search/handle?id=<LOK_IDENT>` and inspect `az_dokumentacni_jednotka[].dj_pian` together with the top-level `pian` array.
-5. **Deployed template:** fetch `/`, resolve `main-*.js` and the modulepreloaded `chunk-*.js` files, and search for `app-dok-jednotka`, `Dok. jednotka - negativn`, and `C ` in the chunk that carries the component; read the compiled branch functions.
+5. **Deployed template:** fetch `/`, resolve `main-*.js` and the modulepreloaded `chunk-*.js` files, search for `app-dok-jednotka` and `Dok. jednotka - negativn` in the chunk that carries the component, and read the compiled branch functions.
 6. **Build identity:** fetch `/`, resolve `main-<HASH>.js`, and read the `raw:"..."` value.
 
 ### Verification commands
@@ -62,35 +62,35 @@ curl.exe -s "https://digiarchiv-test.aiscr.cz/<CHUNK>"
 
 Anonymous records need no credentials. Rate-limit a sweep to about one request per second.
 
-## Current verification (2026-10-23, test `v4.1.0-7-geafb47ea`, production `v4.0.3-237-g96deec70-dirty`)
+## Current verification (2026-10-23, second verification; test `v4.1.0-11-g880f1c3e`, production not re-probed)
 
-**Scope and limitations.** Anonymous read-only probes of both instances plus inspection of the deployed Angular chunks. The maintainer visually confirmed the `akce` and `lokalita` examples in this session. Production was used only to compare the DJ field set (the pre-fix state); the production `akce` payload already served the flag, so the pre-fix `akce` render cannot be re-derived.
+**Scope and limitations.** Anonymous read-only probes of the test instance plus inspection of the deployed Angular chunks. The maintainer visually confirmed the `akce`, `lokalita`, and DJ landing-page examples in this session. Production was not re-probed; its build identity and the pre-fix field-set comparison are the first verification's observations. The test build moved from `v4.1.0-7-geafb47ea` to `v4.1.0-11-g880f1c3e`, which includes `880f1c3e` (#1146).
 
 ### Verified behaviour matrix
 
 | Capability | Result |
 | --- | --- |
-| Type of evidence on the DJ landing page | works — the test DJ handle carries `dj_negativni_jednotka` (true for both sampled negative DJs); the production DJ handle omits the field, and the deployed ternary then renders "pozitivní" for every DJ |
+| Type of evidence on the DJ landing page | works — the test DJ handle carries `dj_negativni_jednotka`; the deployed ternary renders `negativní` for `true` and `pozitivní` for `false`. The first verification observed the production DJ handle omitting the field. |
 | Type mapping | works — true renders "negativní", false renders "pozitivní"; corpus correlation is true ↔ zero `dj_komponenta`, false ↔ at least one |
 | Visual render on the `akce` page | works — maintainer-confirmed: both sampled DJ display "Typ zjištění: negativní" |
 | Per-DJ PIAN on the `akce` page | works — the `akce` template no longer passes the parent `pian` array to DJs; each DJ receives its own `pian` object; the two sampled DJ link two distinct PIANs and each renders once (maintainer-confirmed) |
-| PIAN on the DJ landing page | works — the test DJ handle serves `pian` (full object) and `dj_pian` (reference); the first template branch renders it |
-| PIAN on the `lokalita` page | broken — see D01 |
-| Fallback branch for a DJ without a PIAN | defect — see D02 |
+| PIAN on the DJ landing page | works — the test DJ handle serves `pian` (full object) and `dj_pian` (reference); the first template branch renders it (maintainer-confirmed) |
+| PIAN on the `lokalita` page | fixed — D01 resolved: the lokalita component now assigns the matched PIAN object to `dj.pian` and the template passes no parent `pians`; the sampled DJ renders its PIAN once (maintainer-confirmed) |
+| Fallback branch for a DJ without a PIAN | fixed — D02 resolved: the deployed DJ fallback function contains only the `pians()` loop and no literal text; no sampled record exercised the branch, so its user-visible reach is verified from the compiled bundle |
 
 ### Known defects
 
-- **dokumentacni-jednotky-D01 — Medium (open).** On the `lokalita` record page the PIAN block of a DJ no longer renders. `lokalita.component.ts` replaces `dj.dj_pian` with the full PIAN object, but the deployed DJ template's `dj_pian` branch passes `dj_pian.id` (a bare ident string) to `app-pian`; `Entity` treats `result` as the payload, so `app-pian` sees no `ident_cely` and renders nothing. Introduced by `dbf148fb` (the branch is new); before it the template passed the object held in `dj_pian`. Evidence: the deployed chunk's branch function, `lokalita.component.ts`, `entity.ts`, and the `lokalita` handle payload in which the `dj_pian` reference is replaced from the top-level `pian` array. Maintainer-confirmed visually.
-- **dokumentacni-jednotky-D02 — Low (open).** The DJ template's fallback branch begins with a literal `C ` text node (`r(0,"C ")` in the deployed chunk) before looping `pians()`. It is rendered whenever a DJ has neither `pian` nor `dj_pian`; the loop then emits the caller's PIAN array. Introduced by `dbf148fb`; the old template had no literal. No sampled DJ lacked `dj_pian`, so the branch was not exercised on a record in this run; the defect is demonstrable from the deployed chunk.
+No open defects. D01 and D02 from the first verification are resolved by `880f1c3e`; their current state is recorded in the matrix and the verification log.
 
 ### Corrections made during this run
 
-- The first working hypothesis placed the positive/negative defect on the `akce` page only. Production's `akce` handle already includes the flag, while the production DJ handle omits it; the maintainer reports the inversion on both surfaces. On the test build the `akce` render is correct (visual), so that part is recorded as verified rather than as a reproduced pre-fix state.
+None. The first verification's D01 and D02 are confirmed fixed, not corrected.
 
 ### Unverified
 
-- The pre-fix render of the `akce` page: production already serves the flag and no pre-fix build is available.
-- A record whose DJ has no linked PIAN: no such DJ appeared in the sampled corpus, so D02's user-visible reach is inferred from the deployed template.
+- Production was not re-probed in this run; its build identity and pre-fix field-set comparison are the first verification's observations.
+- A record whose DJ has neither a `pian` payload nor a `dj_pian` reference: none appeared in the sampled corpus, so the fallback branch is verified from the compiled bundle rather than from a record.
+- The `dj_pian.id` fallback path (a DJ whose PIAN is referenced but absent from the parent `pian` array): not exercised on a sampled record; the branch passes a bare ident and renders nothing.
 - The `noevidence` / `posevidence` search filters: not exercised; outside the issue's surfaces.
 
 ## Verification log
@@ -98,3 +98,4 @@ Anonymous records need no credentials. Rate-limit a sweep to about one request p
 | Date | Instance / build verified | What changed |
 | --- | --- | --- |
 | 2026-10-23 | test `v4.1.0-7-geafb47ea`; production `v4.0.3-237-g96deec70-dirty` | First verification of #1146: the DJ handle now serves `dj_negativni_jednotka` and the `akce` page renders each DJ's own PIAN once (both maintainer-confirmed); D01 records the `lokalita` PIAN regression introduced by the fix; D02 records the stray fallback literal; the pre-fix `akce` render is left unverified because production already carries the flag. |
+| 2026-10-23 | test `v4.1.0-11-g880f1c3e` | Second verification of #1146 after `880f1c3e`: the `lokalita` DJ block renders each DJ's own PIAN from the enriched `dj.pian` (D01 fixed, maintainer-confirmed) and the DJ fallback literal is gone (D02 fixed); the `akce` and DJ landing pages remain correct. |
