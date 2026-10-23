@@ -1,20 +1,24 @@
 <div class="app-fxLayout app-column app-fill">
   <h1 mat-dialog-title class="app-fxLayout app-row app-center-v app-gap-2">
     <div class="app-select-files-wrapper app-fxFlex app-fxLayout app-row app-gap-2">
-      <mat-form-field appearance="outline" class="app-select-primary">
-        <mat-select [(ngModel)]="selectedFile">
+      <!-- todo-->
+      <mat-form-field appearance="outline" class="app-select-primary"
+        [matTooltip]="selectedFile()?.nazev ?? ''" [matTooltipDisabled]="files().length > 1">
+        <mat-select [(ngModel)]="selectedFile" [disabled]="files().length <= 1">
           @for (file of files(); track file; let idx = $index) {
             <mat-option (click)="selectFile(file, idx)" [value]="file">{{ file.nazev  }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-select [(ngModel)]="selectedDist">
+      <mat-form-field appearance="outline"
+        [matTooltip]="selectedDist?.path ?? ''" [matTooltipDisabled]="(selectedFile()?.distribuce?.length ?? 0) > 1">
+        <mat-select [(ngModel)]="selectedDist" [disabled]="(selectedFile()?.distribuce?.length ?? 0) <= 1">
           @for(d of selectedFile().distribuce; track d) {
             <mat-option [value]="d">{{ d.path }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
+      <!-- todo end -->
     </div>
     <a mat-dialog-close class="app-close-icon app-fxLayout"><mat-icon>close</mat-icon></a>
   </h1>
