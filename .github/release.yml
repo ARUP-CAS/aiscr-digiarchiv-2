@@ -1,0 +1,27 @@
+# Konfigurace automaticky generovaných poznámek k vydání pro ARUP-CAS/aiscr-digiarchiv-2.
+# Kategorie odpovídají ručně psaným poznámkám k vydání; GitHub je použije pro automatické release notes.
+
+changelog:
+  exclude:
+    labels:
+      - dependencies
+    authors:
+      - dependabot
+      - dependabot[bot]
+  categories:
+    - title: Zásadní změny
+      labels:
+        - breaking
+        - breaking-change
+    - title: Nové funkce
+      labels:
+        - feature
+        - enhancement
+    - title: Opravy chyb
+      labels:
+        - bug
+        - fix
+        - security
+    - title: Ostatní
+      labels:
+        - "*"
