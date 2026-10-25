@@ -87,6 +87,33 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
             }
         }
     }
+    
+    public void addADB(JSONObject jo, SolrClient client, HttpServletRequest request) {
+        String pristupnost = LoginServlet.pristupnost(request.getSession());
+        if ("E".equals(pristupnost)) {
+            pristupnost = "D";
+        }
+        ADBSearcher ps = new ADBSearcher();
+        String[] fs = ps.getSearchFields(pristupnost);
+        String fields = String.join(",", fs);
+
+        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+        for (int i = 0; i < ja.length(); i++) {
+            JSONObject doc = ja.getJSONObject(i);
+            if (doc.has("dj_adb")) {
+                SolrQuery query = new SolrQuery("ident_cely:(\"" + doc.getString("dj_adb") + "\")")
+                    .addFilterQuery("entity:adb")
+                    .setSort("ident_cely", SolrQuery.ORDER.asc)
+                        .setFields(fields)
+                    .setParam("stats", false)
+                    .setFacet(false);
+                JSONObject joPians = SearchUtils.json(query, client, "entities");
+                ps.filter(joPians, request);
+                doc.put("adb", joPians.getJSONObject("response").getJSONArray("docs").getJSONObject(0));
+            }
+        }
+    }
+
 
     @Override
     public boolean isRelatedSearchable() {
@@ -159,6 +186,7 @@ public class DokJednotkaSearcher implements ComponentSearcher, EntitySearcher {
     @Override
     public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
         addPian(jo, client, request);
+        addADB(jo, client, request);
     }
 
     @Override

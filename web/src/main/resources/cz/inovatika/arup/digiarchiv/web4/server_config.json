@@ -677,7 +677,8 @@
         "dj_nazev"
       ],
       "detail": [
-      "dj_pian"],
+      "dj_pian", "dj_adb"
+      ],
       "facets": [],
       "full_text": []
     },

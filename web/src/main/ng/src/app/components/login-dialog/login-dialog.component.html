@@ -1,16 +1,16 @@
 @if (loading()) {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
-<h1 mat-dialog-title>{{ 'dialog.title.Přihlášení uživatele' | translate}}</h1>
+<h1 mat-dialog-title>{{ 'dialog.title.login' | translate}}</h1>
 <div mat-dialog-content class="app-pt-2">
   @if (!state.logged) {
     <div class="app-fxLayout app-column app-gap-4">
       <mat-form-field appearance="outline">
-        <mat-label>{{ 'dialog.desc.Přihlašovací jméno' | translate }}</mat-label>
+        <mat-label>{{ 'dialog.desc.username' | translate }}</mat-label>
         <input matInput cdkFocusInitial type="text" [(ngModel)]="user" (keyup.enter)="focusp(loginpwd)" autocomplete="on" id="loginuser">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>{{ 'dialog.desc.Heslo' | translate }}</mat-label>
+        <mat-label>{{ 'dialog.desc.password' | translate }}</mat-label>
         <input matInput #loginpwd type="password" [(ngModel)]="pwd" (keyup.enter)="login()">
       </mat-form-field>
     </div>
@@ -22,26 +22,26 @@
   }
 
   @if (state.logged) {
-    <span class="app-label">{{ 'dialog.desc.Přihlášený uživatel' | translate }}:</span>&#160;<strong>{{ state.user.jmeno}} {{state.user.prijmeni }}</strong><br />
-    <span class="app-label">{{ 'dialog.desc.Uživatelská role' | translate }}:</span>&#160;<strong>{{ state.user.skupina[0].value | translate }}</strong><br />
-    <span class="app-label">{{ 'dialog.desc.Organizace' | translate }}:</span>&#160;<strong>{{ state.user.organizace.id | translate }}</strong>
+    <span class="app-label">{{ 'dialog.desc.loggedUser' | translate }}:</span>&#160;<strong>{{ state.user.jmeno}} {{state.user.prijmeni }}</strong><br />
+    <span class="app-label">{{ 'dialog.desc.userRole' | translate }}:</span>&#160;<strong>{{ state.user.skupina[0].value | translate }}</strong><br />
+    <span class="app-label">{{ 'dialog.desc.organisation' | translate }}:</span>&#160;<strong>{{ state.user.organizace.id | translate }}</strong>
 
     @if(state.user.pristupnost === 'E') {
     <hr />
-    <span class="app-label">{{ 'Aktualizovat konfiguraci' | translate }}:</span>&#160;<a href="api/config?reset=true" target="_blank">config?reset=true</a><br />
-    <span class="app-label">{{ 'Aktualizovat index z Fedory' | translate }}:</span>&#160;<a href="/api/fedora/index_update" target="_blank">api/fedora/index_update</a><br />
-    <span class="app-label">{{ 'Aktualizovat Museion' | translate }}:</span>&#160;<a href="/api/mus/index" target="_blank">api/mus/index</a><br />
+    <span class="app-label">{{ 'updateConfiguration' | translate }}:</span>&#160;<a href="api/config?reset=true" target="_blank">config?reset=true</a><br />
+    <span class="app-label">{{ 'updateIndexFromFedora' | translate }}:</span>&#160;<a href="/api/fedora/index_update" target="_blank">api/fedora/index_update</a><br />
+    <span class="app-label">{{ 'updateMuseion' | translate }}:</span>&#160;<a href="/api/mus/index" target="_blank">api/mus/index</a><br />
 
     }
   }
 </div>
 <div mat-dialog-actions>
   @if (!state.logged) {
-    <button mat-button (click)="login()">{{ 'dialog.button.Přihlásit' | translate }}</button>
-    <a mat-button [href]="config.restorePassword">{{ 'dialog.button.Obnovit heslo' | translate }}</a>
+    <button mat-button (click)="login()">{{ 'dialog.button.login' | translate }}</button>
+    <a mat-button [href]="config.restorePassword">{{ 'dialog.button.resetPassword' | translate }}</a>
   }
   @if (state.logged) {
-    <button mat-button (click)="logout()">{{ 'dialog.button.Odhlásit' | translate }}</button>
+    <button mat-button (click)="logout()">{{ 'dialog.button.logout' | translate }}</button>
   }
-  <button mat-button [mat-dialog-close]="false" cdkFocusInitial>{{ 'dialog.button.Zavřít' | translate }}</button>
+  <button mat-button [mat-dialog-close]="false" cdkFocusInitial>{{ 'dialog.button.close' | translate }}</button>
 </div>

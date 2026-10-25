@@ -1,6 +1,6 @@
 <mat-card class="app-card-result" [class.app-card-child]="isChild()" (click)="state.setMapResult(_result, mapDetail())">
   @if (mapDetail && !isChild) {
-    <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.Zavřít' | translate">
+    <a (click)="service.setMapResult(null, true)" class="app-link-close" [matTooltip]="'card.tooltip.close' | translate">
       <mat-icon>clear</mat-icon>
     </a>
   }
@@ -13,9 +13,9 @@
       @if (isChild()) {
         <mat-icon class="app-entity-akce" [matTooltip]="'entities.akce.title' | translate">turned_in</mat-icon>
       }
-      {{ 'card.title.Část dokumentu' | translate }}&#160;
+      {{ 'card.title.dokument_cast' | translate }}&#160;
         @if (isChild()) {
-          <a [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().ident_cely }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + _result().ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().ident_cely }} <mat-icon>link</mat-icon></a>
         } @else {
           <span class="app-ident-format">{{ _result().ident_cely }}</span>
         }
@@ -26,32 +26,32 @@
       </div>
         @if (_result().datestamp && state.isMapaCollapsed && !isChild() || mapDetail()) {
           <div class="app-last-change" [matTooltip]="_result().datestamp | date : 'yyyy-MM-dd HH:mm:ss'">{{
-            'card.desc.Poslední změna' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
+            'card.desc.datestamp' | translate }}: {{ _result().datestamp | date : 'yyyy-MM-dd' }}</div>
           }
 
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
     @if (state.itemView === 'col' && !isDocumentDialogOpen() && !isChild()) {
-      <div class="app-fxLayout app-row app-fill app-center-h app-center-v app-thumb" [matTooltip]="'card.tooltip.Obrázek není k dispozici' | translate">
+      <div class="app-fxLayout app-row app-fill app-center-h app-center-v app-thumb" [matTooltip]="'card.tooltip.thumbnailUnavailable' | translate">
         <mat-icon>image_not_supported</mat-icon>
       </div>
     }
     <div class="app-metadata app-row-gap-16">
 
       @if (_result().akce || _result().lokalita) {
-        <label class="app-label">{{ 'card.desc.Dokumentovaná akce/lokalita' | translate }}:</label>&#160;
+        <label class="app-label">{{ 'card.desc.documentedFieldworkOrSite' | translate }}:</label>&#160;
         @if (_result().akce) {
-          <a [routerLink]="'/id/' + _result().akce.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().akce.ident_cely }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
+          <a [routerLink]="'/id/' + _result().akce.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().akce.ident_cely }} <mat-icon>link</mat-icon></a><!-- <span class="app-comma">, </span> -->
         }
         @if (_result().vazba_druha_akce) {
-          <a [routerLink]="'/id/' + _result().vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().vazba_druha_akce }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + _result().vazba_druha_akce" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().vazba_druha_akce }} <mat-icon>link</mat-icon></a>
         }
         @if (_result().lokalita) {
-          <a [routerLink]="'/id/' + _result().lokalita.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().lokalita.ident_cely }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + _result().lokalita.ident_cely" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().lokalita.ident_cely }} <mat-icon>link</mat-icon></a>
         }
         @if (_result().vazba_druha_lokalita) {
-          <a [routerLink]="'/id/' + _result().vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.Persistentní odkaz' | translate">{{ _result().vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
+          <a [routerLink]="'/id/' + _result().vazba_druha_lokalita" [queryParams]="{lang: state.currentLang}" target="_blank" class="app-ident-badge app-inbody" [matTooltip]="'card.tooltip.permalink' | translate">{{ _result().vazba_druha_lokalita }} <mat-icon>link</mat-icon></a>
         }
       }
 
@@ -64,13 +64,13 @@
             <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
               <mat-panel-title>
                 <mat-icon>{{ panel.expanded ? 'remove' : 'add' }}</mat-icon>
-                {{ 'card.panelTitle.Neidentifikovaná akce' | translate }}:
+                {{ 'card.panelTitle.dokument_cast_neident_akce' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
             <table>
               @if (_result().dokument_cast_neident_akce.katastr || _result().dokument_cast_neident_akce.okres) {
                 <tr>
-                  <th class="app-label">{{ 'card.desc.Katastr (okres)' | translate }}:</th>
+                  <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.katastr' | translate }}:</th>
                   <td>
                     <app-inline-filter [isChild]="isChild()" [field]="'f_katastr'" [value]="_result().dokument_cast_neident_akce.katastr.value"></app-inline-filter>
                     @if (_result().dokument_cast_neident_akce.okres) {
@@ -80,13 +80,13 @@
                 }
                 @for (v of _result().dokument_cast_neident_akce.vedouci; track v) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Vedoucí akce' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.vedouci' | translate }}:</th>
                     <td>{{ v.value }}</td>
                   </tr>
                 }
                 @if (_result().dokument_cast_neident_akce.rok_zahajeni || _result().dokument_cast_neident_akce.rok_ukonceni) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Rok od-do' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.documentedEventYears' | translate }}:</th>
                     <td>{{ _result().dokument_cast_neident_akce.rok_zahajeni }}@if (_result().dokument_cast_neident_akce.rok_ukonceni) {
                       -{{ _result().dokument_cast_neident_akce.rok_ukonceni }}
                     }</td>
@@ -94,25 +94,25 @@
                 }
                 @if (_result().dokument_cast_neident_akce.lokalizace) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Akce - lokalizace' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.lokalizace' | translate }}:</th>
                     <td>{{ _result().dokument_cast_neident_akce.lokalizace }}</td>
                   </tr>
                 }
                 @if (_result().dokument_cast_neident_akce.popis) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Popis' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.popis' | translate }}:</th>
                     <td>{{ _result().dokument_cast_neident_akce.popis }}</td>
                   </tr>
                 }
                 @if (_result().dokument_cast_neident_akce.poznamka) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Poznámka' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.poznamka' | translate }}:</th>
                     <td>{{ _result().dokument_cast_neident_akce.poznamka }}</td>
                   </tr>
                 }
                 @if (_result().dokument_cast_neident_akce.pian) {
                   <tr>
-                    <th class="app-label">{{ 'card.desc.Pian' | translate }}:</th>
+                    <th class="app-label">{{ 'card.desc.dokument_cast_neident_akce.pian' | translate }}:</th>
                     <td>{{ _result().dokument_cast_neident_akce.pian }}</td>
                   </tr>
                 }
@@ -141,7 +141,7 @@
           <mat-expansion-panel [expanded]="true" class="app-panel-related-items">
             <mat-expansion-panel-header [expandedHeight]="config.uiVars['panelHeightInCard']" [collapsedHeight]="config.uiVars['panelHeightInCard']">
               <mat-panel-title>
-                {{ 'card.panelTitle.Související záznamy' | translate }}:
+                {{ 'card.panelTitle.relatedRecords' | translate }}:
               </mat-panel-title>
             </mat-expansion-panel-header>
             @for (dokument of _result().dokument; track dokument) {

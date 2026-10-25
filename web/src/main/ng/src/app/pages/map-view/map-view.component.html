@@ -16,9 +16,9 @@
           <button (click)="state.changeMapView(sidenav)" class="app-btn" [ngClass]="opened ? 'app-rotate-up' : 'app-rotate-down'" style="z-index: 4;">
             <mat-icon>last_page</mat-icon>
           </button>
-          <div class="app-p-4">{{ 'sidenav.tab.Info' | translate }}</div>
+          <div class="app-p-4">{{ 'sidenav.tab.mapExtentInfo' | translate }}</div>
           <mat-tab-group [selectedIndex]="1">
-            <mat-tab [label]="'sidenav.tab.Filtry' | translate">
+            <mat-tab [label]="'sidenav.tab.filters' | translate">
               <div class="app-facets">
                 @if (state.breadcrumbs?.length !== 0 || state.inFavorites() || state.inMuseion()) {
                   <app-facets-used></app-facets-used>
@@ -26,7 +26,7 @@
                 <app-facets></app-facets>
               </div>
             </mat-tab>
-            <mat-tab [label]="'sidenav.tab.Výsledky' | translate">
+            <mat-tab [label]="'sidenav.tab.results' | translate">
               @if (showType !== 'marker') {
                 <div>
                   <mat-card class="app-card-result app-p-2 app-pl-4">
@@ -64,7 +64,7 @@
 
         <mat-sidenav-content class="app-ml-0">
           <button (click)="state.changeMapView(sidenav)" class="app-btn">
-            <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.Filtrace / Výsledky' | translate }}</span>
+            <mat-icon>last_page</mat-icon><span class="app-btn-text">{{ 'sidenav.button.filtersResults' | translate }}</span>
           </button>
           <div class="app-map" leaflet [leafletOptions]="options"
             (leafletMapReady)="onMapReady($event)"
@@ -79,7 +79,7 @@
           @if (loadingMarkers()) {
             <mat-card class="app-active-pian-facet">
               <mat-card-content class="app-p-0">
-                <a [matTooltip]="'map.tooltip.Zastavit' | translate" (click)="stopLoadingMarkers()">
+                <a [matTooltip]="'map.tooltip.stop' | translate" (click)="stopLoadingMarkers()">
                   <mat-icon style="margin-right: 0px !important">stop</mat-icon>
                 </a>
               </mat-card-content>
@@ -89,7 +89,7 @@
           @if (state.pianId) {
             <mat-card class="app-active-pian-facet">
               <mat-card-content class="app-p-0">
-                <a [matTooltip]="'map.tooltip.Odstranit tento filtr' | translate" (click)="clearPian()" class="app-fxLayout app-row app-center-v app-gap-1 app-pr-1">
+                <a [matTooltip]="'map.tooltip.removeFilter' | translate" (click)="clearPian()" class="app-fxLayout app-row app-center-v app-gap-1 app-pr-1">
                   <mat-icon>clear</mat-icon><span>{{ state.pianId }}</span>
                 </a>
               </mat-card-content>

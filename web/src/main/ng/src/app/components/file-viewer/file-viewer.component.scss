@@ -2,6 +2,12 @@
   .app-select-files-wrapper {
     .mat-mdc-form-field {
       min-width: 200px;
+      --mat-select-disabled-trigger-text-color: var(--app-color-gray-7);
+      --mat-form-field-outlined-disabled-outline-color: var(--mat-form-field-outlined-outline-color, var(--mat-sys-outline));
+
+      ::ng-deep .mat-mdc-select-disabled .mat-mdc-select-arrow-wrapper {
+        display: none;
+      }
 
       &.app-select-primary {
         ::ng-deep .mat-mdc-text-field-wrapper {
@@ -25,6 +31,22 @@
         ::ng-deep .mdc-notched-outline__notch,
         ::ng-deep .mdc-notched-outline__trailing {
           border-color: transparent;
+        }
+
+        ::ng-deep .mat-mdc-select-arrow-wrapper {
+          margin-left: 8px;
+        }
+
+        &.mat-form-field-disabled {
+          ::ng-deep .mat-mdc-text-field-wrapper {
+            background-color: color-mix(in srgb, var(--app-primary-color, var(--app-color-primary)) 12%, var(--app-color-lightnes));
+          }
+
+          ::ng-deep .mat-mdc-select-value,
+          ::ng-deep .mat-mdc-select-placeholder {
+            color: var(--app-color-gray-7);
+            font-weight: normal;
+          }
         }
       }
     }
