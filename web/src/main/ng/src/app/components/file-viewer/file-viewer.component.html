@@ -12,7 +12,7 @@
       <mat-form-field appearance="outline"
         [matTooltip]="selectedDist?.path ?? ''" [matTooltipDisabled]="(selectedFile()?.distribuce?.length ?? 0) > 1">
         <mat-select [(ngModel)]="selectedDist" [disabled]="(selectedFile()?.distribuce?.length ?? 0) <= 1">
-          @for(d of selectedFile().distribuce; track d) {
+          @for(d of selectedFile()?.distribuce; track d) {
             <mat-option [value]="d">{{ d.path }}</mat-option>
           }
         </mat-select>
