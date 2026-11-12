@@ -32,6 +32,14 @@
     </mat-panel-title>
     }
   </mat-expansion-panel-header>
+
+  @if (_result().komponenta_nalez_objekt?.length > 0 || _result().komponenta_nalez_predmet?.length > 0) {
+  <ng-container *ngTemplateOutlet="nalezyTmpl"></ng-container>
+  }
+
+  @if (_result().samostatny_nalez_druh_nalezu) {
+  <ng-container *ngTemplateOutlet="snnalezyTmpl"></ng-container>
+  }
 </mat-expansion-panel>
 }
 
