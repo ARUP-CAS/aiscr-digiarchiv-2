@@ -33,7 +33,7 @@
     "@turf/turf": "7.4.0",
     "axios": "1.19.0",
     "echarts": "6.0.0",
-    "express": "5.2.1",
+    "express": "5.3.0",
     "heatmap.js": "2.0.5",
     "leaflet": "1.9.4",
     "leaflet-heatmap": "1.0.0",
