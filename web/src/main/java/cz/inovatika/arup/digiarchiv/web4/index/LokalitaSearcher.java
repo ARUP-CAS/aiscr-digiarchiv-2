@@ -15,118 +15,118 @@ import org.apache.solr.client.solrj.jetty.HttpJettySolrClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
- class LokalitaSearcher implements EntitySearcher {
+class LokalitaSearcher implements EntitySearcher {
 
-    public static final Logger LOGGER = Logger.getLogger(LokalitaSearcher.class.getName());
+  public static final Logger LOGGER = Logger.getLogger(LokalitaSearcher.class.getName());
 
-    final String ENTITY = "lokalita";
+  final String ENTITY = "lokalita";
 
-    private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "okres", "typ_lokality",
-        "druh", "datum_zahajeni", "datum_ukonceni", "child_dokument", "organizace", "datestamp"});
+  private final List<String> allowedFields = Arrays.asList(new String[]{"ident_cely", "entity", "pristupnost", "okres", "typ_lokality",
+    "druh", "datum_zahajeni", "datum_ukonceni", "child_dokument", "organizace", "datestamp"});
 
-    @Override
-    public void filter(JSONObject jo, HttpServletRequest request) {
+  @Override
+  public void filter(JSONObject jo, HttpServletRequest request) {
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     String org = LoginServlet.organizace(request.getSession());
-        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) {
-            JSONObject doc = ja.getJSONObject(i);
-            filterOne(doc, pristupnost, org);
-        }
-        
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      filterOne(doc, pristupnost, org);
     }
-    
-    
-    public void filterOne(JSONObject doc, String pristupnost, String org) {
+
+  }
+
+  public void filterOne(JSONObject doc, String pristupnost, String org) {
 //            doc.put("pian", doc.opt("pian_" + pristupnost));
 //            doc.remove("pian_" + pristupnost);
-            if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
-                if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
-                    doc.remove("az_chranene_udaje");
-                    doc.remove("lokalita_chranene_udaje");
-                }
-                Object[] keys = doc.keySet().toArray();
-                for (Object okey : keys) {
-                    String key = (String) okey;
-                    if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
-                        doc.remove((String) key);
-                    }
-                    if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
-                        doc.remove((String) key);
-                    }
-                    if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
-                        doc.remove((String) key);
-                    }
-
-                }
-            }
-        
-    }
-
-    @Override
-    public String[] getChildSearchFields(String pristupnost) {
-        return getSearchFields(pristupnost);
-    }
-
-    @Override
-    public String[] getRelationsFields() {
-        return new String[]{"ident_cely", "az_dokument"};
-    }
-
-    @Override
-    public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
-        JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < docs.length(); i++) {
-            JSONObject doc = docs.getJSONObject(i);
-
-            JSONArray valid_dokuments = new JSONArray();
-            if (doc.has("az_dokument")) {
-                SolrQuery query = new SolrQuery("*")
-                        .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
-                        .setRows(10000)
-                        .setFields("ident_cely")
-                        .setParam("df", "ident_cely");
-                //System.out.println(query);
-                try {
-                    JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
-                    for (int a = 0; a < ja.length(); a++) {
-                        valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
-                    }
-                } catch (SolrServerException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, "", ex);
-                }
-            }
-            doc.put("az_dokument", valid_dokuments);
+    if (doc.optString("pristupnost").compareTo(pristupnost) > 0) {
+      if (doc.getString("pristupnost").compareTo(pristupnost) > 0) {
+        doc.remove("az_chranene_udaje");
+        doc.remove("lokalita_chranene_udaje");
+      }
+      Object[] keys = doc.keySet().toArray();
+      for (Object okey : keys) {
+        String key = (String) okey;
+        if (key.endsWith("_D") && "D".compareToIgnoreCase(pristupnost) > 0) {
+          doc.remove((String) key);
         }
-    }
-
-    @Override
-    public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
-        if (jo.has("response")) {
-            JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-            for (int i = 0; i < ja.length(); i++) {
-                JSONObject doc = ja.getJSONObject(i);
-                if (LoginServlet.userId(request) != null) {
-                    SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
-                }
-                DokumentSearcher as = new DokumentSearcher("dokument");
-                String fields = String.join(",", as.getChildSearchFields("D"));
-
-                //String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
-                SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
-            }
-            addPians(jo, client, request);
-        } else {
-            JSONObject doc = jo.getJSONObject("doc");
-            if (LoginServlet.userId(request) != null) {
-                SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
-            }
-            String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
-            SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
-            
-            addPians(jo, client, request);
+        if (key.endsWith("_C") && "C".compareToIgnoreCase(pristupnost) > 0) {
+          doc.remove((String) key);
         }
+        if (key.endsWith("_B") && "B".compareToIgnoreCase(pristupnost) > 0) {
+          doc.remove((String) key);
+        }
+
+      }
     }
+    doc.remove("historie");
+
+  }
+
+  @Override
+  public String[] getChildSearchFields(String pristupnost) {
+    return getSearchFields(pristupnost);
+  }
+
+  @Override
+  public String[] getRelationsFields() {
+    return new String[]{"ident_cely", "az_dokument"};
+  }
+
+  @Override
+  public void checkRelations(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    JSONArray docs = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < docs.length(); i++) {
+      JSONObject doc = docs.getJSONObject(i);
+
+      JSONArray valid_dokuments = new JSONArray();
+      if (doc.has("az_dokument")) {
+        SolrQuery query = new SolrQuery("*")
+                .addFilterQuery(doc.getJSONArray("az_dokument").join(" "))
+                .setRows(10000)
+                .setFields("ident_cely")
+                .setParam("df", "ident_cely");
+        //System.out.println(query);
+        try {
+          JSONArray ja = SolrSearcher.json(client, "entities", query).getJSONObject("response").getJSONArray("docs");
+          for (int a = 0; a < ja.length(); a++) {
+            valid_dokuments.put(ja.getJSONObject(a).getString("ident_cely"));
+          }
+        } catch (SolrServerException | IOException ex) {
+          LOGGER.log(Level.SEVERE, "", ex);
+        }
+      }
+      doc.put("az_dokument", valid_dokuments);
+    }
+  }
+
+  @Override
+  public void getChilds(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    if (jo.has("response")) {
+      JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+      for (int i = 0; i < ja.length(); i++) {
+        JSONObject doc = ja.getJSONObject(i);
+        if (LoginServlet.userId(request) != null) {
+          SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+        }
+        DokumentSearcher as = new DokumentSearcher("dokument");
+        String fields = String.join(",", as.getChildSearchFields("D"));
+
+        //String fields = "ident_cely,entity,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
+        SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
+      }
+      addPians(jo, client, request);
+    } else {
+      JSONObject doc = jo.getJSONObject("doc");
+      if (LoginServlet.userId(request) != null) {
+        SolrSearcher.addIsFavorite(client, doc, LoginServlet.userId(request));
+      }
+      String fields = "ident_cely,katastr,okres,autor,rok_vzniku,typ_dokumentu,material_originalu,pristupnost,rada,material_originalu,organizace,popis,soubor_filepath";
+      SolrSearcher.addChildField(client, doc, "dokument", "full_dokument", fields);
+
+      addPians(jo, client, request);
+    }
+  }
 
 //    public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
 //        String pristupnost = LoginServlet.pristupnost(request.getSession());
@@ -157,113 +157,112 @@ import org.json.JSONObject;
 //            }
 //        }
 //    }
-    
-    public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
-        String pristupnost = LoginServlet.pristupnost(request.getSession());
-        if ("E".equals(pristupnost)) {
-            pristupnost = "D";
-        }
-        PIANSearcher ps = new PIANSearcher();
-        String[] fs = ps.getSearchFields(pristupnost);
-        String fields = String.join(",", fs);
-
-        JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
-        for (int i = 0; i < ja.length(); i++) {
-            JSONObject doc = ja.getJSONObject(i);
-            if (doc.has("az_dj_pian")) {
-                JSONArray cdjs = doc.getJSONArray("az_dj_pian");
-                String[] pians = (String[]) cdjs.toList().toArray(String[]::new);
-        
-                SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", pians ) + "\")")
-                    .addFilterQuery("entity:pian")
-                    .setSort("ident_cely", SolrQuery.ORDER.asc)
-                        .setFields(fields)
-                    .setParam("stats", false)
-                    .setFacet(false);
-                JSONObject joPians = SearchUtils.json(query, client, "entities");
-                doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs"));
-            }
-        }
+  public void addPians(JSONObject jo, SolrClient client, HttpServletRequest request) {
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    if ("E".equals(pristupnost)) {
+      pristupnost = "D";
     }
+    PIANSearcher ps = new PIANSearcher();
+    String[] fs = ps.getSearchFields(pristupnost);
+    String fields = String.join(",", fs);
 
-    @Override
-    public void processAsChild(HttpServletRequest request, JSONObject jo) {
+    JSONArray ja = jo.getJSONObject("response").getJSONArray("docs");
+    for (int i = 0; i < ja.length(); i++) {
+      JSONObject doc = ja.getJSONObject(i);
+      if (doc.has("az_dj_pian")) {
+        JSONArray cdjs = doc.getJSONArray("az_dj_pian");
+        String[] pians = (String[]) cdjs.toList().toArray(String[]::new);
+
+        SolrQuery query = new SolrQuery("ident_cely:(\"" + String.join("\" OR \"", pians) + "\")")
+                .addFilterQuery("entity:pian")
+                .setSort("ident_cely", SolrQuery.ORDER.asc)
+                .setFields(fields)
+                .setParam("stats", false)
+                .setFacet(false);
+        JSONObject joPians = SearchUtils.json(query, client, "entities");
+        doc.put("pian", joPians.getJSONObject("response").getJSONArray("docs"));
+      }
+    }
+  }
+
+  @Override
+  public void processAsChild(HttpServletRequest request, JSONObject jo) {
 //
 //        if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
 //            addOkresy(jo);
 //        }
-    }
+  }
 
-    @Override
-    public JSONObject search(HttpServletRequest request) {
-        JSONObject json = new JSONObject();
-        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            SolrQuery query = new SolrQuery();
-            setQuery(request, query);
-            JSONObject jo = SearchUtils.json(query, client, "entities");
-            if (jo.has("error")) {
-                return jo;
-            }
-            String pristupnost = LoginServlet.pristupnost(request.getSession());
-            
-            if (Boolean.parseBoolean(request.getParameter("isExport"))) {
-                addPians(jo, client, request);
-            }
-            if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
+  @Override
+  public JSONObject search(HttpServletRequest request) {
+    JSONObject json = new JSONObject();
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery();
+      setQuery(request, query);
+      JSONObject jo = SearchUtils.json(query, client, "entities");
+      if (jo.has("error")) {
+        return jo;
+      }
+      String pristupnost = LoginServlet.pristupnost(request.getSession());
+
+      if (Boolean.parseBoolean(request.getParameter("isExport"))) {
+        addPians(jo, client, request);
+      }
+      if (!Boolean.parseBoolean(request.getParameter("mapa"))) {
 //                checkRelations(jo, client, request);
-            }
-            filter(jo, request);
+      }
+      filter(jo, request);
 
-            SolrSearcher.addFavorites(jo, client, request);
-            return jo;
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "", ex);
-            json.put("error", ex);
-        }
-        return json;
+      SolrSearcher.addFavorites(jo, client, request);
+      return jo;
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "", ex);
+      json.put("error", ex);
     }
+    return json;
+  }
 
-    @Override
-    public JSONObject export(HttpServletRequest request) {
-        try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-            SolrQuery query = new SolrQuery();
-            setQuery(request, query);
-            SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
-            JSONObject jo = SearchUtils.json(query, client, "entities");
-            String pristupnost = LoginServlet.pristupnost(request.getSession());
-            filter(jo, request);
-                addPians(jo, client, request);
-            SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
-            
-            return jo;
-            
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "", ex);
-            return new JSONObject().put("error",ex.toString());
-        }
+  @Override
+  public JSONObject export(HttpServletRequest request) {
+    try (SolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
+      SolrQuery query = new SolrQuery();
+      setQuery(request, query);
+      SolrSearcher.addExportParams(query, ENTITY, request.getParameter("rows"), request.getParameter("page"));
+      JSONObject jo = SearchUtils.json(query, client, "entities");
+      String pristupnost = LoginServlet.pristupnost(request.getSession());
+      filter(jo, request);
+      addPians(jo, client, request);
+      SolrSearcher.processExportDocs(jo.getJSONObject("response").getJSONArray("docs"), ENTITY);
+
+      return jo;
+
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "", ex);
+      return new JSONObject().put("error", ex.toString());
     }
+  }
 
-    @Override
-    public String[] getSearchFields(String pristupnost) {
+  @Override
+  public String[] getSearchFields(String pristupnost) {
 
-        List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
-        List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
-        List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
-        List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("header").toList();
-        List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("detail").toList();
+    List<Object> fields = Options.getInstance().getJSONObject("fields").getJSONArray("common").toList();
+    List<Object> azHeaderFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("header").toList();
+    List<Object> azDetailFields = Options.getInstance().getJSONObject("fields").getJSONObject("archeologicky_zaznam").getJSONArray("detail").toList();
+    List<Object> headerFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("header").toList();
+    List<Object> detailFields = Options.getInstance().getJSONObject("fields").getJSONObject("lokalita").getJSONArray("detail").toList();
 
-        fields.addAll(azHeaderFields);
-        fields.addAll(azDetailFields);
-        fields.addAll(headerFields);
-        fields.addAll(detailFields);
+    fields.addAll(azHeaderFields);
+    fields.addAll(azDetailFields);
+    fields.addAll(headerFields);
+    fields.addAll(detailFields);
 
-        fields.add("pian_id:az_dj_pian");
-        fields.add("loc_rpt:loc_rpt_" + pristupnost);
-        fields.add("loc:loc_rpt_" + pristupnost);
-        fields.add("katastr:f_katastr_" + pristupnost);
+    fields.add("pian_id:az_dj_pian");
+    fields.add("loc_rpt:loc_rpt_" + pristupnost);
+    fields.add("loc:loc_rpt_" + pristupnost);
+    fields.add("katastr:f_katastr_" + pristupnost);
 
-        String[] ret = fields.toArray(new String[0]);
-        return ret;
+    String[] ret = fields.toArray(new String[0]);
+    return ret;
 //        
 //        return new String[]{"ident_cely,entity,pristupnost,okres,lokalita_typ_lokality,lokalita_druh,lokalita_zachovalost,lokalita_jistota,datestamp,dokument,projekt",
 //            "dokumentacni_jednotka:[json]",
@@ -275,24 +274,24 @@ import org.json.JSONObject;
 //            "popis:lokalita_chranene_udaje_popis_" + pristupnost,
 //            "katastr:f_katastr_" + pristupnost,
 //            "dalsi_katastry:f_dalsi_katastry_" + pristupnost};
+  }
+
+  public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
+    SolrSearcher.addCommonParams(request, query, ENTITY);
+    // query.addFilterQuery("{!tag=entityF}stav:3");
+    String pristupnost = LoginServlet.pristupnost(request.getSession());
+    if ("E".equals(pristupnost)) {
+      pristupnost = "D";
+    }
+    query.set("df", "text_all_" + pristupnost);
+
+    SolrSearcher.addFilters(request, query, pristupnost);
+
+    if (Boolean.parseBoolean(request.getParameter("mapa"))) {
+      SolrSearcher.addLocationParams(request, query);
     }
 
-    public void setQuery(HttpServletRequest request, SolrQuery query) throws IOException {
-        SolrSearcher.addCommonParams(request, query, ENTITY);
-        // query.addFilterQuery("{!tag=entityF}stav:3");
-        String pristupnost = LoginServlet.pristupnost(request.getSession());
-        if ("E".equals(pristupnost)) {
-            pristupnost = "D";
-        }
-        query.set("df", "text_all_" + pristupnost);
-
-        SolrSearcher.addFilters(request, query, pristupnost);
-
-        if (Boolean.parseBoolean(request.getParameter("mapa"))) {
-            SolrSearcher.addLocationParams(request, query);
-        }
-        
-        query.setFields(getSearchFields(pristupnost));
+    query.setFields(getSearchFields(pristupnost));
 
 //        if (Boolean.parseBoolean(request.getParameter("mapa")) && request.getParameter("format") == null) {
 //            query.setFields("ident_cely,entity,nazev,organizace,pristupnost,pian_id,pian:[json],okres,child_dokument",
@@ -301,7 +300,6 @@ import org.json.JSONObject;
 //        } else {
 //            query.setFields(getSearchFields(pristupnost));
 //        }
-
-    }
+  }
 
 }
