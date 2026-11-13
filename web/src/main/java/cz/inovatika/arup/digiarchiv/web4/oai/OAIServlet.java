@@ -13,7 +13,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.StringReader;
+import java.io.StringWriter;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import org.json.JSONObject;
+import org.xml.sax.InputSource;
 
 /**
  *
@@ -35,8 +44,6 @@ public class OAIServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/xml;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         String version = request.getPathInfo();
         if (version == null) {
             version = Options.getInstance().getJSONObject("OAI").getString("currentVersion");
@@ -67,6 +74,8 @@ public class OAIServlet extends HttpServlet {
                     if (!jo.has("error")) {
                         request.getSession().setAttribute("user", jo);
                     } else {
+                        response.setContentType("text/xml;charset=UTF-8");
+                        PrintWriter out = response.getWriter();
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         out.print("Invalid credentials");
                         return;
@@ -74,12 +83,30 @@ public class OAIServlet extends HttpServlet {
                     
                 }
                 String xml = actionToDo.doPerform(request, response, version);
+                String ua = request.getHeader("User-Agent");
+                if (ua != null && (ua.contains("Chrome") || ua.contains("Chromium")) ) {
+                  xml = xml.replace("<?xml-stylesheet type=\"text/xsl\" href=\"/oai2.xsl\" ?>\n", "");
+//                  TransformerFactory factory = TransformerFactory.newInstance();
+//                  Source xslt = new StreamSource(Options.getInstance().getBrowserXslt());
+//                  Source text = new SAXSource(new InputSource(new StringReader(xml)));
+//                  Transformer oai2 = factory.newTransformer(xslt);
+//                  StringWriter sw = new StringWriter();
+//                  oai2.transform(text, new StreamResult(sw));
+//                  response.setContentType("text/html;charset=UTF-8");
+//                  PrintWriter out = response.getWriter();
+//                  out.println(sw.toString());
+                } 
+                response.setContentType("text/xml;charset=UTF-8");
+                PrintWriter out = response.getWriter();
                 out.println(xml);
+                
             } else {
                 String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()
                         + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "/" + version + "/oai</request>"
                         + "<error code=\"badVerb\">verb is absent</error>"
                         + "</OAI-PMH>";
+                  response.setContentType("text/xml;charset=UTF-8");
+                  PrintWriter out = response.getWriter();
                 out.print(xml);
             }
         } catch (IllegalArgumentException e1) {
@@ -88,6 +115,8 @@ public class OAIServlet extends HttpServlet {
                     + "<request>" + Options.getInstance().getJSONObject("OAI").getString("baseUrl") + "</request>"
                     + "<error code=\"badVerb\">Illegal OAI verb</error>"
                     + "</OAI-PMH>"; 
+                  response.setContentType("text/xml;charset=UTF-8");
+                  PrintWriter out = response.getWriter();
             out.print(xml);
         } catch (SecurityException e1) {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
@@ -96,6 +125,8 @@ public class OAIServlet extends HttpServlet {
             LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e1.toString());
+                  response.setContentType("text/xml;charset=UTF-8");
+                  PrintWriter out = response.getWriter();
             out.print(e1.toString());
         }
     }
