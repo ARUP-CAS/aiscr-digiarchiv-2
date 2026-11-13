@@ -98,7 +98,7 @@ public class OAIServlet extends HttpServlet {
                 } 
                 response.setContentType("text/xml;charset=UTF-8");
                 PrintWriter out = response.getWriter();
-                out.println(xml);
+                out.println(xml); 
                 
             } else {
                 String xml = OAIRequest.headerOAI() + OAIRequest.responseDateTag()

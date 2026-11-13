@@ -8,7 +8,7 @@
     xmlns:amcr21="https://api.aiscr.cz/schema/amcr/2.1/"
     xmlns:amcr20="https://api.aiscr.cz/schema/amcr/2.0/">
 
-    <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
+    <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" /> 
 
     <xsl:template match="@* | node()">
         <xsl:copy>
@@ -17,6 +17,18 @@
     </xsl:template>
 
     <xsl:template match="amcr:historie[amcr:typ_zmeny = 'KAT']/amcr:poznamka">
+        <xsl:copy>HTTP/1.1 403 Forbidden</xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="amcr22:historie[amcr22:typ_zmeny = 'KAT']/amcr22:poznamka">
+        <xsl:copy>HTTP/1.1 403 Forbidden</xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="amcr21:historie[amcr21:typ_zmeny = 'KAT']/amcr21:poznamka">
+        <xsl:copy>HTTP/1.1 403 Forbidden</xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="amcr20:historie[amcr20:typ_zmeny = 'KAT']/amcr20:poznamka">
         <xsl:copy>HTTP/1.1 403 Forbidden</xsl:copy>
     </xsl:template>
 
