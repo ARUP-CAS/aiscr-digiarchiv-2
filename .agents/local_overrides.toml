@@ -1,7 +1,7 @@
 [bootstrap]
 schema_in_use = "spec-driven"
 last_aligned_at = "2026-11-14"
-last_aligned_hub_revision = "53ad52a2372d40b35f595b27a81d50d3792f66a7"
+last_aligned_hub_revision = "713f5616b3faf0de584fb8fc820fb9bfa4233451"
 target_branch = "DN-agents-setup-review"
 
 [bootstrap.notes]

@@ -1,6 +1,6 @@
 <!-- SPDX-FileCopyrightText: 2026 AIS CR (Archaeological Information System of the Czech Republic) <https://ror.org/01a7rqj69> -->
 <!-- SPDX-License-Identifier: CC-BY-4.0 -->
-<!-- delivery-version: 53ad52a2372d40b35f595b27a81d50d3792f66a7 2026-11-14T12:42:30+01:00 -->
+<!-- delivery-version: 713f5616b3faf0de584fb8fc820fb9bfa4233451 2026-11-14T23:05:33+01:00 -->
 
 # schemas – JSON Schema for workstation_safety
 

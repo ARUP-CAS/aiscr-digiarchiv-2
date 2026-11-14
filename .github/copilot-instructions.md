@@ -24,7 +24,7 @@ AIS CR mirrors the same **`aiscr-*` workflow slugs** into **separate config root
 | **Cursor** | `.claude/skills/`, `.cursor/rules/` |
 | **Claude Code** | `.claude/skills/`, `.claude/rules/` |
 | **Codex** | `.agents/skills/`, `CODEX.md`, `.codex/agents/` |
-| **Gemini** | `.agents/skills/`, `.gemini/context/`, `.gemini/commands/opsx/`, `GEMINI.md` |
+| **Gemini** | `.agents/skills/`, `.gemini/context/`, `GEMINI.md` |
 
 So this digest **does not substitute** for the mirrored `skills/` trees when you work in those products — open the matching tree there. When you work **in Copilot**, use this digest and the shared kernel below.
 
@@ -46,8 +46,8 @@ Use the generated kernel in `AGENTS.md` and Copilot instruction readers under
 
 ## Local OpenSpec entry points
 
-Copilot-specific OpenSpec prompts are delivered under
-`.github/prompts/opsx-*.prompt.md`. Validate OpenSpec edits with
+OpenSpec emits its `openspec-*` skills into the shared `.agents/skills/` tree,
+which Copilot reads directly. Validate OpenSpec edits with
 `npm run openspec:validate`; shared OpenSpec gating is in the generated
 orientation below and the delivered `aiscr-planning-core` reader.
 
@@ -111,7 +111,7 @@ Do not assume every workflow is mirrored in this repository; use the management 
 - **Instructions:** the generated instruction files under `.github/instructions/*.instructions.md` are split one per governance topic but each declares `applyTo: "**/*"` — the split is an authoring convenience, not selective loading.
   This digest is the Copilot entry point for governance context.
 - **Skills:** `aiscr-*` workflows are delivered under `.agents/skills/aiscr-*/SKILL.md`, which the Copilot CLI and the cloud coding agent read at repository scope (gated by manifest locus).
-  OpenSpec prompts are generated under `.github/prompts/opsx-*.prompt.md`, and the `openspec-*` skills land in the same shared tree.
+  OpenSpec emits its `openspec-*` skills into the shared `.agents/skills/` tree, which Copilot reads directly; the CLI emits no prompt files in its current major version.
   Copilot selects skills autonomously from their descriptions and documents no field that disables that, so the guard on this surface is each body's own Iron Laws and approval gates rather than frontmatter.
 - **Sibling-owned content:** repo identity, repo-specific notes, and the enrolled-workflow list live outside the generated blocks of this digest and are preserved on refresh.
 

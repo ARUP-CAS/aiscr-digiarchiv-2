@@ -10,7 +10,7 @@ Use this file when the session uses **Gemini CLI** and/or **Gemini Code Assist**
 
 ## Vendor behaviour — Gemini CLI ([geminicli.com/docs](https://geminicli.com/docs/))
 
-**Project context:** Root **`GEMINI.md`** is the default project context file (hierarchical lookup toward the `.git` boundary; override via `context.fileName` in project **`settings.json`**). **Governance context:** **`.gemini/context/<stem>.md`** — delivered full rule readers; loading takes both `context.includeDirectories` (trusted root) and `context.fileName` (reader names) in **`.gemini/settings.json`**. **Project config:** **`.gemini/settings.json`** (tools, sandbox, model, hooks, MCP, context). **Skills:** the shared **`.agents/skills/`** tree, plus OpenSpec commands under **`.gemini/commands/opsx/`** where enrolled. **Hooks:** configured under `hooks` in **`settings.json`** ([Hooks](https://geminicli.com/docs/hooks/)). **Subagents:** built-in CLI subagents plus **project custom agents** as Markdown with YAML frontmatter under **`.gemini/agents/*.md`** ([Subagents](https://geminicli.com/docs/core/subagents/)). **MCP:** `mcpServers` in **`settings.json`**. **Slash commands:** built-in CLI commands ([docs home](https://geminicli.com/docs/)). **Exclusions:** an optional repository-root ignore file, not committed here; add one per the Gemini CLI docs if needed. **User-level config:** `~/.gemini/settings.json`. **Source:** [Gemini CLI on GitHub](https://github.com/google-gemini/gemini-cli).
+**Project context:** Root **`GEMINI.md`** is the default project context file (hierarchical lookup toward the `.git` boundary; override via `context.fileName` in project **`settings.json`**). **Governance context:** **`.gemini/context/<stem>.md`** — delivered full rule readers; loading takes both `context.includeDirectories` (trusted root) and `context.fileName` (reader names) in **`.gemini/settings.json`**. **Project config:** **`.gemini/settings.json`** (tools, sandbox, model, hooks, MCP, context). **Skills:** the shared **`.agents/skills/`** tree; OpenSpec entry points are delivered there as `openspec-*` skills, which Gemini CLI reads directly. **Hooks:** configured under `hooks` in **`settings.json`** ([Hooks](https://geminicli.com/docs/hooks/)). **Subagents:** built-in CLI subagents plus **project custom agents** as Markdown with YAML frontmatter under **`.gemini/agents/*.md`** ([Subagents](https://geminicli.com/docs/core/subagents/)). **MCP:** `mcpServers` in **`settings.json`**. **Slash commands:** built-in CLI commands ([docs home](https://geminicli.com/docs/)). **Exclusions:** an optional repository-root ignore file, not committed here; add one per the Gemini CLI docs if needed. **User-level config:** `~/.gemini/settings.json`. **Source:** [Gemini CLI on GitHub](https://github.com/google-gemini/gemini-cli).
 
 ## Vendor behaviour — Gemini Code Assist ([developers.google.com/gemini-code-assist](https://developers.google.com/gemini-code-assist/docs/overview))
 
@@ -56,8 +56,7 @@ Planning-first execution, rolling usage logging, ephemeral plan locations, branc
 ## Local OpenSpec entry points
 
 Gemini-facing OpenSpec skills are delivered under
-`.agents/skills/openspec-*/`, with commands under
-`.gemini/commands/opsx/`. Use `npm run openspec:validate` after editing
+`.agents/skills/openspec-*/`; use `npm run openspec:validate` after editing
 OpenSpec artifacts; shared OpenSpec gating remains in the generated
 orientation below and the delivered rule readers.
 
@@ -112,7 +111,7 @@ Do not assume every workflow is mirrored in this repository; use the management 
 **Governance context:** `.gemini/context/<stem>.md` — delivered rule readers.
 Loading them takes **both** settings keys: `context.includeDirectories` registers the directory as a trusted root, and `context.fileName` must name each reader; the generator emits both.
 **Project config:** `.gemini/settings.json` (tools, sandbox, model, hooks, MCP, context).
-**Skills:** the shared `.agents/skills/` tree, resolved ahead of a product-local one; OpenSpec entry points are delivered there and under `.gemini/commands/opsx/` where enrolled.
+**Skills:** the shared `.agents/skills/` tree, resolved ahead of a product-local one; OpenSpec entry points are delivered there as `openspec-*` skills, which Gemini CLI reads directly.
 **Hooks:** under `hooks` in `settings.json` ([Hooks](https://geminicli.com/docs/hooks/)).
 **Subagents:** custom agents as Markdown with YAML frontmatter under `.gemini/agents/*.md` ([Subagents](https://geminicli.com/docs/core/subagents/)).
 **MCP:** `mcpServers` in `settings.json`.
