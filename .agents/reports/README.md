@@ -1,31 +1,19 @@
 # .agents/reports
 
-([English](README_en.md))
+Durable outputs from the repository's codebase-review and validation work.
 
-```text
-Language entry scope: Agents MUST use README_en.md for operational instructions. This README.md is human-facing Czech only; align with the English twin when meaning changes.
-```
+## Structure
 
-Lidsky čitelné výstupy dlouhodobého technického review.
+- `review_reports/` contains per-task and consolidated review reports. See [`review_reports/README.md`](review_reports/README.md).
+- Finding and backlog records use the source and rendered formats supported by the current review configuration and its engine.
+- Testing-scenario publications and redacted extracts preserve evidence without turning those extracts into live production data or real personal data.
+- `incidents/` holds incident reports produced from the delivered [`incident_postmortem` template](../canonical_configs/templates/documents/incident_postmortem.md).
 
-## Struktura
+## Operating guidance
 
-- `review_reports/`
-  - detailní reporty pro jednotlivé tasky (`T01.md` … `T10.md`, `final_audit.md`),
-  - viz také `review_reports/README.md` pro popis jednotlivých souborů.
+- Use [`aiscr-review-codebase`](../skills/aiscr-review-codebase/SKILL.md) as the operational source for review lifecycle, modes, and report handling.
+- Keep new review-workflow prose English. Preserve exact Czech quotations, source comments, documentation excerpts, GitHub issue titles, and AIS CR domain identifiers when their literal wording is evidence.
+- Apply the severity, admissibility, provenance, and finding-disposition requirements in the [shared review-conduct reader](../../.github/instructions/aiscr-review-conduct.instructions.md).
+- Preserve analytical history and review provenance. Report-only artifacts do not authorize repairs, source changes, or issue-tracking writes.
+- Ecosystem-wide documentation audits are requested from the management hub rather than recreated as sibling-local workflow prompts or duplicate tooling.
 
-- `bugs.md`
-  - evidence nalezených chyb (`BUG-XXX`),
-  - pro každou chybu: soubor/řádek, závažnost, vztah ke GitHub Issue, návrh opravy, task.
-
-- `refactoring_backlog.md`
-  - backlog strukturálních / architektonických vylepšení,
-  - členění podle priority (vysoká / střední / nízká).
-
-## Poznámky
-
-- Všechny nové bugy a refaktoringové návrhy musí být zapisovány sem, **ne** pouze
-  do GitHub Issues, aby byla historie review kompletní.
-- Reporty v `review_reports/` se generují po dokončení tasků T01–T11 podle
-  kanonického workflow `aiscr-codebase-review`.
-- Ekosystémová doporučení pro automatizaci (MCP, skills, hooks, subagenty) jsou pouze v hubu `aiscr-management` — viz `AGENTS.md`.

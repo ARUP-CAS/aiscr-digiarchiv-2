@@ -91,7 +91,7 @@ priority = 5
 [[tasks]]
 id = "T06"
 name = "security_analysis"
-description = "Security audit (Spring Security, secrets, authentication, CORS)"
+description = "Security audit (Jakarta Servlet security, secrets, authentication, CORS)"
 target_file = ".agents/analysis/security_analysis.json"
 priority = 6
 
@@ -253,13 +253,13 @@ relevant_for = [
 
 [tech_stack]
 backend = [
-    "Java 17",
-    "Spring",
+    "Java 21",
+    "Jakarta Servlet",
     "Jakarta EE 11",
 ]
 search = [
-    "Apache Solr 9.x",
-    "solr-solrj 9.10.1",
+    "Apache Solr 10.x",
+    "solr-solrj 10.0.0",
 ]
 transformations = [
     "XSLT 2.0",
@@ -278,18 +278,18 @@ ci = [
 ]
 thumbnails = [
     "ThumbnailsGenerator",
-    "Java 1.8 (EOL)",
+    "Java 21",
 ]
 
 [prompt_evolution]
 apply_manually = true
 reviewer = "human"
 note = """
-Older prompt_evolution evidence was classified; usable rules were incorporated into this review_config.yaml and the canonical aiscr-codebase-review workflow. The temporary legacy evidence report was removed. New U05 feedback remains local evidence for this repository until a human explicitly approves report-to-backlog handoff.
+Older prompt_evolution evidence was classified; usable rules were incorporated into this review_config.toml and the canonical aiscr-review-codebase workflow. The temporary legacy evidence report was removed. New U05 feedback remains local evidence for this repository until a human explicitly approves report-to-backlog handoff.
 """
 
 [follow_up]
-workflow = "aiscr-codebase-review"
+workflow = "aiscr-review-codebase"
 mode = "codebase-review-mode-update"
 phases = [
     "U01",
@@ -300,7 +300,7 @@ phases = [
     "U06",
 ]
 output = ".agents/reports/review_reports/final_audit.md"
-tools = ".agents/scripts/review_tools.py"
+tools = ".agents/scripts/codebase_review.py"
 note = """
-Incremental update prompt — detects changes, coverage gaps, cross-validation issues, and spot-checks existing findings. Output goes into final_audit.md Changelog section (not separate files). Does not replace the full T01-T11 audit cycle. review_tools.py provides: hash, cross-validate, coverage-gaps, id-inventory, lint-artifacts, prompt-evolution, repo-structure, status. Script is repo-agnostic and config-driven (uses review_config.yaml).
+Incremental update prompt — detects changes, coverage gaps, cross-validation issues, and spot-checks existing findings. Output goes into final_audit.md Changelog section (not separate files). Does not replace the full T01-T11 audit cycle. codebase_review.py provides: hash, cross-validate, coverage-gaps, id-inventory, lint-artifacts, prompt-evolution, repo-structure, status. Script is repo-agnostic and config-driven (uses review_config.toml).
 """

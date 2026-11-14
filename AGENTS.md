@@ -28,13 +28,32 @@ as the local operating surface; do not hand-edit this block.
   runtime does not expose it.
 - **Script, sync, and git approval:** High-impact scripts, sync apply, git
   staging, commits, pushes, branch switches, and remote delivery require a
-  direct user order. Config sync uses inspect -> dry-run -> apply --approve.
+  direct user order. Sibling delivery uses inspect -> plan -> apply --approve.
 - **Workspace and sibling boundaries:** Work stays inside opened workspaces
   unless explicitly approved. Sibling repositories may be touched only when
   registry-scoped, branch-aware, and covered by the approved operation.
 - **Hub authority:** Sibling workflows may consume delivered governance
   surfaces but must not write back to hub paths; hub adoption starts as a
   separate explicit hub action.
+
+**Basic operation rules:**
+
+- **Permission is not authorization.**
+  An allowed tool or command may be used only within the user-approved task and scope.
+- **Check before changing existing state.**
+  Before moving, deleting, overwriting, or resetting, inspect exact targets and destinations, identify what could be lost, and preserve unrelated work, including untracked or ignored files, mounted data, and persistent volumes.
+- **Prefer reversible steps.**
+  Use the smallest effective operation, preview bulk changes, and establish a recovery path.
+  When consequences or recovery are uncertain, explain the uncertainty and resolve missing scope, authority, or preservation decisions before proceeding.
+- **Treat live infrastructure explicitly.**
+  Operations affecting live environments require project-specific opt-in and authorization covering the target and operation.
+  Infrastructure files or installed tooling alone do not supply that opt-in.
+- **Judge the effect across every route.**
+  Apply the same obligations through shell commands, scripts, runtimes, APIs, and hosted workflows.
+  Never use another route to obtain a refused or unauthorized effect, including before a technical refusal occurs.
+- **Preserve routine autonomy.**
+  Scoped, reversible work within existing approval proceeds without repeated confirmation.
+  Existing planning, protected-configuration, and delivery gates still apply.
 
 **Source stems:**
 
@@ -90,19 +109,19 @@ multiple repositories. Agents must prefer **conservative, compatible changes**.
 
 | Component | Technology | Version / Notes |
 |-----------|-----------|-----------------|
-| Backend | Java, Spring | Java 17 |
-| Search | Apache Solr | solr-solrj 9.10.1 (client) |
+| Backend | Java / Jakarta Servlet | Java 21 |
+| Search | Apache Solr | solr-solrj 10.0.0 (client) |
 | Transformations | XSLT (Saxon) | Saxon 8.7 — XSLT 2.0 only (XSLT 3.0 not supported) |
 | Frontend | Angular, TypeScript, SCSS | Angular 21 |
 | Build | Maven | `web/pom.xml`, `ThumbnailsGenerator/pom.xml` |
 | CI/CD | GitHub Actions | `.github/workflows/` |
-| Thumbnails | ThumbnailsGenerator | Java 1.8 (EOL — inconsistent with main app) |
+| Thumbnails | ThumbnailsGenerator | Java 21 |
 | Jakarta EE | 11.0.0 | All dependencies must use `jakarta.*` namespace |
 
 **Infrastructure note:** Docker/docker-compose files are **not** part of this
 repository. Infrastructure configuration is maintained externally.
 
-**Testing note:** No automated tests exist — `web/src/test/` directory is absent.
+**Testing note:** No automated Java/Maven tests exist — `web/src/test/` directory is absent. Angular `*.spec.ts` test sources are present.
 
 ---
 
@@ -110,13 +129,11 @@ repository. Infrastructure configuration is maintained externally.
 
 Before starting any work, agents must gather repository context.
 
-### For review agents (running the canonical `aiscr-codebase-review` workflow)
+### For review agents (running the canonical `aiscr-review-codebase` workflow)
 
-The operational codebase-review workflow is the hub-canonical `aiscr-codebase-review`,
+The operational codebase-review workflow is the hub-canonical `aiscr-review-codebase`,
 authored in `aiscr-management` and delivered here through the repo-local assistant
-workflow surfaces (`.cursor/`, `.claude/`, `.codex/`, `.gemini/`). There is no
-long-form review prompt under `.agents/prompts/` — the workflow skill is the sole
-operational source.
+workflow surfaces. The delivered workflow skill is the sole operational source.
 
 **Review output language:** Use the canonical English-default rule with a quotation
 carve-out — keep new review workflow prose English by default, while preserving
@@ -129,17 +146,17 @@ supersedes the legacy "all review outputs in Czech" rule.
 Read all of:
 
 - `.agents/config/review_cache.json` — progress state
-- `.agents/config/review_config.yaml` — configuration (Tier 3 repo scope, incl. `phase_outputs`)
+- `.agents/config/review_config.toml` — configuration (Tier 3 repo scope, incl. `phase_outputs`)
 - `.agents/analysis/repository_map.json` — structural index
 - `.agents/reports/bugs.md` — discovered issues
 - `.agents/reports/refactoring_backlog.md` — improvement backlog
 
 For **incremental updates** (after a full audit cycle is complete):
 
-- `.agents/scripts/review_tools.py` — validation CLI (`hash`, `cross-validate`,
+- `.agents/scripts/codebase_review.py` — validation CLI (`hash`, `cross-validate`,
   `coverage-gaps`, `id-inventory`, `lint-artifacts`, `prompt-evolution`,
   `repo-structure`, `status`, `all`); the incremental update mode (U01–U06) is part
-  of the canonical `aiscr-codebase-review` workflow
+  of the canonical `aiscr-review-codebase` workflow
 
 ### For general agents (feature work, bugfixes, refactoring)
 
@@ -196,7 +213,7 @@ Agents must:
 
 - gather repository context before starting work
 - use the canonical codebase-review language rule for review artifacts: English by default, while preserving verbatim Czech quotations, source text, domain identifiers, and user-facing Czech documentation excerpts where those exact words matter
-- avoid repeating previously recorded work
+- avoid duplicating recorded work
 - prefer incremental improvements
 - record findings in `.agents/`
 - keep changes minimal and well scoped
@@ -220,6 +237,16 @@ For larger or riskier changes, run a dedicated subagent in parallel; review rule
 
 - **code-reviewer** — Use for multi-file changes, refactors, or when touching Java + Angular together. Configuration is tool-specific; quality criteria are in `AGENTS.md` and `CONTRIBUTING.md`.
 - **security-reviewer** (optional) — Use when changing auth, CORS, or security-sensitive code. Cross-check with `.agents/reports/bugs.md` and `.agents/analysis/security_analysis.json`.
+
+### Security and privacy for AI usage
+
+When using AI in this repository or when following prompts that may carry live or sensitive context:
+
+- Do not paste raw production data, full log dumps, or real PII into prompts or examples. Abstract or anonymize data instead (for example, use `user ID` and `https://internal.example/…`).
+- Redact secrets, tokens, API keys, and passwords from any logs or context sent to AI; do not commit them to the repository. Check generated artifacts for secrets before committing them.
+- Use placeholders for internal infrastructure URLs, hostnames, and environment names unless the actual value is explicitly needed and allowed by repository policy.
+- Automation must not send sensitive content to external services without explicit user intent and safeguards, including approval before transmission where required.
+- AI-generated artefacts that touch sensitive topics must be stored only in approved locations and must not introduce PII or secrets.
 
 ---
 
@@ -269,9 +296,9 @@ Shared rules and automation context for AI agents live in **versioned** location
 - **This file (`AGENTS.md`)**: Agent governance, scope, behaviour, recommended skills.
 - **`CONTRIBUTING.md`**: Branch/PR workflow, commit format, testing.
 - **`CLAUDE.md`**: Quick orientation, paths, build commands, gotchas.
-- **`.agents/`**: config (`config/review_config.yaml`), reports (`reports/bugs.md`), scripts (`scripts/review_tools.py`); the codebase-review workflow is the delivered `aiscr-codebase-review` skill, not a `.agents/prompts/` file.
+- **`.agents/`**: config (`config/review_config.toml`), reports (`reports/bugs.md`), scripts (`scripts/codebase_review.py`); use the delivered `aiscr-review-codebase` skill for the operational procedure.
 
-Agent-vendor folders such as `.cursor/`, `.claude/`, `.codex/`, `.gemini/`, `.clinerules/`, and `.qodo/` are **tracked repository content** when materialized from the `aiscr-management` hub via direct-bundle sync; treat them as governed delivery surfaces, not gitignored scratch space. Only machine-local files (for example `*/mcp*.json` and per-vendor `settings.local.json` files) stay in `.gitignore`.
+Agent-vendor folders such as `.cursor/`, `.claude/`, `.kilo/`, `.codex/`, `.gemini/`, and selected GitHub AI surfaces are **tracked repository content** when materialized from the `aiscr-management` hub via direct-bundle sync; treat them as governed delivery surfaces, not gitignored scratch space. Only machine-local files (for example `*/mcp*.json` and per-vendor `settings.local.json` files) stay in `.gitignore`.
 
 Detailed automation recommendations (MCP, skills, hooks, subagents) are maintained in **`aiscr-management`** repository.
 

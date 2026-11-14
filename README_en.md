@@ -2,6 +2,12 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8329064.svg)](https://doi.org/10.5281/zenodo.8329064) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+[Czech version](README.md)
+
+```text
+Language entry scope: This README_en.md is the sole operational instruction source for agents. README.md is the Czech human-facing twin; update both together when operational behaviour changes.
+```
+
 The Digital Archive of the Archaeological Map of the Czech Republic (AMCR) is a web application designed for browsing information about archaeological excavations, sites, and finds, operated by the Institutes of Archaeology of the Czech Academy of Sciences in Prague and Brno.  
 The archives of these institutions contain documentation of archaeological fieldwork conducted in the territory of the Czech Republic from 1919 to the present.  
 The AMCR database and related documents constitute the largest collection of archaeological data concerning the Czech Republic.
@@ -32,7 +38,7 @@ The AMCR Digital Archive is part of the Archaeological Information System of the
 
 | Layer | Technology |
 | --- | --- |
-| Backend | Java, Spring |
+| Backend | Java / Jakarta Servlet |
 | Search | Apache Solr |
 | Data transformations | XSLT 2.0 (Saxon 8.7) |
 | Frontend | Angular 21 (TypeScript, SCSS) |
@@ -67,17 +73,17 @@ aiscr-digiarchiv-2/
 
 ### Prerequisites
 
-- Java 17+
+- Java 21+
 - Maven 3.8+
 - Node.js 18+ and npm (for the Angular frontend)
 
 ### Running locally
 
 ```bash
-# 1. Build and run the web application
+# 1. Build the web application (WAR)
 cd web
 mvn clean package
-mvn spring-boot:run
+# Deploy the resulting WAR into a Jakarta Servlet container of your choice
 
 # 2. Build the frontend (if required separately)
 cd src/main/ng
@@ -88,7 +94,7 @@ npm run build
 ### Environment configuration
 
 Sensitive values (API keys, passwords, connection strings) are **never committed**.  
-Use environment variables or a `.env` file (see `.gitignore`).
+Use environment variables for sensitive values.
 
 ---
 

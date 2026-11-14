@@ -1,5 +1,7 @@
-# Vendorova vrstva Claude Code
+# Claude Code vendor surface
 
-Tento adresar `.claude/` je dorucena vrstva Claude Code pro tento repozitar, udrzovana v synchronizaci z hubu `aiscr-management`. Obsahuje aktiva vybrana pro tento repozitar (pravidla, skills, agenty a nastaveni dle potreby).
+<!-- delivery-version: 53ad52a2372d40b35f595b27a81d50d3792f66a7 2026-11-14T12:42:30+01:00 -->
 
-Governance viz `AGENTS.md` a dorucene ctecky pravidel. Synchronizovane soubory zde needitujte rucne; zmeny navrhnete v hubu.
+This `.claude/` directory is the delivered Claude Code surface for this repository, kept in sync from the `aiscr-management` hub. It carries the assets selected for this repository (rules, skills, agents, and settings as applicable).
+
+For governance, see `AGENTS.md` and the delivered rule readers. Do not hand-edit synced files here; propose changes at the hub.

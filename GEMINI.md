@@ -1,6 +1,6 @@
 # GEMINI – Using Gemini in this AIS CR repository
 
-<!-- aiscr:stop-anchor -->
+<!-- aiscr:entry-scope -->
 **Entry scope**
 
 - Stay on **`GEMINI.md`** and repo **`.gemini/`** surfaces for Gemini-specific behaviour first.
@@ -10,11 +10,11 @@ Use this file when the session uses **Gemini CLI** and/or **Gemini Code Assist**
 
 ## Vendor behaviour — Gemini CLI ([geminicli.com/docs](https://geminicli.com/docs/))
 
-**Project context:** Root **`GEMINI.md`** is the default project context file (hierarchical lookup toward the `.git` boundary; override via `context.fileName` in project **`settings.json`**). **Governance context:** **`.gemini/context/<stem>.md`** — delivered stubs that keep the entry-scope marker, topic summary, and link to the fuller reader; kept in sync from the `aiscr-management` hub. Loaded via **`context.includeDirectories`** in **`.gemini/settings.json`**. **Project config:** **`.gemini/settings.json`** (tools, sandbox, model, hooks, MCP, context). **Skills:** **`.gemini/skills/`** with `SKILL.md` stubs. **Hooks:** Configured under `hooks` in **`settings.json`** ([Hooks](https://geminicli.com/docs/hooks/)). **Subagents:** Built-in CLI subagents plus **project custom agents** as Markdown with YAML frontmatter under **`.gemini/agents/*.md`** ([Subagents](https://geminicli.com/docs/core/subagents/)). **MCP:** `mcpServers` in **`settings.json`**. **Slash commands:** Built-in CLI commands ([docs home](https://geminicli.com/docs/)). **Exclusions:** **`.geminiignore`** (CLI). **User-level config:** `~/.gemini/settings.json`. **Source:** [Gemini CLI on GitHub](https://github.com/google-gemini/gemini-cli).
+**Project context:** Root **`GEMINI.md`** is the default project context file (hierarchical lookup toward the `.git` boundary; override via `context.fileName` in project **`settings.json`**). **Governance context:** **`.gemini/context/<stem>.md`** — delivered full rule readers; loading takes both `context.includeDirectories` (trusted root) and `context.fileName` (reader names) in **`.gemini/settings.json`**. **Project config:** **`.gemini/settings.json`** (tools, sandbox, model, hooks, MCP, context). **Skills:** the shared **`.agents/skills/`** tree, plus OpenSpec commands under **`.gemini/commands/opsx/`** where enrolled. **Hooks:** configured under `hooks` in **`settings.json`** ([Hooks](https://geminicli.com/docs/hooks/)). **Subagents:** built-in CLI subagents plus **project custom agents** as Markdown with YAML frontmatter under **`.gemini/agents/*.md`** ([Subagents](https://geminicli.com/docs/core/subagents/)). **MCP:** `mcpServers` in **`settings.json`**. **Slash commands:** built-in CLI commands ([docs home](https://geminicli.com/docs/)). **Exclusions:** an optional repository-root ignore file, not committed here; add one per the Gemini CLI docs if needed. **User-level config:** `~/.gemini/settings.json`. **Source:** [Gemini CLI on GitHub](https://github.com/google-gemini/gemini-cli).
 
 ## Vendor behaviour — Gemini Code Assist ([developers.google.com/gemini-code-assist](https://developers.google.com/gemini-code-assist/docs/overview))
 
-IDE assistance and a **GitHub PR review** service. **PR reviews:** Trigger with `/gemini` in PR comments. Review configuration is optional and is not committed here unless maintainers deliberately add it. **Review rules:** **`.gemini/styleguide.md`** (natural-language guidance). **IDE exclusions:** **`.aiexclude`**. See [Review repo code](https://developers.google.com/gemini-code-assist/docs/review-repo-code) and [Customize repo review](https://developers.google.com/gemini-code-assist/docs/customize-repo-review).
+IDE assistance and a **GitHub PR review** service. **PR reviews:** Trigger with `/gemini` in PR comments. Review configuration is optional and is not committed here unless maintainers deliberately add it. **Review rules:** maintainers may provide a natural-language styleguide. Optional review settings (severity, max comments, PR events, drafts, ignore patterns) and IDE exclusions are not committed here; defaults apply until then. See [Review repo code](https://developers.google.com/gemini-code-assist/docs/review-repo-code) and [Customize repo review](https://developers.google.com/gemini-code-assist/docs/customize-repo-review).
 
 ## Governance load order
 
@@ -44,7 +44,7 @@ flowchart TD
 
 ## Operating default
 
-Run repo commands inside the assistant sandbox and the repository virtualenv
+Run repo commands inside the assistant sandbox and repository virtualenv
 when a repo venv exists. Prefer `.venv\Scripts\python.exe` on Windows or
 `.venv/bin/python` on Unix for this repo's Python tooling. Safety and
 data-exposure rules are in `AGENTS.md` and the delivered rule readers.
@@ -55,54 +55,49 @@ Planning-first execution, rolling usage logging, ephemeral plan locations, branc
 
 ## Local OpenSpec entry points
 
-Gemini-facing OpenSpec skills and commands are delivered under
-`.gemini/skills/openspec-*/` and `.gemini/commands/opsx/`. Use
-`npm run openspec:validate` after editing OpenSpec artifacts; shared OpenSpec
-gating remains in the generated orientation below and the delivered rule
-readers.
+Gemini-facing OpenSpec skills are delivered under
+`.agents/skills/openspec-*/`, with commands under
+`.gemini/commands/opsx/`. Use `npm run openspec:validate` after editing
+OpenSpec artifacts; shared OpenSpec gating remains in the generated
+orientation below and the delivered rule readers.
 
 <!-- begin:generated:vendor-digest-core -->
 <!-- generated by generate_governance_rules.py — do not edit manually -->
 
 ## AIS CR shared assistant orientation
 
-This repository is part of the AIS CR ecosystem. The entry doc you are reading follows the same shared governance as every other assistant integration in this repository; this section is generated from one shared canonical body and is identical across the vendor entry docs. Entry scope (which surfaces to stay in first) is defined once in this document's preamble and is not repeated here.
+This repository is part of the AIS CR ecosystem.
+This entry doc follows the same shared governance as every other assistant integration; this section is generated from one shared canonical body and is identical across the vendor entry docs.
+Entry scope is defined once in this document's preamble and is not repeated here.
 
 ### Cross-vendor map
 
-Each product loads its own configuration tree; workflow slugs stay aligned across them:
-
-| Product | Entry surfaces |
-| --- | --- |
-| Cursor | `.cursor/` (rules, skills, agents) |
-| Claude Code | `CLAUDE.md` + `.claude/` |
-| Codex | `CODEX.md` + `.codex/` |
-| Gemini | `GEMINI.md` + `.gemini/` |
-| GitHub Copilot | `.github/copilot-instructions.md` + `.github/` (instructions, prompts, skills) |
-
-Cross into another vendor tree only for explicit parity checks, generator work, or governance maintenance.
+Each product loads its own configuration tree; workflow slugs stay aligned across them (the per-product entry docs — `CLAUDE.md`, `CODEX.md`, `GEMINI.md`, `.github/copilot-instructions.md` — and the config-root map are owned by the `aiscr-ecosystem-governance` rule).
 
 ### Shared governance kernel
 
-`AGENTS.md` is the governance authority for AI agents in this repository; `CONTRIBUTING.md` owns the branch and PR workflow. The generated `agents-governance-kernel` block in `AGENTS.md` carries the current cross-vendor minimums for planning and approval, usage and model logging, script/sync/git approval, workspace and sibling boundaries, and hub authority.
+`AGENTS.md` is the governance authority for AI agents in this repository, and `CONTRIBUTING.md` owns the branch and PR workflow.
+The generated `agents-governance-kernel` block in `AGENTS.md` carries the cross-vendor minimums for planning and approval, usage and model logging, script/sync/git approval, workspace and sibling boundaries, and hub authority.
 
-The full rule bodies are delivered per assistant; the vendor section below says where this product reads them. This digest points to the shared kernel instead of restating it.
+The full rule bodies are delivered per assistant; the vendor section below says where this product reads them.
 
 ### Where workflows live
 
-Standard `aiscr-*` workflows are authored at the `aiscr-management` hub and delivered per repository enrollment as per-vendor skill trees with matching slugs. Do not assume every workflow is mirrored in this repository; when an ecosystem-wide workflow (config sync, parity validation, registry maintenance) is needed, use the management hub.
+Standard `aiscr-*` workflows are authored at the `aiscr-management` hub and delivered per repository enrollment as per-vendor skill trees with matching slugs.
+Do not assume every workflow is mirrored in this repository; use the management hub for ecosystem-wide workflow needs.
 
 ### OpenSpec
 
-- `openspec/specs/` stores persistent capability specs, `openspec/changes/` stores change-scoped artifacts, and `openspec/config.yaml` selects the repo schema.
-- Mode-transfer gating iron law: `NEVER TREAT ARTIFACT COMPLETION AS IMPLICIT APPROVAL TO IMPLEMENT.` The explore → plan → implement boundaries each need fresh, phase-local human approval; after planning artifacts are complete, stop and offer apply instead of continuing silently.
+- Whether this repository uses OpenSpec at all is its declared **posture** — the adoption ladder, work-kind triggers, and reading discipline are owned by the `aiscr-openspec-posture` rule, which is BASELINE-delivered alongside this digest.
+- Mode-transfer gating iron law: `NEVER TREAT ARTIFACT COMPLETION AS IMPLICIT APPROVAL TO IMPLEMENT.` The explore → plan → implement boundaries each need fresh, phase-local human approval; the full procedure, including the hard stop after planning, is owned by the `aiscr-planning-core` rule, which is BASELINE-delivered alongside this digest.
 - Validate OpenSpec artifacts after editing them (`npm run openspec:validate` where available).
 
 ### Secrets and boundaries
 
 - Do not commit secrets, tokens, or API keys; do not paste production data or real PII into prompts; abstract or redact when demonstrating behaviour.
-- Stay inside the opened workspace; out-of-workspace access needs an explicit user request and a plain statement of impact.
-- Do not weaken sandbox, permission, or other safety-related assistant configuration unless the user strictly orders it.
+  Redact secret-bearing logs and config excerpts **before** they enter AI context or storage, not afterwards, and check a generated artifact for secrets before committing it.
+- Use placeholders for internal infrastructure detail — `https://internal.example/...` and equivalents — unless the real value is explicitly needed and allowed.
+- Automation must not send sensitive content to an external service silently: that path needs explicit intent, a safeguard, and the user's approval before transmission.
 
 <!-- end:generated:vendor-digest-core -->
 
@@ -113,16 +108,28 @@ Standard `aiscr-*` workflows are authored at the `aiscr-management` hub and deli
 
 ### Gemini CLI ([geminicli.com/docs](https://geminicli.com/docs/))
 
-**Project context:** root `GEMINI.md` is the default project context file (hierarchical lookup toward the `.git` boundary; override via `context.fileName` in project `settings.json`). **Governance context:** `.gemini/context/<stem>.md` — delivered rule readers loaded via `context.includeDirectories` in `.gemini/settings.json`. **Project config:** `.gemini/settings.json` (tools, sandbox, model, hooks, MCP, context). **Skills:** `.gemini/skills/` with `SKILL.md` stubs; OpenSpec entry points are delivered under `.gemini/skills/openspec-*/` and `.gemini/commands/opsx/` where enrolled. **Hooks:** configured under `hooks` in `settings.json` ([Hooks](https://geminicli.com/docs/hooks/)). **Subagents:** project custom agents as Markdown with YAML frontmatter under `.gemini/agents/*.md` ([Subagents](https://geminicli.com/docs/core/subagents/)). **MCP:** `mcpServers` in `settings.json`. **Exclusions:** `.geminiignore`. **User-level config:** `~/.gemini/settings.json`. **Source:** [Gemini CLI on GitHub](https://github.com/google-gemini/gemini-cli).
+**Project context:** root `GEMINI.md` is the default project context file (hierarchical lookup toward the `.git` boundary; override via `context.fileName` in project `settings.json`).
+**Governance context:** `.gemini/context/<stem>.md` — delivered rule readers.
+Loading them takes **both** settings keys: `context.includeDirectories` registers the directory as a trusted root, and `context.fileName` must name each reader; the generator emits both.
+**Project config:** `.gemini/settings.json` (tools, sandbox, model, hooks, MCP, context).
+**Skills:** the shared `.agents/skills/` tree, resolved ahead of a product-local one; OpenSpec entry points are delivered there and under `.gemini/commands/opsx/` where enrolled.
+**Hooks:** under `hooks` in `settings.json` ([Hooks](https://geminicli.com/docs/hooks/)).
+**Subagents:** custom agents as Markdown with YAML frontmatter under `.gemini/agents/*.md` ([Subagents](https://geminicli.com/docs/core/subagents/)).
+**MCP:** `mcpServers` in `settings.json`.
+**Exclusions:** the CLI honours an optional repository-root ignore file this repository does not commit — add one per the Gemini CLI docs if needed.
+**User-level config:** `~/.gemini/settings.json`.
+**Source:** [Gemini CLI on GitHub](https://github.com/google-gemini/gemini-cli).
 
 ### Gemini Code Assist ([developers.google.com/gemini-code-assist](https://developers.google.com/gemini-code-assist/docs/overview))
 
-IDE assistance and a GitHub PR review service. **PR reviews:** trigger with `/gemini` in PR comments. **Review rules:** `.gemini/styleguide.md` (natural-language guidance) is the committed, delivered review customization. Code Assist review settings (severity, max comments, PR events, drafts, ignore patterns) and IDE exclusions live in optional Code Assist files this repository does not commit — defaults apply until a maintainer adds them per Google's docs: [Review repo code](https://developers.google.com/gemini-code-assist/docs/review-repo-code) and [Customize repo review](https://developers.google.com/gemini-code-assist/docs/customize-repo-review).
+IDE assistance and a GitHub PR review service.
+**PR reviews:** trigger with `/gemini` in PR comments.
+**Review rules:** Code Assist reads a natural-language styleguide, review settings (severity, max comments, PR events, drafts, ignore patterns), and IDE exclusions from optional files this repository does not commit — defaults apply until a maintainer adds them: [Review repo code](https://developers.google.com/gemini-code-assist/docs/review-repo-code), [Customize repo review](https://developers.google.com/gemini-code-assist/docs/customize-repo-review).
 
 ### Governance load order (Gemini)
 
 1. `AGENTS.md`, `CONTRIBUTING.md`
 2. `GEMINI.md` (this file)
-3. Topic-specific delivered rule readers under `.gemini/context/`
+3. The delivered rule readers under `.gemini/context/` — named in `settings.json` `context.fileName`, so every reader is in context rather than selected per topic
 
 <!-- end:generated:vendor-digest-gemini -->

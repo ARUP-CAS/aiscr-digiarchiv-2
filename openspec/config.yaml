@@ -3,12 +3,15 @@ schema: spec-driven
 context: |
   Repository: aiscr-digiarchiv-2 - Digitalni archiv AMCR, the digital archive
   and presentation layer for archaeological data within the AIS CR ecosystem.
-  Tech stack: Java 17 / Spring backend under web/src/main/java/, Angular
-  frontend under web/src/main/ng/ (web/src/main/webapp/ is NOT the frontend),
-  XSLT transformations via Saxon 8.7 (XSLT 2.0 only), 14 Apache Solr
-  configsets under solr/, Maven builds (web/pom.xml and
+  OpenSpec posture: change-tracked
+  Change-scoped planning artifacts live here; no durable capability specs are maintained.
+  Tech stack: Java 21 / Jakarta Servlet backend under web/src/main/java/,
+  Angular frontend under web/src/main/ng/ (web/src/main/webapp/ is NOT the
+  frontend), XSLT transformations via Saxon 8.7 (XSLT 2.0 only), Apache Solr
+  with solr-solrj 10.0.0, Maven builds (web/pom.xml and
   ThumbnailsGenerator/pom.xml). Docker/infrastructure files are maintained
-  externally; no automated tests exist (web/src/test/ is absent).
+  externally; no Java/Maven tests (web/src/test/ is absent), while Angular
+  *.spec.ts test sources are present.
   Governance: AGENTS.md is the assistant entrypoint, CLAUDE.md narrows
   Claude Code usage, CONTRIBUTING.md owns the human contribution workflow
   (branch from dev, PR to dev; merging to main is human-only).
@@ -33,5 +36,5 @@ rules:
     - Flag changes that can affect Solr schemas, shared APIs, or upstream AMCR compatibility.
   tasks:
     - Include OpenSpec validation after artifact edits.
-    - Include a dry-run sync check before any future sync apply.
+    - Include inspect and plan checks before any future sync apply.
     - Include usage-log close-out for governance work.
