@@ -1,22 +1,11 @@
 # .agents/config
 
-Konfigurační soubory a perzistentní stav pro dlouhodobý technický review.
+Configuration and persistent state for the repository's codebase-review workflow.
 
-## Soubory
+## Files
 
-- `review_config.yaml`
-  - definice tasků (T01–T11), jejich priority a rozsahu,
-  - technický stack, adresáře v rozsahu, vendored výjimky,
-  - limity velikosti tasků (počty řádků/souborů).
+- [`review_config.toml`](review_config.toml) declares the repository's technology stack, review tasks, ordering, scope, exclusions, and relevant limits. It is the owning source for these facts; reference it rather than duplicating them in prompts or other documents.
+- `review_cache.json` is the persistent review-state store. It records task progress, review timing, file hashes, and latest-review evidence as managed by the review engine.
 
-- `review_cache.json`
-  - stav jednotlivých tasků (`pending`, `done`, `split`, `blocked`…),
-  - poslední čas aktualizace,
-  - hash souborů a informace o tom, kterým taskem byly naposledy revidovány.
+The current engine is [`../scripts/codebase_review.py`](../scripts/codebase_review.py), driven by [`aiscr-review-codebase`](../skills/aiscr-review-codebase/SKILL.md). Use the approved workflow to update configuration and review state; an out-of-date cache entry is evidence to investigate, not a reason to reset unrelated history.
 
-## Poznámky
-
-- `review_config.yaml` je kanonickým zdrojem konfigurace — hodnoty z něj **neopisovat**
-  do promptů ani jiných souborů, ale pouze odkazovat.
-- `review_cache.json` se přepisuje automaticky agenty; ruční úpravy pouze ve výjimečných
-  případech a po dohodě týmu.

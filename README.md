@@ -4,6 +4,10 @@
 
 [ENGLISH VERSION HERE](README_en.md)
 
+```text
+Language entry scope: Agents MUST use README_en.md for operational instructions. This README.md is human-facing Czech only; align with the English twin when meaning changes.
+```
+
 Digitální archiv Archeologické mapy České republiky (AMČR) je webová aplikace určená k prohlížení informací o archeologických výzkumech, lokalitách a nálezech, provozovaná Archeologickými ústavy AV ČR v Praze a Brně.  
 Archivy těchto institucí obsahují dokumentaci terénních archeologických výzkumů na území ČR od r. 1919 do současnosti.  
 Databáze AMČR a související dokumenty tvoří největší soubor archeologických dat dotýkajících se Česka.
@@ -28,13 +32,15 @@ Digitální archiv AMČR je součástí Archeologického informačního systému
 - **Uživatelská nápověda:** https://amcr-help.aiscr.cz/
 - **AIS CR:** https://www.aiscr.cz/
 
+**Externí API:** Tato aplikace poskytuje File API a backend pro OAI-PMH; spotřebovává data a uživatele z AMČR (amcr.aiscr.cz). Kanonická dokumentace všech AMČR API (OAI-PMH, File API, Auth API) je v repozitáři [aiscr-api-home](https://github.com/ARUP-CAS/aiscr-api-home) a na https://api.aiscr.cz/ — nepřepisujte definice endpointů zde.
+
 ---
 
 ## Technologický stack
 
 | Vrstva | Technologie |
 | --- | --- |
-| Backend | Java, Spring |
+| Backend | Java / Jakarta Servlet |
 | Vyhledávání | Apache Solr |
 | Datové transformace | XSLT 2.0 (Saxon 8.7) |
 | Frontend | Angular 21 (TypeScript, SCSS) |
@@ -69,17 +75,17 @@ aiscr-digiarchiv-2/
 
 ### Prerekvizity
 
-- Java 17+
+- Java 21+
 - Maven 3.8+
 - Node.js 18+ a npm (pro Angular frontend)
 
 ### Spuštění lokálně
 
 ```bash
-# 1. Sestavit a spustit webovou aplikaci
+# 1. Sestavit webovou aplikaci (WAR)
 cd web
 mvn clean package
-mvn spring-boot:run
+# Výstupní WAR nasaďte do servlet kontejneru podle lokální infrastruktury
 
 # 2. Sestavit frontend (je-li potřeba odděleně)
 cd src/main/ng
@@ -90,7 +96,7 @@ npm run build
 ### Konfigurace prostředí
 
 Citlivé hodnoty (API klíče, hesla, connection strings) se **nikdy necommitují**.  
-Použijte proměnné prostředí nebo `.env` soubor (viz `.gitignore`).
+Použijte proměnné prostředí pro citlivé hodnoty.
 
 ---
 

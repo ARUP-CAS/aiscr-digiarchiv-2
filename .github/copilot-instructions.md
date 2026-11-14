@@ -1,0 +1,118 @@
+# AIS CR — repository guidance for GitHub Copilot
+
+This file is the **repository digest for GitHub Copilot** in `aiscr-digiarchiv-2`. It
+is **committed directly** in this repository. The canonical reference and the
+authoring source live in the `aiscr-management` hub; the assistant surfaces in
+this repo are delivered from that hub by config sync.
+
+<!-- aiscr:entry-scope -->
+
+## Entry scope
+
+- Stay in this Copilot surface first; do not open parallel vendor trees by default just in case.
+- Use `.github/copilot-instructions.md` plus the shared governance docs below before touching `.cursor/`, `.claude/`, `.codex/`, or `.gemini/`.
+- Cross into another vendor tree only for explicit parity checks or governance maintenance.
+- When a directory has both `README.md` and `README_en.md`, prefer the English counterpart for operational reading.
+
+## Vendor-specific entry points (read this first)
+
+AIS CR mirrors the same **`aiscr-*` workflow slugs** into **separate config roots**, because **each product loads its own tree** — there is no single universal skills file:
+
+| Product / runtime | Typical entry in this repo |
+| --- | --- |
+| **GitHub Copilot** | **This file** for governance context, plus **`.agents/skills/aiscr-*/SKILL.md`** self-contained Agent Skills (Copilot CLI + cloud agent) for the `aiscr-*` workflows. |
+| **Cursor** | `.claude/skills/`, `.cursor/rules/` |
+| **Claude Code** | `.claude/skills/`, `.claude/rules/` |
+| **Codex** | `.agents/skills/`, `CODEX.md`, `.codex/agents/` |
+| **Gemini** | `.agents/skills/`, `.gemini/context/`, `GEMINI.md` |
+
+So this digest **does not substitute** for the mirrored `skills/` trees when you work in those products — open the matching tree there. When you work **in Copilot**, use this digest and the shared kernel below.
+
+## Shared kernel pointers
+
+- **`AGENTS.md`** — scope, agent behaviour, and the generated AIS CR governance kernel.
+- **`CONTRIBUTING.md`** — branch model (`dev` → `main`), commit format, testing.
+- **`CLAUDE.md`**, **`CODEX.md`**, **`GEMINI.md`** — per-vendor entry docs into the same shared governance.
+- **Delivered rule readers** — `.github/instructions/`, `.claude/rules/`, `.cursor/rules/`, and `.gemini/context/` carry the generated rule readers for this repo (for example `aiscr-ecosystem-governance`, `aiscr-workspace-boundary-safety`, `aiscr-model-logging`, `aiscr-quality-first-execution`). The canonical bodies are authored at the `aiscr-management` hub and delivered here by config sync.
+
+Use the generated kernel in `AGENTS.md` and Copilot instruction readers under
+`.github/instructions/` for the rule bodies; this digest only routes to them.
+
+## Enrolled workflow discovery
+
+- **Workflow skills (this repo's enrolled set):** delivered as `.agents/skills/aiscr-*/SKILL.md` for Copilot and as matching skills under `.claude/skills/`.
+  Enrolled here: `aiscr-review-codebase`, `aiscr-review-prod-ui`, `aiscr-write-incident-postmortem`, `aiscr-write-release-notes`, `aiscr-review-api-doc`, `aiscr-review-pr`, `aiscr-survey`, `aiscr-analyse-correctness`, `aiscr-analyse-security`, `aiscr-analyse-integration`, `aiscr-verify`, `aiscr-analyse-performance`, `aiscr-analyse-duplication`, `aiscr-analyse-dead-code`, `aiscr-analyse-deploy-safety`, `aiscr-setup-workstation-safety`, `aiscr-plan-issue`, `aiscr-plan-from-issue`, `openspec-commands`, `aiscr-investigate`, and `aiscr-dispatch-library`.
+- **Topic-to-tool routing:** `.agents/canonical_configs/references/governance_by_tool.md`.
+
+## Local OpenSpec entry points
+
+OpenSpec emits its `openspec-*` skills into the shared `.agents/skills/` tree,
+which Copilot reads directly. Validate OpenSpec edits with
+`npm run openspec:validate`; shared OpenSpec gating is in the generated
+orientation below and the delivered `aiscr-planning-core` reader.
+
+## Ecosystem-wide workflows (hub)
+
+Cross-repo config sync, tool-parity / manifest maintenance, and registry changes are **run from the `aiscr-management` hub** (a local clone next to this repo, or via GitHub / `gh`), not from this repository. Sibling delivery uses `sibling_governance_delivery.py inspect → plan → apply --approve`. This digest does not replace the per-assistant skill surfaces enrolled for this repository.
+
+## Safety pointers
+
+Use `AGENTS.md` and the delivered `aiscr-workspace-boundary-safety` reader for workspace and secret-handling rules, and the *Security and privacy for AI usage* section in `AGENTS.md` for redaction, production-data, and external-transmission safeguards.
+
+## Adding or renaming a standard `aiscr-` workflow
+
+Standard `aiscr-*` workflows are authored and registered at the `aiscr-management` hub and delivered here by sync. When a workflow is added or renamed and this repo is enrolled in it, the matching `.agents/skills/aiscr-<name>/SKILL.md` and `.claude/skills/aiscr-<name>/SKILL.md` are delivered together, and this digest is refreshed so the new slug is discoverable. Do not hand-create workflow skills in this sibling; propose the change at the hub and let sync deliver it. The cross-assistant registration checklist lives in the delivered `aiscr-ecosystem-governance` reader.
+
+<!-- begin:generated:vendor-digest-core -->
+<!-- generated by generate_governance_rules.py — do not edit manually -->
+
+## AIS CR shared assistant orientation
+
+This repository is part of the AIS CR ecosystem.
+This entry doc follows the same shared governance as every other assistant integration; this section is generated from one shared canonical body and is identical across the vendor entry docs.
+Entry scope is defined once in this document's preamble and is not repeated here.
+
+### Cross-vendor map
+
+Each product loads its own configuration tree; workflow slugs stay aligned across them (the per-product entry docs — `CLAUDE.md`, `CODEX.md`, `GEMINI.md`, `.github/copilot-instructions.md` — and the config-root map are owned by the `aiscr-ecosystem-governance` rule).
+
+### Shared governance kernel
+
+`AGENTS.md` is the governance authority for AI agents in this repository, and `CONTRIBUTING.md` owns the branch and PR workflow.
+The generated `agents-governance-kernel` block in `AGENTS.md` carries the cross-vendor minimums for planning and approval, usage and model logging, script/sync/git approval, workspace and sibling boundaries, and hub authority.
+
+The full rule bodies are delivered per assistant; the vendor section below says where this product reads them.
+
+### Where workflows live
+
+Standard `aiscr-*` workflows are authored at the `aiscr-management` hub and delivered per repository enrollment as per-vendor skill trees with matching slugs.
+Do not assume every workflow is mirrored in this repository; use the management hub for ecosystem-wide workflow needs.
+
+### OpenSpec
+
+- Whether this repository uses OpenSpec at all is its declared **posture** — the adoption ladder, work-kind triggers, and reading discipline are owned by the `aiscr-openspec-posture` rule, which is BASELINE-delivered alongside this digest.
+- Mode-transfer gating iron law: `NEVER TREAT ARTIFACT COMPLETION AS IMPLICIT APPROVAL TO IMPLEMENT.` The explore → plan → implement boundaries each need fresh, phase-local human approval; the full procedure, including the hard stop after planning, is owned by the `aiscr-planning-core` rule, which is BASELINE-delivered alongside this digest.
+- Validate OpenSpec artifacts after editing them (`npm run openspec:validate` where available).
+
+### Secrets and boundaries
+
+- Do not commit secrets, tokens, or API keys; do not paste production data or real PII into prompts; abstract or redact when demonstrating behaviour.
+  Redact secret-bearing logs and config excerpts **before** they enter AI context or storage, not afterwards, and check a generated artifact for secrets before committing it.
+- Use placeholders for internal infrastructure detail — `https://internal.example/...` and equivalents — unless the real value is explicitly needed and allowed.
+- Automation must not send sensitive content to an external service silently: that path needs explicit intent, a safeguard, and the user's approval before transmission.
+
+<!-- end:generated:vendor-digest-core -->
+
+<!-- begin:generated:vendor-digest-copilot -->
+<!-- generated by generate_governance_rules.py — do not edit manually -->
+
+## GitHub Copilot in this repository
+
+- **Instructions:** the generated instruction files under `.github/instructions/*.instructions.md` are split one per governance topic but each declares `applyTo: "**/*"` — the split is an authoring convenience, not selective loading.
+  This digest is the Copilot entry point for governance context.
+- **Skills:** `aiscr-*` workflows are delivered under `.agents/skills/aiscr-*/SKILL.md`, which the Copilot CLI and the cloud coding agent read at repository scope (gated by manifest locus).
+  OpenSpec emits its `openspec-*` skills into the shared `.agents/skills/` tree, which Copilot reads directly; the CLI emits no prompt files in its current major version.
+  Copilot selects skills autonomously from their descriptions and documents no field that disables that, so the guard on this surface is each body's own Iron Laws and approval gates rather than frontmatter.
+- **Sibling-owned content:** repo identity, repo-specific notes, and the enrolled-workflow list live outside the generated blocks of this digest and are preserved on refresh.
+
+<!-- end:generated:vendor-digest-copilot -->

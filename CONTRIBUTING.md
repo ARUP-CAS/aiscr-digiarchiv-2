@@ -122,7 +122,7 @@ Příklady:
 ### XSLT
 
 - Každý soubor musí mít **hlavičkový komentář** s popisem účelu a vstupním namespace.
-- XSLT 2.0 / 3.0 (Saxon) — nevracejte se k XSLT 1.0 vzorům.
+- XSLT 2.0 (Saxon 8.7) — XSLT 3.0 není podporováno; nevracejte se k XSLT 1.0 vzorům.
 - Namespace prefixy musí být konzistentní napříč všemi soubory.
 - Každá změna musí být validována proti vzorovým AMČR API datům.
 
@@ -182,7 +182,7 @@ Sledujte changelog AMČR a po každé API změně upstream otestujte transformac
 ### Bezpečnost
 
 - Nikdy necommitujte přihlašovací údaje, API klíče ani hesla.
-- Nové REST endpointy musí mít příslušné Spring Security anotace.
+- Nové REST endpointy musí mít odpovídající zabezpečení ve vrstvě Jakarta Servlet (autentizace a autorizace).
 - Uživatelský vstup validujte před předáním do XSLT i Solr dotazů.
 
 ---
@@ -197,11 +197,21 @@ Sledujte changelog AMČR a po každé API změně upstream otestujte transformac
   v `.agents/`, pokud si odporují.
 - `.agents/` — konfigurace, prompty a výstupy analytických agentů; generované soubory
   (analysis/report) se needitují ručně.
-- `.agents/config/review_config.yaml` — **zdroj pravdy** pro konfiguraci review systému;
+- `.agents/config/review_config.toml` — **zdroj pravdy** pro konfiguraci review systému;
   embedded příklady v promtech se mu musí přizpůsobit.
 
 Pokud se informace o stejném tématu v těchto souborech liší, aktualizujte nejprve
 `CONTRIBUTING.md` / `AGENTS.md` a následně upravte ostatní dokumenty, aby byly v souladu.
+
+---
+
+## OpenSpec workflow
+
+Repozitář používá OpenSpec v režimu **change-tracked**: změnové plánovací artefakty patří do `openspec/changes/`; trvalé capability specifikace zatím nejsou vedeny. Schéma je `spec-driven`; repozitářový kontext je v `openspec/config.yaml`.
+
+- Každý proposal musí rozlišovat, zda jde o governance, chování aplikace, nebo obojí; oddělujte governance/bootstrap od aplikačních změn.
+- Přechody explore → plan → implement → archive vyžadují nové schválení v dané fázi podle `AGENTS.md` a dodaného pravidla `aiscr-planning-core`. Dokončené planning artefakty samy o sobě nejsou souhlas s implementací.
+- Po úpravách OpenSpec artefaktů spusťte `npm run openspec:validate`. Příkaz ověřuje existující položky; prázdný korpus není důkaz validace obsahu.
 
 ---
 
@@ -210,18 +220,18 @@ Pokud se informace o stejném tématu v těchto souborech liší, aktualizujte n
 Větve generované AI agenty (`agents/{agent_name}/<topic>`) se větvují od `dev`  
 a mergují do `dev` výhradně po lidském review.
 
-Podrobnosti viz `AGENTS.md` a `.agents/prompts/review_codebase.md`.
+Podrobnosti viz `AGENTS.md` a kanonické workflow `aiscr-review-codebase`.
 
 ### Jak spustit review session
 
 Otevřete nový kontext AI agenta a jako první zprávu vložte:
 
 ```
-Přečti .agents/prompts/review_codebase.md a pokračuj v review.
+Spusť workflow aiscr-review-codebase (režim full nebo update) a pokračuj v review.
 ```
 
 Agent si načte `AGENTS.md`, stav z `.agents/config/review_cache.json` a zahájí
-další čekající task dle registru v `.agents/prompts/review_codebase.md`.
+další čekající task podle kanonického workflow `aiscr-review-codebase` (dodaného přes skill surfaces `.cursor/` / `.claude/` / `.codex/` / `.gemini/`).
 
 ---
 

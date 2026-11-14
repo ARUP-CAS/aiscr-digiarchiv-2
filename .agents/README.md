@@ -1,46 +1,21 @@
 # .agents/
 
-Konfigurace, prompty a výstupy pro AI coding agenty.
-Pravidla a governance viz [AGENTS.md](../AGENTS.md).
+Repository-specific review state and shared tooling for AI-assisted work. Governance starts with [AGENTS.md](../AGENTS.md), and the human contribution workflow is defined in [CONTRIBUTING.md](../CONTRIBUTING.md).
 
-## Struktura
+## Structure
 
-```plain
-.agents/
-  prompts/
-    review_codebase.md          — Hlavní prompt pro review session (plný audit T01–T11)
-    review_update.md            — Follow-up prompt pro inkrementální aktualizaci auditu (U01–U06)
-    audit_doc_hygiene.md        — Portable audit: duplikace, drift, governance (any repo)
-    project_conventions.md      — Shrnutí konvencí pro agenty (odkaz z AGENTS.md)
-    setup_dev.md                — Checklist vývojového prostředí a onboarding
-    hooks_reference.md          — Doporučené hooks (pro lokální konfiguraci)
-    prompt_evolution/           — Návrhy na vylepšení promptu z jednotlivých sessions
-  config/
-    review_config.yaml          — Konfigurace review tasků, tech stack, adresáře
-    review_cache.json           — Perzistentní stav a průběh review sessions
-  analysis/
-    repository_map.json         — Strukturální mapa repozitáře (T01)
-    dependency_graph.json       — Graf interních a externích závislostí (T02)
-    *_analysis.json             — Výstupy analýz per-task (Solr, XSLT, Docker, security, …)
-  reports/
-    review_reports/             — Reporty z jednotlivých tasků (<task_id>.md); final_audit.md obsahuje Changelog
-    bugs.md                     — Evidence nalezených chyb
-    refactoring_backlog.md      — Backlog strukturálních vylepšení
-    automation_recommendations.md — Doporučení pro Claude Code / Cursor automations
-    doc_hygiene_audit_2026-03-11.md — Výsledek auditu dokumentační hygieny
-  scripts/
-    review_tools.py             — Repo-agnostic review automation (hash, cross-validate, coverage-gaps, id-inventory, lint-artifacts, prompt-evolution, repo-structure, status)
-```
+- `analysis/` — machine-readable findings from configured codebase-review tasks, including repository maps and dependency graphs.
+- `config/` — review configuration and persistent review state.
+- `reports/` — review findings, task reports, consolidated audits, and other durable evidence.
+- `scripts/` — the canonical review engine, GitHub review helpers, and workstation-safety tooling.
+- `canonical_configs/` — references and document/workstation templates selected for delivery to this repository.
+- `skills/` — repository-local delivered workflow surfaces, including [`aiscr-review-codebase`](skills/aiscr-review-codebase/SKILL.md).
 
-## Kanonický zdroj
+## Authority and ownership
 
-- **Governance:** `AGENTS.md`
-- **Konfigurační hodnoty:** `config/review_config.yaml`
-- **Stav review:** `config/review_cache.json`
-- **Task instrukce:** `prompts/review_codebase.md`
-- **Inkrementální update:** `prompts/review_update.md`
-- **Doc hygiene audit:** `prompts/audit_doc_hygiene.md`
-- **Konvence / setup / hooks:** `prompts/project_conventions.md`, `prompts/setup_dev.md`, `prompts/hooks_reference.md`
-- **Automation doporučení:** `reports/automation_recommendations.md`
+- `config/review_config.toml` owns review task definitions, scope, paths, and thresholds. `scripts/codebase_review.py` is the corresponding engine, and `config/review_cache.json` records its persistent progress and hashes.
+- Delivered workflow bodies, helper libraries, references, and templates are governed by their upstream sources. Do not patch delivered copies as though they were repository-native code.
+- Repository-owned configuration, review state, analytical evidence, and operational guidance remain local and must not be treated as another hub mirror.
+- Documentation-hygiene and related ecosystem-wide audits are requested from the management hub rather than maintained as duplicate local prompts and discovery helpers.
+- Preserve analytical history and review provenance; do not erase cache or report state merely to make the current layout look cleaner.
 
-Viz také [CONTRIBUTING.md](../CONTRIBUTING.md) § Dokumentační governance.
