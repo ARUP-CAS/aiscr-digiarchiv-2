@@ -1,4 +1,4 @@
-REM delivery-version: 713f5616b3faf0de584fb8fc820fb9bfa4233451 2026-11-14T23:05:33+01:00
+REM delivery-version: 00e795f3863999e297a997632377fb33415531a8 2026-11-15T00:18:09+01:00
 
 @echo off
 rem GitHub Copilot CLI wrapper carrying the AIS CR irreversible-operation floor.
