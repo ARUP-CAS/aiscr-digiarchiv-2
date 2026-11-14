@@ -46,6 +46,7 @@ public class AkceSearcher implements EntitySearcher {
           doc.remove("az_chranene_udaje");
           doc.remove("akce_chranene_udaje"); 
       } 
+      doc.remove("historie"); 
     } 
 
     @Override

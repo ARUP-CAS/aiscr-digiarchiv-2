@@ -57,6 +57,7 @@ export class AkceComponent extends Entity {
     if (this.isChild() || (!this.state.isMapaCollapsed && !this.mapDetail())) {
       return;
     }
+    this.getExtZdroj();
     this.service.checkRelations(this._result().ident_cely).subscribe((res: any) => {
       this._result.update(r => ({
         ...r,

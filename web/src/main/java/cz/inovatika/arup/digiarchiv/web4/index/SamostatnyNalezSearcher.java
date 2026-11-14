@@ -113,6 +113,8 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
         fields.add("samostatny_nalez_lokalizace:samostatny_nalez_lokalizace_" + pristupnost);
         fields.add("loc_rpt:loc_rpt_" + pristupnost);
         fields.add("loc:loc_rpt_" + pristupnost);
+        
+        // Pridame pro hodnoceni pristupnost. Z vysledku vzdy odstranime
         fields.add("historie:[json]");
 
         String[] ret = fields.toArray(new String[0]);
@@ -156,6 +158,7 @@ public class SamostatnyNalezSearcher implements EntitySearcher {
                 doc.remove("f_katastr");
                 doc.remove("samostatny_nalez_katastr_" + pristupnost);
             }
+            doc.remove("historie"); 
         }
     }
     

@@ -66,6 +66,7 @@ public class ProjektSearcher implements EntitySearcher {
       doc.remove("loc_rpt");
       doc.remove("loc");
     }
+    doc.remove("historie"); 
   }
 
   @Override

@@ -52,6 +52,7 @@ public class OAIRequest {
 
     private static final Map<String, Transformer> dcTransformers = new HashMap<>();
     private static Transformer forbiddenTransformer;
+    private static Transformer historieKATTransformer;
     private static Transformer emptyTransformer;
     private static final Map<String, Transformer> versionTransformers = new HashMap<>();
 
@@ -82,6 +83,16 @@ public class OAIRequest {
             forbiddenTransformer.setOutputProperty("omit-xml-declaration", "yes");
         }
         return forbiddenTransformer;
+    }
+
+    private static Transformer getHistorieKATTransformer() throws TransformerConfigurationException {
+        if (historieKATTransformer == null) {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Source xslt = new StreamSource(Options.getInstance().getHistorieKATXslt());
+            historieKATTransformer = factory.newTransformer(xslt);
+            historieKATTransformer.setOutputProperty("omit-xml-declaration", "yes");
+        }
+        return historieKATTransformer;
     }
 
     private static Transformer getVersionTransformer(String versionXslt) throws TransformerConfigurationException {
@@ -345,7 +356,7 @@ public class OAIRequest {
             SolrQuery query = new SolrQuery("*")
                     .setSort(SolrQuery.SortClause.create(conf.getString("orderField"), conf.getString("orderDirection")))
                     .addSort(SolrQuery.SortClause.create("ident_cely", "asc"))
-                    // .addFilterQuery("pristupnost:c")
+                    //.addFilterQuery("pristupnost:A")
                     // .addFilterQuery("stav:1")
                     .setRows(conf.getInt("recordsPerPage"));
 
@@ -612,6 +623,14 @@ public class OAIRequest {
                 stav = ((Number) doc.getFieldValue("stav")).longValue();
             }
             String ret = xml;
+            if (ret.contains("<amcr:typ_zmeny>KAT</amcr:typ_zmeny>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
+              // https://github.com/ARUP-CAS/aiscr-digiarchiv-2/issues/1163
+              try {
+                ret = transformHistorieKat(ret);
+              } catch (TransformerException ex) {
+                  Logger.getLogger(OAIRequest.class.getName()).log(Level.SEVERE, "", ex);
+              }
+            }
             if (ret.contains("<amcr:oznamovatel>")
                     && ("C".compareToIgnoreCase(userPristupnost) > 0
                     || // A-B
@@ -630,7 +649,6 @@ public class OAIRequest {
                 }
                 ret = ret.replaceAll("####", "amcr:oznamovatel");
             }
-
             if (ret.contains("<amcr:chranene_udaje>") && docPristupnost.compareToIgnoreCase(userPristupnost) > 0) {
 
                 while (ret.contains("<amcr:chranene_udaje>")) {
@@ -663,6 +681,14 @@ public class OAIRequest {
         get404Transformer().transform(text, new StreamResult(sw));
         String e404 = sw.toString();
         return e404;
+    }
+
+    private static String transformHistorieKat(String xml) throws TransformerException {
+
+        Source text = new StreamSource(new StringReader(xml));
+        StringWriter sw = new StringWriter();
+        getHistorieKATTransformer().transform(text, new StreamResult(sw));
+        return sw.toString();
     }
 
     private static boolean shoulTransformVersion(String version, String xmlns_amcr) { 

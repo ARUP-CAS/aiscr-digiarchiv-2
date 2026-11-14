@@ -229,6 +229,17 @@ public class Options {
       } 
   }
   
+  public File getHistorieKATXslt() {
+      String path = InitServlet.CONFIG_DIR + File.separator + "historie_kat.xslt";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+          return f;
+      } else {
+          File fdef = FileUtils.toFile(Options.class.getResource("historie_kat.xslt"));
+          return fdef;
+      }
+  }
+  
   public File getVersionXslt(String version) {
       String file = InitServlet.asSafePath(version) + ".xslt";
 //      switch (version) {
@@ -270,5 +281,16 @@ public class Options {
           File fdef = FileUtils.toFile(Options.class.getResource("metadata_DC.xslt"));
           return fdef;
       }
+  }
+  
+  public File getBrowserXslt() {
+      String path = InitServlet.CONFIG_DIR + File.separator + "oai2.xsl";
+      File f = new File(path);
+      if (f.exists() && f.canRead()) {
+          return f;
+      } else {
+          File fdef = FileUtils.toFile(Options.class.getResource("oai2.xsl"));
+          return fdef;
+      } 
   }
 }
