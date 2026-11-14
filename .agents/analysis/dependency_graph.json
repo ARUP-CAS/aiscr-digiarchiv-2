@@ -2,13 +2,13 @@
   "_meta": {
     "task_id": "T02",
     "generated_at": "2026-03-08",
-    "description": "Graf interních a externích závislostí (Maven + npm) — Digitální archiv AMČR"
+    "description": "Graph of internal and external dependencies (Maven + npm) — Digitální archiv AMČR"
   },
 
   "java_packages": {
     "root": {
       "package": "cz.inovatika.arup.digiarchiv.web4",
-      "description": "Hlavní balíček — servlety, konfigurace, pomocné třídy",
+      "description": "Main package — servlets, configuration, helper classes",
       "files": [
         "ApiServlet.java", "AppState.java", "AuthService.java",
         "ConfigServlet.java", "FavoritesServlet.java", "FeedbackServlet.java",
@@ -20,7 +20,7 @@
       "key_classes": {
         "SearchServlet": {
           "lines": 634,
-          "responsibility": "HTTP servlet pro vyhledávání — centrální vstupní bod pro všechny dotazy",
+          "responsibility": "HTTP servlet for search — central entry point for all queries",
           "severity": "god_class",
           "internal_deps": [
             "index.SearchUtils", "index.SolrSearcher", "index.ComponentSearcher",
@@ -29,35 +29,35 @@
         },
         "Options": {
           "lines": 276,
-          "responsibility": "Singleton konfigurace — načítá a slučuje JSON konfiguraci ze souborů",
+          "responsibility": "Singleton configuration — loads and merges JSON configuration from files",
           "issues": ["singleton_global_state", "potential_concurrency_issues"],
           "internal_deps": []
         },
         "InitServlet": {
           "lines": 192,
-          "responsibility": "Lifecycle servlet — inicializace I18n, Solr klientů, temp adresářů",
+          "responsibility": "Lifecycle servlet — initialization of I18n, Solr clients, temp directories",
           "internal_deps": ["index.SolrClientFactory"]
         },
         "AuthService": {
           "lines": 82,
-          "responsibility": "Autentizace uživatelů přes externí AMČR API",
+          "responsibility": "User authentication via the external AMČR API",
           "internal_deps": ["Options", "fedora.FedoraModel", "fedora.models.Uzivatel"]
         },
         "AppState": {
           "lines": 60,
-          "responsibility": "Throttling stahování souborů per-IP",
+          "responsibility": "Per-IP file download throttling",
           "internal_deps": ["Options"]
         }
       }
     },
     "fedora": {
       "package": "cz.inovatika.arup.digiarchiv.web4.fedora",
-      "description": "Komunikace s Fedora Repository REST API — harvestování a modely",
+      "description": "Communication with the Fedora Repository REST API — harvesting and models",
       "files": ["FedoraHarvester.java", "FedoraModel.java", "FedoraServlet.java", "FedoraUtils.java"],
       "key_classes": {
         "FedoraHarvester": {
           "lines": 1024,
-          "responsibility": "Harvestuje záznamy z Fedory a indexuje je do Solru",
+          "responsibility": "Harvests records from Fedora and indexes them into Solr",
           "severity": "god_class",
           "internal_deps": [
             "FormatUtils", "InitServlet", "Options",
@@ -66,37 +66,37 @@
         },
         "FedoraUtils": {
           "lines": 124,
-          "responsibility": "HTTP klient pro Fedora API — autorizace, stahování souborů",
+          "responsibility": "HTTP client for the Fedora API — authorization, file downloads",
           "internal_deps": ["Options"]
         }
       }
     },
     "fedora.models": {
       "package": "cz.inovatika.arup.digiarchiv.web4.fedora.models",
-      "description": "Datové modely AMČR entit (Akce, Dokument, Projekt, Lokalita, atd.)",
+      "description": "Data models of AMČR entities (Akce, Dokument, Projekt, Lokalita, etc.)",
       "file_count": 37,
-      "note": "Modely jsou hydratovány z JSON odpovědí Fedory; nemají interní cross-závislosti (čisté POJO)"
+      "note": "The models are hydrated from Fedora's JSON responses; they have no internal cross-dependencies (pure POJOs)"
     },
     "index": {
       "package": "cz.inovatika.arup.digiarchiv.web4.index",
-      "description": "Solr indexování a vyhledávání — SolrSearcher, IndexUtils, SearchUtils, speciální Searcher třídy",
+      "description": "Solr indexing and search — SolrSearcher, IndexUtils, SearchUtils, specialized Searcher classes",
       "file_count": 22,
       "key_classes": {
         "SolrSearcher": {
           "lines": 1048,
-          "responsibility": "Centrální Solr dotazovací třída — správa přístupových úrovní, facety, thesaurus",
+          "responsibility": "Central Solr query class — access-level management, facets, thesaurus",
           "severity": "god_class",
           "internal_deps": ["LoginServlet", "Options"]
         },
         "SearchUtils": {
           "lines": 344,
-          "responsibility": "Factory a utility pro vyhledávání — instantiace Searcher tříd, CSV/JSON konverze",
+          "responsibility": "Factory and utilities for search — instantiation of Searcher classes, CSV/JSON conversion",
           "issues": ["massive_switch_statements", "hardcoded_entity_type_mappings"],
           "internal_deps": ["Options", "fedora.FedoraHarvester"]
         },
         "IndexUtils": {
           "lines": 296,
-          "responsibility": "Utility pro manipulaci Solr dokumentů — přidávání polí, bezpečnostní přípony",
+          "responsibility": "Utilities for manipulating Solr documents — adding fields, security suffixes",
           "internal_deps": [
             "Options", "fedora.FedoraUtils",
             "fedora.models.Historie", "fedora.models.Lang", "fedora.models.Vocab"
@@ -106,13 +106,13 @@
     },
     "imagging": {
       "package": "cz.inovatika.arup.digiarchiv.web4.imagging",
-      "description": "Práce s obrazovými soubory — přístup, typy MIME, PDF",
-      "note": "PŘEKLEP v názvu balíčku — mělo by být 'imaging'",
+      "description": "Working with image files — access, MIME types, PDF",
+      "note": "TYPO in the package name — it should be 'imaging'",
       "files": ["ImageAccess.java", "ImageMimeType.java", "ImageSupport.java", "PDFAcceptor.java"]
     },
     "oai": {
       "package": "cz.inovatika.arup.digiarchiv.web4.oai",
-      "description": "OAI-PMH protokol — výdej metadat pro sklízeče",
+      "description": "OAI-PMH protocol — metadata delivery for harvesters",
       "files": ["OAIRequest.java", "OAIServlet.java"]
     }
   },
@@ -123,58 +123,58 @@
     "scope_compile": [
       {
         "artifact": "com.jayway.jsonpath:json-path:2.10.0",
-        "purpose": "JSONPath dotazy nad JSON daty"
+        "purpose": "JSONPath queries over JSON data"
       },
       {
         "artifact": "commons-io:commons-io:2.21.0",
-        "purpose": "Souborové operace, IOUtils"
+        "purpose": "File operations, IOUtils"
       },
       {
         "artifact": "org.json:json:20251224",
-        "purpose": "JSON parsování a serializace"
+        "purpose": "JSON parsing and serialization"
       },
       {
         "artifact": "commons-codec:commons-codec:1.21.0",
-        "purpose": "Base64, hash utility"
+        "purpose": "Base64, hash utilities"
       },
       {
         "artifact": "org.apache.xmlrpc:xmlrpc-client:3.1.3",
-        "purpose": "XML-RPC klient",
-        "concern": "EOL_DEPENDENCY — Apache XML-RPC je end-of-life od 2016; zvážit odstranění nebo náhradu"
+        "purpose": "XML-RPC client",
+        "concern": "EOL_DEPENDENCY — Apache XML-RPC has been end-of-life since 2016; consider removal or replacement"
       },
       {
         "artifact": "org.apache.httpcomponents:httpclient:4.5.14",
-        "purpose": "HTTP klient (starší Apache HttpClient 4.x)",
-        "concern": "OUTDATED — projekt jinak používá java.net.http (JDK 11+); zvážit sjednocení na jeden HTTP klient"
+        "purpose": "HTTP client (older Apache HttpClient 4.x)",
+        "concern": "OUTDATED — the project otherwise uses java.net.http (JDK 11+); consider unifying on a single HTTP client"
       },
       {
         "artifact": "org.apache.pdfbox:pdfbox:3.0.6",
-        "purpose": "PDF zpracování a generování"
+        "purpose": "PDF processing and generation"
       },
       {
         "artifact": "org.apache.commons:commons-csv:1.14.1",
-        "purpose": "CSV export výsledků"
+        "purpose": "CSV export of results"
       },
       {
         "artifact": "org.apache.commons:commons-lang3:3.18.0",
-        "purpose": "Pomocné utility pro řetězce"
+        "purpose": "Helper utilities for strings"
       },
       {
         "artifact": "javax.mail:mail:1.4.7",
-        "purpose": "Odesílání e-mailů (feedback formulář)",
-        "concern": "NAMESPACE_MISMATCH — používá starý javax.mail namespace; Jakarta EE 11 vyžaduje jakarta.mail. Nutno ověřit kompatibilitu s application serverem."
+        "purpose": "Sending emails (feedback form)",
+        "concern": "NAMESPACE_MISMATCH — uses the old javax.mail namespace; Jakarta EE 11 requires jakarta.mail. Compatibility with the application server must be verified."
       },
       {
         "artifact": "org.apache.commons:commons-email:1.6.0",
-        "purpose": "Wrapper pro odesílání e-mailů nad javax.mail"
+        "purpose": "Wrapper for sending emails over javax.mail"
       },
       {
         "artifact": "org.apache.commons:commons-text:1.15.0",
-        "purpose": "StringEscapeUtils, textové utility"
+        "purpose": "StringEscapeUtils, text utilities"
       },
       {
         "artifact": "com.fasterxml.jackson:jackson-bom:2.21.0",
-        "purpose": "BOM pro Jackson verze"
+        "purpose": "BOM for Jackson versions"
       },
       {
         "artifact": "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.0",
@@ -182,40 +182,40 @@
       },
       {
         "artifact": "org.locationtech.jts.io:jts-io-common:1.20.0",
-        "purpose": "WKT/WKB geometrie pro prostorové dotazy"
+        "purpose": "WKT/WKB geometry for spatial queries"
       },
       {
         "artifact": "org.apache.solr:solr-solrj:9.10.1",
-        "purpose": "Solr Java klient"
+        "purpose": "Solr Java client"
       },
       {
         "artifact": "net.sf.saxon:saxon:8.7",
-        "purpose": "XSLT procesor",
-        "concern": "KRITICKY_ZASTARALE — Saxon 8.7 vydán v roce 2006. Aktuální verze je Saxon-HE 12.x. Chybí ~18 let bezpečnostních záplat. AGENTS.md dokumentuje XSLT 2.0/3.0, ale Saxon 8.7 plně XSLT 3.0 nepodporuje."
+        "purpose": "XSLT processor",
+        "concern": "CRITICALLY_OUTDATED — Saxon 8.7 was released in 2006. The current version is Saxon-HE 12.x. ~18 years of security patches are missing. AGENTS.md documents XSLT 2.0/3.0, but Saxon 8.7 does not fully support XSLT 3.0."
       }
     ],
     "scope_provided": [
       {
         "artifact": "jakarta.platform:jakarta.jakartaee-api:11.0.0",
-        "purpose": "Jakarta EE API (poskytuje application server)"
+        "purpose": "Jakarta EE API (provided by the application server)"
       }
     ],
     "scope_test": [],
     "maven_plugins": [
-      "org.codehaus.mojo:exec-maven-plugin:3.6.3 — spouští npm build",
-      "maven-clean-plugin:3.5.0 — čistí Angular výstup",
-      "maven-resources-plugin:3.4.0 — kopíruje Angular dist do webapp",
-      "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1 — přejmenování index.csr.html",
-      "com.google.code.maven-replacer-plugin:replacer:1.5.3 — vkládá JSP pageEncoding a context name",
+      "org.codehaus.mojo:exec-maven-plugin:3.6.3 — runs the npm build",
+      "maven-clean-plugin:3.5.0 — cleans the Angular output",
+      "maven-resources-plugin:3.4.0 — copies the Angular dist into webapp",
+      "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1 — renaming index.csr.html",
+      "com.google.code.maven-replacer-plugin:replacer:1.5.3 — injects JSP pageEncoding and context name",
       "maven-compiler-plugin:3.15.0 — Java 17 source/target",
-      "maven-war-plugin:3.5.1 — balení WAR"
+      "maven-war-plugin:3.5.1 — WAR packaging"
     ],
-    "version_management_note": "Verze závislostí jsou spravovány přímo v pom.xml bez parent POM ani BOM. Neexistuje centralizovaná správa verzí mezi moduly."
+    "version_management_note": "Dependency versions are managed directly in pom.xml without a parent POM or BOM. There is no centralized version management across modules."
   },
 
   "thumbnails_generator_dependencies": {
     "java_version": "1.8",
-    "concern": "OUTDATED — ThumbnailsGenerator kompiluje pro Java 1.8, zatímco hlavní aplikace cílí na Java 17.",
+    "concern": "OUTDATED — ThumbnailsGenerator compiles for Java 1.8, while the main application targets Java 17.",
     "dependencies": [
       "com.twelvemonkeys.imageio:imageio-tiff:3.13.0",
       "com.twelvemonkeys.imageio:imageio-jpeg:3.13.0",
@@ -224,12 +224,12 @@
       "commons-io:commons-io:2.21.0",
       "org.json:json:20251224",
       "org.apache.solr:solr-solrj:9.10.1",
-      "net.coobird:thumbnailator:[0.4,0.5) — range verze, nedeterministický build",
+      "net.coobird:thumbnailator:[0.4,0.5) — version range, non-deterministic build",
       "org.slf4j:slf4j-simple:2.0.17",
       "com.levigo.jbig2:levigo-jbig2-imageio:2.0"
     ],
     "shared_with_web_module": ["pdfbox:3.0.6", "commons-io:2.21.0", "org.json:20251224", "solr-solrj:9.10.1"],
-    "note": "Bez společného parent POM — verze sdílených závislostí musí být synchronizovány ručně."
+    "note": "Without a common parent POM — the versions of shared dependencies must be synchronized manually."
   },
 
   "npm_dependencies": {
@@ -238,21 +238,21 @@
     "production_count": 25,
     "production": {
       "@angular/*": "^21.1.x — core framework, routing, forms, Material, SSR",
-      "@bluehalo/ngx-leaflet": "^21.0.0 — Leaflet mapa v Angular",
-      "@bluehalo/ngx-leaflet-markercluster": "^21.0.0 — shlukování markerů",
-      "@ngu/carousel": "^20.0.1 — carousel komponenta (pro Angular 20, app je Angular 21)",
-      "@ngx-translate/core": "^17.0.0 — i18n překlady",
-      "axios": "^1.11.0 — HTTP klient (nadbytečný vedle Angular HttpClient)",
-      "echarts": "^6.0.0 — grafy/vizualizace",
+      "@bluehalo/ngx-leaflet": "^21.0.0 — Leaflet map in Angular",
+      "@bluehalo/ngx-leaflet-markercluster": "^21.0.0 — marker clustering",
+      "@ngu/carousel": "^20.0.1 — carousel component (for Angular 20, the app is Angular 21)",
+      "@ngx-translate/core": "^17.0.0 — i18n translations",
+      "axios": "^1.11.0 — HTTP client (redundant alongside Angular HttpClient)",
+      "echarts": "^6.0.0 — charts/visualizations",
       "express": "^5.1.0 — SSR server",
-      "heatmap.js": "^2.0.5 — heatmapa",
-      "leaflet": "^1.9.4 — mapová knihovna",
-      "leaflet.locationfilter": "^0.1.0 — filtrování polohy (verze 0.x, neudržovaný?)",
-      "moment": "^2.30.1 — práce s datem (v maintenance mode od 2020)",
+      "heatmap.js": "^2.0.5 — heatmap",
+      "leaflet": "^1.9.4 — map library",
+      "leaflet.locationfilter": "^0.1.0 — location filtering (version 0.x, unmaintained?)",
+      "moment": "^2.30.1 — date handling (in maintenance mode since 2020)",
       "ng-recaptcha-2": "^21.0.1 — reCAPTCHA",
-      "ngx-echarts": "^21.0.0 — wrapper Apache ECharts",
-      "rxjs": "~7.8.0 — reaktivní programování",
-      "wicket": "^1.3.8 — WKT/WKB parsování"
+      "ngx-echarts": "^21.0.0 — Apache ECharts wrapper",
+      "rxjs": "~7.8.0 — reactive programming",
+      "wicket": "^1.3.8 — WKT/WKB parsing"
     },
     "devDependencies": {
       "jasmine-core": "~6.0.1",
@@ -262,52 +262,52 @@
     "concerns": [
       {
         "dependency": "axios:^1.11.0",
-        "issue": "REDUNDANT — Angular HttpClient pokrývá potřeby HTTP; axios zvyšuje bundle size"
+        "issue": "REDUNDANT — Angular HttpClient covers HTTP needs; axios increases bundle size"
       },
       {
         "dependency": "@ngu/carousel:^20.0.1",
-        "issue": "VERSION_MISMATCH — carousel je pro Angular 20, aplikace používá Angular 21"
+        "issue": "VERSION_MISMATCH — the carousel is for Angular 20, the application uses Angular 21"
       },
       {
         "dependency": "moment:^2.30.1",
-        "issue": "LEGACY — Moment.js je v maintenance mode. Doporučena migrace na date-fns nebo nativní Angular DatePipe"
+        "issue": "LEGACY — Moment.js is in maintenance mode. Migration to date-fns or the native Angular DatePipe is recommended"
       },
       {
         "dependency": "leaflet.locationfilter:^0.1.0",
-        "issue": "NEUDRZOVANY — verze 0.1.0; ověřit aktivitu projektu"
+        "issue": "UNMAINTAINED — version 0.1.0; verify project activity"
       }
     ]
   },
 
   "docker_service_dependencies": {
-    "note": "Docker a docker-compose soubory nejsou součástí tohoto repozitáře (zjištěno v T01). Závislosti mezi službami nelze z tohoto repozitáře analyzovat."
+    "note": "Docker and docker-compose files are not part of this repository (found in T01). Inter-service dependencies cannot be analyzed from this repository."
   },
 
   "external_dependencies": {
     "amcr_api": {
       "name": "AMČR (aiscr-webamcr)",
-      "description": "Zdrojový systém archeologických dat",
+      "description": "Source system for archaeological data",
       "protocol": "Fedora Repository REST API",
-      "access_pattern": "HTTP polling / harvestování",
-      "authentication": "Basic auth nebo Bearer token (FedoraUtils.java)",
-      "data_format": "JSON (primárně), XML (XSLT transformace)",
-      "coupling": "Vysoká — FedoraHarvester, FedoraUtils a všechny modely v fedora.models jsou přímo svázány s datovým modelem AMČR API. Změna API verze vyžaduje úpravy v mnoha souborech.",
-      "version_negotiation": "XSLT transformace pro konverzi mezi verzemi 2.0, 2.1, 2.2"
+      "access_pattern": "HTTP polling / harvesting",
+      "authentication": "Basic auth or Bearer token (FedoraUtils.java)",
+      "data_format": "JSON (primarily), XML (XSLT transformations)",
+      "coupling": "High — FedoraHarvester, FedoraUtils, and all models in fedora.models are directly bound to the AMČR API data model. An API version change requires modifications in many files.",
+      "version_negotiation": "XSLT transformations for conversion between versions 2.0, 2.1, 2.2"
     },
     "solr": {
       "name": "Apache Solr",
       "version_client": "9.10.1 (solr-solrj)",
-      "access_pattern": "SolrJ klient — HTTP/JSON",
-      "coupling": "Vysoká — SolrSearcher (1048 ř.), IndexUtils, FedoraHarvester"
+      "access_pattern": "SolrJ client — HTTP/JSON",
+      "coupling": "High — SolrSearcher (1048 lines), IndexUtils, FedoraHarvester"
     },
     "fedora_repository": {
       "name": "Fedora Repository",
-      "role": "Úložiště digitálních objektů a binárních souborů",
-      "access": "REST API přes FedoraUtils"
+      "role": "Storage of digital objects and binary files",
+      "access": "REST API via FedoraUtils"
     },
     "google_recaptcha": {
       "name": "Google reCAPTCHA",
-      "role": "Ochrana formulářů",
+      "role": "Form protection",
       "frontend": "ng-recaptcha-2"
     }
   },
@@ -315,86 +315,86 @@
   "architectural_issues": [
     {
       "id": "ARCH-01",
-      "title": "God třídy: SolrSearcher a FedoraHarvester",
-      "severity": "Vysoká",
-      "description": "SolrSearcher má 1 048 řádků, FedoraHarvester má 1 024 řádků. Obě třídy mají nadměrné množství zodpovědností.",
+      "title": "God classes: SolrSearcher and FedoraHarvester",
+      "severity": "High",
+      "description": "SolrSearcher has 1,048 lines, FedoraHarvester has 1,024 lines. Both classes have an excessive number of responsibilities.",
       "affected_files": [
         "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/index/SolrSearcher.java",
         "web/src/main/java/cz/inovatika/arup/digiarchiv/web4/fedora/FedoraHarvester.java"
       ],
-      "recommendation": "Refaktoring na menší třídy (Command pattern, Strategy pattern)"
+      "recommendation": "Refactor into smaller classes (Command pattern, Strategy pattern)"
     },
     {
       "id": "ARCH-02",
-      "title": "Saxon 8.7 — kriticky zastaralý XSLT procesor",
-      "severity": "Vysoká",
-      "description": "Saxon 8.7 z roku 2006 je kriticky zastaralý. Aktuální verze je Saxon-HE 12.x. ~18 let chybějících bezpečnostních záplat.",
+      "title": "Saxon 8.7 — critically outdated XSLT processor",
+      "severity": "High",
+      "description": "Saxon 8.7 from 2006 is critically outdated. The current version is Saxon-HE 12.x. ~18 years of missing security patches.",
       "affected_files": ["web/pom.xml"],
-      "recommendation": "Upgradovat na Saxon-HE 12.x (XSLT 3.0 podpora, aktivní vývoj)"
+      "recommendation": "Upgrade to Saxon-HE 12.x (XSLT 3.0 support, active development)"
     },
     {
       "id": "ARCH-03",
-      "title": "javax.mail v Jakarta EE 11 projektu",
-      "severity": "Střední",
-      "description": "javax.mail:1.4.7 používá starý javax namespace. Jakarta EE 11 vyžaduje jakarta.mail. Možný classloading konflikt.",
+      "title": "javax.mail in a Jakarta EE 11 project",
+      "severity": "Medium",
+      "description": "javax.mail:1.4.7 uses the old javax namespace. Jakarta EE 11 requires jakarta.mail. Possible classloading conflict.",
       "affected_files": ["web/pom.xml"],
-      "recommendation": "Nahradit jakarta.mail:jakarta.mail-api + Angus Mail implementace"
+      "recommendation": "Replace with jakarta.mail:jakarta.mail-api + Angus Mail implementation"
     },
     {
       "id": "ARCH-04",
-      "title": "EOL závislost: Apache XML-RPC",
-      "severity": "Střední",
-      "description": "org.apache.xmlrpc:xmlrpc-client:3.1.3 — end-of-life od roku 2016, bez bezpečnostních aktualizací.",
+      "title": "EOL dependency: Apache XML-RPC",
+      "severity": "Medium",
+      "description": "org.apache.xmlrpc:xmlrpc-client:3.1.3 — end-of-life since 2016, without security updates.",
       "affected_files": ["web/pom.xml"],
-      "recommendation": "Nahradit REST klientem (java.net.http)"
+      "recommendation": "Replace with a REST client (java.net.http)"
     },
     {
       "id": "ARCH-05",
-      "title": "ThumbnailsGenerator cílí na Java 1.8",
-      "severity": "Střední",
-      "description": "Hlavní aplikace cílí na Java 17, ThumbnailsGenerator na Java 1.8.",
+      "title": "ThumbnailsGenerator targets Java 1.8",
+      "severity": "Medium",
+      "description": "The main application targets Java 17, ThumbnailsGenerator targets Java 1.8.",
       "affected_files": ["ThumbnailsGenerator/pom.xml"],
-      "recommendation": "Upgradovat ThumbnailsGenerator na Java 17+"
+      "recommendation": "Upgrade ThumbnailsGenerator to Java 17+"
     },
     {
       "id": "ARCH-06",
-      "title": "Axios vs Angular HttpClient — duplicita",
-      "severity": "Nízká",
-      "description": "Frontend obsahuje axios i Angular HttpClient. Dva HTTP klienty zvyšují bundle size.",
+      "title": "Axios vs Angular HttpClient — duplication",
+      "severity": "Low",
+      "description": "The frontend contains both axios and Angular HttpClient. Two HTTP clients increase the bundle size.",
       "affected_files": ["web/src/main/ng/package.json"],
-      "recommendation": "Ověřit využití axios a migrovat na Angular HttpClient"
+      "recommendation": "Verify axios usage and migrate to Angular HttpClient"
     },
     {
       "id": "ARCH-07",
-      "title": "Moment.js v maintenance mode",
-      "severity": "Nízká",
-      "description": "Moment.js je od roku 2020 v maintenance mode.",
+      "title": "Moment.js in maintenance mode",
+      "severity": "Low",
+      "description": "Moment.js has been in maintenance mode since 2020.",
       "affected_files": ["web/src/main/ng/package.json"],
-      "recommendation": "Migrovat na date-fns nebo nativní Angular DatePipe"
+      "recommendation": "Migrate to date-fns or the native Angular DatePipe"
     },
     {
       "id": "ARCH-08",
-      "title": "Range verze pro thumbnailator",
-      "severity": "Nízká",
-      "description": "net.coobird:thumbnailator:[0.4,0.5) — nedeterministický build.",
+      "title": "Version range for thumbnailator",
+      "severity": "Low",
+      "description": "net.coobird:thumbnailator:[0.4,0.5) — non-deterministic build.",
       "affected_files": ["ThumbnailsGenerator/pom.xml"],
-      "recommendation": "Zafixovat konkrétní verzi (např. 0.4.20)"
+      "recommendation": "Pin a specific version (e.g. 0.4.20)"
     },
     {
       "id": "ARCH-09",
-      "title": "Žádný parent POM ani BOM",
-      "severity": "Střední",
-      "description": "Sdílené závislosti musí být synchronizovány ručně mezi web/ a ThumbnailsGenerator/.",
+      "title": "No parent POM or BOM",
+      "severity": "Medium",
+      "description": "Shared dependencies must be synchronized manually between web/ and ThumbnailsGenerator/.",
       "affected_files": ["web/pom.xml", "ThumbnailsGenerator/pom.xml"],
-      "recommendation": "Přidat root parent POM s dependencyManagement"
+      "recommendation": "Add a root parent POM with dependencyManagement"
     },
     {
       "id": "ARCH-10",
-      "title": "Žádné automatizované Java testy",
-      "severity": "Vysoká",
-      "description": "Adresář web/src/test neexistuje. Již evidováno v refactoring_backlog (T01).",
+      "title": "No automated Java tests",
+      "severity": "High",
+      "description": "The web/src/test directory does not exist. Already tracked in refactoring_backlog (T01).",
       "affected_files": ["web/"],
-      "recommendation": "Přidat JUnit 5 testy pro klíčové třídy"
+      "recommendation": "Add JUnit 5 tests for key classes"
     }
   ]
 }

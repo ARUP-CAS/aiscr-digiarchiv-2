@@ -1,0 +1,12 @@
+[bootstrap]
+schema_in_use = "spec-driven"
+last_aligned_at = "2026-07-04"
+last_aligned_hub_revision = "8197900bb4ad9965a9e3f431e7e1fb66a51319f4"
+mode = "bootstrap-mode-align"
+target_branch = "DN-agents-setup-review"
+
+[bootstrap.notes]
+summary = "Align run: applied the current hub direct-bundle baseline for enrolled assistant/vendor surfaces and OpenSpec workflow mirrors; pruned 12 superseded sibling-only Copilot aiscr-*.prompt.md files in favour of delivered .github/skills Agent Skills; delivered missing planning and usage rule readers across Claude, Cursor, Gemini, and Copilot; added the generated AGENTS governance kernel; replaced the stale hub-framed GEMINI.md and .github/copilot-instructions.md with sibling candidates carrying the generated digest blocks; created CODEX.md with the generated rule sections; removed the dangling .claude/settings.local.json reference from AGENTS.md."
+
+[bootstrap.notes.open_items]
+mcp_assets_advisory = "doc_reconciliation suggests optional adoption of MCP setup/authentication reference and per-vendor MCP setup surfaces; deliberately not enrolled in this run."
