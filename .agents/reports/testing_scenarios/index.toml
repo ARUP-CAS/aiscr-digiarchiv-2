@@ -109,3 +109,13 @@ entities = ["dokumentacni_jednotka", "pian", "akce", "lokalita"]
 surfaces = ["akce record page (/id/:id)", "lokalita record page (/id/:id)", "DJ landing page (/id/:id)", "handle API (/api/search/handle)", "search API (/api/search/query)", "Angular DJ chunk"]
 issues = ["ARUP-CAS/aiscr-digiarchiv-2#1146"]
 last_verified = "2026-10-23"
+
+[[scenario]]
+key = "history-location-protection"
+kind = "feature"
+title = "History location-data protection"
+features = ["history location-data protection", "protected data masking"]
+entities = ["samostatny_nalez", "projekt", "archeologicky_zaznam", "akce", "lokalita"]
+surfaces = ["search API (/api/search/query)", "handle API (/api/search/handle)", "legacy id API (/api/search/id)", "OAI-PMH (GetRecord/ListRecords, 2.0/2.1/2.2)", "landing page (indirect via handle API)"]
+issues = ["ARUP-CAS/aiscr-digiarchiv-2#1163"]
+last_verified = "2026-11-15"
