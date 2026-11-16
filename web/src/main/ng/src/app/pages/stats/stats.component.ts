@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -28,6 +28,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import { LabelLayout } from "echarts/features";
 echarts.use([CanvasRenderer, LineChart, TooltipComponent, GridComponent, TitleComponent, LabelLayout, LegendComponent]);
 import { MatCheckbox } from "@angular/material/checkbox";
+import { DynamicDatepickerIntl } from '../../shared/dynamic-datepicker-intl';
 
 @Component({
   imports: [
@@ -49,6 +50,7 @@ import { MatCheckbox } from "@angular/material/checkbox";
 ],
   providers: [
     provideEchartsCore({ echarts }),
+    { provide: MatDatepickerIntl, useClass: DynamicDatepickerIntl },
   ],
   selector: 'app-stats',
   templateUrl: './stats.component.html',

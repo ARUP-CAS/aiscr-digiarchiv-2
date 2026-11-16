@@ -16,11 +16,12 @@ import { AppService } from '../../app.service';
 import { AppState } from '../../app.state';
 import { Crumb } from '../../shared/crumb';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DynamicDatepickerIntl } from '../../shared/dynamic-datepicker-intl';
 
 @Component({
   imports: [
@@ -30,6 +31,7 @@ import { MatInputModule } from '@angular/material/input';
     MatDatepickerModule, MatRadioModule, MatButtonModule, MatInputModule
   ],
   providers: [
+    { provide: MatDatepickerIntl, useClass: DynamicDatepickerIntl },
   ],
   selector: 'app-facets-dynamic',
   templateUrl: './facets-dynamic.component.html',

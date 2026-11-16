@@ -932,5 +932,13 @@
   "updateConfiguration": "Aktualizovat konfiguraci",
   "updateIndexFromFedora": "Aktualizovat index z Fedory",
   "updateMuseion": "Aktualizovat Museion",
-  "reindex": "Přeindexovat záznam"
+  "reindex": "Přeindexovat záznam",
+  "datepicker" : {
+    "next_24_years": "Dalších 24 let",
+    "prev_24_years": "Předchozích 24 let",
+    "next_year": "Další rok",
+    "prev_year": "Předchozí rok",
+    "next_month": "Další měsíc",
+    "prev_month": "Předchozí měsíc"
+  }
 }

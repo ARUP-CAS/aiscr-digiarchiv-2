@@ -932,5 +932,13 @@
   "updateConfiguration": "Update configuration",
   "updateIndexFromFedora": "Update index from Fedora",
   "updateMuseion": "Update Museion",
-  "reindex": "Reindex record"
+  "reindex": "Reindex record",
+  "datepicker" : {
+    "next_24_years": "Next 24 years",
+    "prev_24_years": "Previous 24 years",
+    "next_year": "Next year",
+    "prev_year": "Previous year",
+    "next_month": "Next month",
+    "prev_month": "Previous month"
+  }
 }

@@ -21,7 +21,10 @@ import { environment } from '../environments/environment';
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter';
 
 import localeCs from '@angular/common/locales/cs';
+import { MatDatepickerIntl } from '@angular/material/datepicker';
+import { DynamicDatepickerIntl } from './shared/dynamic-datepicker-intl';
 registerLocaleData(localeCs);
+
 
 export const MY_FORMATS = {
   parse: {
@@ -55,6 +58,7 @@ export const appConfig: ApplicationConfig = {
     provideLuxonDateAdapter(),
     //{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MatDatepickerIntl, useClass: DynamicDatepickerIntl },
 
     provideTranslateService({
       loader: provideTranslateHttpLoader({

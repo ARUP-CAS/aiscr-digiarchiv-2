@@ -225,13 +225,6 @@ export class FileViewerComponent implements OnInit {
         file.pages = new Array(file.rozsah);
         file.filepath = f.filepath;
         file.distribuce = f.distribuce;
-        //file.distribuce.push('orig');
-        // f.historie.forEach((h:{datum_zmeny: number, id: string,poznamka:string,typ_zmeny: string}) => {
-        //   if (!file.distribuce.includes(h.poznamka) && h.typ_zmeny === 'DIST01') {
-        //     file.distribuce.push(h.poznamka)
-        //   }
-        // });
-        // file.setSize(true);
         files.push(file);
       });
         files.sort((a, b) => {
