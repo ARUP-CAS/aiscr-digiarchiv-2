@@ -1,5 +1,6 @@
 package cz.inovatika.arup.digiarchiv.web4;
 
+import static cz.inovatika.arup.digiarchiv.web4.HandleServlet.LOGGER;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,19 +43,24 @@ public class FeedbackServlet extends HttpServlet {
 
         if (Boolean.parseBoolean(request.getParameter("verify"))) {
             try {
-                response.getWriter().println(verify(js));
+                response.getWriter().println(verify(js, request));
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "", ex);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Verification failed");
             }
             return;
         }
-        String systemMail = Options.getInstance().getJSONObject("mail").getString("destMail");
-        sendMail(js.getString("name"), systemMail, js.getString("text"), js.getString("ident_cely"), js.getString("mail")).toString();
-        response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text"), js.getString("ident_cely"), systemMail).toString());
+        
+        if (canSend(request, response)) {
+          String systemMail = Options.getInstance().getJSONObject("mail").getString("destMail");
+          sendMail(js.getString("name"), systemMail, js.getString("text"), js.getString("ident_cely"), js.getString("mail")).toString();
+          response.getWriter().println(sendMail(js.getString("name"), js.getString("mail"), js.getString("text"), js.getString("ident_cely"), systemMail).toString());
+          
+          AppState.writeFeedbackIP(request.getRemoteAddr());
+        }
     }
 
-    private String verify(JSONObject body) throws URISyntaxException, IOException, InterruptedException {
+    private String verify(JSONObject body, HttpServletRequest req) throws URISyntaxException, IOException, InterruptedException {
         String url = "https://recaptchaenterprise.googleapis.com/v1/projects/"
                 + Options.getInstance().getString("reCaptchaProjectId")
                 + "/assessments?key=" + Options.getInstance().getString("reCaptchaApiKey");
@@ -64,7 +70,32 @@ public class FeedbackServlet extends HttpServlet {
                 .uri(new URI(url))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        req.getSession().setAttribute("reCaptcha", new JSONObject(response.body()));
         return response.body();
+    }
+
+    private boolean canSend(HttpServletRequest request, HttpServletResponse response) {
+      
+      try {
+        //Logger.getLogger(HandleServlet.class.getName()).log(Level.INFO, "getFile started");
+        // Check if IP call could run by time limits
+        String ip = request.getRemoteAddr();
+        long retryTime = AppState.canFeedbackInterval(ip);
+        if (retryTime > 0) {
+          response.setStatus(429); // 429 Too Many Requests
+          response.addHeader("Retry-After", (int)Math.ceil(retryTime*.001) + "");
+          response.getWriter().print("Try in " + (int)Math.ceil(retryTime*.001) + " seconds.");
+          return false;
+        } 
+      } catch (Exception ex) {
+        LOGGER.log(Level.SEVERE, "", ex);
+        return false;
+      }
+      
+        JSONObject reCaptcha = (JSONObject) request.getSession().getAttribute("reCaptcha");
+        return reCaptcha.has("tokenProperties") && 
+               reCaptcha.getJSONObject("tokenProperties").optBoolean("valid") &&
+               reCaptcha.getJSONObject("riskAnalysis").getDouble("score") > Options.getInstance().getClientConf().optInt("reCaptchaScore", 0);
     }
 
     private JSONObject sendMail(String fromName, String fromMail, String text, String ident_cely, String toMail) {
@@ -91,7 +122,7 @@ public class FeedbackServlet extends HttpServlet {
             ret.put("hasError", false);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error sending mail", ex);
-            ret.put("hasError", true).put("error", ex);
+            ret.put("hasError", true).put("error", "Error sending mail");
         }
         return ret;
     }

@@ -15,6 +15,20 @@ public class AppState {
     
     static Map<String, Boolean>  ipsRunning = new HashMap<>();
     static Map<String, Instant>  ipsTimes = new HashMap<>();
+    static Map<String, Instant>  ipFeedbackTimes = new HashMap<>();
+    
+    public static synchronized long canFeedbackInterval(String ip) {
+      
+        int interval = Options.getInstance().getInt("feedbackInterval", 5000);
+        if (ipFeedbackTimes.containsKey(ip)) {
+            return Duration.between(Instant.now(), ipFeedbackTimes.get(ip).plus(interval, ChronoUnit.MILLIS)).toMillis();
+        }
+        return 0;
+    }
+    
+    public static synchronized void writeFeedbackIP(String ip) {
+        ipFeedbackTimes.put(ip, Instant.now());
+    }
     
     public static synchronized boolean canGetFile(String ip, String id) {
         if (id.contains("thumb")) {

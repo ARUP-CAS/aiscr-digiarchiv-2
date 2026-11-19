@@ -264,6 +264,10 @@ public class SolrSearcher {
     String q = "*:*";
     if (request.getParameter("q") != null) {
       q = request.getParameter("q");
+      if (q.contains(":")) {
+        // nedovolime hledat primo v polich
+        q = "\"" + q + "\"";
+      }
 //      if (!q.trim().contains(" ") && !q.trim().contains("*") && !q.trim().contains("?") && !q.trim().contains("\"")) {
 //        // jenom jedno slovo, bez wildcards, pridame " abychom zpracovali ident_cely
 //        q = "\"" + q + "\"";
