@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.util.Collection;
+import static java.util.Map.entry;
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.request.SolrQuery;
@@ -258,30 +259,32 @@ public class SolrSearcher {
     }
   }
   
+  public static Map<String,String> orgsByEntity = Map.ofEntries(
+    entry("dokument", "dokument_organizace"),
+    entry("akce", "akce_organizace"),
+    entry("samostatny_nalez", "samostatny_nalez_predano_organizace"),
+    entry("projekt", "projekt_organizace"),
+    entry("komponenta", "dokument_organizace")
+);
+  
   public static void addCommonParams(HttpServletRequest request, SolrQuery query, String entity) throws IOException {
-    
-    query.addFilterQuery("{!tag=entityF}entity:" + entity);
-    String q = "*:*";
-    if (request.getParameter("q") != null) {
-      q = request.getParameter("q");
-      if (q.contains(":")) {
-        // nedovolime hledat primo v polich
-        q = "\"" + q + "\"";
-      }
-//      if (!q.trim().contains(" ") && !q.trim().contains("*") && !q.trim().contains("?") && !q.trim().contains("\"")) {
-//        // jenom jedno slovo, bez wildcards, pridame " abychom zpracovali ident_cely
-//        q = "\"" + q + "\"";
-//      }
-    }
-    
     String pristupnost = LoginServlet.pristupnost(request.getSession());
     if ("E".equals(pristupnost)) {
       pristupnost = "D";
     }
-    if ("C".compareTo(pristupnost) <= 0) {
-      String organizace = LoginServlet.organizace(request.getSession());
-      // Zohlednit organizace. Hledame full_text pro "D" + organizace
-      q += " OR (text_all_D:(" + q + ") AND organizace:\"" + organizace + "\")";
+    query.addFilterQuery("{!tag=entityF}entity:" + entity);
+    String q = "*";
+    if (request.getParameter("q") != null) {
+      q = request.getParameter("q");
+        // nedovolime hledat primo v polich
+        if (!q.startsWith("\"")) {
+          q = q.replaceAll(":", "\\\\:");
+        }
+      if ("C".compareTo(pristupnost) <= 0 && orgsByEntity.containsKey(entity)) {
+        String organizace = LoginServlet.organizace(request.getSession());
+        // Zohlednit organizace. Hledame full_text pro "D" + organizace
+        q += " OR (text_all_D:(" + q + ") AND " + orgsByEntity.get(entity) + ":\"" + organizace + "\")";
+      }
     }
     query.setQuery(q);
     
@@ -362,7 +365,7 @@ public class SolrSearcher {
     
     query.add("stats.field", "{!key=lat}lat_" + pristupnost);
     query.add("stats.field", "{!key=lng}lng_" + pristupnost);
-    query.add("echoParams", "all");
+    query.add("echoParams", "none");
     
     if (Boolean.parseBoolean(request.getParameter("noFacets"))) {
       query.setFacet(false);
@@ -931,17 +934,10 @@ public class SolrSearcher {
   
   public static JSONObject getDokBySoubor(String id) {
     try (HttpJettySolrClient client = new HttpJettySolrClient.Builder(Options.getInstance().getString("solrhost")).build()) {
-
-//            SolrQuery query = new SolrQuery("*").addFilterQuery("soubor_id:\"" + id + "\"").setRows(1).setFields("dokument", "samostatny_nalez");
-//            QueryResponse rsp = client.query("soubor", query);
-//            if (rsp.getResults().isEmpty()) {
-//                return null;
-//            } else {
-//                String dok = (String) rsp.getResults().get(0).getFirstValue("dokument");
-//                if (dok == null || "".equals(dok)) {
-//                    dok = (String) rsp.getResults().get(0).getFirstValue("samostatny_nalez");
-//                }
-      SolrQuery queryDok = new SolrQuery("*").addFilterQuery("soubor_id:\"" + id + "\"").setRows(1).setFields("pristupnost,organizace,entity");
+      SolrQuery queryDok = new SolrQuery("*")
+              .addFilterQuery("soubor_id:\"" + id + "\"")
+              .setRows(1)
+              .setFields("pristupnost,organizace:dokument_organizace,organizace:akce_organizace,organizace:samostatny_nalez_predano_organizace,organizace:projekt_organizace,entity");
       JSONObject jo = json(client, "entities", queryDok);
       if (jo.getJSONObject("response").optInt("numFound", 0) > 0) {
         return jo.getJSONObject("response").getJSONArray("docs").getJSONObject(0);

@@ -16,10 +16,6 @@ public class ImageAccess {
         allow = true;
       } else {
         String id = request.getParameter("id");
-        String field = request.getParameter("field");
-        if(field == null) {
-          field = "dokument";
-        } 
         JSONObject dok = SolrSearcher.getDokBySoubor(id);
         if (dok == null) {
           return false;

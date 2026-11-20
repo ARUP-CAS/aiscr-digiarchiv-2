@@ -139,7 +139,10 @@ public class FeedbackServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+      
+          response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+          response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Method not allowed");
+        //processRequest(request, response);
     }
 
     /**
