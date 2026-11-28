@@ -1,6 +1,6 @@
 # Governance by Assistant Product – Canonical Rule Map
 
-<!-- delivery-version: 00e795f3863999e297a997632377fb33415531a8 2026-11-15T00:18:09+01:00 -->
+<!-- delivery-version: a9e7178f2056994b3ac481702b0ec38cdb13c576 2026-11-28T16:49:05+01:00 -->
 
 **Purpose:** Map policy topics to the governance rule stem that owns each one, so a reader can tell which surface is authoritative for a topic.
 Every vendor delivery surface carries the full rule body generated from the matching stem.

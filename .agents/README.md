@@ -7,7 +7,7 @@ Repository-specific review state and shared tooling for AI-assisted work. Govern
 - `analysis/` — machine-readable findings from configured codebase-review tasks, including repository maps and dependency graphs.
 - `config/` — review configuration and persistent review state.
 - `reports/` — review findings, task reports, consolidated audits, and other durable evidence.
-- `scripts/` — the canonical review engine, GitHub review helpers, and workstation-safety tooling.
+- `scripts/` — the canonical review engine and GitHub review helpers.
 - `canonical_configs/` — references and document/workstation templates selected for delivery to this repository.
 - `skills/` — repository-local delivered workflow surfaces, including [`aiscr-review-codebase`](skills/aiscr-review-codebase/SKILL.md).
 

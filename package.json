@@ -9,6 +9,6 @@
     "openspec:update": "node ./node_modules/@fission-ai/openspec/bin/openspec.js update"
   },
   "devDependencies": {
-    "@fission-ai/openspec": "2.0.0"
+    "@fission-ai/openspec": "2.1.1"
   }
 }

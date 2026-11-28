@@ -7,10 +7,9 @@ compatibility: Requires openspec CLI.
 metadata:
   author: openspec
   version: "1.0"
-  generatedBy: "2.0.0"
 ---
 
-<!-- delivery-version: 00e795f3863999e297a997632377fb33415531a8 2026-11-15T00:18:09+01:00 -->
+<!-- delivery-version: a9e7178f2056994b3ac481702b0ec38cdb13c576 2026-11-28T16:49:05+01:00 -->
 
 Fast-forward through artifact creation - generate everything needed to start implementation in one go.
 
@@ -110,7 +109,7 @@ After completing all artifacts, summarize:
 - Change name and location
 - List of artifacts created with brief descriptions, plus any conditional artifact you skipped and why
 - What's ready: "All artifacts needed for implementation are ready."
-- Prompt: "Use the `openspec-apply-change` skill or ask me to implement to start working on the tasks."
+- Prompt: "The plan is ready for review. When you’re ready, ask me to apply it."
 
 **Artifact Creation Guidelines**
 

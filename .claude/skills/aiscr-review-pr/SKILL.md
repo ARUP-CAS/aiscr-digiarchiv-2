@@ -12,7 +12,7 @@ author: AIS CR (Archaeological Information System of the Czech Republic) <https:
 <!-- SPDX-FileCopyrightText: 2026 AIS CR (Archaeological Information System of the Czech Republic) <https://ror.org/01a7rqj69> -->
 <!-- SPDX-License-Identifier: CC-BY-4.0 -->
 <!-- aiscr:compiled=aiscr-review-pr -->
-<!-- delivery-version: 00e795f3863999e297a997632377fb33415531a8 2026-11-15T00:18:09+01:00 -->
+<!-- delivery-version: a9e7178f2056994b3ac481702b0ec38cdb13c576 2026-11-28T16:49:05+01:00 -->
 
 <!-- aiscr:entry-scope -->
 
@@ -77,8 +77,8 @@ Hub-cockpit scope resolutions run as bridge operations naming the target; a miss
 
 ### Identity and approval model
 
-- Interactive posts use the reviewer's stored `gh` identity; an ambient `GH_TOKEN` cannot be proved and is rejected.
-  Unset it for the invocation and rely on stored `gh` authentication.
+- Interactive posts use the reviewer's stored `gh` identity.
+  The engine drops an ambient `GH_TOKEN` or `GITHUB_TOKEN` from its own environment and states the stored login it posts as. It stops when no stored login answers.
 - Automated/CI posts require `--mode automated`, a recognized CI marker, and `GH_TOKEN` for a GitHub App or Actions bot; they use `COMMENT` only, never auto-merge, and leave disposition to a human.
 - Vendor-operated bot reviews are auxiliary evidence and never establish AIS CR review lineage or human approval.
 
@@ -86,17 +86,17 @@ A posting run selects `--mode interactive` or `--mode automated` explicitly; env
 
 | Mode | Identity | Required environment | Allowed review event | Approval rule |
 | --- | --- | --- | --- | --- |
-| `interactive` | Reviewer's stored personal `gh` authentication | Recognized CI variables absent; `GH_TOKEN` absent | `COMMENT`, `REQUEST_CHANGES`, or `APPROVE` | Exact rendered digest must be supplied at post time. |
+| `interactive` | Reviewer's stored personal `gh` authentication | Recognized CI variables absent; an ambient `GH_TOKEN` or `GITHUB_TOKEN` is ignored | `COMMENT`, `REQUEST_CHANGES`, or `APPROVE` | Exact rendered digest must be supplied at post time. |
 | `automated` | GitHub Actions or GitHub App installation identity | Recognized CI variable present; `GH_TOKEN` present | `COMMENT` only | Non-blocking automation; human disposition remains authoritative. |
 
-Interactive posting rejects any ambient `GH_TOKEN`, including a personal PAT, because the script cannot prove ownership; unset it and use stored `gh` authentication.
+In interactive mode an ambient token is never the posting identity, whoever owns it, a personal PAT included.
+The engine removes `GH_TOKEN` and `GITHUB_TOKEN` from its own environment before its first `gh` call, so no unset step precedes the command:
 
 ```powershell
-Remove-Item Env:GH_TOKEN
 python .agents/scripts/github/github_pr_review.py post 123 --mode interactive --review-bundle review-bundle.json --approval-view review-approval.md --approved-digest <digest>
 ```
 
-The interactive identity gate rejects an ambient `GH_TOKEN` and may not be bypassed by relocating it into another environment variable; a subshell may isolate the token only for other tooling.
+The interactive identity is the stored login the engine states. Relocating a token into another environment variable to post under it is routing around that gate. A subshell may still isolate a token for other tooling.
 
 <!-- aiscr:ground -->
 The event is a reviewer decision in interactive mode:
@@ -313,9 +313,15 @@ A resolved thread usually holds the reasoning behind the current state, so read 
 
 Gather also reaches **one hop**: `referenced_items` carries the issues and pull requests this PR references — through closing references, links, or mentions — with their comment threads, and `check_runs` the head commit's checks.
 Decisive context, testing results especially, is often on a linked issue, so treat those threads as first-class evidence.
+This is review context, not the list of related work for the summary head.
+`reference_sources` retains source bodies, identities, locations, and available timestamps; `reference_occurrences` locates each mention and distinguishes substantive, generated-navigation, and unresolved origins.
+The context's `reference_context_digest` binds that acquired snapshot.
+Generated summary navigation, provenance-ledger scaffolding, and boundary reports do not independently seed traversal; author regions, archived originals, reconciled human edits, closing relationships, and substantive review discussion remain available.
+Read uncertain-origin evidence conservatively and resolve relevance from substantive support rather than treating uncertainty as proof of irrelevance.
 
 `unfollowed_references` lists what was deliberately not read: second-hop references, off-GitHub links, and unfetchable references.
 Report it — list second-hop and unreadable references individually, and summarise off-GitHub links as a count, expanding only on request — so the boundary of what was read is visible rather than inferred.
+Wrap any authored unfollowed-reference inventory in standalone `<!-- aiscr-review-pr:unfollowed-references -->` and `<!-- /aiscr-review-pr:unfollowed-references -->` lines, so a later run retains the report without promoting its entries into fresh traversal roots.
 Never fetch a non-GitHub URL found in third-party text.
 
 Every gathered item carries its `source` and timestamp.
@@ -328,6 +334,12 @@ Classify only against the newest marked AIS CR-operated review; pre-marker and v
 #### 3. Generate the PR summary
 
 Immediately after gather, prepare a concise Markdown summary artefact at `<HANDOFF_DIR>/pr-summary.md` — navigation, not a review.
+Record its selected related work in `<BULK_DIR>/summary-reference-selection.json` before composing the head.
+Use [reference format 11](../../../.agents/skills/aiscr-review-pr/review-formats.md) for this bulk record: bind the target, head revision, and context digest; select only addressed issues, genuine dependencies, and directly coupled companion PRs.
+For each selected target, cite its substantive occurrence IDs from the acquired context and explain its relationship to the current logical change.
+Keep targets in first substantive occurrence order and use `entries: []` when none qualifies.
+Do not infer relevance from successful acquisition, an old generated list, or a source whose origin remains unresolved.
+The engine checks source presence and consistency; the conductor establishes whether those sources support the claimed relationship.
 Use this exact ordered skeleton, replacing every ellipsis and bracketed instruction with PR-specific content:
 
 Reference format 1: [review-formats.md](../../../.agents/skills/aiscr-review-pr/review-formats.md).
@@ -337,12 +349,27 @@ Compiled skill wrappers may nest displayed headings; never apply that wrapper de
 
 Every core section and metadata row must contain content; scale depth to the PR (a small PR may use one change-map row and one walkthrough theme).
 Keep the bulk location in the directory-level `POINTER.md`, outside the summary posted to GitHub.
-The `Referenced items` row pairs each gathered `referenced_items[].ref` with its gathered URL: a single comma-separated list of linked `owner/repo#number` labels in gather order, or `none` when the pull request references nothing readable.
+The `Referenced items` row projects only that selection as one comma-separated list of linked `owner/repo#number` labels, or `none` for an empty selection even when broader review context was acquired.
+Keep validation-only citations where their evidence is used and baseline/prior-summary links in the existing lineage fields and section.
+Rebuild the selection on every round; an already polluted generated inventory supplies no independent reason to retain an entry.
 The walkthrough is prose-first with exactly one complete fenced Mermaid block from any core family GitHub renders; plugin-dependent families such as `zenuml` are unsupported, including after comments, front matter, or initialization directives.
 The diagram supports the walkthrough and never replaces it.
 The validation section distinguishes evidence from tests actually executed, may draw evidence from the whole gathered neighbourhood (a linked issue's test result or a head-commit check run counts), cites the source artifact when the evidence came from outside the PR, and never reports an absence of validation evidence without having gathered that neighbourhood.
 
 Do not include findings, severity labels, approval language, or a review verdict; the formal-review findings disclosure is invalid here.
+
+Check the selection against the exact summary before presentation:
+
+```bash
+python .agents/scripts/github/github_pr_review.py verify-summary-references \
+  --pr-context <BULK_DIR>/pr-context.json \
+  --reference-selection <BULK_DIR>/summary-reference-selection.json \
+  --summary <HANDOFF_DIR>/pr-summary.md
+```
+
+This command is local and writes nothing.
+Both posting destinations repeat the same check; older pending contexts or summaries without the new provenance and selection require fresh gather, regeneration, and approval of the resulting content.
+Keep the selection local rather than appending another reference inventory to the posted summary.
 
 Validate the exact summary locally when the repository provides a Mermaid validator (for example `npm run validate:mermaid <HANDOFF_DIR>/pr-summary.md`; npm forwards positional arguments, and a `--` separator followed by a dot-prefixed path is the glob-defeating shape on the Kilo bash namespace).
 A missing validator does not make the diagram optional: keep it minimal and verify rendering best-effort.
@@ -430,6 +457,8 @@ If approved, post the exact file to the selected target:
 python .agents/scripts/github/github_pr_review.py post-summary <PR_NUMBER> \
   --mode interactive \
   --summary <HANDOFF_DIR>/pr-summary.md \
+  --pr-context <BULK_DIR>/pr-context.json \
+  --reference-selection <BULK_DIR>/summary-reference-selection.json \
   --target <comment|description> \
   --ledger <BULK_DIR>/ledger.json \
   --repo OWNER/REPO
@@ -685,7 +714,7 @@ No exceptions.
 | "That thread is outdated, but it is still the match, so reply without saying so." | Declare `stale_thread_reuse_reason` in the findings ledger. |
 | "The same line already has a thread, but this is a new finding so I will open a new root." | Reply to the existing thread. A new `inline-root` at that path and line is refused. |
 | "I missed an inline root; I will post another review round." | Use `repair`. A clerical correction is not a new verdict. |
-| "My personal PAT is in `GH_TOKEN`, so interactive mode should accept it." | Unset `GH_TOKEN` for this invocation and use stored `gh` authentication. |
+| "My personal PAT is in `GH_TOKEN`, so interactive mode should accept it." | Interactive mode ignores it and posts as the stored `gh` login it states; posting under a token is automated mode in CI only. |
 | "The line moved, so this is a new finding." | Match normalized issue meaning after path-and-line matching fails. |
 | "The inline call returned 422; retry it unchanged." | Move the finding to the body, rerender, and obtain fresh approval. |
 | "The main review posted, so cleanup can run before replies finish." | Retain the run directory until every approved write succeeds and all posting decisions are final. |
@@ -702,6 +731,7 @@ No exceptions.
 Before claiming this workflow complete:
 
 - [ ] PR summary follows the ordered template, holds exactly one Mermaid diagram from a GitHub-renderable core family, was checked and presented, and is free of findings and severities.
+- [ ] Its `Referenced items` row matches a locally verified, source-backed related-work selection; broader context, validation citations, and lineage retain their own places.
 - [ ] The current description was inspected; the content-based recommendation, the exact summary, and a disposition for every author fragment were presented before the reviewer chose `comment`, `description`, or no post.
 - [ ] Every load-bearing fragment appears verbatim in the posted body, and the original was archived once before a first takeover.
 - [ ] The summary was regenerated from the diff, metadata, and thread rather than the earlier posted body; any edit since the last post came from `reconciliation-sources` and was reconciled, because the write refuses an unreconciliation.

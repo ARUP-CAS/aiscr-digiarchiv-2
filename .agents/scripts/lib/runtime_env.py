@@ -1,6 +1,4 @@
-# SPDX-FileCopyrightText: 2026 AIS CR (Archaeological Information System of the Czech Republic) <https://ror.org/01a7rqj69>
-# SPDX-License-Identifier: MIT
-# delivery-version: 00e795f3863999e297a997632377fb33415531a8 2026-11-15T00:18:09+01:00
+# delivery-version: a9e7178f2056994b3ac481702b0ec38cdb13c576 2026-11-28T16:49:05+01:00
 
 """Shared repo-local runtime paths.
 
@@ -116,6 +114,11 @@ OPERATOR_PATCHES_DIRNAME = "operator-patches"
 def operator_patch_cache_dir(root: Path, label: Optional[str] = None, *, create: bool = False) -> Path:
     """Return the operator-patch bulk stage ``<venv>/.cache/operator-patches[/<label>]``."""
     return cache_dir(root, OPERATOR_PATCHES_DIRNAME, label, create=create)
+
+
+def guard_decision_dir(root: Path, *, create: bool = False) -> Path:
+    """Return the tool-call guard's local decision record ``<venv>/.cache/agent-safety-guard``."""
+    return cache_dir(root, "agent-safety-guard", create=create)
 
 
 def review_pr_cache_dir(root: Path, run: Optional[str] = None, *, create: bool = False) -> Path:

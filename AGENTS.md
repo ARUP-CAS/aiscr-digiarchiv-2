@@ -93,7 +93,7 @@ multiple repositories. Agents must prefer **conservative, compatible changes**.
 
 | Path | Purpose |
 |------|---------|
-| `web/src/main/java/` | Java backend (Spring), base pkg `cz.inovatika.arup.digiarchiv.web4` |
+| `web/src/main/java/` | Java backend (Jakarta Servlet), base pkg `cz.inovatika.arup.digiarchiv.web4` |
 | `web/src/main/ng/` | **Angular frontend** (TypeScript, SCSS) |
 | `web/src/main/webapp/` | Minimal JSP / web descriptors only (NOT the frontend) |
 | `web/src/main/resources/` | XSLT transformations, application config |
