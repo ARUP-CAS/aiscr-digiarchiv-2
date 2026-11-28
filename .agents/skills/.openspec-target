@@ -1,15 +1,4 @@
+agents
 claude own-files
 gemini
 github-copilot
-keep openspec-apply-change
-keep openspec-archive-change
-keep openspec-bulk-archive-change
-keep openspec-continue-change
-keep openspec-explore
-keep openspec-ff-change
-keep openspec-new-change
-keep openspec-onboard
-keep openspec-propose
-keep openspec-sync-specs
-keep openspec-update-change
-keep openspec-verify-change
